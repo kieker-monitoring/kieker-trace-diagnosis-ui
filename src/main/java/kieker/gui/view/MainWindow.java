@@ -16,8 +16,6 @@
 
 package kieker.gui.view;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -25,12 +23,11 @@ import java.util.Observable;
 import java.util.Observer;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.gui.model.AggregatedExecutionEntry;
 import kieker.gui.model.DataSource;
 import kieker.gui.model.ExecutionEntry;
 import kieker.gui.model.Properties;
 import kieker.gui.model.RecordEntry;
-import kieker.tools.traceAnalysis.systemModel.ComponentType;
-import kieker.tools.traceAnalysis.systemModel.Operation;
 
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -64,7 +61,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 /**
  * The main window of this application. This file should probably be maintained with the Eclipse GUI builder.
- * 
+ *
  * @author Nils Christian Ehmke
  */
 public class MainWindow {
@@ -72,15 +69,14 @@ public class MainWindow {
 	protected Shell shell;
 	private Composite mainComposite;
 	private Table recordsTable;
-	private TreeViewer treeViewer_4;
-	private SashForm sashForm;
+	private SashForm outerForm;
 	private TreeViewer explorerTreeViewer;
 	private TreeItem explorerTreeItem;
 	private TreeItem recordsTreeItem;
 	private TreeItem executionTracesTreeItem;
 	private TableViewer recordsTableViewer;
 	private TableColumn recordsTableTimestampColumn;
-	private TableColumn recordsTableRecordsColumn;
+	private TableColumn recordsTableRecordColumn;
 	private Menu menuBar;
 	private MenuItem fileMenuItem;
 	private Menu fileMenu;
@@ -91,7 +87,7 @@ public class MainWindow {
 	private MenuItem aboutMenuItem;
 	private Tree explorerTree;
 	private Tree executionTracesTree;
-	private TreeColumn treeColumn_7;
+	private TreeColumn tracesTreeContainerColumn;
 	private TreeColumn treeColumn_8;
 	private TreeColumn treeColumn_10;
 	private TreeColumn treeColumn_11;
@@ -102,13 +98,13 @@ public class MainWindow {
 	private MenuItem mntmLongComponentNames;
 	private MenuItem mntmShortOperationParameters;
 	private MenuItem mntmLongOperationParameters;
-	private TableColumn tblclmnType;
-	private SashForm sashForm_1;
+	private TableColumn recordsTableTypeColumn;
+	private SashForm explorerForm;
 	private final DataSource model = new DataSource();
 	private TreeColumn trclmnPercent;
 	private Label lblNa;
-	private SashForm sashForm_2;
-	private Composite composite;
+	private SashForm executionTracesForm;
+	private Composite executionTracesDetailComposite;
 	private Label lblTraceId;
 	private Label lblNa_1;
 	private Label lblFailed;
@@ -123,6 +119,24 @@ public class MainWindow {
 	private Label lblNa_6;
 	private Label lblStackDepth;
 	private Label lblNa_7;
+	private SashForm sashForm;
+	private Tree tree_1;
+	private TreeColumn treeColumn;
+	private TreeColumn treeColumn_1;
+	private TreeColumn treeColumn_2;
+	private TreeColumn trclmnCalls;
+	private Composite composite;
+	private Label label;
+	private Label label_1;
+	private Label label_2;
+	private Label label_3;
+	private Label label_4;
+	private Label label_5;
+	private Label label_10;
+	private Label label_11;
+	private Label label_12;
+	private Label label_13;
+	private TreeItem trtmAggregatedExecutionTraces;
 
 	public static void main(final String[] args) {
 		final MainWindow window = new MainWindow();
@@ -132,7 +146,7 @@ public class MainWindow {
 	public void open() {
 		final Display display = Display.getDefault();
 		this.createContents();
-
+		this.model.loadMonitoringLogFromFS("testdata");
 		this.shell.open();
 		this.shell.layout();
 		while (!this.shell.isDisposed()) {
@@ -149,12 +163,12 @@ public class MainWindow {
 		this.shell.setText("Kieker's GUI");
 		this.shell.setLayout(new GridLayout(1, false));
 
-		this.sashForm = new SashForm(this.shell, SWT.NONE);
-		this.sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		this.outerForm = new SashForm(this.shell, SWT.NONE);
+		this.outerForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		this.sashForm_1 = new SashForm(this.sashForm, SWT.VERTICAL);
+		this.explorerForm = new SashForm(this.outerForm, SWT.VERTICAL);
 
-		this.explorerTreeViewer = new TreeViewer(this.sashForm_1, SWT.BORDER);
+		this.explorerTreeViewer = new TreeViewer(this.explorerForm, SWT.BORDER);
 		this.explorerTree = this.explorerTreeViewer.getTree();
 
 		this.explorerTreeItem = new TreeItem(this.explorerTree, SWT.NONE);
@@ -166,13 +180,16 @@ public class MainWindow {
 		this.executionTracesTreeItem = new TreeItem(this.explorerTreeItem, SWT.NONE);
 		this.executionTracesTreeItem.setText("Execution Traces");
 
+		this.trtmAggregatedExecutionTraces = new TreeItem(this.executionTracesTreeItem, SWT.NONE);
+		this.trtmAggregatedExecutionTraces.setText("Aggregated Execution Traces");
+
 		this.executionTracesTreeItem.setExpanded(true);
 		this.explorerTreeItem.setExpanded(true);
 
 		this.explorerTree.addSelectionListener(new ExplorerTreeSelectionAdapter());
-		this.sashForm_1.setWeights(new int[] { 3 });
+		this.explorerForm.setWeights(new int[] { 3 });
 
-		this.mainComposite = new Composite(this.sashForm, SWT.NONE);
+		this.mainComposite = new Composite(this.outerForm, SWT.NONE);
 		this.mainComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.mainComposite.setLayout(new StackLayout());
 
@@ -186,27 +203,27 @@ public class MainWindow {
 		this.recordsTableTimestampColumn.setText("Timestamp");
 		this.recordsTableTimestampColumn.addListener(SWT.Selection, new RecordsTableTimestampSortListener());
 
-		this.tblclmnType = new TableColumn(this.recordsTable, SWT.NONE);
-		this.tblclmnType.setWidth(100);
-		this.tblclmnType.setText("Type");
-		this.tblclmnType.addListener(SWT.Selection, new RecordsTableTypeSortListener());
+		this.recordsTableTypeColumn = new TableColumn(this.recordsTable, SWT.NONE);
+		this.recordsTableTypeColumn.setWidth(100);
+		this.recordsTableTypeColumn.setText("Type");
+		this.recordsTableTypeColumn.addListener(SWT.Selection, new RecordsTableTypeSortListener());
 
-		this.recordsTableRecordsColumn = new TableColumn(this.recordsTable, SWT.NONE);
-		this.recordsTableRecordsColumn.setWidth(100);
-		this.recordsTableRecordsColumn.setText("Record");
-		this.recordsTableRecordsColumn.addListener(SWT.Selection, new RecordsTableTimestampSortListener());
+		this.recordsTableRecordColumn = new TableColumn(this.recordsTable, SWT.NONE);
+		this.recordsTableRecordColumn.setWidth(100);
+		this.recordsTableRecordColumn.setText("Record");
+		this.recordsTableRecordColumn.addListener(SWT.Selection, new RecordsTableTimestampSortListener());
 
-		this.sashForm_2 = new SashForm(this.mainComposite, SWT.VERTICAL);
+		this.executionTracesForm = new SashForm(this.mainComposite, SWT.VERTICAL);
 
-		this.executionTracesTree = new Tree(this.sashForm_2, SWT.BORDER | SWT.FULL_SELECTION | SWT.VIRTUAL);
+		this.executionTracesTree = new Tree(this.executionTracesForm, SWT.BORDER | SWT.FULL_SELECTION | SWT.VIRTUAL);
 		this.executionTracesTree.setHeaderVisible(true);
 		this.executionTracesTree.addListener(SWT.SetData, new ExecutionTracesTreeSetDataListener());
 		this.executionTracesTree.addSelectionListener(new ExecutionTraceTreeSelectionListener());
 		Properties.getInstance().addObserver(new TreeUpdateObserver(this.executionTracesTree));
 
-		this.treeColumn_7 = new TreeColumn(this.executionTracesTree, SWT.NONE);
-		this.treeColumn_7.setWidth(100);
-		this.treeColumn_7.setText("Execution Container");
+		this.tracesTreeContainerColumn = new TreeColumn(this.executionTracesTree, SWT.NONE);
+		this.tracesTreeContainerColumn.setWidth(100);
+		this.tracesTreeContainerColumn.setText("Execution Container");
 
 		this.treeColumn_8 = new TreeColumn(this.executionTracesTree, SWT.NONE);
 		this.treeColumn_8.setWidth(100);
@@ -228,69 +245,137 @@ public class MainWindow {
 		this.treeColumn_16.setWidth(100);
 		this.treeColumn_16.setText("Trace ID");
 
-		this.composite = new Composite(this.sashForm_2, SWT.BORDER);
-		this.composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.composite.setLayout(new GridLayout(2, false));
+		this.executionTracesDetailComposite = new Composite(this.executionTracesForm, SWT.BORDER);
+		this.executionTracesDetailComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		this.executionTracesDetailComposite.setLayout(new GridLayout(2, false));
 
-		this.lblExecutionContainer = new Label(this.composite, SWT.NONE);
+		this.lblExecutionContainer = new Label(this.executionTracesDetailComposite, SWT.NONE);
 		this.lblExecutionContainer.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblExecutionContainer.setText("Execution Container:");
 
-		this.lblNa_4 = new Label(this.composite, SWT.NONE);
+		this.lblNa_4 = new Label(this.executionTracesDetailComposite, SWT.NONE);
 		this.lblNa_4.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		this.lblNa_4.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblNa_4.setText("N/A");
 
-		this.lblComponent = new Label(this.composite, SWT.NONE);
+		this.lblComponent = new Label(this.executionTracesDetailComposite, SWT.NONE);
 		this.lblComponent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblComponent.setText("Component:");
 
-		this.lblNa_5 = new Label(this.composite, SWT.NONE);
+		this.lblNa_5 = new Label(this.executionTracesDetailComposite, SWT.NONE);
 		this.lblNa_5.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblNa_5.setText("N/A");
 
-		this.lblOperation = new Label(this.composite, SWT.NONE);
+		this.lblOperation = new Label(this.executionTracesDetailComposite, SWT.NONE);
 		this.lblOperation.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblOperation.setText("Operation:");
 
-		this.lblNa_6 = new Label(this.composite, SWT.NONE);
+		this.lblNa_6 = new Label(this.executionTracesDetailComposite, SWT.NONE);
 		this.lblNa_6.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblNa_6.setText("N/A");
 
-		this.lblTraceId = new Label(this.composite, SWT.NONE);
+		this.lblTraceId = new Label(this.executionTracesDetailComposite, SWT.NONE);
 		this.lblTraceId.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblTraceId.setText("Trace ID:");
 
-		this.lblNa_1 = new Label(this.composite, SWT.NONE);
+		this.lblNa_1 = new Label(this.executionTracesDetailComposite, SWT.NONE);
 		this.lblNa_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblNa_1.setText("N/A");
 
-		this.lblDuration = new Label(this.composite, SWT.NONE);
+		this.lblDuration = new Label(this.executionTracesDetailComposite, SWT.NONE);
 		this.lblDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblDuration.setText("Duration:");
 
-		this.lblNa_3 = new Label(this.composite, SWT.NONE);
+		this.lblNa_3 = new Label(this.executionTracesDetailComposite, SWT.NONE);
 		this.lblNa_3.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblNa_3.setText("N/A");
 
-		this.lblStackDepth = new Label(this.composite, SWT.NONE);
+		this.lblStackDepth = new Label(this.executionTracesDetailComposite, SWT.NONE);
 		this.lblStackDepth.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblStackDepth.setText("Stack Depth:");
 
-		this.lblNa_7 = new Label(this.composite, SWT.NONE);
+		this.lblNa_7 = new Label(this.executionTracesDetailComposite, SWT.NONE);
 		this.lblNa_7.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblNa_7.setText("N/A");
 
-		this.lblFailed = new Label(this.composite, SWT.NONE);
+		this.lblFailed = new Label(this.executionTracesDetailComposite, SWT.NONE);
 		this.lblFailed.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblFailed.setText("Failed:");
 
-		this.lblNa_2 = new Label(this.composite, SWT.NONE);
+		this.lblNa_2 = new Label(this.executionTracesDetailComposite, SWT.NONE);
 		this.lblNa_2.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblNa_2.setText("N/A");
-		this.sashForm_2.setWeights(new int[] { 2, 1 });
+		this.executionTracesForm.setWeights(new int[] { 2, 1 });
 
-		this.sashForm.setWeights(new int[] { 2, 4 });
+		this.sashForm = new SashForm(this.mainComposite, SWT.VERTICAL);
+
+		this.tree_1 = new Tree(this.sashForm, SWT.BORDER | SWT.FULL_SELECTION | SWT.VIRTUAL);
+		this.tree_1.setHeaderVisible(true);
+		this.tree_1.addListener(SWT.SetData, new AggregatedExecutionTracesTreeSetDataListener());
+
+		this.treeColumn = new TreeColumn(this.tree_1, SWT.NONE);
+		this.treeColumn.setWidth(100);
+		this.treeColumn.setText("Execution Container");
+
+		this.treeColumn_1 = new TreeColumn(this.tree_1, SWT.NONE);
+		this.treeColumn_1.setWidth(100);
+		this.treeColumn_1.setText("Component");
+
+		this.treeColumn_2 = new TreeColumn(this.tree_1, SWT.NONE);
+		this.treeColumn_2.setWidth(100);
+		this.treeColumn_2.setText("Operation");
+
+		this.trclmnCalls = new TreeColumn(this.tree_1, SWT.NONE);
+		this.trclmnCalls.setWidth(100);
+		this.trclmnCalls.setText("# Calls");
+
+		this.composite = new Composite(this.sashForm, SWT.BORDER);
+		this.composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		this.composite.setLayout(new GridLayout(2, false));
+
+		this.label = new Label(this.composite, SWT.NONE);
+		this.label.setText("Execution Container:");
+		this.label.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+
+		this.label_1 = new Label(this.composite, SWT.NONE);
+		this.label_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		this.label_1.setText("N/A");
+		this.label_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+
+		this.label_2 = new Label(this.composite, SWT.NONE);
+		this.label_2.setText("Component:");
+		this.label_2.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+
+		this.label_3 = new Label(this.composite, SWT.NONE);
+		this.label_3.setText("N/A");
+		this.label_3.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+
+		this.label_4 = new Label(this.composite, SWT.NONE);
+		this.label_4.setText("Operation:");
+		this.label_4.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+
+		this.label_5 = new Label(this.composite, SWT.NONE);
+		this.label_5.setText("N/A");
+		this.label_5.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+
+		this.label_10 = new Label(this.composite, SWT.NONE);
+		this.label_10.setText("Stack Depth:");
+		this.label_10.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+
+		this.label_11 = new Label(this.composite, SWT.NONE);
+		this.label_11.setText("N/A");
+		this.label_11.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+
+		this.label_12 = new Label(this.composite, SWT.NONE);
+		this.label_12.setText("Failed:");
+		this.label_12.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+
+		this.label_13 = new Label(this.composite, SWT.NONE);
+		this.label_13.setText("N/A");
+		this.label_13.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		this.sashForm.setWeights(new int[] { 2, 1 });
+
+		this.outerForm.setWeights(new int[] { 2, 4 });
 
 		this.menuBar = new Menu(this.shell, SWT.BAR);
 		this.shell.setMenuBar(this.menuBar);
@@ -381,7 +466,21 @@ public class MainWindow {
 
 	protected void showAggregatedExecutionTraces() {
 		// Show the tree
+		this.setVisibleMainComponent(this.sashForm);
 
+		// Reload the data from the model...
+		final List<AggregatedExecutionEntry> traces = this.model.getAggregatedTrace();
+
+		// ...and write it into the tree
+		this.tree_1.setItemCount(traces.size());
+		this.tree_1.setData(traces);
+		this.lblNa.setText(Integer.toString(traces.size()) + " Aggregated Traces");
+		this.lblNa.pack();
+
+		// Resize the columns
+		for (final TreeColumn column : this.tree_1.getColumns()) {
+			column.pack();
+		}
 	}
 
 	protected void showAggregatedExecutionTracesByContainer() {
@@ -394,7 +493,7 @@ public class MainWindow {
 
 	protected void showExecutionTraces() {
 		// Show the tree
-		this.setVisibleMainComponent(this.sashForm_2);
+		this.setVisibleMainComponent(this.executionTracesForm);
 
 		// Reload the data from the model...
 		final List<ExecutionEntry> traces = this.model.getTraces();
@@ -456,6 +555,8 @@ public class MainWindow {
 				MainWindow.this.showRecords();
 			} else if (MainWindow.this.executionTracesTreeItem == selectedWidget) {
 				MainWindow.this.showExecutionTraces();
+			} else if (MainWindow.this.trtmAggregatedExecutionTraces == selectedWidget) {
+				MainWindow.this.showAggregatedExecutionTraces();
 			} else {
 				MainWindow.this.setVisibleMainComponent(null);
 				MainWindow.this.lblNa.setText("");
@@ -464,7 +565,7 @@ public class MainWindow {
 
 	}
 
-	private class SystemModelTreeSetDataListener implements Listener {
+	private class AggregatedExecutionTracesTreeSetDataListener implements Listener {
 
 		@Override
 		public void handleEvent(final Event event) {
@@ -475,19 +576,36 @@ public class MainWindow {
 			final TreeItem parent = item.getParentItem();
 
 			// Decide whether the current item is a root or not
+			final AggregatedExecutionEntry executionEntry;
 			if (parent == null) {
-				final List<ComponentType> components = new ArrayList<>((Collection<ComponentType>) tree.getData());
-				final ComponentType component = components.get(tableIndex);
-
-				item.setText(component.getFullQualifiedName());
-
-				item.setData(component.getOperations());
-				item.setItemCount(component.getOperations().size());
+				executionEntry = ((List<AggregatedExecutionEntry>) tree.getData()).get(tableIndex);
 			} else {
-				final List<Operation> operations = new ArrayList<>((Collection<Operation>) parent.getData());
-				final Operation operation = operations.get(tableIndex);
-				item.setText(operation.getSignature().toString());
+				// executionEntry = ((AggregatedExecutionEntry) parent.getData()).getChildren().get(tableIndex);
+				executionEntry = null;
 			}
+
+			String componentName = executionEntry.getComponent();
+			if (Properties.getInstance().isShortComponentNames()) {
+				final int lastPointPos = componentName.lastIndexOf('.');
+				componentName = componentName.substring(lastPointPos + 1);
+			}
+			String operationString = executionEntry.getOperation();
+			if (Properties.getInstance().isShortOperationParameters()) {
+				operationString = operationString.replaceAll("\\(..*\\)", "(...)");
+
+				final int lastPointPos = operationString.lastIndexOf('.', operationString.length() - 5);
+				operationString = operationString.substring(lastPointPos + 1);
+			}
+			item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, Integer.toString(executionEntry.getCalls()) });
+
+			// if (executionEntry.isFailed()) {
+			// final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+			// item.setForeground(colorRed);
+			// }
+
+			item.setData(executionEntry);
+			item.setItemCount(0);
+			// item.setItemCount(executionEntry.getChildren().size());
 		}
 	}
 
@@ -503,7 +621,6 @@ public class MainWindow {
 
 			// Decide whether the current item is a root or not
 			final ExecutionEntry executionEntry;
-			final List<ExecutionEntry> executions;
 			final String traceID;
 
 			if (parent == null) {

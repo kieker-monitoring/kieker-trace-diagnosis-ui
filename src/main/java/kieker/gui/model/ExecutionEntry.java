@@ -17,6 +17,7 @@
 package kieker.gui.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -122,6 +123,67 @@ public final class ExecutionEntry {
 		for (final ExecutionEntry child : this.children) {
 			child.updatePercent();
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + ((this.children == null) ? 0 : this.children.hashCode());
+		result = (prime * result) + ((this.component == null) ? 0 : this.component.hashCode());
+		result = (prime * result) + ((this.container == null) ? 0 : this.container.hashCode());
+		result = (prime * result) + ((this.failedCause == null) ? 0 : this.failedCause.hashCode());
+		result = (prime * result) + ((this.operation == null) ? 0 : this.operation.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(final Object other) {
+		if (this == other) {
+			return true;
+		}
+		if (other == null) {
+			return false;
+		}
+		if (!(other instanceof ExecutionEntry)) {
+			return false;
+		}
+		final ExecutionEntry otherEntry = (ExecutionEntry) other;
+		if (!this.container.equals(otherEntry.container)) {
+			return false;
+		}
+		if (!this.component.equals(otherEntry.component)) {
+			return false;
+		}
+		if (!this.operation.equals(otherEntry.operation)) {
+			return false;
+		}
+		if (this.failedCause == null) {
+			if (otherEntry.failedCause != null) {
+				return false;
+			}
+		} else {
+			if (!this.failedCause.equals(otherEntry.failedCause)) {
+				return false;
+			}
+		}
+		if (this.children.size() != otherEntry.children.size()) {
+			return false;
+		}
+
+		final Iterator<ExecutionEntry> ownChildrenIterator = this.children.iterator();
+		final Iterator<ExecutionEntry> otherChildrenIterator = otherEntry.children.iterator();
+
+		while (ownChildrenIterator.hasNext()) {
+			final ExecutionEntry ownChild = ownChildrenIterator.next();
+			final ExecutionEntry otherChild = otherChildrenIterator.next();
+
+			if (!ownChild.equals(otherChild)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 }

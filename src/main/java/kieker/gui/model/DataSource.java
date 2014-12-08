@@ -25,13 +25,14 @@ import teetime.framework.Analysis;
 
 /**
  * A container for data used within this application.
- * 
+ *
  * @author Nils Christian Ehmke
  */
 public final class DataSource {
 
 	private List<RecordEntry> records = Collections.emptyList();
 	private List<ExecutionEntry> traces = Collections.emptyList();
+	private List<AggregatedExecutionEntry> aggregatedTraces;
 
 	public void loadMonitoringLogFromFS(final String directory) {
 		// Load and analyze the monitoring logs from the given directory
@@ -44,6 +45,7 @@ public final class DataSource {
 		// Store the results from the analysis
 		this.records = analysisConfiguration.getRecordsList();
 		this.traces = analysisConfiguration.getTracesList();
+		this.aggregatedTraces = analysisConfiguration.getAggregatedTraces();
 	}
 
 	public List<RecordEntry> getRecords() {
@@ -52,6 +54,10 @@ public final class DataSource {
 
 	public List<ExecutionEntry> getTraces() {
 		return this.traces;
+	}
+
+	public List<AggregatedExecutionEntry> getAggregatedTrace() {
+		return this.aggregatedTraces;
 	}
 
 }
