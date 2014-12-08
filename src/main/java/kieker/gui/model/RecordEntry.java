@@ -26,7 +26,7 @@ public final class RecordEntry {
 	private final long timestamp;
 	private final String type;
 	private final String representation;
-
+ 
 	public RecordEntry(final long timestamp, final String type, final String representation) {
 		this.timestamp = timestamp;
 		this.type = type;

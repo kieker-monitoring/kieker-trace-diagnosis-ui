@@ -24,7 +24,7 @@ import teetime.framework.OutputPort;
  *
  * @author Nils Christian Ehmke
  */
-public class Cloner<T> extends AbstractConsumerStage<T> {
+public final class Cloner<T> extends AbstractConsumerStage<T> {
 
 	private final OutputPort<T> firstOutputPort = super.createOutputPort();
 	private final OutputPort<T> secondOutputPort = super.createOutputPort();

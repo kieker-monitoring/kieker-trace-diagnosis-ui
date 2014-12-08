@@ -23,17 +23,25 @@ import java.util.List;
 import kieker.gui.model.importer.ImportAnalysisConfiguration;
 import teetime.framework.Analysis;
 
+/**
+ * A container for data used within this application.
+ * 
+ * @author Nils Christian Ehmke
+ */
 public final class DataSource {
 
 	private List<RecordEntry> records = Collections.emptyList();
 	private List<ExecutionEntry> traces = Collections.emptyList();
 
 	public void loadMonitoringLogFromFS(final String directory) {
-		final ImportAnalysisConfiguration analysisConfiguration = new ImportAnalysisConfiguration(new File(directory));
+		// Load and analyze the monitoring logs from the given directory
+		final File importDirectory = new File(directory);
+		final ImportAnalysisConfiguration analysisConfiguration = new ImportAnalysisConfiguration(importDirectory);
 		final Analysis analysis = new Analysis(analysisConfiguration);
 		analysis.init();
 		analysis.start();
 
+		// Store the results from the analysis
 		this.records = analysisConfiguration.getRecordsList();
 		this.traces = analysisConfiguration.getTracesList();
 	}

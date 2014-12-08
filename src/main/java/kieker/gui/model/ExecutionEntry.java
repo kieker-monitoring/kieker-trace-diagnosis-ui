@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simplified representation of an execution within a trace.
+ * A simplified representation of an execution within a trace. As an instance of this class can contain other instances, it can be used to represent a trace tree.
  *
  * @author Nils Christian Ehmke
  */

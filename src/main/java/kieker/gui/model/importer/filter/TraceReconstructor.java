@@ -32,11 +32,10 @@ import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 
 /**
- * Reconstruct traces based on the incoming instances of {@code IFlowRecord}. Currently only {@link TraceMetadata}, {@link BeforeOperationEvent} and
- * {@link AfterOperationEvent} instances are supported.
+ * Reconstruct traces based on the incoming instances of {@code IFlowRecord}. Currently only {@link TraceMetadata}, {@link BeforeOperationEvent} and {@link AfterOperationEvent} instances are supported.
  *
  * @author Nils Christian Ehmke
- */
+ */ 
 public final class TraceReconstructor extends AbstractConsumerStage<IFlowRecord> {
 
 	private final OutputPort<ExecutionEntry> outputPort = super.createOutputPort();
@@ -73,7 +72,7 @@ public final class TraceReconstructor extends AbstractConsumerStage<IFlowRecord>
 		return this.outputPort;
 	}
 
-	private static class TraceBuffer {
+	private final static class TraceBuffer {
 
 		private final String hostname;
 		private final Deque<BeforeOperationEvent> stack = new LinkedList<>();
@@ -95,12 +94,10 @@ public final class TraceReconstructor extends AbstractConsumerStage<IFlowRecord>
 		private void handleBeforeOperationEventRecord(final BeforeOperationEvent record) {
 			this.stack.push(record);
 
-			final ExecutionEntry newExecutionEntry;
+			final ExecutionEntry newExecutionEntry = new ExecutionEntry(record.getTraceId(), this.hostname, record.getClassSignature(), record.getOperationSignature());
 			if (this.root == null) {
-				newExecutionEntry = new ExecutionEntry(record.getTraceId(), this.hostname, record.getClassSignature(), record.getOperationSignature());
 				this.root = newExecutionEntry;
 			} else {
-				newExecutionEntry = new ExecutionEntry(record.getTraceId(), this.hostname, record.getClassSignature(), record.getOperationSignature());
 				this.header.addExecutionEntry(newExecutionEntry);
 			}
 			this.header = newExecutionEntry;
