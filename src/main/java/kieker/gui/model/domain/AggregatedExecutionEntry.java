@@ -26,6 +26,8 @@ public final class AggregatedExecutionEntry {
 	private final String container;
 	private final String component;
 	private final String operation;
+	private long minDuration;
+	private long maxDuration;
 	private int calls;
 
 	public AggregatedExecutionEntry(final ExecutionEntry execEntry) {
@@ -33,10 +35,24 @@ public final class AggregatedExecutionEntry {
 		this.component = execEntry.getComponent();
 		this.operation = execEntry.getOperation();
 		this.failedCause = execEntry.getFailedCause();
+		this.minDuration = execEntry.getDuration();
+		this.maxDuration = execEntry.getDuration();
 
 		for (final ExecutionEntry child : execEntry.getChildren()) {
 			this.children.add(new AggregatedExecutionEntry(child));
 		}
+	}
+
+	public int getStackDepth() {
+		int stackDepth = this.children.isEmpty() ? 0 : 1;
+
+		int maxChildrenStackDepth = 0;
+		for (final AggregatedExecutionEntry child : this.children) {
+			maxChildrenStackDepth = Math.max(maxChildrenStackDepth, child.getStackDepth());
+		}
+		stackDepth += maxChildrenStackDepth;
+
+		return stackDepth;
 	}
 
 	public List<AggregatedExecutionEntry> getChildren() {
@@ -55,8 +71,18 @@ public final class AggregatedExecutionEntry {
 		return this.operation;
 	}
 
-	public void incrementCalls() {
+	public void incrementCalls(final ExecutionEntry executionEntry) {
 		this.calls++;
+		this.minDuration = Math.min(this.minDuration, executionEntry.getDuration());
+		this.maxDuration = Math.max(this.maxDuration, executionEntry.getDuration());
+	}
+
+	public long getMinDuration() {
+		return this.minDuration;
+	}
+
+	public long getMaxDuration() {
+		return this.maxDuration;
 	}
 
 	public int getCalls() {

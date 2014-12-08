@@ -17,8 +17,10 @@ public final class AggregatedTraceDetailComposite extends Composite {
 	private final Label lblOperationDisplay;
 	private final Label lblFailed;
 	private final Label lblFailedDisplay;
-
 	private final Label lblCalledDisplay;
+	private final Label lblStackDepthDisplay;
+	private final Label lblMinimalDurationDisplay;
+	private final Label lblMaximalDurationDisplay;
 
 	public AggregatedTraceDetailComposite(final Composite parent, final int style) {
 		super(parent, style);
@@ -52,6 +54,14 @@ public final class AggregatedTraceDetailComposite extends Composite {
 		this.lblOperationDisplay.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		this.lblOperationDisplay.setText("N/A");
 
+		final Label lblStackDepth = new Label(this, SWT.NONE);
+		lblStackDepth.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		lblStackDepth.setText("Stack Depth:");
+
+		this.lblStackDepthDisplay = new Label(this, SWT.NONE);
+		this.lblStackDepthDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		this.lblStackDepthDisplay.setText("N/A");
+
 		this.lblFailed = new Label(this, SWT.NONE);
 		this.lblFailed.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblFailed.setText("Failed:");
@@ -68,13 +78,33 @@ public final class AggregatedTraceDetailComposite extends Composite {
 		this.lblCalledDisplay = new Label(this, SWT.NONE);
 		this.lblCalledDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblCalledDisplay.setText("N/A");
+
+		final Label lblMinimalDuration = new Label(this, SWT.NONE);
+		lblMinimalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		lblMinimalDuration.setText("Minimal Duration:");
+
+		this.lblMinimalDurationDisplay = new Label(this, SWT.NONE);
+		this.lblMinimalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		this.lblMinimalDurationDisplay.setText("N/A");
+
+		final Label lblMaximalDuration = new Label(this, SWT.NONE);
+		lblMaximalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		lblMaximalDuration.setText("Maximal Duration:");
+
+		this.lblMaximalDurationDisplay = new Label(this, SWT.NONE);
+		this.lblMaximalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		this.lblMaximalDurationDisplay.setText("N/A");
 	}
 
 	public void setTraceToDisplay(final AggregatedExecutionEntry trace) {
 		this.lblExecutionContainerDisplay.setText(trace.getContainer());
 		this.lblComponentDisplay.setText(trace.getComponent());
 		this.lblOperationDisplay.setText(trace.getOperation());
+		this.lblStackDepthDisplay.setText(Integer.toString(trace.getStackDepth()));
 		this.lblCalledDisplay.setText(Integer.toString(trace.getCalls()));
+
+		this.lblMinimalDurationDisplay.setText(Long.toString(trace.getMinDuration()));
+		this.lblMaximalDurationDisplay.setText(Long.toString(trace.getMaxDuration()));
 
 		if (trace.isFailed()) {
 			this.lblFailedDisplay.setText("Yes (" + trace.getFailedCause() + ")");

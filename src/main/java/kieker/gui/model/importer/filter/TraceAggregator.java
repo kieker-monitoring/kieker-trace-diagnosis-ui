@@ -40,7 +40,7 @@ public final class TraceAggregator extends AbstractConsumerStage<ExecutionEntry>
 			final AggregatedExecutionEntry aggregatedExecutionEntry = new AggregatedExecutionEntry(executionEntry);
 			this.aggregationMap.put(executionEntry, aggregatedExecutionEntry);
 		}
-		this.aggregationMap.get(executionEntry).incrementCalls();
+		this.aggregationMap.get(executionEntry).incrementCalls(executionEntry);
 	}
 
 	@Override
