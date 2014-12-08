@@ -43,7 +43,6 @@ public final class TraceAggregator extends AbstractConsumerStage<ExecutionEntry>
 
 	@Override
 	public void onTerminating() throws Exception {
-		System.out.println("onTerminating");
 		for (final AggregatedExecutionEntry aggregatedExecutionEntry : this.aggregationMap.values()) {
 			this.outputPort.send(aggregatedExecutionEntry);
 		}

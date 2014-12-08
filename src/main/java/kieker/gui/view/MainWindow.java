@@ -16,13 +16,8 @@
 
 package kieker.gui.view;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
-import kieker.common.record.IMonitoringRecord;
 import kieker.gui.model.AggregatedExecutionEntry;
 import kieker.gui.model.DataSource;
 import kieker.gui.model.ExecutionEntry;
@@ -36,27 +31,21 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.swt.widgets.Widget;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 /**
@@ -72,8 +61,8 @@ public class MainWindow {
 	private SashForm outerForm;
 	private TreeViewer explorerTreeViewer;
 	private TreeItem explorerTreeItem;
-	private TreeItem recordsTreeItem;
-	private TreeItem executionTracesTreeItem;
+	TreeItem recordsTreeItem;
+	TreeItem executionTracesTreeItem;
 	private TableViewer recordsTableViewer;
 	private TableColumn recordsTableTimestampColumn;
 	private TableColumn recordsTableRecordColumn;
@@ -102,23 +91,23 @@ public class MainWindow {
 	private SashForm explorerForm;
 	private final DataSource model = new DataSource();
 	private TreeColumn trclmnPercent;
-	private Label lblNa;
+	Label lblNa;
 	private SashForm executionTracesForm;
 	private Composite executionTracesDetailComposite;
 	private Label lblTraceId;
-	private Label lblNa_1;
-	private Label lblFailed;
-	private Label lblNa_2;
+	Label lblNa_1;
+	Label lblFailed;
+	Label lblNa_2;
 	private Label lblDuration;
-	private Label lblNa_3;
+	Label lblNa_3;
 	private Label lblExecutionContainer;
 	private Label lblComponent;
 	private Label lblOperation;
-	private Label lblNa_4;
-	private Label lblNa_5;
-	private Label lblNa_6;
+	Label lblNa_4;
+	Label lblNa_5;
+	Label lblNa_6;
 	private Label lblStackDepth;
-	private Label lblNa_7;
+	Label lblNa_7;
 	private SashForm sashForm;
 	private Tree tree_1;
 	private TreeColumn treeColumn;
@@ -136,7 +125,7 @@ public class MainWindow {
 	private Label label_11;
 	private Label label_12;
 	private Label label_13;
-	private TreeItem trtmAggregatedExecutionTraces;
+	TreeItem trtmAggregatedExecutionTraces;
 
 	public static void main(final String[] args) {
 		final MainWindow window = new MainWindow();
@@ -186,7 +175,7 @@ public class MainWindow {
 		this.executionTracesTreeItem.setExpanded(true);
 		this.explorerTreeItem.setExpanded(true);
 
-		this.explorerTree.addSelectionListener(new ExplorerTreeSelectionAdapter());
+		this.explorerTree.addSelectionListener(new ExplorerTreeSelectionAdapter(this));
 		this.explorerForm.setWeights(new int[] { 3 });
 
 		this.mainComposite = new Composite(this.outerForm, SWT.NONE);
@@ -218,7 +207,7 @@ public class MainWindow {
 		this.executionTracesTree = new Tree(this.executionTracesForm, SWT.BORDER | SWT.FULL_SELECTION | SWT.VIRTUAL);
 		this.executionTracesTree.setHeaderVisible(true);
 		this.executionTracesTree.addListener(SWT.SetData, new ExecutionTracesTreeSetDataListener());
-		this.executionTracesTree.addSelectionListener(new ExecutionTraceTreeSelectionListener());
+		this.executionTracesTree.addSelectionListener(new ExecutionTraceTreeSelectionListener(this));
 		Properties.getInstance().addObserver(new TreeUpdateObserver(this.executionTracesTree));
 
 		this.tracesTreeContainerColumn = new TreeColumn(this.executionTracesTree, SWT.NONE);
@@ -538,292 +527,10 @@ public class MainWindow {
 		}
 	}
 
-	private void setVisibleMainComponent(final Control component) {
+	void setVisibleMainComponent(final Control component) {
 		final StackLayout layout = (StackLayout) this.mainComposite.getLayout();
 		layout.topControl = component;
 
 		this.mainComposite.layout();
-	}
-
-	private class ExplorerTreeSelectionAdapter extends SelectionAdapter {
-
-		@Override
-		public void widgetSelected(final SelectionEvent e) {
-			final Widget selectedWidget = e.item;
-
-			if (MainWindow.this.recordsTreeItem == selectedWidget) {
-				MainWindow.this.showRecords();
-			} else if (MainWindow.this.executionTracesTreeItem == selectedWidget) {
-				MainWindow.this.showExecutionTraces();
-			} else if (MainWindow.this.trtmAggregatedExecutionTraces == selectedWidget) {
-				MainWindow.this.showAggregatedExecutionTraces();
-			} else {
-				MainWindow.this.setVisibleMainComponent(null);
-				MainWindow.this.lblNa.setText("");
-			}
-		}
-
-	}
-
-	private class AggregatedExecutionTracesTreeSetDataListener implements Listener {
-
-		@Override
-		public void handleEvent(final Event event) {
-			// Get the necessary information from the event
-			final Tree tree = (Tree) event.widget;
-			final TreeItem item = (TreeItem) event.item;
-			final int tableIndex = event.index;
-			final TreeItem parent = item.getParentItem();
-
-			// Decide whether the current item is a root or not
-			final AggregatedExecutionEntry executionEntry;
-			if (parent == null) {
-				executionEntry = ((List<AggregatedExecutionEntry>) tree.getData()).get(tableIndex);
-			} else {
-				// executionEntry = ((AggregatedExecutionEntry) parent.getData()).getChildren().get(tableIndex);
-				executionEntry = null;
-			}
-
-			String componentName = executionEntry.getComponent();
-			if (Properties.getInstance().isShortComponentNames()) {
-				final int lastPointPos = componentName.lastIndexOf('.');
-				componentName = componentName.substring(lastPointPos + 1);
-			}
-			String operationString = executionEntry.getOperation();
-			if (Properties.getInstance().isShortOperationParameters()) {
-				operationString = operationString.replaceAll("\\(..*\\)", "(...)");
-
-				final int lastPointPos = operationString.lastIndexOf('.', operationString.length() - 5);
-				operationString = operationString.substring(lastPointPos + 1);
-			}
-			item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, Integer.toString(executionEntry.getCalls()) });
-
-			// if (executionEntry.isFailed()) {
-			// final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
-			// item.setForeground(colorRed);
-			// }
-
-			item.setData(executionEntry);
-			item.setItemCount(0);
-			// item.setItemCount(executionEntry.getChildren().size());
-		}
-	}
-
-	private class ExecutionTracesTreeSetDataListener implements Listener {
-
-		@Override
-		public void handleEvent(final Event event) {
-			// Get the necessary information from the event
-			final Tree tree = (Tree) event.widget;
-			final TreeItem item = (TreeItem) event.item;
-			final int tableIndex = event.index;
-			final TreeItem parent = item.getParentItem();
-
-			// Decide whether the current item is a root or not
-			final ExecutionEntry executionEntry;
-			final String traceID;
-
-			if (parent == null) {
-				executionEntry = ((List<ExecutionEntry>) tree.getData()).get(tableIndex);
-				traceID = Long.toString(executionEntry.getTraceID());
-			} else {
-				executionEntry = ((ExecutionEntry) parent.getData()).getChildren().get(tableIndex);
-				traceID = "";
-			}
-
-			String componentName = executionEntry.getComponent();
-			if (Properties.getInstance().isShortComponentNames()) {
-				final int lastPointPos = componentName.lastIndexOf('.');
-				componentName = componentName.substring(lastPointPos + 1);
-			}
-			String operationString = executionEntry.getOperation();
-			if (Properties.getInstance().isShortOperationParameters()) {
-				operationString = operationString.replaceAll("\\(..*\\)", "(...)");
-
-				final int lastPointPos = operationString.lastIndexOf('.', operationString.length() - 5);
-				operationString = operationString.substring(lastPointPos + 1);
-			}
-			item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, Long.toString(executionEntry.getDuration()),
-					String.format("%.1f%%", executionEntry.getPercent()), traceID });
-
-			if (executionEntry.isFailed()) {
-				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
-				item.setForeground(colorRed);
-			}
-
-			item.setData(executionEntry);
-			item.setItemCount(executionEntry.getChildren().size());
-		}
-	}
-
-	private class RecordsTableSetDataListener implements Listener {
-
-		@Override
-		public void handleEvent(final Event event) {
-			// Get the necessary information from the event
-			final Table table = (Table) event.widget;
-			final TableItem item = (TableItem) event.item;
-			final int tableIndex = event.index;
-
-			// Get the data for the current row
-			final List<RecordEntry> records = (List<RecordEntry>) table.getData();
-			final RecordEntry record = records.get(tableIndex);
-
-			// Get the data to display
-			final String timestampStr = Long.toString(record.getTimestamp());
-			final String type = record.getType();
-			final String recordStr = record.getRepresentation();
-			item.setText(new String[] { timestampStr, type, recordStr });
-		}
-
-	}
-
-	private class RecordsTableTimestampSortListener implements Listener {
-
-		@Override
-		public void handleEvent(final Event event) {
-			// Get the necessary information from the event
-			final TableColumn currentColumn = (TableColumn) event.widget;
-			final Table table = currentColumn.getParent();
-			final TableColumn sortColumn = table.getSortColumn();
-
-			// Determine new sort column and direction
-			int direction = table.getSortDirection();
-			if (sortColumn == currentColumn) {
-				direction = ((direction == SWT.UP) ? SWT.DOWN : SWT.UP);
-			} else {
-				table.setSortColumn(currentColumn);
-				direction = SWT.UP;
-			}
-
-			// Sort the data
-			final List<RecordEntry> records = (List<RecordEntry>) table.getData();
-			Collections.sort(records, new RecordEntryTimestampComparator(direction));
-
-			// Update the data displayed in the table
-			table.setSortDirection(direction);
-			table.clearAll();
-		}
-	}
-
-	private class RecordsTableTypeSortListener implements Listener {
-
-		@Override
-		public void handleEvent(final Event event) {
-			// Get the necessary information from the event
-			final TableColumn currentColumn = (TableColumn) event.widget;
-			final Table table = currentColumn.getParent();
-			final TableColumn sortColumn = table.getSortColumn();
-
-			// Determine new sort column and direction
-			int direction = table.getSortDirection();
-			if (sortColumn == currentColumn) {
-				direction = ((direction == SWT.UP) ? SWT.DOWN : SWT.UP);
-			} else {
-				table.setSortColumn(currentColumn);
-				direction = SWT.UP;
-			}
-
-			// Sort the data
-			final List<IMonitoringRecord> records = (List<IMonitoringRecord>) table.getData();
-			Collections.sort(records, new IMonitoringRecordTypeComparator(direction));
-
-			// Update the data displayed in the table
-			table.setSortDirection(direction);
-			table.clearAll();
-		}
-	}
-
-	private class RecordEntryTimestampComparator implements Comparator<RecordEntry> {
-
-		private final int direction;
-
-		public RecordEntryTimestampComparator(final int direction) {
-			this.direction = direction;
-		}
-
-		@Override
-		public int compare(final RecordEntry o1, final RecordEntry o2) {
-			int result = Long.compare(o1.getTimestamp(), o2.getTimestamp());
-			if (this.direction == SWT.UP) {
-				result = -result;
-			}
-			return result;
-		}
-
-	}
-
-	private class IMonitoringRecordTypeComparator implements Comparator<IMonitoringRecord> {
-
-		private final int direction;
-
-		public IMonitoringRecordTypeComparator(final int direction) {
-			this.direction = direction;
-		}
-
-		@Override
-		public int compare(final IMonitoringRecord o1, final IMonitoringRecord o2) {
-			int result = o1.getClass().getCanonicalName().compareTo(o2.getClass().getCanonicalName());
-			if (this.direction == SWT.UP) {
-				result = -result;
-			}
-			return result;
-		}
-	}
-
-	private static class TreeUpdateObserver implements Observer {
-
-		private final Tree tree;
-
-		public TreeUpdateObserver(final Tree tree) {
-			this.tree = tree;
-		}
-
-		@Override
-		public void update(final Observable observable, final Object obj) {
-			this.tree.clearAll(true);
-		}
-
-	}
-
-	private class ExecutionTraceTreeSelectionListener implements SelectionListener {
-
-		@Override
-		public void widgetSelected(final SelectionEvent e) {
-			final Object data = e.item.getData();
-			if (data instanceof ExecutionEntry) {
-				MainWindow.this.lblNa_1.setText(Long.toString(((ExecutionEntry) data).getTraceID()));
-				MainWindow.this.lblNa_3.setText(Long.toString(((ExecutionEntry) data).getDuration()));
-
-				MainWindow.this.lblNa_4.setText(((ExecutionEntry) data).getContainer());
-				MainWindow.this.lblNa_5.setText(((ExecutionEntry) data).getComponent());
-				MainWindow.this.lblNa_6.setText(((ExecutionEntry) data).getOperation());
-				MainWindow.this.lblNa_7.setText(Integer.toString(((ExecutionEntry) data).getStackDepth()));
-
-				if (((ExecutionEntry) data).isFailed()) {
-					MainWindow.this.lblNa_2.setText("Yes (" + ((ExecutionEntry) data).getFailedCause() + ")");
-					MainWindow.this.lblNa_2.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
-					MainWindow.this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
-				} else {
-					MainWindow.this.lblNa_2.setText("No");
-					MainWindow.this.lblNa_2.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-					MainWindow.this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-				}
-
-				MainWindow.this.lblNa_1.pack();
-				MainWindow.this.lblNa_2.pack();
-				MainWindow.this.lblNa_3.pack();
-				MainWindow.this.lblNa_4.pack();
-				MainWindow.this.lblNa_5.pack();
-				MainWindow.this.lblNa_6.pack();
-				MainWindow.this.lblNa_7.pack();
-			}
-		}
-
-		@Override
-		public void widgetDefaultSelected(final SelectionEvent e) {
-
-		}
-
 	}
 }
