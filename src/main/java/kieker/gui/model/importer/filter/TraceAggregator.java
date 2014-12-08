@@ -35,7 +35,7 @@ public final class TraceAggregator extends AbstractConsumerStage<ExecutionEntry>
 	@Override
 	protected void execute(final ExecutionEntry execEntry) {
 		if (!this.aggregationMap.containsKey(execEntry)) {
-			final AggregatedExecutionEntry aggregatedExecutionEntry = new AggregatedExecutionEntry(execEntry.getContainer(), execEntry.getComponent(), execEntry.getOperation());
+			final AggregatedExecutionEntry aggregatedExecutionEntry = new AggregatedExecutionEntry(execEntry);
 			this.aggregationMap.put(execEntry, aggregatedExecutionEntry);
 		}
 		this.aggregationMap.get(execEntry).incrementCalls();

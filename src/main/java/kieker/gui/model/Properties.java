@@ -20,14 +20,14 @@ import java.util.Observable;
 
 /**
  * An observable singleton container for properties used within this application.
- * 
+ *
  * @author Nils Christian Ehmke
  */
 public final class Properties extends Observable {
 
 	private static final Properties INSTANCE = new Properties();
 	private boolean shortComponentNames = false;
-	private boolean shortOperationParameters = false;
+	private boolean shortOperationParameters = true;
 
 	private Properties() {}
 

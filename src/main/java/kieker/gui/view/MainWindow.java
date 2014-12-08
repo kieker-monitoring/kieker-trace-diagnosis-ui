@@ -301,6 +301,7 @@ public class MainWindow {
 		this.tree_1 = new Tree(this.sashForm, SWT.BORDER | SWT.FULL_SELECTION | SWT.VIRTUAL);
 		this.tree_1.setHeaderVisible(true);
 		this.tree_1.addListener(SWT.SetData, new AggregatedExecutionTracesTreeSetDataListener());
+		Properties.getInstance().addObserver(new TreeUpdateObserver(this.tree_1));
 
 		this.treeColumn = new TreeColumn(this.tree_1, SWT.NONE);
 		this.treeColumn.setWidth(100);
@@ -396,6 +397,7 @@ public class MainWindow {
 		this.mntmView_1.setMenu(this.menu);
 
 		this.mntmShortOperationParameters = new MenuItem(this.menu, SWT.RADIO);
+		this.mntmShortOperationParameters.setSelection(true);
 		this.mntmShortOperationParameters.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
@@ -411,7 +413,6 @@ public class MainWindow {
 				Properties.getInstance().setShortOperationParameters(false);
 			}
 		});
-		this.mntmLongOperationParameters.setSelection(true);
 		this.mntmLongOperationParameters.setText("Long Operation Parameters");
 
 		new MenuItem(this.menu, SWT.SEPARATOR);

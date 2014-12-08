@@ -5,6 +5,9 @@ import java.util.List;
 import kieker.gui.model.AggregatedExecutionEntry;
 import kieker.gui.model.Properties;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
@@ -25,8 +28,7 @@ class AggregatedExecutionTracesTreeSetDataListener implements Listener {
 		if (parent == null) {
 			executionEntry = ((List<AggregatedExecutionEntry>) tree.getData()).get(tableIndex);
 		} else {
-			// executionEntry = ((AggregatedExecutionEntry) parent.getData()).getChildren().get(tableIndex);
-			executionEntry = null;
+			executionEntry = ((AggregatedExecutionEntry) parent.getData()).getChildren().get(tableIndex);
 		}
 
 		String componentName = executionEntry.getComponent();
@@ -41,15 +43,18 @@ class AggregatedExecutionTracesTreeSetDataListener implements Listener {
 			final int lastPointPos = operationString.lastIndexOf('.', operationString.length() - 5);
 			operationString = operationString.substring(lastPointPos + 1);
 		}
-		item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, Integer.toString(executionEntry.getCalls()) });
+		if (parent != null) {
+			item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, "" });
+		} else {
+			item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, Integer.toString(executionEntry.getCalls()) });
+		}
 
-		// if (executionEntry.isFailed()) {
-		// final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
-		// item.setForeground(colorRed);
-		// }
+		if (executionEntry.isFailed()) {
+			final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+			item.setForeground(colorRed);
+		}
 
 		item.setData(executionEntry);
-		item.setItemCount(0);
-		// item.setItemCount(executionEntry.getChildren().size());
+		item.setItemCount(executionEntry.getChildren().size());
 	}
 }
