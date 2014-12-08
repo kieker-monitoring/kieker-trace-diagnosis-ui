@@ -17,12 +17,20 @@
 package kieker.gui.view;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
-import kieker.gui.model.AggregatedExecutionEntry;
 import kieker.gui.model.DataSource;
-import kieker.gui.model.ExecutionEntry;
 import kieker.gui.model.Properties;
-import kieker.gui.model.RecordEntry;
+import kieker.gui.model.domain.AggregatedExecutionEntry;
+import kieker.gui.model.domain.ExecutionEntry;
+import kieker.gui.model.domain.RecordEntry;
+import kieker.gui.view.util.AggregatedExecutionTracesTreeSetDataListener;
+import kieker.gui.view.util.ExecutionTracesTreeSetDataListener;
+import kieker.gui.view.util.RecordEntryTimestampComparator;
+import kieker.gui.view.util.RecordEntryTypeComparator;
+import kieker.gui.view.util.RecordsTableSetDataListener;
+import kieker.gui.view.util.TableColumnSortListener;
 
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -46,6 +54,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 /**
@@ -53,7 +62,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
  *
  * @author Nils Christian Ehmke
  */
-public class MainWindow {
+public final class MainWindow {
 
 	protected Shell shell;
 	private Composite mainComposite;
@@ -75,7 +84,7 @@ public class MainWindow {
 	private Menu helpMenu;
 	private MenuItem aboutMenuItem;
 	private Tree explorerTree;
-	private Tree executionTracesTree;
+	private Tree tracesTree;
 	private TreeColumn tracesTreeContainerColumn;
 	private TreeColumn treeColumn_8;
 	private TreeColumn treeColumn_10;
@@ -89,7 +98,6 @@ public class MainWindow {
 	private MenuItem mntmLongOperationParameters;
 	private TableColumn recordsTableTypeColumn;
 	private SashForm explorerForm;
-	final DataSource model = new DataSource();
 	private TreeColumn trclmnPercent;
 	Label lblNa;
 	private SashForm executionTracesForm;
@@ -109,7 +117,7 @@ public class MainWindow {
 	private Label lblStackDepth;
 	Label lblNa_7;
 	private SashForm sashForm;
-	private Tree tree_1;
+	private Tree aggregatedTracesTree;
 	private TreeColumn treeColumn;
 	private TreeColumn treeColumn_1;
 	private TreeColumn treeColumn_2;
@@ -135,7 +143,8 @@ public class MainWindow {
 	public void open() {
 		final Display display = Display.getDefault();
 		this.createContents();
-		this.model.loadMonitoringLogFromFS("testdata");
+		this.addLogic();
+		DataSource.getInstance().loadMonitoringLogFromFS("testdata");
 		this.shell.open();
 		this.shell.layout();
 		while (!this.shell.isDisposed()) {
@@ -175,7 +184,6 @@ public class MainWindow {
 		this.executionTracesTreeItem.setExpanded(true);
 		this.explorerTreeItem.setExpanded(true);
 
-		this.explorerTree.addSelectionListener(new ExplorerTreeSelectionAdapter(this));
 		this.explorerForm.setWeights(new int[] { 3 });
 
 		this.mainComposite = new Composite(this.outerForm, SWT.NONE);
@@ -185,52 +193,45 @@ public class MainWindow {
 		this.recordsTableViewer = new TableViewer(this.mainComposite, SWT.BORDER | SWT.FULL_SELECTION | SWT.VIRTUAL);
 		this.recordsTable = this.recordsTableViewer.getTable();
 		this.recordsTable.setHeaderVisible(true);
-		this.recordsTable.addListener(SWT.SetData, new RecordsTableSetDataListener());
 
 		this.recordsTableTimestampColumn = new TableColumn(this.recordsTable, SWT.NONE);
 		this.recordsTableTimestampColumn.setWidth(100);
 		this.recordsTableTimestampColumn.setText("Timestamp");
-		this.recordsTableTimestampColumn.addListener(SWT.Selection, new RecordsTableTimestampSortListener());
 
 		this.recordsTableTypeColumn = new TableColumn(this.recordsTable, SWT.NONE);
 		this.recordsTableTypeColumn.setWidth(100);
 		this.recordsTableTypeColumn.setText("Type");
-		this.recordsTableTypeColumn.addListener(SWT.Selection, new RecordsTableTypeSortListener());
 
 		this.recordsTableRecordColumn = new TableColumn(this.recordsTable, SWT.NONE);
 		this.recordsTableRecordColumn.setWidth(100);
 		this.recordsTableRecordColumn.setText("Record");
-		this.recordsTableRecordColumn.addListener(SWT.Selection, new RecordsTableTimestampSortListener());
 
 		this.executionTracesForm = new SashForm(this.mainComposite, SWT.VERTICAL);
 
-		this.executionTracesTree = new Tree(this.executionTracesForm, SWT.BORDER | SWT.FULL_SELECTION | SWT.VIRTUAL);
-		this.executionTracesTree.setHeaderVisible(true);
-		this.executionTracesTree.addListener(SWT.SetData, new ExecutionTracesTreeSetDataListener());
-		this.executionTracesTree.addSelectionListener(new ExecutionTraceTreeSelectionListener(this));
-		Properties.getInstance().addObserver(new ClearTreeObserver(this.executionTracesTree));
+		this.tracesTree = new Tree(this.executionTracesForm, SWT.BORDER | SWT.FULL_SELECTION | SWT.VIRTUAL);
+		this.tracesTree.setHeaderVisible(true);
 
-		this.tracesTreeContainerColumn = new TreeColumn(this.executionTracesTree, SWT.NONE);
+		this.tracesTreeContainerColumn = new TreeColumn(this.tracesTree, SWT.NONE);
 		this.tracesTreeContainerColumn.setWidth(100);
 		this.tracesTreeContainerColumn.setText("Execution Container");
 
-		this.treeColumn_8 = new TreeColumn(this.executionTracesTree, SWT.NONE);
+		this.treeColumn_8 = new TreeColumn(this.tracesTree, SWT.NONE);
 		this.treeColumn_8.setWidth(100);
 		this.treeColumn_8.setText("Component");
 
-		this.treeColumn_10 = new TreeColumn(this.executionTracesTree, SWT.NONE);
+		this.treeColumn_10 = new TreeColumn(this.tracesTree, SWT.NONE);
 		this.treeColumn_10.setWidth(100);
 		this.treeColumn_10.setText("Operation");
 
-		this.treeColumn_11 = new TreeColumn(this.executionTracesTree, SWT.NONE);
+		this.treeColumn_11 = new TreeColumn(this.tracesTree, SWT.NONE);
 		this.treeColumn_11.setWidth(100);
 		this.treeColumn_11.setText("Duration");
 
-		this.trclmnPercent = new TreeColumn(this.executionTracesTree, SWT.NONE);
+		this.trclmnPercent = new TreeColumn(this.tracesTree, SWT.NONE);
 		this.trclmnPercent.setWidth(100);
 		this.trclmnPercent.setText("Percent");
 
-		this.treeColumn_16 = new TreeColumn(this.executionTracesTree, SWT.NONE);
+		this.treeColumn_16 = new TreeColumn(this.tracesTree, SWT.NONE);
 		this.treeColumn_16.setWidth(100);
 		this.treeColumn_16.setText("Trace ID");
 
@@ -298,24 +299,22 @@ public class MainWindow {
 
 		this.sashForm = new SashForm(this.mainComposite, SWT.VERTICAL);
 
-		this.tree_1 = new Tree(this.sashForm, SWT.BORDER | SWT.FULL_SELECTION | SWT.VIRTUAL);
-		this.tree_1.setHeaderVisible(true);
-		this.tree_1.addListener(SWT.SetData, new AggregatedExecutionTracesTreeSetDataListener());
-		Properties.getInstance().addObserver(new ClearTreeObserver(this.tree_1));
+		this.aggregatedTracesTree = new Tree(this.sashForm, SWT.BORDER | SWT.FULL_SELECTION | SWT.VIRTUAL);
+		this.aggregatedTracesTree.setHeaderVisible(true);
 
-		this.treeColumn = new TreeColumn(this.tree_1, SWT.NONE);
+		this.treeColumn = new TreeColumn(this.aggregatedTracesTree, SWT.NONE);
 		this.treeColumn.setWidth(100);
 		this.treeColumn.setText("Execution Container");
 
-		this.treeColumn_1 = new TreeColumn(this.tree_1, SWT.NONE);
+		this.treeColumn_1 = new TreeColumn(this.aggregatedTracesTree, SWT.NONE);
 		this.treeColumn_1.setWidth(100);
 		this.treeColumn_1.setText("Component");
 
-		this.treeColumn_2 = new TreeColumn(this.tree_1, SWT.NONE);
+		this.treeColumn_2 = new TreeColumn(this.aggregatedTracesTree, SWT.NONE);
 		this.treeColumn_2.setWidth(100);
 		this.treeColumn_2.setText("Operation");
 
-		this.trclmnCalls = new TreeColumn(this.tree_1, SWT.NONE);
+		this.trclmnCalls = new TreeColumn(this.aggregatedTracesTree, SWT.NONE);
 		this.trclmnCalls.setWidth(100);
 		this.trclmnCalls.setText("# Calls");
 
@@ -377,12 +376,6 @@ public class MainWindow {
 		this.fileMenuItem.setMenu(this.fileMenu);
 
 		this.openMonitoringLogMenuItem = new MenuItem(this.fileMenu, SWT.NONE);
-		this.openMonitoringLogMenuItem.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				MainWindow.this.showOpenMonitoringLogDialog();
-			}
-		});
 		this.openMonitoringLogMenuItem.setText("Open Monitoring Log");
 
 		new MenuItem(this.fileMenu, SWT.SEPARATOR);
@@ -398,41 +391,17 @@ public class MainWindow {
 
 		this.mntmShortOperationParameters = new MenuItem(this.menu, SWT.RADIO);
 		this.mntmShortOperationParameters.setSelection(true);
-		this.mntmShortOperationParameters.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				Properties.getInstance().setShortOperationParameters(true);
-			}
-		});
 		this.mntmShortOperationParameters.setText("Short Operation Parameters");
 
 		this.mntmLongOperationParameters = new MenuItem(this.menu, SWT.RADIO);
-		this.mntmLongOperationParameters.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				Properties.getInstance().setShortOperationParameters(false);
-			}
-		});
 		this.mntmLongOperationParameters.setText("Long Operation Parameters");
 
 		new MenuItem(this.menu, SWT.SEPARATOR);
 
 		this.mntmShortComponentNames = new MenuItem(this.menu, SWT.RADIO);
-		this.mntmShortComponentNames.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				Properties.getInstance().setShortComponentNames(true);
-			}
-		});
 		this.mntmShortComponentNames.setText("Short Component Names");
 
 		this.mntmLongComponentNames = new MenuItem(this.menu, SWT.RADIO);
-		this.mntmLongComponentNames.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				Properties.getInstance().setShortComponentNames(false);
-			}
-		});
 		this.mntmLongComponentNames.setSelection(true);
 		this.mntmLongComponentNames.setText("Long Component Names");
 
@@ -449,69 +418,124 @@ public class MainWindow {
 		this.lblNa.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
 	}
 
-	protected void showSystemModel() {
-		// Show the tree
+	private void addLogic() {
+		DataSource.getInstance().addObserver(new Observer() {
 
+			@Override
+			public void update(final Observable o, final Object arg) {
+				MainWindow.this.reloadFromModel();
+			}
+
+		});
+
+		this.openMonitoringLogMenuItem.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				MainWindow.this.showOpenMonitoringLogDialog();
+			}
+
+		});
+
+		this.mntmShortOperationParameters.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				Properties.getInstance().setShortOperationParameters(true);
+			}
+
+		});
+
+		this.mntmLongOperationParameters.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				Properties.getInstance().setShortOperationParameters(false);
+			}
+
+		});
+
+		this.mntmShortComponentNames.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				Properties.getInstance().setShortComponentNames(true);
+			}
+
+		});
+
+		this.mntmLongComponentNames.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				Properties.getInstance().setShortComponentNames(false);
+			}
+
+		});
+
+		Properties.getInstance().addObserver(new Observer() {
+
+			@Override
+			public void update(final Observable o, final Object arg) {
+				MainWindow.this.aggregatedTracesTree.clearAll(true);
+				MainWindow.this.tracesTree.clearAll(true);
+			}
+
+		});
+
+		this.recordsTable.addListener(SWT.SetData, new RecordsTableSetDataListener());
+		this.aggregatedTracesTree.addListener(SWT.SetData, new AggregatedExecutionTracesTreeSetDataListener());
+		this.tracesTree.addListener(SWT.SetData, new ExecutionTracesTreeSetDataListener());
+
+		this.recordsTableTimestampColumn.addListener(SWT.Selection, new TableColumnSortListener<RecordEntry>(new RecordEntryTimestampComparator()));
+		this.recordsTableTypeColumn.addListener(SWT.Selection, new TableColumnSortListener<RecordEntry>(new RecordEntryTypeComparator()));
+		this.recordsTableRecordColumn.addListener(SWT.Selection, new TableColumnSortListener<RecordEntry>(new RecordEntryTimestampComparator()));
+
+		this.explorerTree.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				final Widget selectedWidget = e.item;
+				MainWindow.this.handleExplorerSelection(selectedWidget);
+			}
+		});
+
+		this.tracesTree.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				final Object data = e.item.getData();
+				if (data instanceof ExecutionEntry) {
+					MainWindow.this.handleTracesSelection((ExecutionEntry) data);
+				}
+			}
+
+		});
 	}
 
-	protected void showAggregatedExecutionTraces() {
+	private void showAggregatedExecutionTraces() {
 		// Show the tree
 		this.setVisibleMainComponent(this.sashForm);
 
-		// Reload the data from the model...
-		final List<AggregatedExecutionEntry> traces = this.model.getAggregatedTrace();
-
-		// ...and write it into the tree
-		this.tree_1.setItemCount(traces.size());
-		this.tree_1.setData(traces);
-		this.lblNa.setText(Integer.toString(traces.size()) + " Aggregated Traces");
-		this.lblNa.pack();
-
 		// Resize the columns
-		for (final TreeColumn column : this.tree_1.getColumns()) {
+		for (final TreeColumn column : this.aggregatedTracesTree.getColumns()) {
 			column.pack();
 		}
 	}
 
-	protected void showAggregatedExecutionTracesByContainer() {
-
-	}
-
-	protected void showAggregatedExecutionTracesByComponent() {
-
-	}
-
-	protected void showExecutionTraces() {
+	private void showExecutionTraces() {
 		// Show the tree
 		this.setVisibleMainComponent(this.executionTracesForm);
 
-		// Reload the data from the model...
-		final List<ExecutionEntry> traces = this.model.getTraces();
-
-		// ...and write it into the tree
-		this.executionTracesTree.setItemCount(traces.size());
-		this.executionTracesTree.setData(traces);
-		this.lblNa.setText(Integer.toString(traces.size()) + " Traces");
-		this.lblNa.pack();
-
 		// Resize the columns
-		for (final TreeColumn column : this.executionTracesTree.getColumns()) {
+		for (final TreeColumn column : this.tracesTree.getColumns()) {
 			column.pack();
 		}
 	}
 
-	protected void showRecords() {
+	private void showRecords() {
 		// Show the table
 		this.setVisibleMainComponent(this.recordsTable);
-
-		// Reload the data from the model...
-		final List<RecordEntry> records = this.model.getRecords();
-
-		// ...and write it into the table
-		this.recordsTable.setItemCount(records.size());
-		this.recordsTable.setData(records);
-		this.lblNa.setText(Integer.toString(records.size()) + " Records");
-		this.lblNa.pack();
 
 		// Resize the columns
 		for (final TableColumn column : this.recordsTable.getColumns()) {
@@ -519,16 +543,74 @@ public class MainWindow {
 		}
 	}
 
-	protected void showOpenMonitoringLogDialog() {
+	private void handleExplorerSelection(final Widget selectedWidget) {
+		if (MainWindow.this.recordsTreeItem == selectedWidget) {
+			MainWindow.this.showRecords();
+		} else if (MainWindow.this.executionTracesTreeItem == selectedWidget) {
+			MainWindow.this.showExecutionTraces();
+		} else if (MainWindow.this.trtmAggregatedExecutionTraces == selectedWidget) {
+			MainWindow.this.showAggregatedExecutionTraces();
+		} else {
+			MainWindow.this.setVisibleMainComponent(null);
+			MainWindow.this.lblNa.setText("");
+		}
+	}
+
+	private void handleTracesSelection(final ExecutionEntry data) {
+		this.lblNa_1.setText(Long.toString(data.getTraceID()));
+		this.lblNa_3.setText(Long.toString(data.getDuration()));
+
+		this.lblNa_4.setText(data.getContainer());
+		this.lblNa_5.setText(data.getComponent());
+		this.lblNa_6.setText(data.getOperation());
+		this.lblNa_7.setText(Integer.toString(data.getStackDepth()));
+
+		if (data.isFailed()) {
+			this.lblNa_2.setText("Yes (" + data.getFailedCause() + ")");
+			this.lblNa_2.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+			this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+		} else {
+			this.lblNa_2.setText("No");
+			this.lblNa_2.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+			this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+		}
+
+		this.lblNa_1.pack();
+		this.lblNa_2.pack();
+		this.lblNa_3.pack();
+		this.lblNa_4.pack();
+		this.lblNa_5.pack();
+		this.lblNa_6.pack();
+		this.lblNa_7.pack();
+	}
+
+	private void reloadFromModel() {
+		// Reload the data from the model...
+		final List<RecordEntry> records = DataSource.getInstance().getRecords();
+		final List<ExecutionEntry> traces = DataSource.getInstance().getTraces();
+		final List<AggregatedExecutionEntry> aggregatedTraces = DataSource.getInstance().getAggregatedTrace();
+
+		// ...and write it into the corresponding widgets
+		MainWindow.this.recordsTable.setItemCount(records.size());
+		MainWindow.this.recordsTable.setData(records);
+
+		MainWindow.this.tracesTree.setItemCount(traces.size());
+		MainWindow.this.tracesTree.setData(traces);
+
+		MainWindow.this.aggregatedTracesTree.setItemCount(aggregatedTraces.size());
+		MainWindow.this.aggregatedTracesTree.setData(aggregatedTraces);
+	}
+
+	private void showOpenMonitoringLogDialog() {
 		final DirectoryDialog dialog = new DirectoryDialog(this.shell);
 		final String selectedDirectory = dialog.open();
 
 		if (null != selectedDirectory) {
-			this.model.loadMonitoringLogFromFS(selectedDirectory);
+			DataSource.getInstance().loadMonitoringLogFromFS(selectedDirectory);
 		}
 	}
 
-	void setVisibleMainComponent(final Control component) {
+	private void setVisibleMainComponent(final Control component) {
 		final StackLayout layout = (StackLayout) this.mainComposite.getLayout();
 		layout.topControl = component;
 

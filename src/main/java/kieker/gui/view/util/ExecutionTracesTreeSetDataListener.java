@@ -1,9 +1,9 @@
-package kieker.gui.view;
+package kieker.gui.view.util;
 
 import java.util.List;
 
-import kieker.gui.model.ExecutionEntry;
 import kieker.gui.model.Properties;
+import kieker.gui.model.domain.ExecutionEntry;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
-class ExecutionTracesTreeSetDataListener implements Listener {
+public class ExecutionTracesTreeSetDataListener implements Listener {
 
 	@Override
 	public void handleEvent(final Event event) {
@@ -48,7 +48,7 @@ class ExecutionTracesTreeSetDataListener implements Listener {
 			operationString = operationString.substring(lastPointPos + 1);
 		}
 		item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, Long.toString(executionEntry.getDuration()),
-				String.format("%.1f%%", executionEntry.getPercent()), traceID });
+			String.format("%.1f%%", executionEntry.getPercent()), traceID });
 
 		if (executionEntry.isFailed()) {
 			final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);

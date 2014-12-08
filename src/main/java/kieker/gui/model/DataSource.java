@@ -19,7 +19,11 @@ package kieker.gui.model;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
+import java.util.Observable;
 
+import kieker.gui.model.domain.AggregatedExecutionEntry;
+import kieker.gui.model.domain.ExecutionEntry;
+import kieker.gui.model.domain.RecordEntry;
 import kieker.gui.model.importer.ImportAnalysisConfiguration;
 import teetime.framework.Analysis;
 
@@ -28,11 +32,18 @@ import teetime.framework.Analysis;
  *
  * @author Nils Christian Ehmke
  */
-public final class DataSource {
+public final class DataSource extends Observable {
 
+	private static final DataSource INSTANCE = new DataSource();
 	private List<RecordEntry> records = Collections.emptyList();
 	private List<ExecutionEntry> traces = Collections.emptyList();
 	private List<AggregatedExecutionEntry> aggregatedTraces;
+
+	private DataSource() {}
+
+	public static DataSource getInstance() {
+		return DataSource.INSTANCE;
+	}
 
 	public void loadMonitoringLogFromFS(final String directory) {
 		// Load and analyze the monitoring logs from the given directory
@@ -46,6 +57,9 @@ public final class DataSource {
 		this.records = analysisConfiguration.getRecordsList();
 		this.traces = analysisConfiguration.getTracesList();
 		this.aggregatedTraces = analysisConfiguration.getAggregatedTraces();
+
+		this.setChanged();
+		this.notifyObservers();
 	}
 
 	public List<RecordEntry> getRecords() {

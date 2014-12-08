@@ -27,7 +27,7 @@ import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
-import kieker.gui.model.ExecutionEntry;
+import kieker.gui.model.domain.ExecutionEntry;
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 

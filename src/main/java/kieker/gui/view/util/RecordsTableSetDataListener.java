@@ -1,15 +1,15 @@
-package kieker.gui.view;
+package kieker.gui.view.util;
 
 import java.util.List;
 
-import kieker.gui.model.RecordEntry;
+import kieker.gui.model.domain.RecordEntry;
 
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
-class RecordsTableSetDataListener implements Listener {
+public class RecordsTableSetDataListener implements Listener {
 
 	@Override
 	public void handleEvent(final Event event) {

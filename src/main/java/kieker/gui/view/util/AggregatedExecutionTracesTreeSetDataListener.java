@@ -1,9 +1,9 @@
-package kieker.gui.view;
+package kieker.gui.view.util;
 
 import java.util.List;
 
-import kieker.gui.model.AggregatedExecutionEntry;
 import kieker.gui.model.Properties;
+import kieker.gui.model.domain.AggregatedExecutionEntry;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
-class AggregatedExecutionTracesTreeSetDataListener implements Listener {
+public class AggregatedExecutionTracesTreeSetDataListener implements Listener {
 
 	@Override
 	public void handleEvent(final Event event) {

@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.model;
+package kieker.gui.model.domain;
 
 /**
  * A simplified representation of a monitoring record.

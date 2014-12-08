@@ -17,7 +17,7 @@
 package kieker.gui.model.importer.filter;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.gui.model.RecordEntry;
+import kieker.gui.model.domain.RecordEntry;
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 

@@ -22,9 +22,9 @@ import java.util.Vector;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.IFlowRecord;
-import kieker.gui.model.AggregatedExecutionEntry;
-import kieker.gui.model.ExecutionEntry;
-import kieker.gui.model.RecordEntry;
+import kieker.gui.model.domain.AggregatedExecutionEntry;
+import kieker.gui.model.domain.ExecutionEntry;
+import kieker.gui.model.domain.RecordEntry;
 import kieker.gui.model.importer.filter.Cloner;
 import kieker.gui.model.importer.filter.RecordSimplificator;
 import kieker.gui.model.importer.filter.TraceAggregator;

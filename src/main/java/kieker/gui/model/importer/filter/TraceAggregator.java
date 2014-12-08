@@ -19,8 +19,8 @@ package kieker.gui.model.importer.filter;
 import java.util.HashMap;
 import java.util.Map;
 
-import kieker.gui.model.AggregatedExecutionEntry;
-import kieker.gui.model.ExecutionEntry;
+import kieker.gui.model.domain.AggregatedExecutionEntry;
+import kieker.gui.model.domain.ExecutionEntry;
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 

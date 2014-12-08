@@ -1,9 +1,7 @@
-package kieker.gui.view;
+package kieker.gui.view.util;
 
 import java.util.Collections;
 import java.util.List;
-
-import kieker.gui.model.RecordEntry;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
@@ -11,7 +9,13 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
-class RecordsTableTypeSortListener implements Listener {
+public final class TableColumnSortListener<T> implements Listener {
+
+	private final AbstractDirectedComparator<T> comparator;
+
+	public TableColumnSortListener(final AbstractDirectedComparator<T> comparator) {
+		this.comparator = comparator;
+	}
 
 	@Override
 	public void handleEvent(final Event event) {
@@ -30,11 +34,13 @@ class RecordsTableTypeSortListener implements Listener {
 		}
 
 		// Sort the data
-		final List<RecordEntry> records = (List<RecordEntry>) table.getData();
-		Collections.sort(records, new RecordEntryTypeComparator(direction));
+		this.comparator.setDirection(direction);
+		final List<T> entries = (List<T>) table.getData();
+		Collections.sort(entries, this.comparator);
 
 		// Update the data displayed in the table
 		table.setSortDirection(direction);
 		table.clearAll();
 	}
+
 }
