@@ -101,38 +101,14 @@ public final class MainWindow {
 	private TreeColumn trclmnPercent;
 	Label lblNa;
 	private SashForm executionTracesForm;
-	private Composite executionTracesDetailComposite;
-	private Label lblTraceId;
-	Label lblNa_1;
-	Label lblFailed;
-	Label lblNa_2;
-	private Label lblDuration;
-	Label lblNa_3;
-	private Label lblExecutionContainer;
-	private Label lblComponent;
-	private Label lblOperation;
-	Label lblNa_4;
-	Label lblNa_5;
-	Label lblNa_6;
-	private Label lblStackDepth;
-	Label lblNa_7;
+	private TraceDetailComposite traceDetailComposite;
 	private SashForm sashForm;
 	private Tree aggregatedTracesTree;
 	private TreeColumn treeColumn;
 	private TreeColumn treeColumn_1;
 	private TreeColumn treeColumn_2;
 	private TreeColumn trclmnCalls;
-	private Composite composite;
-	private Label label;
-	private Label label_1;
-	private Label label_2;
-	private Label label_3;
-	private Label label_4;
-	private Label label_5;
-	private Label label_10;
-	private Label label_11;
-	private Label label_12;
-	private Label label_13;
+	private AggregatedTraceDetailComposite aggregatedTraceDetailComposite;
 	TreeItem trtmAggregatedExecutionTraces;
 
 	public static void main(final String[] args) {
@@ -235,66 +211,7 @@ public final class MainWindow {
 		this.treeColumn_16.setWidth(100);
 		this.treeColumn_16.setText("Trace ID");
 
-		this.executionTracesDetailComposite = new Composite(this.executionTracesForm, SWT.BORDER);
-		this.executionTracesDetailComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.executionTracesDetailComposite.setLayout(new GridLayout(2, false));
-
-		this.lblExecutionContainer = new Label(this.executionTracesDetailComposite, SWT.NONE);
-		this.lblExecutionContainer.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblExecutionContainer.setText("Execution Container:");
-
-		this.lblNa_4 = new Label(this.executionTracesDetailComposite, SWT.NONE);
-		this.lblNa_4.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		this.lblNa_4.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblNa_4.setText("N/A");
-
-		this.lblComponent = new Label(this.executionTracesDetailComposite, SWT.NONE);
-		this.lblComponent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblComponent.setText("Component:");
-
-		this.lblNa_5 = new Label(this.executionTracesDetailComposite, SWT.NONE);
-		this.lblNa_5.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblNa_5.setText("N/A");
-
-		this.lblOperation = new Label(this.executionTracesDetailComposite, SWT.NONE);
-		this.lblOperation.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblOperation.setText("Operation:");
-
-		this.lblNa_6 = new Label(this.executionTracesDetailComposite, SWT.NONE);
-		this.lblNa_6.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblNa_6.setText("N/A");
-
-		this.lblTraceId = new Label(this.executionTracesDetailComposite, SWT.NONE);
-		this.lblTraceId.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblTraceId.setText("Trace ID:");
-
-		this.lblNa_1 = new Label(this.executionTracesDetailComposite, SWT.NONE);
-		this.lblNa_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblNa_1.setText("N/A");
-
-		this.lblDuration = new Label(this.executionTracesDetailComposite, SWT.NONE);
-		this.lblDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblDuration.setText("Duration:");
-
-		this.lblNa_3 = new Label(this.executionTracesDetailComposite, SWT.NONE);
-		this.lblNa_3.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblNa_3.setText("N/A");
-
-		this.lblStackDepth = new Label(this.executionTracesDetailComposite, SWT.NONE);
-		this.lblStackDepth.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblStackDepth.setText("Stack Depth:");
-
-		this.lblNa_7 = new Label(this.executionTracesDetailComposite, SWT.NONE);
-		this.lblNa_7.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblNa_7.setText("N/A");
-
-		this.lblFailed = new Label(this.executionTracesDetailComposite, SWT.NONE);
-		this.lblFailed.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblFailed.setText("Failed:");
-
-		this.lblNa_2 = new Label(this.executionTracesDetailComposite, SWT.NONE);
-		this.lblNa_2.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblNa_2.setText("N/A");
+		this.traceDetailComposite = new TraceDetailComposite(this.executionTracesForm, SWT.BORDER);
 		this.executionTracesForm.setWeights(new int[] { 2, 1 });
 
 		this.sashForm = new SashForm(this.mainComposite, SWT.VERTICAL);
@@ -318,50 +235,7 @@ public final class MainWindow {
 		this.trclmnCalls.setWidth(100);
 		this.trclmnCalls.setText("# Calls");
 
-		this.composite = new Composite(this.sashForm, SWT.BORDER);
-		this.composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.composite.setLayout(new GridLayout(2, false));
-
-		this.label = new Label(this.composite, SWT.NONE);
-		this.label.setText("Execution Container:");
-		this.label.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-
-		this.label_1 = new Label(this.composite, SWT.NONE);
-		this.label_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		this.label_1.setText("N/A");
-		this.label_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-
-		this.label_2 = new Label(this.composite, SWT.NONE);
-		this.label_2.setText("Component:");
-		this.label_2.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-
-		this.label_3 = new Label(this.composite, SWT.NONE);
-		this.label_3.setText("N/A");
-		this.label_3.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-
-		this.label_4 = new Label(this.composite, SWT.NONE);
-		this.label_4.setText("Operation:");
-		this.label_4.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-
-		this.label_5 = new Label(this.composite, SWT.NONE);
-		this.label_5.setText("N/A");
-		this.label_5.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-
-		this.label_10 = new Label(this.composite, SWT.NONE);
-		this.label_10.setText("Stack Depth:");
-		this.label_10.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-
-		this.label_11 = new Label(this.composite, SWT.NONE);
-		this.label_11.setText("N/A");
-		this.label_11.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-
-		this.label_12 = new Label(this.composite, SWT.NONE);
-		this.label_12.setText("Failed:");
-		this.label_12.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-
-		this.label_13 = new Label(this.composite, SWT.NONE);
-		this.label_13.setText("N/A");
-		this.label_13.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		this.aggregatedTraceDetailComposite = new AggregatedTraceDetailComposite(this.sashForm, SWT.BORDER);
 		this.sashForm.setWeights(new int[] { 2, 1 });
 
 		this.outerForm.setWeights(new int[] { 2, 4 });
@@ -506,7 +380,19 @@ public final class MainWindow {
 			public void widgetSelected(final SelectionEvent e) {
 				final Object data = e.item.getData();
 				if (data instanceof ExecutionEntry) {
-					MainWindow.this.handleTracesSelection((ExecutionEntry) data);
+					MainWindow.this.traceDetailComposite.setTraceToDisplay((ExecutionEntry) data);
+				}
+			}
+
+		});
+
+		this.aggregatedTracesTree.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				final Object data = e.item.getData();
+				if (data instanceof AggregatedExecutionEntry) {
+					MainWindow.this.aggregatedTraceDetailComposite.setTraceToDisplay((AggregatedExecutionEntry) data);
 				}
 			}
 
@@ -554,34 +440,6 @@ public final class MainWindow {
 			MainWindow.this.setVisibleMainComponent(null);
 			MainWindow.this.lblNa.setText("");
 		}
-	}
-
-	private void handleTracesSelection(final ExecutionEntry data) {
-		this.lblNa_1.setText(Long.toString(data.getTraceID()));
-		this.lblNa_3.setText(Long.toString(data.getDuration()));
-
-		this.lblNa_4.setText(data.getContainer());
-		this.lblNa_5.setText(data.getComponent());
-		this.lblNa_6.setText(data.getOperation());
-		this.lblNa_7.setText(Integer.toString(data.getStackDepth()));
-
-		if (data.isFailed()) {
-			this.lblNa_2.setText("Yes (" + data.getFailedCause() + ")");
-			this.lblNa_2.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
-			this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
-		} else {
-			this.lblNa_2.setText("No");
-			this.lblNa_2.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-			this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-		}
-
-		this.lblNa_1.pack();
-		this.lblNa_2.pack();
-		this.lblNa_3.pack();
-		this.lblNa_4.pack();
-		this.lblNa_5.pack();
-		this.lblNa_6.pack();
-		this.lblNa_7.pack();
 	}
 
 	private void reloadFromModel() {
