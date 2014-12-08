@@ -208,7 +208,7 @@ public class MainWindow {
 		this.executionTracesTree.setHeaderVisible(true);
 		this.executionTracesTree.addListener(SWT.SetData, new ExecutionTracesTreeSetDataListener());
 		this.executionTracesTree.addSelectionListener(new ExecutionTraceTreeSelectionListener(this));
-		Properties.getInstance().addObserver(new TreeUpdateObserver(this.executionTracesTree));
+		Properties.getInstance().addObserver(new ClearTreeObserver(this.executionTracesTree));
 
 		this.tracesTreeContainerColumn = new TreeColumn(this.executionTracesTree, SWT.NONE);
 		this.tracesTreeContainerColumn.setWidth(100);
@@ -301,7 +301,7 @@ public class MainWindow {
 		this.tree_1 = new Tree(this.sashForm, SWT.BORDER | SWT.FULL_SELECTION | SWT.VIRTUAL);
 		this.tree_1.setHeaderVisible(true);
 		this.tree_1.addListener(SWT.SetData, new AggregatedExecutionTracesTreeSetDataListener());
-		Properties.getInstance().addObserver(new TreeUpdateObserver(this.tree_1));
+		Properties.getInstance().addObserver(new ClearTreeObserver(this.tree_1));
 
 		this.treeColumn = new TreeColumn(this.tree_1, SWT.NONE);
 		this.treeColumn.setWidth(100);

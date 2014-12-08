@@ -5,11 +5,16 @@ import java.util.Observer;
 
 import org.eclipse.swt.widgets.Tree;
 
-class TreeUpdateObserver implements Observer {
+/**
+ * An observer clearing an instance of {@link Tree}.
+ *
+ * @author Nils Christian Ehmke
+ */
+public final class ClearTreeObserver implements Observer {
 
 	private final Tree tree;
 
-	public TreeUpdateObserver(final Tree tree) {
+	public ClearTreeObserver(final Tree tree) {
 		this.tree = tree;
 	}
 

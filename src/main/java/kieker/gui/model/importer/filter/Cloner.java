@@ -29,6 +29,12 @@ public final class Cloner<T> extends AbstractConsumerStage<T> {
 	private final OutputPort<T> firstOutputPort = super.createOutputPort();
 	private final OutputPort<T> secondOutputPort = super.createOutputPort();
 
+	@Override
+	protected void execute(final T element) {
+		this.firstOutputPort.send(element);
+		this.secondOutputPort.send(element);
+	}
+
 	public OutputPort<T> getFirstOutputPort() {
 		return this.firstOutputPort;
 	}
@@ -36,11 +42,4 @@ public final class Cloner<T> extends AbstractConsumerStage<T> {
 	public OutputPort<T> getSecondOutputPort() {
 		return this.secondOutputPort;
 	}
-
-	@Override
-	protected void execute(final T element) {
-		this.firstOutputPort.send(element);
-		this.secondOutputPort.send(element);
-	}
-
 }

@@ -32,10 +32,11 @@ import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 
 /**
- * Reconstruct traces based on the incoming instances of {@code IFlowRecord}. Currently only {@link TraceMetadata}, {@link BeforeOperationEvent} and {@link AfterOperationEvent} instances are supported.
+ * Reconstruct traces based on the incoming instances of {@code IFlowRecord}. Currently only {@link TraceMetadata}, {@link BeforeOperationEvent} and
+ * {@link AfterOperationEvent} instances are supported.
  *
  * @author Nils Christian Ehmke
- */ 
+ */
 public final class TraceReconstructor extends AbstractConsumerStage<IFlowRecord> {
 
 	private final OutputPort<ExecutionEntry> outputPort = super.createOutputPort();
@@ -72,7 +73,7 @@ public final class TraceReconstructor extends AbstractConsumerStage<IFlowRecord>
 		return this.outputPort;
 	}
 
-	private final static class TraceBuffer {
+	private static final class TraceBuffer {
 
 		private final String hostname;
 		private final Deque<BeforeOperationEvent> stack = new LinkedList<>();

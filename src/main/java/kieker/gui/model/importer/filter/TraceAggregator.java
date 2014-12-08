@@ -25,6 +25,8 @@ import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 
 /**
+ * Aggregates incoming traces into trace equivalence classes.
+ *
  * @author Nils Christian Ehmke
  */
 public final class TraceAggregator extends AbstractConsumerStage<ExecutionEntry> {
@@ -33,12 +35,12 @@ public final class TraceAggregator extends AbstractConsumerStage<ExecutionEntry>
 	private final Map<ExecutionEntry, AggregatedExecutionEntry> aggregationMap = new HashMap<>();
 
 	@Override
-	protected void execute(final ExecutionEntry execEntry) {
-		if (!this.aggregationMap.containsKey(execEntry)) {
-			final AggregatedExecutionEntry aggregatedExecutionEntry = new AggregatedExecutionEntry(execEntry);
-			this.aggregationMap.put(execEntry, aggregatedExecutionEntry);
+	protected void execute(final ExecutionEntry executionEntry) {
+		if (!this.aggregationMap.containsKey(executionEntry)) {
+			final AggregatedExecutionEntry aggregatedExecutionEntry = new AggregatedExecutionEntry(executionEntry);
+			this.aggregationMap.put(executionEntry, aggregatedExecutionEntry);
 		}
-		this.aggregationMap.get(execEntry).incrementCalls();
+		this.aggregationMap.get(executionEntry).incrementCalls();
 	}
 
 	@Override
