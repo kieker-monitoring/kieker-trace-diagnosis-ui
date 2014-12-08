@@ -4,17 +4,11 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Widget;
 
-class ExplorerTreeSelectionAdapter extends SelectionAdapter {
+public final class ExplorerTreeSelectionAdapter extends SelectionAdapter {
 
-	/**
-	 * 
-	 */
 	private final MainWindow mainWindow;
 
-	/**
-	 * @param mainWindow
-	 */
-	ExplorerTreeSelectionAdapter(MainWindow mainWindow) {
+	public ExplorerTreeSelectionAdapter(final MainWindow mainWindow) {
 		this.mainWindow = mainWindow;
 	}
 

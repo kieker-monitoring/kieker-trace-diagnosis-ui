@@ -57,7 +57,7 @@ public class MainWindow {
 
 	protected Shell shell;
 	private Composite mainComposite;
-	private Table recordsTable;
+	Table recordsTable;
 	private SashForm outerForm;
 	private TreeViewer explorerTreeViewer;
 	private TreeItem explorerTreeItem;
@@ -89,7 +89,7 @@ public class MainWindow {
 	private MenuItem mntmLongOperationParameters;
 	private TableColumn recordsTableTypeColumn;
 	private SashForm explorerForm;
-	private final DataSource model = new DataSource();
+	final DataSource model = new DataSource();
 	private TreeColumn trclmnPercent;
 	Label lblNa;
 	private SashForm executionTracesForm;
@@ -534,4 +534,5 @@ public class MainWindow {
 
 		this.mainComposite.layout();
 	}
+
 }
