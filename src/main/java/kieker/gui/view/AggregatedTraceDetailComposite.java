@@ -21,6 +21,8 @@ public final class AggregatedTraceDetailComposite extends Composite {
 	private final Label lblStackDepthDisplay;
 	private final Label lblMinimalDurationDisplay;
 	private final Label lblMaximalDurationDisplay;
+	private final Label lblAverageDuration;
+	private final Label lblAverageDurationDisplay;
 
 	public AggregatedTraceDetailComposite(final Composite parent, final int style) {
 		super(parent, style);
@@ -87,6 +89,14 @@ public final class AggregatedTraceDetailComposite extends Composite {
 		this.lblMinimalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblMinimalDurationDisplay.setText("N/A");
 
+		this.lblAverageDuration = new Label(this, SWT.NONE);
+		this.lblAverageDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		this.lblAverageDuration.setText("Average Duration:");
+
+		this.lblAverageDurationDisplay = new Label(this, SWT.NONE);
+		this.lblAverageDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		this.lblAverageDurationDisplay.setText("N/A");
+
 		final Label lblMaximalDuration = new Label(this, SWT.NONE);
 		lblMaximalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblMaximalDuration.setText("Maximal Duration:");
@@ -105,6 +115,7 @@ public final class AggregatedTraceDetailComposite extends Composite {
 
 		this.lblMinimalDurationDisplay.setText(Long.toString(trace.getMinDuration()));
 		this.lblMaximalDurationDisplay.setText(Long.toString(trace.getMaxDuration()));
+		this.lblAverageDurationDisplay.setText(Long.toString(trace.getAvgDuration()));
 
 		if (trace.isFailed()) {
 			this.lblFailedDisplay.setText("Yes (" + trace.getFailedCause() + ")");

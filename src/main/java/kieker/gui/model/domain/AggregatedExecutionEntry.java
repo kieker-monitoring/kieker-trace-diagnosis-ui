@@ -28,6 +28,7 @@ public final class AggregatedExecutionEntry {
 	private final String operation;
 	private long minDuration;
 	private long maxDuration;
+	private long avgDuration;
 	private int calls;
 
 	public AggregatedExecutionEntry(final ExecutionEntry execEntry) {
@@ -75,6 +76,11 @@ public final class AggregatedExecutionEntry {
 		this.calls++;
 		this.minDuration = Math.min(this.minDuration, executionEntry.getDuration());
 		this.maxDuration = Math.max(this.maxDuration, executionEntry.getDuration());
+		this.avgDuration += executionEntry.getDuration();
+	}
+
+	public void recalculateValues() {
+		this.avgDuration /= this.calls;
 	}
 
 	public long getMinDuration() {
@@ -83,6 +89,10 @@ public final class AggregatedExecutionEntry {
 
 	public long getMaxDuration() {
 		return this.maxDuration;
+	}
+
+	public long getAvgDuration() {
+		return this.avgDuration;
 	}
 
 	public int getCalls() {
