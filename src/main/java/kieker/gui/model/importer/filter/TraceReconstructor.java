@@ -117,6 +117,7 @@ public final class TraceReconstructor extends AbstractConsumerStage<IFlowRecord>
 		}
 
 		public ExecutionEntry reconstructTrace() {
+			this.root.recalculateValues();
 			return this.root;
 		}
 

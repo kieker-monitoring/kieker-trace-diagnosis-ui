@@ -120,7 +120,6 @@ public final class MainWindow {
 		final Display display = Display.getDefault();
 		this.createContents();
 		this.addLogic();
-		DataSource.getInstance().loadMonitoringLogFromFS("testdata");
 		this.shell.open();
 		this.shell.layout();
 		while (!this.shell.isDisposed()) {

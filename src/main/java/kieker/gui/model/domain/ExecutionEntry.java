@@ -67,8 +67,6 @@ public final class ExecutionEntry {
 
 	public void setDuration(final long duration) {
 		this.duration = duration;
-
-		this.updatePercent();
 	}
 
 	public boolean isFailed() {
@@ -106,12 +104,14 @@ public final class ExecutionEntry {
 	public void addExecutionEntry(final ExecutionEntry entry) {
 		this.children.add(entry);
 		entry.parent = this;
-
-		this.updatePercent();
 	}
 
 	public ExecutionEntry getParent() {
 		return this.parent;
+	}
+
+	public void recalculateValues() {
+		this.updatePercent();
 	}
 
 	private void updatePercent() {
@@ -119,9 +119,6 @@ public final class ExecutionEntry {
 			this.percent = (this.duration * 100.0f) / this.parent.duration;
 		} else {
 			this.percent = 100.0f;
-		}
-		for (final ExecutionEntry child : this.children) {
-			child.updatePercent();
 		}
 	}
 
