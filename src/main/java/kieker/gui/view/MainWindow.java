@@ -25,12 +25,14 @@ import kieker.gui.model.Properties;
 import kieker.gui.model.domain.AggregatedExecutionEntry;
 import kieker.gui.model.domain.ExecutionEntry;
 import kieker.gui.model.domain.RecordEntry;
+import kieker.gui.view.util.AbstractDirectedComparator;
 import kieker.gui.view.util.AggregatedExecutionTracesTreeSetDataListener;
 import kieker.gui.view.util.ExecutionTracesTreeSetDataListener;
 import kieker.gui.view.util.RecordEntryTimestampComparator;
 import kieker.gui.view.util.RecordEntryTypeComparator;
 import kieker.gui.view.util.RecordsTableSetDataListener;
 import kieker.gui.view.util.TableColumnSortListener;
+import kieker.gui.view.util.TreeColumnSortListener;
 
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -363,6 +365,19 @@ public final class MainWindow {
 		this.recordsTableTimestampColumn.addListener(SWT.Selection, new TableColumnSortListener<RecordEntry>(new RecordEntryTimestampComparator()));
 		this.recordsTableTypeColumn.addListener(SWT.Selection, new TableColumnSortListener<RecordEntry>(new RecordEntryTypeComparator()));
 		this.recordsTableRecordColumn.addListener(SWT.Selection, new TableColumnSortListener<RecordEntry>(new RecordEntryTimestampComparator()));
+
+		this.treeColumn_11.addListener(SWT.Selection, new TreeColumnSortListener(new AbstractDirectedComparator<ExecutionEntry>() {
+
+			@Override
+			public int compare(final ExecutionEntry arg0, final ExecutionEntry arg1) {
+				int result = Long.compare(arg0.getDuration(), arg1.getDuration());
+				if (this.getDirection() == SWT.UP) {
+					result = -result;
+				}
+				return result;
+
+			}
+		}));
 
 		this.explorerTree.addSelectionListener(new SelectionAdapter() {
 

@@ -120,6 +120,9 @@ public final class ExecutionEntry {
 		} else {
 			this.percent = 100.0f;
 		}
+		for (final ExecutionEntry executionEntry : this.children) {
+			executionEntry.updatePercent();
+		}
 	}
 
 	@Override
