@@ -10,7 +10,7 @@ targetCompatibility = '1.7'
 repositories {
 	mavenCentral()
 	maven { url 'https://swt-repo.googlecode.com/svn/repo/' }
-	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" } 
+	maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' } 
 }
 
 configurations { 
@@ -32,9 +32,8 @@ dependencies {
 	linuxX64Runtime 'org.eclipse.swt:org.eclipse.swt.gtk.linux.x86_64:4.4'
 	
 	compile 'net.sourceforge.teetime:teetime:1.0-SNAPSHOT'
+  compile 'net.sourceforge.teetime-stages:teetime-stages:1.0-SNAPSHOT'
   compile 'net.kieker-monitoring:kieker:1.11-SNAPSHOT'
-  compile files('lib/kieker-teetime-stages-1.0-SNAPSHOT.jar')
-  
   compile 'org.eclipse:jface:3.2.1-M20060908-1000'
 }
 
