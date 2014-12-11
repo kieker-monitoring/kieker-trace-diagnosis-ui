@@ -25,8 +25,10 @@ import kieker.gui.model.Properties;
 import kieker.gui.model.domain.AggregatedExecutionEntry;
 import kieker.gui.model.domain.ExecutionEntry;
 import kieker.gui.model.domain.RecordEntry;
-import kieker.gui.view.util.AbstractDirectedComparator;
 import kieker.gui.view.util.AggregatedExecutionTracesTreeSetDataListener;
+import kieker.gui.view.util.ExecutionEntryComponentComparator;
+import kieker.gui.view.util.ExecutionEntryDurationComparator;
+import kieker.gui.view.util.ExecutionEntryOperationComparator;
 import kieker.gui.view.util.ExecutionTracesTreeSetDataListener;
 import kieker.gui.view.util.RecordEntryTimestampComparator;
 import kieker.gui.view.util.RecordEntryTypeComparator;
@@ -366,18 +368,9 @@ public final class MainWindow {
 		this.recordsTableTypeColumn.addListener(SWT.Selection, new TableColumnSortListener<RecordEntry>(new RecordEntryTypeComparator()));
 		this.recordsTableRecordColumn.addListener(SWT.Selection, new TableColumnSortListener<RecordEntry>(new RecordEntryTimestampComparator()));
 
-		this.treeColumn_11.addListener(SWT.Selection, new TreeColumnSortListener(new AbstractDirectedComparator<ExecutionEntry>() {
-
-			@Override
-			public int compare(final ExecutionEntry arg0, final ExecutionEntry arg1) {
-				int result = Long.compare(arg0.getDuration(), arg1.getDuration());
-				if (this.getDirection() == SWT.UP) {
-					result = -result;
-				}
-				return result;
-
-			}
-		}));
+		this.treeColumn_10.addListener(SWT.Selection, new TreeColumnSortListener<ExecutionEntry>(new ExecutionEntryOperationComparator()));
+		this.treeColumn_11.addListener(SWT.Selection, new TreeColumnSortListener<ExecutionEntry>(new ExecutionEntryDurationComparator()));
+		this.treeColumn_8.addListener(SWT.Selection, new TreeColumnSortListener<ExecutionEntry>(new ExecutionEntryComponentComparator()));
 
 		this.explorerTree.addSelectionListener(new SelectionAdapter() {
 
