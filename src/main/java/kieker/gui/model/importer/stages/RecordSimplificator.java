@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.model.importer.filter;
+package kieker.gui.model.importer.stages;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.gui.model.domain.RecordEntry;

@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.model.importer.filter;
+package kieker.gui.model.importer.stages;
 
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
