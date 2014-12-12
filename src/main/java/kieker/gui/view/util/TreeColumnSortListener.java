@@ -4,12 +4,12 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 
-public final class TreeColumnSortListener<T> implements Listener {
+public final class TreeColumnSortListener<T> extends SelectionAdapter {
 
 	private final AbstractDirectedComparator<T> comparator;
 
@@ -18,7 +18,7 @@ public final class TreeColumnSortListener<T> implements Listener {
 	}
 
 	@Override
-	public void handleEvent(final Event event) {
+	public void widgetSelected(final SelectionEvent event) {
 		// Get the necessary information from the event
 		final TreeColumn currentColumn = (TreeColumn) event.widget;
 		final Tree tree = currentColumn.getParent();

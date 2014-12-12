@@ -44,16 +44,25 @@ public final class AggregatedExecutionEntry {
 		}
 	}
 
-	public int getStackDepth() {
-		int stackDepth = this.children.isEmpty() ? 0 : 1;
+	public int getTraceDepth() {
+		int traceDepth = this.children.isEmpty() ? 0 : 1;
 
-		int maxChildrenStackDepth = 0;
+		int maxChildrenTraceDepth = 0;
 		for (final AggregatedExecutionEntry child : this.children) {
-			maxChildrenStackDepth = Math.max(maxChildrenStackDepth, child.getStackDepth());
+			maxChildrenTraceDepth = Math.max(maxChildrenTraceDepth, child.getTraceDepth());
 		}
-		stackDepth += maxChildrenStackDepth;
+		traceDepth += maxChildrenTraceDepth;
 
-		return stackDepth;
+		return traceDepth;
+	}
+
+	public int getTraceSize() {
+		int traceSize = 1;
+
+		for (final AggregatedExecutionEntry child : this.children) {
+			traceSize += child.getTraceSize();
+		}
+		return traceSize;
 	}
 
 	public List<AggregatedExecutionEntry> getChildren() {
