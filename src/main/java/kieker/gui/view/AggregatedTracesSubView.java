@@ -284,9 +284,11 @@ public class AggregatedTracesSubView implements Observer {
 				operationString = operationString.substring(lastPointPos + 1);
 			}
 			if (parent != null) {
-				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, "" });
+				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, "",
+					Long.toString(executionEntry.getMinDuration()), Long.toString(executionEntry.getAvgDuration()), Long.toString(executionEntry.getMaxDuration()) });
 			} else {
-				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, Integer.toString(executionEntry.getCalls()) });
+				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, Integer.toString(executionEntry.getCalls()),
+					Long.toString(executionEntry.getMinDuration()), Long.toString(executionEntry.getAvgDuration()), Long.toString(executionEntry.getMaxDuration()) });
 			}
 
 			if (executionEntry.isFailed()) {
