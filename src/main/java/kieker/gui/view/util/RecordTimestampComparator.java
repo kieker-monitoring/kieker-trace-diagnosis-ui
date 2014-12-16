@@ -16,20 +16,19 @@
 
 package kieker.gui.view.util;
 
-import kieker.gui.model.domain.Execution;
+import kieker.gui.model.domain.Record;
 
 import org.eclipse.swt.SWT;
 
-public class ExecutionEntryComponentComparator extends AbstractDirectedComparator<Execution> {
+public class RecordTimestampComparator extends AbstractDirectedComparator<Record> {
 
 	@Override
-	public int compare(final Execution arg0, final Execution arg1) {
-		int result = arg0.getComponent().compareTo(arg1.getOperation());
+	public int compare(final Record o1, final Record o2) {
+		int result = Long.compare(o1.getTimestamp(), o2.getTimestamp());
 		if (this.getDirection() == SWT.UP) {
 			result = -result;
 		}
 		return result;
-
 	}
 
 }

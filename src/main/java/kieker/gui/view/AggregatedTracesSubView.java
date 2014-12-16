@@ -25,6 +25,14 @@ import kieker.gui.model.AggregatedTracesSubViewModel;
 import kieker.gui.model.DataModel;
 import kieker.gui.model.PropertiesModel;
 import kieker.gui.model.domain.AggregatedExecution;
+import kieker.gui.view.util.AggregatedExecutionAvgDurationComparator;
+import kieker.gui.view.util.AggregatedExecutionCallComparator;
+import kieker.gui.view.util.AggregatedExecutionMaxDurationComparator;
+import kieker.gui.view.util.AggregatedExecutionMinDurationComparator;
+import kieker.gui.view.util.ExecutionComponentComparator;
+import kieker.gui.view.util.ExecutionContainerComparator;
+import kieker.gui.view.util.ExecutionOperationComparator;
+import kieker.gui.view.util.TreeColumnSortListener;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -206,6 +214,14 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 
 		this.tree.addSelectionListener(this.controller);
 		this.tree.addListener(SWT.SetData, new DataProvider());
+
+		trclmnExecutionContainer.addSelectionListener(new TreeColumnSortListener<>(new ExecutionContainerComparator()));
+		trclmnComponent.addSelectionListener(new TreeColumnSortListener<>(new ExecutionComponentComparator()));
+		trclmnOperation.addSelectionListener(new TreeColumnSortListener<>(new ExecutionOperationComparator()));
+		trclmnMinimalDuration.addSelectionListener(new TreeColumnSortListener<>(new AggregatedExecutionMinDurationComparator()));
+		trclmnMaximalDuration.addSelectionListener(new TreeColumnSortListener<>(new AggregatedExecutionMaxDurationComparator()));
+		trclmnAverageDuration.addSelectionListener(new TreeColumnSortListener<>(new AggregatedExecutionAvgDurationComparator()));
+		trclmnCalls.addSelectionListener(new TreeColumnSortListener<>(new AggregatedExecutionCallComparator()));
 	}
 
 	@Override
@@ -314,7 +330,7 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, "", minDuration, avgDuration, maxDuration });
 			} else {
 				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, Integer.toString(executionEntry.getCalls()), minDuration, avgDuration,
-					maxDuration });
+						maxDuration });
 			}
 
 			if (executionEntry.isFailed()) {

@@ -16,20 +16,19 @@
 
 package kieker.gui.view.util;
 
-import kieker.gui.model.domain.Execution;
+import kieker.gui.model.domain.AbstractExecution;
 
 import org.eclipse.swt.SWT;
 
-public class ExecutionEntryContainerComparator extends AbstractDirectedComparator<Execution> {
+public class ExecutionOperationComparator extends AbstractDirectedComparator<AbstractExecution<?>> {
 
 	@Override
-	public int compare(final Execution arg0, final Execution arg1) {
-		int result = arg0.getContainer().compareTo(arg1.getContainer());
+	public int compare(final AbstractExecution<?> fst, final AbstractExecution<?> snd) {
+		int result = fst.getOperation().compareTo(snd.getOperation());
 		if (this.getDirection() == SWT.UP) {
 			result = -result;
 		}
 		return result;
-
 	}
 
 }

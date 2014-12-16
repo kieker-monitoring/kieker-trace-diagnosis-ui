@@ -16,15 +16,15 @@
 
 package kieker.gui.view.util;
 
-import kieker.gui.model.domain.Execution;
+import kieker.gui.model.domain.AggregatedExecution;
 
 import org.eclipse.swt.SWT;
 
-public class ExecutionEntryDurationComparator extends AbstractDirectedComparator<Execution> {
+public class AggregatedExecutionMinDurationComparator extends AbstractDirectedComparator<AggregatedExecution> {
 
 	@Override
-	public int compare(final Execution arg0, final Execution arg1) {
-		int result = Long.compare(arg0.getDuration(), arg1.getDuration());
+	public int compare(final AggregatedExecution arg0, final AggregatedExecution arg1) {
+		int result = Long.compare(arg0.getMinDuration(), arg1.getMinDuration());
 		if (this.getDirection() == SWT.UP) {
 			result = -result;
 		}

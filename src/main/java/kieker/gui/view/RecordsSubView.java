@@ -23,8 +23,8 @@ import java.util.Observer;
 import kieker.gui.controller.RecordsSubViewController;
 import kieker.gui.model.DataModel;
 import kieker.gui.model.domain.Record;
-import kieker.gui.view.util.RecordEntryTimestampComparator;
-import kieker.gui.view.util.RecordEntryTypeComparator;
+import kieker.gui.view.util.RecordTimestampComparator;
+import kieker.gui.view.util.RecordTypeComparator;
 import kieker.gui.view.util.TableColumnSortListener;
 
 import org.eclipse.jface.viewers.TableViewer;
@@ -80,9 +80,9 @@ public final class RecordsSubView implements Observer, ISubView {
 
 		this.table.addListener(SWT.SetData, new DataProvider());
 
-		tblclmnTimestamp.addSelectionListener(new TableColumnSortListener<>(new RecordEntryTimestampComparator()));
-		tblclmnRecordType.addSelectionListener(new TableColumnSortListener<>(new RecordEntryTypeComparator()));
-		tblclmnRecordContent.addSelectionListener(new TableColumnSortListener<>(new RecordEntryTimestampComparator()));
+		tblclmnTimestamp.addSelectionListener(new TableColumnSortListener<>(new RecordTimestampComparator()));
+		tblclmnRecordType.addSelectionListener(new TableColumnSortListener<>(new RecordTypeComparator()));
+		tblclmnRecordContent.addSelectionListener(new TableColumnSortListener<>(new RecordTimestampComparator()));
 	}
 
 	public Table getTable() {

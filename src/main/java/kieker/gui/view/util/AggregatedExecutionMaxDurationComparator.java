@@ -16,19 +16,20 @@
 
 package kieker.gui.view.util;
 
-import kieker.gui.model.domain.Record;
+import kieker.gui.model.domain.AggregatedExecution;
 
 import org.eclipse.swt.SWT;
 
-public class RecordEntryTypeComparator extends AbstractDirectedComparator<Record> {
+public class AggregatedExecutionMaxDurationComparator extends AbstractDirectedComparator<AggregatedExecution> {
 
 	@Override
-	public int compare(final Record o1, final Record o2) {
-		int result = o1.getType().compareTo(o2.getType());
+	public int compare(final AggregatedExecution arg0, final AggregatedExecution arg1) {
+		int result = Long.compare(arg0.getMaxDuration(), arg1.getMaxDuration());
 		if (this.getDirection() == SWT.UP) {
 			result = -result;
 		}
 		return result;
+
 	}
 
 }
