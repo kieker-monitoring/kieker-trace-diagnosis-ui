@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-public final class RecordsSubView implements Observer {
+public final class RecordsSubView implements Observer, ISubView {
 
 	private final DataModel model;
 	private Composite composite;
@@ -36,6 +36,7 @@ public final class RecordsSubView implements Observer {
 	/**
 	 * @wbp.parser.entryPoint
 	 */
+	@Override
 	public void createComposite(final Composite parent) {
 		if (this.composite != null) {
 			this.composite.dispose();
@@ -72,6 +73,7 @@ public final class RecordsSubView implements Observer {
 		return this.table;
 	}
 
+	@Override
 	public Composite getComposite() {
 		return this.composite;
 	}

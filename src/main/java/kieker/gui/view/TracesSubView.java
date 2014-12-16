@@ -31,7 +31,7 @@ import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-public class TracesSubView implements Observer {
+public class TracesSubView implements Observer, ISubView {
 
 	private final DataModel model;
 	private final TracesSubViewModel tracesSubViewModel;
@@ -68,6 +68,7 @@ public class TracesSubView implements Observer {
 	/**
 	 * @wbp.parser.entryPoint
 	 */
+	@Override
 	public void createComposite(final Composite parent) {
 		if (this.composite != null) {
 			this.composite.dispose();
@@ -190,6 +191,7 @@ public class TracesSubView implements Observer {
 		return this.tree;
 	}
 
+	@Override
 	public Composite getComposite() {
 		return this.composite;
 	}

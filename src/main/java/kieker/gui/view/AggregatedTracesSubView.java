@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-public class AggregatedTracesSubView implements Observer {
+public class AggregatedTracesSubView implements Observer, ISubView {
 
 	private final AggregatedTracesSubViewModel aggregatedTracesSubViewModel;
 	private final AggregatedTracesSubViewController controller;
@@ -61,6 +61,7 @@ public class AggregatedTracesSubView implements Observer {
 	/**
 	 * @wbp.parser.entryPoint
 	 */
+	@Override
 	public void createComposite(final Composite parent) {
 		if (this.composite != null) {
 			this.composite.dispose();
@@ -191,6 +192,7 @@ public class AggregatedTracesSubView implements Observer {
 		this.tree.addListener(SWT.SetData, new DataProvider());
 	}
 
+	@Override
 	public Composite getComposite() {
 		return this.composite;
 	}
@@ -296,7 +298,7 @@ public class AggregatedTracesSubView implements Observer {
 				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, "", minDuration, avgDuration, maxDuration });
 			} else {
 				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, Integer.toString(executionEntry.getCalls()), minDuration, avgDuration,
-					maxDuration });
+						maxDuration });
 			}
 
 			if (executionEntry.isFailed()) {

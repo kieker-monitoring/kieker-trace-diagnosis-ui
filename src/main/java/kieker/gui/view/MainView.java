@@ -24,10 +24,11 @@ public class MainView implements Observer {
 
 	private final DataModel dataModel;
 	private final MainViewModel mainViewModel;
-	private final RecordsSubView recordsSubView;
-	private final TracesSubView tracesSubView;
-	private final TracesSubView failedTracesSubView;
-	private final AggregatedTracesSubView aggregatedTracesSubView;
+	private final ISubView recordsSubView;
+	private final ISubView tracesSubView;
+	private final ISubView failedTracesSubView;
+	private final ISubView aggregatedTracesSubView;
+	private final ISubView failureContainingTracesSubView;
 	private final MainViewController controller;
 
 	private Shell shell;
@@ -46,12 +47,11 @@ public class MainView implements Observer {
 	private DirectoryDialog dialog;
 	private TreeItem trtmAggregatedTraces;
 	private TreeItem trtmJustFailedTraces;
-	private final TracesSubView failureContainingTracesSubView;
+
 	private TreeItem trtmJustTracesContaining;
 
-	public MainView(final DataModel dataModel, final MainViewModel mainViewModel, final MainViewController controller, final RecordsSubView recordsSubView,
-			final TracesSubView tracesSubView, final TracesSubView failedTracesSubView, final AggregatedTracesSubView aggregatedTracesSubView,
-			final TracesSubView failureContainingTracesSubView) {
+	public MainView(final DataModel dataModel, final MainViewModel mainViewModel, final MainViewController controller, final ISubView recordsSubView, final ISubView tracesSubView,
+			final ISubView failedTracesSubView, final ISubView aggregatedTracesSubView, final ISubView failureContainingTracesSubView) {
 		this.dataModel = dataModel;
 		this.mainViewModel = mainViewModel;
 		this.recordsSubView = recordsSubView;
@@ -71,7 +71,7 @@ public class MainView implements Observer {
 		this.shell.open();
 		this.shell.layout();
 
-		this.dataModel.loadMonitoringLogFromFS("example/monitoring log");
+		this.dataModel.loadMonitoringLogFromFS("kieker-20141209-135930886-UTC-SE-Nils-Ehmke-KIEKER");
 
 		while (!this.shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
