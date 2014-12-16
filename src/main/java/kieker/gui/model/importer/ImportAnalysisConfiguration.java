@@ -22,6 +22,7 @@ import java.util.Vector;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.IFlowRecord;
+import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.gui.model.domain.AggregatedExecutionEntry;
 import kieker.gui.model.domain.ExecutionEntry;
 import kieker.gui.model.domain.RecordEntry;
@@ -35,7 +36,7 @@ import teetime.framework.pipe.PipeFactoryRegistry.PipeOrdering;
 import teetime.framework.pipe.PipeFactoryRegistry.ThreadCommunication;
 import teetime.stage.CollectorSink;
 import teetime.stage.InitialElementProducer;
-import teetime.stage.InstanceOfFilter;
+import teetime.stage.MultipleInstanceOfFilter;
 import teetime.stage.className.ClassNameRegistryRepository;
 import teetime.stage.io.filesystem.Dir2RecordsFilter;
 
@@ -49,12 +50,15 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 	private final List<RecordEntry> recordsList = new Vector<>(100000);
 	private final List<ExecutionEntry> tracesList = new Vector<>(100000);
 	private final List<AggregatedExecutionEntry> aggregatedTraces = new Vector<>(100000);
+	private final List<KiekerMetadataRecord> metadataRecords = new Vector<>(100000);
 
 	public ImportAnalysisConfiguration(final File importDirectory) {
 		// Create the stages
 		final InitialElementProducer<File> producer = new InitialElementProducer<>(importDirectory);
 		final Dir2RecordsFilter reader = new Dir2RecordsFilter(new ClassNameRegistryRepository());
-		final InstanceOfFilter<IMonitoringRecord, IFlowRecord> typeFilter = new InstanceOfFilter<>(IFlowRecord.class);
+
+		final MultipleInstanceOfFilter<IMonitoringRecord> typeFilter = new MultipleInstanceOfFilter<>();
+
 		final Cloner<IFlowRecord> fstDistributor = new Cloner<>();
 		final RecordSimplificator recordSimplificator = new RecordSimplificator();
 		final CollectorSink<RecordEntry> recordCollector = new CollectorSink<>(this.recordsList);
@@ -63,12 +67,14 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 		final CollectorSink<ExecutionEntry> traceCollector = new CollectorSink<>(this.tracesList);
 		final TraceAggregator traceAggregator = new TraceAggregator();
 		final CollectorSink<AggregatedExecutionEntry> aggregatedTraceCollector = new CollectorSink<>(this.aggregatedTraces);
+		final CollectorSink<KiekerMetadataRecord> metadataCollector = new CollectorSink<>(this.metadataRecords);
 
 		// Connect the stages
 		final IPipeFactory pipeFactory = AnalysisConfiguration.PIPE_FACTORY_REGISTRY.getPipeFactory(ThreadCommunication.INTRA, PipeOrdering.ARBITRARY, false);
 		pipeFactory.create(producer.getOutputPort(), reader.getInputPort());
 		pipeFactory.create(reader.getOutputPort(), typeFilter.getInputPort());
-		pipeFactory.create(typeFilter.getOutputPort(), fstDistributor.getInputPort());
+
+		pipeFactory.create(typeFilter.getOutputPortForType(IFlowRecord.class), fstDistributor.getInputPort());
 		pipeFactory.create(fstDistributor.getFirstOutputPort(), recordSimplificator.getInputPort());
 		pipeFactory.create(recordSimplificator.getOutputPort(), recordCollector.getInputPort());
 		pipeFactory.create(fstDistributor.getSecondOutputPort(), traceReconstructor.getInputPort());
@@ -76,6 +82,8 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 		pipeFactory.create(sndDistributor.getFirstOutputPort(), traceCollector.getInputPort());
 		pipeFactory.create(sndDistributor.getSecondOutputPort(), traceAggregator.getInputPort());
 		pipeFactory.create(traceAggregator.getOutputPort(), aggregatedTraceCollector.getInputPort());
+
+		pipeFactory.create(typeFilter.getOutputPortForType(KiekerMetadataRecord.class), metadataCollector.getInputPort());
 
 		// Make sure that the producer is executed by the analysis
 		super.addThreadableStage(producer);
@@ -91,6 +99,10 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 
 	public List<AggregatedExecutionEntry> getAggregatedTraces() {
 		return this.aggregatedTraces;
+	}
+
+	public List<KiekerMetadataRecord> getMetadataRecords() {
+		return this.metadataRecords;
 	}
 
 }

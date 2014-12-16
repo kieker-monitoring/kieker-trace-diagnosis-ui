@@ -95,7 +95,7 @@ public final class RecordsSubView implements Observer {
 		}
 	}
 
-	private static class DataProvider implements Listener {
+	private class DataProvider implements Listener {
 
 		@Override
 		@SuppressWarnings("unchecked")

@@ -86,19 +86,19 @@ public class AggregatedTracesSubView implements Observer {
 		trclmnOperation.setWidth(100);
 		trclmnOperation.setText("Operation");
 
-		final TreeColumn trclmnCalls = new TreeColumn(this.tree, SWT.NONE);
+		final TreeColumn trclmnCalls = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnCalls.setWidth(100);
 		trclmnCalls.setText("Number of Calls");
 
-		final TreeColumn trclmnMinimalDuration = new TreeColumn(this.tree, SWT.NONE);
+		final TreeColumn trclmnMinimalDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnMinimalDuration.setWidth(100);
 		trclmnMinimalDuration.setText("Minimal Duration");
 
-		final TreeColumn trclmnAverageDuration = new TreeColumn(this.tree, SWT.NONE);
+		final TreeColumn trclmnAverageDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnAverageDuration.setWidth(100);
 		trclmnAverageDuration.setText("Average Duration");
 
-		final TreeColumn trclmnMaximalDuration = new TreeColumn(this.tree, SWT.NONE);
+		final TreeColumn trclmnMaximalDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnMaximalDuration.setWidth(100);
 		trclmnMaximalDuration.setText("Maximal Duration");
 
@@ -228,9 +228,13 @@ public class AggregatedTracesSubView implements Observer {
 	private void updateDetailComposite() {
 		final AggregatedExecutionEntry trace = this.aggregatedTracesSubViewModel.getCurrentActiveTrace();
 
-		this.lblMinimalDurationDisplay.setText(Long.toString(trace.getMinDuration()));
-		this.lblMaximalDurationDisplay.setText(Long.toString(trace.getMaxDuration()));
-		this.lblAverageDurationDisplay.setText(Long.toString(trace.getAvgDuration()));
+		final String minDuration = (Long.toString(trace.getMinDuration()) + " " + this.model.getShortTimeUnit()).trim();
+		final String maxDuration = (Long.toString(trace.getMaxDuration()) + " " + this.model.getShortTimeUnit()).trim();
+		final String avgDuration = (Long.toString(trace.getAvgDuration()) + " " + this.model.getShortTimeUnit()).trim();
+
+		this.lblMinimalDurationDisplay.setText(minDuration);
+		this.lblMaximalDurationDisplay.setText(maxDuration);
+		this.lblAverageDurationDisplay.setText(avgDuration);
 
 		this.lblExecutionContainerDisplay.setText(trace.getContainer());
 		this.lblComponentDisplay.setText(trace.getComponent());
@@ -283,12 +287,16 @@ public class AggregatedTracesSubView implements Observer {
 				final int lastPointPos = operationString.lastIndexOf('.', operationString.length() - 5);
 				operationString = operationString.substring(lastPointPos + 1);
 			}
+
+			final String minDuration = (Long.toString(executionEntry.getMinDuration()) + " " + AggregatedTracesSubView.this.model.getShortTimeUnit()).trim();
+			final String maxDuration = (Long.toString(executionEntry.getMaxDuration()) + " " + AggregatedTracesSubView.this.model.getShortTimeUnit()).trim();
+			final String avgDuration = (Long.toString(executionEntry.getAvgDuration()) + " " + AggregatedTracesSubView.this.model.getShortTimeUnit()).trim();
+
 			if (parent != null) {
-				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, "",
-					Long.toString(executionEntry.getMinDuration()), Long.toString(executionEntry.getAvgDuration()), Long.toString(executionEntry.getMaxDuration()) });
+				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, "", minDuration, avgDuration, maxDuration });
 			} else {
-				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, Integer.toString(executionEntry.getCalls()),
-					Long.toString(executionEntry.getMinDuration()), Long.toString(executionEntry.getAvgDuration()), Long.toString(executionEntry.getMaxDuration()) });
+				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, Integer.toString(executionEntry.getCalls()), minDuration, avgDuration,
+					maxDuration });
 			}
 
 			if (executionEntry.isFailed()) {

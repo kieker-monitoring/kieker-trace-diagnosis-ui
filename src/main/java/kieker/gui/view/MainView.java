@@ -49,7 +49,6 @@ public class MainView implements Observer {
 			final TracesSubView tracesSubView, final AggregatedTracesSubView aggregatedTracesSubView) {
 		this.dataModel = dataModel;
 		this.mainViewModel = mainViewModel;
-
 		this.recordsSubView = recordsSubView;
 		this.tracesSubView = tracesSubView;
 		this.aggregatedTracesSubView = aggregatedTracesSubView;
@@ -64,6 +63,8 @@ public class MainView implements Observer {
 		this.addLogic();
 		this.shell.open();
 		this.shell.layout();
+
+	
 
 		while (!this.shell.isDisposed()) {
 			if (!display.readAndDispatch()) {

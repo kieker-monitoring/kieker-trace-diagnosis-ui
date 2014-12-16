@@ -87,11 +87,11 @@ public class TracesSubView implements Observer {
 		trclmnOperation.setWidth(100);
 		trclmnOperation.setText("Operation");
 
-		final TreeColumn trclmnDuration = new TreeColumn(this.tree, SWT.NONE);
+		final TreeColumn trclmnDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnDuration.setWidth(100);
 		trclmnDuration.setText("Duration");
 
-		final TreeColumn trclmnPercent = new TreeColumn(this.tree, SWT.NONE);
+		final TreeColumn trclmnPercent = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnPercent.setWidth(100);
 		trclmnPercent.setText("Percent");
 
@@ -219,8 +219,10 @@ public class TracesSubView implements Observer {
 	private void updateDetailComposite() {
 		final ExecutionEntry trace = this.tracesSubViewModel.getCurrentActiveTrace();
 
+		final String duration = (Long.toString(trace.getDuration()) + " " + this.model.getShortTimeUnit()).trim();
+
 		this.lblTraceIdDisplay.setText(Long.toString(trace.getTraceID()));
-		this.lblDurationDisplay.setText(Long.toString(trace.getDuration()));
+		this.lblDurationDisplay.setText(duration);
 
 		this.lblExecutionContainerDisplay.setText(trace.getContainer());
 		this.lblComponentDisplay.setText(trace.getComponent());
@@ -276,8 +278,8 @@ public class TracesSubView implements Observer {
 				final int lastPointPos = operationString.lastIndexOf('.', operationString.length() - 5);
 				operationString = operationString.substring(lastPointPos + 1);
 			}
-			item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, Long.toString(executionEntry.getDuration()),
-					String.format("%.1f%%", executionEntry.getPercent()), traceID });
+			final String duration = (Long.toString(executionEntry.getDuration()) + " " + TracesSubView.this.model.getShortTimeUnit()).trim();
+			item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, duration, String.format("%.1f%%", executionEntry.getPercent()), traceID });
 
 			if (executionEntry.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
@@ -287,7 +289,6 @@ public class TracesSubView implements Observer {
 			item.setData(executionEntry);
 			item.setItemCount(executionEntry.getChildren().size());
 		}
-
 	}
 
 }
