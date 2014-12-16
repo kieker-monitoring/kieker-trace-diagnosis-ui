@@ -18,17 +18,17 @@ package kieker.gui.model;
 
 import java.util.Observable;
 
-import kieker.gui.model.domain.ExecutionEntry;
+import kieker.gui.model.domain.Execution;
 
 public final class TracesSubViewModel extends Observable {
 
-	private ExecutionEntry currentActiveTrace;
+	private Execution currentActiveTrace;
 
-	public ExecutionEntry getCurrentActiveTrace() {
+	public Execution getCurrentActiveTrace() {
 		return this.currentActiveTrace;
 	}
 
-	public void setCurrentActiveTrace(final ExecutionEntry currentActiveTrace) {
+	public void setCurrentActiveTrace(final Execution currentActiveTrace) {
 		this.currentActiveTrace = currentActiveTrace;
 
 		this.setChanged();

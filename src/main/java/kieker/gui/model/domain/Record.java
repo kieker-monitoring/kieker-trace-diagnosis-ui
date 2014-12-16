@@ -21,13 +21,13 @@ package kieker.gui.model.domain;
  *
  * @author Nils Christian Ehmke
  */
-public final class RecordEntry {
+public final class Record {
 
 	private final long timestamp;
 	private final String type;
 	private final String representation;
  
-	public RecordEntry(final long timestamp, final String type, final String representation) {
+	public Record(final long timestamp, final String type, final String representation) {
 		this.timestamp = timestamp;
 		this.type = type;
 		this.representation = representation;

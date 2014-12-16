@@ -27,7 +27,7 @@ import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
-import kieker.gui.model.domain.ExecutionEntry;
+import kieker.gui.model.domain.Execution;
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 
@@ -39,7 +39,7 @@ import teetime.framework.OutputPort;
  */
 public final class TraceReconstructor extends AbstractConsumerStage<IFlowRecord> {
 
-	private final OutputPort<ExecutionEntry> outputPort = super.createOutputPort();
+	private final OutputPort<Execution> outputPort = super.createOutputPort();
 	private final Map<Long, TraceBuffer> traceBuffers = new HashMap<>();
 
 	@Override
@@ -64,12 +64,12 @@ public final class TraceReconstructor extends AbstractConsumerStage<IFlowRecord>
 
 		traceBuffer.handleEvent(input);
 		if (traceBuffer.isTraceComplete()) {
-			final ExecutionEntry executionEntry = traceBuffer.reconstructTrace();
+			final Execution executionEntry = traceBuffer.reconstructTrace();
 			this.outputPort.send(executionEntry);
 		}
 	}
 
-	public OutputPort<ExecutionEntry> getOutputPort() {
+	public OutputPort<Execution> getOutputPort() {
 		return this.outputPort;
 	}
 
@@ -77,8 +77,8 @@ public final class TraceReconstructor extends AbstractConsumerStage<IFlowRecord>
 
 		private final String hostname;
 		private final Deque<BeforeOperationEvent> stack = new LinkedList<>();
-		private ExecutionEntry root;
-		private ExecutionEntry header;
+		private Execution root;
+		private Execution header;
 
 		public TraceBuffer(final TraceMetadata traceMetadata) {
 			this.hostname = traceMetadata.getHostname();
@@ -95,7 +95,7 @@ public final class TraceReconstructor extends AbstractConsumerStage<IFlowRecord>
 		private void handleBeforeOperationEventRecord(final BeforeOperationEvent record) {
 			this.stack.push(record);
 
-			final ExecutionEntry newExecutionEntry = new ExecutionEntry(record.getTraceId(), this.hostname, record.getClassSignature(), record.getOperationSignature());
+			final Execution newExecutionEntry = new Execution(record.getTraceId(), this.hostname, record.getClassSignature(), record.getOperationSignature());
 			if (this.root == null) {
 				this.root = newExecutionEntry;
 			} else {
@@ -116,7 +116,7 @@ public final class TraceReconstructor extends AbstractConsumerStage<IFlowRecord>
 			this.header = this.header.getParent();
 		}
 
-		public ExecutionEntry reconstructTrace() {
+		public Execution reconstructTrace() {
 			this.root.recalculateValues();
 			return this.root;
 		}

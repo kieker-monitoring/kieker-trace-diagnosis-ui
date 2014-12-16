@@ -19,7 +19,7 @@ package kieker.gui.controller;
 import kieker.gui.model.AggregatedTracesSubViewModel;
 import kieker.gui.model.DataModel;
 import kieker.gui.model.PropertiesModel;
-import kieker.gui.model.domain.AggregatedExecutionEntry;
+import kieker.gui.model.domain.AggregatedExecution;
 import kieker.gui.view.AggregatedTracesSubView;
 import kieker.gui.view.ISubView;
 
@@ -48,8 +48,8 @@ public class AggregatedTracesSubViewController implements SelectionListener, ISu
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
-		if (e.item.getData() instanceof AggregatedExecutionEntry) {
-			this.model.setCurrentActiveTrace((AggregatedExecutionEntry) e.item.getData());
+		if (e.item.getData() instanceof AggregatedExecution) {
+			this.model.setCurrentActiveTrace((AggregatedExecution) e.item.getData());
 		}
 	}
 

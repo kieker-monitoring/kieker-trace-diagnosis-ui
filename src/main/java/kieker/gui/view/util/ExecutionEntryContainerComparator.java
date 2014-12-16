@@ -16,14 +16,14 @@
 
 package kieker.gui.view.util;
 
-import kieker.gui.model.domain.ExecutionEntry;
+import kieker.gui.model.domain.Execution;
 
 import org.eclipse.swt.SWT;
 
-public class ExecutionEntryContainerComparator extends AbstractDirectedComparator<ExecutionEntry> {
+public class ExecutionEntryContainerComparator extends AbstractDirectedComparator<Execution> {
 
 	@Override
-	public int compare(final ExecutionEntry arg0, final ExecutionEntry arg1) {
+	public int compare(final Execution arg0, final Execution arg1) {
 		int result = arg0.getContainer().compareTo(arg1.getContainer());
 		if (this.getDirection() == SWT.UP) {
 			result = -result;

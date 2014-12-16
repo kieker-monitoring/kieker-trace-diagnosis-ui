@@ -24,9 +24,9 @@ import java.util.Observable;
 import java.util.concurrent.TimeUnit;
 
 import kieker.common.record.misc.KiekerMetadataRecord;
-import kieker.gui.model.domain.AggregatedExecutionEntry;
-import kieker.gui.model.domain.ExecutionEntry;
-import kieker.gui.model.domain.RecordEntry;
+import kieker.gui.model.domain.AggregatedExecution;
+import kieker.gui.model.domain.Execution;
+import kieker.gui.model.domain.Record;
 import kieker.gui.model.importer.ImportAnalysisConfiguration;
 import teetime.framework.Analysis;
 
@@ -37,11 +37,11 @@ import teetime.framework.Analysis;
  */
 public final class DataModel extends Observable {
 
-	private List<RecordEntry> records = Collections.emptyList();
-	private List<ExecutionEntry> traces = Collections.emptyList();
-	private List<ExecutionEntry> failureContainingTraces = Collections.emptyList();
-	private List<ExecutionEntry> failedTraces = Collections.emptyList();
-	private List<AggregatedExecutionEntry> aggregatedTraces = Collections.emptyList();
+	private List<Record> records = Collections.emptyList();
+	private List<Execution> traces = Collections.emptyList();
+	private List<Execution> failureContainingTraces = Collections.emptyList();
+	private List<Execution> failedTraces = Collections.emptyList();
+	private List<AggregatedExecution> aggregatedTraces = Collections.emptyList();
 	private String shortTimeUnit = "";
 
 	public DataModel() {}
@@ -106,23 +106,23 @@ public final class DataModel extends Observable {
 		return result;
 	}
 
-	public List<RecordEntry> getRecordsCopy() {
+	public List<Record> getRecordsCopy() {
 		return new ArrayList<>(this.records);
 	}
 
-	public List<ExecutionEntry> getTracesCopy() {
+	public List<Execution> getTracesCopy() {
 		return new ArrayList<>(this.traces);
 	}
 
-	public List<ExecutionEntry> getFailedTracesCopy() {
+	public List<Execution> getFailedTracesCopy() {
 		return new ArrayList<>(this.failedTraces);
 	}
 
-	public List<ExecutionEntry> getFailureContainingTracesCopy() {
+	public List<Execution> getFailureContainingTracesCopy() {
 		return new ArrayList<>(this.failureContainingTraces);
 	}
 
-	public List<AggregatedExecutionEntry> getAggregatedTracesCopy() {
+	public List<AggregatedExecution> getAggregatedTracesCopy() {
 		return new ArrayList<>(this.aggregatedTraces);
 	}
 

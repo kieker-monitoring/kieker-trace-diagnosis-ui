@@ -24,7 +24,7 @@ import kieker.gui.controller.AggregatedTracesSubViewController;
 import kieker.gui.model.AggregatedTracesSubViewModel;
 import kieker.gui.model.DataModel;
 import kieker.gui.model.PropertiesModel;
-import kieker.gui.model.domain.AggregatedExecutionEntry;
+import kieker.gui.model.domain.AggregatedExecution;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -227,7 +227,7 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 	}
 
 	private void updateTree() {
-		final List<AggregatedExecutionEntry> records = this.model.getAggregatedTracesCopy();
+		final List<AggregatedExecution> records = this.model.getAggregatedTracesCopy();
 
 		this.tree.setData(records);
 		this.tree.setItemCount(records.size());
@@ -244,7 +244,7 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 	}
 
 	private void updateDetailComposite() {
-		final AggregatedExecutionEntry trace = this.aggregatedTracesSubViewModel.getCurrentActiveTrace();
+		final AggregatedExecution trace = this.aggregatedTracesSubViewModel.getCurrentActiveTrace();
 
 		final String minDuration = (Long.toString(trace.getMinDuration()) + " " + this.model.getShortTimeUnit()).trim();
 		final String maxDuration = (Long.toString(trace.getMaxDuration()) + " " + this.model.getShortTimeUnit()).trim();
@@ -286,11 +286,11 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 			final TreeItem parent = item.getParentItem();
 
 			// Decide whether the current item is a root or not
-			final AggregatedExecutionEntry executionEntry;
+			final AggregatedExecution executionEntry;
 			if (parent == null) {
-				executionEntry = ((List<AggregatedExecutionEntry>) tree.getData()).get(tableIndex);
+				executionEntry = ((List<AggregatedExecution>) tree.getData()).get(tableIndex);
 			} else {
-				executionEntry = ((AggregatedExecutionEntry) parent.getData()).getChildren().get(tableIndex);
+				executionEntry = ((AggregatedExecution) parent.getData()).getChildren().get(tableIndex);
 			}
 
 			String componentName = executionEntry.getComponent();

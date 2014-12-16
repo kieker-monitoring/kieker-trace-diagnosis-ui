@@ -19,8 +19,8 @@ package kieker.gui.model.importer.stages;
 import java.util.HashMap;
 import java.util.Map;
 
-import kieker.gui.model.domain.AggregatedExecutionEntry;
-import kieker.gui.model.domain.ExecutionEntry;
+import kieker.gui.model.domain.AggregatedExecution;
+import kieker.gui.model.domain.Execution;
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 
@@ -29,15 +29,15 @@ import teetime.framework.OutputPort;
  *
  * @author Nils Christian Ehmke
  */
-public final class TraceAggregator extends AbstractConsumerStage<ExecutionEntry> {
+public final class TraceAggregator extends AbstractConsumerStage<Execution> {
 
-	private final OutputPort<AggregatedExecutionEntry> outputPort = super.createOutputPort();
-	private final Map<ExecutionEntry, AggregatedExecutionEntry> aggregationMap = new HashMap<>();
+	private final OutputPort<AggregatedExecution> outputPort = super.createOutputPort();
+	private final Map<Execution, AggregatedExecution> aggregationMap = new HashMap<>();
 
 	@Override
-	protected void execute(final ExecutionEntry executionEntry) {
+	protected void execute(final Execution executionEntry) {
 		if (!this.aggregationMap.containsKey(executionEntry)) {
-			final AggregatedExecutionEntry aggregatedExecutionEntry = new AggregatedExecutionEntry(executionEntry);
+			final AggregatedExecution aggregatedExecutionEntry = new AggregatedExecution(executionEntry);
 			this.aggregationMap.put(executionEntry, aggregatedExecutionEntry);
 		}
 		this.aggregationMap.get(executionEntry).incrementCalls(executionEntry);
@@ -45,14 +45,14 @@ public final class TraceAggregator extends AbstractConsumerStage<ExecutionEntry>
 
 	@Override
 	public void onTerminating() throws Exception {
-		for (final AggregatedExecutionEntry aggregatedExecutionEntry : this.aggregationMap.values()) {
+		for (final AggregatedExecution aggregatedExecutionEntry : this.aggregationMap.values()) {
 			aggregatedExecutionEntry.recalculateValues();
 			this.outputPort.send(aggregatedExecutionEntry);
 		}
 		super.onTerminating();
 	}
 
-	public OutputPort<AggregatedExecutionEntry> getOutputPort() {
+	public OutputPort<AggregatedExecution> getOutputPort() {
 		return this.outputPort;
 	}
 

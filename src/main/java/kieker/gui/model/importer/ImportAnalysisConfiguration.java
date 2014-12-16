@@ -23,9 +23,9 @@ import java.util.Vector;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.misc.KiekerMetadataRecord;
-import kieker.gui.model.domain.AggregatedExecutionEntry;
-import kieker.gui.model.domain.ExecutionEntry;
-import kieker.gui.model.domain.RecordEntry;
+import kieker.gui.model.domain.AggregatedExecution;
+import kieker.gui.model.domain.Execution;
+import kieker.gui.model.domain.Record;
 import kieker.gui.model.importer.stages.FailedTraceFilter;
 import kieker.gui.model.importer.stages.FailureContainingTraceFilter;
 import kieker.gui.model.importer.stages.RecordSimplificator;
@@ -50,11 +50,11 @@ import teetime.stage.io.filesystem.Dir2RecordsFilter;
  */
 public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 
-	private final List<RecordEntry> recordsList = new Vector<>(1000);
-	private final List<ExecutionEntry> failedTracesList = new Vector<>(1000);
-	private final List<ExecutionEntry> failureContainingTracesList = new Vector<>(1000);
-	private final List<ExecutionEntry> tracesList = new Vector<>(1000);
-	private final List<AggregatedExecutionEntry> aggregatedTraces = new Vector<>(1000);
+	private final List<Record> recordsList = new Vector<>(1000);
+	private final List<Execution> failedTracesList = new Vector<>(1000);
+	private final List<Execution> failureContainingTracesList = new Vector<>(1000);
+	private final List<Execution> tracesList = new Vector<>(1000);
+	private final List<AggregatedExecution> aggregatedTraces = new Vector<>(1000);
 	private final List<KiekerMetadataRecord> metadataRecords = new Vector<>(1000);
 
 	public ImportAnalysisConfiguration(final File importDirectory) {
@@ -64,21 +64,21 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 		final MultipleInstanceOfFilter<IMonitoringRecord> typeFilter = new MultipleInstanceOfFilter<>();
 		final Distributor<IFlowRecord> fstDistributor = new Distributor<>();
 		final RecordSimplificator recordSimplificator = new RecordSimplificator();
-		final CollectorSink<RecordEntry> recordCollector = new CollectorSink<>(this.recordsList);
+		final CollectorSink<Record> recordCollector = new CollectorSink<>(this.recordsList);
 		final TraceReconstructor traceReconstructor = new TraceReconstructor();
-		final Distributor<ExecutionEntry> sndDistributor = new Distributor<>();
-		final CollectorSink<ExecutionEntry> traceCollector = new CollectorSink<>(this.tracesList);
+		final Distributor<Execution> sndDistributor = new Distributor<>();
+		final CollectorSink<Execution> traceCollector = new CollectorSink<>(this.tracesList);
 		final FailedTraceFilter failedTraceFilter = new FailedTraceFilter();
-		final CollectorSink<ExecutionEntry> failedTraceCollector = new CollectorSink<>(this.failedTracesList);
+		final CollectorSink<Execution> failedTraceCollector = new CollectorSink<>(this.failedTracesList);
 		final FailureContainingTraceFilter failureContainingTraceFilter = new FailureContainingTraceFilter();
-		final CollectorSink<ExecutionEntry> failureContainingTraceCollector = new CollectorSink<>(this.failureContainingTracesList);
+		final CollectorSink<Execution> failureContainingTraceCollector = new CollectorSink<>(this.failureContainingTracesList);
 		final TraceAggregator traceAggregator = new TraceAggregator();
-		final CollectorSink<AggregatedExecutionEntry> aggregatedTraceCollector = new CollectorSink<>(this.aggregatedTraces);
+		final CollectorSink<AggregatedExecution> aggregatedTraceCollector = new CollectorSink<>(this.aggregatedTraces);
 		final CollectorSink<KiekerMetadataRecord> metadataCollector = new CollectorSink<>(this.metadataRecords);
 
 		// Configure the stages
 		fstDistributor.setStrategy(new CopyByReferenceStrategy<IFlowRecord>());
-		sndDistributor.setStrategy(new CopyByReferenceStrategy<ExecutionEntry>());
+		sndDistributor.setStrategy(new CopyByReferenceStrategy<Execution>());
 
 		// Connect the stages
 		final IPipeFactory pipeFactory = AnalysisConfiguration.PIPE_FACTORY_REGISTRY.getPipeFactory(ThreadCommunication.INTRA, PipeOrdering.ARBITRARY, false);
@@ -102,23 +102,23 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 		super.addThreadableStage(producer);
 	}
 
-	public List<RecordEntry> getRecordsList() {
+	public List<Record> getRecordsList() {
 		return this.recordsList;
 	}
 
-	public List<ExecutionEntry> getTracesList() {
+	public List<Execution> getTracesList() {
 		return this.tracesList;
 	}
 
-	public List<ExecutionEntry> getFailedTracesList() {
+	public List<Execution> getFailedTracesList() {
 		return this.failedTracesList;
 	}
 
-	public List<ExecutionEntry> getFailureContainingTracesList() {
+	public List<Execution> getFailureContainingTracesList() {
 		return this.failureContainingTracesList;
 	}
 
-	public List<AggregatedExecutionEntry> getAggregatedTraces() {
+	public List<AggregatedExecution> getAggregatedTraces() {
 		return this.aggregatedTraces;
 	}
 

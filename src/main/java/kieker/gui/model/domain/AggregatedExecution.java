@@ -16,26 +16,26 @@
 
 package kieker.gui.model.domain;
 
-public final class AggregatedExecutionEntry extends AbstractExecutionEntry<AggregatedExecutionEntry> {
+public final class AggregatedExecution extends AbstractExecution<AggregatedExecution> {
 
 	private long minDuration;
 	private long maxDuration;
 	private long avgDuration;
 	private int calls;
 
-	public AggregatedExecutionEntry(final ExecutionEntry execEntry) {
+	public AggregatedExecution(final Execution execEntry) {
 		super(execEntry.getContainer(), execEntry.getComponent(), execEntry.getOperation());
 
 		this.setFailedCause(execEntry.getFailedCause());
 		this.minDuration = execEntry.getDuration();
 		this.maxDuration = execEntry.getDuration();
 
-		for (final ExecutionEntry child : execEntry.getChildren()) {
-			super.addExecutionEntry(new AggregatedExecutionEntry(child));
+		for (final Execution child : execEntry.getChildren()) {
+			super.addExecutionEntry(new AggregatedExecution(child));
 		}
 	}
 
-	public void incrementCalls(final ExecutionEntry executionEntry) {
+	public void incrementCalls(final Execution executionEntry) {
 		this.calls++;
 		this.minDuration = Math.min(this.minDuration, executionEntry.getDuration());
 		this.maxDuration = Math.max(this.maxDuration, executionEntry.getDuration());

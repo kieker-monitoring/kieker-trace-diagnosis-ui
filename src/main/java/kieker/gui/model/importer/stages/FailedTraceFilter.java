@@ -16,22 +16,22 @@
 
 package kieker.gui.model.importer.stages;
 
-import kieker.gui.model.domain.ExecutionEntry;
+import kieker.gui.model.domain.Execution;
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 
-public final class FailedTraceFilter extends AbstractConsumerStage<ExecutionEntry> {
+public final class FailedTraceFilter extends AbstractConsumerStage<Execution> {
 
-	private final OutputPort<ExecutionEntry> outputPort = super.createOutputPort();
+	private final OutputPort<Execution> outputPort = super.createOutputPort();
 
 	@Override
-	protected void execute(final ExecutionEntry element) {
+	protected void execute(final Execution element) {
 		if (element.isFailed()) {
 			this.outputPort.send(element);
 		}
 	}
 
-	public OutputPort<ExecutionEntry> getOutputPort() {
+	public OutputPort<Execution> getOutputPort() {
 		return this.outputPort;
 	}
 

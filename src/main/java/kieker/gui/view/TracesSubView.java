@@ -23,7 +23,7 @@ import java.util.Observer;
 import kieker.gui.model.DataModel;
 import kieker.gui.model.PropertiesModel;
 import kieker.gui.model.TracesSubViewModel;
-import kieker.gui.model.domain.ExecutionEntry;
+import kieker.gui.model.domain.Execution;
 import kieker.gui.view.util.ExecutionEntryComponentComparator;
 import kieker.gui.view.util.ExecutionEntryContainerComparator;
 import kieker.gui.view.util.ExecutionEntryDurationComparator;
@@ -226,7 +226,7 @@ public class TracesSubView implements Observer, ISubView {
 	}
 
 	private void updateTree() {
-		final List<ExecutionEntry> records;
+		final List<Execution> records;
 		if (this.type == Type.SHOW_JUST_FAILED_TRACES) {
 			records = this.model.getFailedTracesCopy();
 		} else if (this.type == Type.SHOW_JUST_FAILURE_CONTAINING_TRACES) {
@@ -250,7 +250,7 @@ public class TracesSubView implements Observer, ISubView {
 	}
 
 	private void updateDetailComposite() {
-		final ExecutionEntry trace = this.tracesSubViewModel.getCurrentActiveTrace();
+		final Execution trace = this.tracesSubViewModel.getCurrentActiveTrace();
 
 		final String duration = (Long.toString(trace.getDuration()) + " " + this.model.getShortTimeUnit()).trim();
 
@@ -288,14 +288,14 @@ public class TracesSubView implements Observer, ISubView {
 			final TreeItem parent = item.getParentItem();
 
 			// Decide whether the current item is a root or not
-			final ExecutionEntry executionEntry;
+			final Execution executionEntry;
 			final String traceID;
 
 			if (parent == null) {
-				executionEntry = ((List<ExecutionEntry>) tree.getData()).get(tableIndex);
+				executionEntry = ((List<Execution>) tree.getData()).get(tableIndex);
 				traceID = Long.toString(executionEntry.getTraceID());
 			} else {
-				executionEntry = ((ExecutionEntry) parent.getData()).getChildren().get(tableIndex);
+				executionEntry = ((Execution) parent.getData()).getChildren().get(tableIndex);
 				traceID = "";
 			}
 

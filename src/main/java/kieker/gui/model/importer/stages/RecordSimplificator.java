@@ -17,18 +17,18 @@
 package kieker.gui.model.importer.stages;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.gui.model.domain.RecordEntry;
+import kieker.gui.model.domain.Record;
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 
 /**
- * Converts incoming instances of {@link IMonitoringRecord} into simplified representations ({@link RecordEntry}) used within this application.
+ * Converts incoming instances of {@link IMonitoringRecord} into simplified representations ({@link Record}) used within this application.
  *
  * @author Nils Christian Ehmke
  */
 public final class RecordSimplificator extends AbstractConsumerStage<IMonitoringRecord> {
 
-	private final OutputPort<RecordEntry> outputPort = super.createOutputPort();
+	private final OutputPort<Record> outputPort = super.createOutputPort();
 
 	@Override
 	protected void execute(final IMonitoringRecord input) {
@@ -36,11 +36,11 @@ public final class RecordSimplificator extends AbstractConsumerStage<IMonitoring
 		final String type = input.getClass().getCanonicalName();
 		final String representation = input.toString();
 
-		final RecordEntry simplifiedRecord = new RecordEntry(timestamp, type, representation);
+		final Record simplifiedRecord = new Record(timestamp, type, representation);
 		this.outputPort.send(simplifiedRecord);
 	}
 
-	public OutputPort<RecordEntry> getOutputPort() {
+	public OutputPort<Record> getOutputPort() {
 		return this.outputPort;
 	}
 

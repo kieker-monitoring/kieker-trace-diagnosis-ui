@@ -22,7 +22,7 @@ import java.util.Observer;
 
 import kieker.gui.controller.RecordsSubViewController;
 import kieker.gui.model.DataModel;
-import kieker.gui.model.domain.RecordEntry;
+import kieker.gui.model.domain.Record;
 import kieker.gui.view.util.RecordEntryTimestampComparator;
 import kieker.gui.view.util.RecordEntryTypeComparator;
 import kieker.gui.view.util.TableColumnSortListener;
@@ -102,7 +102,7 @@ public final class RecordsSubView implements Observer, ISubView {
 	}
 
 	private void updateTable() {
-		final List<RecordEntry> records = this.model.getRecordsCopy();
+		final List<Record> records = this.model.getRecordsCopy();
 
 		this.table.setData(records);
 		this.table.setItemCount(records.size());
@@ -124,8 +124,8 @@ public final class RecordsSubView implements Observer, ISubView {
 			final int tableIndex = event.index;
 
 			// Get the data for the current row
-			final List<RecordEntry> records = (List<RecordEntry>) table.getData();
-			final RecordEntry record = records.get(tableIndex);
+			final List<Record> records = (List<Record>) table.getData();
+			final Record record = records.get(tableIndex);
 
 			// Get the data to display
 			final String timestampStr = Long.toString(record.getTimestamp());

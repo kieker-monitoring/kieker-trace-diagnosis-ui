@@ -19,7 +19,7 @@ package kieker.gui.model.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractExecutionEntry<T extends AbstractExecutionEntry<T>> {
+public abstract class AbstractExecution<T extends AbstractExecution<T>> {
 
 	protected final String container;
 	protected final String component;
@@ -29,7 +29,7 @@ public abstract class AbstractExecutionEntry<T extends AbstractExecutionEntry<T>
 	protected T parent;
 	protected final List<T> children = new ArrayList<>();
 
-	public AbstractExecutionEntry(final String container, final String component, final String operation) {
+	public AbstractExecution(final String container, final String component, final String operation) {
 		this.container = container;
 		this.component = component;
 		this.operation = operation;

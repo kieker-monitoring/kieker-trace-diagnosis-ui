@@ -16,14 +16,14 @@
 
 package kieker.gui.view.util;
 
-import kieker.gui.model.domain.RecordEntry;
+import kieker.gui.model.domain.Record;
 
 import org.eclipse.swt.SWT;
 
-public class RecordEntryTimestampComparator extends AbstractDirectedComparator<RecordEntry> {
+public class RecordEntryTimestampComparator extends AbstractDirectedComparator<Record> {
 
 	@Override
-	public int compare(final RecordEntry o1, final RecordEntry o2) {
+	public int compare(final Record o1, final Record o2) {
 		int result = Long.compare(o1.getTimestamp(), o2.getTimestamp());
 		if (this.getDirection() == SWT.UP) {
 			result = -result;

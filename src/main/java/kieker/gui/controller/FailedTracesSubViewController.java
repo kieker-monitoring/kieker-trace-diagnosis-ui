@@ -19,7 +19,7 @@ package kieker.gui.controller;
 import kieker.gui.model.DataModel;
 import kieker.gui.model.PropertiesModel;
 import kieker.gui.model.TracesSubViewModel;
-import kieker.gui.model.domain.ExecutionEntry;
+import kieker.gui.model.domain.Execution;
 import kieker.gui.view.ISubView;
 import kieker.gui.view.TracesSubView;
 
@@ -48,8 +48,8 @@ public class FailedTracesSubViewController implements SelectionListener, ISubCon
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
-		if (e.item.getData() instanceof ExecutionEntry) {
-			this.model.setCurrentActiveTrace((ExecutionEntry) e.item.getData());
+		if (e.item.getData() instanceof Execution) {
+			this.model.setCurrentActiveTrace((Execution) e.item.getData());
 		}
 	}
 

@@ -23,14 +23,14 @@ import java.util.Iterator;
  *
  * @author Nils Christian Ehmke
  */
-public final class ExecutionEntry extends AbstractExecutionEntry<ExecutionEntry> {
+public final class Execution extends AbstractExecution<Execution> {
 
 	private final long traceID;
 
 	private float percent;
 	private long duration;
 
-	public ExecutionEntry(final long traceID, final String container, final String component, final String operation) {
+	public Execution(final long traceID, final String container, final String component, final String operation) {
 		super(container, component, operation);
 		this.traceID = traceID;
 	}
@@ -61,7 +61,7 @@ public final class ExecutionEntry extends AbstractExecutionEntry<ExecutionEntry>
 		} else {
 			this.percent = 100.0f;
 		}
-		for (final ExecutionEntry executionEntry : this.children) {
+		for (final Execution executionEntry : this.children) {
 			executionEntry.updatePercent();
 		}
 	}
@@ -86,10 +86,10 @@ public final class ExecutionEntry extends AbstractExecutionEntry<ExecutionEntry>
 		if (other == null) {
 			return false;
 		}
-		if (!(other instanceof ExecutionEntry)) {
+		if (!(other instanceof Execution)) {
 			return false;
 		}
-		final ExecutionEntry otherEntry = (ExecutionEntry) other;
+		final Execution otherEntry = (Execution) other;
 		if (!this.container.equals(otherEntry.container)) {
 			return false;
 		}
@@ -112,12 +112,12 @@ public final class ExecutionEntry extends AbstractExecutionEntry<ExecutionEntry>
 			return false;
 		}
 
-		final Iterator<ExecutionEntry> ownChildrenIterator = this.children.iterator();
-		final Iterator<ExecutionEntry> otherChildrenIterator = otherEntry.children.iterator();
+		final Iterator<Execution> ownChildrenIterator = this.children.iterator();
+		final Iterator<Execution> otherChildrenIterator = otherEntry.children.iterator();
 
 		while (ownChildrenIterator.hasNext()) {
-			final ExecutionEntry ownChild = ownChildrenIterator.next();
-			final ExecutionEntry otherChild = otherChildrenIterator.next();
+			final Execution ownChild = ownChildrenIterator.next();
+			final Execution otherChild = otherChildrenIterator.next();
 
 			if (!ownChild.equals(otherChild)) {
 				return false;
