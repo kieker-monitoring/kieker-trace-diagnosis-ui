@@ -16,54 +16,23 @@
 
 package kieker.gui.model.domain;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * A simplified representation of an execution within a trace. As an instance of this class can contain other instances, it can be used to represent a trace tree.
- * 
+ *
  * @author Nils Christian Ehmke
  */
-public final class ExecutionEntry {
+public final class ExecutionEntry extends AbstractExecutionEntry<ExecutionEntry> {
 
 	private final long traceID;
-	private final String container;
-	private final String component;
-	private final String operation;
 
 	private float percent;
 	private long duration;
-	private String failedCause;
-	private ExecutionEntry parent;
-	private final List<ExecutionEntry> children = new ArrayList<>();
 
 	public ExecutionEntry(final long traceID, final String container, final String component, final String operation) {
+		super(container, component, operation);
 		this.traceID = traceID;
-		this.container = container;
-		this.component = component;
-		this.operation = operation;
-	}
-
-	public int getTraceDepth() {
-		int traceDepth = this.children.isEmpty() ? 0 : 1;
-
-		int maxChildrenTraceDepth = 0;
-		for (final ExecutionEntry child : this.children) {
-			maxChildrenTraceDepth = Math.max(maxChildrenTraceDepth, child.getTraceDepth());
-		}
-		traceDepth += maxChildrenTraceDepth;
-
-		return traceDepth;
-	}
-
-	public int getTraceSize() {
-		int traceSize = 1;
-
-		for (final ExecutionEntry child : this.children) {
-			traceSize += child.getTraceSize();
-		}
-		return traceSize;
 	}
 
 	public long getTraceID() {
@@ -78,45 +47,8 @@ public final class ExecutionEntry {
 		this.duration = duration;
 	}
 
-	public boolean isFailed() {
-		return (this.failedCause != null);
-	}
-
-	public String getFailedCause() {
-		return this.failedCause;
-	}
-
-	public void setFailedCause(final String failedCause) {
-		this.failedCause = failedCause;
-	}
-
 	public float getPercent() {
 		return this.percent;
-	}
-
-	public String getContainer() {
-		return this.container;
-	}
-
-	public String getComponent() {
-		return this.component;
-	}
-
-	public String getOperation() {
-		return this.operation;
-	}
-
-	public List<ExecutionEntry> getChildren() {
-		return this.children;
-	}
-
-	public void addExecutionEntry(final ExecutionEntry entry) {
-		this.children.add(entry);
-		entry.parent = this;
-	}
-
-	public ExecutionEntry getParent() {
-		return this.parent;
 	}
 
 	public void recalculateValues() {

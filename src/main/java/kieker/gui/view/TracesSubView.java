@@ -10,8 +10,10 @@ import kieker.gui.model.PropertiesModel;
 import kieker.gui.model.TracesSubViewModel;
 import kieker.gui.model.domain.ExecutionEntry;
 import kieker.gui.view.util.ExecutionEntryComponentComparator;
+import kieker.gui.view.util.ExecutionEntryContainerComparator;
 import kieker.gui.view.util.ExecutionEntryDurationComparator;
 import kieker.gui.view.util.ExecutionEntryOperationComparator;
+import kieker.gui.view.util.ExecutionEntryTraceIDComparator;
 import kieker.gui.view.util.TreeColumnSortListener;
 
 import org.eclipse.swt.SWT;
@@ -173,9 +175,11 @@ public class TracesSubView implements Observer {
 		this.tree.addSelectionListener(this.controller);
 		this.tree.addListener(SWT.SetData, new DataProvider());
 
+		trclmnExecutionContainer.addSelectionListener(new TreeColumnSortListener<>(new ExecutionEntryContainerComparator()));
 		trclmnComponent.addSelectionListener(new TreeColumnSortListener<>(new ExecutionEntryComponentComparator()));
 		trclmnOperation.addSelectionListener(new TreeColumnSortListener<>(new ExecutionEntryOperationComparator()));
 		trclmnDuration.addSelectionListener(new TreeColumnSortListener<>(new ExecutionEntryDurationComparator()));
+		trclmnTraceId.addSelectionListener(new TreeColumnSortListener<>(new ExecutionEntryTraceIDComparator()));
 	}
 
 	public Tree getTree() {
