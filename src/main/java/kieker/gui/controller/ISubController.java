@@ -14,32 +14,12 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.model.importer.stages;
+package kieker.gui.controller;
 
-import teetime.framework.AbstractConsumerStage;
-import teetime.framework.OutputPort;
+import kieker.gui.view.ISubView;
 
-/**
- * Distributes incoming elements to the two output ports.
- *
- * @author Nils Christian Ehmke
- */
-public final class Cloner<T> extends AbstractConsumerStage<T> {
+public interface ISubController {
 
-	private final OutputPort<T> firstOutputPort = super.createOutputPort();
-	private final OutputPort<T> secondOutputPort = super.createOutputPort();
+	public ISubView getView();
 
-	@Override
-	protected void execute(final T element) {
-		this.firstOutputPort.send(element);
-		this.secondOutputPort.send(element);
-	}
-
-	public OutputPort<T> getFirstOutputPort() {
-		return this.firstOutputPort;
-	}
-
-	public OutputPort<T> getSecondOutputPort() {
-		return this.secondOutputPort;
-	}
 }
