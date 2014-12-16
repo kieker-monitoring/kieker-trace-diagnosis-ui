@@ -18,8 +18,19 @@ package kieker.gui;
 
 import kieker.gui.controller.MainViewController;
 
+/**
+ * Contains the main method of this application.
+ *
+ * @author Nils Christian Ehmke
+ */
 public class Main {
 
+	/**
+	 * The main method of this application.
+	 * 
+	 * @param args
+	 *            The command line arguments. They have no effect.
+	 */
 	public static void main(final String[] args) {
 		final MainViewController controller = new MainViewController();
 		controller.showView();

@@ -26,12 +26,18 @@ import kieker.gui.view.MainView;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
+/**
+ * The main controller of this application. It is responsible for creating top level models, further sub-controllers, and for creating and controlling the
+ * application's main view. The sub-views and their corresponding models are created by the sub-controllers.
+ *
+ * @author Nils Christian Ehmke
+ */
 public final class MainViewController implements SelectionListener {
 
+	private final MainView mainView;
 	private final DataModel dataModel;
 	private final MainViewModel mainViewModel;
 	private final PropertiesModel propertiesModel;
-	private final MainView view;
 
 	public MainViewController() {
 		// Create the top models
@@ -54,11 +60,11 @@ public final class MainViewController implements SelectionListener {
 
 		// Create the main model and the main view
 		this.mainViewModel = new MainViewModel();
-		this.view = new MainView(this.dataModel, this.mainViewModel, this, subView1, subView2, subView3, subView4, subView5);
+		this.mainView = new MainView(this.dataModel, this.mainViewModel, this, subView1, subView2, subView3, subView4, subView5);
 	}
 
 	public void showView() {
-		this.view.show();
+		this.mainView.show();
 	}
 
 	@Override
@@ -69,58 +75,58 @@ public final class MainViewController implements SelectionListener {
 	}
 
 	private void handlePotentialPropertiesSelection(final SelectionEvent e) {
-		if (e.widget == this.view.getMntmShortOperationNames()) {
+		if (e.widget == this.mainView.getMntmShortOperationNames()) {
 			this.propertiesModel.setShortOperationNames(true);
 		}
-		if (e.widget == this.view.getMntmLongOperationNames()) {
+		if (e.widget == this.mainView.getMntmLongOperationNames()) {
 			this.propertiesModel.setShortOperationNames(false);
 		}
-		if (e.widget == this.view.getMntmShortComponentNames()) {
+		if (e.widget == this.mainView.getMntmShortComponentNames()) {
 			this.propertiesModel.setShortComponentNames(true);
 		}
-		if (e.widget == this.view.getMntmLongComponentNames()) {
+		if (e.widget == this.mainView.getMntmLongComponentNames()) {
 			this.propertiesModel.setShortComponentNames(false);
 		}
 	}
 
 	private void handlePotentialMenuSelection(final SelectionEvent e) {
-		if (e.widget == this.view.getMntmOpenMonitoringLog()) {
-			final String selectedDirectory = this.view.getDialog().open();
+		if (e.widget == this.mainView.getMntmOpenMonitoringLog()) {
+			final String selectedDirectory = this.mainView.getDialog().open();
 
 			if (null != selectedDirectory) {
 				this.dataModel.loadMonitoringLogFromFS(selectedDirectory);
 			}
 		}
 
-		if (e.widget == this.view.getMntmExit()) {
-			this.view.close();
+		if (e.widget == this.mainView.getMntmExit()) {
+			this.mainView.close();
 		}
 	}
 
 	private void handlePotentialTreeSelection(final SelectionEvent e) {
-		if (e.item == this.view.getTrtmExplorer()) {
+		if (e.item == this.mainView.getTrtmExplorer()) {
 			this.mainViewModel.setCurrentActiveSubView(SubView.NONE);
 		}
-		if (e.item == this.view.getTrtmRecords()) {
+		if (e.item == this.mainView.getTrtmRecords()) {
 			this.mainViewModel.setCurrentActiveSubView(SubView.RECORDS_SUB_VIEW);
 		}
-		if (e.item == this.view.getTrtmTraces()) {
+		if (e.item == this.mainView.getTrtmTraces()) {
 			this.mainViewModel.setCurrentActiveSubView(SubView.TRACES_SUB_VIEW);
 		}
-		if (e.item == this.view.getTrtmAggregatedTraces()) {
+		if (e.item == this.mainView.getTrtmAggregatedTraces()) {
 			this.mainViewModel.setCurrentActiveSubView(SubView.AGGREGATED_TRACES_SUB_VIEW);
 		}
-		if (e.item == this.view.getTrtmJustFailedTraces()) {
+		if (e.item == this.mainView.getTrtmJustFailedTraces()) {
 			this.mainViewModel.setCurrentActiveSubView(SubView.FAILED_TRACES_SUB_VIEW);
 		}
-		if (e.item == this.view.getTrtmJustTracesContaining()) {
+		if (e.item == this.mainView.getTrtmJustTracesContaining()) {
 			this.mainViewModel.setCurrentActiveSubView(SubView.FAILURE_CONTAINING_TRACES_SUB_VIEW);
 		}
 	}
 
 	@Override
 	public void widgetDefaultSelected(final SelectionEvent e) {
-
+		// Nothing to do here. This method is just required by the interface.
 	}
 
 }

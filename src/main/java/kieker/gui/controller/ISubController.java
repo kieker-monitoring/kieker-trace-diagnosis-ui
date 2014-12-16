@@ -18,6 +18,11 @@ package kieker.gui.controller;
 
 import kieker.gui.view.ISubView;
 
+/**
+ * A commons interface for all sub-controllers to reduce dependencies.
+ *
+ * @author Nils Christian Ehmke
+ */
 public interface ISubController {
 
 	public ISubView getView();

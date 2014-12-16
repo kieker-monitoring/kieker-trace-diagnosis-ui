@@ -21,32 +21,35 @@ import kieker.gui.model.DataModel;
 import kieker.gui.model.PropertiesModel;
 import kieker.gui.model.domain.AggregatedExecutionEntry;
 import kieker.gui.view.AggregatedTracesSubView;
+import kieker.gui.view.ISubView;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
+/**
+ * The sub-controller responsible for the sub-view presenting the available aggregated traces.
+ *
+ * @author Nils Christian Ehmke
+ */
 public class AggregatedTracesSubViewController implements SelectionListener, ISubController {
 
-	private final DataModel model;
-	private final AggregatedTracesSubView view;
-	private final AggregatedTracesSubViewModel aggregatedTracesSubViewModel;
+	private final ISubView view;
+	private final AggregatedTracesSubViewModel model;
 
-	public AggregatedTracesSubViewController(final DataModel model, final PropertiesModel propertiesModel) {
-		this.model = model;
-		this.aggregatedTracesSubViewModel = new AggregatedTracesSubViewModel();
-
-		this.view = new AggregatedTracesSubView(this.model, this.aggregatedTracesSubViewModel, propertiesModel, this);
+	public AggregatedTracesSubViewController(final DataModel dataModel, final PropertiesModel propertiesModel) {
+		this.model = new AggregatedTracesSubViewModel();
+		this.view = new AggregatedTracesSubView(dataModel, this.model, propertiesModel, this);
 	}
 
 	@Override
-	public AggregatedTracesSubView getView() {
+	public ISubView getView() {
 		return this.view;
 	}
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
 		if (e.item.getData() instanceof AggregatedExecutionEntry) {
-			this.aggregatedTracesSubViewModel.setCurrentActiveTrace((AggregatedExecutionEntry) e.item.getData());
+			this.model.setCurrentActiveTrace((AggregatedExecutionEntry) e.item.getData());
 		}
 	}
 

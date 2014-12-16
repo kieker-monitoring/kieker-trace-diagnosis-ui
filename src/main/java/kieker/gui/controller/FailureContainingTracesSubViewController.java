@@ -20,34 +20,42 @@ import kieker.gui.model.DataModel;
 import kieker.gui.model.PropertiesModel;
 import kieker.gui.model.TracesSubViewModel;
 import kieker.gui.model.domain.ExecutionEntry;
+import kieker.gui.view.ISubView;
 import kieker.gui.view.TracesSubView;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
+/**
+ * The sub-controller responsible for the sub-view presenting the available failure-containing traces.
+ *
+ * @author Nils Christian Ehmke
+ */
 public class FailureContainingTracesSubViewController implements SelectionListener, ISubController {
 
-	private final TracesSubViewModel tracesSubViewModel;
-	private final TracesSubView view;
+	private final TracesSubViewModel model;
+	private final ISubView view;
 
-	public FailureContainingTracesSubViewController(final DataModel model, final PropertiesModel propertiesModel) {
-		this.tracesSubViewModel = new TracesSubViewModel();
-		this.view = new TracesSubView(TracesSubView.Type.SHOW_JUST_FAILURE_CONTAINING_TRACES, model, this.tracesSubViewModel, propertiesModel, this);
+	public FailureContainingTracesSubViewController(final DataModel dataModel, final PropertiesModel propertiesModel) {
+		this.model = new TracesSubViewModel();
+		this.view = new TracesSubView(TracesSubView.Type.SHOW_JUST_FAILURE_CONTAINING_TRACES, dataModel, this.model, propertiesModel, this);
 	}
 
 	@Override
-	public TracesSubView getView() {
+	public ISubView getView() {
 		return this.view;
 	}
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
 		if (e.item.getData() instanceof ExecutionEntry) {
-			this.tracesSubViewModel.setCurrentActiveTrace((ExecutionEntry) e.item.getData());
+			this.model.setCurrentActiveTrace((ExecutionEntry) e.item.getData());
 		}
 	}
 
 	@Override
-	public void widgetDefaultSelected(final SelectionEvent e) {}
+	public void widgetDefaultSelected(final SelectionEvent e) {
+		// Nothing to do here. This method is just required by the interface.
+	}
 
 }

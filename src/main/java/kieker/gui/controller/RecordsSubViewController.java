@@ -17,20 +17,24 @@
 package kieker.gui.controller;
 
 import kieker.gui.model.DataModel;
+import kieker.gui.view.ISubView;
 import kieker.gui.view.RecordsSubView;
 
-public class RecordsSubViewController implements ISubController {
+/**
+ * The sub-controller responsible for the sub-view presenting the available records.
+ *
+ * @author Nils Christian Ehmke
+ */
+public final class RecordsSubViewController implements ISubController {
 
-	private final DataModel model;
-	private final RecordsSubView view;
+	private final ISubView view;
 
-	public RecordsSubViewController(final DataModel model) {
-		this.model = model;
-		this.view = new RecordsSubView(this.model, this);
+	public RecordsSubViewController(final DataModel dataModel) {
+		this.view = new RecordsSubView(dataModel, this);
 	}
 
 	@Override
-	public RecordsSubView getView() {
+	public ISubView getView() {
 		return this.view;
 	}
 
