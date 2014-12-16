@@ -14,7 +14,9 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.view.util;import java.util.Collections;
+package kieker.gui.view.util;
+
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -22,7 +24,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
-n;
 
 public final class TreeColumnSortListener<T> extends SelectionAdapter {
 
