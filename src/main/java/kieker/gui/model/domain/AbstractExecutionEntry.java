@@ -44,6 +44,20 @@ public abstract class AbstractExecutionEntry<T extends AbstractExecutionEntry<T>
 		return (this.failedCause != null);
 	}
 
+	public boolean containsFailure() {
+		if (this.isFailed()) {
+			return true;
+		}
+
+		for (final T child : this.children) {
+			if (child.containsFailure()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public String getFailedCause() {
 		return this.failedCause;
 	}

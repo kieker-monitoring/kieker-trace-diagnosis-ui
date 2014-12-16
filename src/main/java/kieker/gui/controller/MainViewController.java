@@ -27,12 +27,16 @@ public class MainViewController implements SelectionListener {
 		final RecordsSubViewController subView1Controller = new RecordsSubViewController(this.dataModel);
 		final TracesSubViewController subView2Controller = new TracesSubViewController(this.dataModel, this.propertiesModel);
 		final AggregatedTracesSubViewController subView3Controller = new AggregatedTracesSubViewController(this.dataModel, this.propertiesModel);
+		final FailedTracesSubViewController subView4Controller = new FailedTracesSubViewController(this.dataModel, this.propertiesModel);
+		final FailureContainingTracesSubViewController subView5Controller = new FailureContainingTracesSubViewController(this.dataModel, this.propertiesModel);
 
 		final RecordsSubView subView1 = subView1Controller.getView();
 		final TracesSubView subView2 = subView2Controller.getView();
 		final AggregatedTracesSubView subView3 = subView3Controller.getView();
+		final TracesSubView subView4 = subView4Controller.getView();
+		final TracesSubView subView5 = subView5Controller.getView();
 
-		this.view = new MainView(this.dataModel, this.mainViewModel, this, subView1, subView2, subView3);
+		this.view = new MainView(this.dataModel, this.mainViewModel, this, subView1, subView2, subView4, subView3, subView5);
 	}
 
 	public void showView() {
@@ -52,6 +56,12 @@ public class MainViewController implements SelectionListener {
 		}
 		if (e.item == this.view.getTrtmAggregatedTraces()) {
 			this.mainViewModel.setCurrentActiveSubView(SubView.AGGREGATED_TRACES_SUB_VIEW);
+		}
+		if (e.item == this.view.getTrtmJustFailedTraces()) {
+			this.mainViewModel.setCurrentActiveSubView(SubView.FAILED_TRACES_SUB_VIEW);
+		}
+		if (e.item == this.view.getTrtmJustTracesContaining()) {
+			this.mainViewModel.setCurrentActiveSubView(SubView.FAILURE_CONTAINING_TRACES_SUB_VIEW);
 		}
 
 		if (e.widget == this.view.getMntmOpenMonitoringLog()) {

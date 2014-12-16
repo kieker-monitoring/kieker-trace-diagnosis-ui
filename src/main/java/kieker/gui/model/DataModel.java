@@ -23,8 +23,10 @@ public final class DataModel extends Observable {
 
 	private List<RecordEntry> records = Collections.emptyList();
 	private List<ExecutionEntry> traces = Collections.emptyList();
-	private List<AggregatedExecutionEntry> aggregatedTraces;
-	private String shortTimeUnit;
+	private List<ExecutionEntry> failureContainingTraces = Collections.emptyList();
+	private List<ExecutionEntry> failedTraces = Collections.emptyList();
+	private List<AggregatedExecutionEntry> aggregatedTraces = Collections.emptyList();
+	private String shortTimeUnit = "";
 
 	public DataModel() {}
 
@@ -39,6 +41,8 @@ public final class DataModel extends Observable {
 		// Store the results from the analysis
 		this.records = analysisConfiguration.getRecordsList();
 		this.traces = analysisConfiguration.getTracesList();
+		this.failedTraces = analysisConfiguration.getFailedTracesList();
+		this.failureContainingTraces = analysisConfiguration.getFailureContainingTracesList();
 		this.aggregatedTraces = analysisConfiguration.getAggregatedTraces();
 
 		final List<KiekerMetadataRecord> metadataRecords = analysisConfiguration.getMetadataRecords();
@@ -92,6 +96,14 @@ public final class DataModel extends Observable {
 
 	public List<ExecutionEntry> getTracesCopy() {
 		return new ArrayList<>(this.traces);
+	}
+
+	public List<ExecutionEntry> getFailedTracesCopy() {
+		return new ArrayList<>(this.failedTraces);
+	}
+
+	public List<ExecutionEntry> getFailureContainingTracesCopy() {
+		return new ArrayList<>(this.failureContainingTraces);
 	}
 
 	public List<AggregatedExecutionEntry> getAggregatedTracesCopy() {

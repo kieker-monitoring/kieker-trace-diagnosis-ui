@@ -9,14 +9,14 @@ import kieker.gui.view.TracesSubView;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
-public class TracesSubViewController implements SelectionListener {
+public class FailedTracesSubViewController implements SelectionListener {
 
 	private final TracesSubViewModel tracesSubViewModel;
 	private final TracesSubView view;
 
-	public TracesSubViewController(final DataModel model, final PropertiesModel propertiesModel) {
+	public FailedTracesSubViewController(final DataModel model, final PropertiesModel propertiesModel) {
 		this.tracesSubViewModel = new TracesSubViewModel();
-		this.view = new TracesSubView(TracesSubView.Type.SHOW_ALL_TRACES, model, this.tracesSubViewModel, propertiesModel, this);
+		this.view = new TracesSubView(TracesSubView.Type.SHOW_JUST_FAILED_TRACES, model, this.tracesSubViewModel, propertiesModel, this);
 	}
 
 	public TracesSubView getView() {
