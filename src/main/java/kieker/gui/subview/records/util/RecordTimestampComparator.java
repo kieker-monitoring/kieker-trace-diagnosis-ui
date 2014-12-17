@@ -14,26 +14,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui;
+package kieker.gui.subview.records.util;
 
-import kieker.gui.mainview.MainViewController;
+import kieker.gui.common.AbstractDirectedComparator;
+import kieker.gui.common.domain.Record;
 
-/**
- * Contains the main method of this application.
- *
- * @author Nils Christian Ehmke
- */
-public class Main {
+import org.eclipse.swt.SWT;
 
-	/**
-	 * The main method of this application.
-	 * 
-	 * @param args
-	 *            The command line arguments. They have no effect.
-	 */
-	public static void main(final String[] args) {
-		final MainViewController controller = new MainViewController();
-		controller.showView();
+public class RecordTimestampComparator extends AbstractDirectedComparator<Record> {
+
+	@Override
+	public int compare(final Record o1, final Record o2) {
+		int result = Long.compare(o1.getTimestamp(), o2.getTimestamp());
+		if (this.getDirection() == SWT.UP) {
+			result = -result;
+		}
+		return result;
 	}
 
 }

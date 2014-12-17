@@ -14,26 +14,16 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui;
+package kieker.gui.common;
 
-import kieker.gui.mainview.MainViewController;
 
 /**
- * Contains the main method of this application.
+ * A commons interface for all sub-controllers to reduce dependencies.
  *
  * @author Nils Christian Ehmke
  */
-public class Main {
+public interface ISubController {
 
-	/**
-	 * The main method of this application.
-	 * 
-	 * @param args
-	 *            The command line arguments. They have no effect.
-	 */
-	public static void main(final String[] args) {
-		final MainViewController controller = new MainViewController();
-		controller.showView();
-	}
+	public ISubView getView();
 
 }

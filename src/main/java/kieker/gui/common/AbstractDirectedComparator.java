@@ -14,26 +14,20 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui;
+package kieker.gui.common;
 
-import kieker.gui.mainview.MainViewController;
+import java.util.Comparator;
 
-/**
- * Contains the main method of this application.
- *
- * @author Nils Christian Ehmke
- */
-public class Main {
+public abstract class AbstractDirectedComparator<T> implements Comparator<T> {
 
-	/**
-	 * The main method of this application.
-	 * 
-	 * @param args
-	 *            The command line arguments. They have no effect.
-	 */
-	public static void main(final String[] args) {
-		final MainViewController controller = new MainViewController();
-		controller.showView();
+	private int direction;
+
+	public int getDirection() {
+		return this.direction;
+	}
+
+	public void setDirection(final int direction) {
+		this.direction = direction;
 	}
 
 }

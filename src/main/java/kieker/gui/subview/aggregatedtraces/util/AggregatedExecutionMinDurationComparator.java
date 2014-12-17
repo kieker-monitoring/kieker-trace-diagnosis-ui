@@ -14,26 +14,23 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui;
+package kieker.gui.subview.aggregatedtraces.util;
 
-import kieker.gui.mainview.MainViewController;
+import kieker.gui.common.AbstractDirectedComparator;
+import kieker.gui.common.domain.AggregatedExecution;
 
-/**
- * Contains the main method of this application.
- *
- * @author Nils Christian Ehmke
- */
-public class Main {
+import org.eclipse.swt.SWT;
 
-	/**
-	 * The main method of this application.
-	 * 
-	 * @param args
-	 *            The command line arguments. They have no effect.
-	 */
-	public static void main(final String[] args) {
-		final MainViewController controller = new MainViewController();
-		controller.showView();
+public class AggregatedExecutionMinDurationComparator extends AbstractDirectedComparator<AggregatedExecution> {
+
+	@Override
+	public int compare(final AggregatedExecution arg0, final AggregatedExecution arg1) {
+		int result = Long.compare(arg0.getMinDuration(), arg1.getMinDuration());
+		if (this.getDirection() == SWT.UP) {
+			result = -result;
+		}
+		return result;
+
 	}
 
 }

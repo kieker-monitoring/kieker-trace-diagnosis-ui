@@ -14,26 +14,35 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui;
-
-import kieker.gui.mainview.MainViewController;
+package kieker.gui.common.domain;
 
 /**
- * Contains the main method of this application.
+ * A simplified representation of a monitoring record.
  *
  * @author Nils Christian Ehmke
  */
-public class Main {
+public final class Record {
 
-	/**
-	 * The main method of this application.
-	 * 
-	 * @param args
-	 *            The command line arguments. They have no effect.
-	 */
-	public static void main(final String[] args) {
-		final MainViewController controller = new MainViewController();
-		controller.showView();
+	private final long timestamp;
+	private final String type;
+	private final String representation;
+
+	public Record(final long timestamp, final String type, final String representation) {
+		this.timestamp = timestamp;
+		this.type = type;
+		this.representation = representation;
+	}
+
+	public long getTimestamp() {
+		return this.timestamp;
+	}
+
+	public String getType() {
+		return this.type;
+	}
+
+	public String getRepresentation() {
+		return this.representation;
 	}
 
 }

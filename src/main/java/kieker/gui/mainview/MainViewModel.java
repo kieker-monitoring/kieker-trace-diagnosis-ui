@@ -14,26 +14,27 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui;
+package kieker.gui.mainview;
 
-import kieker.gui.mainview.MainViewController;
+import java.util.Observable;
 
-/**
- * Contains the main method of this application.
- *
- * @author Nils Christian Ehmke
- */
-public class Main {
+public final class MainViewModel extends Observable {
 
-	/**
-	 * The main method of this application.
-	 * 
-	 * @param args
-	 *            The command line arguments. They have no effect.
-	 */
-	public static void main(final String[] args) {
-		final MainViewController controller = new MainViewController();
-		controller.showView();
+	private SubView currentActiveSubView = SubView.NONE;
+
+	public SubView getCurrentActiveSubView() {
+		return this.currentActiveSubView;
+	}
+
+	public void setCurrentActiveSubView(final SubView currentActiveSubView) {
+		this.currentActiveSubView = currentActiveSubView;
+
+		this.setChanged();
+		this.notifyObservers();
+	}
+
+	public enum SubView {
+		RECORDS_SUB_VIEW, TRACES_SUB_VIEW, FAILED_TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, FAILURE_CONTAINING_TRACES_SUB_VIEW, FAILED_AGGREGATED_TRACES_SUB_VIEW, FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW
 	}
 
 }

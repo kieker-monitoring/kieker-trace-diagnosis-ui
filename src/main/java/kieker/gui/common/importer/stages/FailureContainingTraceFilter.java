@@ -14,26 +14,25 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui;
+package kieker.gui.common.importer.stages;
 
-import kieker.gui.mainview.MainViewController;
+import kieker.gui.common.domain.Execution;
+import teetime.framework.AbstractConsumerStage;
+import teetime.framework.OutputPort;
 
-/**
- * Contains the main method of this application.
- *
- * @author Nils Christian Ehmke
- */
-public class Main {
+public final class FailureContainingTraceFilter extends AbstractConsumerStage<Execution> {
 
-	/**
-	 * The main method of this application.
-	 * 
-	 * @param args
-	 *            The command line arguments. They have no effect.
-	 */
-	public static void main(final String[] args) {
-		final MainViewController controller = new MainViewController();
-		controller.showView();
+	private final OutputPort<Execution> outputPort = super.createOutputPort();
+
+	@Override
+	protected void execute(final Execution element) {
+		if (element.containsFailure()) {
+			this.outputPort.send(element);
+		}
+	}
+
+	public OutputPort<Execution> getOutputPort() {
+		return this.outputPort;
 	}
 
 }

@@ -14,26 +14,35 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui;
+package kieker.gui.common;
 
-import kieker.gui.mainview.MainViewController;
+import java.util.Observable;
 
-/**
- * Contains the main method of this application.
- *
- * @author Nils Christian Ehmke
- */
-public class Main {
+public final class PropertiesModel extends Observable {
 
-	/**
-	 * The main method of this application.
-	 * 
-	 * @param args
-	 *            The command line arguments. They have no effect.
-	 */
-	public static void main(final String[] args) {
-		final MainViewController controller = new MainViewController();
-		controller.showView();
+	private boolean shortComponentNames = false;
+	private boolean shortOperationNames = true;
+
+	public boolean isShortComponentNames() {
+		return this.shortComponentNames;
+	}
+
+	public void setShortComponentNames(final boolean shortComponentNames) {
+		this.shortComponentNames = shortComponentNames;
+
+		this.setChanged();
+		this.notifyObservers();
+	}
+
+	public boolean isShortOperationNames() {
+		return this.shortOperationNames;
+	}
+
+	public void setShortOperationNames(final boolean shortOperationNames) {
+		this.shortOperationNames = shortOperationNames;
+
+		this.setChanged();
+		this.notifyObservers();
 	}
 
 }

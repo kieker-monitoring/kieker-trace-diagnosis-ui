@@ -14,26 +14,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui;
+package kieker.gui.subview.traces.util;
 
-import kieker.gui.mainview.MainViewController;
+import kieker.gui.common.AbstractDirectedComparator;
+import kieker.gui.common.domain.AbstractExecution;
 
-/**
- * Contains the main method of this application.
- *
- * @author Nils Christian Ehmke
- */
-public class Main {
+import org.eclipse.swt.SWT;
 
-	/**
-	 * The main method of this application.
-	 * 
-	 * @param args
-	 *            The command line arguments. They have no effect.
-	 */
-	public static void main(final String[] args) {
-		final MainViewController controller = new MainViewController();
-		controller.showView();
+public class ExecutionComponentComparator extends AbstractDirectedComparator<AbstractExecution<?>> {
+
+	@Override
+	public int compare(final AbstractExecution<?> fst, final AbstractExecution<?> snd) {
+		int result = fst.getComponent().compareTo(snd.getComponent());
+		if (this.getDirection() == SWT.UP) {
+			result = -result;
+		}
+		return result;
 	}
 
 }

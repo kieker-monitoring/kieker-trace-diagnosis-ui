@@ -14,26 +14,25 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui;
+package kieker.gui.subview.traces;
 
-import kieker.gui.mainview.MainViewController;
+import java.util.Observable;
 
-/**
- * Contains the main method of this application.
- *
- * @author Nils Christian Ehmke
- */
-public class Main {
+import kieker.gui.common.domain.Execution;
 
-	/**
-	 * The main method of this application.
-	 * 
-	 * @param args
-	 *            The command line arguments. They have no effect.
-	 */
-	public static void main(final String[] args) {
-		final MainViewController controller = new MainViewController();
-		controller.showView();
+public final class TracesSubViewModel extends Observable {
+
+	private Execution currentActiveTrace;
+
+	public Execution getCurrentActiveTrace() {
+		return this.currentActiveTrace;
+	}
+
+	public void setCurrentActiveTrace(final Execution currentActiveTrace) {
+		this.currentActiveTrace = currentActiveTrace;
+
+		this.setChanged();
+		this.notifyObservers();
 	}
 
 }

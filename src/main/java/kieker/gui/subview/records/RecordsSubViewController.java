@@ -14,26 +14,28 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui;
+package kieker.gui.subview.records;
 
-import kieker.gui.mainview.MainViewController;
+import kieker.gui.common.DataModel;
+import kieker.gui.common.ISubController;
+import kieker.gui.common.ISubView;
 
 /**
- * Contains the main method of this application.
+ * The sub-controller responsible for the sub-view presenting the available records.
  *
  * @author Nils Christian Ehmke
  */
-public class Main {
+public final class RecordsSubViewController implements ISubController {
 
-	/**
-	 * The main method of this application.
-	 * 
-	 * @param args
-	 *            The command line arguments. They have no effect.
-	 */
-	public static void main(final String[] args) {
-		final MainViewController controller = new MainViewController();
-		controller.showView();
+	private final ISubView view;
+
+	public RecordsSubViewController(final DataModel dataModel) {
+		this.view = new RecordsSubView(dataModel, this);
+	}
+
+	@Override
+	public ISubView getView() {
+		return this.view;
 	}
 
 }
