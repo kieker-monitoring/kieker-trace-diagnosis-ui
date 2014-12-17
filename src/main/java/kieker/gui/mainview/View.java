@@ -16,6 +16,7 @@
 
 package kieker.gui.mainview;
 
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -39,14 +40,8 @@ public class View implements Observer {
 
 	private final DataModel dataModel;
 	private final Model mainViewModel;
-	private final ISubView recordsSubView;
-	private final ISubView tracesSubView;
-	private final ISubView failedTracesSubView;
-	private final ISubView aggregatedTracesSubView;
-	private final ISubView failureContainingTracesSubView;
-	private final ISubView subView6;
-	private final ISubView subView7;
 	private final Controller controller;
+	private final Map<String, ISubView> subViews;
 
 	private Shell shell;
 	private Composite subViewComposite;
@@ -69,18 +64,10 @@ public class View implements Observer {
 	private TreeItem trtmJustFailedAggTraces;
 	private TreeItem trtmJustAggTracesContaining;
 
-	public View(final DataModel dataModel, final Model mainViewModel, final Controller controller, final ISubView recordsSubView, final ISubView tracesSubView,
-			final ISubView failedTracesSubView, final ISubView aggregatedTracesSubView, final ISubView failureContainingTracesSubView, final ISubView subView6,
-			final ISubView subView7) {
+	public View(final DataModel dataModel, final Model mainViewModel, final Controller controller, final Map<String, ISubView> subViews) {
 		this.dataModel = dataModel;
 		this.mainViewModel = mainViewModel;
-		this.recordsSubView = recordsSubView;
-		this.tracesSubView = tracesSubView;
-		this.failureContainingTracesSubView = failureContainingTracesSubView;
-		this.failedTracesSubView = failedTracesSubView;
-		this.aggregatedTracesSubView = aggregatedTracesSubView;
-		this.subView6 = subView6;
-		this.subView7 = subView7;
+		this.subViews = subViews;
 
 		this.controller = controller;
 	}
@@ -214,13 +201,9 @@ public class View implements Observer {
 		this.subViewComposite.setLayout(this.subViewLayout);
 		sashForm.setWeights(new int[] { 1, 4 });
 
-		this.recordsSubView.createComposite(this.subViewComposite);
-		this.tracesSubView.createComposite(this.subViewComposite);
-		this.failedTracesSubView.createComposite(this.subViewComposite);
-		this.aggregatedTracesSubView.createComposite(this.subViewComposite);
-		this.failureContainingTracesSubView.createComposite(this.subViewComposite);
-		this.subView6.createComposite(this.subViewComposite);
-		this.subView7.createComposite(this.subViewComposite);
+		for (final ISubView subview : this.subViews.values()) {
+			subview.createComposite(this.subViewComposite);
+		}
 
 		final Menu menu = new Menu(this.shell, SWT.BAR);
 		this.shell.setMenuBar(menu);
@@ -288,38 +271,12 @@ public class View implements Observer {
 	}
 
 	private void handleChangedSubView() {
-		final Composite subViewToShow;
-		switch (this.mainViewModel.getCurrentActiveSubView()) {
-		case NONE:
-			subViewToShow = null;
-			break;
-		case RECORDS_SUB_VIEW:
-			subViewToShow = this.recordsSubView.getComposite();
-			break;
-		case TRACES_SUB_VIEW:
-			subViewToShow = this.tracesSubView.getComposite();
-			break;
-		case AGGREGATED_TRACES_SUB_VIEW:
-			subViewToShow = this.aggregatedTracesSubView.getComposite();
-			break;
-		case FAILED_TRACES_SUB_VIEW:
-			subViewToShow = this.failedTracesSubView.getComposite();
-			break;
-		case FAILURE_CONTAINING_TRACES_SUB_VIEW:
-			subViewToShow = this.failureContainingTracesSubView.getComposite();
-			break;
-		case FAILED_AGGREGATED_TRACES_SUB_VIEW:
-			subViewToShow = this.subView6.getComposite();
-			break;
-		case FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW:
-			subViewToShow = this.subView7.getComposite();
-			break;
-		default:
-			subViewToShow = null;
-			break;
-		}
+		final String subViewKey = this.mainViewModel.getCurrentActiveSubViewKey();
 
-		this.subViewLayout.topControl = subViewToShow;
+		final ISubView subViewToShow = this.subViews.get(subViewKey);
+		final Composite compositeToShow = (subViewToShow != null) ? subViewToShow.getComposite() : null;
+
+		this.subViewLayout.topControl = compositeToShow;
 		this.subViewComposite.layout();
 	}
 }

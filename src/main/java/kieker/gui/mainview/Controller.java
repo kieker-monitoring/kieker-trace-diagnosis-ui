@@ -16,9 +16,11 @@
 
 package kieker.gui.mainview;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import kieker.gui.common.model.DataModel;
 import kieker.gui.common.model.PropertiesModel;
-import kieker.gui.mainview.Model.SubView;
 import kieker.gui.subview.ISubController;
 import kieker.gui.subview.ISubView;
 
@@ -53,17 +55,18 @@ public final class Controller implements SelectionListener {
 		final ISubController subViewController7 = new kieker.gui.subview.aggregatedtraces.FailureController(this.dataModel, this.propertiesModel);
 
 		// Get the sub-views from the controllers
-		final ISubView subView1 = subViewController1.getView();
-		final ISubView subView2 = subViewController2.getView();
-		final ISubView subView3 = subViewController3.getView();
-		final ISubView subView4 = subViewController4.getView();
-		final ISubView subView5 = subViewController5.getView();
-		final ISubView subView6 = subViewController6.getView();
-		final ISubView subView7 = subViewController7.getView();
+		final Map<String, ISubView> subViews = new HashMap<>();
+		subViews.put(SubView.RECORDS_SUB_VIEW.name(), subViewController1.getView());
+		subViews.put(SubView.AGGREGATED_TRACES_SUB_VIEW.name(), subViewController2.getView());
+		subViews.put(SubView.FAILED_TRACES_SUB_VIEW.name(), subViewController3.getView());
+		subViews.put(SubView.TRACES_SUB_VIEW.name(), subViewController4.getView());
+		subViews.put(SubView.FAILURE_CONTAINING_TRACES_SUB_VIEW.name(), subViewController5.getView());
+		subViews.put(SubView.FAILED_AGGREGATED_TRACES_SUB_VIEW.name(), subViewController6.getView());
+		subViews.put(SubView.FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW.name(), subViewController7.getView());
 
 		// Create the main model and the main view
 		this.mainViewModel = new Model();
-		this.mainView = new View(this.dataModel, this.mainViewModel, this, subView1, subView2, subView3, subView4, subView5, subView6, subView7);
+		this.mainView = new View(this.dataModel, this.mainViewModel, this, subViews);
 	}
 
 	public void showView() {
@@ -108,34 +111,38 @@ public final class Controller implements SelectionListener {
 
 	private void handlePotentialTreeSelection(final SelectionEvent e) {
 		if (e.item == this.mainView.getTrtmExplorer()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.NONE);
+			this.mainViewModel.setCurrentActiveSubView(SubView.NONE.name());
 		}
 		if (e.item == this.mainView.getTrtmRecords()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.RECORDS_SUB_VIEW);
+			this.mainViewModel.setCurrentActiveSubView(SubView.RECORDS_SUB_VIEW.name());
 		}
 		if (e.item == this.mainView.getTrtmTraces()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.TRACES_SUB_VIEW);
+			this.mainViewModel.setCurrentActiveSubView(SubView.TRACES_SUB_VIEW.name());
 		}
 		if (e.item == this.mainView.getTrtmAggregatedTraces()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.AGGREGATED_TRACES_SUB_VIEW);
+			this.mainViewModel.setCurrentActiveSubView(SubView.AGGREGATED_TRACES_SUB_VIEW.name());
 		}
 		if (e.item == this.mainView.getTrtmJustFailedTraces()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.FAILED_TRACES_SUB_VIEW);
+			this.mainViewModel.setCurrentActiveSubView(SubView.FAILED_TRACES_SUB_VIEW.name());
 		}
 		if (e.item == this.mainView.getTrtmJustTracesContaining()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.FAILURE_CONTAINING_TRACES_SUB_VIEW);
+			this.mainViewModel.setCurrentActiveSubView(SubView.FAILURE_CONTAINING_TRACES_SUB_VIEW.name());
 		}
 		if (e.item == this.mainView.getTrtmJustFailedAggTraces()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.FAILED_AGGREGATED_TRACES_SUB_VIEW);
+			this.mainViewModel.setCurrentActiveSubView(SubView.FAILED_AGGREGATED_TRACES_SUB_VIEW.name());
 		}
 		if (e.item == this.mainView.getTrtmJustAggTracesContaining()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW);
+			this.mainViewModel.setCurrentActiveSubView(SubView.FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW.name());
 		}
 	}
 
 	@Override
 	public void widgetDefaultSelected(final SelectionEvent e) {
 		// Nothing to do here. This method is just required by the interface.
+	}
+
+	public enum SubView {
+		RECORDS_SUB_VIEW, TRACES_SUB_VIEW, FAILED_TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, FAILURE_CONTAINING_TRACES_SUB_VIEW, FAILED_AGGREGATED_TRACES_SUB_VIEW, FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW
 	}
 
 }

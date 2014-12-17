@@ -20,21 +20,17 @@ import java.util.Observable;
 
 public final class Model extends Observable {
 
-	private SubView currentActiveSubView = SubView.NONE;
+	private String currentActiveSubViewKey = "";
 
-	public SubView getCurrentActiveSubView() {
-		return this.currentActiveSubView;
+	public String getCurrentActiveSubViewKey() {
+		return this.currentActiveSubViewKey;
 	}
 
-	public void setCurrentActiveSubView(final SubView currentActiveSubView) {
-		this.currentActiveSubView = currentActiveSubView;
+	public void setCurrentActiveSubView(final String currentActiveSubViewKey) {
+		this.currentActiveSubViewKey = currentActiveSubViewKey;
 
 		this.setChanged();
 		this.notifyObservers();
-	}
-
-	public enum SubView {
-		RECORDS_SUB_VIEW, TRACES_SUB_VIEW, FAILED_TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, FAILURE_CONTAINING_TRACES_SUB_VIEW, FAILED_AGGREGATED_TRACES_SUB_VIEW, FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW
 	}
 
 }
