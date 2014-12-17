@@ -16,6 +16,9 @@
 
 package kieker.gui.controller;
 
+import java.util.List;
+
+import kieker.gui.model.AbstractProxyDataModel;
 import kieker.gui.model.AggregatedTracesSubViewModel;
 import kieker.gui.model.DataModel;
 import kieker.gui.model.PropertiesModel;
@@ -38,7 +41,14 @@ public final class AggregatedFailedTracesSubViewController implements SelectionL
 
 	public AggregatedFailedTracesSubViewController(final DataModel dataModel, final PropertiesModel propertiesModel) {
 		this.model = new AggregatedTracesSubViewModel();
-		this.view = new AggregatedTracesSubView(AggregatedTracesSubView.Type.SHOW_JUST_FAILED_TRACES, dataModel, this.model, propertiesModel, this);
+		this.view = new AggregatedTracesSubView(new AbstractProxyDataModel<AggregatedExecution>(dataModel) {
+
+			@Override
+			public List<AggregatedExecution> getContent() {
+				return super.dataModel.getFailedAggregatedTracesCopy();
+			}
+
+		}, this.model, propertiesModel, this);
 	}
 
 	@Override

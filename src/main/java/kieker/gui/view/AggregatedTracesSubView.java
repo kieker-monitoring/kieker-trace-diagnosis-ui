@@ -21,7 +21,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import kieker.gui.model.AggregatedTracesSubViewModel;
-import kieker.gui.model.DataModel;
+import kieker.gui.model.IModel;
 import kieker.gui.model.PropertiesModel;
 import kieker.gui.model.domain.AggregatedExecution;
 import kieker.gui.view.util.AggregatedExecutionAvgDurationComparator;
@@ -54,7 +54,7 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 
 	private final AggregatedTracesSubViewModel aggregatedTracesSubViewModel;
 	private final SelectionListener controller;
-	private final DataModel model;
+	private final IModel<AggregatedExecution> model;
 	private Composite composite;
 	private Tree tree;
 	private Composite detailComposite;
@@ -71,15 +71,13 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 	private Label lblFailed;
 	private final PropertiesModel propertiesModel;
 	private Label lblTotalDurationDisplay;
-	private final Type type;
 
-	public AggregatedTracesSubView(final Type type, final DataModel model, final AggregatedTracesSubViewModel aggregatedTracesSubViewModel, final PropertiesModel propertiesModel,
+	public AggregatedTracesSubView(final IModel<AggregatedExecution> model, final AggregatedTracesSubViewModel aggregatedTracesSubViewModel, final PropertiesModel propertiesModel,
 			final SelectionListener controller) {
 		this.controller = controller;
 		this.model = model;
 		this.propertiesModel = propertiesModel;
 		this.aggregatedTracesSubViewModel = aggregatedTracesSubViewModel;
-		this.type = type;
 
 		model.addObserver(this);
 		aggregatedTracesSubViewModel.addObserver(this);
@@ -260,14 +258,8 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 	}
 
 	private void updateTree() {
-		final List<AggregatedExecution> records;
-		if (this.type == Type.SHOW_JUST_FAILED_TRACES) {
-			records = this.model.getFailedAggregatedTracesCopy();
-		} else if (this.type == Type.SHOW_JUST_FAILURE_CONTAINING_TRACES) {
-			records = this.model.getFailureContainingAggregatedTracesCopy();
-		} else {
-			records = this.model.getAggregatedTracesCopy();
-		}
+		final List<AggregatedExecution> records = this.model.getContent();
+
 		this.tree.setData(records);
 		this.tree.setItemCount(records.size());
 
@@ -356,7 +348,7 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, "", minDuration, avgDuration, maxDuration, totalDuration });
 			} else {
 				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, Integer.toString(executionEntry.getCalls()), minDuration, avgDuration,
-						maxDuration, totalDuration });
+					maxDuration, totalDuration });
 			}
 
 			if (executionEntry.isFailed()) {
@@ -368,10 +360,6 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 			item.setItemCount(executionEntry.getChildren().size());
 		}
 
-	}
-
-	public enum Type {
-		SHOW_ALL_TRACES, SHOW_JUST_FAILED_TRACES, SHOW_JUST_FAILURE_CONTAINING_TRACES
 	}
 
 }

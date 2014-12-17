@@ -16,6 +16,9 @@
 
 package kieker.gui.controller;
 
+import java.util.List;
+
+import kieker.gui.model.AbstractProxyDataModel;
 import kieker.gui.model.DataModel;
 import kieker.gui.model.PropertiesModel;
 import kieker.gui.model.TracesSubViewModel;
@@ -38,7 +41,14 @@ public final class FailedTracesSubViewController implements SelectionListener, I
 
 	public FailedTracesSubViewController(final DataModel dataModel, final PropertiesModel propertiesModel) {
 		this.model = new TracesSubViewModel();
-		this.view = new TracesSubView(TracesSubView.Type.SHOW_JUST_FAILED_TRACES, dataModel, this.model, propertiesModel, this);
+		this.view = new TracesSubView(new AbstractProxyDataModel<Execution>(dataModel) {
+
+			@Override
+			public final List<Execution> getContent() {
+				return this.dataModel.getFailedTracesCopy();
+			}
+
+		}, this.model, propertiesModel, this);
 	}
 
 	@Override

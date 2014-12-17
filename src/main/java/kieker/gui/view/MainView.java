@@ -94,6 +94,8 @@ public class MainView implements Observer {
 		this.shell.open();
 		this.shell.layout();
 
+		this.dataModel.loadMonitoringLogFromFS("example/kieker-20141217-134719867-UTC-SE-Nils-Ehmke-KIEKER");
+
 		while (!this.shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();

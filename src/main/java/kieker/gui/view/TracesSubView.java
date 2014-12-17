@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import kieker.gui.model.DataModel;
+import kieker.gui.model.IModel;
 import kieker.gui.model.PropertiesModel;
 import kieker.gui.model.TracesSubViewModel;
 import kieker.gui.model.domain.Execution;
@@ -49,7 +49,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 public class TracesSubView implements Observer, ISubView {
 
-	private final DataModel model;
+	private final IModel<Execution> model;
 	private final TracesSubViewModel tracesSubViewModel;
 	private final SelectionListener controller;
 	private Composite composite;
@@ -65,10 +65,8 @@ public class TracesSubView implements Observer, ISubView {
 	private Label lblExecutionContainerDisplay;
 	private Label lblFailed;
 	private final PropertiesModel propertiesModel;
-	private final Type type;
 
-	public TracesSubView(final Type type, final DataModel model, final TracesSubViewModel tracesSubViewModel, final PropertiesModel propertiesModel,
-			final SelectionListener controller) {
+	public TracesSubView(final IModel<Execution> model, final TracesSubViewModel tracesSubViewModel, final PropertiesModel propertiesModel, final SelectionListener controller) {
 		this.model = model;
 		this.propertiesModel = propertiesModel;
 		this.tracesSubViewModel = tracesSubViewModel;
@@ -77,8 +75,6 @@ public class TracesSubView implements Observer, ISubView {
 		model.addObserver(this);
 		tracesSubViewModel.addObserver(this);
 		propertiesModel.addObserver(this);
-
-		this.type = type;
 	}
 
 	/**
@@ -226,14 +222,7 @@ public class TracesSubView implements Observer, ISubView {
 	}
 
 	private void updateTree() {
-		final List<Execution> records;
-		if (this.type == Type.SHOW_JUST_FAILED_TRACES) {
-			records = this.model.getFailedTracesCopy();
-		} else if (this.type == Type.SHOW_JUST_FAILURE_CONTAINING_TRACES) {
-			records = this.model.getFailureContainingTracesCopy();
-		} else {
-			records = this.model.getTracesCopy();
-		}
+		final List<Execution> records = this.model.getContent();
 
 		this.tree.setData(records);
 		this.tree.setItemCount(records.size());
@@ -322,10 +311,6 @@ public class TracesSubView implements Observer, ISubView {
 			item.setData(executionEntry);
 			item.setItemCount(executionEntry.getChildren().size());
 		}
-	}
-
-	public enum Type {
-		SHOW_ALL_TRACES, SHOW_JUST_FAILED_TRACES, SHOW_JUST_FAILURE_CONTAINING_TRACES
 	}
 
 }
