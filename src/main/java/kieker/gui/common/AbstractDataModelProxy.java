@@ -3,11 +3,11 @@ package kieker.gui.common;
 import java.util.Observable;
 import java.util.Observer;
 
-public abstract class AbstractProxyDataModel<T> extends Observable implements IModel<T>, Observer {
+public abstract class AbstractDataModelProxy<T> extends Observable implements IModel<T>, Observer {
 
 	protected final DataModel dataModel;
 
-	public AbstractProxyDataModel(final DataModel dataModel) {
+	public AbstractDataModelProxy(final DataModel dataModel) {
 		this.dataModel = dataModel;
 		this.dataModel.addObserver(this);
 	}

@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import kieker.gui.common.DataModel;
+import kieker.gui.common.IModel;
 import kieker.gui.common.ISubView;
 import kieker.gui.common.TableColumnSortListener;
 import kieker.gui.common.domain.Record;
@@ -39,11 +39,11 @@ import org.eclipse.swt.widgets.TableItem;
 
 public final class RecordsSubView implements Observer, ISubView {
 
-	private final DataModel model;
+	private final IModel<Record> model;
 	private Composite composite;
 	private Table table;
 
-	public RecordsSubView(final DataModel model, final RecordsSubViewController controller) {
+	public RecordsSubView(final IModel<Record> model, final RecordsSubViewController controller) {
 		this.model = model;
 
 		model.addObserver(this);
@@ -102,7 +102,7 @@ public final class RecordsSubView implements Observer, ISubView {
 	}
 
 	private void updateTable() {
-		final List<Record> records = this.model.getRecordsCopy();
+		final List<Record> records = this.model.getContent();
 
 		this.table.setData(records);
 		this.table.setItemCount(records.size());

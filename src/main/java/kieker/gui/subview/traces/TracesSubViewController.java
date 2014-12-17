@@ -18,7 +18,7 @@ package kieker.gui.subview.traces;
 
 import java.util.List;
 
-import kieker.gui.common.AbstractProxyDataModel;
+import kieker.gui.common.AbstractDataModelProxy;
 import kieker.gui.common.DataModel;
 import kieker.gui.common.ISubController;
 import kieker.gui.common.ISubView;
@@ -40,7 +40,7 @@ public final class TracesSubViewController implements SelectionListener, ISubCon
 
 	public TracesSubViewController(final DataModel dataModel, final PropertiesModel propertiesModel) {
 		this.model = new TracesSubViewModel();
-		this.view = new TracesSubView(new AbstractProxyDataModel<Execution>(dataModel) {
+		this.view = new TracesSubView(new AbstractDataModelProxy<Execution>(dataModel) {
 
 			@Override
 			public final List<Execution> getContent() {

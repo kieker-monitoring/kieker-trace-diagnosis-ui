@@ -16,9 +16,14 @@
 
 package kieker.gui.subview.records;
 
+import java.util.List;
+
+import kieker.gui.common.AbstractDataModelProxy;
 import kieker.gui.common.DataModel;
+import kieker.gui.common.IModel;
 import kieker.gui.common.ISubController;
 import kieker.gui.common.ISubView;
+import kieker.gui.common.domain.Record;
 
 /**
  * The sub-controller responsible for the sub-view presenting the available records.
@@ -30,12 +35,26 @@ public final class RecordsSubViewController implements ISubController {
 	private final ISubView view;
 
 	public RecordsSubViewController(final DataModel dataModel) {
-		this.view = new RecordsSubView(dataModel, this);
+		final IModel<Record> modelProxy = new RecordsModelProxy(dataModel);
+
+		this.view = new RecordsSubView(modelProxy, this);
 	}
 
 	@Override
 	public ISubView getView() {
 		return this.view;
+	}
+
+	private final class RecordsModelProxy extends AbstractDataModelProxy<Record> {
+
+		private RecordsModelProxy(final DataModel dataModel) {
+			super(dataModel);
+		}
+
+		@Override
+		public List<Record> getContent() {
+			return super.dataModel.getRecordsCopy();
+		}
 	}
 
 }
