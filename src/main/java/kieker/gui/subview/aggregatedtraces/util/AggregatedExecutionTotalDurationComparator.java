@@ -1,7 +1,7 @@
 package kieker.gui.subview.aggregatedtraces.util;
 
-import kieker.gui.common.AbstractDirectedComparator;
 import kieker.gui.common.domain.AggregatedExecution;
+import kieker.gui.common.util.AbstractDirectedComparator;
 
 import org.eclipse.swt.SWT;
 

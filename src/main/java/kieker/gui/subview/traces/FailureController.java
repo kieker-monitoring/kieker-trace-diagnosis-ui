@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.subview.aggregatedtraces;
+package kieker.gui.subview.traces;
 
 import java.util.List;
 
@@ -22,38 +22,33 @@ import kieker.gui.common.AbstractDataModelProxy;
 import kieker.gui.common.DataModel;
 import kieker.gui.common.IModel;
 import kieker.gui.common.PropertiesModel;
-import kieker.gui.common.domain.AggregatedExecution;
-
-import org.eclipse.swt.events.SelectionEvent;
+import kieker.gui.common.domain.Execution;
 
 /**
- * The sub-controller responsible for the sub-view presenting the available aggregated traces.
+ * The sub-controller responsible for the sub-view presenting the available failure-containing traces.
  *
  * @author Nils Christian Ehmke
  */
-public final class AggregatedTracesSubViewController extends AbstractAggregatedTracesController {
+public final class FailureController extends AbstractController {
 
-	public AggregatedTracesSubViewController(final DataModel dataModel, final PropertiesModel propertiesModel) {
+	public FailureController(final DataModel dataModel, final PropertiesModel propertiesModel) {
 		super(dataModel, propertiesModel);
 	}
 
 	@Override
-	protected IModel<AggregatedExecution> createModelProxy(final DataModel dataModel) {
+	protected IModel<Execution> createModelProxy(final DataModel dataModel) {
 		return new ModelProxy(dataModel);
 	}
 
-	@Override
-	public void widgetDefaultSelected(final SelectionEvent e) {}
-
-	private final class ModelProxy extends AbstractDataModelProxy<AggregatedExecution> {
+	private final class ModelProxy extends AbstractDataModelProxy<Execution> {
 
 		private ModelProxy(final DataModel dataModel) {
 			super(dataModel);
 		}
 
 		@Override
-		public List<AggregatedExecution> getContent() {
-			return super.dataModel.getAggregatedTracesCopy();
+		public List<Execution> getContent() {
+			return super.dataModel.getFailureContainingTracesCopy();
 		}
 
 	}

@@ -29,9 +29,9 @@ import kieker.gui.common.domain.AggregatedExecution;
  *
  * @author Nils Christian Ehmke
  */
-public final class FailureContainingAggregatedTracesSubViewController extends AbstractAggregatedTracesController {
+public final class FailureController extends AbstractController {
 
-	public FailureContainingAggregatedTracesSubViewController(final DataModel dataModel, final PropertiesModel propertiesModel) {
+	public FailureController(final DataModel dataModel, final PropertiesModel propertiesModel) {
 		super(dataModel, propertiesModel);
 	}
 

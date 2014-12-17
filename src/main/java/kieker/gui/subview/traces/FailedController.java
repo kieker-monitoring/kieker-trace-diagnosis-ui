@@ -25,13 +25,13 @@ import kieker.gui.common.PropertiesModel;
 import kieker.gui.common.domain.Execution;
 
 /**
- * The sub-controller responsible for the sub-view presenting the available traces.
+ * The sub-controller responsible for the sub-view presenting the available failed traces.
  *
  * @author Nils Christian Ehmke
  */
-public final class TracesSubViewController extends AbstractTracesController {
+public final class FailedController extends AbstractController {
 
-	public TracesSubViewController(final DataModel dataModel, final PropertiesModel propertiesModel) {
+	public FailedController(final DataModel dataModel, final PropertiesModel propertiesModel) {
 		super(dataModel, propertiesModel);
 	}
 
@@ -48,7 +48,7 @@ public final class TracesSubViewController extends AbstractTracesController {
 
 		@Override
 		public List<Execution> getContent() {
-			return super.dataModel.getTracesCopy();
+			return super.dataModel.getFailedTracesCopy();
 		}
 
 	}

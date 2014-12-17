@@ -35,10 +35,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
-public class MainView implements Observer {
+public class View implements Observer {
 
 	private final DataModel dataModel;
-	private final MainViewModel mainViewModel;
+	private final Model mainViewModel;
 	private final ISubView recordsSubView;
 	private final ISubView tracesSubView;
 	private final ISubView failedTracesSubView;
@@ -46,7 +46,7 @@ public class MainView implements Observer {
 	private final ISubView failureContainingTracesSubView;
 	private final ISubView subView6;
 	private final ISubView subView7;
-	private final MainViewController controller;
+	private final Controller controller;
 
 	private Shell shell;
 	private Composite subViewComposite;
@@ -69,7 +69,7 @@ public class MainView implements Observer {
 	private TreeItem trtmJustFailedAggTraces;
 	private TreeItem trtmJustAggTracesContaining;
 
-	public MainView(final DataModel dataModel, final MainViewModel mainViewModel, final MainViewController controller, final ISubView recordsSubView, final ISubView tracesSubView,
+	public View(final DataModel dataModel, final Model mainViewModel, final Controller controller, final ISubView recordsSubView, final ISubView tracesSubView,
 			final ISubView failedTracesSubView, final ISubView aggregatedTracesSubView, final ISubView failureContainingTracesSubView, final ISubView subView6,
 			final ISubView subView7) {
 		this.dataModel = dataModel;

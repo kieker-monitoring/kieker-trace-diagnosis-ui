@@ -20,14 +20,7 @@ import kieker.gui.common.DataModel;
 import kieker.gui.common.ISubController;
 import kieker.gui.common.ISubView;
 import kieker.gui.common.PropertiesModel;
-import kieker.gui.mainview.MainViewModel.SubView;
-import kieker.gui.subview.aggregatedtraces.AggregatedFailedTracesSubViewController;
-import kieker.gui.subview.aggregatedtraces.AggregatedTracesSubViewController;
-import kieker.gui.subview.aggregatedtraces.FailureContainingAggregatedTracesSubViewController;
-import kieker.gui.subview.records.RecordsSubViewController;
-import kieker.gui.subview.traces.FailedTracesSubViewController;
-import kieker.gui.subview.traces.FailureContainingTracesSubViewController;
-import kieker.gui.subview.traces.TracesSubViewController;
+import kieker.gui.mainview.Model.SubView;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -38,26 +31,26 @@ import org.eclipse.swt.events.SelectionListener;
  *
  * @author Nils Christian Ehmke
  */
-public final class MainViewController implements SelectionListener {
+public final class Controller implements SelectionListener {
 
-	private final MainView mainView;
+	private final View mainView;
 	private final DataModel dataModel;
-	private final MainViewModel mainViewModel;
+	private final Model mainViewModel;
 	private final PropertiesModel propertiesModel;
 
-	public MainViewController() {
+	public Controller() {
 		// Create the top models
 		this.dataModel = new DataModel();
 		this.propertiesModel = new PropertiesModel();
 
 		// Create the sub-controllers
-		final ISubController subViewController1 = new RecordsSubViewController(this.dataModel);
-		final ISubController subViewController2 = new TracesSubViewController(this.dataModel, this.propertiesModel);
-		final ISubController subViewController3 = new FailedTracesSubViewController(this.dataModel, this.propertiesModel);
-		final ISubController subViewController4 = new AggregatedTracesSubViewController(this.dataModel, this.propertiesModel);
-		final ISubController subViewController5 = new FailureContainingTracesSubViewController(this.dataModel, this.propertiesModel);
-		final ISubController subViewController6 = new AggregatedFailedTracesSubViewController(this.dataModel, this.propertiesModel);
-		final ISubController subViewController7 = new FailureContainingAggregatedTracesSubViewController(this.dataModel, this.propertiesModel);
+		final ISubController subViewController1 = new kieker.gui.subview.records.Controller(this.dataModel);
+		final ISubController subViewController2 = new kieker.gui.subview.aggregatedtraces.Controller(this.dataModel, this.propertiesModel);
+		final ISubController subViewController3 = new kieker.gui.subview.traces.FailedController(this.dataModel, this.propertiesModel);
+		final ISubController subViewController4 = new kieker.gui.subview.traces.Controller(this.dataModel, this.propertiesModel);
+		final ISubController subViewController5 = new kieker.gui.subview.traces.FailureController(this.dataModel, this.propertiesModel);
+		final ISubController subViewController6 = new kieker.gui.subview.aggregatedtraces.FailedController(this.dataModel, this.propertiesModel);
+		final ISubController subViewController7 = new kieker.gui.subview.aggregatedtraces.FailureController(this.dataModel, this.propertiesModel);
 
 		// Get the sub-views from the controllers
 		final ISubView subView1 = subViewController1.getView();
@@ -69,8 +62,8 @@ public final class MainViewController implements SelectionListener {
 		final ISubView subView7 = subViewController7.getView();
 
 		// Create the main model and the main view
-		this.mainViewModel = new MainViewModel();
-		this.mainView = new MainView(this.dataModel, this.mainViewModel, this, subView1, subView2, subView3, subView4, subView5, subView6, subView7);
+		this.mainViewModel = new Model();
+		this.mainView = new View(this.dataModel, this.mainViewModel, this, subView1, subView2, subView3, subView4, subView5, subView6, subView7);
 	}
 
 	public void showView() {

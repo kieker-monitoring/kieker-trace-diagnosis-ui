@@ -23,8 +23,8 @@ import java.util.Observer;
 import kieker.gui.common.IModel;
 import kieker.gui.common.ISubView;
 import kieker.gui.common.PropertiesModel;
-import kieker.gui.common.TreeColumnSortListener;
 import kieker.gui.common.domain.Execution;
+import kieker.gui.common.util.TreeColumnSortListener;
 import kieker.gui.subview.traces.util.ExecutionComponentComparator;
 import kieker.gui.subview.traces.util.ExecutionContainerComparator;
 import kieker.gui.subview.traces.util.ExecutionDurationComparator;
@@ -47,10 +47,10 @@ import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-public class TracesSubView implements Observer, ISubView {
+public class View implements Observer, ISubView {
 
 	private final IModel<Execution> model;
-	private final TracesSubViewModel tracesSubViewModel;
+	private final Model tracesSubViewModel;
 	private final SelectionListener controller;
 	private Composite composite;
 	private Tree tree;
@@ -66,7 +66,7 @@ public class TracesSubView implements Observer, ISubView {
 	private Label lblFailed;
 	private final PropertiesModel propertiesModel;
 
-	public TracesSubView(final IModel<Execution> model, final TracesSubViewModel tracesSubViewModel, final PropertiesModel propertiesModel, final SelectionListener controller) {
+	public View(final IModel<Execution> model, final Model tracesSubViewModel, final PropertiesModel propertiesModel, final SelectionListener controller) {
 		this.model = model;
 		this.propertiesModel = propertiesModel;
 		this.tracesSubViewModel = tracesSubViewModel;
@@ -289,18 +289,18 @@ public class TracesSubView implements Observer, ISubView {
 			}
 
 			String componentName = executionEntry.getComponent();
-			if (TracesSubView.this.propertiesModel.isShortComponentNames()) {
+			if (View.this.propertiesModel.isShortComponentNames()) {
 				final int lastPointPos = componentName.lastIndexOf('.');
 				componentName = componentName.substring(lastPointPos + 1);
 			}
 			String operationString = executionEntry.getOperation();
-			if (TracesSubView.this.propertiesModel.isShortOperationNames()) {
+			if (View.this.propertiesModel.isShortOperationNames()) {
 				operationString = operationString.replaceAll("\\(..*\\)", "(...)");
 
 				final int lastPointPos = operationString.lastIndexOf('.', operationString.length() - 5);
 				operationString = operationString.substring(lastPointPos + 1);
 			}
-			final String duration = (Long.toString(executionEntry.getDuration()) + " " + TracesSubView.this.model.getShortTimeUnit()).trim();
+			final String duration = (Long.toString(executionEntry.getDuration()) + " " + View.this.model.getShortTimeUnit()).trim();
 			item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, duration, String.format("%.1f%%", executionEntry.getPercent()), traceID });
 
 			if (executionEntry.isFailed()) {

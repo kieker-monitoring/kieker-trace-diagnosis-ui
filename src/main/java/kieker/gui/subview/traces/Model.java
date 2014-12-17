@@ -1,7 +1,5 @@
-/****************************import java.util.Observable;
-
-import kieker.gui.model.domain.AggregatedExecutionEntry;
-kieker-monitoring.net)
+/***************************************************************************
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +14,21 @@ kieker-monitoring.net)
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.subview.aggregatedtraces;
+package kieker.gui.subview.traces;
 
 import java.util.Observable;
 
-import kieker.gui.common.domain.AggregatedExecution;
+import kieker.gui.common.domain.Execution;
 
-public final class AggregatedTracesSubViewModel extends Observable {
+public final class Model extends Observable {
 
-	private AggregatedExecution currentActiveTrace;
+	private Execution currentActiveTrace;
 
-	public AggregatedExecution getCurrentActiveTrace() {
+	public Execution getCurrentActiveTrace() {
 		return this.currentActiveTrace;
 	}
 
-	public void setCurrentActiveTrace(final AggregatedExecution currentActiveTrace) {
+	public void setCurrentActiveTrace(final Execution currentActiveTrace) {
 		this.currentActiveTrace = currentActiveTrace;
 
 		this.setChanged();

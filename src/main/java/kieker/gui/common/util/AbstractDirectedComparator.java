@@ -14,27 +14,20 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.mainview;
+package kieker.gui.common.util;
 
-import java.util.Observable;
+import java.util.Comparator;
 
-public final class MainViewModel extends Observable {
+public abstract class AbstractDirectedComparator<T> implements Comparator<T> {
 
-	private SubView currentActiveSubView = SubView.NONE;
+	private int direction;
 
-	public SubView getCurrentActiveSubView() {
-		return this.currentActiveSubView;
+	public int getDirection() {
+		return this.direction;
 	}
 
-	public void setCurrentActiveSubView(final SubView currentActiveSubView) {
-		this.currentActiveSubView = currentActiveSubView;
-
-		this.setChanged();
-		this.notifyObservers();
-	}
-
-	public enum SubView {
-		RECORDS_SUB_VIEW, TRACES_SUB_VIEW, FAILED_TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, FAILURE_CONTAINING_TRACES_SUB_VIEW, FAILED_AGGREGATED_TRACES_SUB_VIEW, FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW
+	public void setDirection(final int direction) {
+		this.direction = direction;
 	}
 
 }

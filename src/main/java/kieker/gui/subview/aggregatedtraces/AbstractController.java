@@ -10,16 +10,16 @@ import kieker.gui.common.domain.AggregatedExecution;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
-public abstract class AbstractAggregatedTracesController implements ISubController, SelectionListener {
+public abstract class AbstractController implements ISubController, SelectionListener {
 
 	private final ISubView view;
-	private final AggregatedTracesSubViewModel model;
+	private final Model model;
 
-	public AbstractAggregatedTracesController(final DataModel dataModel, final PropertiesModel propertiesModel) {
+	public AbstractController(final DataModel dataModel, final PropertiesModel propertiesModel) {
 		final IModel<AggregatedExecution> modelProxy = this.createModelProxy(dataModel);
-		this.model = new AggregatedTracesSubViewModel();
+		this.model = new Model();
 
-		this.view = new AggregatedTracesSubView(modelProxy, this.model, propertiesModel, this);
+		this.view = new View(modelProxy, this.model, propertiesModel, this);
 	}
 
 	@Override

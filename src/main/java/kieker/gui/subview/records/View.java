@@ -22,8 +22,8 @@ import java.util.Observer;
 
 import kieker.gui.common.IModel;
 import kieker.gui.common.ISubView;
-import kieker.gui.common.TableColumnSortListener;
 import kieker.gui.common.domain.Record;
+import kieker.gui.common.util.TableColumnSortListener;
 import kieker.gui.subview.records.util.RecordTimestampComparator;
 import kieker.gui.subview.records.util.RecordTypeComparator;
 
@@ -37,13 +37,13 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-public final class RecordsSubView implements Observer, ISubView {
+public final class View implements Observer, ISubView {
 
 	private final IModel<Record> model;
 	private Composite composite;
 	private Table table;
 
-	public RecordsSubView(final IModel<Record> model, final RecordsSubViewController controller) {
+	public View(final IModel<Record> model, final Controller controller) {
 		this.model = model;
 
 		model.addObserver(this);

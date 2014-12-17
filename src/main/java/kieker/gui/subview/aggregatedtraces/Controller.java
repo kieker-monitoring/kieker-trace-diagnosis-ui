@@ -24,14 +24,16 @@ import kieker.gui.common.IModel;
 import kieker.gui.common.PropertiesModel;
 import kieker.gui.common.domain.AggregatedExecution;
 
+import org.eclipse.swt.events.SelectionEvent;
+
 /**
  * The sub-controller responsible for the sub-view presenting the available aggregated traces.
  *
  * @author Nils Christian Ehmke
  */
-public final class AggregatedFailedTracesSubViewController extends AbstractAggregatedTracesController {
+public final class Controller extends AbstractController {
 
-	public AggregatedFailedTracesSubViewController(final DataModel dataModel, final PropertiesModel propertiesModel) {
+	public Controller(final DataModel dataModel, final PropertiesModel propertiesModel) {
 		super(dataModel, propertiesModel);
 	}
 
@@ -39,6 +41,9 @@ public final class AggregatedFailedTracesSubViewController extends AbstractAggre
 	protected IModel<AggregatedExecution> createModelProxy(final DataModel dataModel) {
 		return new ModelProxy(dataModel);
 	}
+
+	@Override
+	public void widgetDefaultSelected(final SelectionEvent e) {}
 
 	private final class ModelProxy extends AbstractDataModelProxy<AggregatedExecution> {
 
@@ -48,7 +53,7 @@ public final class AggregatedFailedTracesSubViewController extends AbstractAggre
 
 		@Override
 		public List<AggregatedExecution> getContent() {
-			return super.dataModel.getFailedAggregatedTracesCopy();
+			return super.dataModel.getAggregatedTracesCopy();
 		}
 
 	}

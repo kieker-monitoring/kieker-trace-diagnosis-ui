@@ -1,5 +1,7 @@
-/***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+/****************************import java.util.Observable;
+
+import kieker.gui.model.domain.AggregatedExecutionEntry;
+kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +16,25 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.subview.traces.util;
+package kieker.gui.subview.aggregatedtraces;
 
-import kieker.gui.common.domain.Execution;
-import kieker.gui.common.util.AbstractDirectedComparator;
+import java.util.Observable;
 
-import org.eclipse.swt.SWT;
+import kieker.gui.common.domain.AggregatedExecution;
 
-public class ExecutionDurationComparator extends AbstractDirectedComparator<Execution> {
+public final class Model extends Observable {
 
-	@Override
-	public int compare(final Execution arg0, final Execution arg1) {
-		int result = Long.compare(arg0.getDuration(), arg1.getDuration());
-		if (this.getDirection() == SWT.UP) {
-			result = -result;
-		}
-		return result;
+	private AggregatedExecution currentActiveTrace;
 
+	public AggregatedExecution getCurrentActiveTrace() {
+		return this.currentActiveTrace;
+	}
+
+	public void setCurrentActiveTrace(final AggregatedExecution currentActiveTrace) {
+		this.currentActiveTrace = currentActiveTrace;
+
+		this.setChanged();
+		this.notifyObservers();
 	}
 
 }

@@ -14,47 +14,43 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.subview.records;
+package kieker.gui.subview.aggregatedtraces;
 
 import java.util.List;
 
 import kieker.gui.common.AbstractDataModelProxy;
 import kieker.gui.common.DataModel;
 import kieker.gui.common.IModel;
-import kieker.gui.common.ISubController;
-import kieker.gui.common.ISubView;
-import kieker.gui.common.domain.Record;
+import kieker.gui.common.PropertiesModel;
+import kieker.gui.common.domain.AggregatedExecution;
 
 /**
- * The sub-controller responsible for the sub-view presenting the available records.
+ * The sub-controller responsible for the sub-view presenting the available aggregated traces.
  *
  * @author Nils Christian Ehmke
  */
-public final class RecordsSubViewController implements ISubController {
+public final class FailedController extends AbstractController {
 
-	private final ISubView view;
-
-	public RecordsSubViewController(final DataModel dataModel) {
-		final IModel<Record> modelProxy = new RecordsModelProxy(dataModel);
-
-		this.view = new RecordsSubView(modelProxy, this);
+	public FailedController(final DataModel dataModel, final PropertiesModel propertiesModel) {
+		super(dataModel, propertiesModel);
 	}
 
 	@Override
-	public ISubView getView() {
-		return this.view;
+	protected IModel<AggregatedExecution> createModelProxy(final DataModel dataModel) {
+		return new ModelProxy(dataModel);
 	}
 
-	private final class RecordsModelProxy extends AbstractDataModelProxy<Record> {
+	private final class ModelProxy extends AbstractDataModelProxy<AggregatedExecution> {
 
-		private RecordsModelProxy(final DataModel dataModel) {
+		private ModelProxy(final DataModel dataModel) {
 			super(dataModel);
 		}
 
 		@Override
-		public List<Record> getContent() {
-			return super.dataModel.getRecordsCopy();
+		public List<AggregatedExecution> getContent() {
+			return super.dataModel.getFailedAggregatedTracesCopy();
 		}
+
 	}
 
 }

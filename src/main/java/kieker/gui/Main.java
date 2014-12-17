@@ -16,7 +16,7 @@
 
 package kieker.gui;
 
-import kieker.gui.mainview.MainViewController;
+import kieker.gui.mainview.Controller;
 
 /**
  * Contains the main method of this application.
@@ -32,7 +32,7 @@ public class Main {
 	 *            The command line arguments. They have no effect.
 	 */
 	public static void main(final String[] args) {
-		final MainViewController controller = new MainViewController();
+		final Controller controller = new Controller();
 		controller.showView();
 	}
 

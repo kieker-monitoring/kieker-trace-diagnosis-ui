@@ -16,23 +16,41 @@
 
 package kieker.gui.subview.traces;
 
-import java.util.Observable;
+import java.util.List;
 
+import kieker.gui.common.AbstractDataModelProxy;
+import kieker.gui.common.DataModel;
+import kieker.gui.common.IModel;
+import kieker.gui.common.PropertiesModel;
 import kieker.gui.common.domain.Execution;
 
-public final class TracesSubViewModel extends Observable {
+/**
+ * The sub-controller responsible for the sub-view presenting the available traces.
+ *
+ * @author Nils Christian Ehmke
+ */
+public final class Controller extends AbstractController {
 
-	private Execution currentActiveTrace;
-
-	public Execution getCurrentActiveTrace() {
-		return this.currentActiveTrace;
+	public Controller(final DataModel dataModel, final PropertiesModel propertiesModel) {
+		super(dataModel, propertiesModel);
 	}
 
-	public void setCurrentActiveTrace(final Execution currentActiveTrace) {
-		this.currentActiveTrace = currentActiveTrace;
+	@Override
+	protected IModel<Execution> createModelProxy(final DataModel dataModel) {
+		return new ModelProxy(dataModel);
+	}
 
-		this.setChanged();
-		this.notifyObservers();
+	private final class ModelProxy extends AbstractDataModelProxy<Execution> {
+
+		private ModelProxy(final DataModel dataModel) {
+			super(dataModel);
+		}
+
+		@Override
+		public List<Execution> getContent() {
+			return super.dataModel.getTracesCopy();
+		}
+
 	}
 
 }

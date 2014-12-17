@@ -14,43 +14,47 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.subview.traces;
+package kieker.gui.subview.records;
 
 import java.util.List;
 
 import kieker.gui.common.AbstractDataModelProxy;
 import kieker.gui.common.DataModel;
 import kieker.gui.common.IModel;
-import kieker.gui.common.PropertiesModel;
-import kieker.gui.common.domain.Execution;
+import kieker.gui.common.ISubController;
+import kieker.gui.common.ISubView;
+import kieker.gui.common.domain.Record;
 
 /**
- * The sub-controller responsible for the sub-view presenting the available failed traces.
+ * The sub-controller responsible for the sub-view presenting the available records.
  *
  * @author Nils Christian Ehmke
  */
-public final class FailedTracesSubViewController extends AbstractTracesController {
+public final class Controller implements ISubController {
 
-	public FailedTracesSubViewController(final DataModel dataModel, final PropertiesModel propertiesModel) {
-		super(dataModel, propertiesModel);
+	private final ISubView view;
+
+	public Controller(final DataModel dataModel) {
+		final IModel<Record> modelProxy = new RecordsModelProxy(dataModel);
+
+		this.view = new View(modelProxy, this);
 	}
 
 	@Override
-	protected IModel<Execution> createModelProxy(final DataModel dataModel) {
-		return new ModelProxy(dataModel);
+	public ISubView getView() {
+		return this.view;
 	}
 
-	private final class ModelProxy extends AbstractDataModelProxy<Execution> {
+	private final class RecordsModelProxy extends AbstractDataModelProxy<Record> {
 
-		private ModelProxy(final DataModel dataModel) {
+		private RecordsModelProxy(final DataModel dataModel) {
 			super(dataModel);
 		}
 
 		@Override
-		public List<Execution> getContent() {
-			return super.dataModel.getFailedTracesCopy();
+		public List<Record> getContent() {
+			return super.dataModel.getRecordsCopy();
 		}
-
 	}
 
 }

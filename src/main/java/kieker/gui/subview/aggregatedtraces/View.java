@@ -23,8 +23,8 @@ import java.util.Observer;
 import kieker.gui.common.IModel;
 import kieker.gui.common.ISubView;
 import kieker.gui.common.PropertiesModel;
-import kieker.gui.common.TreeColumnSortListener;
 import kieker.gui.common.domain.AggregatedExecution;
+import kieker.gui.common.util.TreeColumnSortListener;
 import kieker.gui.subview.aggregatedtraces.util.AggregatedExecutionAvgDurationComparator;
 import kieker.gui.subview.aggregatedtraces.util.AggregatedExecutionCallComparator;
 import kieker.gui.subview.aggregatedtraces.util.AggregatedExecutionMaxDurationComparator;
@@ -50,9 +50,9 @@ import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-public class AggregatedTracesSubView implements Observer, ISubView {
+public final class View implements Observer, ISubView {
 
-	private final AggregatedTracesSubViewModel aggregatedTracesSubViewModel;
+	private final Model aggregatedTracesSubViewModel;
 	private final SelectionListener controller;
 	private final IModel<AggregatedExecution> model;
 	private Composite composite;
@@ -72,7 +72,7 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 	private final PropertiesModel propertiesModel;
 	private Label lblTotalDurationDisplay;
 
-	public AggregatedTracesSubView(final IModel<AggregatedExecution> model, final AggregatedTracesSubViewModel aggregatedTracesSubViewModel, final PropertiesModel propertiesModel,
+	public View(final IModel<AggregatedExecution> model, final Model aggregatedTracesSubViewModel, final PropertiesModel propertiesModel,
 			final SelectionListener controller) {
 		this.controller = controller;
 		this.model = model;
@@ -327,28 +327,28 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 			}
 
 			String componentName = executionEntry.getComponent();
-			if (AggregatedTracesSubView.this.propertiesModel.isShortComponentNames()) {
+			if (View.this.propertiesModel.isShortComponentNames()) {
 				final int lastPointPos = componentName.lastIndexOf('.');
 				componentName = componentName.substring(lastPointPos + 1);
 			}
 			String operationString = executionEntry.getOperation();
-			if (AggregatedTracesSubView.this.propertiesModel.isShortOperationNames()) {
+			if (View.this.propertiesModel.isShortOperationNames()) {
 				operationString = operationString.replaceAll("\\(..*\\)", "(...)");
 
 				final int lastPointPos = operationString.lastIndexOf('.', operationString.length() - 5);
 				operationString = operationString.substring(lastPointPos + 1);
 			}
 
-			final String minDuration = (Long.toString(executionEntry.getMinDuration()) + " " + AggregatedTracesSubView.this.model.getShortTimeUnit()).trim();
-			final String maxDuration = (Long.toString(executionEntry.getMaxDuration()) + " " + AggregatedTracesSubView.this.model.getShortTimeUnit()).trim();
-			final String avgDuration = (Long.toString(executionEntry.getAvgDuration()) + " " + AggregatedTracesSubView.this.model.getShortTimeUnit()).trim();
-			final String totalDuration = (Long.toString(executionEntry.getTotalDuration()) + " " + AggregatedTracesSubView.this.model.getShortTimeUnit()).trim();
+			final String minDuration = (Long.toString(executionEntry.getMinDuration()) + " " + View.this.model.getShortTimeUnit()).trim();
+			final String maxDuration = (Long.toString(executionEntry.getMaxDuration()) + " " + View.this.model.getShortTimeUnit()).trim();
+			final String avgDuration = (Long.toString(executionEntry.getAvgDuration()) + " " + View.this.model.getShortTimeUnit()).trim();
+			final String totalDuration = (Long.toString(executionEntry.getTotalDuration()) + " " + View.this.model.getShortTimeUnit()).trim();
 
 			if (parent != null) {
 				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, "", minDuration, avgDuration, maxDuration, totalDuration });
 			} else {
 				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, Integer.toString(executionEntry.getCalls()), minDuration, avgDuration,
-					maxDuration, totalDuration });
+						maxDuration, totalDuration });
 			}
 
 			if (executionEntry.isFailed()) {
