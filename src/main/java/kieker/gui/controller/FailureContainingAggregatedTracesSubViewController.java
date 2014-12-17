@@ -16,29 +16,29 @@
 
 package kieker.gui.controller;
 
+import kieker.gui.model.AggregatedTracesSubViewModel;
 import kieker.gui.model.DataModel;
 import kieker.gui.model.PropertiesModel;
-import kieker.gui.model.TracesSubViewModel;
-import kieker.gui.model.domain.Execution;
+import kieker.gui.model.domain.AggregatedExecution;
+import kieker.gui.view.AggregatedTracesSubView;
 import kieker.gui.view.ISubView;
-import kieker.gui.view.TracesSubView;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
 /**
- * The sub-controller responsible for the sub-view presenting the available failed traces.
+ * The sub-controller responsible for the sub-view presenting the available aggregated traces.
  *
  * @author Nils Christian Ehmke
  */
-public final class FailedTracesSubViewController implements SelectionListener, ISubController {
+public final class FailureContainingAggregatedTracesSubViewController implements SelectionListener, ISubController {
 
-	private final TracesSubViewModel model;
 	private final ISubView view;
+	private final AggregatedTracesSubViewModel model;
 
-	public FailedTracesSubViewController(final DataModel dataModel, final PropertiesModel propertiesModel) {
-		this.model = new TracesSubViewModel();
-		this.view = new TracesSubView(TracesSubView.Type.SHOW_JUST_FAILED_TRACES, dataModel, this.model, propertiesModel, this);
+	public FailureContainingAggregatedTracesSubViewController(final DataModel dataModel, final PropertiesModel propertiesModel) {
+		this.model = new AggregatedTracesSubViewModel();
+		this.view = new AggregatedTracesSubView(AggregatedTracesSubView.Type.SHOW_JUST_FAILURE_CONTAINING_TRACES, dataModel, this.model, propertiesModel, this);
 	}
 
 	@Override
@@ -48,14 +48,12 @@ public final class FailedTracesSubViewController implements SelectionListener, I
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
-		if (e.item.getData() instanceof Execution) {
-			this.model.setCurrentActiveTrace((Execution) e.item.getData());
+		if (e.item.getData() instanceof AggregatedExecution) {
+			this.model.setCurrentActiveTrace((AggregatedExecution) e.item.getData());
 		}
 	}
 
 	@Override
-	public void widgetDefaultSelected(final SelectionEvent e) {
-		// Nothing to do here. This method is just required by the interface.
-	}
+	public void widgetDefaultSelected(final SelectionEvent e) {}
 
 }

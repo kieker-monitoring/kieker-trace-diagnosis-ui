@@ -31,14 +31,14 @@ import org.eclipse.swt.events.SelectionListener;
  *
  * @author Nils Christian Ehmke
  */
-public class AggregatedTracesSubViewController implements SelectionListener, ISubController {
+public final class AggregatedTracesSubViewController implements SelectionListener, ISubController {
 
 	private final ISubView view;
 	private final AggregatedTracesSubViewModel model;
 
 	public AggregatedTracesSubViewController(final DataModel dataModel, final PropertiesModel propertiesModel) {
 		this.model = new AggregatedTracesSubViewModel();
-		this.view = new AggregatedTracesSubView(dataModel, this.model, propertiesModel, this);
+		this.view = new AggregatedTracesSubView(AggregatedTracesSubView.Type.SHOW_ALL_TRACES, dataModel, this.model, propertiesModel, this);
 	}
 
 	@Override

@@ -45,6 +45,8 @@ public class MainView implements Observer {
 	private final ISubView failedTracesSubView;
 	private final ISubView aggregatedTracesSubView;
 	private final ISubView failureContainingTracesSubView;
+	private final ISubView subView6;
+	private final ISubView subView7;
 	private final MainViewController controller;
 
 	private Shell shell;
@@ -65,9 +67,12 @@ public class MainView implements Observer {
 	private TreeItem trtmJustFailedTraces;
 
 	private TreeItem trtmJustTracesContaining;
+	private TreeItem trtmJustFailedAggTraces;
+	private TreeItem trtmJustAggTracesContaining;
 
 	public MainView(final DataModel dataModel, final MainViewModel mainViewModel, final MainViewController controller, final ISubView recordsSubView, final ISubView tracesSubView,
-			final ISubView failedTracesSubView, final ISubView aggregatedTracesSubView, final ISubView failureContainingTracesSubView) {
+			final ISubView failedTracesSubView, final ISubView aggregatedTracesSubView, final ISubView failureContainingTracesSubView, final ISubView subView6,
+			final ISubView subView7) {
 		this.dataModel = dataModel;
 		this.mainViewModel = mainViewModel;
 		this.recordsSubView = recordsSubView;
@@ -75,6 +80,8 @@ public class MainView implements Observer {
 		this.failureContainingTracesSubView = failureContainingTracesSubView;
 		this.failedTracesSubView = failedTracesSubView;
 		this.aggregatedTracesSubView = aggregatedTracesSubView;
+		this.subView6 = subView6;
+		this.subView7 = subView7;
 
 		this.controller = controller;
 	}
@@ -120,6 +127,14 @@ public class MainView implements Observer {
 
 	public TreeItem getTrtmJustTracesContaining() {
 		return this.trtmJustTracesContaining;
+	}
+
+	public TreeItem getTrtmJustFailedAggTraces() {
+		return this.trtmJustFailedAggTraces;
+	}
+
+	public TreeItem getTrtmJustAggTracesContaining() {
+		return this.trtmJustAggTracesContaining;
 	}
 
 	public MenuItem getMntmExit() {
@@ -184,6 +199,13 @@ public class MainView implements Observer {
 
 		this.trtmAggregatedTraces = new TreeItem(this.trtmExplorer, 0);
 		this.trtmAggregatedTraces.setText("Aggregated Traces");
+
+		this.trtmJustFailedAggTraces = new TreeItem(this.trtmAggregatedTraces, SWT.NONE);
+		this.trtmJustFailedAggTraces.setText("Just Failed Traces");
+
+		this.trtmJustAggTracesContaining = new TreeItem(this.trtmAggregatedTraces, SWT.NONE);
+		this.trtmJustAggTracesContaining.setText("Just Traces Containing Failures");
+		this.trtmAggregatedTraces.setExpanded(true);
 		this.trtmExplorer.setExpanded(true);
 
 		this.subViewLayout = new StackLayout();
@@ -196,6 +218,8 @@ public class MainView implements Observer {
 		this.failedTracesSubView.createComposite(this.subViewComposite);
 		this.aggregatedTracesSubView.createComposite(this.subViewComposite);
 		this.failureContainingTracesSubView.createComposite(this.subViewComposite);
+		this.subView6.createComposite(this.subViewComposite);
+		this.subView7.createComposite(this.subViewComposite);
 
 		final Menu menu = new Menu(this.shell, SWT.BAR);
 		this.shell.setMenuBar(menu);
@@ -282,6 +306,12 @@ public class MainView implements Observer {
 			break;
 		case FAILURE_CONTAINING_TRACES_SUB_VIEW:
 			subViewToShow = this.failureContainingTracesSubView.getComposite();
+			break;
+		case FAILED_AGGREGATED_TRACES_SUB_VIEW:
+			subViewToShow = this.subView6.getComposite();
+			break;
+		case FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW:
+			subViewToShow = this.subView7.getComposite();
 			break;
 		default:
 			subViewToShow = null;

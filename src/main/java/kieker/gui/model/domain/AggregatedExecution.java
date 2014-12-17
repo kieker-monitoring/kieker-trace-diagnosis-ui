@@ -21,6 +21,7 @@ public final class AggregatedExecution extends AbstractExecution<AggregatedExecu
 	private long minDuration;
 	private long maxDuration;
 	private long avgDuration;
+	private long totalDuration;
 	private int calls;
 
 	public AggregatedExecution(final Execution execEntry) {
@@ -39,11 +40,11 @@ public final class AggregatedExecution extends AbstractExecution<AggregatedExecu
 		this.calls++;
 		this.minDuration = Math.min(this.minDuration, executionEntry.getDuration());
 		this.maxDuration = Math.max(this.maxDuration, executionEntry.getDuration());
-		this.avgDuration += executionEntry.getDuration();
+		this.totalDuration += executionEntry.getDuration();
 	}
 
 	public void recalculateValues() {
-		this.avgDuration /= this.calls;
+		this.avgDuration = this.totalDuration / this.calls;
 	}
 
 	public long getMinDuration() {
@@ -56,6 +57,10 @@ public final class AggregatedExecution extends AbstractExecution<AggregatedExecu
 
 	public long getAvgDuration() {
 		return this.avgDuration;
+	}
+
+	public long getTotalDuration() {
+		return this.totalDuration;
 	}
 
 	public int getCalls() {

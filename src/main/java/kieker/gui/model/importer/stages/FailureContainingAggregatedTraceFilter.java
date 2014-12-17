@@ -14,35 +14,25 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.model.domain;
+package kieker.gui.model.importer.stages;
 
-/**
- * A simplified representation of a monitoring record.
- *
- * @author Nils Christian Ehmke
- */
-public final class Record {
+import kieker.gui.model.domain.AggregatedExecution;
+import teetime.framework.AbstractConsumerStage;
+import teetime.framework.OutputPort;
 
-	private final long timestamp;
-	private final String type;
-	private final String representation;
+public final class FailureContainingAggregatedTraceFilter extends AbstractConsumerStage<AggregatedExecution> {
 
-	public Record(final long timestamp, final String type, final String representation) {
-		this.timestamp = timestamp;
-		this.type = type;
-		this.representation = representation;
+	private final OutputPort<AggregatedExecution> outputPort = super.createOutputPort();
+
+	@Override
+	protected void execute(final AggregatedExecution element) {
+		if (element.containsFailure()) {
+			this.outputPort.send(element);
+		}
 	}
 
-	public long getTimestamp() {
-		return this.timestamp;
-	}
-
-	public String getType() {
-		return this.type;
-	}
-
-	public String getRepresentation() {
-		return this.representation;
+	public OutputPort<AggregatedExecution> getOutputPort() {
+		return this.outputPort;
 	}
 
 }

@@ -31,7 +31,7 @@ import org.eclipse.swt.events.SelectionListener;
  *
  * @author Nils Christian Ehmke
  */
-public class TracesSubViewController implements SelectionListener, ISubController {
+public final class TracesSubViewController implements SelectionListener, ISubController {
 
 	private final TracesSubViewModel model;
 	private final ISubView view;

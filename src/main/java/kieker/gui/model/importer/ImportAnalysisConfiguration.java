@@ -26,7 +26,9 @@ import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.gui.model.domain.AggregatedExecution;
 import kieker.gui.model.domain.Execution;
 import kieker.gui.model.domain.Record;
+import kieker.gui.model.importer.stages.FailedAggregatedTraceFilter;
 import kieker.gui.model.importer.stages.FailedTraceFilter;
+import kieker.gui.model.importer.stages.FailureContainingAggregatedTraceFilter;
 import kieker.gui.model.importer.stages.FailureContainingTraceFilter;
 import kieker.gui.model.importer.stages.RecordSimplificator;
 import kieker.gui.model.importer.stages.TraceAggregator;
@@ -55,6 +57,8 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 	private final List<Execution> failureContainingTracesList = new Vector<>(1000);
 	private final List<Execution> tracesList = new Vector<>(1000);
 	private final List<AggregatedExecution> aggregatedTraces = new Vector<>(1000);
+	private final List<AggregatedExecution> failedAggregatedTracesList = new Vector<>(1000);
+	private final List<AggregatedExecution> failureContainingAggregatedTracesList = new Vector<>(1000);
 	private final List<KiekerMetadataRecord> metadataRecords = new Vector<>(1000);
 
 	public ImportAnalysisConfiguration(final File importDirectory) {
@@ -75,10 +79,16 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 		final TraceAggregator traceAggregator = new TraceAggregator();
 		final CollectorSink<AggregatedExecution> aggregatedTraceCollector = new CollectorSink<>(this.aggregatedTraces);
 		final CollectorSink<KiekerMetadataRecord> metadataCollector = new CollectorSink<>(this.metadataRecords);
+		final FailedAggregatedTraceFilter failedAggregatedTraceFilter = new FailedAggregatedTraceFilter();
+		final Distributor<AggregatedExecution> thrdDistributor = new Distributor<>();
+		final CollectorSink<AggregatedExecution> failedAggregatedTraceCollector = new CollectorSink<>(this.failedAggregatedTracesList);
+		final FailureContainingAggregatedTraceFilter failureContainingAggregatedTraceFilter = new FailureContainingAggregatedTraceFilter();
+		final CollectorSink<AggregatedExecution> failureContainingAggregatedTraceCollector = new CollectorSink<>(this.failureContainingAggregatedTracesList);
 
 		// Configure the stages
 		fstDistributor.setStrategy(new CopyByReferenceStrategy<IFlowRecord>());
 		sndDistributor.setStrategy(new CopyByReferenceStrategy<Execution>());
+		thrdDistributor.setStrategy(new CopyByReferenceStrategy<AggregatedExecution>());
 
 		// Connect the stages
 		final IPipeFactory pipeFactory = AnalysisConfiguration.PIPE_FACTORY_REGISTRY.getPipeFactory(ThreadCommunication.INTRA, PipeOrdering.ARBITRARY, false);
@@ -95,7 +105,12 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 		pipeFactory.create(failedTraceFilter.getOutputPort(), failedTraceCollector.getInputPort());
 		pipeFactory.create(sndDistributor.getNewOutputPort(), failureContainingTraceFilter.getInputPort());
 		pipeFactory.create(failureContainingTraceFilter.getOutputPort(), failureContainingTraceCollector.getInputPort());
-		pipeFactory.create(traceAggregator.getOutputPort(), aggregatedTraceCollector.getInputPort());
+		pipeFactory.create(traceAggregator.getOutputPort(), thrdDistributor.getInputPort());
+		pipeFactory.create(thrdDistributor.getNewOutputPort(), aggregatedTraceCollector.getInputPort());
+		pipeFactory.create(thrdDistributor.getNewOutputPort(), failedAggregatedTraceFilter.getInputPort());
+		pipeFactory.create(thrdDistributor.getNewOutputPort(), failureContainingAggregatedTraceFilter.getInputPort());
+		pipeFactory.create(failedAggregatedTraceFilter.getOutputPort(), failedAggregatedTraceCollector.getInputPort());
+		pipeFactory.create(failureContainingAggregatedTraceFilter.getOutputPort(), failureContainingAggregatedTraceCollector.getInputPort());
 		pipeFactory.create(typeFilter.getOutputPortForType(KiekerMetadataRecord.class), metadataCollector.getInputPort());
 
 		// Make sure that the producer is executed by the analysis
@@ -116,6 +131,14 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 
 	public List<Execution> getFailureContainingTracesList() {
 		return this.failureContainingTracesList;
+	}
+
+	public List<AggregatedExecution> getFailedAggregatedTracesList() {
+		return this.failedAggregatedTracesList;
+	}
+
+	public List<AggregatedExecution> getFailureContainingAggregatedTracesList() {
+		return this.failureContainingAggregatedTracesList;
 	}
 
 	public List<AggregatedExecution> getAggregatedTraces() {

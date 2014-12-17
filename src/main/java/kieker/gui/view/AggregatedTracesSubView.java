@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import kieker.gui.controller.AggregatedTracesSubViewController;
 import kieker.gui.model.AggregatedTracesSubViewModel;
 import kieker.gui.model.DataModel;
 import kieker.gui.model.PropertiesModel;
@@ -29,6 +28,7 @@ import kieker.gui.view.util.AggregatedExecutionAvgDurationComparator;
 import kieker.gui.view.util.AggregatedExecutionCallComparator;
 import kieker.gui.view.util.AggregatedExecutionMaxDurationComparator;
 import kieker.gui.view.util.AggregatedExecutionMinDurationComparator;
+import kieker.gui.view.util.AggregatedExecutionTotalDurationComparator;
 import kieker.gui.view.util.ExecutionComponentComparator;
 import kieker.gui.view.util.ExecutionContainerComparator;
 import kieker.gui.view.util.ExecutionOperationComparator;
@@ -36,6 +36,7 @@ import kieker.gui.view.util.TreeColumnSortListener;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
@@ -52,7 +53,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 public class AggregatedTracesSubView implements Observer, ISubView {
 
 	private final AggregatedTracesSubViewModel aggregatedTracesSubViewModel;
-	private final AggregatedTracesSubViewController controller;
+	private final SelectionListener controller;
 	private final DataModel model;
 	private Composite composite;
 	private Tree tree;
@@ -69,13 +70,16 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 	private Label lblExecutionContainerDisplay;
 	private Label lblFailed;
 	private final PropertiesModel propertiesModel;
+	private Label lblTotalDurationDisplay;
+	private final Type type;
 
-	public AggregatedTracesSubView(final DataModel model, final AggregatedTracesSubViewModel aggregatedTracesSubViewModel,
-			final PropertiesModel propertiesModel, final AggregatedTracesSubViewController controller) {
+	public AggregatedTracesSubView(final Type type, final DataModel model, final AggregatedTracesSubViewModel aggregatedTracesSubViewModel, final PropertiesModel propertiesModel,
+			final SelectionListener controller) {
 		this.controller = controller;
 		this.model = model;
 		this.propertiesModel = propertiesModel;
 		this.aggregatedTracesSubViewModel = aggregatedTracesSubViewModel;
+		this.type = type;
 
 		model.addObserver(this);
 		aggregatedTracesSubViewModel.addObserver(this);
@@ -126,6 +130,10 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 		final TreeColumn trclmnMaximalDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnMaximalDuration.setWidth(100);
 		trclmnMaximalDuration.setText("Maximal Duration");
+
+		final TreeColumn trclmnTotalDuration = new TreeColumn(this.tree, SWT.RIGHT);
+		trclmnTotalDuration.setWidth(100);
+		trclmnTotalDuration.setText("Total Duration");
 
 		this.detailComposite = new Composite(sashForm, SWT.BORDER);
 		this.detailComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -187,6 +195,14 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 		this.lblMaximalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblMaximalDurationDisplay.setText("N/A");
 
+		final Label lblTotalDuration = new Label(this.detailComposite, SWT.NONE);
+		lblTotalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		lblTotalDuration.setText("Total Duration:");
+
+		this.lblTotalDurationDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblTotalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		this.lblTotalDurationDisplay.setText("N/A");
+
 		this.lblFailed = new Label(this.detailComposite, SWT.NONE);
 		this.lblFailed.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblFailed.setText("Failed:");
@@ -222,6 +238,7 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 		trclmnMaximalDuration.addSelectionListener(new TreeColumnSortListener<>(new AggregatedExecutionMaxDurationComparator()));
 		trclmnAverageDuration.addSelectionListener(new TreeColumnSortListener<>(new AggregatedExecutionAvgDurationComparator()));
 		trclmnCalls.addSelectionListener(new TreeColumnSortListener<>(new AggregatedExecutionCallComparator()));
+		trclmnTotalDuration.addSelectionListener(new TreeColumnSortListener<>(new AggregatedExecutionTotalDurationComparator()));
 	}
 
 	@Override
@@ -243,8 +260,14 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 	}
 
 	private void updateTree() {
-		final List<AggregatedExecution> records = this.model.getAggregatedTracesCopy();
-
+		final List<AggregatedExecution> records;
+		if (this.type == Type.SHOW_JUST_FAILED_TRACES) {
+			records = this.model.getFailedAggregatedTracesCopy();
+		} else if (this.type == Type.SHOW_JUST_FAILURE_CONTAINING_TRACES) {
+			records = this.model.getFailureContainingAggregatedTracesCopy();
+		} else {
+			records = this.model.getAggregatedTracesCopy();
+		}
 		this.tree.setData(records);
 		this.tree.setItemCount(records.size());
 
@@ -265,10 +288,12 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 		final String minDuration = (Long.toString(trace.getMinDuration()) + " " + this.model.getShortTimeUnit()).trim();
 		final String maxDuration = (Long.toString(trace.getMaxDuration()) + " " + this.model.getShortTimeUnit()).trim();
 		final String avgDuration = (Long.toString(trace.getAvgDuration()) + " " + this.model.getShortTimeUnit()).trim();
+		final String totalDuration = (Long.toString(trace.getTotalDuration()) + " " + this.model.getShortTimeUnit()).trim();
 
 		this.lblMinimalDurationDisplay.setText(minDuration);
 		this.lblMaximalDurationDisplay.setText(maxDuration);
 		this.lblAverageDurationDisplay.setText(avgDuration);
+		this.lblTotalDurationDisplay.setText(totalDuration);
 
 		this.lblExecutionContainerDisplay.setText(trace.getContainer());
 		this.lblComponentDisplay.setText(trace.getComponent());
@@ -325,12 +350,13 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 			final String minDuration = (Long.toString(executionEntry.getMinDuration()) + " " + AggregatedTracesSubView.this.model.getShortTimeUnit()).trim();
 			final String maxDuration = (Long.toString(executionEntry.getMaxDuration()) + " " + AggregatedTracesSubView.this.model.getShortTimeUnit()).trim();
 			final String avgDuration = (Long.toString(executionEntry.getAvgDuration()) + " " + AggregatedTracesSubView.this.model.getShortTimeUnit()).trim();
+			final String totalDuration = (Long.toString(executionEntry.getTotalDuration()) + " " + AggregatedTracesSubView.this.model.getShortTimeUnit()).trim();
 
 			if (parent != null) {
-				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, "", minDuration, avgDuration, maxDuration });
+				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, "", minDuration, avgDuration, maxDuration, totalDuration });
 			} else {
 				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, Integer.toString(executionEntry.getCalls()), minDuration, avgDuration,
-						maxDuration });
+						maxDuration, totalDuration });
 			}
 
 			if (executionEntry.isFailed()) {
@@ -342,6 +368,10 @@ public class AggregatedTracesSubView implements Observer, ISubView {
 			item.setItemCount(executionEntry.getChildren().size());
 		}
 
+	}
+
+	public enum Type {
+		SHOW_ALL_TRACES, SHOW_JUST_FAILED_TRACES, SHOW_JUST_FAILURE_CONTAINING_TRACES
 	}
 
 }

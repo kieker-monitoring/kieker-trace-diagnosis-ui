@@ -50,6 +50,8 @@ public final class MainViewController implements SelectionListener {
 		final ISubController subViewController3 = new FailedTracesSubViewController(this.dataModel, this.propertiesModel);
 		final ISubController subViewController4 = new AggregatedTracesSubViewController(this.dataModel, this.propertiesModel);
 		final ISubController subViewController5 = new FailureContainingTracesSubViewController(this.dataModel, this.propertiesModel);
+		final ISubController subViewController6 = new AggregatedFailedTracesSubViewController(this.dataModel, this.propertiesModel);
+		final ISubController subViewController7 = new FailureContainingAggregatedTracesSubViewController(this.dataModel, this.propertiesModel);
 
 		// Get the sub-views from the controllers
 		final ISubView subView1 = subViewController1.getView();
@@ -57,10 +59,12 @@ public final class MainViewController implements SelectionListener {
 		final ISubView subView3 = subViewController3.getView();
 		final ISubView subView4 = subViewController4.getView();
 		final ISubView subView5 = subViewController5.getView();
+		final ISubView subView6 = subViewController6.getView();
+		final ISubView subView7 = subViewController7.getView();
 
 		// Create the main model and the main view
 		this.mainViewModel = new MainViewModel();
-		this.mainView = new MainView(this.dataModel, this.mainViewModel, this, subView1, subView2, subView3, subView4, subView5);
+		this.mainView = new MainView(this.dataModel, this.mainViewModel, this, subView1, subView2, subView3, subView4, subView5, subView6, subView7);
 	}
 
 	public void showView() {
@@ -121,6 +125,12 @@ public final class MainViewController implements SelectionListener {
 		}
 		if (e.item == this.mainView.getTrtmJustTracesContaining()) {
 			this.mainViewModel.setCurrentActiveSubView(SubView.FAILURE_CONTAINING_TRACES_SUB_VIEW);
+		}
+		if (e.item == this.mainView.getTrtmJustFailedAggTraces()) {
+			this.mainViewModel.setCurrentActiveSubView(SubView.FAILED_AGGREGATED_TRACES_SUB_VIEW);
+		}
+		if (e.item == this.mainView.getTrtmJustAggTracesContaining()) {
+			this.mainViewModel.setCurrentActiveSubView(SubView.FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW);
 		}
 	}
 
