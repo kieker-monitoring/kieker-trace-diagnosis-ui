@@ -20,15 +20,15 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import kieker.gui.common.IModel;
-import kieker.gui.common.ISubView;
 import kieker.gui.common.domain.Execution;
 import kieker.gui.common.model.PropertiesModel;
+import kieker.gui.subview.ISubView;
 import kieker.gui.subview.traces.util.ExecutionDurationComparator;
 import kieker.gui.subview.traces.util.ExecutionTraceIDComparator;
 import kieker.gui.subview.util.ExecutionComponentComparator;
 import kieker.gui.subview.util.ExecutionContainerComparator;
 import kieker.gui.subview.util.ExecutionOperationComparator;
+import kieker.gui.subview.util.IModel;
 import kieker.gui.subview.util.TreeColumnSortListener;
 
 import org.eclipse.swt.SWT;

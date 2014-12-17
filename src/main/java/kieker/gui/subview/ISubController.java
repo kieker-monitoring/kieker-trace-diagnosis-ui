@@ -14,7 +14,8 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.common;
+package kieker.gui.subview;
+
 
 /**
  * A commons interface for all sub-controllers to reduce dependencies.

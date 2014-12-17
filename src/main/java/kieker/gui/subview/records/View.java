@@ -20,11 +20,11 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import kieker.gui.common.IModel;
-import kieker.gui.common.ISubView;
 import kieker.gui.common.domain.Record;
+import kieker.gui.subview.ISubView;
 import kieker.gui.subview.records.util.RecordTimestampComparator;
 import kieker.gui.subview.records.util.RecordTypeComparator;
+import kieker.gui.subview.util.IModel;
 import kieker.gui.subview.util.TableColumnSortListener;
 
 import org.eclipse.jface.viewers.TableViewer;

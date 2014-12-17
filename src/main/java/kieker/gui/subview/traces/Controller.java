@@ -18,11 +18,11 @@ package kieker.gui.subview.traces;
 
 import java.util.List;
 
-import kieker.gui.common.IModel;
 import kieker.gui.common.domain.Execution;
 import kieker.gui.common.model.DataModel;
 import kieker.gui.common.model.PropertiesModel;
 import kieker.gui.subview.util.AbstractDataModelProxy;
+import kieker.gui.subview.util.IModel;
 
 /**
  * The sub-controller responsible for the sub-view presenting the available traces.

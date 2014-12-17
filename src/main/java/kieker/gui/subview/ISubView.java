@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.common;
+package kieker.gui.subview;
 
 import org.eclipse.swt.widgets.Composite;
 

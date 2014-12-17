@@ -18,12 +18,12 @@ package kieker.gui.subview.records;
 
 import java.util.List;
 
-import kieker.gui.common.IModel;
-import kieker.gui.common.ISubController;
-import kieker.gui.common.ISubView;
 import kieker.gui.common.domain.Record;
 import kieker.gui.common.model.DataModel;
+import kieker.gui.subview.ISubController;
+import kieker.gui.subview.ISubView;
 import kieker.gui.subview.util.AbstractDataModelProxy;
+import kieker.gui.subview.util.IModel;
 
 /**
  * The sub-controller responsible for the sub-view presenting the available records.

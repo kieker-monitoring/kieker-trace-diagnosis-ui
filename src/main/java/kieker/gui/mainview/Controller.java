@@ -16,11 +16,11 @@
 
 package kieker.gui.mainview;
 
-import kieker.gui.common.ISubController;
-import kieker.gui.common.ISubView;
 import kieker.gui.common.model.DataModel;
 import kieker.gui.common.model.PropertiesModel;
 import kieker.gui.mainview.Model.SubView;
+import kieker.gui.subview.ISubController;
+import kieker.gui.subview.ISubView;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;

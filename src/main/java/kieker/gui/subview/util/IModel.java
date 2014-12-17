@@ -1,4 +1,4 @@
-package kieker.gui.common;
+package kieker.gui.subview.util;
 
 import java.util.List;
 import java.util.Observer;

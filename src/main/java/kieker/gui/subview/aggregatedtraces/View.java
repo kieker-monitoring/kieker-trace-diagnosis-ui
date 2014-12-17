@@ -20,10 +20,9 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import kieker.gui.common.IModel;
-import kieker.gui.common.ISubView;
 import kieker.gui.common.domain.AggregatedExecution;
 import kieker.gui.common.model.PropertiesModel;
+import kieker.gui.subview.ISubView;
 import kieker.gui.subview.aggregatedtraces.util.AggregatedExecutionAvgDurationComparator;
 import kieker.gui.subview.aggregatedtraces.util.AggregatedExecutionCallComparator;
 import kieker.gui.subview.aggregatedtraces.util.AggregatedExecutionMaxDurationComparator;
@@ -32,6 +31,7 @@ import kieker.gui.subview.aggregatedtraces.util.AggregatedExecutionTotalDuration
 import kieker.gui.subview.util.ExecutionComponentComparator;
 import kieker.gui.subview.util.ExecutionContainerComparator;
 import kieker.gui.subview.util.ExecutionOperationComparator;
+import kieker.gui.subview.util.IModel;
 import kieker.gui.subview.util.TreeColumnSortListener;
 
 import org.eclipse.swt.SWT;
