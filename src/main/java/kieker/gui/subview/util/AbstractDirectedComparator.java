@@ -14,35 +14,20 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.common;
+package kieker.gui.subview.util;
 
-import java.util.Observable;
+import java.util.Comparator;
 
-public final class PropertiesModel extends Observable {
+public abstract class AbstractDirectedComparator<T> implements Comparator<T> {
 
-	private boolean shortComponentNames = false;
-	private boolean shortOperationNames = true;
+	private int direction;
 
-	public boolean isShortComponentNames() {
-		return this.shortComponentNames;
+	public int getDirection() {
+		return this.direction;
 	}
 
-	public void setShortComponentNames(final boolean shortComponentNames) {
-		this.shortComponentNames = shortComponentNames;
-
-		this.setChanged();
-		this.notifyObservers();
-	}
-
-	public boolean isShortOperationNames() {
-		return this.shortOperationNames;
-	}
-
-	public void setShortOperationNames(final boolean shortOperationNames) {
-		this.shortOperationNames = shortOperationNames;
-
-		this.setChanged();
-		this.notifyObservers();
+	public void setDirection(final int direction) {
+		this.direction = direction;
 	}
 
 }

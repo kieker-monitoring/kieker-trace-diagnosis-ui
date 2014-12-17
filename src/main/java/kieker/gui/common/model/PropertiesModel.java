@@ -14,22 +14,35 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.subview.traces.util;
+package kieker.gui.common.model;
 
-import kieker.gui.common.domain.AbstractExecution;
-import kieker.gui.common.util.AbstractDirectedComparator;
+import java.util.Observable;
 
-import org.eclipse.swt.SWT;
+public final class PropertiesModel extends Observable {
 
-public class ExecutionContainerComparator extends AbstractDirectedComparator<AbstractExecution<?>> {
+	private boolean shortComponentNames = false;
+	private boolean shortOperationNames = true;
 
-	@Override
-	public int compare(final AbstractExecution<?> fst, final AbstractExecution<?> snd) {
-		int result = fst.getContainer().compareTo(snd.getContainer());
-		if (this.getDirection() == SWT.UP) {
-			result = -result;
-		}
-		return result;
+	public boolean isShortComponentNames() {
+		return this.shortComponentNames;
+	}
+
+	public void setShortComponentNames(final boolean shortComponentNames) {
+		this.shortComponentNames = shortComponentNames;
+
+		this.setChanged();
+		this.notifyObservers();
+	}
+
+	public boolean isShortOperationNames() {
+		return this.shortOperationNames;
+	}
+
+	public void setShortOperationNames(final boolean shortOperationNames) {
+		this.shortOperationNames = shortOperationNames;
+
+		this.setChanged();
+		this.notifyObservers();
 	}
 
 }

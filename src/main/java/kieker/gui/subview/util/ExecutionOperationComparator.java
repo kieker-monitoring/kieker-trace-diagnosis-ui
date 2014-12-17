@@ -14,20 +14,21 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.common.util;
+package kieker.gui.subview.util;
 
-import java.util.Comparator;
+import kieker.gui.common.domain.AbstractExecution;
 
-public abstract class AbstractDirectedComparator<T> implements Comparator<T> {
+import org.eclipse.swt.SWT;
 
-	private int direction;
+public class ExecutionOperationComparator extends AbstractDirectedComparator<AbstractExecution<?>> {
 
-	public int getDirection() {
-		return this.direction;
-	}
-
-	public void setDirection(final int direction) {
-		this.direction = direction;
+	@Override
+	public int compare(final AbstractExecution<?> fst, final AbstractExecution<?> snd) {
+		int result = fst.getOperation().compareTo(snd.getOperation());
+		if (this.getDirection() == SWT.UP) {
+			result = -result;
+		}
+		return result;
 	}
 
 }

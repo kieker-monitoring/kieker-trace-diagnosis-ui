@@ -1,11 +1,11 @@
 package kieker.gui.subview.aggregatedtraces;
 
-import kieker.gui.common.DataModel;
 import kieker.gui.common.IModel;
 import kieker.gui.common.ISubController;
 import kieker.gui.common.ISubView;
-import kieker.gui.common.PropertiesModel;
 import kieker.gui.common.domain.AggregatedExecution;
+import kieker.gui.common.model.DataModel;
+import kieker.gui.common.model.PropertiesModel;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;

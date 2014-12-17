@@ -14,18 +14,17 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.subview.traces.util;
+package kieker.gui.subview.util;
 
 import kieker.gui.common.domain.AbstractExecution;
-import kieker.gui.common.util.AbstractDirectedComparator;
 
 import org.eclipse.swt.SWT;
 
-public class ExecutionComponentComparator extends AbstractDirectedComparator<AbstractExecution<?>> {
+public class ExecutionContainerComparator extends AbstractDirectedComparator<AbstractExecution<?>> {
 
 	@Override
 	public int compare(final AbstractExecution<?> fst, final AbstractExecution<?> snd) {
-		int result = fst.getComponent().compareTo(snd.getComponent());
+		int result = fst.getContainer().compareTo(snd.getContainer());
 		if (this.getDirection() == SWT.UP) {
 			result = -result;
 		}

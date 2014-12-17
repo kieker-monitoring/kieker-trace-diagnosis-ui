@@ -22,14 +22,14 @@ import java.util.Observer;
 
 import kieker.gui.common.IModel;
 import kieker.gui.common.ISubView;
-import kieker.gui.common.PropertiesModel;
 import kieker.gui.common.domain.Execution;
-import kieker.gui.common.util.TreeColumnSortListener;
-import kieker.gui.subview.traces.util.ExecutionComponentComparator;
-import kieker.gui.subview.traces.util.ExecutionContainerComparator;
+import kieker.gui.common.model.PropertiesModel;
 import kieker.gui.subview.traces.util.ExecutionDurationComparator;
-import kieker.gui.subview.traces.util.ExecutionOperationComparator;
 import kieker.gui.subview.traces.util.ExecutionTraceIDComparator;
+import kieker.gui.subview.util.ExecutionComponentComparator;
+import kieker.gui.subview.util.ExecutionContainerComparator;
+import kieker.gui.subview.util.ExecutionOperationComparator;
+import kieker.gui.subview.util.TreeColumnSortListener;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;

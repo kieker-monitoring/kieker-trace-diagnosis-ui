@@ -1,7 +1,10 @@
-package kieker.gui.common;
+package kieker.gui.subview.util;
 
 import java.util.Observable;
 import java.util.Observer;
+
+import kieker.gui.common.IModel;
+import kieker.gui.common.model.DataModel;
 
 public abstract class AbstractDataModelProxy<T> extends Observable implements IModel<T>, Observer {
 

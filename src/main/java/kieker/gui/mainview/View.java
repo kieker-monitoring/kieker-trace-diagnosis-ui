@@ -19,8 +19,8 @@ package kieker.gui.mainview;
 import java.util.Observable;
 import java.util.Observer;
 
-import kieker.gui.common.DataModel;
 import kieker.gui.common.ISubView;
+import kieker.gui.common.model.DataModel;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;

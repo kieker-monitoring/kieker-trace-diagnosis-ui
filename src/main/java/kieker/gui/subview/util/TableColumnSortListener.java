@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.common.util;
+package kieker.gui.subview.util;
 
 import java.util.Collections;
 import java.util.List;

@@ -18,11 +18,11 @@ package kieker.gui.subview.traces;
 
 import java.util.List;
 
-import kieker.gui.common.AbstractDataModelProxy;
-import kieker.gui.common.DataModel;
 import kieker.gui.common.IModel;
-import kieker.gui.common.PropertiesModel;
 import kieker.gui.common.domain.Execution;
+import kieker.gui.common.model.DataModel;
+import kieker.gui.common.model.PropertiesModel;
+import kieker.gui.subview.util.AbstractDataModelProxy;
 
 /**
  * The sub-controller responsible for the sub-view presenting the available failed traces.

@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.common;
+package kieker.gui.common.model;
 
 import java.io.File;
 import java.util.ArrayList;

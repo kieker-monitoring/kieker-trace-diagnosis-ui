@@ -17,7 +17,7 @@
 package kieker.gui.subview.traces.util;
 
 import kieker.gui.common.domain.Execution;
-import kieker.gui.common.util.AbstractDirectedComparator;
+import kieker.gui.subview.util.AbstractDirectedComparator;
 
 import org.eclipse.swt.SWT;
 
