@@ -20,51 +20,37 @@ import java.util.List;
 
 import kieker.gui.common.AbstractDataModelProxy;
 import kieker.gui.common.DataModel;
-import kieker.gui.common.ISubController;
-import kieker.gui.common.ISubView;
+import kieker.gui.common.IModel;
 import kieker.gui.common.PropertiesModel;
 import kieker.gui.common.domain.Execution;
-
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 
 /**
  * The sub-controller responsible for the sub-view presenting the available traces.
  *
  * @author Nils Christian Ehmke
  */
-public final class TracesSubViewController implements SelectionListener, ISubController {
-
-	private final TracesSubViewModel model;
-	private final ISubView view;
+public final class TracesSubViewController extends AbstractTracesController {
 
 	public TracesSubViewController(final DataModel dataModel, final PropertiesModel propertiesModel) {
-		this.model = new TracesSubViewModel();
-		this.view = new TracesSubView(new AbstractDataModelProxy<Execution>(dataModel) {
-
-			@Override
-			public final List<Execution> getContent() {
-				return this.dataModel.getTracesCopy();
-			}
-
-		}, this.model, propertiesModel, this);
+		super(dataModel, propertiesModel);
 	}
 
 	@Override
-	public ISubView getView() {
-		return this.view;
+	protected IModel<Execution> createModelProxy(final DataModel dataModel) {
+		return new ModelProxy(dataModel);
 	}
 
-	@Override
-	public void widgetSelected(final SelectionEvent e) {
-		if (e.item.getData() instanceof Execution) {
-			this.model.setCurrentActiveTrace((Execution) e.item.getData());
+	private final class ModelProxy extends AbstractDataModelProxy<Execution> {
+
+		private ModelProxy(final DataModel dataModel) {
+			super(dataModel);
 		}
-	}
 
-	@Override
-	public void widgetDefaultSelected(final SelectionEvent e) {
-		// Nothing to do here. This method is just required by the interface.
+		@Override
+		public List<Execution> getContent() {
+			return super.dataModel.getTracesCopy();
+		}
+
 	}
 
 }
