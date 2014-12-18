@@ -29,9 +29,11 @@ import kieker.gui.subview.util.TableColumnSortListener;
 
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -42,6 +44,8 @@ public final class View implements Observer, ISubView {
 	private final IModel<Record> model;
 	private Composite composite;
 	private Table table;
+	private Label lblRecords;
+	private Composite statusBar;
 
 	public View(final IModel<Record> model, final Controller controller) {
 		this.model = model;
@@ -59,10 +63,16 @@ public final class View implements Observer, ISubView {
 		}
 
 		this.composite = new Composite(parent, SWT.NONE);
-		this.composite.setLayout(new FillLayout(SWT.HORIZONTAL));
+		final GridLayout gl_composite = new GridLayout(1, false);
+		gl_composite.verticalSpacing = 0;
+		gl_composite.marginHeight = 0;
+		gl_composite.marginWidth = 0;
+		gl_composite.horizontalSpacing = 0;
+		this.composite.setLayout(gl_composite);
 
 		final TableViewer tableViewer = new TableViewer(this.composite, SWT.BORDER | SWT.FULL_SELECTION | SWT.VIRTUAL);
 		this.table = tableViewer.getTable();
+		this.table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		this.table.setHeaderVisible(true);
 		this.table.setLinesVisible(true);
 
@@ -77,6 +87,12 @@ public final class View implements Observer, ISubView {
 		final TableColumn tblclmnRecordContent = new TableColumn(this.table, SWT.NONE);
 		tblclmnRecordContent.setWidth(100);
 		tblclmnRecordContent.setText("Record Content");
+
+		this.statusBar = new Composite(this.composite, SWT.NONE);
+		this.statusBar.setLayout(new GridLayout(1, false));
+
+		this.lblRecords = new Label(this.statusBar, SWT.NONE);
+		this.lblRecords.setText("0 Records");
 
 		this.table.addListener(SWT.SetData, new DataProvider());
 
@@ -98,7 +114,13 @@ public final class View implements Observer, ISubView {
 	public void update(final Observable observable, final Object obj) {
 		if (observable == this.model) {
 			this.updateTable();
+			this.updateStatusBar();
 		}
+	}
+
+	private void updateStatusBar() {
+		this.lblRecords.setText(this.model.getContent().size() + " Record(s)");
+		this.statusBar.getParent().layout();
 	}
 
 	private void updateTable() {
@@ -135,5 +157,4 @@ public final class View implements Observer, ISubView {
 		}
 
 	}
-
 }

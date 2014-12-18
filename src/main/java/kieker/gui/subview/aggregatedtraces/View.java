@@ -38,7 +38,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -71,6 +71,8 @@ public final class View implements Observer, ISubView {
 	private Label lblFailed;
 	private final PropertiesModel propertiesModel;
 	private Label lblTotalDurationDisplay;
+	private Composite statusBar;
+	private Label lblTraceEquivalence;
 
 	public View(final IModel<AggregatedExecution> model, final Model aggregatedTracesSubViewModel, final PropertiesModel propertiesModel,
 			final SelectionListener controller) {
@@ -94,9 +96,15 @@ public final class View implements Observer, ISubView {
 		}
 
 		this.composite = new Composite(parent, SWT.NONE);
-		this.composite.setLayout(new FillLayout(SWT.HORIZONTAL));
+		final GridLayout gl_composite = new GridLayout(1, false);
+		gl_composite.verticalSpacing = 0;
+		gl_composite.marginHeight = 0;
+		gl_composite.marginWidth = 0;
+		gl_composite.horizontalSpacing = 0;
+		this.composite.setLayout(gl_composite);
 
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);
+		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		this.tree = new Tree(sashForm, SWT.BORDER | SWT.FULL_SELECTION | SWT.VIRTUAL);
 		this.tree.setHeaderVisible(true);
@@ -226,6 +234,12 @@ public final class View implements Observer, ISubView {
 		this.lblTraceSizeDisplay.setText("N/A");
 		sashForm.setWeights(new int[] { 2, 1 });
 
+		this.statusBar = new Composite(this.composite, SWT.NONE);
+		this.statusBar.setLayout(new GridLayout(1, false));
+
+		this.lblTraceEquivalence = new Label(this.statusBar, SWT.NONE);
+		this.lblTraceEquivalence.setText("0 Trace Equivalence Classes");
+
 		this.tree.addSelectionListener(this.controller);
 		this.tree.addListener(SWT.SetData, new DataProvider());
 
@@ -248,6 +262,7 @@ public final class View implements Observer, ISubView {
 	public void update(final Observable observable, final Object obj) {
 		if (observable == this.model) {
 			this.updateTree();
+			this.updateStatusBar();
 		}
 		if (observable == this.aggregatedTracesSubViewModel) {
 			this.updateDetailComposite();
@@ -255,6 +270,11 @@ public final class View implements Observer, ISubView {
 		if (observable == this.propertiesModel) {
 			this.clearTree();
 		}
+	}
+
+	private void updateStatusBar() {
+		this.lblTraceEquivalence.setText(this.model.getContent().size() + " Trace Equivalence Class(es)");
+		this.statusBar.getParent().layout();
 	}
 
 	private void updateTree() {

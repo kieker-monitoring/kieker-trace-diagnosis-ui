@@ -109,6 +109,10 @@ public final class Controller implements SelectionListener {
 		if (e.widget == this.mainView.getMntmExit()) {
 			this.mainView.close();
 		}
+
+		if (e.widget == this.mainView.getMntmAbout()) {
+			this.mainView.getAboutDialog().open();
+		}
 	}
 
 	private void handlePotentialTreeSelection(final SelectionEvent e) {

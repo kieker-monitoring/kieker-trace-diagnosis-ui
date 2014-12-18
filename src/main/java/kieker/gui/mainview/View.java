@@ -32,9 +32,11 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.swt.widgets.Widget;
 
 /**
  * The main view of the application. For the most part it uses sub-views to show data.
@@ -52,6 +54,7 @@ public final class View implements Observer {
 	private Composite subViewComposite;
 	private StackLayout subViewLayout;
 
+	private MessageBox aboutDialog;
 	private DirectoryDialog dialog;
 
 	private MenuItem mntmExit;
@@ -70,6 +73,7 @@ public final class View implements Observer {
 	private TreeItem trtmJustTracesContaining;
 	private TreeItem trtmJustFailedAggTraces;
 	private TreeItem trtmJustAggTracesContaining;
+	private MenuItem mntmAbout;
 
 	public View(final DataModel dataModel, final Model mainViewModel, final Controller controller, final Map<String, ISubView> subViews) {
 		this.dataModel = dataModel;
@@ -134,6 +138,10 @@ public final class View implements Observer {
 		return this.mntmExit;
 	}
 
+	public Widget getMntmAbout() {
+		return this.mntmAbout;
+	}
+
 	public MenuItem getMntmShortOperationNames() {
 		return this.mntmShortOperationNames;
 	}
@@ -158,6 +166,10 @@ public final class View implements Observer {
 		return this.dialog;
 	}
 
+	public MessageBox getAboutDialog() {
+		return this.aboutDialog;
+	}
+
 	/**
 	 * @wbp.parser.entryPoint
 	 */
@@ -169,6 +181,10 @@ public final class View implements Observer {
 		this.shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 
 		this.dialog = new DirectoryDialog(this.shell);
+		this.aboutDialog = new MessageBox(this.shell, SWT.ICON_INFORMATION);
+
+		this.aboutDialog.setText("About...");
+		this.aboutDialog.setMessage("Kieker's GUI - 1.0-SNAPSHOT\n\nCopyright 2014 Kieker Project (http://kieker-monitoring.net)");
 
 		final SashForm sashForm = new SashForm(this.shell, SWT.NONE);
 
@@ -248,6 +264,15 @@ public final class View implements Observer {
 		this.mntmLongComponentNames = new MenuItem(menu_2, SWT.RADIO);
 		this.mntmLongComponentNames.setSelection(true);
 		this.mntmLongComponentNames.setText("Long Component Names");
+
+		final MenuItem mntmHelp = new MenuItem(menu, SWT.CASCADE);
+		mntmHelp.setText("Help");
+
+		final Menu menu_3 = new Menu(mntmHelp);
+		mntmHelp.setMenu(menu_3);
+
+		this.mntmAbout = new MenuItem(menu_3, SWT.NONE);
+		this.mntmAbout.setText("About...");
 	}
 
 	private void addLogic() {
@@ -258,6 +283,7 @@ public final class View implements Observer {
 
 		this.mntmExit.addSelectionListener(this.controller);
 		this.mntmOpenMonitoringLog.addSelectionListener(this.controller);
+		this.mntmAbout.addSelectionListener(this.controller);
 
 		this.mntmShortOperationNames.addSelectionListener(this.controller);
 		this.mntmLongOperationNames.addSelectionListener(this.controller);
@@ -284,4 +310,5 @@ public final class View implements Observer {
 		this.subViewLayout.topControl = compositeToShow;
 		this.subViewComposite.layout();
 	}
+
 }
