@@ -66,11 +66,11 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 		final InitialElementProducer<File> producer = new InitialElementProducer<>(importDirectory);
 		final Dir2RecordsFilter reader = new Dir2RecordsFilter(new ClassNameRegistryRepository());
 		final MultipleInstanceOfFilter<IMonitoringRecord> typeFilter = new MultipleInstanceOfFilter<>();
-		final Distributor<IFlowRecord> fstDistributor = new Distributor<>();
+		final Distributor<IFlowRecord> fstDistributor = new Distributor<>(new CopyByReferenceStrategy());
 		final RecordSimplificator recordSimplificator = new RecordSimplificator();
 		final CollectorSink<Record> recordCollector = new CollectorSink<>(this.recordsList);
 		final TraceReconstructor traceReconstructor = new TraceReconstructor();
-		final Distributor<Execution> sndDistributor = new Distributor<>();
+		final Distributor<Execution> sndDistributor = new Distributor<>(new CopyByReferenceStrategy());
 		final CollectorSink<Execution> traceCollector = new CollectorSink<>(this.tracesList);
 		final FailedTraceFilter failedTraceFilter = new FailedTraceFilter();
 		final CollectorSink<Execution> failedTraceCollector = new CollectorSink<>(this.failedTracesList);
@@ -80,15 +80,10 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 		final CollectorSink<AggregatedExecution> aggregatedTraceCollector = new CollectorSink<>(this.aggregatedTraces);
 		final CollectorSink<KiekerMetadataRecord> metadataCollector = new CollectorSink<>(this.metadataRecords);
 		final FailedAggregatedTraceFilter failedAggregatedTraceFilter = new FailedAggregatedTraceFilter();
-		final Distributor<AggregatedExecution> thrdDistributor = new Distributor<>();
+		final Distributor<AggregatedExecution> thrdDistributor = new Distributor<>(new CopyByReferenceStrategy());
 		final CollectorSink<AggregatedExecution> failedAggregatedTraceCollector = new CollectorSink<>(this.failedAggregatedTracesList);
 		final FailureContainingAggregatedTraceFilter failureContainingAggregatedTraceFilter = new FailureContainingAggregatedTraceFilter();
 		final CollectorSink<AggregatedExecution> failureContainingAggregatedTraceCollector = new CollectorSink<>(this.failureContainingAggregatedTracesList);
-
-		// Configure the stages
-		fstDistributor.setStrategy(new CopyByReferenceStrategy<IFlowRecord>());
-		sndDistributor.setStrategy(new CopyByReferenceStrategy<Execution>());
-		thrdDistributor.setStrategy(new CopyByReferenceStrategy<AggregatedExecution>());
 
 		// Connect the stages
 		final IPipeFactory pipeFactory = AnalysisConfiguration.PIPE_FACTORY_REGISTRY.getPipeFactory(ThreadCommunication.INTRA, PipeOrdering.ARBITRARY, false);
