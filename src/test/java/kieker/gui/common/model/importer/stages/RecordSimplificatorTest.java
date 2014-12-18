@@ -1,4 +1,4 @@
-package kieker.gui.common.importer.stages;
+package kieker.gui.common.model.importer.stages;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -9,7 +9,7 @@ import java.util.List;
 
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.gui.common.domain.Record;
-import kieker.gui.common.importer.stages.RecordSimplificator;
+import kieker.gui.common.model.importer.stages.RecordSimplificator;
 
 import org.junit.Before;
 import org.junit.Test;

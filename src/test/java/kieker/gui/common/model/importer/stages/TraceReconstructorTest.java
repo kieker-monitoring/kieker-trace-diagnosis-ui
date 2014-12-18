@@ -1,4 +1,4 @@
-package kieker.gui.common.importer.stages;
+package kieker.gui.common.model.importer.stages;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -13,7 +13,7 @@ import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.gui.common.domain.Execution;
-import kieker.gui.common.importer.stages.TraceReconstructor;
+import kieker.gui.common.model.importer.stages.TraceReconstructor;
 
 import org.junit.Before;
 import org.junit.Test;

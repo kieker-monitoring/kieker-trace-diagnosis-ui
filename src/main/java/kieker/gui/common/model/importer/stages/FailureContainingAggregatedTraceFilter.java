@@ -14,24 +14,24 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.common.importer.stages;
+package kieker.gui.common.model.importer.stages;
 
-import kieker.gui.common.domain.Execution;
+import kieker.gui.common.domain.AggregatedExecution;
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 
-public final class FailedTraceFilter extends AbstractConsumerStage<Execution> {
+public final class FailureContainingAggregatedTraceFilter extends AbstractConsumerStage<AggregatedExecution> {
 
-	private final OutputPort<Execution> outputPort = super.createOutputPort();
+	private final OutputPort<AggregatedExecution> outputPort = super.createOutputPort();
 
 	@Override
-	protected void execute(final Execution element) {
-		if (element.isFailed()) {
+	protected void execute(final AggregatedExecution element) {
+		if (element.containsFailure()) {
 			this.outputPort.send(element);
 		}
 	}
 
-	public OutputPort<Execution> getOutputPort() {
+	public OutputPort<AggregatedExecution> getOutputPort() {
 		return this.outputPort;
 	}
 

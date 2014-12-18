@@ -23,6 +23,8 @@ import kieker.gui.common.model.DataModel;
 import kieker.gui.common.model.PropertiesModel;
 import kieker.gui.subview.ISubController;
 import kieker.gui.subview.ISubView;
+import kieker.gui.subview.aggregatedtraces.Controller.Filter;
+import kieker.gui.subview.traces.Controller.Type;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -47,12 +49,12 @@ public final class Controller implements SelectionListener {
 
 		// Create the sub-controllers
 		final ISubController subViewController1 = new kieker.gui.subview.records.Controller(this.dataModel);
-		final ISubController subViewController2 = new kieker.gui.subview.aggregatedtraces.Controller(this.dataModel, this.propertiesModel);
-		final ISubController subViewController3 = new kieker.gui.subview.traces.FailedController(this.dataModel, this.propertiesModel);
-		final ISubController subViewController4 = new kieker.gui.subview.traces.Controller(this.dataModel, this.propertiesModel);
-		final ISubController subViewController5 = new kieker.gui.subview.traces.FailureController(this.dataModel, this.propertiesModel);
-		final ISubController subViewController6 = new kieker.gui.subview.aggregatedtraces.FailedController(this.dataModel, this.propertiesModel);
-		final ISubController subViewController7 = new kieker.gui.subview.aggregatedtraces.FailureController(this.dataModel, this.propertiesModel);
+		final ISubController subViewController2 = new kieker.gui.subview.aggregatedtraces.Controller(Filter.NONE, this.dataModel, this.propertiesModel);
+		final ISubController subViewController3 = new kieker.gui.subview.traces.Controller(Type.JUST_FAILED_TRACES, this.dataModel, this.propertiesModel);
+		final ISubController subViewController4 = new kieker.gui.subview.traces.Controller(Type.NONE, this.dataModel, this.propertiesModel);
+		final ISubController subViewController5 = new kieker.gui.subview.traces.Controller(Type.JUST_FAILURE_CONTAINING_TRACES, this.dataModel, this.propertiesModel);
+		final ISubController subViewController6 = new kieker.gui.subview.aggregatedtraces.Controller(Filter.JUST_FAILED_TRACES, this.dataModel, this.propertiesModel);
+		final ISubController subViewController7 = new kieker.gui.subview.aggregatedtraces.Controller(Filter.JUST_FAILURE_CONTAINING_TRACES, this.dataModel, this.propertiesModel);
 
 		// Get the sub-views from the controllers
 		final Map<String, ISubView> subViews = new HashMap<>();

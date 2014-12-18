@@ -18,6 +18,11 @@ package kieker.gui.subview;
 
 import org.eclipse.swt.widgets.Composite;
 
+/**
+ * An interface for classes representing sub-views within the main view.
+ *
+ * @author Nils Christian Ehmke
+ */
 public interface ISubView {
 
 	public void createComposite(final Composite parent);

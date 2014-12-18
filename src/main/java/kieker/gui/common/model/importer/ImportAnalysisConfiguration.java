@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.common.importer;
+package kieker.gui.common.model.importer;
 
 import java.io.File;
 import java.util.List;
@@ -26,13 +26,13 @@ import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.gui.common.domain.AggregatedExecution;
 import kieker.gui.common.domain.Execution;
 import kieker.gui.common.domain.Record;
-import kieker.gui.common.importer.stages.FailedAggregatedTraceFilter;
-import kieker.gui.common.importer.stages.FailedTraceFilter;
-import kieker.gui.common.importer.stages.FailureContainingAggregatedTraceFilter;
-import kieker.gui.common.importer.stages.FailureContainingTraceFilter;
-import kieker.gui.common.importer.stages.RecordSimplificator;
-import kieker.gui.common.importer.stages.TraceAggregator;
-import kieker.gui.common.importer.stages.TraceReconstructor;
+import kieker.gui.common.model.importer.stages.FailedAggregatedTraceFilter;
+import kieker.gui.common.model.importer.stages.FailedTraceFilter;
+import kieker.gui.common.model.importer.stages.FailureContainingAggregatedTraceFilter;
+import kieker.gui.common.model.importer.stages.FailureContainingTraceFilter;
+import kieker.gui.common.model.importer.stages.RecordSimplificator;
+import kieker.gui.common.model.importer.stages.TraceAggregator;
+import kieker.gui.common.model.importer.stages.TraceReconstructor;
 import teetime.framework.AnalysisConfiguration;
 import teetime.framework.pipe.IPipeFactory;
 import teetime.framework.pipe.PipeFactoryRegistry.PipeOrdering;

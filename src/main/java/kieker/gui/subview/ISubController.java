@@ -16,7 +16,6 @@
 
 package kieker.gui.subview;
 
-
 /**
  * A commons interface for all sub-controllers to reduce dependencies.
  *

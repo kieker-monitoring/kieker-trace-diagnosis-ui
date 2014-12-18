@@ -36,7 +36,12 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
-public class View implements Observer {
+/**
+ * The main view of the application. For the most part it uses sub-views to show data.
+ *
+ * @author Nils Christian Ehmke
+ */
+public final class View implements Observer {
 
 	private final DataModel dataModel;
 	private final Model mainViewModel;
@@ -46,20 +51,22 @@ public class View implements Observer {
 	private Shell shell;
 	private Composite subViewComposite;
 	private StackLayout subViewLayout;
-	private Tree tree;
-	private TreeItem trtmExplorer;
-	private TreeItem trtmRecords;
-	private TreeItem trtmTraces;
+
+	private DirectoryDialog dialog;
+
 	private MenuItem mntmExit;
 	private MenuItem mntmShortOperationNames;
 	private MenuItem mntmLongOperationNames;
 	private MenuItem mntmShortComponentNames;
 	private MenuItem mntmLongComponentNames;
 	private MenuItem mntmOpenMonitoringLog;
-	private DirectoryDialog dialog;
+
+	private Tree tree;
+	private TreeItem trtmExplorer;
+	private TreeItem trtmRecords;
+	private TreeItem trtmTraces;
 	private TreeItem trtmAggregatedTraces;
 	private TreeItem trtmJustFailedTraces;
-
 	private TreeItem trtmJustTracesContaining;
 	private TreeItem trtmJustFailedAggTraces;
 	private TreeItem trtmJustAggTracesContaining;

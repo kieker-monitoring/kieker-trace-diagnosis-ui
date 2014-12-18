@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.common.importer.stages;
+package kieker.gui.common.model.importer.stages;
 
 import java.util.Deque;
 import java.util.HashMap;

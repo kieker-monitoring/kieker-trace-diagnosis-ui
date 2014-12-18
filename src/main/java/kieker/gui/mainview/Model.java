@@ -18,9 +18,14 @@ package kieker.gui.mainview;
 
 import java.util.Observable;
 
+/**
+ * The model of the main view.
+ *
+ * @author Nils Christian Ehmke
+ */
 public final class Model extends Observable {
 
-	private String currentActiveSubViewKey = "";
+	private String currentActiveSubViewKey;
 
 	public String getCurrentActiveSubViewKey() {
 		return this.currentActiveSubViewKey;

@@ -23,11 +23,11 @@ import kieker.gui.mainview.Controller;
  *
  * @author Nils Christian Ehmke
  */
-public class Main {
+public final class Main {
 
 	/**
 	 * The main method of this application.
-	 * 
+	 *
 	 * @param args
 	 *            The command line arguments. They have no effect.
 	 */

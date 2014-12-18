@@ -27,7 +27,7 @@ import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.gui.common.domain.AggregatedExecution;
 import kieker.gui.common.domain.Execution;
 import kieker.gui.common.domain.Record;
-import kieker.gui.common.importer.ImportAnalysisConfiguration;
+import kieker.gui.common.model.importer.ImportAnalysisConfiguration;
 import teetime.framework.Analysis;
 
 /**

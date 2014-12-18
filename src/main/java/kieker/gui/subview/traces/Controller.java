@@ -21,34 +21,95 @@ import java.util.List;
 import kieker.gui.common.domain.Execution;
 import kieker.gui.common.model.DataModel;
 import kieker.gui.common.model.PropertiesModel;
+import kieker.gui.subview.ISubController;
+import kieker.gui.subview.ISubView;
 import kieker.gui.subview.util.AbstractDataModelProxy;
 import kieker.gui.subview.util.IModel;
+
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 
 /**
  * The sub-controller responsible for the sub-view presenting the available traces.
  *
  * @author Nils Christian Ehmke
  */
-public final class Controller extends AbstractController {
+public final class Controller implements ISubController, SelectionListener {
 
-	public Controller(final DataModel dataModel, final PropertiesModel propertiesModel) {
-		super(dataModel, propertiesModel);
+	private final ISubView view;
+	private final Model model;
+
+	public Controller(final Type filter, final DataModel dataModel, final PropertiesModel propertiesModel) {
+		final IModel<Execution> modelProxy = createModelProxy(dataModel, filter);
+		this.model = new Model();
+
+		this.view = new View(modelProxy, this.model, propertiesModel, this);
 	}
 
 	@Override
-	protected IModel<Execution> createModelProxy(final DataModel dataModel) {
-		return new ModelProxy(dataModel);
+	public ISubView getView() {
+		return this.view;
 	}
 
-	private final class ModelProxy extends AbstractDataModelProxy<Execution> {
+	@Override
+	public void widgetSelected(final SelectionEvent e) {
+		if (e.item.getData() instanceof Execution) {
+			this.model.setCurrentActiveTrace((Execution) e.item.getData());
+		}
+	}
 
-		private ModelProxy(final DataModel dataModel) {
+	@Override
+	public void widgetDefaultSelected(final SelectionEvent e) {}
+
+	private static IModel<Execution> createModelProxy(final DataModel dataModel, final Type filter) {
+		if (filter == Type.JUST_FAILED_TRACES) {
+			return new FailedTracesModelProxy(dataModel);
+		}
+		if (filter == Type.JUST_FAILURE_CONTAINING_TRACES) {
+			return new FailureContainingTracesModelProxy(dataModel);
+		}
+		return new TracesModelProxy(dataModel);
+	}
+
+	public enum Type {
+		NONE, JUST_FAILED_TRACES, JUST_FAILURE_CONTAINING_TRACES
+	}
+
+	private static final class TracesModelProxy extends AbstractDataModelProxy<Execution> {
+
+		private TracesModelProxy(final DataModel dataModel) {
 			super(dataModel);
 		}
 
 		@Override
 		public List<Execution> getContent() {
 			return super.dataModel.getTracesCopy();
+		}
+
+	}
+
+	private static final class FailedTracesModelProxy extends AbstractDataModelProxy<Execution> {
+
+		private FailedTracesModelProxy(final DataModel dataModel) {
+			super(dataModel);
+		}
+
+		@Override
+		public List<Execution> getContent() {
+			return super.dataModel.getFailedTracesCopy();
+		}
+
+	}
+
+	private static final class FailureContainingTracesModelProxy extends AbstractDataModelProxy<Execution> {
+
+		private FailureContainingTracesModelProxy(final DataModel dataModel) {
+			super(dataModel);
+		}
+
+		@Override
+		public List<Execution> getContent() {
+			return super.dataModel.getFailureContainingTracesCopy();
 		}
 
 	}
