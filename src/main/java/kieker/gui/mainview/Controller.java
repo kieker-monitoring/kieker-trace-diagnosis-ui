@@ -26,8 +26,10 @@ import kieker.gui.subview.ISubView;
 import kieker.gui.subview.aggregatedtraces.Controller.Filter;
 import kieker.gui.subview.traces.Controller.Type;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Display;
 
 /**
  * The main controller of this application. It is responsible for creating top level models, further sub-controllers, and for creating and controlling the
@@ -68,7 +70,7 @@ public final class Controller implements SelectionListener {
 
 		// Create the main model and the main view
 		this.mainViewModel = new Model();
-		this.mainView = new View(this.dataModel, this.mainViewModel, this, subViews);
+		this.mainView = new View(this.mainViewModel, this, subViews);
 	}
 
 	public void showView() {
@@ -102,7 +104,9 @@ public final class Controller implements SelectionListener {
 			final String selectedDirectory = this.mainView.getDialog().open();
 
 			if (null != selectedDirectory) {
+				this.mainViewModel.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_WAIT));
 				this.dataModel.loadMonitoringLogFromFS(selectedDirectory);
+				this.mainViewModel.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_ARROW));
 			}
 		}
 

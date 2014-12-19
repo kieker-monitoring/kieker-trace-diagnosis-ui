@@ -18,6 +18,8 @@ package kieker.gui.mainview;
 
 import java.util.Observable;
 
+import org.eclipse.swt.graphics.Cursor;
+
 /**
  * The model of the main view.
  *
@@ -25,7 +27,19 @@ import java.util.Observable;
  */
 public final class Model extends Observable {
 
+	private Cursor cursor;
 	private String currentActiveSubViewKey;
+
+	public Cursor getCursor() {
+		return this.cursor;
+	}
+
+	public void setCursor(final Cursor cursor) {
+		this.cursor = cursor;
+
+		this.setChanged();
+		this.notifyObservers();
+	}
 
 	public String getCurrentActiveSubViewKey() {
 		return this.currentActiveSubViewKey;

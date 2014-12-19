@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-import kieker.gui.common.model.DataModel;
 import kieker.gui.subview.ISubView;
 
 import org.eclipse.swt.SWT;
@@ -45,8 +44,7 @@ import org.eclipse.swt.widgets.Widget;
  */
 public final class View implements Observer {
 
-	private final DataModel dataModel;
-	private final Model mainViewModel;
+	private final Model model;
 	private final Controller controller;
 	private final Map<String, ISubView> subViews;
 
@@ -75,9 +73,8 @@ public final class View implements Observer {
 	private TreeItem trtmJustAggTracesContaining;
 	private MenuItem mntmAbout;
 
-	public View(final DataModel dataModel, final Model mainViewModel, final Controller controller, final Map<String, ISubView> subViews) {
-		this.dataModel = dataModel;
-		this.mainViewModel = mainViewModel;
+	public View(final Model mainViewModel, final Controller controller, final Map<String, ISubView> subViews) {
+		this.model = mainViewModel;
 		this.subViews = subViews;
 
 		this.controller = controller;
@@ -276,8 +273,7 @@ public final class View implements Observer {
 	}
 
 	private void addLogic() {
-		this.dataModel.addObserver(this);
-		this.mainViewModel.addObserver(this);
+		this.model.addObserver(this);
 
 		this.tree.addSelectionListener(this.controller);
 
@@ -293,22 +289,24 @@ public final class View implements Observer {
 
 	@Override
 	public void update(final Observable observable, final Object obj) {
-		if (observable == this.dataModel) {
-
-		}
-		if (observable == this.mainViewModel) {
+		if (observable == this.model) {
 			this.handleChangedSubView();
+			this.handleChangedCursor();
 		}
 	}
 
 	private void handleChangedSubView() {
-		final String subViewKey = this.mainViewModel.getCurrentActiveSubViewKey();
+		final String subViewKey = this.model.getCurrentActiveSubViewKey();
 
 		final ISubView subViewToShow = this.subViews.get(subViewKey);
 		final Composite compositeToShow = (subViewToShow != null) ? subViewToShow.getComposite() : null;
 
 		this.subViewLayout.topControl = compositeToShow;
 		this.subViewComposite.layout();
+	}
+
+	private void handleChangedCursor() {
+		this.shell.setCursor(this.model.getCursor());
 	}
 
 }
