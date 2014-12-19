@@ -26,7 +26,7 @@ import teetime.framework.OutputPort;
  *
  * @author Nils Christian Ehmke
  */
-public final class RecordSimplificator extends AbstractConsumerStage<IMonitoringRecord> {
+final class RecordSimplificator extends AbstractConsumerStage<IMonitoringRecord> {
 
 	private final OutputPort<Record> outputPort = super.createOutputPort();
 

@@ -37,7 +37,7 @@ import teetime.framework.OutputPort;
  *
  * @author Nils Christian Ehmke
  */
-public final class TraceReconstructor extends AbstractConsumerStage<IFlowRecord> {
+final class TraceReconstructor extends AbstractConsumerStage<IFlowRecord> {
 
 	private final OutputPort<Execution> outputPort = super.createOutputPort();
 	private final Map<Long, TraceBuffer> traceBuffers = new HashMap<>();

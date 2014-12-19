@@ -29,7 +29,7 @@ import teetime.framework.OutputPort;
  *
  * @author Nils Christian Ehmke
  */
-public final class TraceAggregator extends AbstractConsumerStage<Execution> {
+final class TraceAggregator extends AbstractConsumerStage<Execution> {
 
 	private final OutputPort<AggregatedExecution> outputPort = super.createOutputPort();
 	private final Map<Execution, AggregatedExecution> aggregationMap = new HashMap<>();
