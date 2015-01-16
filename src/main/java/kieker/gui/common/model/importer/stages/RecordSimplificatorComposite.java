@@ -78,4 +78,13 @@ public final class RecordSimplificatorComposite extends Stage {
 		return this.simplificator.shouldBeTerminated();
 	}
 
+	@Override
+	protected InputPort<?>[] getInputPorts() {
+		return this.simplificator.getInputPorts();
+	}
+
+	@Override
+	protected boolean isStarted() {
+		return this.collector.isStarted();
+	}
 }

@@ -99,4 +99,14 @@ public final class TraceAggregationComposite extends Stage {
 		return this.aggregator.shouldBeTerminated();
 	}
 
+	@Override
+	protected InputPort<?>[] getInputPorts() {
+		return this.aggregator.getInputPorts();
+	}
+
+	@Override
+	protected boolean isStarted() {
+		return this.tracesCollector.isStarted() && this.failedTracesCollector.isStarted() && this.failureContainingTracesCollector.isStarted();
+	}
+
 }

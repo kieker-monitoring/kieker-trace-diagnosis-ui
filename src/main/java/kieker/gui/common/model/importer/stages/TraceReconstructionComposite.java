@@ -27,7 +27,7 @@ public final class TraceReconstructionComposite extends Stage {
 
 	private final CollectorSink<Execution> tracesCollector;
 	private final CollectorSink<Execution> failedTracesCollector;
-	private final CollectorSink<Execution> failureContainingTracescollector;
+	private final CollectorSink<Execution> failureContainingTracesCollector;
 	private final OutputPort<Execution> outputPort;
 
 	public TraceReconstructionComposite(final List<Execution> traces, final List<Execution> failedTraces, final List<Execution> failureContainingTraces) {
@@ -38,7 +38,7 @@ public final class TraceReconstructionComposite extends Stage {
 
 		this.tracesCollector = new CollectorSink<>(traces);
 		this.failedTracesCollector = new CollectorSink<>(failedTraces);
-		this.failureContainingTracescollector = new CollectorSink<>(failureContainingTraces);
+		this.failureContainingTracesCollector = new CollectorSink<>(failureContainingTraces);
 
 		this.outputPort = this.distributor.getNewOutputPort();
 
@@ -50,7 +50,7 @@ public final class TraceReconstructionComposite extends Stage {
 		pipeFactory.create(this.distributor.getNewOutputPort(), this.failureContainingTraceFilter.getInputPort());
 
 		pipeFactory.create(this.failedTraceFilter.getOutputPort(), this.failedTracesCollector.getInputPort());
-		pipeFactory.create(this.failureContainingTraceFilter.getOutputPort(), this.failureContainingTracescollector.getInputPort());
+		pipeFactory.create(this.failureContainingTraceFilter.getOutputPort(), this.failureContainingTracesCollector.getInputPort());
 	}
 
 	@Override
@@ -89,6 +89,16 @@ public final class TraceReconstructionComposite extends Stage {
 	@Override
 	protected boolean shouldBeTerminated() {
 		return this.reconstructor.shouldBeTerminated();
+	}
+
+	@Override
+	protected InputPort<?>[] getInputPorts() {
+		return this.reconstructor.getInputPorts();
+	}
+
+	@Override
+	protected boolean isStarted() {
+		return this.tracesCollector.isStarted() && this.failedTracesCollector.isStarted() && this.failureContainingTracesCollector.isStarted();
 	}
 
 }

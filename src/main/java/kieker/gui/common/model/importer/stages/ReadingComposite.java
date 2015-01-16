@@ -65,4 +65,14 @@ public final class ReadingComposite extends Stage {
 		return this.producer.shouldBeTerminated();
 	}
 
+	@Override
+	protected InputPort<?>[] getInputPorts() {
+		return this.producer.getInputPorts();
+	}
+
+	@Override
+	protected boolean isStarted() {
+		return this.reader.isStarted();
+	}
+
 }
