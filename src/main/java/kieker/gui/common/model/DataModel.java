@@ -67,7 +67,7 @@ public final class DataModel extends Observable {
 			final KiekerMetadataRecord metadataRecord = metadataRecords.get(0);
 			this.shortTimeUnit = this.convertToShortTimeUnit(TimeUnit.valueOf(metadataRecord.getTimeUnit()));
 		} else {
-			this.shortTimeUnit = this.convertToShortTimeUnit(null);
+			this.shortTimeUnit = "";
 		}
 
 		this.setChanged();

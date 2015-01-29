@@ -23,12 +23,18 @@ import org.eclipse.swt.SWT;
 
 public class ExecutionDurationComparator extends AbstractDirectedComparator<Execution> {
 
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public int compare(final Execution arg0, final Execution arg1) {
-		int result = Long.compare(arg0.getDuration(), arg1.getDuration());
+		int result;
+
 		if (this.getDirection() == SWT.UP) {
-			result = -result;
+			result = Long.compare(arg1.getTraceID(), arg0.getTraceID());
+		} else {
+			result = Long.compare(arg0.getTraceID(), arg1.getTraceID());
 		}
+
 		return result;
 
 	}

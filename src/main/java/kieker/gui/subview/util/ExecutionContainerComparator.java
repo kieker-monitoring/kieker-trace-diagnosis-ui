@@ -22,12 +22,18 @@ import org.eclipse.swt.SWT;
 
 public class ExecutionContainerComparator extends AbstractDirectedComparator<AbstractExecution<?>> {
 
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public int compare(final AbstractExecution<?> fst, final AbstractExecution<?> snd) {
-		int result = fst.getContainer().compareTo(snd.getContainer());
+		int result;
+
 		if (this.getDirection() == SWT.UP) {
-			result = -result;
+			result = snd.getComponent().compareTo(fst.getComponent());
+		} else {
+			result = fst.getComponent().compareTo(snd.getComponent());
 		}
+
 		return result;
 	}
 

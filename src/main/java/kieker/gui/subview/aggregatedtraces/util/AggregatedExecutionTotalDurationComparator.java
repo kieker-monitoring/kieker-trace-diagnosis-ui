@@ -7,14 +7,19 @@ import org.eclipse.swt.SWT;
 
 public class AggregatedExecutionTotalDurationComparator extends AbstractDirectedComparator<AggregatedExecution> {
 
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public int compare(final AggregatedExecution arg0, final AggregatedExecution arg1) {
-		int result = Long.compare(arg0.getTotalDuration(), arg1.getTotalDuration());
-		if (this.getDirection() == SWT.UP) {
-			result = -result;
-		}
-		return result;
+		int result;
 
+		if (this.getDirection() == SWT.UP) {
+			result = Long.compare(arg1.getTotalDuration(), arg0.getTotalDuration());
+		} else {
+			result = Long.compare(arg0.getTotalDuration(), arg1.getTotalDuration());
+		}
+
+		return result;
 	}
 
 }

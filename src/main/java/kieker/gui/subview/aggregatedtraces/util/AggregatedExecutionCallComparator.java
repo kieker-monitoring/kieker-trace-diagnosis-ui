@@ -23,14 +23,19 @@ import org.eclipse.swt.SWT;
 
 public class AggregatedExecutionCallComparator extends AbstractDirectedComparator<AggregatedExecution> {
 
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public int compare(final AggregatedExecution arg0, final AggregatedExecution arg1) {
-		int result = Long.compare(arg0.getCalls(), arg1.getCalls());
-		if (this.getDirection() == SWT.UP) {
-			result = -result;
-		}
-		return result;
+		int result;
 
+		if (this.getDirection() == SWT.UP) {
+			result = Long.compare(arg1.getCalls(), arg0.getCalls());
+		} else {
+			result = Long.compare(arg0.getCalls(), arg1.getCalls());
+		}
+
+		return result;
 	}
 
 }

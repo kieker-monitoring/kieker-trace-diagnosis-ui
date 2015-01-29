@@ -1,0 +1,8 @@
+<FindBugsFilter>
+
+	<Match>
+    <Class name="org.eclipse.wb.swt.SWTResourceManager" />
+    <Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+	
+</FindBugsFilter>  

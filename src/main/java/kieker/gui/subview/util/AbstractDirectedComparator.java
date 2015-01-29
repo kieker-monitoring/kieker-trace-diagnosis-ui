@@ -16,9 +16,12 @@
 
 package kieker.gui.subview.util;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-public abstract class AbstractDirectedComparator<T> implements Comparator<T> {
+public abstract class AbstractDirectedComparator<T> implements Comparator<T>, Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private int direction;
 

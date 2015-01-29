@@ -48,9 +48,6 @@ eclipse.classpath.plusConfigurations += [configurations.providedCompile]
 apply plugin: 'pmd'
 pmd { 
   ignoreFailures = true
-
-    // Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
- // ruleSets = []
 }
 
 apply plugin: 'checkstyle'
@@ -64,6 +61,8 @@ findbugs {
   ignoreFailures = true 
   effort = "max"
   reportLevel = "low"
+  
+  excludeFilter = file('config/findbugs/excludeFilter.xml')
 }
 
 def commonStartScriptConfiguration = {
