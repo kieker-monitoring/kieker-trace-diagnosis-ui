@@ -50,23 +50,21 @@ public final class Controller implements SelectionListener {
 		this.propertiesModel = new PropertiesModel();
 
 		// Create the sub-controllers
-		final ISubController subViewController1 = new kieker.gui.subview.records.Controller(this.dataModel);
-		final ISubController subViewController2 = new kieker.gui.subview.aggregatedtraces.Controller(Filter.NONE, this.dataModel, this.propertiesModel);
-		final ISubController subViewController3 = new kieker.gui.subview.traces.Controller(Type.JUST_FAILED_TRACES, this.dataModel, this.propertiesModel);
-		final ISubController subViewController4 = new kieker.gui.subview.traces.Controller(Type.NONE, this.dataModel, this.propertiesModel);
-		final ISubController subViewController5 = new kieker.gui.subview.traces.Controller(Type.JUST_FAILURE_CONTAINING_TRACES, this.dataModel, this.propertiesModel);
-		final ISubController subViewController6 = new kieker.gui.subview.aggregatedtraces.Controller(Filter.JUST_FAILED_TRACES, this.dataModel, this.propertiesModel);
-		final ISubController subViewController7 = new kieker.gui.subview.aggregatedtraces.Controller(Filter.JUST_FAILURE_CONTAINING_TRACES, this.dataModel, this.propertiesModel);
+		final ISubController subViewController1 = new kieker.gui.subview.aggregatedtraces.Controller(Filter.NONE, this.dataModel, this.propertiesModel);
+		final ISubController subViewController2 = new kieker.gui.subview.traces.Controller(Type.JUST_FAILED_TRACES, this.dataModel, this.propertiesModel);
+		final ISubController subViewController3 = new kieker.gui.subview.traces.Controller(Type.NONE, this.dataModel, this.propertiesModel);
+		final ISubController subViewController4 = new kieker.gui.subview.traces.Controller(Type.JUST_FAILURE_CONTAINING_TRACES, this.dataModel, this.propertiesModel);
+		final ISubController subViewController5 = new kieker.gui.subview.aggregatedtraces.Controller(Filter.JUST_FAILED_TRACES, this.dataModel, this.propertiesModel);
+		final ISubController subViewController6 = new kieker.gui.subview.aggregatedtraces.Controller(Filter.JUST_FAILURE_CONTAINING_TRACES, this.dataModel, this.propertiesModel);
 
 		// Get the sub-views from the controllers
 		final Map<String, ISubView> subViews = new HashMap<>();
-		subViews.put(SubView.RECORDS_SUB_VIEW.name(), subViewController1.getView());
-		subViews.put(SubView.AGGREGATED_TRACES_SUB_VIEW.name(), subViewController2.getView());
-		subViews.put(SubView.FAILED_TRACES_SUB_VIEW.name(), subViewController3.getView());
-		subViews.put(SubView.TRACES_SUB_VIEW.name(), subViewController4.getView());
-		subViews.put(SubView.FAILURE_CONTAINING_TRACES_SUB_VIEW.name(), subViewController5.getView());
-		subViews.put(SubView.FAILED_AGGREGATED_TRACES_SUB_VIEW.name(), subViewController6.getView());
-		subViews.put(SubView.FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW.name(), subViewController7.getView());
+		subViews.put(SubView.AGGREGATED_TRACES_SUB_VIEW.name(), subViewController1.getView());
+		subViews.put(SubView.FAILED_TRACES_SUB_VIEW.name(), subViewController2.getView());
+		subViews.put(SubView.TRACES_SUB_VIEW.name(), subViewController3.getView());
+		subViews.put(SubView.FAILURE_CONTAINING_TRACES_SUB_VIEW.name(), subViewController4.getView());
+		subViews.put(SubView.FAILED_AGGREGATED_TRACES_SUB_VIEW.name(), subViewController5.getView());
+		subViews.put(SubView.FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW.name(), subViewController6.getView());
 
 		// Create the main model and the main view
 		this.mainViewModel = new Model();
@@ -123,9 +121,6 @@ public final class Controller implements SelectionListener {
 		if (e.item == this.mainView.getTrtmExplorer()) {
 			this.mainViewModel.setCurrentActiveSubView(SubView.NONE.name());
 		}
-		if (e.item == this.mainView.getTrtmRecords()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.RECORDS_SUB_VIEW.name());
-		}
 		if (e.item == this.mainView.getTrtmTraces()) {
 			this.mainViewModel.setCurrentActiveSubView(SubView.TRACES_SUB_VIEW.name());
 		}
@@ -152,7 +147,7 @@ public final class Controller implements SelectionListener {
 	}
 
 	public enum SubView {
-		RECORDS_SUB_VIEW, TRACES_SUB_VIEW, FAILED_TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, FAILURE_CONTAINING_TRACES_SUB_VIEW, FAILED_AGGREGATED_TRACES_SUB_VIEW, FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW
+		TRACES_SUB_VIEW, FAILED_TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, FAILURE_CONTAINING_TRACES_SUB_VIEW, FAILED_AGGREGATED_TRACES_SUB_VIEW, FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW
 	}
 
 }

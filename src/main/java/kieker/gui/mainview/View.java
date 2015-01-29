@@ -64,7 +64,6 @@ public final class View implements Observer {
 
 	private Tree tree;
 	private TreeItem trtmExplorer;
-	private TreeItem trtmRecords;
 	private TreeItem trtmTraces;
 	private TreeItem trtmAggregatedTraces;
 	private TreeItem trtmJustFailedTraces;
@@ -101,10 +100,6 @@ public final class View implements Observer {
 
 	public TreeItem getTrtmExplorer() {
 		return this.trtmExplorer;
-	}
-
-	public TreeItem getTrtmRecords() {
-		return this.trtmRecords;
 	}
 
 	public TreeItem getTrtmTraces() {
@@ -189,9 +184,6 @@ public final class View implements Observer {
 
 		this.trtmExplorer = new TreeItem(this.tree, SWT.NONE);
 		this.trtmExplorer.setText("Explorer");
-
-		this.trtmRecords = new TreeItem(this.trtmExplorer, SWT.NONE);
-		this.trtmRecords.setText("Records");
 
 		this.trtmTraces = new TreeItem(this.trtmExplorer, SWT.NONE);
 		this.trtmTraces.setText("Traces");
