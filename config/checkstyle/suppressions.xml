@@ -6,4 +6,6 @@
 
 <suppressions>
   <suppress files="SWTResourceManager.java" checks=".*" />
+  
+  <suppress files="Main.java" checks="UncommentedMainCheck" />
 </suppressions>

@@ -58,7 +58,6 @@
     <module name="MultipleStringLiterals"/>
     <module name="MultipleVariableDeclarations"/>
     <module name="RequireThis"/>
-    <module name="UnnecessaryParentheses"/>
     <module name="OneStatementPerLine"/>
     
     <module name="AvoidStarImport"/>
@@ -78,7 +77,6 @@
     <module name="ClassFanOutComplexity"/>
     <module name="CyclomaticComplexity"/>
     <module name="NPathComplexity"/>
-    <module name="JavaNCSS"/>
 
     <module name="TodoComment"/>
     <module name="UncommentedMain"/>
@@ -98,7 +96,6 @@
     <module name="AbstractClassName"/>
     <module name="PackageName"/>
     
-    <module name="ExecutableStatementCount"/>
     <module name="LineLength"><property name="max" value="180"/></module>
     <module name="MethodLength"/>
     <module name="AnonInnerLength"/>
@@ -110,13 +107,9 @@
     <module name="EmptyForInitializerPad"/>
     <module name="EmptyForIteratorPad"/>
     <module name="MethodParamPad"/>
-    <module name="NoWhitespaceAfter"/>
-    <module name="NoWhitespaceBefore"/>
     <module name="OperatorWrap"/>
     <module name="ParenPad"/>
     <module name="TypecastParenPad"/>
-    <module name="WhitespaceAfter"/>
-    <module name="WhitespaceAround"/>
   </module>
   
    <module name="Header">
