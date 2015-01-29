@@ -25,7 +25,6 @@
     <module name="InnerTypeLast"/>
     
     <module name="ArrayTrailingComma"/>
-    <module name="AvoidInlineConditionals"/>
     <module name="CovariantEquals"/>
     <module name="EmptyStatement"/>
     <module name="EqualsAvoidNull"/>
@@ -72,7 +71,7 @@
     <module name="UnusedImports"/>
     <module name="ImportOrder"/>
     
-    <module name="JavadocType"/>
+    <module name="JavadocType"><property name="severity" value="info"/></module>
     <module name="JavadocMethod"><property name="severity" value="info"/></module>
     <module name="JavadocVariable"><property name="severity" value="info"/></module>
     <module name="JavadocStyle"/>
@@ -94,7 +93,6 @@
     <module name="OuterTypeFilename"/>
     
     <module name="ModifierOrder"/>
-    <module name="RedundantModifier"/>
     
     <module name="MemberName"/>
     <module name="LocalVariableName"/>
@@ -104,7 +102,7 @@
     <module name="PackageName"/>
     
     <module name="ExecutableStatementCount"/>
-    <module name="LineLength"><property name="max" value="165"/></module>
+    <module name="LineLength"><property name="max" value="180"/></module>
     <module name="MethodLength"/>
     <module name="AnonInnerLength"/>
     <module name="ParameterNumber"/>
@@ -129,9 +127,7 @@
         <property name="ignoreLines"    value="2"/>
         <property name="fileExtensions" value="java"/>
     </module>
-    
-    <module name="JavadocPackage"/>
-    
+
     <module name="NewlineAtEndOfFile"/>
     <module name="Translation"/>
     <module name="UniqueProperties"/>
