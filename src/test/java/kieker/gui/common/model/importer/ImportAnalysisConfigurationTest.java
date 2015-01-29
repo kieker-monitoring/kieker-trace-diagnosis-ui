@@ -22,7 +22,6 @@ public class ImportAnalysisConfigurationTest {
 		analysis.start();
 
 		assertThat(configuration.getMetadataRecords(), hasSize(1));
-		assertThat(configuration.getRecordsList(), is(not(empty())));
 		assertThat(configuration.getTracesList(), is(not(empty())));
 		assertThat(configuration.getAggregatedTraces(), is(not(empty())));
 		assertThat(configuration.getFailedTracesList(), is(not(empty())));

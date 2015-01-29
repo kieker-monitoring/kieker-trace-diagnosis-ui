@@ -26,7 +26,6 @@ import java.util.concurrent.TimeUnit;
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.gui.common.domain.AggregatedExecution;
 import kieker.gui.common.domain.Execution;
-import kieker.gui.common.domain.Record;
 import kieker.gui.common.model.importer.ImportAnalysisConfiguration;
 import teetime.framework.Analysis;
 
@@ -37,7 +36,6 @@ import teetime.framework.Analysis;
  */
 public final class DataModel extends Observable {
 
-	private List<Record> records = Collections.emptyList();
 	private List<Execution> traces = Collections.emptyList();
 	private List<Execution> failureContainingTraces = Collections.emptyList();
 	private List<Execution> failedTraces = Collections.emptyList();
@@ -57,7 +55,6 @@ public final class DataModel extends Observable {
 		analysis.start();
 
 		// Store the results from the analysis
-		this.records = analysisConfiguration.getRecordsList();
 		this.traces = analysisConfiguration.getTracesList();
 		this.failedTraces = analysisConfiguration.getFailedTracesList();
 		this.failureContainingTraces = analysisConfiguration.getFailureContainingTracesList();
@@ -108,10 +105,6 @@ public final class DataModel extends Observable {
 		}
 
 		return result;
-	}
-
-	public List<Record> getRecordsCopy() {
-		return new ArrayList<>(this.records);
 	}
 
 	public List<Execution> getTracesCopy() {

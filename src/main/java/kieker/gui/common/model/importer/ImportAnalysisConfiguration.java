@@ -25,7 +25,6 @@ import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.gui.common.domain.AggregatedExecution;
 import kieker.gui.common.domain.Execution;
-import kieker.gui.common.domain.Record;
 import kieker.gui.common.model.importer.stages.ReadingComposite;
 import kieker.gui.common.model.importer.stages.TraceAggregationComposite;
 import kieker.gui.common.model.importer.stages.TraceReconstructionComposite;
@@ -42,8 +41,6 @@ import teetime.stage.MultipleInstanceOfFilter;
  * @author Nils Christian Ehmke
  */
 public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
-
-	private final List<Record> records = new Vector<>(1000);
 
 	private final List<Execution> traces = new Vector<>(1000);
 	private final List<Execution> failedTraces = new Vector<>(1000);
@@ -73,10 +70,6 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 
 		// Make sure that the producer is executed by the analysis
 		super.addThreadableStage(reader);
-	}
-
-	public List<Record> getRecordsList() {
-		return this.records;
 	}
 
 	public List<Execution> getTracesList() {
