@@ -21,7 +21,7 @@ import kieker.gui.subview.util.AbstractDirectedComparator;
 
 import org.eclipse.swt.SWT;
 
-public class ExecutionTraceIDComparator extends AbstractDirectedComparator<Execution> {
+public final class ExecutionTraceIDComparator extends AbstractDirectedComparator<Execution> {
 
 	private static final long serialVersionUID = 1L;
 

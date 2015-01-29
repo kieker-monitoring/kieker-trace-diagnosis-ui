@@ -47,7 +47,7 @@ import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-public class View implements Observer, ISubView {
+public final class View implements Observer, ISubView {
 
 	private final IModel<Execution> model;
 	private final Model tracesSubViewModel;

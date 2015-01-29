@@ -20,7 +20,7 @@ import kieker.gui.common.domain.AbstractExecution;
 
 import org.eclipse.swt.SWT;
 
-public class ExecutionOperationComparator extends AbstractDirectedComparator<AbstractExecution<?>> {
+public final class ExecutionOperationComparator extends AbstractDirectedComparator<AbstractExecution<?>> {
 
 	private static final long serialVersionUID = 1L;
 

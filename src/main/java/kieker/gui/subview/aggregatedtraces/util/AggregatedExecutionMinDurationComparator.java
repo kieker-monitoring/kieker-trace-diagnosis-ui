@@ -21,7 +21,7 @@ import kieker.gui.subview.util.AbstractDirectedComparator;
 
 import org.eclipse.swt.SWT;
 
-public class AggregatedExecutionMinDurationComparator extends AbstractDirectedComparator<AggregatedExecution> {
+public final class AggregatedExecutionMinDurationComparator extends AbstractDirectedComparator<AggregatedExecution> {
 
 	private static final long serialVersionUID = 1L;
 

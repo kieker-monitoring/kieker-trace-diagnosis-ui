@@ -35,7 +35,7 @@ public abstract class AbstractExecution<T extends AbstractExecution<T>> {
 		this.operation = operation;
 	}
 
-	public int getTraceDepth() {
+	public final int getTraceDepth() {
 		int traceDepth = this.children.isEmpty() ? 0 : 1;
 
 		int maxChildrenTraceDepth = 0;
@@ -47,7 +47,7 @@ public abstract class AbstractExecution<T extends AbstractExecution<T>> {
 		return traceDepth;
 	}
 
-	public int getTraceSize() {
+	public final int getTraceSize() {
 		int traceSize = 1;
 
 		for (final T child : this.children) {
@@ -56,11 +56,11 @@ public abstract class AbstractExecution<T extends AbstractExecution<T>> {
 		return traceSize;
 	}
 
-	public boolean isFailed() {
+	public final boolean isFailed() {
 		return (this.failedCause != null);
 	}
 
-	public boolean containsFailure() {
+	public final boolean containsFailure() {
 		if (this.isFailed()) {
 			return true;
 		}
@@ -74,36 +74,36 @@ public abstract class AbstractExecution<T extends AbstractExecution<T>> {
 		return false;
 	}
 
-	public String getFailedCause() {
+	public final String getFailedCause() {
 		return this.failedCause;
 	}
 
-	public void setFailedCause(final String failedCause) {
+	public final void setFailedCause(final String failedCause) {
 		this.failedCause = failedCause;
 	}
 
-	public String getContainer() {
+	public final String getContainer() {
 		return this.container;
 	}
 
-	public String getComponent() {
+	public final String getComponent() {
 		return this.component;
 	}
 
-	public String getOperation() {
+	public final String getOperation() {
 		return this.operation;
 	}
 
-	public List<T> getChildren() {
+	public final List<T> getChildren() {
 		return this.children;
 	}
 
-	public void addExecutionEntry(final T entry) {
+	public final void addExecutionEntry(final T entry) {
 		this.children.add(entry);
 		entry.parent = (T) this;
 	}
 
-	public T getParent() {
+	public final T getParent() {
 		return this.parent;
 	}
 
