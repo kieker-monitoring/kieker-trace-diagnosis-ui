@@ -56,12 +56,12 @@ public final class Execution extends AbstractExecution<Execution> {
 	}
 
 	private void updatePercent() {
-		if (this.parent != null) {
-			this.percent = (this.duration * 100.0f) / this.parent.duration;
+		if (this.getParent() != null) {
+			this.percent = (this.duration * 100.0f) / this.getParent().duration;
 		} else {
 			this.percent = 100.0f;
 		}
-		for (final Execution executionEntry : this.children) {
+		for (final Execution executionEntry : this.getChildren()) {
 			executionEntry.updatePercent();
 		}
 	}
@@ -70,11 +70,11 @@ public final class Execution extends AbstractExecution<Execution> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = (prime * result) + ((this.children == null) ? 0 : this.children.hashCode());
-		result = (prime * result) + ((this.component == null) ? 0 : this.component.hashCode());
-		result = (prime * result) + ((this.container == null) ? 0 : this.container.hashCode());
-		result = (prime * result) + ((this.failedCause == null) ? 0 : this.failedCause.hashCode());
-		result = (prime * result) + ((this.operation == null) ? 0 : this.operation.hashCode());
+		result = (prime * result) + ((this.getChildren() == null) ? 0 : this.getChildren().hashCode());
+		result = (prime * result) + ((this.getComponent() == null) ? 0 : this.getComponent().hashCode());
+		result = (prime * result) + ((this.getContainer() == null) ? 0 : this.getContainer().hashCode());
+		result = (prime * result) + ((this.getFailedCause() == null) ? 0 : this.getFailedCause().hashCode());
+		result = (prime * result) + ((this.getOperation() == null) ? 0 : this.getOperation().hashCode());
 		return result;
 	}
 
@@ -87,30 +87,30 @@ public final class Execution extends AbstractExecution<Execution> {
 			return false;
 		}
 		final Execution otherEntry = (Execution) other;
-		if (!this.container.equals(otherEntry.container)) {
+		if (!this.getContainer().equals(otherEntry.getContainer())) {
 			return false;
 		}
-		if (!this.component.equals(otherEntry.component)) {
+		if (!this.getComponent().equals(otherEntry.getComponent())) {
 			return false;
 		}
-		if (!this.operation.equals(otherEntry.operation)) {
+		if (!this.getOperation().equals(otherEntry.getOperation())) {
 			return false;
 		}
-		if (this.failedCause == null) {
-			if (otherEntry.failedCause != null) {
+		if (this.getFailedCause() == null) {
+			if (otherEntry.getFailedCause() != null) {
 				return false;
 			}
 		} else {
-			if (!this.failedCause.equals(otherEntry.failedCause)) {
+			if (!this.getFailedCause().equals(otherEntry.getFailedCause())) {
 				return false;
 			}
 		}
-		if (this.children.size() != otherEntry.children.size()) {
+		if (this.getChildren().size() != otherEntry.getChildren().size()) {
 			return false;
 		}
 
-		final Iterator<Execution> ownChildrenIterator = this.children.iterator();
-		final Iterator<Execution> otherChildrenIterator = otherEntry.children.iterator();
+		final Iterator<Execution> ownChildrenIterator = this.getChildren().iterator();
+		final Iterator<Execution> otherChildrenIterator = otherEntry.getChildren().iterator();
 
 		while (ownChildrenIterator.hasNext()) {
 			final Execution ownChild = ownChildrenIterator.next();
@@ -123,5 +123,4 @@ public final class Execution extends AbstractExecution<Execution> {
 
 		return true;
 	}
-
 }

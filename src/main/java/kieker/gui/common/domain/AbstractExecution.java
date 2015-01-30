@@ -21,13 +21,13 @@ import java.util.List;
 
 public abstract class AbstractExecution<T extends AbstractExecution<T>> {
 
-	protected final String container;
-	protected final String component;
-	protected final String operation;
+	private final String container;
+	private final String component;
+	private final String operation;
 
-	protected String failedCause;
-	protected T parent;
-	protected final List<T> children = new ArrayList<>();
+	private String failedCause;
+	private T parent;
+	private final List<T> children = new ArrayList<>();
 
 	public AbstractExecution(final String container, final String component, final String operation) {
 		this.container = container;
@@ -98,13 +98,18 @@ public abstract class AbstractExecution<T extends AbstractExecution<T>> {
 		return this.children;
 	}
 
+	@SuppressWarnings("unchecked")
 	public final void addExecutionEntry(final T entry) {
 		this.children.add(entry);
-		entry.parent = (T) this;
+		entry.setParent((T) this);
 	}
 
 	public final T getParent() {
 		return this.parent;
+	}
+
+	public void setParent(final T parent) {
+		this.parent = parent;
 	}
 
 }
