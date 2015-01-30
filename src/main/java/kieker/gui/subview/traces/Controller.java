@@ -59,7 +59,9 @@ public final class Controller implements ISubController, SelectionListener {
 	}
 
 	@Override
-	public void widgetDefaultSelected(final SelectionEvent e) {}
+	public void widgetDefaultSelected(final SelectionEvent e) {
+		// Just implemented for the interface
+	}
 
 	private static IModel<Execution> createModelProxy(final DataModel dataModel, final Type filter) {
 		if (filter == Type.JUST_FAILED_TRACES) {
@@ -77,7 +79,7 @@ public final class Controller implements ISubController, SelectionListener {
 
 	private static final class TracesModelProxy extends AbstractDataModelProxy<Execution> {
 
-		private TracesModelProxy(final DataModel dataModel) {
+		public TracesModelProxy(final DataModel dataModel) {
 			super(dataModel);
 		}
 
@@ -90,7 +92,7 @@ public final class Controller implements ISubController, SelectionListener {
 
 	private static final class FailedTracesModelProxy extends AbstractDataModelProxy<Execution> {
 
-		private FailedTracesModelProxy(final DataModel dataModel) {
+		public FailedTracesModelProxy(final DataModel dataModel) {
 			super(dataModel);
 		}
 
@@ -103,7 +105,7 @@ public final class Controller implements ISubController, SelectionListener {
 
 	private static final class FailureContainingTracesModelProxy extends AbstractDataModelProxy<Execution> {
 
-		private FailureContainingTracesModelProxy(final DataModel dataModel) {
+		public FailureContainingTracesModelProxy(final DataModel dataModel) {
 			super(dataModel);
 		}
 

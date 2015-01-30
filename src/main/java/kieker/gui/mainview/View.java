@@ -165,7 +165,7 @@ public final class View implements Observer {
 	/**
 	 * @wbp.parser.entryPoint
 	 */
-	protected void createContents() {
+	private void createContents() {
 		this.shell = new Shell();
 		this.shell.setImage(null);
 		this.shell.setMaximized(true);
@@ -291,7 +291,7 @@ public final class View implements Observer {
 		final String subViewKey = this.model.getCurrentActiveSubViewKey();
 
 		final ISubView subViewToShow = this.subViews.get(subViewKey);
-		final Composite compositeToShow = (subViewToShow != null) ? subViewToShow.getComposite() : null;
+		final Composite compositeToShow = (subViewToShow != null) ? subViewToShow.getComposite() : null; // NOPMD (null assigment)
 
 		this.subViewLayout.topControl = compositeToShow;
 		this.subViewComposite.layout();

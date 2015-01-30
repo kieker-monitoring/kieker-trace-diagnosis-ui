@@ -52,6 +52,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 public final class View implements Observer, ISubView {
 
+	private static final String N_A = "N/A";
 	private final Model aggregatedTracesSubViewModel;
 	private final SelectionListener controller;
 	private final IModel<AggregatedExecution> model;
@@ -90,7 +91,7 @@ public final class View implements Observer, ISubView {
 	 * @wbp.parser.entryPoint
 	 */
 	@Override
-	public void createComposite(final Composite parent) {
+	public void createComposite(final Composite parent) { // NOPMD (This method violates some metrics)
 		if (this.composite != null) {
 			this.composite.dispose();
 		}
@@ -151,7 +152,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblExecutionContainerDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblExecutionContainerDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblExecutionContainerDisplay.setText("N/A");
+		this.lblExecutionContainerDisplay.setText(View.N_A);
 
 		final Label lblComponent = new Label(this.detailComposite, SWT.NONE);
 		lblComponent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -159,7 +160,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblComponentDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblComponentDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblComponentDisplay.setText("N/A");
+		this.lblComponentDisplay.setText(View.N_A);
 
 		final Label lblOperation = new Label(this.detailComposite, SWT.NONE);
 		lblOperation.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -167,7 +168,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblOperationDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblOperationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblOperationDisplay.setText("N/A");
+		this.lblOperationDisplay.setText(View.N_A);
 
 		final Label lblNumberOfCalls = new Label(this.detailComposite, SWT.NONE);
 		lblNumberOfCalls.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -175,7 +176,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblNumberOfCallsDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblNumberOfCallsDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblNumberOfCallsDisplay.setText("N/A");
+		this.lblNumberOfCallsDisplay.setText(View.N_A);
 
 		final Label lblMinimalDuration = new Label(this.detailComposite, SWT.NONE);
 		lblMinimalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -183,7 +184,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblMinimalDurationDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblMinimalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblMinimalDurationDisplay.setText("N/A");
+		this.lblMinimalDurationDisplay.setText(View.N_A);
 
 		final Label lblAverageDuration = new Label(this.detailComposite, SWT.NONE);
 		lblAverageDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -191,7 +192,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblAverageDurationDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblAverageDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblAverageDurationDisplay.setText("N/A");
+		this.lblAverageDurationDisplay.setText(View.N_A);
 
 		final Label lblMaximalDuration = new Label(this.detailComposite, SWT.NONE);
 		lblMaximalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -199,7 +200,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblMaximalDurationDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblMaximalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblMaximalDurationDisplay.setText("N/A");
+		this.lblMaximalDurationDisplay.setText(View.N_A);
 
 		final Label lblTotalDuration = new Label(this.detailComposite, SWT.NONE);
 		lblTotalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -207,7 +208,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblTotalDurationDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblTotalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblTotalDurationDisplay.setText("N/A");
+		this.lblTotalDurationDisplay.setText(View.N_A);
 
 		this.lblFailed = new Label(this.detailComposite, SWT.NONE);
 		this.lblFailed.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -215,7 +216,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblFailedDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblFailedDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblFailedDisplay.setText("N/A");
+		this.lblFailedDisplay.setText(View.N_A);
 
 		final Label lblTraceDepth = new Label(this.detailComposite, SWT.NONE);
 		lblTraceDepth.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -223,7 +224,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblTraceDepthDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblTraceDepthDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblTraceDepthDisplay.setText("N/A");
+		this.lblTraceDepthDisplay.setText(View.N_A);
 
 		final Label lblTraceSize = new Label(this.detailComposite, SWT.NONE);
 		lblTraceSize.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -231,7 +232,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblTraceSizeDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblTraceSizeDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblTraceSizeDisplay.setText("N/A");
+		this.lblTraceSizeDisplay.setText(View.N_A);
 		sashForm.setWeights(new int[] { 2, 1 });
 
 		this.statusBar = new Composite(this.composite, SWT.NONE);
@@ -368,7 +369,7 @@ public final class View implements Observer, ISubView {
 				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, "", minDuration, avgDuration, maxDuration, totalDuration, });
 			} else {
 				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, Integer.toString(executionEntry.getCalls()), minDuration, avgDuration,
-						maxDuration, totalDuration, });
+					maxDuration, totalDuration, });
 			}
 
 			if (executionEntry.isFailed()) {

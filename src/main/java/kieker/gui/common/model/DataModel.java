@@ -44,8 +44,6 @@ public final class DataModel extends Observable {
 	private List<AggregatedExecution> failureAggregatedContainingTraces = Collections.emptyList();
 	private String shortTimeUnit = "";
 
-	public DataModel() {}
-
 	public void loadMonitoringLogFromFS(final String directory) {
 		// Load and analyze the monitoring logs from the given directory
 		final File importDirectory = new File(directory);
@@ -63,7 +61,7 @@ public final class DataModel extends Observable {
 		this.failureAggregatedContainingTraces = analysisConfiguration.getFailureContainingAggregatedTracesList();
 
 		final List<KiekerMetadataRecord> metadataRecords = analysisConfiguration.getMetadataRecords();
-		if (metadataRecords.size() == 1) {
+		if (!metadataRecords.isEmpty()) {
 			final KiekerMetadataRecord metadataRecord = metadataRecords.get(0);
 			this.shortTimeUnit = this.convertToShortTimeUnit(TimeUnit.valueOf(metadataRecord.getTimeUnit()));
 		} else {

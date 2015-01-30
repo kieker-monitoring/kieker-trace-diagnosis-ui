@@ -17,8 +17,8 @@
 package kieker.gui.common.model.importer;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.IFlowRecord;
@@ -42,15 +42,15 @@ import teetime.stage.MultipleInstanceOfFilter;
  */
 public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 
-	private final List<Execution> traces = new Vector<>(1000);
-	private final List<Execution> failedTraces = new Vector<>(1000);
-	private final List<Execution> failureContainingTraces = new Vector<>(1000);
+	private final List<Execution> traces = new ArrayList<>(1000);
+	private final List<Execution> failedTraces = new ArrayList<>(1000);
+	private final List<Execution> failureContainingTraces = new ArrayList<>(1000);
 
-	private final List<AggregatedExecution> aggregatedTraces = new Vector<>(1000);
-	private final List<AggregatedExecution> failedAggregatedTraces = new Vector<>(1000);
-	private final List<AggregatedExecution> failureContainingAggregatedTraces = new Vector<>(1000);
+	private final List<AggregatedExecution> aggregatedTraces = new ArrayList<>(1000);
+	private final List<AggregatedExecution> failedAggregatedTraces = new ArrayList<>(1000);
+	private final List<AggregatedExecution> failureContainingAggregatedTraces = new ArrayList<>(1000);
 
-	private final List<KiekerMetadataRecord> metadataRecords = new Vector<>(1000);
+	private final List<KiekerMetadataRecord> metadataRecords = new ArrayList<>(1000);
 
 	public ImportAnalysisConfiguration(final File importDirectory) {
 		// Create the stages

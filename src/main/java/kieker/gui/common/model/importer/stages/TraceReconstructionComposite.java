@@ -38,8 +38,6 @@ public final class TraceReconstructionComposite extends Stage {
 
 	private final TraceReconstructor reconstructor;
 	private final Distributor<Execution> distributor;
-	private final FailedTraceFilter<Execution> failedTraceFilter;
-	private final FailureContainingTraceFilter<Execution> failureContainingTraceFilter;
 
 	private final CollectorSink<Execution> tracesCollector;
 	private final CollectorSink<Execution> failedTracesCollector;
@@ -49,8 +47,8 @@ public final class TraceReconstructionComposite extends Stage {
 	public TraceReconstructionComposite(final List<Execution> traces, final List<Execution> failedTraces, final List<Execution> failureContainingTraces) {
 		this.reconstructor = new TraceReconstructor();
 		this.distributor = new Distributor<>(new CopyByReferenceStrategy());
-		this.failedTraceFilter = new FailedTraceFilter<>();
-		this.failureContainingTraceFilter = new FailureContainingTraceFilter<>();
+		final FailedTraceFilter<Execution> failedTraceFilter = new FailedTraceFilter<>();
+		final FailureContainingTraceFilter<Execution> failureContainingTraceFilter = new FailureContainingTraceFilter<>();
 
 		this.tracesCollector = new CollectorSink<>(traces);
 		this.failedTracesCollector = new CollectorSink<>(failedTraces);
@@ -62,11 +60,11 @@ public final class TraceReconstructionComposite extends Stage {
 		pipeFactory.create(this.reconstructor.getOutputPort(), this.distributor.getInputPort());
 
 		pipeFactory.create(this.distributor.getNewOutputPort(), this.tracesCollector.getInputPort());
-		pipeFactory.create(this.distributor.getNewOutputPort(), this.failedTraceFilter.getInputPort());
-		pipeFactory.create(this.distributor.getNewOutputPort(), this.failureContainingTraceFilter.getInputPort());
+		pipeFactory.create(this.distributor.getNewOutputPort(), failedTraceFilter.getInputPort());
+		pipeFactory.create(this.distributor.getNewOutputPort(), failureContainingTraceFilter.getInputPort());
 
-		pipeFactory.create(this.failedTraceFilter.getOutputPort(), this.failedTracesCollector.getInputPort());
-		pipeFactory.create(this.failureContainingTraceFilter.getOutputPort(), this.failureContainingTracesCollector.getInputPort());
+		pipeFactory.create(failedTraceFilter.getOutputPort(), this.failedTracesCollector.getInputPort());
+		pipeFactory.create(failureContainingTraceFilter.getOutputPort(), this.failureContainingTracesCollector.getInputPort());
 	}
 
 	@Override

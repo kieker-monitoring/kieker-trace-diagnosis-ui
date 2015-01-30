@@ -48,6 +48,9 @@ eclipse.classpath.plusConfigurations += [configurations.providedCompile]
 apply plugin: 'pmd'
 pmd { 
   ignoreFailures = true
+  
+  ruleSets = []
+  ruleSetFiles = files('config/pmd/ruleset.xml')
 }
 
 apply plugin: 'checkstyle'

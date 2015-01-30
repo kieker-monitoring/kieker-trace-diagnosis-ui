@@ -67,7 +67,7 @@ public final class Execution extends AbstractExecution<Execution> {
 	}
 
 	@Override
-	public int hashCode() {
+	public int hashCode() { // NOPMD (This method violates some metrics
 		final int prime = 31;
 		int result = 1;
 		result = (prime * result) + ((this.getChildren() == null) ? 0 : this.getChildren().hashCode());
@@ -79,7 +79,7 @@ public final class Execution extends AbstractExecution<Execution> {
 	}
 
 	@Override
-	public boolean equals(final Object other) { // NOCS (This method violates some metrics of CS)
+	public boolean equals(final Object other) { // NOCS NOPMD (This method violates some metrics)
 		if (this == other) {
 			return true;
 		}

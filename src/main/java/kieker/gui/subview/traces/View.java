@@ -49,6 +49,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 public final class View implements Observer, ISubView {
 
+	private static final String N_A = "N/A";
 	private final IModel<Execution> model;
 	private final Model tracesSubViewModel;
 	private final SelectionListener controller;
@@ -136,7 +137,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblExecutionContainerDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblExecutionContainerDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblExecutionContainerDisplay.setText("N/A");
+		this.lblExecutionContainerDisplay.setText(N_A);
 
 		final Label lblComponent = new Label(this.detailComposite, SWT.NONE);
 		lblComponent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -144,7 +145,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblComponentDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblComponentDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblComponentDisplay.setText("N/A");
+		this.lblComponentDisplay.setText(N_A);
 
 		final Label lblOperation = new Label(this.detailComposite, SWT.NONE);
 		lblOperation.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -152,7 +153,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblOperationDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblOperationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblOperationDisplay.setText("N/A");
+		this.lblOperationDisplay.setText(N_A);
 
 		final Label lblDuration = new Label(this.detailComposite, SWT.NONE);
 		lblDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -160,7 +161,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblDurationDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblDurationDisplay.setText("N/A");
+		this.lblDurationDisplay.setText(N_A);
 
 		final Label lblTraceId = new Label(this.detailComposite, SWT.NONE);
 		lblTraceId.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -169,7 +170,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblTraceIdDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblTraceIdDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblTraceIdDisplay.setText("N/A");
+		this.lblTraceIdDisplay.setText(N_A);
 
 		this.lblFailed = new Label(this.detailComposite, SWT.NONE);
 		this.lblFailed.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -177,7 +178,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblFailedDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblFailedDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblFailedDisplay.setText("N/A");
+		this.lblFailedDisplay.setText(N_A);
 
 		final Label lblTraceDepth = new Label(this.detailComposite, SWT.NONE);
 		lblTraceDepth.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -185,7 +186,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblTraceDepthDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblTraceDepthDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblTraceDepthDisplay.setText("N/A");
+		this.lblTraceDepthDisplay.setText(N_A);
 
 		final Label lblTraceSize = new Label(this.detailComposite, SWT.NONE);
 		lblTraceSize.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -193,7 +194,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblTraceSizeDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblTraceSizeDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblTraceSizeDisplay.setText("N/A");
+		this.lblTraceSizeDisplay.setText(N_A);
 
 		sashForm.setWeights(new int[] { 2, 1 });
 
