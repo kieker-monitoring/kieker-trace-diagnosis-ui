@@ -98,18 +98,17 @@ public abstract class AbstractExecution<T extends AbstractExecution<T>> {
 		return this.children;
 	}
 
+	public final T getParent() {
+		return this.parent;
+	}
+
+	public final void setParent(final T parent) {
+		this.parent = parent;
+	}
+
 	@SuppressWarnings("unchecked")
 	public final void addExecutionEntry(final T entry) {
 		this.children.add(entry);
 		entry.setParent((T) this);
 	}
-
-	public final T getParent() {
-		return this.parent;
-	}
-
-	public void setParent(final T parent) {
-		this.parent = parent;
-	}
-
 }

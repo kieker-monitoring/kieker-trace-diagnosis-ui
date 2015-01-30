@@ -79,7 +79,7 @@ public final class Execution extends AbstractExecution<Execution> {
 	}
 
 	@Override
-	public boolean equals(final Object other) {
+	public boolean equals(final Object other) { // NOCS (This method violates some metrics of CS)
 		if (this == other) {
 			return true;
 		}

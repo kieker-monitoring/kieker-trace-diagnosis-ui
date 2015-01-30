@@ -48,10 +48,8 @@
     <module name="IllegalCatch"/>
     <module name="IllegalThrows"/>
     <module name="PackageDeclaration"/>
-    <module name="ReturnCount"/>
     <module name="DeclarationOrder"/>
     <module name="ParameterAssignment"/>
-    <module name="ExplicitInitialization"/>
     <module name="DefaultComesLast"/>
     <module name="FallThrough"/>
     <module name="MultipleStringLiterals"/>
