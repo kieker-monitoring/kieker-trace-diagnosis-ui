@@ -25,6 +25,8 @@ import kieker.gui.mainview.Controller;
  */
 public final class Main {
 
+	private Main() {}
+
 	/**
 	 * The main method of this application.
 	 *

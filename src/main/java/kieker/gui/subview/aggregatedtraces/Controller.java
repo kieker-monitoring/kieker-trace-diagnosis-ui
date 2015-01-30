@@ -29,7 +29,7 @@ import kieker.gui.subview.util.IModel;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
-public class Controller implements ISubController, SelectionListener {
+public final class Controller implements ISubController, SelectionListener {
 
 	private final ISubView view;
 	private final Model model;

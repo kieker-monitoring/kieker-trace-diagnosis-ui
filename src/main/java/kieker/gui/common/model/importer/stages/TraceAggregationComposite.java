@@ -44,7 +44,8 @@ public final class TraceAggregationComposite extends Stage {
 	private final CollectorSink<AggregatedExecution> failedTracesCollector;
 	private final CollectorSink<AggregatedExecution> failureContainingTracesCollector;
 
-	public TraceAggregationComposite(final List<AggregatedExecution> traces, final List<AggregatedExecution> failedTraces, final List<AggregatedExecution> failureContainingTraces) {
+	public TraceAggregationComposite(final List<AggregatedExecution> traces, final List<AggregatedExecution> failedTraces,
+			final List<AggregatedExecution> failureContainingTraces) {
 		this.aggregator = new TraceAggregator();
 		this.distributor = new Distributor<>(new CopyByReferenceStrategy());
 		this.failedTraceFilter = new FailedTraceFilter<>();

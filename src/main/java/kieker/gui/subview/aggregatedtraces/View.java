@@ -365,10 +365,10 @@ public final class View implements Observer, ISubView {
 			final String totalDuration = (Long.toString(executionEntry.getTotalDuration()) + " " + View.this.model.getShortTimeUnit()).trim();
 
 			if (parent != null) {
-				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, "", minDuration, avgDuration, maxDuration, totalDuration });
+				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, "", minDuration, avgDuration, maxDuration, totalDuration, });
 			} else {
 				item.setText(new String[] { executionEntry.getContainer(), componentName, operationString, Integer.toString(executionEntry.getCalls()), minDuration, avgDuration,
-						maxDuration, totalDuration });
+						maxDuration, totalDuration, });
 			}
 
 			if (executionEntry.isFailed()) {

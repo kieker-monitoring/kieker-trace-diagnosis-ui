@@ -25,11 +25,11 @@ public abstract class AbstractDirectedComparator<T> implements Comparator<T>, Se
 
 	private int direction;
 
-	public int getDirection() {
+	public final int getDirection() {
 		return this.direction;
 	}
 
-	public void setDirection(final int direction) {
+	public final void setDirection(final int direction) {
 		this.direction = direction;
 	}
 

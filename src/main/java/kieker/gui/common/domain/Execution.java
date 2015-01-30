@@ -83,9 +83,6 @@ public final class Execution extends AbstractExecution<Execution> {
 		if (this == other) {
 			return true;
 		}
-		if (other == null) {
-			return false;
-		}
 		if (!(other instanceof Execution)) {
 			return false;
 		}
