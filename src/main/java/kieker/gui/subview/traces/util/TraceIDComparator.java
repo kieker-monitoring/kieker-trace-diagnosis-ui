@@ -14,24 +14,25 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.subview.util;
+package kieker.gui.subview.traces.util;
 
-import kieker.gui.common.domain.AbstractExecution;
+import kieker.gui.common.domain.Trace;
+import kieker.gui.subview.util.AbstractDirectedComparator;
 
 import org.eclipse.swt.SWT;
 
-public final class ExecutionOperationComparator extends AbstractDirectedComparator<AbstractExecution<?>> {
+public final class TraceIDComparator extends AbstractDirectedComparator<Trace> {
 
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public int compare(final AbstractExecution<?> fst, final AbstractExecution<?> snd) {
+	public int compare(final Trace fstTrace, final Trace sndTrace) {
 		int result;
 
 		if (this.getDirection() == SWT.UP) {
-			result = snd.getComponent().compareTo(fst.getComponent());
+			result = Long.compare(sndTrace.getTraceID(), fstTrace.getTraceID());
 		} else {
-			result = fst.getComponent().compareTo(snd.getComponent());
+			result = Long.compare(fstTrace.getTraceID(), sndTrace.getTraceID());
 		}
 
 		return result;

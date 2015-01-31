@@ -16,44 +16,40 @@
 
 package kieker.gui.common.model.importer.stages;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import kieker.gui.common.domain.AggregatedExecution;
-import kieker.gui.common.domain.Execution;
-import teetime.framework.AbstractConsumerStage;
-import teetime.framework.OutputPort;
+import kieker.gui.common.domain.AggregatedTrace;
+import kieker.gui.common.domain.Trace;
 
 /**
  * Aggregates incoming traces into trace equivalence classes.
- *
+ * 
  * @author Nils Christian Ehmke
  */
-final class TraceAggregator extends AbstractConsumerStage<Execution> {
+public final class TraceAggregator extends AbstractStage<Trace, AggregatedTrace> {
 
-	private final OutputPort<AggregatedExecution> outputPort = super.createOutputPort();
-	private final Map<Execution, AggregatedExecution> aggregationMap = new HashMap<>();
+	private final Map<Trace, List<Trace>> aggregationMap = new HashMap<>();
 
 	@Override
-	protected void execute(final Execution executionEntry) {
-		if (!this.aggregationMap.containsKey(executionEntry)) {
-			final AggregatedExecution aggregatedExecutionEntry = new AggregatedExecution(executionEntry);
-			this.aggregationMap.put(executionEntry, aggregatedExecutionEntry);
+	protected void execute(final Trace trace) {
+		if (!this.aggregationMap.containsKey(trace)) {
+			final List<Trace> aggregationList = new ArrayList<>();
+			this.aggregationMap.put(trace, aggregationList);
 		}
-		this.aggregationMap.get(executionEntry).incrementCalls(executionEntry);
+		this.aggregationMap.get(trace).add(trace);
 	}
 
 	@Override
 	public void onTerminating() throws Exception {
-		for (final AggregatedExecution aggregatedExecutionEntry : this.aggregationMap.values()) {
-			aggregatedExecutionEntry.recalculateValues();
-			this.outputPort.send(aggregatedExecutionEntry);
+		for (final List<Trace> aggregationList : this.aggregationMap.values()) {
+			final AggregatedTrace aggregatedTrace = new AggregatedTrace(aggregationList);
+			super.send(aggregatedTrace);
 		}
-		super.onTerminating();
-	}
 
-	public OutputPort<AggregatedExecution> getOutputPort() {
-		return this.outputPort;
+		super.onTerminating();
 	}
 
 }

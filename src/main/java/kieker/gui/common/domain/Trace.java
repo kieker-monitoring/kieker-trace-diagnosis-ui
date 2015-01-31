@@ -14,28 +14,20 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.subview.aggregatedtraces.util;
+package kieker.gui.common.domain;
 
-import kieker.gui.common.domain.AggregatedExecution;
-import kieker.gui.subview.util.AbstractDirectedComparator;
+public final class Trace extends AbstractTrace {
 
-import org.eclipse.swt.SWT;
+	private final long traceID;
 
-public final class AggregatedExecutionCallComparator extends AbstractDirectedComparator<AggregatedExecution> {
+	public Trace(final OperationCall rootOperationCall, final long traceID) {
+		super(rootOperationCall);
 
-	private static final long serialVersionUID = 1L;
+		this.traceID = traceID;
+	}
 
-	@Override
-	public int compare(final AggregatedExecution arg0, final AggregatedExecution arg1) {
-		int result;
-
-		if (this.getDirection() == SWT.UP) {
-			result = Long.compare(arg1.getCalls(), arg0.getCalls());
-		} else {
-			result = Long.compare(arg0.getCalls(), arg1.getCalls());
-		}
-
-		return result;
+	public long getTraceID() {
+		return this.traceID;
 	}
 
 }

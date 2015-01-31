@@ -18,8 +18,8 @@ package kieker.gui.common.model.importer.stages;
 
 import java.util.List;
 
-import kieker.gui.common.domain.AggregatedExecution;
-import kieker.gui.common.domain.Execution;
+import kieker.gui.common.domain.AggregatedTrace;
+import kieker.gui.common.domain.Trace;
 import teetime.framework.InputPort;
 import teetime.framework.Stage;
 import teetime.framework.TerminationStrategy;
@@ -37,23 +37,26 @@ public final class TraceAggregationComposite extends Stage {
 
 	private final TraceAggregator aggregator;
 
-	private final CollectorSink<AggregatedExecution> tracesCollector;
-	private final CollectorSink<AggregatedExecution> failedTracesCollector;
-	private final CollectorSink<AggregatedExecution> failureContainingTracesCollector;
+	private final CollectorSink<AggregatedTrace> tracesCollector;
+	private final CollectorSink<AggregatedTrace> failedTracesCollector;
+	private final CollectorSink<AggregatedTrace> failureContainingTracesCollector;
+	private final AggregatedTraceStatisticsDecorator statisticsDecorator;
 
-	public TraceAggregationComposite(final List<AggregatedExecution> traces, final List<AggregatedExecution> failedTraces,
-			final List<AggregatedExecution> failureContainingTraces) {
+	public TraceAggregationComposite(final List<AggregatedTrace> traces, final List<AggregatedTrace> failedTraces, final List<AggregatedTrace> failureContainingTraces) {
 		this.aggregator = new TraceAggregator();
-		final Distributor<AggregatedExecution> distributor = new Distributor<>(new CopyByReferenceStrategy());
-		final FailedTraceFilter<AggregatedExecution> failedTraceFilter = new FailedTraceFilter<>();
-		final FailureContainingTraceFilter<AggregatedExecution> failureContainingTraceFilter = new FailureContainingTraceFilter<>();
+		this.statisticsDecorator = new AggregatedTraceStatisticsDecorator();
+
+		final Distributor<AggregatedTrace> distributor = new Distributor<>(new CopyByReferenceStrategy());
+		final FailedTraceFilter<AggregatedTrace> failedTraceFilter = new FailedTraceFilter<>();
+		final FailureContainingTraceFilter<AggregatedTrace> failureContainingTraceFilter = new FailureContainingTraceFilter<>();
 
 		this.tracesCollector = new CollectorSink<>(traces);
 		this.failedTracesCollector = new CollectorSink<>(failedTraces);
 		this.failureContainingTracesCollector = new CollectorSink<>(failureContainingTraces);
 
 		final IPipeFactory pipeFactory = PipeFactoryRegistry.INSTANCE.getPipeFactory(ThreadCommunication.INTRA, PipeOrdering.ARBITRARY, false);
-		pipeFactory.create(this.aggregator.getOutputPort(), distributor.getInputPort());
+		pipeFactory.create(this.aggregator.getOutputPort(), this.statisticsDecorator.getInputPort());
+		pipeFactory.create(this.statisticsDecorator.getOutputPort(), distributor.getInputPort());
 
 		pipeFactory.create(distributor.getNewOutputPort(), this.tracesCollector.getInputPort());
 		pipeFactory.create(distributor.getNewOutputPort(), failedTraceFilter.getInputPort());
@@ -68,7 +71,7 @@ public final class TraceAggregationComposite extends Stage {
 		this.aggregator.executeWithPorts();
 	}
 
-	public InputPort<Execution> getInputPort() {
+	public InputPort<Trace> getInputPort() {
 		return this.aggregator.getInputPort();
 	}
 
@@ -104,7 +107,8 @@ public final class TraceAggregationComposite extends Stage {
 
 	@Override
 	protected boolean isStarted() {
-		return this.tracesCollector.isStarted() && this.failedTracesCollector.isStarted() && this.failureContainingTracesCollector.isStarted();
+		return this.tracesCollector.isStarted() && this.failedTracesCollector.isStarted() && this.failureContainingTracesCollector.isStarted()
+				&& this.statisticsDecorator.isStarted();
 	}
 
 }

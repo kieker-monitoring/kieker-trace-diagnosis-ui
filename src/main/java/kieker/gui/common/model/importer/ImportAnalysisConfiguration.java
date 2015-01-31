@@ -23,8 +23,8 @@ import java.util.List;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.misc.KiekerMetadataRecord;
-import kieker.gui.common.domain.AggregatedExecution;
-import kieker.gui.common.domain.Execution;
+import kieker.gui.common.domain.AggregatedTrace;
+import kieker.gui.common.domain.Trace;
 import kieker.gui.common.model.importer.stages.ReadingComposite;
 import kieker.gui.common.model.importer.stages.TraceAggregationComposite;
 import kieker.gui.common.model.importer.stages.TraceReconstructionComposite;
@@ -37,18 +37,18 @@ import teetime.stage.MultipleInstanceOfFilter;
 
 /**
  * A configuration for the import and analysis of monitoring logs.
- *
+ * 
  * @author Nils Christian Ehmke
  */
 public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 
-	private final List<Execution> traces = new ArrayList<>(1000);
-	private final List<Execution> failedTraces = new ArrayList<>(1000);
-	private final List<Execution> failureContainingTraces = new ArrayList<>(1000);
+	private final List<Trace> traces = new ArrayList<>(1000);
+	private final List<Trace> failedTraces = new ArrayList<>(1000);
+	private final List<Trace> failureContainingTraces = new ArrayList<>(1000);
 
-	private final List<AggregatedExecution> aggregatedTraces = new ArrayList<>(1000);
-	private final List<AggregatedExecution> failedAggregatedTraces = new ArrayList<>(1000);
-	private final List<AggregatedExecution> failureContainingAggregatedTraces = new ArrayList<>(1000);
+	private final List<AggregatedTrace> aggregatedTraces = new ArrayList<>(1000);
+	private final List<AggregatedTrace> failedAggregatedTraces = new ArrayList<>(1000);
+	private final List<AggregatedTrace> failureContainingAggregatedTraces = new ArrayList<>(1000);
 
 	private final List<KiekerMetadataRecord> metadataRecords = new ArrayList<>(1000);
 
@@ -57,8 +57,7 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 		final ReadingComposite reader = new ReadingComposite(importDirectory);
 		final MultipleInstanceOfFilter<IMonitoringRecord> typeFilter = new MultipleInstanceOfFilter<>();
 		final TraceReconstructionComposite traceReconstruction = new TraceReconstructionComposite(this.traces, this.failedTraces, this.failureContainingTraces);
-		final TraceAggregationComposite traceAggregation = new TraceAggregationComposite(this.aggregatedTraces, this.failedAggregatedTraces,
-				this.failureContainingAggregatedTraces);
+		final TraceAggregationComposite traceAggregation = new TraceAggregationComposite(this.aggregatedTraces, this.failedAggregatedTraces, this.failureContainingAggregatedTraces);
 
 		final CollectorSink<KiekerMetadataRecord> metadataCollector = new CollectorSink<>(this.metadataRecords);
 
@@ -73,27 +72,27 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 		super.addThreadableStage(reader);
 	}
 
-	public List<Execution> getTracesList() {
+	public List<Trace> getTracesList() {
 		return this.traces;
 	}
 
-	public List<Execution> getFailedTracesList() {
+	public List<Trace> getFailedTracesList() {
 		return this.failedTraces;
 	}
 
-	public List<Execution> getFailureContainingTracesList() {
+	public List<Trace> getFailureContainingTracesList() {
 		return this.failureContainingTraces;
 	}
 
-	public List<AggregatedExecution> getFailedAggregatedTracesList() {
+	public List<AggregatedTrace> getFailedAggregatedTracesList() {
 		return this.failedAggregatedTraces;
 	}
 
-	public List<AggregatedExecution> getFailureContainingAggregatedTracesList() {
+	public List<AggregatedTrace> getFailureContainingAggregatedTracesList() {
 		return this.failureContainingAggregatedTraces;
 	}
 
-	public List<AggregatedExecution> getAggregatedTraces() {
+	public List<AggregatedTrace> getAggregatedTraces() {
 		return this.aggregatedTraces;
 	}
 

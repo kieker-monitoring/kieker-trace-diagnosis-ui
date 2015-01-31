@@ -27,19 +27,17 @@ import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
-import kieker.gui.common.domain.Execution;
-import teetime.framework.AbstractConsumerStage;
-import teetime.framework.OutputPort;
+import kieker.gui.common.domain.OperationCall;
+import kieker.gui.common.domain.Trace;
 
 /**
  * Reconstruct traces based on the incoming instances of {@code IFlowRecord}. Currently only {@link TraceMetadata}, {@link BeforeOperationEvent} and
  * {@link AfterOperationEvent} instances are supported.
- *
+ * 
  * @author Nils Christian Ehmke
  */
-final class TraceReconstructor extends AbstractConsumerStage<IFlowRecord> {
+final class TraceReconstructor extends AbstractStage<IFlowRecord, Trace> {
 
-	private final OutputPort<Execution> outputPort = super.createOutputPort();
 	private final Map<Long, TraceBuffer> traceBuffers = new HashMap<>();
 
 	@Override
@@ -64,24 +62,22 @@ final class TraceReconstructor extends AbstractConsumerStage<IFlowRecord> {
 
 		traceBuffer.handleEvent(input);
 		if (traceBuffer.isTraceComplete()) {
-			final Execution executionEntry = traceBuffer.reconstructTrace();
-			this.outputPort.send(executionEntry);
+			final Trace trace = traceBuffer.reconstructTrace();
+			super.send(trace);
 		}
-	}
-
-	public OutputPort<Execution> getOutputPort() {
-		return this.outputPort;
 	}
 
 	private static final class TraceBuffer {
 
 		private final String hostname;
 		private final Deque<BeforeOperationEvent> stack = new LinkedList<>();
-		private Execution root;
-		private Execution header;
+		private OperationCall root;
+		private OperationCall header;
+		private final long traceID;
 
 		public TraceBuffer(final TraceMetadata traceMetadata) {
 			this.hostname = traceMetadata.getHostname();
+			this.traceID = traceMetadata.getTraceId();
 		}
 
 		public void handleEvent(final AbstractOperationEvent record) {
@@ -95,13 +91,13 @@ final class TraceReconstructor extends AbstractConsumerStage<IFlowRecord> {
 		private void handleBeforeOperationEventRecord(final BeforeOperationEvent record) {
 			this.stack.push(record);
 
-			final Execution newExecutionEntry = new Execution(record.getTraceId(), this.hostname, record.getClassSignature(), record.getOperationSignature());
+			final OperationCall newCall = new OperationCall(this.hostname, record.getClassSignature(), record.getOperationSignature(), this.traceID);
 			if (this.root == null) {
-				this.root = newExecutionEntry;
+				this.root = newCall;
 			} else {
-				this.header.addExecutionEntry(newExecutionEntry);
+				this.header.addChild(newCall);
 			}
-			this.header = newExecutionEntry;
+			this.header = newCall;
 		}
 
 		private void handleAferOperationEventRecord(final AfterOperationEvent record) {
@@ -116,9 +112,8 @@ final class TraceReconstructor extends AbstractConsumerStage<IFlowRecord> {
 			this.header = this.header.getParent();
 		}
 
-		public Execution reconstructTrace() {
-			this.root.recalculateValues();
-			return this.root;
+		public Trace reconstructTrace() {
+			return new Trace(this.root, this.traceID);
 		}
 
 		public boolean isTraceComplete() {

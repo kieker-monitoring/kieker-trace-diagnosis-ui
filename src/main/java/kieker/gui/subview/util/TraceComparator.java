@@ -16,22 +16,33 @@
 
 package kieker.gui.subview.util;
 
-import kieker.gui.common.domain.AbstractExecution;
+import kieker.gui.common.domain.AbstractTrace;
+import kieker.gui.common.domain.StatisticType;
 
 import org.eclipse.swt.SWT;
 
-public final class ExecutionComponentComparator extends AbstractDirectedComparator<AbstractExecution<?>> {
+public final class TraceComparator<T extends Comparable<T>> extends AbstractDirectedComparator<AbstractTrace> {
 
 	private static final long serialVersionUID = 1L;
 
+	private final StatisticType statisticType;
+
+	public TraceComparator(final StatisticType statisticType) {
+		this.statisticType = statisticType;
+	}
+
 	@Override
-	public int compare(final AbstractExecution<?> fst, final AbstractExecution<?> snd) {
+	@SuppressWarnings("unchecked")
+	public int compare(final AbstractTrace fstTrace, final AbstractTrace sndTrace) {
+		final T fstValue = (T) fstTrace.getRootOperationCall().getStatistic(this.statisticType);
+		final T sndValue = (T) sndTrace.getRootOperationCall().getStatistic(this.statisticType);
+
 		int result;
 
 		if (this.getDirection() == SWT.UP) {
-			result = snd.getComponent().compareTo(fst.getComponent());
+			result = fstValue.compareTo(sndValue);
 		} else {
-			result = fst.getComponent().compareTo(snd.getComponent());
+			result = sndValue.compareTo(fstValue);
 		}
 
 		return result;

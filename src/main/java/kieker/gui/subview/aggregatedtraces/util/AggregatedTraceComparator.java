@@ -16,23 +16,34 @@
 
 package kieker.gui.subview.aggregatedtraces.util;
 
-import kieker.gui.common.domain.AggregatedExecution;
+import kieker.gui.common.domain.AggregatedTrace;
+import kieker.gui.common.domain.StatisticType;
 import kieker.gui.subview.util.AbstractDirectedComparator;
 
 import org.eclipse.swt.SWT;
 
-public final class AggregatedExecutionMinDurationComparator extends AbstractDirectedComparator<AggregatedExecution> {
+public final class AggregatedTraceComparator<T extends Comparable<T>> extends AbstractDirectedComparator<AggregatedTrace> {
 
 	private static final long serialVersionUID = 1L;
 
+	private final StatisticType statisticType;
+
+	public AggregatedTraceComparator(final StatisticType statisticType) {
+		this.statisticType = statisticType;
+	}
+
 	@Override
-	public int compare(final AggregatedExecution arg0, final AggregatedExecution arg1) {
+	@SuppressWarnings("unchecked")
+	public int compare(final AggregatedTrace fstTrace, final AggregatedTrace sndTrace) {
+		final T fstValue = (T) fstTrace.getStatistic(this.statisticType);
+		final T sndValue = (T) sndTrace.getStatistic(this.statisticType);
+
 		int result;
 
 		if (this.getDirection() == SWT.UP) {
-			result = Long.compare(arg1.getMinDuration(), arg0.getMinDuration());
+			result = fstValue.compareTo(sndValue);
 		} else {
-			result = Long.compare(arg0.getMinDuration(), arg1.getMinDuration());
+			result = sndValue.compareTo(fstValue);
 		}
 
 		return result;

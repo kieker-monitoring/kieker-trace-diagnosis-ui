@@ -18,21 +18,20 @@ package kieker.gui.subview.aggregatedtraces;
 
 import java.util.Observable;
 
-import kieker.gui.common.domain.AggregatedExecution;
+import kieker.gui.common.domain.OperationCall;
 
 public final class Model extends Observable {
 
-	private AggregatedExecution currentActiveTrace;
+	private OperationCall operationCall;
 
-	public AggregatedExecution getCurrentActiveTrace() {
-		return this.currentActiveTrace;
+	public OperationCall getCurrentActiveCall() {
+		return this.operationCall;
 	}
 
-	public void setCurrentActiveTrace(final AggregatedExecution currentActiveTrace) {
-		this.currentActiveTrace = currentActiveTrace;
+	public void setCurrentActiveCall(final OperationCall operationCall) {
+		this.operationCall = operationCall;
 
 		this.setChanged();
 		this.notifyObservers();
 	}
-
 }

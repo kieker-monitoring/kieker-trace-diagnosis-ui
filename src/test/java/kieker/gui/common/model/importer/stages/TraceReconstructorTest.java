@@ -16,10 +16,6 @@
 
 package kieker.gui.common.model.importer.stages;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +24,11 @@ import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
-import kieker.gui.common.domain.Execution;
+import kieker.gui.common.domain.OperationCall;
+import kieker.gui.common.domain.Trace;
 
+import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,9 +38,9 @@ import teetime.stage.CollectorSink;
 
 public final class TraceReconstructorTest {
 
-	private List<Execution> traceCollectorList;
+	private List<Trace> traceCollectorList;
 	private TraceReconstructor reconstructorUnderTest;
-	private CollectorSink<Execution> traceCollector;
+	private CollectorSink<Trace> traceCollector;
 
 	@Before
 	public void initializeTraceReconstructor() {
@@ -71,15 +70,16 @@ public final class TraceReconstructorTest {
 		for (final IFlowRecord record : records) {
 			this.reconstructorUnderTest.execute(record);
 		}
-		assertThat(this.traceCollectorList, hasSize(1));
+		Assert.assertThat(this.traceCollectorList, Matchers.hasSize(1));
 
-		final Execution trace = this.traceCollectorList.get(0);
-		assertThat(trace.getOperation(), is("main()"));
-		assertThat(trace.getChildren(), hasSize(2));
-		assertThat(trace.getChildren().get(0).getOperation(), is("Bookstore()"));
-		assertThat(trace.getChildren().get(1).getOperation(), is("Catalog()"));
-		assertThat(trace.getChildren().get(1).getChildren(), hasSize(1));
-		assertThat(trace.getChildren().get(1).getChildren().get(0).getOperation(), is("CRM()"));
+		final Trace trace = this.traceCollectorList.get(0);
+		final OperationCall rootCall = trace.getRootOperationCall();
+		Assert.assertThat(rootCall.getOperation(), Matchers.is("main()"));
+		Assert.assertThat(rootCall.getChildren(), Matchers.hasSize(2));
+		Assert.assertThat(rootCall.getChildren().get(0).getOperation(), Matchers.is("Bookstore()"));
+		Assert.assertThat(rootCall.getChildren().get(1).getOperation(), Matchers.is("Catalog()"));
+		Assert.assertThat(rootCall.getChildren().get(1).getChildren(), Matchers.hasSize(1));
+		Assert.assertThat(rootCall.getChildren().get(1).getChildren().get(0).getOperation(), Matchers.is("CRM()"));
 	}
 
 	@Test
@@ -96,13 +96,13 @@ public final class TraceReconstructorTest {
 		for (final IFlowRecord record : records) {
 			this.reconstructorUnderTest.execute(record);
 		}
-		assertThat(this.traceCollectorList, hasSize(2));
+		Assert.assertThat(this.traceCollectorList, Matchers.hasSize(2));
 
-		final Execution fstTrace = this.traceCollectorList.get(0);
-		final Execution sndTrace = this.traceCollectorList.get(1);
+		final Trace fstTrace = this.traceCollectorList.get(0);
+		final Trace sndTrace = this.traceCollectorList.get(1);
 
-		assertThat(fstTrace.getOperation(), is("main()"));
-		assertThat(sndTrace.getOperation(), is("Bookstore()"));
+		Assert.assertThat(fstTrace.getRootOperationCall().getOperation(), Matchers.is("main()"));
+		Assert.assertThat(sndTrace.getRootOperationCall().getOperation(), Matchers.is("Bookstore()"));
 	}
 
 	@Test
@@ -118,13 +118,14 @@ public final class TraceReconstructorTest {
 		for (final IFlowRecord record : records) {
 			this.reconstructorUnderTest.execute(record);
 		}
-		assertThat(this.traceCollectorList, hasSize(1));
+		Assert.assertThat(this.traceCollectorList, Matchers.hasSize(1));
 
-		final Execution trace = this.traceCollectorList.get(0);
-		assertThat(trace.isFailed(), is(true));
-		assertThat(trace.getFailedCause(), is("IllegalArgumentException"));
-		assertThat(trace.getChildren().get(0).isFailed(), is(true));
-		assertThat(trace.getChildren().get(0).getFailedCause(), is("NullPointerException"));
+		final Trace trace = this.traceCollectorList.get(0);
+		final OperationCall rootCall = trace.getRootOperationCall();
+		Assert.assertThat(rootCall.isFailed(), Matchers.is(true));
+		Assert.assertThat(rootCall.getFailedCause(), Matchers.is("IllegalArgumentException"));
+		Assert.assertThat(rootCall.getChildren().get(0).isFailed(), Matchers.is(true));
+		Assert.assertThat(rootCall.getChildren().get(0).getFailedCause(), Matchers.is("NullPointerException"));
 	}
 
 	@Test
@@ -140,13 +141,14 @@ public final class TraceReconstructorTest {
 		for (final IFlowRecord record : records) {
 			this.reconstructorUnderTest.execute(record);
 		}
-		assertThat(this.traceCollectorList, hasSize(1));
+		Assert.assertThat(this.traceCollectorList, Matchers.hasSize(1));
 
-		final Execution trace = this.traceCollectorList.get(0);
-		assertThat(trace.isFailed(), is(false));
-		assertThat(trace.containsFailure(), is(true));
-		assertThat(trace.getChildren().get(0).isFailed(), is(true));
-		assertThat(trace.getChildren().get(0).getFailedCause(), is("NullPointerException"));
+		final Trace trace = this.traceCollectorList.get(0);
+		final OperationCall rootCall = trace.getRootOperationCall();
+		Assert.assertThat(rootCall.isFailed(), Matchers.is(false));
+		Assert.assertThat(rootCall.containsFailure(), Matchers.is(true));
+		Assert.assertThat(rootCall.getChildren().get(0).isFailed(), Matchers.is(true));
+		Assert.assertThat(rootCall.getChildren().get(0).getFailedCause(), Matchers.is("NullPointerException"));
 	}
 
 }

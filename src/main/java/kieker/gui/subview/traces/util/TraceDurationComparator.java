@@ -16,27 +16,26 @@
 
 package kieker.gui.subview.traces.util;
 
-import kieker.gui.common.domain.Execution;
+import kieker.gui.common.domain.Trace;
 import kieker.gui.subview.util.AbstractDirectedComparator;
 
 import org.eclipse.swt.SWT;
 
-public final class ExecutionDurationComparator extends AbstractDirectedComparator<Execution> {
+public final class TraceDurationComparator extends AbstractDirectedComparator<Trace> {
 
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public int compare(final Execution arg0, final Execution arg1) {
+	public int compare(final Trace fstTrace, final Trace sndTrace) {
 		int result;
 
 		if (this.getDirection() == SWT.UP) {
-			result = Long.compare(arg1.getTraceID(), arg0.getTraceID());
+			result = Long.compare(sndTrace.getRootOperationCall().getDuration(), fstTrace.getRootOperationCall().getDuration());
 		} else {
-			result = Long.compare(arg0.getTraceID(), arg1.getTraceID());
+			result = Long.compare(fstTrace.getRootOperationCall().getDuration(), sndTrace.getRootOperationCall().getDuration());
 		}
 
 		return result;
-
 	}
 
 }

@@ -18,7 +18,8 @@ package kieker.gui.subview.aggregatedtraces;
 
 import java.util.List;
 
-import kieker.gui.common.domain.AggregatedExecution;
+import kieker.gui.common.domain.AggregatedTrace;
+import kieker.gui.common.domain.OperationCall;
 import kieker.gui.common.model.DataModel;
 import kieker.gui.common.model.PropertiesModel;
 import kieker.gui.subview.ISubController;
@@ -35,7 +36,7 @@ public final class Controller implements ISubController, SelectionListener {
 	private final Model model;
 
 	public Controller(final Filter filter, final DataModel dataModel, final PropertiesModel propertiesModel) {
-		final IModel<AggregatedExecution> modelProxy = createModelProxy(dataModel, filter);
+		final IModel<AggregatedTrace> modelProxy = Controller.createModelProxy(dataModel, filter);
 		this.model = new Model();
 
 		this.view = new View(modelProxy, this.model, propertiesModel, this);
@@ -48,8 +49,8 @@ public final class Controller implements ISubController, SelectionListener {
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
-		if (e.item.getData() instanceof AggregatedExecution) {
-			this.model.setCurrentActiveTrace((AggregatedExecution) e.item.getData());
+		if (e.item.getData() instanceof OperationCall) {
+			this.model.setCurrentActiveCall((OperationCall) e.item.getData());
 		}
 	}
 
@@ -58,7 +59,7 @@ public final class Controller implements ISubController, SelectionListener {
 		// Just implemented for the interface
 	}
 
-	private static IModel<AggregatedExecution> createModelProxy(final DataModel dataModel, final Filter filter) {
+	private static IModel<AggregatedTrace> createModelProxy(final DataModel dataModel, final Filter filter) {
 		if (filter == Filter.JUST_FAILED_TRACES) {
 			return new FailedTracesModelProxy(dataModel);
 		}
@@ -72,40 +73,40 @@ public final class Controller implements ISubController, SelectionListener {
 		NONE, JUST_FAILED_TRACES, JUST_FAILURE_CONTAINING_TRACES
 	}
 
-	private static final class TracesModelProxy extends AbstractDataModelProxy<AggregatedExecution> {
+	private static final class TracesModelProxy extends AbstractDataModelProxy<AggregatedTrace> {
 
 		public TracesModelProxy(final DataModel dataModel) {
 			super(dataModel);
 		}
 
 		@Override
-		public List<AggregatedExecution> getContent() {
+		public List<AggregatedTrace> getContent() {
 			return super.dataModel.getAggregatedTracesCopy();
 		}
 
 	}
 
-	private static final class FailedTracesModelProxy extends AbstractDataModelProxy<AggregatedExecution> {
+	private static final class FailedTracesModelProxy extends AbstractDataModelProxy<AggregatedTrace> {
 
 		public FailedTracesModelProxy(final DataModel dataModel) {
 			super(dataModel);
 		}
 
 		@Override
-		public List<AggregatedExecution> getContent() {
+		public List<AggregatedTrace> getContent() {
 			return super.dataModel.getFailedAggregatedTracesCopy();
 		}
 
 	}
 
-	private static final class FailureContainingTracesModelProxy extends AbstractDataModelProxy<AggregatedExecution> {
+	private static final class FailureContainingTracesModelProxy extends AbstractDataModelProxy<AggregatedTrace> {
 
 		public FailureContainingTracesModelProxy(final DataModel dataModel) {
 			super(dataModel);
 		}
 
 		@Override
-		public List<AggregatedExecution> getContent() {
+		public List<AggregatedTrace> getContent() {
 			return super.dataModel.getFailureContainingAggregatedTracesCopy();
 		}
 

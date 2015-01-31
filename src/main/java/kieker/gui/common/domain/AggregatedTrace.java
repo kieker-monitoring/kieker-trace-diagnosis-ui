@@ -14,28 +14,35 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.subview.aggregatedtraces.util;
+package kieker.gui.common.domain;
 
-import kieker.gui.common.domain.AggregatedExecution;
-import kieker.gui.subview.util.AbstractDirectedComparator;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 
-import org.eclipse.swt.SWT;
+public final class AggregatedTrace extends AbstractTrace {
 
-public final class AggregatedExecutionAvgDurationComparator extends AbstractDirectedComparator<AggregatedExecution> {
+	private final Map<StatisticType, Object> statistics = new EnumMap<>(StatisticType.class);
+	private final List<Trace> traces;
 
-	private static final long serialVersionUID = 1L;
+	public AggregatedTrace(final List<Trace> traces) {
+		super(traces.get(0).getRootOperationCall().copy());
 
-	@Override
-	public int compare(final AggregatedExecution arg0, final AggregatedExecution arg1) {
-		int result;
+		this.traces = traces;
+	}
 
-		if (this.getDirection() == SWT.UP) {
-			result = Long.compare(arg1.getAvgDuration(), arg0.getAvgDuration());
-		} else {
-			result = Long.compare(arg0.getAvgDuration(), arg1.getAvgDuration());
+	public void addStatistic(final StatisticType statisticType, final Object value) {
+		if (statisticType.getTypeOfValue().isInstance(value)) {
+			this.statistics.put(statisticType, value);
 		}
+	}
 
-		return result;
+	public List<Trace> getTraces() {
+		return this.traces;
+	}
+
+	public Object getStatistic(final StatisticType statisticType) {
+		return this.statistics.get(statisticType);
 	}
 
 }

@@ -24,24 +24,24 @@ import java.util.Observable;
 import java.util.concurrent.TimeUnit;
 
 import kieker.common.record.misc.KiekerMetadataRecord;
-import kieker.gui.common.domain.AggregatedExecution;
-import kieker.gui.common.domain.Execution;
+import kieker.gui.common.domain.AggregatedTrace;
+import kieker.gui.common.domain.Trace;
 import kieker.gui.common.model.importer.ImportAnalysisConfiguration;
 import teetime.framework.Analysis;
 
 /**
  * A container for data used within this application.
- *
+ * 
  * @author Nils Christian Ehmke
  */
 public final class DataModel extends Observable {
 
-	private List<Execution> traces = Collections.emptyList();
-	private List<Execution> failureContainingTraces = Collections.emptyList();
-	private List<Execution> failedTraces = Collections.emptyList();
-	private List<AggregatedExecution> aggregatedTraces = Collections.emptyList();
-	private List<AggregatedExecution> failedAggregatedTraces = Collections.emptyList();
-	private List<AggregatedExecution> failureAggregatedContainingTraces = Collections.emptyList();
+	private List<Trace> traces = Collections.emptyList();
+	private List<Trace> failureContainingTraces = Collections.emptyList();
+	private List<Trace> failedTraces = Collections.emptyList();
+	private List<AggregatedTrace> aggregatedTraces = Collections.emptyList();
+	private List<AggregatedTrace> failedAggregatedTraces = Collections.emptyList();
+	private List<AggregatedTrace> failureAggregatedContainingTraces = Collections.emptyList();
 	private String shortTimeUnit = "";
 
 	public void loadMonitoringLogFromFS(final String directory) {
@@ -105,31 +105,31 @@ public final class DataModel extends Observable {
 		return result;
 	}
 
-	public List<Execution> getTracesCopy() {
-		return new ArrayList<>(this.traces);
-	}
-
-	public List<Execution> getFailedTracesCopy() {
-		return new ArrayList<>(this.failedTraces);
-	}
-
-	public List<Execution> getFailureContainingTracesCopy() {
-		return new ArrayList<>(this.failureContainingTraces);
-	}
-
-	public List<AggregatedExecution> getAggregatedTracesCopy() {
-		return new ArrayList<>(this.aggregatedTraces);
-	}
-
 	public String getShortTimeUnit() {
 		return this.shortTimeUnit;
 	}
 
-	public List<AggregatedExecution> getFailedAggregatedTracesCopy() {
+	public List<Trace> getTracesCopy() {
+		return new ArrayList<>(this.traces);
+	}
+
+	public List<Trace> getFailedTracesCopy() {
+		return new ArrayList<>(this.failedTraces);
+	}
+
+	public List<Trace> getFailureContainingTracesCopy() {
+		return new ArrayList<>(this.failureContainingTraces);
+	}
+
+	public List<AggregatedTrace> getAggregatedTracesCopy() {
+		return new ArrayList<>(this.aggregatedTraces);
+	}
+
+	public List<AggregatedTrace> getFailedAggregatedTracesCopy() {
 		return new ArrayList<>(this.failedAggregatedTraces);
 	}
 
-	public List<AggregatedExecution> getFailureContainingAggregatedTracesCopy() {
+	public List<AggregatedTrace> getFailureContainingAggregatedTracesCopy() {
 		return new ArrayList<>(this.failureAggregatedContainingTraces);
 	}
 

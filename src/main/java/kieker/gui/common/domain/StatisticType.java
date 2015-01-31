@@ -14,27 +14,21 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.subview.util;
+package kieker.gui.common.domain;
 
-import kieker.gui.common.domain.AbstractExecution;
+public enum StatisticType {
 
-import org.eclipse.swt.SWT;
+	STACK_DEPTH(Integer.class), STACK_SIZE(Integer.class), AVG_DURATION(Long.class), MIN_DURATION(Long.class), MAX_DURATION(Long.class), TOTAL_DURATION(Long.class),
+	PERCENT(Float.class), CALLS(Integer.class);
 
-public final class ExecutionContainerComparator extends AbstractDirectedComparator<AbstractExecution<?>> {
+	private final Class<?> typeOfValue;
 
-	private static final long serialVersionUID = 1L;
+	private <T extends Comparable<T>> StatisticType(final Class<T> typeOfValue) {
+		this.typeOfValue = typeOfValue;
+	}
 
-	@Override
-	public int compare(final AbstractExecution<?> fst, final AbstractExecution<?> snd) {
-		int result;
-
-		if (this.getDirection() == SWT.UP) {
-			result = snd.getComponent().compareTo(fst.getComponent());
-		} else {
-			result = fst.getComponent().compareTo(snd.getComponent());
-		}
-
-		return result;
+	public Class<?> getTypeOfValue() {
+		return this.typeOfValue;
 	}
 
 }

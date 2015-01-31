@@ -19,7 +19,7 @@ package kieker.gui.common.model.importer.stages;
 import java.util.List;
 
 import kieker.common.record.flow.IFlowRecord;
-import kieker.gui.common.domain.Execution;
+import kieker.gui.common.domain.Trace;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
 import teetime.framework.Stage;
@@ -37,24 +37,27 @@ import teetime.stage.basic.distributor.Distributor;
 public final class TraceReconstructionComposite extends Stage {
 
 	private final TraceReconstructor reconstructor;
-	private final Distributor<Execution> distributor;
+	private final Distributor<Trace> distributor;
 
-	private final CollectorSink<Execution> tracesCollector;
-	private final CollectorSink<Execution> failedTracesCollector;
-	private final CollectorSink<Execution> failureContainingTracesCollector;
-	private final OutputPort<Execution> outputPort;
+	private final CollectorSink<Trace> tracesCollector;
+	private final CollectorSink<Trace> failedTracesCollector;
+	private final CollectorSink<Trace> failureContainingTracesCollector;
+	private final TraceStatisticsDecorator statisticsDecorator;
 
-	public TraceReconstructionComposite(final List<Execution> traces, final List<Execution> failedTraces, final List<Execution> failureContainingTraces) {
+	private final OutputPort<Trace> outputPort;
+
+	public TraceReconstructionComposite(final List<Trace> traces, final List<Trace> failedTraces, final List<Trace> failureContainingTraces) {
 		this.reconstructor = new TraceReconstructor();
 		this.distributor = new Distributor<>(new CopyByReferenceStrategy());
-		final FailedTraceFilter<Execution> failedTraceFilter = new FailedTraceFilter<>();
-		final FailureContainingTraceFilter<Execution> failureContainingTraceFilter = new FailureContainingTraceFilter<>();
+		final FailedTraceFilter<Trace> failedTraceFilter = new FailedTraceFilter<>();
+		final FailureContainingTraceFilter<Trace> failureContainingTraceFilter = new FailureContainingTraceFilter<>();
 
 		this.tracesCollector = new CollectorSink<>(traces);
 		this.failedTracesCollector = new CollectorSink<>(failedTraces);
 		this.failureContainingTracesCollector = new CollectorSink<>(failureContainingTraces);
+		this.statisticsDecorator = new TraceStatisticsDecorator();
 
-		this.outputPort = this.distributor.getNewOutputPort();
+		this.outputPort = this.statisticsDecorator.getOutputPort();
 
 		final IPipeFactory pipeFactory = PipeFactoryRegistry.INSTANCE.getPipeFactory(ThreadCommunication.INTRA, PipeOrdering.ARBITRARY, false);
 		pipeFactory.create(this.reconstructor.getOutputPort(), this.distributor.getInputPort());
@@ -62,6 +65,7 @@ public final class TraceReconstructionComposite extends Stage {
 		pipeFactory.create(this.distributor.getNewOutputPort(), this.tracesCollector.getInputPort());
 		pipeFactory.create(this.distributor.getNewOutputPort(), failedTraceFilter.getInputPort());
 		pipeFactory.create(this.distributor.getNewOutputPort(), failureContainingTraceFilter.getInputPort());
+		pipeFactory.create(this.distributor.getNewOutputPort(), this.statisticsDecorator.getInputPort());
 
 		pipeFactory.create(failedTraceFilter.getOutputPort(), this.failedTracesCollector.getInputPort());
 		pipeFactory.create(failureContainingTraceFilter.getOutputPort(), this.failureContainingTracesCollector.getInputPort());
@@ -76,13 +80,13 @@ public final class TraceReconstructionComposite extends Stage {
 		return this.reconstructor.getInputPort();
 	}
 
-	public OutputPort<Execution> getOutputPort() {
+	public OutputPort<Trace> getOutputPort() {
 		return this.outputPort;
 	}
 
 	@Override
 	public void validateOutputPorts(final List<InvalidPortConnection> invalidPortConnections) {
-		this.distributor.validateOutputPorts(invalidPortConnections);
+		this.statisticsDecorator.validateOutputPorts(invalidPortConnections);
 	}
 
 	@Override
@@ -112,7 +116,8 @@ public final class TraceReconstructionComposite extends Stage {
 
 	@Override
 	protected boolean isStarted() {
-		return this.tracesCollector.isStarted() && this.failedTracesCollector.isStarted() && this.failureContainingTracesCollector.isStarted();
+		return this.tracesCollector.isStarted() && this.failedTracesCollector.isStarted() && this.failureContainingTracesCollector.isStarted()
+				&& this.statisticsDecorator.isStarted();
 	}
 
 }

@@ -18,7 +18,8 @@ package kieker.gui.subview.traces;
 
 import java.util.List;
 
-import kieker.gui.common.domain.Execution;
+import kieker.gui.common.domain.OperationCall;
+import kieker.gui.common.domain.Trace;
 import kieker.gui.common.model.DataModel;
 import kieker.gui.common.model.PropertiesModel;
 import kieker.gui.subview.ISubController;
@@ -31,7 +32,7 @@ import org.eclipse.swt.events.SelectionListener;
 
 /**
  * The sub-controller responsible for the sub-view presenting the available traces.
- *
+ * 
  * @author Nils Christian Ehmke
  */
 public final class Controller implements ISubController, SelectionListener {
@@ -40,7 +41,7 @@ public final class Controller implements ISubController, SelectionListener {
 	private final Model model;
 
 	public Controller(final Type filter, final DataModel dataModel, final PropertiesModel propertiesModel) {
-		final IModel<Execution> modelProxy = createModelProxy(dataModel, filter);
+		final IModel<Trace> modelProxy = Controller.createModelProxy(dataModel, filter);
 		this.model = new Model();
 
 		this.view = new View(modelProxy, this.model, propertiesModel, this);
@@ -53,8 +54,8 @@ public final class Controller implements ISubController, SelectionListener {
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
-		if (e.item.getData() instanceof Execution) {
-			this.model.setCurrentActiveTrace((Execution) e.item.getData());
+		if (e.item.getData() instanceof OperationCall) {
+			this.model.setCurrentActiveCall((OperationCall) e.item.getData());
 		}
 	}
 
@@ -63,7 +64,7 @@ public final class Controller implements ISubController, SelectionListener {
 		// Just implemented for the interface
 	}
 
-	private static IModel<Execution> createModelProxy(final DataModel dataModel, final Type filter) {
+	private static IModel<Trace> createModelProxy(final DataModel dataModel, final Type filter) {
 		if (filter == Type.JUST_FAILED_TRACES) {
 			return new FailedTracesModelProxy(dataModel);
 		}
@@ -77,40 +78,40 @@ public final class Controller implements ISubController, SelectionListener {
 		NONE, JUST_FAILED_TRACES, JUST_FAILURE_CONTAINING_TRACES
 	}
 
-	private static final class TracesModelProxy extends AbstractDataModelProxy<Execution> {
+	private static final class TracesModelProxy extends AbstractDataModelProxy<Trace> {
 
 		public TracesModelProxy(final DataModel dataModel) {
 			super(dataModel);
 		}
 
 		@Override
-		public List<Execution> getContent() {
+		public List<Trace> getContent() {
 			return super.dataModel.getTracesCopy();
 		}
 
 	}
 
-	private static final class FailedTracesModelProxy extends AbstractDataModelProxy<Execution> {
+	private static final class FailedTracesModelProxy extends AbstractDataModelProxy<Trace> {
 
 		public FailedTracesModelProxy(final DataModel dataModel) {
 			super(dataModel);
 		}
 
 		@Override
-		public List<Execution> getContent() {
+		public List<Trace> getContent() {
 			return super.dataModel.getFailedTracesCopy();
 		}
 
 	}
 
-	private static final class FailureContainingTracesModelProxy extends AbstractDataModelProxy<Execution> {
+	private static final class FailureContainingTracesModelProxy extends AbstractDataModelProxy<Trace> {
 
 		public FailureContainingTracesModelProxy(final DataModel dataModel) {
 			super(dataModel);
 		}
 
 		@Override
-		public List<Execution> getContent() {
+		public List<Trace> getContent() {
 			return super.dataModel.getFailureContainingTracesCopy();
 		}
 
