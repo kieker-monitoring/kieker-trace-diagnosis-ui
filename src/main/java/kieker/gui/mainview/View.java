@@ -25,6 +25,7 @@ import kieker.gui.subview.ISubView;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
@@ -39,7 +40,7 @@ import org.eclipse.swt.widgets.Widget;
 
 /**
  * The main view of the application. For the most part it uses sub-views to show data.
- *
+ * 
  * @author Nils Christian Ehmke
  */
 public final class View implements Observer {
@@ -169,14 +170,16 @@ public final class View implements Observer {
 		this.shell = new Shell();
 		this.shell.setImage(null);
 		this.shell.setMaximized(true);
-		this.shell.setText("Kieker's GUI");
+		this.shell.setText("Kieker Diagnosis");
+
+		this.shell.setImage(new Image(this.shell.getDisplay(), ClassLoader.getSystemClassLoader().getResourceAsStream("kieker-logo.png")));
 		this.shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 
 		this.dialog = new DirectoryDialog(this.shell);
 		this.aboutDialog = new MessageBox(this.shell, SWT.ICON_INFORMATION);
 
 		this.aboutDialog.setText("About...");
-		this.aboutDialog.setMessage("Kieker's GUI - 1.0-SNAPSHOT\n\nCopyright 2014 Kieker Project (http://kieker-monitoring.net)");
+		this.aboutDialog.setMessage("Kieker Diagnosis - 1.0-SNAPSHOT\n\nCopyright 2014 Kieker Project (http://kieker-monitoring.net)");
 
 		final SashForm sashForm = new SashForm(this.shell, SWT.NONE);
 

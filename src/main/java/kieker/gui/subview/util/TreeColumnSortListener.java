@@ -34,6 +34,7 @@ public final class TreeColumnSortListener<T> extends SelectionAdapter {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void widgetSelected(final SelectionEvent event) {
 		// Get the necessary information from the event
 		final TreeColumn currentColumn = (TreeColumn) event.widget;
