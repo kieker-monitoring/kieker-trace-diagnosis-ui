@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.gui.subview.traces;
+package kieker.gui.subview.traces; // NOPMD (to many imports)
 
 import java.util.List;
 import java.util.Observable;
@@ -328,7 +328,7 @@ public final class View implements Observer, ISubView {
 			}
 			final String duration = (Long.toString(operationCall.getDuration()) + " " + View.this.model.getShortTimeUnit()).trim();
 			item.setText(new String[] { operationCall.getContainer(), componentName, operationString, duration,
-				String.format("%.1f%%", (float) operationCall.getStatistic(StatisticType.PERCENT)), traceID });
+				String.format("%.1f%%", operationCall.getStatistic(StatisticType.PERCENT)), traceID });
 
 			if (operationCall.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);

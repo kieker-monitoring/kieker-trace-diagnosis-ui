@@ -16,7 +16,7 @@
 
 package kieker.gui.common.domain;
 
-public abstract class AbstractTrace {
+public abstract class AbstractTrace { // NOPMD (abstract class without abstract methods)
 
 	private final OperationCall rootOperationCall;
 

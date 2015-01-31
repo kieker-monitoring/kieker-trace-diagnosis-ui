@@ -47,7 +47,7 @@ public final class AggregatedTraceStatisticsDecorator extends AbstractStage<Aggr
 		}
 	}
 
-	private final class TraceDurationVisitor {
+	private static final class TraceDurationVisitor {
 
 		private final List<List<Long>> durationsPerEdge = new ArrayList<>();
 		private int edgeIndex;

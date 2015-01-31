@@ -21,7 +21,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public final class OperationCall {
+public final class OperationCall { // NOPMD (cyclomatic complexity)
 
 	private final Map<StatisticType, Object> statistics = new EnumMap<>(StatisticType.class);
 	private final List<OperationCall> children = new ArrayList<>();
