@@ -45,4 +45,21 @@ public final class ImportAnalysisConfigurationTest {
 		assertThat(configuration.getFailedAggregatedTracesList(), is(not(empty())));
 		assertThat(configuration.getFailureContainingAggregatedTracesList(), is(not(empty())));
 	}
+
+	@Test
+	public void nonExistingLogShouldNotLeadToCrash() {
+		final ImportAnalysisConfiguration configuration = new ImportAnalysisConfiguration(new File("nonExistingLog"));
+		final Analysis analysis = new Analysis(configuration);
+		analysis.init();
+		analysis.start();
+
+		assertThat(configuration.getMetadataRecords(), is(empty()));
+		assertThat(configuration.getTracesList(), is(empty()));
+		assertThat(configuration.getAggregatedTraces(), is(empty()));
+		assertThat(configuration.getFailedTracesList(), is(empty()));
+		assertThat(configuration.getFailureContainingTracesList(), is(empty()));
+		assertThat(configuration.getFailedAggregatedTracesList(), is(empty()));
+		assertThat(configuration.getFailureContainingAggregatedTracesList(), is(empty()));
+	}
+
 }

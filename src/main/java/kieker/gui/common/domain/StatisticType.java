@@ -16,6 +16,11 @@
 
 package kieker.gui.common.domain;
 
+/**
+ * This enumeration shows the available statistics (and their datatype) which can be added for example to traces or operation calls.
+ * 
+ * @author Nils Christian Ehmke
+ */
 public enum StatisticType {
 
 	STACK_DEPTH(Integer.class), STACK_SIZE(Integer.class), AVG_DURATION(Long.class), MIN_DURATION(Long.class), MAX_DURATION(Long.class), TOTAL_DURATION(Long.class),

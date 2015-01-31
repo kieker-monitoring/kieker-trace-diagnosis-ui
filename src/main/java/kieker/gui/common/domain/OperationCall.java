@@ -21,6 +21,13 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class represents an operation call (or an execution) within this application. As it can has multiple children, an instance of this class can represent a whole call tree.
+ * This class implements the both methods {@link OperationCall#equals(Object)} and {@link OperationCall#hashCode()}, allowing to easily check whether two traces are equal (aside
+ * from some varying properties like the duration) and should be in the same equivalence class.
+ * 
+ * @author Nils Christian Ehmke
+ */
 public final class OperationCall { // NOPMD (cyclomatic complexity)
 
 	private final Map<StatisticType, Object> statistics = new EnumMap<>(StatisticType.class);

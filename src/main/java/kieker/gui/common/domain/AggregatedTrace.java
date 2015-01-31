@@ -20,6 +20,11 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class represents an aggregated trace (or a trace equivalence class) within this application.
+ * 
+ * @author Nils Christian Ehmke
+ */
 public final class AggregatedTrace extends AbstractTrace {
 
 	private final Map<StatisticType, Object> statistics = new EnumMap<>(StatisticType.class);
@@ -31,14 +36,14 @@ public final class AggregatedTrace extends AbstractTrace {
 		this.traces = traces;
 	}
 
+	public List<Trace> getTraces() {
+		return this.traces;
+	}
+
 	public void addStatistic(final StatisticType statisticType, final Object value) {
 		if (statisticType.getTypeOfValue().isInstance(value)) {
 			this.statistics.put(statisticType, value);
 		}
-	}
-
-	public List<Trace> getTraces() {
-		return this.traces;
 	}
 
 	public Object getStatistic(final StatisticType statisticType) {
