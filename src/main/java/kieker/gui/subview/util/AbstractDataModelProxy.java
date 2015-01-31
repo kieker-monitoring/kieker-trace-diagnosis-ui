@@ -23,7 +23,7 @@ import kieker.gui.common.model.DataModel;
 
 public abstract class AbstractDataModelProxy<T> extends Observable implements IModel<T>, Observer {
 
-	protected final DataModel dataModel;
+	private final DataModel dataModel;
 
 	public AbstractDataModelProxy(final DataModel dataModel) {
 		this.dataModel = dataModel;
@@ -41,4 +41,7 @@ public abstract class AbstractDataModelProxy<T> extends Observable implements IM
 		return this.dataModel.getShortTimeUnit();
 	}
 
+	protected DataModel getDataModel() {
+		return this.dataModel;
+	}
 }

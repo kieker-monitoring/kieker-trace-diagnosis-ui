@@ -132,7 +132,7 @@ public final class OperationCall {
 	}
 
 	@Override
-	public int hashCode() {
+	public int hashCode() { // NOPMD NOCS (this method violates some metrics)
 		final int prime = 31;
 		int result = 1;
 		result = (prime * result) + ((this.children == null) ? 0 : this.children.hashCode());
@@ -144,7 +144,7 @@ public final class OperationCall {
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(final Object obj) { // NOPMD NOCS (this method violates some metrics)
 		if (this == obj) {
 			return true;
 		}

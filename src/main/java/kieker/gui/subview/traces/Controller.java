@@ -86,7 +86,7 @@ public final class Controller implements ISubController, SelectionListener {
 
 		@Override
 		public List<Trace> getContent() {
-			return super.dataModel.getTracesCopy();
+			return super.getDataModel().getTracesCopy();
 		}
 
 	}
@@ -99,7 +99,7 @@ public final class Controller implements ISubController, SelectionListener {
 
 		@Override
 		public List<Trace> getContent() {
-			return super.dataModel.getFailedTracesCopy();
+			return super.getDataModel().getFailedTracesCopy();
 		}
 
 	}
@@ -112,7 +112,7 @@ public final class Controller implements ISubController, SelectionListener {
 
 		@Override
 		public List<Trace> getContent() {
-			return super.dataModel.getFailureContainingTracesCopy();
+			return super.getDataModel().getFailureContainingTracesCopy();
 		}
 
 	}

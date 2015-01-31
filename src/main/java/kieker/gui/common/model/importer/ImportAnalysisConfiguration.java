@@ -56,16 +56,16 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 		// Create the stages
 		final ReadingComposite reader = new ReadingComposite(importDirectory);
 		final MultipleInstanceOfFilter<IMonitoringRecord> typeFilter = new MultipleInstanceOfFilter<>();
-		final TraceReconstructionComposite traceReconstruction = new TraceReconstructionComposite(this.traces, this.failedTraces, this.failureContainingTraces);
-		final TraceAggregationComposite traceAggregation = new TraceAggregationComposite(this.aggregatedTraces, this.failedAggregatedTraces, this.failureContainingAggregatedTraces);
+		final TraceReconstructionComposite reconstruction = new TraceReconstructionComposite(this.traces, this.failedTraces, this.failureContainingTraces);
+		final TraceAggregationComposite aggregation = new TraceAggregationComposite(this.aggregatedTraces, this.failedAggregatedTraces, this.failureContainingAggregatedTraces);
 
 		final CollectorSink<KiekerMetadataRecord> metadataCollector = new CollectorSink<>(this.metadataRecords);
 
 		// Connect the stages
 		final IPipeFactory pipeFactory = AnalysisConfiguration.PIPE_FACTORY_REGISTRY.getPipeFactory(ThreadCommunication.INTRA, PipeOrdering.ARBITRARY, false);
 		pipeFactory.create(reader.getOutputPort(), typeFilter.getInputPort());
-		pipeFactory.create(typeFilter.getOutputPortForType(IFlowRecord.class), traceReconstruction.getInputPort());
-		pipeFactory.create(traceReconstruction.getOutputPort(), traceAggregation.getInputPort());
+		pipeFactory.create(typeFilter.getOutputPortForType(IFlowRecord.class), reconstruction.getInputPort());
+		pipeFactory.create(reconstruction.getOutputPort(), aggregation.getInputPort());
 		pipeFactory.create(typeFilter.getOutputPortForType(KiekerMetadataRecord.class), metadataCollector.getInputPort());
 
 		// Make sure that the producer is executed by the analysis

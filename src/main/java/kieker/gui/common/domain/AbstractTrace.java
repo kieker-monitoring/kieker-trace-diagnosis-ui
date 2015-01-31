@@ -29,7 +29,7 @@ public abstract class AbstractTrace {
 	}
 
 	@Override
-	public int hashCode() {
+	public final int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = (prime * result) + ((this.rootOperationCall == null) ? 0 : this.rootOperationCall.hashCode());
@@ -37,7 +37,7 @@ public abstract class AbstractTrace {
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public final boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
