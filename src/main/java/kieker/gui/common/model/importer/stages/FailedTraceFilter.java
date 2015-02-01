@@ -18,6 +18,14 @@ package kieker.gui.common.model.importer.stages;
 
 import kieker.gui.common.domain.AbstractTrace;
 
+/**
+ * This stage filters incoming traces and forwards only those which are failed.
+ * 
+ * @author Nils Christian Ehmke
+ * 
+ * @param <T>
+ *            The precise type of the incoming and outgoing traces.
+ */
 public final class FailedTraceFilter<T extends AbstractTrace> extends AbstractStage<T, T> {
 
 	@Override

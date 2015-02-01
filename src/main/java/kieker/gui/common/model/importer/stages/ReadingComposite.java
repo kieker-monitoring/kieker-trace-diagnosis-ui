@@ -34,6 +34,11 @@ import teetime.stage.InitialElementProducer;
 import teetime.stage.className.ClassNameRegistryRepository;
 import teetime.stage.io.filesystem.Dir2RecordsFilter;
 
+/**
+ * This is a composite stage which deserializes monitoring records from a specific directory and forwards them to the output port.
+ * 
+ * @author Nils Christian Ehmke
+ */
 public final class ReadingComposite extends Stage {
 
 	private final InitialElementProducer<File> producer;

@@ -31,8 +31,8 @@ import kieker.gui.common.domain.OperationCall;
 import kieker.gui.common.domain.Trace;
 
 /**
- * Reconstruct traces based on the incoming instances of {@code IFlowRecord}. Currently only {@link TraceMetadata}, {@link BeforeOperationEvent} and
- * {@link AfterOperationEvent} instances are supported.
+ * Reconstruct traces based on the incoming instances of {@code IFlowRecord}. Currently only {@link TraceMetadata}, {@link BeforeOperationEvent} and {@link AfterOperationEvent}
+ * instances are supported.
  * 
  * @author Nils Christian Ehmke
  */

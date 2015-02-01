@@ -17,7 +17,7 @@
 package kieker.gui.common.domain;
 
 /**
- * This enumeration shows the available statistics (and their datatype) which can be added for example to traces or operation calls.
+ * This enumeration shows the available statistics (and their datatype) which can be added  for example to traces or operation calls.
  * 
  * @author Nils Christian Ehmke
  */

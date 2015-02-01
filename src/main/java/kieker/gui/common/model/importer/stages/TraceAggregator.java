@@ -25,7 +25,7 @@ import kieker.gui.common.domain.AggregatedTrace;
 import kieker.gui.common.domain.Trace;
 
 /**
- * Aggregates incoming traces into trace equivalence classes.
+ * This stage aggregates incoming traces into trace equivalence classes.
  * 
  * @author Nils Christian Ehmke
  */
