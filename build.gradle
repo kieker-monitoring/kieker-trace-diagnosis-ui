@@ -1,7 +1,7 @@
 apply plugin: 'application'
 apply plugin: 'eclipse'
 
-mainClassName = 'kieker.gui.Main'
+mainClassName = 'kieker.diagnosis.Main'
 version = '1.0-SNAPSHOT'
 
 sourceCompatibility = '1.7'
