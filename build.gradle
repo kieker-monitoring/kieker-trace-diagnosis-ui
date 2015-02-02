@@ -18,24 +18,24 @@ configurations {
 	windowsX64Runtime
 	linuxX86Runtime
 	linuxX64Runtime
-  
-  providedCompile 
+		  
+	providedCompile 
 }
 
 dependencies {
-  // One of the runtime dependencies has to be used during the compilation. Modify this entry for Eclipse depending on your development JRE.
-  providedCompile 'org.eclipse.swt:org.eclipse.swt.win32.win32.x86_64:4.4'
-  
+	// One of the runtime dependencies has to be used during the compilation. Modify this entry for Eclipse depending on your development JRE.
+	providedCompile 'org.eclipse.swt:org.eclipse.swt.win32.win32.x86_64:4.4'
+
 	windowsX86Runtime 'org.eclipse.swt:org.eclipse.swt.win32.win32.x86:4.4'
 	windowsX64Runtime 'org.eclipse.swt:org.eclipse.swt.win32.win32.x86_64:4.4'
 	linuxX86Runtime 'org.eclipse.swt:org.eclipse.swt.gtk.linux.x86:4.4'
 	linuxX64Runtime 'org.eclipse.swt:org.eclipse.swt.gtk.linux.x86_64:4.4'
-	
+
 	compile 'net.sourceforge.teetime:teetime:1.1-SNAPSHOT'
 	compile 'net.sourceforge.teetime-stages:teetime-stages:1.0-SNAPSHOT'
 	compile 'net.kieker-monitoring:kieker:1.11-SNAPSHOT'
 	compile 'org.eclipse:jface:3.2.1-M20060908-1000'
-  
+
 	testCompile 'org.hamcrest:hamcrest-core:1.3'
 	testCompile 'org.hamcrest:hamcrest-library:1.3'
 	testCompile 'junit:junit:4.12'
@@ -47,123 +47,149 @@ eclipse.classpath.plusConfigurations += [configurations.providedCompile]
 
 apply plugin: 'pmd'
 pmd { 
-  ignoreFailures = true
-  
-  ruleSets = []
-  ruleSetFiles = files('config/pmd/ruleset.xml')
+	ignoreFailures = true
+
+	ruleSets = []
+	ruleSetFiles = files('config/pmd/ruleset.xml')
 }
 
 apply plugin: 'checkstyle'
 checkstyle {
-  ignoreFailures = true
-  showViolations = false
+	ignoreFailures = true
+	showViolations = false
 }
 
 apply plugin: 'findbugs'
 findbugs { 
-  ignoreFailures = true 
-  effort = "max"
-  reportLevel = "low"
-  
-  excludeFilter = file('config/findbugs/excludeFilter.xml')
+	ignoreFailures = true 
+	effort = "max"
+	reportLevel = "low"
+
+	excludeFilter = file('config/findbugs/excludeFilter.xml')
 }
 
 def commonStartScriptConfiguration = {
-  mainClassName = project.mainClassName
-  applicationName = 'start' 
-  outputDir = new File(project.buildDir, 'scripts')
-  classpath = jar.outputs.files + project.configurations.runtime 
+	mainClassName = project.mainClassName
+	applicationName = 'start' 
+	outputDir = new File(project.buildDir, 'scripts')
+	classpath = jar.outputs.files + project.configurations.runtime 
 }
 
 task createStartScriptWinX86(type: CreateStartScripts) {
 	configure commonStartScriptConfiguration
-  classpath += project.configurations.windowsX86Runtime
+	classpath += project.configurations.windowsX86Runtime
 }
 
 task createStartScriptWinX64(type: CreateStartScripts) {
 	configure commonStartScriptConfiguration
-  classpath += project.configurations.windowsX64Runtime
+	classpath += project.configurations.windowsX64Runtime
 }
 
 task createStartScriptLinuxX86(type: CreateStartScripts) {
 	configure commonStartScriptConfiguration
-  classpath += project.configurations.linuxX86Runtime 
+	classpath += project.configurations.linuxX86Runtime 
 }
 
 task createStartScriptLinuxX64(type: CreateStartScripts) {
 	configure commonStartScriptConfiguration
-  classpath += project.configurations.linuxX64Runtime
+	classpath += project.configurations.linuxX64Runtime
 }
 
 def commonDistBinConfiguration = {
-  into('lib') {
-    from configurations.runtime
-    from jar.archivePath 
-  }
+	into('lib') {
+		from configurations.runtime
+		from jar.archivePath 
+	}
 }
 
 task distBinWinX86(type: Zip, dependsOn: [jar, createStartScriptWinX86]) {
 	description = 'Bundles the project as a JVM application with OS specific libs and script for Windows x86.'
 	classifier = 'windows_x86'
-	
+
 	configure commonDistBinConfiguration
-	
+
 	into ('bin') {
 		from createStartScriptWinX86.getWindowsScript()
 	}
-	
-  into('lib') {
-    from configurations.windowsX86Runtime
-  }
+
+	into('lib') {
+		from configurations.windowsX86Runtime
+	}
 }
 
 task distBinWinX64(type: Zip, dependsOn: [jar, createStartScriptWinX64]) {
 	description = 'Bundles the project as a JVM application with OS specific libs and script for Windows x64.'
 	classifier = 'windows_x64'
-	
+
 	configure commonDistBinConfiguration
-	
+
 	into ('bin') {
 		from createStartScriptWinX64.getWindowsScript()
 	}
 
-  into('lib') {
-    from configurations.windowsX64Runtime
-  }
+	into('lib') {
+		from configurations.windowsX64Runtime
+	}
 }
 
 task distBinLinuxX86(type: Tar, dependsOn: [jar, createStartScriptLinuxX86]) {
 	description = 'Bundles the project as a JVM application with OS specific libs and script for Linux x86.'
 	classifier = 'linux_x86'
 	compression = Compression.GZIP
-	
+
 	configure commonDistBinConfiguration
-	
+
 	into ('bin') {
 		from createStartScriptLinuxX86.getUnixScript()
 	}
-	
-  into('lib') {
-    from configurations.linuxX86Runtime
-  }
+
+	into('lib') {
+		from configurations.linuxX86Runtime
+	}
 }
 
 task distBinLinuxX64(type: Tar, dependsOn: [jar, createStartScriptLinuxX64]) {
 	description = 'Bundles the project as a JVM application with OS specific libs and script for Linux x64.'
 	classifier = 'linux_x64'
 	compression = Compression.GZIP
-	
+
 	configure commonDistBinConfiguration
-	
+
 	into ('bin') {
 		from createStartScriptLinuxX64.getUnixScript()
 	}
-	
-  into('lib') {
-    from configurations.linuxX64Runtime
-  }
+
+	into('lib') {
+		from configurations.linuxX64Runtime
+	}
 }
 
 task distAllBin(dependsOn: [distBinWinX86, distBinWinX64, distBinLinuxX86, distBinLinuxX64]) {
 	description = 'Bundles the project as a JVM application with OS specific libs and scripts for all platforms.'
+}
+
+def commonDistSrcConfiguration = {
+	classifier 'src'
+
+	into ('src') { from 'src' }
+	into ('config') { from 'config' }
+	into ('example') { from 'example' }
+	from ('.') {
+		include 'LICENSE'
+		include 'README'
+		include 'build.gradle'
+	}
+}
+
+task distSrcZip(type: Zip) {
+	configure commonDistSrcConfiguration
+}
+
+task distSrcTar(type: Tar) {
+	configure commonDistSrcConfiguration
+	compression = Compression.GZIP
+}
+
+task distAllSrc(dependsOn: [distSrcZip, distSrcTar]) {
+	description = 'Bundles the source files of the project.'
 }
