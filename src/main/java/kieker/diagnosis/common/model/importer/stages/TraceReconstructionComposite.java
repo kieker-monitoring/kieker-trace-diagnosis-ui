@@ -16,25 +16,25 @@
 
 package kieker.diagnosis.common.model.importer.stages;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import kieker.common.record.flow.IFlowRecord;
 import kieker.diagnosis.common.domain.Trace;
+import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
 import teetime.framework.Stage;
-import teetime.framework.TerminationStrategy;
 import teetime.framework.pipe.IPipeFactory;
 import teetime.framework.pipe.PipeFactoryRegistry;
 import teetime.framework.pipe.PipeFactoryRegistry.PipeOrdering;
 import teetime.framework.pipe.PipeFactoryRegistry.ThreadCommunication;
-import teetime.framework.signal.ISignal;
-import teetime.framework.validation.InvalidPortConnection;
 import teetime.stage.CollectorSink;
 import teetime.stage.basic.distributor.CopyByReferenceStrategy;
 import teetime.stage.basic.distributor.Distributor;
 
-public final class TraceReconstructionComposite extends Stage {
+public final class TraceReconstructionComposite extends CompositeStage {
 
 	private final TraceReconstructor reconstructor;
 
@@ -70,11 +70,6 @@ public final class TraceReconstructionComposite extends Stage {
 		pipeFactory.create(failureContainingTraceFilter.getOutputPort(), this.failureContainingTracesCollector.getInputPort());
 	}
 
-	@Override
-	protected void executeWithPorts() {
-		this.reconstructor.executeWithPorts();
-	}
-
 	public InputPort<IFlowRecord> getInputPort() {
 		return this.reconstructor.getInputPort();
 	}
@@ -84,39 +79,13 @@ public final class TraceReconstructionComposite extends Stage {
 	}
 
 	@Override
-	public void validateOutputPorts(final List<InvalidPortConnection> invalidPortConnections) {
-		this.statisticsDecorator.validateOutputPorts(invalidPortConnections);
+	protected Stage getFirstStage() {
+		return this.reconstructor;
 	}
 
 	@Override
-	protected void onSignal(final ISignal signal, final InputPort<?> inputPort) {
-		this.reconstructor.onSignal(signal, inputPort);
-	}
-
-	@Override
-	protected TerminationStrategy getTerminationStrategy() {
-		return this.reconstructor.getTerminationStrategy();
-	}
-
-	@Override
-	protected void terminate() {
-		this.reconstructor.terminate();
-	}
-
-	@Override
-	protected boolean shouldBeTerminated() {
-		return this.reconstructor.shouldBeTerminated();
-	}
-
-	@Override
-	protected InputPort<?>[] getInputPorts() {
-		return this.reconstructor.getInputPorts();
-	}
-
-	@Override
-	protected boolean isStarted() {
-		return this.tracesCollector.isStarted() && this.failedTracesCollector.isStarted() && this.failureContainingTracesCollector.isStarted()
-				&& this.statisticsDecorator.isStarted();
+	protected Collection<? extends Stage> getLastStages() {
+		return Arrays.asList(this.tracesCollector, this.failedTracesCollector, this.failureContainingTracesCollector, this.statisticsDecorator);
 	}
 
 }

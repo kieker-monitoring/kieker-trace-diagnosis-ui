@@ -16,24 +16,24 @@
 
 package kieker.diagnosis.common.model.importer.stages;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import kieker.diagnosis.common.domain.AggregatedTrace;
 import kieker.diagnosis.common.domain.Trace;
+import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;
 import teetime.framework.Stage;
-import teetime.framework.TerminationStrategy;
 import teetime.framework.pipe.IPipeFactory;
 import teetime.framework.pipe.PipeFactoryRegistry;
 import teetime.framework.pipe.PipeFactoryRegistry.PipeOrdering;
 import teetime.framework.pipe.PipeFactoryRegistry.ThreadCommunication;
-import teetime.framework.signal.ISignal;
-import teetime.framework.validation.InvalidPortConnection;
 import teetime.stage.CollectorSink;
 import teetime.stage.basic.distributor.CopyByReferenceStrategy;
 import teetime.stage.basic.distributor.Distributor;
 
-public final class TraceAggregationComposite extends Stage {
+public final class TraceAggregationComposite extends CompositeStage {
 
 	private final TraceAggregator aggregator;
 
@@ -66,49 +66,18 @@ public final class TraceAggregationComposite extends Stage {
 		pipeFactory.create(failureContainingTraceFilter.getOutputPort(), this.failureContainingTracesCollector.getInputPort());
 	}
 
-	@Override
-	protected void executeWithPorts() {
-		this.aggregator.executeWithPorts();
-	}
-
 	public InputPort<Trace> getInputPort() {
 		return this.aggregator.getInputPort();
 	}
 
 	@Override
-	public void validateOutputPorts(final List<InvalidPortConnection> invalidPortConnections) {
-		// No code necessary
+	protected Stage getFirstStage() {
+		return this.aggregator;
 	}
 
 	@Override
-	protected void onSignal(final ISignal signal, final InputPort<?> inputPort) {
-		this.aggregator.onSignal(signal, inputPort);
-	}
-
-	@Override
-	protected TerminationStrategy getTerminationStrategy() {
-		return this.aggregator.getTerminationStrategy();
-	}
-
-	@Override
-	protected void terminate() {
-		this.aggregator.terminate();
-	}
-
-	@Override
-	protected boolean shouldBeTerminated() {
-		return this.aggregator.shouldBeTerminated();
-	}
-
-	@Override
-	protected InputPort<?>[] getInputPorts() {
-		return this.aggregator.getInputPorts();
-	}
-
-	@Override
-	protected boolean isStarted() {
-		return this.tracesCollector.isStarted() && this.failedTracesCollector.isStarted() && this.failureContainingTracesCollector.isStarted()
-				&& this.statisticsDecorator.isStarted();
+	protected Collection<? extends Stage> getLastStages() {
+		return Arrays.asList(this.tracesCollector, this.failedTracesCollector, this.failureContainingTracesCollector, this.statisticsDecorator);
 	}
 
 }

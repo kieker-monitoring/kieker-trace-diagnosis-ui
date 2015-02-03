@@ -17,29 +17,27 @@
 package kieker.diagnosis.common.model.importer.stages;
 
 import java.io.File;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Collection;
 
 import kieker.common.record.IMonitoringRecord;
-import teetime.framework.InputPort;
+import teetime.framework.CompositeStage;
 import teetime.framework.OutputPort;
 import teetime.framework.Stage;
-import teetime.framework.TerminationStrategy;
 import teetime.framework.pipe.IPipeFactory;
 import teetime.framework.pipe.PipeFactoryRegistry;
 import teetime.framework.pipe.PipeFactoryRegistry.PipeOrdering;
 import teetime.framework.pipe.PipeFactoryRegistry.ThreadCommunication;
-import teetime.framework.signal.ISignal;
-import teetime.framework.validation.InvalidPortConnection;
 import teetime.stage.InitialElementProducer;
 import teetime.stage.className.ClassNameRegistryRepository;
 import teetime.stage.io.filesystem.Dir2RecordsFilter;
 
 /**
  * This is a composite stage which deserializes monitoring records from a specific directory and forwards them to the output port.
- * 
+ *
  * @author Nils Christian Ehmke
  */
-public final class ReadingComposite extends Stage {
+public final class ReadingComposite extends CompositeStage {
 
 	private final InitialElementProducer<File> producer;
 	private final Dir2RecordsFilter reader;
@@ -52,48 +50,18 @@ public final class ReadingComposite extends Stage {
 		pipeFactory.create(this.producer.getOutputPort(), this.reader.getInputPort());
 	}
 
-	@Override
-	protected void executeWithPorts() {
-		this.producer.executeWithPorts();
-	}
-
 	public OutputPort<IMonitoringRecord> getOutputPort() {
 		return this.reader.getOutputPort();
 	}
 
 	@Override
-	public void validateOutputPorts(final List<InvalidPortConnection> invalidPortConnections) {
-		this.reader.validateOutputPorts(invalidPortConnections);
+	protected Stage getFirstStage() {
+		return this.producer;
 	}
 
 	@Override
-	protected void onSignal(final ISignal signal, final InputPort<?> inputPort) {
-		this.producer.onSignal(signal, inputPort);
-	}
-
-	@Override
-	protected TerminationStrategy getTerminationStrategy() {
-		return this.producer.getTerminationStrategy();
-	}
-
-	@Override
-	protected void terminate() {
-		this.producer.terminate();
-	}
-
-	@Override
-	protected boolean shouldBeTerminated() {
-		return this.producer.shouldBeTerminated();
-	}
-
-	@Override
-	protected InputPort<?>[] getInputPorts() {
-		return this.producer.getInputPorts();
-	}
-
-	@Override
-	protected boolean isStarted() {
-		return this.reader.isStarted();
+	protected Collection<? extends Stage> getLastStages() {
+		return Arrays.asList(this.reader);
 	}
 
 }
