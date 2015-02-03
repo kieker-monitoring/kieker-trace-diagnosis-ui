@@ -18,6 +18,8 @@ package kieker.diagnosis.mainview;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 import kieker.diagnosis.common.model.DataModel;
 import kieker.diagnosis.common.model.PropertiesModel;
@@ -55,7 +57,8 @@ public final class Controller implements SelectionListener {
 		final ISubController subViewController3 = new kieker.diagnosis.subview.traces.Controller(Type.NONE, this.dataModel, this.propertiesModel);
 		final ISubController subViewController4 = new kieker.diagnosis.subview.traces.Controller(Type.JUST_FAILURE_CONTAINING_TRACES, this.dataModel, this.propertiesModel);
 		final ISubController subViewController5 = new kieker.diagnosis.subview.aggregatedtraces.Controller(Filter.JUST_FAILED_TRACES, this.dataModel, this.propertiesModel);
-		final ISubController subViewController6 = new kieker.diagnosis.subview.aggregatedtraces.Controller(Filter.JUST_FAILURE_CONTAINING_TRACES, this.dataModel, this.propertiesModel);
+		final ISubController subViewController6 = new kieker.diagnosis.subview.aggregatedtraces.Controller(Filter.JUST_FAILURE_CONTAINING_TRACES, this.dataModel,
+				this.propertiesModel);
 
 		// Get the sub-views from the controllers
 		final Map<String, ISubView> subViews = new HashMap<>();
@@ -99,12 +102,23 @@ public final class Controller implements SelectionListener {
 
 	private void handlePotentialMenuSelection(final SelectionEvent e) {
 		if (e.widget == this.mainView.getMntmOpenMonitoringLog()) {
+			final Preferences preferences = Preferences.userNodeForPackage(Controller.class);
+			final String filterPath = preferences.get("lastimportpath", ".");
+
+			this.mainView.getDialog().setFilterPath(filterPath);
 			final String selectedDirectory = this.mainView.getDialog().open();
 
 			if (null != selectedDirectory) {
 				this.mainViewModel.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_WAIT));
 				this.dataModel.loadMonitoringLogFromFS(selectedDirectory);
 				this.mainViewModel.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_ARROW));
+
+				preferences.put("lastimportpath", selectedDirectory);
+				try {
+					preferences.flush();
+				} catch (final BackingStoreException ex) {
+					ex.printStackTrace();
+				}
 			}
 		}
 
