@@ -29,7 +29,9 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 
-public abstract class AbstractTraceTreeColumnSortListener<T extends AbstractTrace<?>> extends SelectionAdapter {
+public abstract class AbstractTraceTreeColumnSortListener<T extends AbstractTrace<?>> extends SelectionAdapter implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private final TraceComparator comparator = new TraceComparator();
 	private int direction;
