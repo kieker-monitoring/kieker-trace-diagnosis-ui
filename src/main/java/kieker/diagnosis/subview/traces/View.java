@@ -21,17 +21,15 @@ import java.util.Observable;
 import java.util.Observer;
 
 import kieker.diagnosis.common.domain.OperationCall;
-import kieker.diagnosis.common.domain.StatisticType;
 import kieker.diagnosis.common.domain.Trace;
 import kieker.diagnosis.common.model.PropertiesModel;
 import kieker.diagnosis.subview.ISubView;
-import kieker.diagnosis.subview.traces.util.TraceDurationComparator;
-import kieker.diagnosis.subview.traces.util.TraceIDComparator;
+import kieker.diagnosis.subview.traces.util.DurationSortListener;
+import kieker.diagnosis.subview.traces.util.TraceIDSortListener;
+import kieker.diagnosis.subview.util.ComponentSortListener;
+import kieker.diagnosis.subview.util.ContainerSortListener;
 import kieker.diagnosis.subview.util.IModel;
-import kieker.diagnosis.subview.util.TraceComponentComparator;
-import kieker.diagnosis.subview.util.TraceContainerComparator;
-import kieker.diagnosis.subview.util.TraceOperationComparator;
-import kieker.diagnosis.subview.util.TreeColumnSortListener;
+import kieker.diagnosis.subview.util.OperationSortListener;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -210,11 +208,11 @@ public final class View implements Observer, ISubView {
 		this.tree.addSelectionListener(this.controller);
 		this.tree.addListener(SWT.SetData, new DataProvider());
 
-		trclmnExecutionContainer.addSelectionListener(new TreeColumnSortListener<>(new TraceContainerComparator()));
-		trclmnComponent.addSelectionListener(new TreeColumnSortListener<>(new TraceComponentComparator()));
-		trclmnOperation.addSelectionListener(new TreeColumnSortListener<>(new TraceOperationComparator()));
-		trclmnDuration.addSelectionListener(new TreeColumnSortListener<>(new TraceDurationComparator()));
-		trclmnTraceId.addSelectionListener(new TreeColumnSortListener<>(new TraceIDComparator()));
+		trclmnExecutionContainer.addSelectionListener(new ContainerSortListener());
+		trclmnComponent.addSelectionListener(new ComponentSortListener());
+		trclmnOperation.addSelectionListener(new OperationSortListener());
+		trclmnDuration.addSelectionListener(new DurationSortListener());
+		trclmnTraceId.addSelectionListener(new TraceIDSortListener());
 	}
 
 	public Tree getTree() {
@@ -273,8 +271,8 @@ public final class View implements Observer, ISubView {
 		this.lblExecutionContainerDisplay.setText(operationCall.getContainer());
 		this.lblComponentDisplay.setText(operationCall.getComponent());
 		this.lblOperationDisplay.setText(operationCall.getOperation());
-		this.lblTraceDepthDisplay.setText(Integer.toString((Integer) operationCall.getStatistic(StatisticType.STACK_DEPTH)));
-		this.lblTraceSizeDisplay.setText(Integer.toString((Integer) operationCall.getStatistic(StatisticType.STACK_SIZE)));
+		this.lblTraceDepthDisplay.setText(Integer.toString(operationCall.getStackDepth()));
+		this.lblTraceSizeDisplay.setText(Integer.toString(operationCall.getStackSize()));
 
 		if (operationCall.isFailed()) {
 			this.lblFailedDisplay.setText("Yes (" + operationCall.getFailedCause() + ")");
@@ -327,8 +325,7 @@ public final class View implements Observer, ISubView {
 				operationString = operationString.substring(lastPointPos + 1);
 			}
 			final String duration = (Long.toString(operationCall.getDuration()) + " " + View.this.model.getShortTimeUnit()).trim();
-			item.setText(new String[] { operationCall.getContainer(), componentName, operationString, duration,
-				String.format("%.1f%%", operationCall.getStatistic(StatisticType.PERCENT)), traceID });
+			item.setText(new String[] { operationCall.getContainer(), componentName, operationString, duration, String.format("%.1f%%", operationCall.getPercent()), traceID });
 
 			if (operationCall.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);

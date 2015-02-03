@@ -19,16 +19,16 @@ package kieker.diagnosis.common.model.importer.stages;
 import java.util.ArrayList;
 import java.util.List;
 
+import kieker.diagnosis.common.domain.AggregatedOperationCall;
 import kieker.diagnosis.common.domain.AggregatedTrace;
 import kieker.diagnosis.common.domain.OperationCall;
-import kieker.diagnosis.common.domain.StatisticType;
 import kieker.diagnosis.common.domain.Trace;
 
 public final class AggregatedTraceStatisticsDecorator extends AbstractStage<AggregatedTrace, AggregatedTrace> {
 
 	@Override
 	public void execute(final AggregatedTrace trace) {
-		AggregatedTraceStatisticsDecorator.addNumberOfCalls(trace.getRootOperationCall(), trace.getTraces().size());
+		addNumberOfCalls(trace.getRootOperationCall(), trace.getTraces().size());
 
 		final TraceDurationVisitor traceDurationVisitor = new TraceDurationVisitor();
 		for (final Trace t : trace.getTraces()) {
@@ -39,11 +39,11 @@ public final class AggregatedTraceStatisticsDecorator extends AbstractStage<Aggr
 		super.send(trace);
 	}
 
-	private static void addNumberOfCalls(final OperationCall rootCall, final int calls) {
-		rootCall.addStatistic(StatisticType.CALLS, calls);
+	private static void addNumberOfCalls(final AggregatedOperationCall rootCall, final int calls) {
+		rootCall.setCalls(calls);
 
-		for (final OperationCall child : rootCall.getChildren()) {
-			AggregatedTraceStatisticsDecorator.addNumberOfCalls(child, calls);
+		for (final AggregatedOperationCall child : rootCall.getChildren()) {
+			addNumberOfCalls(child, calls);
 		}
 	}
 
@@ -77,17 +77,17 @@ public final class AggregatedTraceStatisticsDecorator extends AbstractStage<Aggr
 			this.addDurationStatistics(trace.getRootOperationCall());
 		}
 
-		private void addDurationStatistics(final OperationCall rootOperationCall) {
+		private void addDurationStatistics(final AggregatedOperationCall rootOperationCall) {
 			this.edgeIndex++;
 
 			final List<Long> durationsOfCurrentEdge = this.durationsPerEdge.get(this.edgeIndex);
 
-			rootOperationCall.addStatistic(StatisticType.MIN_DURATION, this.findMinDuration(durationsOfCurrentEdge));
-			rootOperationCall.addStatistic(StatisticType.MAX_DURATION, this.findMaxDuration(durationsOfCurrentEdge));
-			rootOperationCall.addStatistic(StatisticType.AVG_DURATION, this.calculateAvgDuration(durationsOfCurrentEdge));
-			rootOperationCall.addStatistic(StatisticType.TOTAL_DURATION, this.calculateTotalDuration(durationsOfCurrentEdge));
+			rootOperationCall.setMinDuration(this.findMinDuration(durationsOfCurrentEdge));
+			rootOperationCall.setMaxDuration(this.findMaxDuration(durationsOfCurrentEdge));
+			rootOperationCall.setAvgDuration(this.calculateAvgDuration(durationsOfCurrentEdge));
+			rootOperationCall.setTotalDuration(this.calculateTotalDuration(durationsOfCurrentEdge));
 
-			for (final OperationCall child : rootOperationCall.getChildren()) {
+			for (final AggregatedOperationCall child : rootOperationCall.getChildren()) {
 				this.addDurationStatistics(child);
 			}
 		}

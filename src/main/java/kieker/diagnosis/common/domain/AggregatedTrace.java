@@ -16,38 +16,25 @@
 
 package kieker.diagnosis.common.domain;
 
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * This class represents an aggregated trace (or a trace equivalence class) within this application.
- * 
+ *
  * @author Nils Christian Ehmke
  */
-public final class AggregatedTrace extends AbstractTrace {
+public final class AggregatedTrace extends AbstractTrace<AggregatedOperationCall> {
 
-	private final Map<StatisticType, Object> statistics = new EnumMap<>(StatisticType.class);
 	private final List<Trace> traces;
 
 	public AggregatedTrace(final List<Trace> traces) {
-		super(traces.get(0).getRootOperationCall().copy());
+		super(new AggregatedOperationCall(traces.get(0).getRootOperationCall()));
 
 		this.traces = traces;
 	}
 
 	public List<Trace> getTraces() {
 		return this.traces;
-	}
-
-	public void addStatistic(final StatisticType statisticType, final Object value) {
-		if (statisticType.getTypeOfValue().isInstance(value)) {
-			this.statistics.put(statisticType, value);
-		}
-	}
-
-	public Object getStatistic(final StatisticType statisticType) {
-		return this.statistics.get(statisticType);
 	}
 
 }

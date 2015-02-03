@@ -20,13 +20,13 @@ import kieker.diagnosis.common.domain.AbstractTrace;
 
 /**
  * This stage filters incoming traces and forwards only those which are failed.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @param <T>
  *            The precise type of the incoming and outgoing traces.
  */
-public final class FailedTraceFilter<T extends AbstractTrace> extends AbstractStage<T, T> {
+public final class FailedTraceFilter<T extends AbstractTrace<?>> extends AbstractStage<T, T> {
 
 	@Override
 	protected void execute(final T element) {

@@ -1,9 +1,8 @@
 package kieker.diagnosis.common.domain;
 
-import kieker.diagnosis.common.domain.OperationCall;
+import static org.junit.Assert.assertThat;
 
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class OperationCallTest {
@@ -15,7 +14,7 @@ public class OperationCallTest {
 
 		execution.addChild(child);
 
-		Assert.assertThat(child.getParent(), Matchers.is(execution));
+		assertThat(child.getParent(), Matchers.is(execution));
 	}
 
 }

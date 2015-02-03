@@ -16,8 +16,12 @@
 
 package kieker.diagnosis.subview.util;
 
+import java.io.Serializable;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+import kieker.diagnosis.common.domain.AbstractTrace;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -25,39 +29,56 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 
-public final class TreeColumnSortListener<T> extends SelectionAdapter {
+public abstract class AbstractTraceTreeColumnSortListener<T extends AbstractTrace<?>> extends SelectionAdapter {
 
-	private final AbstractDirectedComparator<T> comparator;
-
-	public TreeColumnSortListener(final AbstractDirectedComparator<T> comparator) {
-		this.comparator = comparator;
-	}
+	private final TraceComparator comparator = new TraceComparator();
+	private int direction;
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public void widgetSelected(final SelectionEvent event) {
+	public final void widgetSelected(final SelectionEvent event) {
 		// Get the necessary information from the event
 		final TreeColumn currentColumn = (TreeColumn) event.widget;
 		final Tree tree = currentColumn.getParent();
 		final TreeColumn sortColumn = tree.getSortColumn();
 
 		// Determine new sort column and direction
-		int direction = tree.getSortDirection();
+		this.direction = tree.getSortDirection();
 		if (sortColumn == currentColumn) {
-			direction = ((direction == SWT.UP) ? SWT.DOWN : SWT.UP);
+			this.direction = ((this.direction == SWT.UP) ? SWT.DOWN : SWT.UP);
 		} else {
 			tree.setSortColumn(currentColumn);
-			direction = SWT.UP;
+			this.direction = SWT.UP;
 		}
 
 		// Sort the data
-		this.comparator.setDirection(direction);
 		final List<T> entries = (List<T>) tree.getData();
 		Collections.sort(entries, this.comparator);
 
 		// Update the data displayed in the table
-		tree.setSortDirection(direction);
+		tree.setSortDirection(this.direction);
 		tree.clearAll(true);
+	}
+
+	protected abstract int compare(final T fstTrace, final T sndTrace);
+
+	private final class TraceComparator implements Comparator<T>, Serializable {
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public int compare(final T fstTrace, final T sndTrace) {
+			int result;
+
+			if (AbstractTraceTreeColumnSortListener.this.direction == SWT.DOWN) {
+				result = AbstractTraceTreeColumnSortListener.this.compare(fstTrace, sndTrace);
+			} else {
+				result = AbstractTraceTreeColumnSortListener.this.compare(sndTrace, fstTrace);
+			}
+
+			return result;
+		}
+
 	}
 
 }

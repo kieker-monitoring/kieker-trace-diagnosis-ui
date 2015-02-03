@@ -18,17 +18,17 @@ package kieker.diagnosis.subview.aggregatedtraces;
 
 import java.util.Observable;
 
-import kieker.diagnosis.common.domain.OperationCall;
+import kieker.diagnosis.common.domain.AggregatedOperationCall;
 
 public final class Model extends Observable {
 
-	private OperationCall operationCall;
+	private AggregatedOperationCall operationCall;
 
-	public OperationCall getCurrentActiveCall() {
+	public AggregatedOperationCall getCurrentActiveCall() {
 		return this.operationCall;
 	}
 
-	public void setCurrentActiveCall(final OperationCall operationCall) {
+	public void setCurrentActiveCall(final AggregatedOperationCall operationCall) {
 		this.operationCall = operationCall;
 
 		this.setChanged();

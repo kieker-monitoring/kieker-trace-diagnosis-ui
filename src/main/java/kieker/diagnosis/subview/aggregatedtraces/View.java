@@ -20,17 +20,19 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import kieker.diagnosis.common.domain.AggregatedOperationCall;
 import kieker.diagnosis.common.domain.AggregatedTrace;
-import kieker.diagnosis.common.domain.OperationCall;
-import kieker.diagnosis.common.domain.StatisticType;
 import kieker.diagnosis.common.model.PropertiesModel;
 import kieker.diagnosis.subview.ISubView;
+import kieker.diagnosis.subview.aggregatedtraces.util.AvgDurationSortListener;
+import kieker.diagnosis.subview.aggregatedtraces.util.CallsSortListener;
+import kieker.diagnosis.subview.aggregatedtraces.util.MaxDurationSortListener;
+import kieker.diagnosis.subview.aggregatedtraces.util.MinDurationSortListener;
+import kieker.diagnosis.subview.aggregatedtraces.util.TotalDurationSortListener;
+import kieker.diagnosis.subview.util.ComponentSortListener;
+import kieker.diagnosis.subview.util.ContainerSortListener;
 import kieker.diagnosis.subview.util.IModel;
-import kieker.diagnosis.subview.util.TraceComparator;
-import kieker.diagnosis.subview.util.TraceComponentComparator;
-import kieker.diagnosis.subview.util.TraceContainerComparator;
-import kieker.diagnosis.subview.util.TraceOperationComparator;
-import kieker.diagnosis.subview.util.TreeColumnSortListener;
+import kieker.diagnosis.subview.util.OperationSortListener;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -242,14 +244,14 @@ public final class View implements Observer, ISubView {
 		this.tree.addSelectionListener(this.controller);
 		this.tree.addListener(SWT.SetData, new DataProvider());
 
-		trclmnExecutionContainer.addSelectionListener(new TreeColumnSortListener<>(new TraceContainerComparator()));
-		trclmnComponent.addSelectionListener(new TreeColumnSortListener<>(new TraceComponentComparator()));
-		trclmnOperation.addSelectionListener(new TreeColumnSortListener<>(new TraceOperationComparator()));
-		trclmnMinimalDuration.addSelectionListener(new TreeColumnSortListener<>(new TraceComparator<>(StatisticType.MIN_DURATION)));
-		trclmnMaximalDuration.addSelectionListener(new TreeColumnSortListener<>(new TraceComparator<>(StatisticType.MAX_DURATION)));
-		trclmnAverageDuration.addSelectionListener(new TreeColumnSortListener<>(new TraceComparator<>(StatisticType.AVG_DURATION)));
-		trclmnCalls.addSelectionListener(new TreeColumnSortListener<>(new TraceComparator<>(StatisticType.CALLS)));
-		trclmnTotalDuration.addSelectionListener(new TreeColumnSortListener<>(new TraceComparator<>(StatisticType.TOTAL_DURATION)));
+		trclmnExecutionContainer.addSelectionListener(new ContainerSortListener());
+		trclmnComponent.addSelectionListener(new ComponentSortListener());
+		trclmnOperation.addSelectionListener(new OperationSortListener());
+		trclmnMinimalDuration.addSelectionListener(new MinDurationSortListener());
+		trclmnMaximalDuration.addSelectionListener(new MaxDurationSortListener());
+		trclmnAverageDuration.addSelectionListener(new AvgDurationSortListener());
+		trclmnCalls.addSelectionListener(new CallsSortListener());
+		trclmnTotalDuration.addSelectionListener(new TotalDurationSortListener());
 	}
 
 	@Override
@@ -294,12 +296,12 @@ public final class View implements Observer, ISubView {
 	}
 
 	private void updateDetailComposite() {
-		final OperationCall call = this.aggregatedTracesSubViewModel.getCurrentActiveCall();
+		final AggregatedOperationCall call = this.aggregatedTracesSubViewModel.getCurrentActiveCall();
 
-		final String minDuration = (call.getStatistic(StatisticType.MIN_DURATION) + " " + this.model.getShortTimeUnit()).trim();
-		final String maxDuration = (call.getStatistic(StatisticType.MAX_DURATION) + " " + this.model.getShortTimeUnit()).trim();
-		final String avgDuration = (call.getStatistic(StatisticType.AVG_DURATION) + " " + this.model.getShortTimeUnit()).trim();
-		final String totalDuration = (call.getStatistic(StatisticType.TOTAL_DURATION) + " " + this.model.getShortTimeUnit()).trim();
+		final String minDuration = (call.getMinDuration() + " " + this.model.getShortTimeUnit()).trim();
+		final String maxDuration = (call.getMaxDuration() + " " + this.model.getShortTimeUnit()).trim();
+		final String avgDuration = (call.getAvgDuration() + " " + this.model.getShortTimeUnit()).trim();
+		final String totalDuration = (call.getTotalDuration() + " " + this.model.getShortTimeUnit()).trim();
 
 		this.lblMinimalDurationDisplay.setText(minDuration);
 		this.lblMaximalDurationDisplay.setText(maxDuration);
@@ -309,9 +311,9 @@ public final class View implements Observer, ISubView {
 		this.lblExecutionContainerDisplay.setText(call.getContainer());
 		this.lblComponentDisplay.setText(call.getComponent());
 		this.lblOperationDisplay.setText(call.getOperation());
-		this.lblTraceDepthDisplay.setText(Integer.toString((int) call.getStatistic(StatisticType.STACK_DEPTH)));
-		this.lblTraceSizeDisplay.setText(Integer.toString((int) call.getStatistic(StatisticType.STACK_SIZE)));
-		this.lblNumberOfCallsDisplay.setText(Integer.toString((int) call.getStatistic(StatisticType.CALLS)));
+		this.lblTraceDepthDisplay.setText(Integer.toString(call.getStackDepth()));
+		this.lblTraceSizeDisplay.setText(Integer.toString(call.getStackSize()));
+		this.lblNumberOfCallsDisplay.setText(Integer.toString(call.getCalls()));
 
 		if (call.isFailed()) {
 			this.lblFailedDisplay.setText("Yes (" + call.getFailedCause() + ")");
@@ -338,14 +340,14 @@ public final class View implements Observer, ISubView {
 			final TreeItem parent = item.getParentItem();
 
 			// Decide whether the current item is a root or not
-			final OperationCall operationCall;
+			final AggregatedOperationCall operationCall;
 
 			if (parent == null) {
 				final AggregatedTrace trace = ((List<AggregatedTrace>) tree.getData()).get(tableIndex);
 
 				operationCall = trace.getRootOperationCall();
 			} else {
-				operationCall = ((OperationCall) parent.getData()).getChildren().get(tableIndex);
+				operationCall = ((AggregatedOperationCall) parent.getData()).getChildren().get(tableIndex);
 			}
 
 			String componentName = operationCall.getComponent();
@@ -361,16 +363,16 @@ public final class View implements Observer, ISubView {
 				operationString = operationString.substring(lastPointPos + 1);
 			}
 
-			final String minDuration = (operationCall.getStatistic(StatisticType.MIN_DURATION) + " " + View.this.model.getShortTimeUnit()).trim();
-			final String maxDuration = (operationCall.getStatistic(StatisticType.MAX_DURATION) + " " + View.this.model.getShortTimeUnit()).trim();
-			final String avgDuration = (operationCall.getStatistic(StatisticType.AVG_DURATION) + " " + View.this.model.getShortTimeUnit()).trim();
-			final String totalDuration = (operationCall.getStatistic(StatisticType.TOTAL_DURATION) + " " + View.this.model.getShortTimeUnit()).trim();
+			final String minDuration = (operationCall.getMinDuration() + " " + View.this.model.getShortTimeUnit()).trim();
+			final String maxDuration = (operationCall.getMaxDuration() + " " + View.this.model.getShortTimeUnit()).trim();
+			final String avgDuration = (operationCall.getAvgDuration() + " " + View.this.model.getShortTimeUnit()).trim();
+			final String totalDuration = (operationCall.getTotalDuration() + " " + View.this.model.getShortTimeUnit()).trim();
 
 			if (parent != null) {
 				item.setText(new String[] { operationCall.getContainer(), componentName, operationString, "", minDuration, avgDuration, maxDuration, totalDuration, });
 			} else {
-				item.setText(new String[] { operationCall.getContainer(), componentName, operationString, Integer.toString((int) operationCall.getStatistic(StatisticType.CALLS)),
-					minDuration, avgDuration, maxDuration, totalDuration, });
+				item.setText(new String[] { operationCall.getContainer(), componentName, operationString, Integer.toString(operationCall.getCalls()), minDuration, avgDuration,
+					maxDuration, totalDuration, });
 			}
 
 			if (operationCall.isFailed()) {

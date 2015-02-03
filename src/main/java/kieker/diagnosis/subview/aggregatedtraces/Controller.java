@@ -18,8 +18,8 @@ package kieker.diagnosis.subview.aggregatedtraces;
 
 import java.util.List;
 
+import kieker.diagnosis.common.domain.AggregatedOperationCall;
 import kieker.diagnosis.common.domain.AggregatedTrace;
-import kieker.diagnosis.common.domain.OperationCall;
 import kieker.diagnosis.common.model.DataModel;
 import kieker.diagnosis.common.model.PropertiesModel;
 import kieker.diagnosis.subview.ISubController;
@@ -49,8 +49,8 @@ public final class Controller implements ISubController, SelectionListener {
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
-		if (e.item.getData() instanceof OperationCall) {
-			this.model.setCurrentActiveCall((OperationCall) e.item.getData());
+		if (e.item.getData() instanceof AggregatedOperationCall) {
+			this.model.setCurrentActiveCall((AggregatedOperationCall) e.item.getData());
 		}
 	}
 

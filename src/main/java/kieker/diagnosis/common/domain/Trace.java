@@ -18,10 +18,10 @@ package kieker.diagnosis.common.domain;
 
 /**
  * This class represents an actual trace (a sequence of operation calls) within this application.
- * 
+ *
  * @author Nils Christian Ehmke
  */
-public final class Trace extends AbstractTrace {
+public final class Trace extends AbstractTrace<OperationCall> {
 
 	private final long traceID;
 

@@ -17,7 +17,6 @@
 package kieker.diagnosis.common.model.importer.stages;
 
 import kieker.diagnosis.common.domain.OperationCall;
-import kieker.diagnosis.common.domain.StatisticType;
 import kieker.diagnosis.common.domain.Trace;
 
 public final class TraceStatisticsDecorator extends AbstractStage<Trace, Trace> {
@@ -44,7 +43,7 @@ public final class TraceStatisticsDecorator extends AbstractStage<Trace, Trace> 
 			traceDepth = 1 + maxTraceDepthOfChildren;
 		}
 
-		rootOperationCall.addStatistic(StatisticType.STACK_DEPTH, traceDepth);
+		rootOperationCall.setStackDepth(traceDepth);
 
 		return traceDepth;
 	}
@@ -57,13 +56,13 @@ public final class TraceStatisticsDecorator extends AbstractStage<Trace, Trace> 
 			traceSize += traceSizeOfChild;
 		}
 
-		rootOperationCall.addStatistic(StatisticType.STACK_SIZE, traceSize);
+		rootOperationCall.setStackSize(traceSize);
 
 		return traceSize;
 	}
 
 	private static void addPercentValues(final OperationCall call, final long rootDuration) {
-		call.addStatistic(StatisticType.PERCENT, (100.0f * call.getDuration()) / rootDuration);
+		call.setPercent((100.0f * call.getDuration()) / rootDuration);
 		for (final OperationCall child : call.getChildren()) {
 			TraceStatisticsDecorator.addPercentValues(child, call.getDuration());
 		}

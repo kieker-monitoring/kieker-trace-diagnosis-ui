@@ -1,13 +1,11 @@
 package kieker.diagnosis.common.model.importer.stages;
 
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.number.IsCloseTo.closeTo;
+import static org.junit.Assert.assertThat;
 import kieker.diagnosis.common.domain.OperationCall;
-import kieker.diagnosis.common.domain.StatisticType;
 import kieker.diagnosis.common.domain.Trace;
-import kieker.diagnosis.common.model.importer.stages.TraceStatisticsDecorator;
 
-import org.hamcrest.core.Is;
-import org.hamcrest.number.IsCloseTo;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class TraceStatisticsDecoratorTest {
@@ -39,11 +37,11 @@ public class TraceStatisticsDecoratorTest {
 		decorator.onStarting();
 		decorator.execute(trace);
 
-		Assert.assertThat((double) (Float) rootCall.getStatistic(StatisticType.PERCENT), Is.is(IsCloseTo.closeTo(100.0, 1e-3)));
-		Assert.assertThat((double) (Float) child1.getStatistic(StatisticType.PERCENT), Is.is(IsCloseTo.closeTo(70.0, 1e-3)));
-		Assert.assertThat((double) (Float) child2.getStatistic(StatisticType.PERCENT), Is.is(IsCloseTo.closeTo(15.0, 1e-3)));
-		Assert.assertThat((double) (Float) child3.getStatistic(StatisticType.PERCENT), Is.is(IsCloseTo.closeTo(36.0, 1e-3)));
-		Assert.assertThat((double) (Float) child4.getStatistic(StatisticType.PERCENT), Is.is(IsCloseTo.closeTo(50.0, 1e-3)));
+		assertThat((double) rootCall.getPercent(), is(closeTo(100.0, 1e-3)));
+		assertThat((double) child1.getPercent(), is(closeTo(70.0, 1e-3)));
+		assertThat((double) child2.getPercent(), is(closeTo(15.0, 1e-3)));
+		assertThat((double) child3.getPercent(), is(closeTo(36.0, 1e-3)));
+		assertThat((double) child4.getPercent(), is(closeTo(50.0, 1e-3)));
 	}
 
 	@Test
@@ -62,7 +60,7 @@ public class TraceStatisticsDecoratorTest {
 		decorator.onStarting();
 		decorator.execute(trace);
 
-		Assert.assertThat((Integer) rootCall.getStatistic(StatisticType.STACK_DEPTH), Is.is(2));
+		assertThat(rootCall.getStackDepth(), is(2));
 	}
 
 	@Test
@@ -76,7 +74,7 @@ public class TraceStatisticsDecoratorTest {
 		decorator.onStarting();
 		decorator.execute(trace);
 
-		Assert.assertThat((Integer) rootCall.getStatistic(StatisticType.STACK_DEPTH), Is.is(0));
+		assertThat(rootCall.getStackDepth(), is(0));
 	}
 
 	@Test
@@ -101,7 +99,7 @@ public class TraceStatisticsDecoratorTest {
 		decorator.onStarting();
 		decorator.execute(trace);
 
-		Assert.assertThat((Integer) rootCall.getStatistic(StatisticType.STACK_SIZE), Is.is(5));
+		assertThat(rootCall.getStackSize(), is(5));
 	}
 
 	@Test
@@ -115,7 +113,7 @@ public class TraceStatisticsDecoratorTest {
 		decorator.onStarting();
 		decorator.execute(trace);
 
-		Assert.assertThat((Integer) rootCall.getStatistic(StatisticType.STACK_SIZE), Is.is(1));
+		assertThat(rootCall.getStackSize(), is(1));
 	}
 
 }
