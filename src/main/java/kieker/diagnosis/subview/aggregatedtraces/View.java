@@ -27,6 +27,7 @@ import kieker.diagnosis.subview.ISubView;
 import kieker.diagnosis.subview.aggregatedtraces.util.AvgDurationSortListener;
 import kieker.diagnosis.subview.aggregatedtraces.util.CallsSortListener;
 import kieker.diagnosis.subview.aggregatedtraces.util.MaxDurationSortListener;
+import kieker.diagnosis.subview.aggregatedtraces.util.MeanDurationSortListener;
 import kieker.diagnosis.subview.aggregatedtraces.util.MinDurationSortListener;
 import kieker.diagnosis.subview.aggregatedtraces.util.TotalDurationSortListener;
 import kieker.diagnosis.subview.util.ComponentSortListener;
@@ -64,6 +65,7 @@ public final class View implements Observer, ISubView {
 	private Label lblNumberOfCallsDisplay;
 	private Label lblMinimalDurationDisplay;
 	private Label lblAverageDurationDisplay;
+	private Label lblMeanDurationDisplay;
 	private Label lblMaximalDurationDisplay;
 	private Label lblFailedDisplay;
 	private Label lblTraceDepthDisplay;
@@ -134,6 +136,10 @@ public final class View implements Observer, ISubView {
 		trclmnAverageDuration.setWidth(100);
 		trclmnAverageDuration.setText("Average Duration");
 
+		final TreeColumn trclmnMeanDuration = new TreeColumn(this.tree, SWT.RIGHT);
+		trclmnMeanDuration.setWidth(100);
+		trclmnMeanDuration.setText("Mean Duration");
+
 		final TreeColumn trclmnMaximalDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnMaximalDuration.setWidth(100);
 		trclmnMaximalDuration.setText("Maximal Duration");
@@ -194,6 +200,14 @@ public final class View implements Observer, ISubView {
 		this.lblAverageDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblAverageDurationDisplay.setText(View.N_A);
 
+		final Label lblMeanDuration = new Label(this.detailComposite, SWT.NONE);
+		lblMeanDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		lblMeanDuration.setText("Mean Duration:");
+
+		this.lblMeanDurationDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblMeanDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		this.lblMeanDurationDisplay.setText(View.N_A);
+
 		final Label lblMaximalDuration = new Label(this.detailComposite, SWT.NONE);
 		lblMaximalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblMaximalDuration.setText("Maximal Duration:");
@@ -250,6 +264,7 @@ public final class View implements Observer, ISubView {
 		trclmnMinimalDuration.addSelectionListener(new MinDurationSortListener());
 		trclmnMaximalDuration.addSelectionListener(new MaxDurationSortListener());
 		trclmnAverageDuration.addSelectionListener(new AvgDurationSortListener());
+		trclmnMeanDuration.addSelectionListener(new MeanDurationSortListener());
 		trclmnCalls.addSelectionListener(new CallsSortListener());
 		trclmnTotalDuration.addSelectionListener(new TotalDurationSortListener());
 	}
@@ -300,12 +315,14 @@ public final class View implements Observer, ISubView {
 
 		final String minDuration = (call.getMinDuration() + " " + this.model.getShortTimeUnit()).trim();
 		final String maxDuration = (call.getMaxDuration() + " " + this.model.getShortTimeUnit()).trim();
+		final String meanDuration = (call.getMeanDuration() + " " + this.model.getShortTimeUnit()).trim();
 		final String avgDuration = (call.getAvgDuration() + " " + this.model.getShortTimeUnit()).trim();
 		final String totalDuration = (call.getTotalDuration() + " " + this.model.getShortTimeUnit()).trim();
 
 		this.lblMinimalDurationDisplay.setText(minDuration);
 		this.lblMaximalDurationDisplay.setText(maxDuration);
 		this.lblAverageDurationDisplay.setText(avgDuration);
+		this.lblMeanDurationDisplay.setText(meanDuration);
 		this.lblTotalDurationDisplay.setText(totalDuration);
 
 		this.lblExecutionContainerDisplay.setText(call.getContainer());
@@ -366,13 +383,14 @@ public final class View implements Observer, ISubView {
 			final String minDuration = (operationCall.getMinDuration() + " " + View.this.model.getShortTimeUnit()).trim();
 			final String maxDuration = (operationCall.getMaxDuration() + " " + View.this.model.getShortTimeUnit()).trim();
 			final String avgDuration = (operationCall.getAvgDuration() + " " + View.this.model.getShortTimeUnit()).trim();
+			final String meanDuration = (operationCall.getMeanDuration() + " " + View.this.model.getShortTimeUnit()).trim();
 			final String totalDuration = (operationCall.getTotalDuration() + " " + View.this.model.getShortTimeUnit()).trim();
 
 			if (parent != null) {
-				item.setText(new String[] { operationCall.getContainer(), componentName, operationString, "", minDuration, avgDuration, maxDuration, totalDuration, });
+				item.setText(new String[] { operationCall.getContainer(), componentName, operationString, "", minDuration, avgDuration, meanDuration, maxDuration, totalDuration, });
 			} else {
 				item.setText(new String[] { operationCall.getContainer(), componentName, operationString, Integer.toString(operationCall.getCalls()), minDuration, avgDuration,
-					maxDuration, totalDuration, });
+					meanDuration, maxDuration, totalDuration, });
 			}
 
 			if (operationCall.isFailed()) {

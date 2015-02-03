@@ -17,6 +17,7 @@
 package kieker.diagnosis.common.model.importer.stages;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import kieker.diagnosis.common.domain.AggregatedOperationCall;
@@ -86,6 +87,7 @@ public final class AggregatedTraceStatisticsDecorator extends AbstractStage<Aggr
 			rootOperationCall.setMaxDuration(this.findMaxDuration(durationsOfCurrentEdge));
 			rootOperationCall.setAvgDuration(this.calculateAvgDuration(durationsOfCurrentEdge));
 			rootOperationCall.setTotalDuration(this.calculateTotalDuration(durationsOfCurrentEdge));
+			rootOperationCall.setMeanDuration(this.calculateMeanDuration(durationsOfCurrentEdge));
 
 			for (final AggregatedOperationCall child : rootOperationCall.getChildren()) {
 				this.addDurationStatistics(child);
@@ -130,6 +132,12 @@ public final class AggregatedTraceStatisticsDecorator extends AbstractStage<Aggr
 			}
 
 			return totalDuration;
+		}
+
+		private long calculateMeanDuration(final List<Long> durationsOfCurrentEdge) {
+			Collections.sort(durationsOfCurrentEdge);
+
+			return durationsOfCurrentEdge.get(durationsOfCurrentEdge.size() / 2);
 		}
 
 	}
