@@ -17,32 +17,121 @@
 package kieker.diagnosis.common.model;
 
 import java.util.Observable;
+import java.util.concurrent.TimeUnit;
+import java.util.prefs.Preferences;
 
 public final class PropertiesModel extends Observable {
 
-	private boolean shortComponentNames = false;
-	private boolean shortOperationNames = true;
+	private boolean commit = true;
 
-	public boolean isShortComponentNames() {
-		return this.shortComponentNames;
+	private String graphvizPath;
+	private GraphvizGenerator graphvizGenerator;
+	private TimeUnit timeunit;
+	private ComponentNames componentNames;
+	private OperationNames operationNames;
+
+	public PropertiesModel() {
+		this.loadSettings();
 	}
 
-	public void setShortComponentNames(final boolean shortComponentNames) {
-		this.shortComponentNames = shortComponentNames;
+	private void loadSettings() {
+		final Preferences preferences = Preferences.userNodeForPackage(PropertiesModel.class);
 
-		this.setChanged();
-		this.notifyObservers();
+		this.graphvizPath = preferences.get("graphvizpath", ".");
+		this.graphvizGenerator = GraphvizGenerator.valueOf(preferences.get("graphvizgenerator", GraphvizGenerator.DOT.name()));
+		this.timeunit = TimeUnit.valueOf(preferences.get("timeunit", TimeUnit.NANOSECONDS.name()));
+		this.componentNames = ComponentNames.valueOf(preferences.get("operations", ComponentNames.LONG.name()));
+		this.operationNames = OperationNames.valueOf(preferences.get("components", OperationNames.SHORT.name()));
 	}
 
-	public boolean isShortOperationNames() {
-		return this.shortOperationNames;
+	private void saveSettings() {
+		final Preferences preferences = Preferences.userNodeForPackage(PropertiesModel.class);
+
+		preferences.put("graphvizpath", this.graphvizPath);
+		preferences.put("graphvizgenerator", this.graphvizGenerator.name());
+		preferences.put("timeunit", this.timeunit.name());
+		preferences.put("operations", this.componentNames.name());
+		preferences.put("components", this.operationNames.name());
 	}
 
-	public void setShortOperationNames(final boolean shortOperationNames) {
-		this.shortOperationNames = shortOperationNames;
+	public String getGraphvizPath() {
+		return this.graphvizPath;
+	}
 
-		this.setChanged();
-		this.notifyObservers();
+	public void setGraphvizPath(final String graphvizPath) {
+		this.graphvizPath = graphvizPath;
+
+		this.notifyObserversAndSaveSettings();
+	}
+
+	public GraphvizGenerator getGraphvizGenerator() {
+		return this.graphvizGenerator;
+	}
+
+	public void setGraphvizGenerator(final GraphvizGenerator graphvizGenerator) {
+		this.graphvizGenerator = graphvizGenerator;
+
+		this.notifyObserversAndSaveSettings();
+	}
+
+	public TimeUnit getTimeunit() {
+		return this.timeunit;
+	}
+
+	public void setTimeunit(final TimeUnit timeunit) {
+		this.timeunit = timeunit;
+
+		this.notifyObserversAndSaveSettings();
+	}
+
+	public ComponentNames getComponentNames() {
+		return this.componentNames;
+	}
+
+	public void setComponentNames(final ComponentNames componentNames) {
+		this.componentNames = componentNames;
+
+		this.notifyObserversAndSaveSettings();
+	}
+
+	public OperationNames getOperationNames() {
+		return this.operationNames;
+	}
+
+	public void setOperationNames(final OperationNames operationNames) {
+		this.operationNames = operationNames;
+
+		this.notifyObserversAndSaveSettings();
+	}
+
+	public void startModification() {
+		this.commit = false;
+	}
+
+	public void commitModification() {
+		this.commit = true;
+
+		this.notifyObserversAndSaveSettings();
+	}
+
+	private void notifyObserversAndSaveSettings() {
+		if (this.commit) {
+			this.setChanged();
+			this.notifyObservers();
+			this.saveSettings();
+		}
+	}
+
+	public enum GraphvizGenerator {
+		DOT, NEATO
+	}
+
+	public enum ComponentNames {
+		SHORT, LONG
+	}
+
+	public enum OperationNames {
+		SHORT, LONG
 	}
 
 }

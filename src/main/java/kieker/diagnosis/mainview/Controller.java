@@ -23,6 +23,7 @@ import java.util.prefs.Preferences;
 
 import kieker.diagnosis.common.model.DataModel;
 import kieker.diagnosis.common.model.PropertiesModel;
+import kieker.diagnosis.dialog.SettingsDialog;
 import kieker.diagnosis.subview.ISubController;
 import kieker.diagnosis.subview.ISubView;
 import kieker.diagnosis.subview.aggregatedtraces.Controller.Filter;
@@ -71,7 +72,7 @@ public final class Controller implements SelectionListener {
 
 		// Create the main model and the main view
 		this.mainViewModel = new Model();
-		this.mainView = new View(this.mainViewModel, this, subViews);
+		this.mainView = new View(this.mainViewModel, this, subViews, this.propertiesModel);
 	}
 
 	public void showView() {
@@ -82,22 +83,6 @@ public final class Controller implements SelectionListener {
 	public void widgetSelected(final SelectionEvent e) {
 		this.handlePotentialTreeSelection(e);
 		this.handlePotentialMenuSelection(e);
-		this.handlePotentialPropertiesSelection(e);
-	}
-
-	private void handlePotentialPropertiesSelection(final SelectionEvent e) {
-		if (e.widget == this.mainView.getMntmShortOperationNames()) {
-			this.propertiesModel.setShortOperationNames(true);
-		}
-		if (e.widget == this.mainView.getMntmLongOperationNames()) {
-			this.propertiesModel.setShortOperationNames(false);
-		}
-		if (e.widget == this.mainView.getMntmShortComponentNames()) {
-			this.propertiesModel.setShortComponentNames(true);
-		}
-		if (e.widget == this.mainView.getMntmLongComponentNames()) {
-			this.propertiesModel.setShortComponentNames(false);
-		}
 	}
 
 	private void handlePotentialMenuSelection(final SelectionEvent e) {
@@ -105,8 +90,8 @@ public final class Controller implements SelectionListener {
 			final Preferences preferences = Preferences.userNodeForPackage(Controller.class);
 			final String filterPath = preferences.get("lastimportpath", ".");
 
-			this.mainView.getDialog().setFilterPath(filterPath);
-			final String selectedDirectory = this.mainView.getDialog().open();
+			this.mainView.getDirectoryDialog().setFilterPath(filterPath);
+			final String selectedDirectory = this.mainView.getDirectoryDialog().open();
 
 			if (null != selectedDirectory) {
 				this.mainViewModel.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_WAIT));
@@ -120,6 +105,11 @@ public final class Controller implements SelectionListener {
 					ex.printStackTrace();
 				}
 			}
+		}
+
+		if (e.widget == this.mainView.getMntmSettings()) {
+			final SettingsDialog settingsDialog = this.mainView.getSettingsDialog();
+			settingsDialog.open();
 		}
 
 		if (e.widget == this.mainView.getMntmExit()) {

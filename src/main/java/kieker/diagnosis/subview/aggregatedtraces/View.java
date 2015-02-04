@@ -23,6 +23,8 @@ import java.util.Observer;
 import kieker.diagnosis.common.domain.AggregatedOperationCall;
 import kieker.diagnosis.common.domain.AggregatedTrace;
 import kieker.diagnosis.common.model.PropertiesModel;
+import kieker.diagnosis.common.model.PropertiesModel.ComponentNames;
+import kieker.diagnosis.common.model.PropertiesModel.OperationNames;
 import kieker.diagnosis.subview.ISubView;
 import kieker.diagnosis.subview.aggregatedtraces.util.AvgDurationSortListener;
 import kieker.diagnosis.subview.aggregatedtraces.util.CallsSortListener;
@@ -33,6 +35,7 @@ import kieker.diagnosis.subview.aggregatedtraces.util.TotalDurationSortListener;
 import kieker.diagnosis.subview.util.ComponentSortListener;
 import kieker.diagnosis.subview.util.ContainerSortListener;
 import kieker.diagnosis.subview.util.IModel;
+import kieker.diagnosis.subview.util.NameConverter;
 import kieker.diagnosis.subview.util.OperationSortListener;
 
 import org.eclipse.swt.SWT;
@@ -77,8 +80,7 @@ public final class View implements Observer, ISubView {
 	private Composite statusBar;
 	private Label lblTraceEquivalence;
 
-	public View(final IModel<AggregatedTrace> model, final Model aggregatedTracesSubViewModel, final PropertiesModel propertiesModel,
-			final SelectionListener controller) {
+	public View(final IModel<AggregatedTrace> model, final Model aggregatedTracesSubViewModel, final PropertiesModel propertiesModel, final SelectionListener controller) {
 		this.controller = controller;
 		this.model = model;
 		this.propertiesModel = propertiesModel;
@@ -368,16 +370,12 @@ public final class View implements Observer, ISubView {
 			}
 
 			String componentName = operationCall.getComponent();
-			if (View.this.propertiesModel.isShortComponentNames()) {
-				final int lastPointPos = componentName.lastIndexOf('.');
-				componentName = componentName.substring(lastPointPos + 1);
+			if (View.this.propertiesModel.getComponentNames() == ComponentNames.SHORT) {
+				componentName = NameConverter.toShortComponentName(componentName);
 			}
 			String operationString = operationCall.getOperation();
-			if (View.this.propertiesModel.isShortOperationNames()) {
-				operationString = operationString.replaceAll("\\(..*\\)", "(...)");
-
-				final int lastPointPos = operationString.lastIndexOf('.', operationString.length() - 5);
-				operationString = operationString.substring(lastPointPos + 1);
+			if (View.this.propertiesModel.getOperationNames() == OperationNames.SHORT) {
+				operationString = NameConverter.toShortOperationName(operationString);
 			}
 
 			final String minDuration = (operationCall.getMinDuration() + " " + View.this.model.getShortTimeUnit()).trim();

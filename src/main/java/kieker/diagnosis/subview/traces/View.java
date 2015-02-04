@@ -23,12 +23,15 @@ import java.util.Observer;
 import kieker.diagnosis.common.domain.OperationCall;
 import kieker.diagnosis.common.domain.Trace;
 import kieker.diagnosis.common.model.PropertiesModel;
+import kieker.diagnosis.common.model.PropertiesModel.ComponentNames;
+import kieker.diagnosis.common.model.PropertiesModel.OperationNames;
 import kieker.diagnosis.subview.ISubView;
 import kieker.diagnosis.subview.traces.util.DurationSortListener;
 import kieker.diagnosis.subview.traces.util.TraceIDSortListener;
 import kieker.diagnosis.subview.util.ComponentSortListener;
 import kieker.diagnosis.subview.util.ContainerSortListener;
 import kieker.diagnosis.subview.util.IModel;
+import kieker.diagnosis.subview.util.NameConverter;
 import kieker.diagnosis.subview.util.OperationSortListener;
 
 import org.eclipse.swt.SWT;
@@ -313,16 +316,12 @@ public final class View implements Observer, ISubView {
 			}
 
 			String componentName = operationCall.getComponent();
-			if (View.this.propertiesModel.isShortComponentNames()) {
-				final int lastPointPos = componentName.lastIndexOf('.');
-				componentName = componentName.substring(lastPointPos + 1);
+			if (View.this.propertiesModel.getComponentNames() == ComponentNames.SHORT) {
+				componentName = NameConverter.toShortComponentName(componentName);
 			}
 			String operationString = operationCall.getOperation();
-			if (View.this.propertiesModel.isShortOperationNames()) {
-				operationString = operationString.replaceAll("\\(..*\\)", "(...)");
-
-				final int lastPointPos = operationString.lastIndexOf('.', operationString.length() - 5);
-				operationString = operationString.substring(lastPointPos + 1);
+			if (View.this.propertiesModel.getOperationNames() == OperationNames.SHORT) {
+				operationString = NameConverter.toShortOperationName(operationString);
 			}
 			final String duration = (Long.toString(operationCall.getDuration()) + " " + View.this.model.getShortTimeUnit()).trim();
 			item.setText(new String[] { operationCall.getContainer(), componentName, operationString, duration, String.format("%.1f%%", operationCall.getPercent()), traceID });

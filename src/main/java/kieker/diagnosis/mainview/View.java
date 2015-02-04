@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
+import kieker.diagnosis.common.model.PropertiesModel;
+import kieker.diagnosis.dialog.SettingsDialog;
 import kieker.diagnosis.subview.ISubView;
 
 import org.eclipse.swt.SWT;
@@ -45,22 +47,19 @@ import org.eclipse.swt.widgets.Widget;
  */
 public final class View implements Observer {
 
+	private final PropertiesModel propertiesModel;
 	private final Model model;
 	private final Controller controller;
 	private final Map<String, ISubView> subViews;
-
 	private Shell shell;
 	private Composite subViewComposite;
 	private StackLayout subViewLayout;
 
 	private MessageBox aboutDialog;
-	private DirectoryDialog dialog;
+	private DirectoryDialog directoryDialog;
+	private SettingsDialog settingsDialog;
 
 	private MenuItem mntmExit;
-	private MenuItem mntmShortOperationNames;
-	private MenuItem mntmLongOperationNames;
-	private MenuItem mntmShortComponentNames;
-	private MenuItem mntmLongComponentNames;
 	private MenuItem mntmOpenMonitoringLog;
 
 	private Tree tree;
@@ -72,11 +71,12 @@ public final class View implements Observer {
 	private TreeItem trtmJustFailedAggTraces;
 	private TreeItem trtmJustAggTracesContaining;
 	private MenuItem mntmAbout;
+	private MenuItem mntmSettings;
 
-	public View(final Model mainViewModel, final Controller controller, final Map<String, ISubView> subViews) {
+	public View(final Model mainViewModel, final Controller controller, final Map<String, ISubView> subViews, final PropertiesModel propertiesModel) {
 		this.model = mainViewModel;
+		this.propertiesModel = propertiesModel;
 		this.subViews = subViews;
-
 		this.controller = controller;
 	}
 
@@ -135,28 +135,20 @@ public final class View implements Observer {
 		return this.mntmAbout;
 	}
 
-	public MenuItem getMntmShortOperationNames() {
-		return this.mntmShortOperationNames;
-	}
-
-	public MenuItem getMntmLongOperationNames() {
-		return this.mntmLongOperationNames;
-	}
-
-	public MenuItem getMntmShortComponentNames() {
-		return this.mntmShortComponentNames;
-	}
-
-	public MenuItem getMntmLongComponentNames() {
-		return this.mntmLongComponentNames;
+	public MenuItem getMntmSettings() {
+		return this.mntmSettings;
 	}
 
 	public MenuItem getMntmOpenMonitoringLog() {
 		return this.mntmOpenMonitoringLog;
 	}
 
-	public DirectoryDialog getDialog() {
-		return this.dialog;
+	public DirectoryDialog getDirectoryDialog() {
+		return this.directoryDialog;
+	}
+
+	public SettingsDialog getSettingsDialog() {
+		return this.settingsDialog;
 	}
 
 	public MessageBox getAboutDialog() {
@@ -175,8 +167,9 @@ public final class View implements Observer {
 		this.shell.setImage(new Image(this.shell.getDisplay(), ClassLoader.getSystemClassLoader().getResourceAsStream("kieker-logo.png")));
 		this.shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 
-		this.dialog = new DirectoryDialog(this.shell);
+		this.directoryDialog = new DirectoryDialog(this.shell);
 		this.aboutDialog = new MessageBox(this.shell, SWT.ICON_INFORMATION);
+		this.settingsDialog = new SettingsDialog(this.shell, SWT.NONE, this.propertiesModel);
 
 		this.aboutDialog.setText("About...");
 		this.aboutDialog.setMessage("Kieker Trace Diagnosis - 1.0-SNAPSHOT\n\nCopyright 2014 Kieker Project (http://kieker-monitoring.net)");
@@ -232,30 +225,13 @@ public final class View implements Observer {
 
 		new MenuItem(menu_1, SWT.SEPARATOR);
 
+		this.mntmSettings = new MenuItem(menu_1, SWT.NONE);
+		this.mntmSettings.setText("Settings");
+
+		new MenuItem(menu_1, SWT.SEPARATOR);
+
 		this.mntmExit = new MenuItem(menu_1, SWT.NONE);
 		this.mntmExit.setText("Exit");
-
-		final MenuItem mntmView = new MenuItem(menu, SWT.CASCADE);
-		mntmView.setText("View");
-
-		final Menu menu_2 = new Menu(mntmView);
-		mntmView.setMenu(menu_2);
-
-		this.mntmShortOperationNames = new MenuItem(menu_2, SWT.RADIO);
-		this.mntmShortOperationNames.setSelection(true);
-		this.mntmShortOperationNames.setText("Short Operation Names");
-
-		this.mntmLongOperationNames = new MenuItem(menu_2, SWT.RADIO);
-		this.mntmLongOperationNames.setText("Long Operation Names");
-
-		new MenuItem(menu_2, SWT.SEPARATOR);
-
-		this.mntmShortComponentNames = new MenuItem(menu_2, SWT.RADIO);
-		this.mntmShortComponentNames.setText("Short Component Names");
-
-		this.mntmLongComponentNames = new MenuItem(menu_2, SWT.RADIO);
-		this.mntmLongComponentNames.setSelection(true);
-		this.mntmLongComponentNames.setText("Long Component Names");
 
 		final MenuItem mntmHelp = new MenuItem(menu, SWT.CASCADE);
 		mntmHelp.setText("Help");
@@ -276,10 +252,7 @@ public final class View implements Observer {
 		this.mntmOpenMonitoringLog.addSelectionListener(this.controller);
 		this.mntmAbout.addSelectionListener(this.controller);
 
-		this.mntmShortOperationNames.addSelectionListener(this.controller);
-		this.mntmLongOperationNames.addSelectionListener(this.controller);
-		this.mntmShortComponentNames.addSelectionListener(this.controller);
-		this.mntmLongOperationNames.addSelectionListener(this.controller);
+		this.mntmSettings.addSelectionListener(this.controller);
 	}
 
 	@Override
@@ -303,5 +276,4 @@ public final class View implements Observer {
 	private void handleChangedCursor() {
 		this.shell.setCursor(this.model.getCursor());
 	}
-
 }
