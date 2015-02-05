@@ -106,6 +106,8 @@
     <module name="OperatorWrap"/>
     <module name="ParenPad"/>
     <module name="TypecastParenPad"/>
+    
+    <property name="tabWidth" value="4"/>
   </module>
   
    <module name="Header">

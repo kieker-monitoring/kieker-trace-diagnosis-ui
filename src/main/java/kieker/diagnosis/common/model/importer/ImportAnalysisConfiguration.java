@@ -37,7 +37,7 @@ import teetime.stage.MultipleInstanceOfFilter;
 
 /**
  * A configuration for the import and analysis of monitoring logs.
- * 
+ *
  * @author Nils Christian Ehmke
  */
 public final class ImportAnalysisConfiguration extends AnalysisConfiguration {

@@ -104,7 +104,7 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 	}
 
 	@Override
-	public final int hashCode() { // NOPMD NOCS (this method violates some metrics)
+	public final int hashCode() { // NOPMD (this method violates some metrics)
 		final int prime = 31;
 		int result = 1;
 		result = (prime * result) + ((this.children == null) ? 0 : this.children.hashCode());
@@ -117,7 +117,7 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public final boolean equals(final Object obj) { // NOPMD NOCS (this method violates some metrics)
+	public final boolean equals(final Object obj) { // NOPMD (this method violates some metrics)
 		if (this == obj) {
 			return true;
 		}
