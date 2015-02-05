@@ -17,9 +17,8 @@
 package kieker.diagnosis.common.domain;
 
 /**
- * This class represents an operation call (or an execution) within this application. As it can has multiple children, an instance of this class can represent a whole call tree.
- * This class implements the both methods {@link OperationCall#equals(Object)} and {@link OperationCall#hashCode()}, allowing to easily check whether two traces are equal (aside
- * from some varying properties like the duration) and should be in the same equivalence class.
+ * This class represents a concrete operation call within this application. It adds some properties that are only required for concrete operation calls, like the trace ID and the
+ * duration. It extends the call tree mechanism (inherited from {@link AbstractOperationCall}) by a parent, allowing to navigate in both directions within the tree.
  *
  * @author Nils Christian Ehmke
  */

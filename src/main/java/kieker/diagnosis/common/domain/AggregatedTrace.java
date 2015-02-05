@@ -19,7 +19,7 @@ package kieker.diagnosis.common.domain;
 import java.util.List;
 
 /**
- * This class represents an aggregated trace (or a trace equivalence class) within this application.
+ * This class represents an aggregated trace (also called a trace equivalence class) within this application.
  *
  * @author Nils Christian Ehmke
  */

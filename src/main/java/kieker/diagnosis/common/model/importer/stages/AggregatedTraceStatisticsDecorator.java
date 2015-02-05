@@ -25,6 +25,11 @@ import kieker.diagnosis.common.domain.AggregatedTrace;
 import kieker.diagnosis.common.domain.OperationCall;
 import kieker.diagnosis.common.domain.Trace;
 
+/**
+ * This class is a {@code TeeTime} stage adding statistics (via the corresponding setters) to instances of {@link AggregatedTrace}. The traces are forwarded to the output port.
+ *
+ * @author Nils Christian Ehmke
+ */
 public final class AggregatedTraceStatisticsDecorator extends AbstractStage<AggregatedTrace, AggregatedTrace> {
 
 	@Override

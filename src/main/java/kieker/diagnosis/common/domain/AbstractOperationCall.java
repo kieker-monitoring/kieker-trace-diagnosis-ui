@@ -19,6 +19,16 @@ package kieker.diagnosis.common.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This is an abstract base for classes representing operation calls (also called executions) within this application. As it can has multiple children, an instance of this class
+ * can represent a whole call tree. This class implements the both methods {@link OperationCall#equals(Object)} and {@link OperationCall#hashCode()}, allowing to easily check
+ * whether two traces are equal and should be in the same equivalence class.
+ *
+ * @author Nils Christian Ehmke
+ *
+ * @param <T>
+ *            The precise type of the children. This should usually be the implementing class itself.
+ */
 public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> {
 
 	private final List<T> children = new ArrayList<>();

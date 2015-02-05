@@ -33,6 +33,11 @@ import teetime.stage.CollectorSink;
 import teetime.stage.basic.distributor.CopyByReferenceStrategy;
 import teetime.stage.basic.distributor.Distributor;
 
+/**
+ * This is a composite {@code TeeTime} stage which aggregates incoming traces, adds statistical data and stores the aggregated traces.
+ *
+ * @author Nils Christian Ehmke
+ */
 public final class TraceAggregationComposite extends CompositeStage {
 
 	private final TraceAggregator aggregator;

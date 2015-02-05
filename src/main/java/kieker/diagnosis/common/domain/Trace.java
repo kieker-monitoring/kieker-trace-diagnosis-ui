@@ -17,7 +17,7 @@
 package kieker.diagnosis.common.domain;
 
 /**
- * This class represents an actual trace (a sequence of operation calls) within this application.
+ * This class represents a concrete trace within this application. It adds some properties that are only required for concrete traces, like the trace ID.
  *
  * @author Nils Christian Ehmke
  */

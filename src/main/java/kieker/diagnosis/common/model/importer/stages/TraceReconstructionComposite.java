@@ -34,6 +34,11 @@ import teetime.stage.CollectorSink;
 import teetime.stage.basic.distributor.CopyByReferenceStrategy;
 import teetime.stage.basic.distributor.Distributor;
 
+/**
+ * This class is a composite {@code TeeTime} stage, which reconstruct traces based on the incoming records, adds statistical data and stores the traces.
+ *
+ * @author Nils Christian Ehmke
+ */
 public final class TraceReconstructionComposite extends CompositeStage {
 
 	private final TraceReconstructor reconstructor;

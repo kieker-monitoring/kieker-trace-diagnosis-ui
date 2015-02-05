@@ -36,7 +36,7 @@ import teetime.stage.CollectorSink;
 import teetime.stage.MultipleInstanceOfFilter;
 
 /**
- * A configuration for the import and analysis of monitoring logs.
+ * A {@code TeeTime} configuration for the import and analysis of monitoring logs.
  *
  * @author Nils Christian Ehmke
  */

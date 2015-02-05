@@ -21,9 +21,9 @@ import teetime.framework.OutputPort;
 
 /**
  * This is a abstract base for {@code TeeTime} stages with exactly one input and one output port.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @param <I>
  *            The type of the input port.
  * @param <O>

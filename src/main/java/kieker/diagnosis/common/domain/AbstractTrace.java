@@ -17,13 +17,13 @@
 package kieker.diagnosis.common.domain;
 
 /**
- * This is an abstract base for classes representing traces within this application. Technically this class is just a container for a single {@link OperationCall} instance
- * representing the root call of a whole call trace. Furthermore, this class implements the both methods {@link AbstractTrace#equals(Object)} and {@link AbstractTrace#hashCode()},
- * allowing to put traces for example into a map to aggregate them.
+ * This is an abstract base for classes representing traces (a tree of operation calls) within this application. Technically this class is just a container for a single
+ * {@link AbstractOperationCall} instance representing the root call of a whole call tree. Furthermore, this class implements the methods {@link AbstractTrace#equals(Object)} and
+ * {@link AbstractTrace#hashCode()}, allowing to put traces for example into a map to aggregate them.
  *
  * @author Nils Christian Ehmke
  */
-public abstract class AbstractTrace<T extends AbstractOperationCall<T>> { // NOPMD (abstract class without abstract methods)
+public abstract class AbstractTrace<T extends AbstractOperationCall<T>> {
 
 	private final T rootOperationCall;
 
