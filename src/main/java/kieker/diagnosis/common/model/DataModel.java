@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.diagnosis.common.domain.AggregatedTrace;
+import kieker.diagnosis.common.domain.OperationCall;
 import kieker.diagnosis.common.domain.Trace;
 import kieker.diagnosis.common.model.importer.ImportAnalysisConfiguration;
 import teetime.framework.Analysis;
@@ -42,6 +43,8 @@ public final class DataModel extends Observable {
 	private List<AggregatedTrace> aggregatedTraces = Collections.emptyList();
 	private List<AggregatedTrace> failedAggregatedTraces = Collections.emptyList();
 	private List<AggregatedTrace> failureAggregatedContainingTraces = Collections.emptyList();
+	private List<OperationCall> operationCalls = Collections.emptyList();
+	private List<OperationCall> failedOperationCalls = Collections.emptyList();
 	private String shortTimeUnit = "";
 
 	public void loadMonitoringLogFromFS(final String directory) {
@@ -58,6 +61,8 @@ public final class DataModel extends Observable {
 		this.aggregatedTraces = analysisConfiguration.getAggregatedTraces();
 		this.failedAggregatedTraces = analysisConfiguration.getFailedAggregatedTracesList();
 		this.failureAggregatedContainingTraces = analysisConfiguration.getFailureContainingAggregatedTracesList();
+		this.operationCalls = analysisConfiguration.getOperationCalls();
+		this.failedOperationCalls = analysisConfiguration.getFailedOperationCalls();
 
 		final List<KiekerMetadataRecord> metadataRecords = analysisConfiguration.getMetadataRecords();
 		if (!metadataRecords.isEmpty()) {
@@ -130,6 +135,14 @@ public final class DataModel extends Observable {
 
 	public List<AggregatedTrace> getFailureContainingAggregatedTracesCopy() {
 		return new ArrayList<>(this.failureAggregatedContainingTraces);
+	}
+
+	public List<OperationCall> getOperationCalls() {
+		return new ArrayList<>(this.operationCalls);
+	}
+
+	public List<OperationCall> getFailedOperationCalls() {
+		return new ArrayList<>(this.failedOperationCalls);
 	}
 
 }

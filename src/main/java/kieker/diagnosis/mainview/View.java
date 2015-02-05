@@ -72,6 +72,10 @@ public final class View implements Observer {
 	private TreeItem trtmJustAggTracesContaining;
 	private MenuItem mntmAbout;
 	private MenuItem mntmSettings;
+	private TreeItem trtmAggregatedOperationCalls;
+	private TreeItem trtmJustFailedAggregated;
+	private TreeItem trtmOperationCalls;
+	private TreeItem trtmJustFailedOperation;
 
 	public View(final Model mainViewModel, final Controller controller, final Map<String, ISubView> subViews, final PropertiesModel propertiesModel) {
 		this.model = mainViewModel;
@@ -127,6 +131,22 @@ public final class View implements Observer {
 		return this.trtmJustAggTracesContaining;
 	}
 
+	public Widget getTrtmAggregatedOperationCalls() {
+		return this.trtmAggregatedOperationCalls;
+	}
+
+	public Widget getTrtmFailedAggregatedOperationCalls() {
+		return this.trtmJustFailedAggregated;
+	}
+
+	public TreeItem getTrtmOperationCalls() {
+		return this.trtmOperationCalls;
+	}
+
+	public TreeItem getTrtmJustFailedOperation() {
+		return this.trtmJustFailedOperation;
+	}
+
 	public MenuItem getMntmExit() {
 		return this.mntmExit;
 	}
@@ -172,7 +192,7 @@ public final class View implements Observer {
 		this.settingsDialog = new SettingsDialog(this.shell, SWT.NONE, this.propertiesModel);
 
 		this.aboutDialog.setText("About...");
-		this.aboutDialog.setMessage("Kieker Trace Diagnosis - 1.0-SNAPSHOT\n\nCopyright 2014 Kieker Project (http://kieker-monitoring.net)");
+		this.aboutDialog.setMessage("Kieker Trace Diagnosis - 1.0-SNAPSHOT\n\nCopyright 2015 Kieker Project (http://kieker-monitoring.net)");
 
 		final SashForm sashForm = new SashForm(this.shell, SWT.NONE);
 
@@ -200,6 +220,20 @@ public final class View implements Observer {
 		this.trtmJustAggTracesContaining = new TreeItem(this.trtmAggregatedTraces, SWT.NONE);
 		this.trtmJustAggTracesContaining.setText("Just Traces Containing Failures");
 		this.trtmAggregatedTraces.setExpanded(true);
+
+		this.trtmOperationCalls = new TreeItem(this.trtmExplorer, SWT.NONE);
+		this.trtmOperationCalls.setText("Operation Calls");
+
+		this.trtmJustFailedOperation = new TreeItem(this.trtmOperationCalls, SWT.NONE);
+		this.trtmJustFailedOperation.setText("Just Failed Operation Calls");
+		this.trtmOperationCalls.setExpanded(true);
+
+		this.trtmAggregatedOperationCalls = new TreeItem(this.trtmExplorer, SWT.NONE);
+		this.trtmAggregatedOperationCalls.setText("Aggregated Operation Calls");
+
+		this.trtmJustFailedAggregated = new TreeItem(this.trtmAggregatedOperationCalls, SWT.NONE);
+		this.trtmJustFailedAggregated.setText("Just Failed Operation Calls");
+		this.trtmAggregatedOperationCalls.setExpanded(true);
 		this.trtmExplorer.setExpanded(true);
 
 		this.subViewLayout = new StackLayout();
@@ -276,4 +310,5 @@ public final class View implements Observer {
 	private void handleChangedCursor() {
 		this.shell.setCursor(this.model.getCursor());
 	}
+
 }

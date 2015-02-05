@@ -25,10 +25,9 @@ import java.util.prefs.Preferences;
 import kieker.diagnosis.common.model.DataModel;
 import kieker.diagnosis.common.model.PropertiesModel;
 import kieker.diagnosis.dialog.SettingsDialog;
+import kieker.diagnosis.subview.Filter;
 import kieker.diagnosis.subview.ISubController;
 import kieker.diagnosis.subview.ISubView;
-import kieker.diagnosis.subview.aggregatedtraces.Controller.Filter;
-import kieker.diagnosis.subview.traces.Controller.Type;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -56,11 +55,15 @@ public final class Controller implements SelectionListener {
 
 		// Create the sub-controllers
 		final ISubController subViewController1 = new kieker.diagnosis.subview.aggregatedtraces.Controller(Filter.NONE, this.dataModel, propertiesModel);
-		final ISubController subViewController2 = new kieker.diagnosis.subview.traces.Controller(Type.JUST_FAILED_TRACES, this.dataModel, propertiesModel);
-		final ISubController subViewController3 = new kieker.diagnosis.subview.traces.Controller(Type.NONE, this.dataModel, propertiesModel);
-		final ISubController subViewController4 = new kieker.diagnosis.subview.traces.Controller(Type.JUST_FAILURE_CONTAINING_TRACES, this.dataModel, propertiesModel);
-		final ISubController subViewController5 = new kieker.diagnosis.subview.aggregatedtraces.Controller(Filter.JUST_FAILED_TRACES, this.dataModel, propertiesModel);
-		final ISubController subViewController6 = new kieker.diagnosis.subview.aggregatedtraces.Controller(Filter.JUST_FAILURE_CONTAINING_TRACES, this.dataModel, propertiesModel);
+		final ISubController subViewController2 = new kieker.diagnosis.subview.traces.Controller(Filter.JUST_FAILED, this.dataModel, propertiesModel);
+		final ISubController subViewController3 = new kieker.diagnosis.subview.traces.Controller(Filter.NONE, this.dataModel, propertiesModel);
+		final ISubController subViewController4 = new kieker.diagnosis.subview.traces.Controller(Filter.JUST_FAILURE_CONTAINING, this.dataModel, propertiesModel);
+		final ISubController subViewController5 = new kieker.diagnosis.subview.aggregatedtraces.Controller(Filter.JUST_FAILED, this.dataModel, propertiesModel);
+		final ISubController subViewController6 = new kieker.diagnosis.subview.aggregatedtraces.Controller(Filter.JUST_FAILURE_CONTAINING, this.dataModel, propertiesModel);
+		final ISubController subViewController7 = new kieker.diagnosis.subview.aggregatedcalls.Controller(Filter.NONE, this.dataModel, propertiesModel);
+		final ISubController subViewController8 = new kieker.diagnosis.subview.aggregatedcalls.Controller(Filter.JUST_FAILED, this.dataModel, propertiesModel);
+		final ISubController subViewController9 = new kieker.diagnosis.subview.calls.Controller(Filter.NONE, this.dataModel, propertiesModel);
+		final ISubController subViewController10 = new kieker.diagnosis.subview.calls.Controller(Filter.JUST_FAILED, this.dataModel, propertiesModel);
 
 		// Get the sub-views from the controllers
 		final Map<String, ISubView> subViews = new HashMap<>();
@@ -70,6 +73,10 @@ public final class Controller implements SelectionListener {
 		subViews.put(SubView.FAILURE_CONTAINING_TRACES_SUB_VIEW.name(), subViewController4.getView());
 		subViews.put(SubView.FAILED_AGGREGATED_TRACES_SUB_VIEW.name(), subViewController5.getView());
 		subViews.put(SubView.FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW.name(), subViewController6.getView());
+		subViews.put(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW.name(), subViewController7.getView());
+		subViews.put(SubView.FAILED_AGGREGATED_OPERATION_CALLS_SUB_VIEW.name(), subViewController8.getView());
+		subViews.put(SubView.OPERATION_CALLS_SUB_VIEW.name(), subViewController9.getView());
+		subViews.put(SubView.FAILED_OPERATION_CALLS_SUB_VIEW.name(), subViewController10.getView());
 
 		// Create the main model and the main view
 		this.mainViewModel = new Model();
@@ -144,6 +151,18 @@ public final class Controller implements SelectionListener {
 		if (e.item == this.mainView.getTrtmJustAggTracesContaining()) {
 			this.mainViewModel.setCurrentActiveSubView(SubView.FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW.name());
 		}
+		if (e.item == this.mainView.getTrtmAggregatedOperationCalls()) {
+			this.mainViewModel.setCurrentActiveSubView(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW.name());
+		}
+		if (e.item == this.mainView.getTrtmFailedAggregatedOperationCalls()) {
+			this.mainViewModel.setCurrentActiveSubView(SubView.FAILED_AGGREGATED_OPERATION_CALLS_SUB_VIEW.name());
+		}
+		if (e.item == this.mainView.getTrtmOperationCalls()) {
+			this.mainViewModel.setCurrentActiveSubView(SubView.OPERATION_CALLS_SUB_VIEW.name());
+		}
+		if (e.item == this.mainView.getTrtmJustFailedOperation()) {
+			this.mainViewModel.setCurrentActiveSubView(SubView.FAILED_OPERATION_CALLS_SUB_VIEW.name());
+		}
 	}
 
 	@Override
@@ -153,7 +172,8 @@ public final class Controller implements SelectionListener {
 
 	public enum SubView {
 		TRACES_SUB_VIEW, FAILED_TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, FAILURE_CONTAINING_TRACES_SUB_VIEW, FAILED_AGGREGATED_TRACES_SUB_VIEW,
-		FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW
+		FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW, AGGREGATED_OPERATION_CALLS_SUB_VIEW, FAILED_AGGREGATED_OPERATION_CALLS_SUB_VIEW, OPERATION_CALLS_SUB_VIEW,
+		FAILED_OPERATION_CALLS_SUB_VIEW,
 	}
 
 }

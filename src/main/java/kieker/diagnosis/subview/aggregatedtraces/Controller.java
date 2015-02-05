@@ -22,6 +22,7 @@ import kieker.diagnosis.common.domain.AggregatedOperationCall;
 import kieker.diagnosis.common.domain.AggregatedTrace;
 import kieker.diagnosis.common.model.DataModel;
 import kieker.diagnosis.common.model.PropertiesModel;
+import kieker.diagnosis.subview.Filter;
 import kieker.diagnosis.subview.ISubController;
 import kieker.diagnosis.subview.ISubView;
 import kieker.diagnosis.subview.util.AbstractDataModelProxy;
@@ -60,17 +61,13 @@ public final class Controller implements ISubController, SelectionListener {
 	}
 
 	private static IModel<AggregatedTrace> createModelProxy(final DataModel dataModel, final Filter filter) {
-		if (filter == Filter.JUST_FAILED_TRACES) {
+		if (filter == Filter.JUST_FAILED) {
 			return new FailedTracesModelProxy(dataModel);
 		}
-		if (filter == Filter.JUST_FAILURE_CONTAINING_TRACES) {
+		if (filter == Filter.JUST_FAILURE_CONTAINING) {
 			return new FailureContainingTracesModelProxy(dataModel);
 		}
 		return new TracesModelProxy(dataModel);
-	}
-
-	public enum Filter {
-		NONE, JUST_FAILED_TRACES, JUST_FAILURE_CONTAINING_TRACES
 	}
 
 	private static final class TracesModelProxy extends AbstractDataModelProxy<AggregatedTrace> {

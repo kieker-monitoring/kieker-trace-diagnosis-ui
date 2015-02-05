@@ -136,11 +136,11 @@ public final class View implements Observer, ISubView {
 
 		final TreeColumn trclmnAverageDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnAverageDuration.setWidth(100);
-		trclmnAverageDuration.setText("Average Duration");
+		trclmnAverageDuration.setText("Mean Duration");
 
 		final TreeColumn trclmnMeanDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnMeanDuration.setWidth(100);
-		trclmnMeanDuration.setText("Mean Duration");
+		trclmnMeanDuration.setText("Median Duration");
 
 		final TreeColumn trclmnMaximalDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnMaximalDuration.setWidth(100);
@@ -196,7 +196,7 @@ public final class View implements Observer, ISubView {
 
 		final Label lblAverageDuration = new Label(this.detailComposite, SWT.NONE);
 		lblAverageDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblAverageDuration.setText("Average Duration:");
+		lblAverageDuration.setText("Mean Duration:");
 
 		this.lblAverageDurationDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblAverageDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -204,7 +204,7 @@ public final class View implements Observer, ISubView {
 
 		final Label lblMeanDuration = new Label(this.detailComposite, SWT.NONE);
 		lblMeanDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblMeanDuration.setText("Mean Duration:");
+		lblMeanDuration.setText("Median Duration:");
 
 		this.lblMeanDurationDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblMeanDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));

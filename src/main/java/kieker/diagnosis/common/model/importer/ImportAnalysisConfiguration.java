@@ -24,7 +24,10 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.diagnosis.common.domain.AggregatedTrace;
+import kieker.diagnosis.common.domain.OperationCall;
 import kieker.diagnosis.common.domain.Trace;
+import kieker.diagnosis.common.model.importer.stages.FailedCallFilter;
+import kieker.diagnosis.common.model.importer.stages.OperationCallExtractor;
 import kieker.diagnosis.common.model.importer.stages.ReadingComposite;
 import kieker.diagnosis.common.model.importer.stages.TraceAggregationComposite;
 import kieker.diagnosis.common.model.importer.stages.TraceReconstructionComposite;
@@ -34,6 +37,8 @@ import teetime.framework.pipe.PipeFactoryRegistry.PipeOrdering;
 import teetime.framework.pipe.PipeFactoryRegistry.ThreadCommunication;
 import teetime.stage.CollectorSink;
 import teetime.stage.MultipleInstanceOfFilter;
+import teetime.stage.basic.distributor.CopyByReferenceStrategy;
+import teetime.stage.basic.distributor.Distributor;
 
 /**
  * A {@code TeeTime} configuration for the import and analysis of monitoring logs.
@@ -46,6 +51,9 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 	private final List<Trace> failedTraces = new ArrayList<>(1000);
 	private final List<Trace> failureContainingTraces = new ArrayList<>(1000);
 
+	private final List<OperationCall> operationCalls = new ArrayList<>(1000);
+	private final List<OperationCall> failedOperationCalls = new ArrayList<>(1000);
+
 	private final List<AggregatedTrace> aggregatedTraces = new ArrayList<>(1000);
 	private final List<AggregatedTrace> failedAggregatedTraces = new ArrayList<>(1000);
 	private final List<AggregatedTrace> failureContainingAggregatedTraces = new ArrayList<>(1000);
@@ -57,15 +65,26 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 		final ReadingComposite reader = new ReadingComposite(importDirectory);
 		final MultipleInstanceOfFilter<IMonitoringRecord> typeFilter = new MultipleInstanceOfFilter<>();
 		final TraceReconstructionComposite reconstruction = new TraceReconstructionComposite(this.traces, this.failedTraces, this.failureContainingTraces);
+		final Distributor<Trace> distributor = new Distributor<>(new CopyByReferenceStrategy());
+		final OperationCallExtractor operationCallExtractor = new OperationCallExtractor();
 		final TraceAggregationComposite aggregation = new TraceAggregationComposite(this.aggregatedTraces, this.failedAggregatedTraces, this.failureContainingAggregatedTraces);
-
 		final CollectorSink<KiekerMetadataRecord> metadataCollector = new CollectorSink<>(this.metadataRecords);
+		final CollectorSink<OperationCall> callCollector = new CollectorSink<>(this.operationCalls);
+		final Distributor<OperationCall> distributor2 = new Distributor<>(new CopyByReferenceStrategy());
+		final FailedCallFilter<OperationCall> failedCallFilter = new FailedCallFilter<>();
+		final CollectorSink<OperationCall> failedCallCollector = new CollectorSink<>(this.failedOperationCalls);
 
 		// Connect the stages
 		final IPipeFactory pipeFactory = AnalysisConfiguration.PIPE_FACTORY_REGISTRY.getPipeFactory(ThreadCommunication.INTRA, PipeOrdering.ARBITRARY, false);
 		pipeFactory.create(reader.getOutputPort(), typeFilter.getInputPort());
 		pipeFactory.create(typeFilter.getOutputPortForType(IFlowRecord.class), reconstruction.getInputPort());
-		pipeFactory.create(reconstruction.getOutputPort(), aggregation.getInputPort());
+		pipeFactory.create(reconstruction.getOutputPort(), distributor.getInputPort());
+		pipeFactory.create(distributor.getNewOutputPort(), operationCallExtractor.getInputPort());
+		pipeFactory.create(operationCallExtractor.getOutputPort(), distributor2.getInputPort());
+		pipeFactory.create(distributor2.getNewOutputPort(), callCollector.getInputPort());
+		pipeFactory.create(distributor2.getNewOutputPort(), failedCallFilter.getInputPort());
+		pipeFactory.create(failedCallFilter.getOutputPort(), failedCallCollector.getInputPort());
+		pipeFactory.create(distributor.getNewOutputPort(), aggregation.getInputPort());
 		pipeFactory.create(typeFilter.getOutputPortForType(KiekerMetadataRecord.class), metadataCollector.getInputPort());
 
 		// Make sure that the producer is executed by the analysis
@@ -98,6 +117,14 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 
 	public List<KiekerMetadataRecord> getMetadataRecords() {
 		return this.metadataRecords;
+	}
+
+	public List<OperationCall> getOperationCalls() {
+		return this.operationCalls;
+	}
+
+	public List<OperationCall> getFailedOperationCalls() {
+		return this.failedOperationCalls;
 	}
 
 }

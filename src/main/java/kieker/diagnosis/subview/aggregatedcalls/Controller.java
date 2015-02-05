@@ -14,12 +14,12 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.subview.traces;
+package kieker.diagnosis.subview.aggregatedcalls;
 
 import java.util.List;
 
+import kieker.diagnosis.common.domain.AggregatedOperationCall;
 import kieker.diagnosis.common.domain.OperationCall;
-import kieker.diagnosis.common.domain.Trace;
 import kieker.diagnosis.common.model.DataModel;
 import kieker.diagnosis.common.model.PropertiesModel;
 import kieker.diagnosis.subview.Filter;
@@ -31,18 +31,13 @@ import kieker.diagnosis.subview.util.IModel;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
-/**
- * The sub-controller responsible for the sub-view presenting the available traces.
- *
- * @author Nils Christian Ehmke
- */
 public final class Controller implements ISubController, SelectionListener {
 
 	private final ISubView view;
 	private final Model model;
 
 	public Controller(final Filter filter, final DataModel dataModel, final PropertiesModel propertiesModel) {
-		final IModel<Trace> modelProxy = Controller.createModelProxy(dataModel, filter);
+		final IModel<OperationCall> modelProxy = Controller.createModelProxy(dataModel, filter);
 		this.model = new Model();
 
 		this.view = new View(modelProxy, this.model, propertiesModel, this);
@@ -55,8 +50,8 @@ public final class Controller implements ISubController, SelectionListener {
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
-		if (e.item.getData() instanceof OperationCall) {
-			this.model.setCurrentActiveCall((OperationCall) e.item.getData());
+		if (e.item.getData() instanceof AggregatedOperationCall) {
+			this.model.setCurrentActiveCall((AggregatedOperationCall) e.item.getData());
 		}
 	}
 
@@ -65,51 +60,19 @@ public final class Controller implements ISubController, SelectionListener {
 		// Just implemented for the interface
 	}
 
-	private static IModel<Trace> createModelProxy(final DataModel dataModel, final Filter filter) {
-		if (filter == Filter.JUST_FAILED) {
-			return new FailedTracesModelProxy(dataModel);
-		}
-		if (filter == Filter.JUST_FAILURE_CONTAINING) {
-			return new FailureContainingTracesModelProxy(dataModel);
-		}
-		return new TracesModelProxy(dataModel);
+	private static IModel<OperationCall> createModelProxy(final DataModel dataModel, final Filter filter) {
+		return new OperationCallsModelProxy(dataModel);
 	}
 
-	private static final class TracesModelProxy extends AbstractDataModelProxy<Trace> {
+	private static final class OperationCallsModelProxy extends AbstractDataModelProxy<OperationCall> {
 
-		public TracesModelProxy(final DataModel dataModel) {
+		public OperationCallsModelProxy(final DataModel dataModel) {
 			super(dataModel);
 		}
 
 		@Override
-		public List<Trace> getContent() {
-			return super.getDataModel().getTracesCopy();
-		}
-
-	}
-
-	private static final class FailedTracesModelProxy extends AbstractDataModelProxy<Trace> {
-
-		public FailedTracesModelProxy(final DataModel dataModel) {
-			super(dataModel);
-		}
-
-		@Override
-		public List<Trace> getContent() {
-			return super.getDataModel().getFailedTracesCopy();
-		}
-
-	}
-
-	private static final class FailureContainingTracesModelProxy extends AbstractDataModelProxy<Trace> {
-
-		public FailureContainingTracesModelProxy(final DataModel dataModel) {
-			super(dataModel);
-		}
-
-		@Override
-		public List<Trace> getContent() {
-			return super.getDataModel().getFailureContainingTracesCopy();
+		public List<OperationCall> getContent() {
+			return super.getDataModel().getOperationCalls();
 		}
 
 	}
