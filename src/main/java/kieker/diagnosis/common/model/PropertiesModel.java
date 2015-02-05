@@ -18,9 +18,13 @@ package kieker.diagnosis.common.model;
 
 import java.util.Observable;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public final class PropertiesModel extends Observable {
+
+	private final Logger logger = Logger.getGlobal();
 
 	private boolean commit = true;
 
@@ -52,6 +56,12 @@ public final class PropertiesModel extends Observable {
 		preferences.put("timeunit", this.timeunit.name());
 		preferences.put("operations", this.componentNames.name());
 		preferences.put("components", this.operationNames.name());
+
+		try {
+			preferences.flush();
+		} catch (final BackingStoreException e) {
+			this.logger.warning(e.getLocalizedMessage());
+		}
 	}
 
 	public String getGraphvizPath() {

@@ -18,6 +18,7 @@ package kieker.diagnosis.mainview;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -41,6 +42,8 @@ import org.eclipse.swt.widgets.Display;
  * @author Nils Christian Ehmke
  */
 public final class Controller implements SelectionListener {
+
+	private final Logger logger = Logger.getGlobal();
 
 	private final View mainView;
 	private final DataModel dataModel;
@@ -102,7 +105,7 @@ public final class Controller implements SelectionListener {
 				try {
 					preferences.flush();
 				} catch (final BackingStoreException ex) {
-					ex.printStackTrace();
+					this.logger.warning(ex.getLocalizedMessage());
 				}
 			}
 		}
