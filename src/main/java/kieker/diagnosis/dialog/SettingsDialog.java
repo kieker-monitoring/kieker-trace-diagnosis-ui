@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.diagnosis.dialog;
 
 import java.util.concurrent.TimeUnit;
@@ -37,9 +53,6 @@ public final class SettingsDialog extends Dialog {
 	private Combo comboBoxOperationNames;
 	private Combo comboBoxComponentNames;
 	private Combo comboBoxGraphvizGenerator;
-
-	private Button btnOkay;
-	private Button btnCancel;
 
 	public SettingsDialog(final Shell parent, final int style, final PropertiesModel model) {
 		super(parent, style);
@@ -225,9 +238,9 @@ public final class SettingsDialog extends Dialog {
 		this.comboBoxGraphvizGenerator.select(0);
 		new Label(grpDependencyAndCall, SWT.NONE);
 
-		this.btnOkay = new Button(this.shlSettings, SWT.NONE);
-		fd_grpDependencyAndCall.bottom = new FormAttachment(this.btnOkay, -20);
-		this.btnOkay.addSelectionListener(new SelectionAdapter() {
+		final Button btnOkay = new Button(this.shlSettings, SWT.NONE);
+		fd_grpDependencyAndCall.bottom = new FormAttachment(btnOkay, -20);
+		btnOkay.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				SettingsDialog.this.result = SWT.OK;
@@ -240,11 +253,11 @@ public final class SettingsDialog extends Dialog {
 		final FormData fd_btnOkay = new FormData();
 		fd_btnOkay.bottom = new FormAttachment(100, -10);
 		fd_btnOkay.left = new FormAttachment(0, 290);
-		this.btnOkay.setLayoutData(fd_btnOkay);
-		this.btnOkay.setText("OK");
+		btnOkay.setLayoutData(fd_btnOkay);
+		btnOkay.setText("OK");
 
-		this.btnCancel = new Button(this.shlSettings, SWT.NONE);
-		this.btnCancel.addSelectionListener(new SelectionAdapter() {
+		final Button btnCancel = new Button(this.shlSettings, SWT.NONE);
+		btnCancel.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				SettingsDialog.this.result = SWT.CANCEL;
@@ -253,11 +266,11 @@ public final class SettingsDialog extends Dialog {
 		});
 		fd_btnOkay.right = new FormAttachment(100, -80);
 		final FormData fd_btnCancel = new FormData();
-		fd_btnCancel.top = new FormAttachment(this.btnOkay, 0, SWT.TOP);
-		fd_btnCancel.left = new FormAttachment(this.btnOkay, 6);
+		fd_btnCancel.top = new FormAttachment(btnOkay, 0, SWT.TOP);
+		fd_btnCancel.left = new FormAttachment(btnOkay, 6);
 		fd_btnCancel.right = new FormAttachment(100, -10);
-		this.btnCancel.setLayoutData(fd_btnCancel);
-		this.btnCancel.setText("Cancel");
+		btnCancel.setLayoutData(fd_btnCancel);
+		btnCancel.setText("Cancel");
 	}
 
 }

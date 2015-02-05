@@ -24,7 +24,13 @@ import java.util.prefs.Preferences;
 
 public final class PropertiesModel extends Observable {
 
-	private final Logger logger = Logger.getGlobal();
+	private static final String KEY_TIMEUNIT = "timeunit";
+	private static final String KEY_OPERATIONS = "operations";
+	private static final String KEY_COMPONENTS = "components";
+	private static final String KEY_GRAPHVIZ_GENERATOR = "graphvizgenerator";
+	private static final String KEY_GRAPHVIZ_PATH = "graphvizpath";
+
+	private static final Logger LOGGER = Logger.getGlobal();
 
 	private boolean commit = true;
 
@@ -41,26 +47,26 @@ public final class PropertiesModel extends Observable {
 	private void loadSettings() {
 		final Preferences preferences = Preferences.userNodeForPackage(PropertiesModel.class);
 
-		this.graphvizPath = preferences.get("graphvizpath", ".");
-		this.graphvizGenerator = GraphvizGenerator.valueOf(preferences.get("graphvizgenerator", GraphvizGenerator.DOT.name()));
-		this.timeunit = TimeUnit.valueOf(preferences.get("timeunit", TimeUnit.NANOSECONDS.name()));
-		this.componentNames = ComponentNames.valueOf(preferences.get("operations", ComponentNames.LONG.name()));
-		this.operationNames = OperationNames.valueOf(preferences.get("components", OperationNames.SHORT.name()));
+		this.graphvizPath = preferences.get(PropertiesModel.KEY_GRAPHVIZ_PATH, ".");
+		this.graphvizGenerator = GraphvizGenerator.valueOf(preferences.get(PropertiesModel.KEY_GRAPHVIZ_GENERATOR, GraphvizGenerator.DOT.name()));
+		this.timeunit = TimeUnit.valueOf(preferences.get(PropertiesModel.KEY_TIMEUNIT, TimeUnit.NANOSECONDS.name()));
+		this.componentNames = ComponentNames.valueOf(preferences.get(PropertiesModel.KEY_COMPONENTS, ComponentNames.LONG.name()));
+		this.operationNames = OperationNames.valueOf(preferences.get(PropertiesModel.KEY_OPERATIONS, OperationNames.SHORT.name()));
 	}
 
 	private void saveSettings() {
 		final Preferences preferences = Preferences.userNodeForPackage(PropertiesModel.class);
 
-		preferences.put("graphvizpath", this.graphvizPath);
-		preferences.put("graphvizgenerator", this.graphvizGenerator.name());
-		preferences.put("timeunit", this.timeunit.name());
-		preferences.put("operations", this.componentNames.name());
-		preferences.put("components", this.operationNames.name());
+		preferences.put(PropertiesModel.KEY_GRAPHVIZ_PATH, this.graphvizPath);
+		preferences.put(PropertiesModel.KEY_GRAPHVIZ_GENERATOR, this.graphvizGenerator.name());
+		preferences.put(PropertiesModel.KEY_TIMEUNIT, this.timeunit.name());
+		preferences.put(PropertiesModel.KEY_COMPONENTS, this.componentNames.name());
+		preferences.put(PropertiesModel.KEY_OPERATIONS, this.operationNames.name());
 
 		try {
 			preferences.flush();
 		} catch (final BackingStoreException e) {
-			this.logger.warning(e.getLocalizedMessage());
+			PropertiesModel.LOGGER.warning(e.getLocalizedMessage());
 		}
 	}
 

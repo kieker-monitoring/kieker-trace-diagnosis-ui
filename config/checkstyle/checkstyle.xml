@@ -81,7 +81,6 @@
     <module name="ArrayTypeStyle"/>
     <module name="FinalParameters"/>
     <module name="DescendantToken"/>
-    <module name="TrailingComment"/>
     <module name="OuterTypeFilename"/>
     
     <module name="ModifierOrder"/>

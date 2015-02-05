@@ -43,26 +43,24 @@ import org.eclipse.swt.widgets.Display;
  */
 public final class Controller implements SelectionListener {
 
-	private final Logger logger = Logger.getGlobal();
+	private static final Logger LOGGER = Logger.getGlobal();
 
 	private final View mainView;
 	private final DataModel dataModel;
 	private final Model mainViewModel;
-	private final PropertiesModel propertiesModel;
 
 	public Controller() {
 		// Create the top models
 		this.dataModel = new DataModel();
-		this.propertiesModel = new PropertiesModel();
+		final PropertiesModel propertiesModel = new PropertiesModel();
 
 		// Create the sub-controllers
-		final ISubController subViewController1 = new kieker.diagnosis.subview.aggregatedtraces.Controller(Filter.NONE, this.dataModel, this.propertiesModel);
-		final ISubController subViewController2 = new kieker.diagnosis.subview.traces.Controller(Type.JUST_FAILED_TRACES, this.dataModel, this.propertiesModel);
-		final ISubController subViewController3 = new kieker.diagnosis.subview.traces.Controller(Type.NONE, this.dataModel, this.propertiesModel);
-		final ISubController subViewController4 = new kieker.diagnosis.subview.traces.Controller(Type.JUST_FAILURE_CONTAINING_TRACES, this.dataModel, this.propertiesModel);
-		final ISubController subViewController5 = new kieker.diagnosis.subview.aggregatedtraces.Controller(Filter.JUST_FAILED_TRACES, this.dataModel, this.propertiesModel);
-		final ISubController subViewController6 = new kieker.diagnosis.subview.aggregatedtraces.Controller(Filter.JUST_FAILURE_CONTAINING_TRACES, this.dataModel,
-				this.propertiesModel);
+		final ISubController subViewController1 = new kieker.diagnosis.subview.aggregatedtraces.Controller(Filter.NONE, this.dataModel, propertiesModel);
+		final ISubController subViewController2 = new kieker.diagnosis.subview.traces.Controller(Type.JUST_FAILED_TRACES, this.dataModel, propertiesModel);
+		final ISubController subViewController3 = new kieker.diagnosis.subview.traces.Controller(Type.NONE, this.dataModel, propertiesModel);
+		final ISubController subViewController4 = new kieker.diagnosis.subview.traces.Controller(Type.JUST_FAILURE_CONTAINING_TRACES, this.dataModel, propertiesModel);
+		final ISubController subViewController5 = new kieker.diagnosis.subview.aggregatedtraces.Controller(Filter.JUST_FAILED_TRACES, this.dataModel, propertiesModel);
+		final ISubController subViewController6 = new kieker.diagnosis.subview.aggregatedtraces.Controller(Filter.JUST_FAILURE_CONTAINING_TRACES, this.dataModel, propertiesModel);
 
 		// Get the sub-views from the controllers
 		final Map<String, ISubView> subViews = new HashMap<>();
@@ -75,7 +73,7 @@ public final class Controller implements SelectionListener {
 
 		// Create the main model and the main view
 		this.mainViewModel = new Model();
-		this.mainView = new View(this.mainViewModel, this, subViews, this.propertiesModel);
+		this.mainView = new View(this.mainViewModel, this, subViews, propertiesModel);
 	}
 
 	public void showView() {
@@ -105,7 +103,7 @@ public final class Controller implements SelectionListener {
 				try {
 					preferences.flush();
 				} catch (final BackingStoreException ex) {
-					this.logger.warning(ex.getLocalizedMessage());
+					Controller.LOGGER.warning(ex.getLocalizedMessage());
 				}
 			}
 		}
