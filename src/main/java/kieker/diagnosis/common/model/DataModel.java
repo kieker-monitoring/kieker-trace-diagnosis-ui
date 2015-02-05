@@ -31,7 +31,7 @@ import teetime.framework.Analysis;
 
 /**
  * A container for data used within this application.
- * 
+ *
  * @author Nils Christian Ehmke
  */
 public final class DataModel extends Observable {
@@ -49,7 +49,6 @@ public final class DataModel extends Observable {
 		final File importDirectory = new File(directory);
 		final ImportAnalysisConfiguration analysisConfiguration = new ImportAnalysisConfiguration(importDirectory);
 		final Analysis analysis = new Analysis(analysisConfiguration);
-		analysis.init();
 		analysis.start();
 
 		// Store the results from the analysis
