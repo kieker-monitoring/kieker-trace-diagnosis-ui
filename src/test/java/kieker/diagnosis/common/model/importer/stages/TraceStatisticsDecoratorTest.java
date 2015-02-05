@@ -24,7 +24,7 @@ import kieker.diagnosis.common.domain.Trace;
 
 import org.junit.Test;
 
-public class TraceStatisticsDecoratorTest {
+public final class TraceStatisticsDecoratorTest {
 
 	@Test
 	public void percentCalculationShouldWork() throws Exception {
