@@ -41,7 +41,7 @@ public abstract class AbstractDataModelProxy<T> extends Observable implements IM
 		return this.dataModel.getShortTimeUnit();
 	}
 
-	protected DataModel getDataModel() {
+	protected final DataModel getDataModel() {
 		return this.dataModel;
 	}
 }

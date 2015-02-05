@@ -385,7 +385,8 @@ public final class View implements Observer, ISubView {
 			final String totalDuration = (operationCall.getTotalDuration() + " " + View.this.model.getShortTimeUnit()).trim();
 
 			if (parent != null) {
-				item.setText(new String[] { operationCall.getContainer(), componentName, operationString, "", minDuration, avgDuration, meanDuration, maxDuration, totalDuration, });
+				item.setText(new String[] { operationCall.getContainer(), componentName, operationString, "", minDuration, avgDuration, meanDuration, maxDuration,
+					totalDuration, });
 			} else {
 				item.setText(new String[] { operationCall.getContainer(), componentName, operationString, Integer.toString(operationCall.getCalls()), minDuration, avgDuration,
 					meanDuration, maxDuration, totalDuration, });
