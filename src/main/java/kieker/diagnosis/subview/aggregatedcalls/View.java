@@ -1,8 +1,26 @@
+/***************************************************************************
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.diagnosis.subview.aggregatedcalls;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import kieker.diagnosis.common.domain.AggregatedOperationCall;
 import kieker.diagnosis.common.domain.OperationCall;
 import kieker.diagnosis.common.model.PropertiesModel;
 import kieker.diagnosis.subview.ISubView;
@@ -13,12 +31,13 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-public class View implements ISubView, Observer {
+public final class View implements ISubView, Observer {
 
 	private static final String N_A = "N/A";
 	private Composite composite;
@@ -37,8 +56,17 @@ public class View implements ISubView, Observer {
 	private Composite statusBar;
 	private Label lblTraceEquivalence;
 	private Table table;
+	private final Model model;
+	private final IModel<OperationCall> modelProxy;
+	private final PropertiesModel propertiesModel;
+	private final Controller controller;
 
 	public View(final IModel<OperationCall> modelProxy, final Model model, final PropertiesModel propertiesModel, final Controller controller) {
+		this.model = model;
+		this.modelProxy = modelProxy;
+		this.propertiesModel = propertiesModel;
+		this.controller = controller;
+
 		modelProxy.addObserver(this);
 		model.addObserver(this);
 		propertiesModel.addObserver(this);
@@ -190,6 +218,8 @@ public class View implements ISubView, Observer {
 
 		this.lblTraceEquivalence = new Label(this.statusBar, SWT.NONE);
 		this.lblTraceEquivalence.setText("0 Aggregated Operation Calls");
+
+		this.table.addSelectionListener(this.controller);
 	}
 
 	@Override
@@ -198,9 +228,71 @@ public class View implements ISubView, Observer {
 	}
 
 	@Override
-	public void update(final Observable arg0, final Object arg1) {
-		// TODO Auto-generated method stub
+	public void update(final Observable observable, final Object obj) {
+		if (observable == this.modelProxy) {
+			this.updateTable();
+			this.updateStatusBar();
+		}
+		if (observable == this.model) {
+			this.updateDetailComposite();
+		}
+		if (observable == this.propertiesModel) {
+			this.clearTable();
+		}
+	}
 
+	private void updateStatusBar() {
+		this.lblTraceEquivalence.setText(this.modelProxy.getContent().size() + " Aggregated Operation Call(s)");
+		this.statusBar.getParent().layout();
+	}
+
+	private void updateTable() {
+		final List<OperationCall> calls = this.modelProxy.getContent();
+
+		this.table.setData(calls);
+		this.table.setItemCount(calls.size());
+		this.clearTable();
+	}
+
+	private void clearTable() {
+		this.table.clearAll();
+
+		for (final TableColumn column : this.table.getColumns()) {
+			column.pack();
+		}
+	}
+
+	private void updateDetailComposite() {
+		final AggregatedOperationCall call = this.model.getCurrentActiveCall();
+
+		final String minDuration = (call.getMinDuration() + " " + this.modelProxy.getShortTimeUnit()).trim();
+		final String maxDuration = (call.getMaxDuration() + " " + this.modelProxy.getShortTimeUnit()).trim();
+		final String meanDuration = (call.getMeanDuration() + " " + this.modelProxy.getShortTimeUnit()).trim();
+		final String avgDuration = (call.getAvgDuration() + " " + this.modelProxy.getShortTimeUnit()).trim();
+		final String totalDuration = (call.getTotalDuration() + " " + this.modelProxy.getShortTimeUnit()).trim();
+
+		this.lblMinimalDurationDisplay.setText(minDuration);
+		this.lblMaximalDurationDisplay.setText(maxDuration);
+		this.lblAverageDurationDisplay.setText(avgDuration);
+		this.lblMeanDurationDisplay.setText(meanDuration);
+		this.lblTotalDurationDisplay.setText(totalDuration);
+
+		this.lblExecutionContainerDisplay.setText(call.getContainer());
+		this.lblComponentDisplay.setText(call.getComponent());
+		this.lblOperationDisplay.setText(call.getOperation());
+		this.lblNumberOfCallsDisplay.setText(Integer.toString(call.getCalls()));
+
+		if (call.isFailed()) {
+			this.lblFailedDisplay.setText("Yes (" + call.getFailedCause() + ")");
+			this.lblFailedDisplay.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+			this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+		} else {
+			this.lblFailedDisplay.setText("No");
+			this.lblFailedDisplay.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+			this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+		}
+
+		this.detailComposite.layout();
 	}
 
 }

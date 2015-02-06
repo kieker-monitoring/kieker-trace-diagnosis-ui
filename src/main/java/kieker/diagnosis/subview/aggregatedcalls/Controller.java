@@ -61,7 +61,24 @@ public final class Controller implements ISubController, SelectionListener {
 	}
 
 	private static IModel<OperationCall> createModelProxy(final DataModel dataModel, final Filter filter) {
-		return new OperationCallsModelProxy(dataModel);
+		if (filter == Filter.JUST_FAILED) {
+			return new FailedOperationCallsModelProxy(dataModel);
+		} else {
+			return new OperationCallsModelProxy(dataModel);
+		}
+	}
+
+	private static final class FailedOperationCallsModelProxy extends AbstractDataModelProxy<OperationCall> {
+
+		public FailedOperationCallsModelProxy(final DataModel dataModel) {
+			super(dataModel);
+		}
+
+		@Override
+		public List<OperationCall> getContent() {
+			return super.getDataModel().getFailedOperationCalls();
+		}
+
 	}
 
 	private static final class OperationCallsModelProxy extends AbstractDataModelProxy<OperationCall> {

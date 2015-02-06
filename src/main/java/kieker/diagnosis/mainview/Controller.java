@@ -129,7 +129,7 @@ public final class Controller implements SelectionListener {
 		}
 	}
 
-	private void handlePotentialTreeSelection(final SelectionEvent e) {
+	private void handlePotentialTreeSelection(final SelectionEvent e) { // NOPMD (this method violates some metrics. This is acceptable, as it is readable)
 		if (e.item == this.mainView.getTrtmExplorer()) {
 			this.mainViewModel.setCurrentActiveSubView(SubView.NONE.name());
 		}
