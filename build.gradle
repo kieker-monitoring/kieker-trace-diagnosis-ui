@@ -13,6 +13,16 @@ repositories {
 	maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' } 
 }
 
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		classpath 'de.aaschmid.gradle.plugins:gradle-cpd-plugin:0.1'
+	}
+}
+
 configurations { 
 	windowsX86Runtime
 	windowsX64Runtime
@@ -51,6 +61,13 @@ pmd {
 
 	ruleSets = []
 	ruleSetFiles = files('config/pmd/ruleset.xml')
+}
+
+apply plugin: 'cpd'
+tasks.cpd {
+	source = sourceSets.main.allJava
+  
+	reports.xml.destination = file('build/reports/cpd/cpd.xml')
 }
 
 apply plugin: 'checkstyle'
