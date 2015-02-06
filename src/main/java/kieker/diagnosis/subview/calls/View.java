@@ -37,12 +37,6 @@ public class View implements ISubView, Observer {
 	private static final String N_A = "N/A";
 	private Composite composite;
 	private Composite detailComposite;
-	private Label lblComponentDisplay;
-	private Label lblOperationDisplay;
-	private Label lblMinimalDurationDisplay;
-	private Label lblFailedDisplay;
-	private Label lblExecutionContainerDisplay;
-	private Label lblFailed;
 	private Composite statusBar;
 	private Label lblTraceEquivalence;
 	private Table table;
@@ -50,6 +44,12 @@ public class View implements ISubView, Observer {
 	private final PropertiesModel propertiesModel;
 	private final Model model;
 	private final Controller controller;
+	private Label lblFailedDisplay;
+	private Label lblMinimalDurationDisplay;
+	private Label lblOperationDisplay;
+	private Label lblComponentDisplay;
+	private Label lblExecutionContainerDisplay;
+	private Label lblFailed;
 
 	public View(final IModel<OperationCall> modelProxy, final Model model, final PropertiesModel propertiesModel, final Controller controller) {
 		this.modelProxy = modelProxy;
@@ -67,7 +67,6 @@ public class View implements ISubView, Observer {
 	 */
 	@Override
 	public void createComposite(final Composite parent) { // NOPMD (This method violates some metrics)
-		System.out.println("create!");
 		if (this.composite != null) {
 			this.composite.dispose();
 		}
