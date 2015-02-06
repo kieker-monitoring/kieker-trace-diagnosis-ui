@@ -317,8 +317,8 @@ public final class View implements Observer, ISubView {
 
 		final String minDuration = (call.getMinDuration() + " " + this.model.getShortTimeUnit()).trim();
 		final String maxDuration = (call.getMaxDuration() + " " + this.model.getShortTimeUnit()).trim();
-		final String meanDuration = (call.getMeanDuration() + " " + this.model.getShortTimeUnit()).trim();
-		final String avgDuration = (call.getAvgDuration() + " " + this.model.getShortTimeUnit()).trim();
+		final String meanDuration = (call.getMedianDuration() + " " + this.model.getShortTimeUnit()).trim();
+		final String avgDuration = (call.getMeanDuration() + " " + this.model.getShortTimeUnit()).trim();
 		final String totalDuration = (call.getTotalDuration() + " " + this.model.getShortTimeUnit()).trim();
 
 		this.lblMinimalDurationDisplay.setText(minDuration);
@@ -380,8 +380,8 @@ public final class View implements Observer, ISubView {
 
 			final String minDuration = (operationCall.getMinDuration() + " " + View.this.model.getShortTimeUnit()).trim();
 			final String maxDuration = (operationCall.getMaxDuration() + " " + View.this.model.getShortTimeUnit()).trim();
-			final String avgDuration = (operationCall.getAvgDuration() + " " + View.this.model.getShortTimeUnit()).trim();
-			final String meanDuration = (operationCall.getMeanDuration() + " " + View.this.model.getShortTimeUnit()).trim();
+			final String avgDuration = (operationCall.getMeanDuration() + " " + View.this.model.getShortTimeUnit()).trim();
+			final String meanDuration = (operationCall.getMedianDuration() + " " + View.this.model.getShortTimeUnit()).trim();
 			final String totalDuration = (operationCall.getTotalDuration() + " " + View.this.model.getShortTimeUnit()).trim();
 
 			if (parent != null) {

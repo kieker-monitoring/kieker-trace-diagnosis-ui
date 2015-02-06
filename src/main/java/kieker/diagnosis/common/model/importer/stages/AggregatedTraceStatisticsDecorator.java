@@ -35,22 +35,27 @@ public final class AggregatedTraceStatisticsDecorator extends AbstractStage<Aggr
 	@Override
 	public void execute(final AggregatedTrace trace) {
 		addNumberOfCalls(trace.getRootOperationCall(), trace.getTraces().size());
-
-		final TraceDurationVisitor traceDurationVisitor = new TraceDurationVisitor();
-		for (final Trace t : trace.getTraces()) {
-			traceDurationVisitor.visit(t);
-		}
-		traceDurationVisitor.addDurationStatistics(trace);
+		addDurationStatistics(trace);
 
 		super.send(trace);
 	}
 
-	private static void addNumberOfCalls(final AggregatedOperationCall rootCall, final int calls) {
-		rootCall.setCalls(calls);
+	private static void addNumberOfCalls(final AggregatedOperationCall call, final int calls) {
+		call.setCalls(calls);
 
-		for (final AggregatedOperationCall child : rootCall.getChildren()) {
+		for (final AggregatedOperationCall child : call.getChildren()) {
 			addNumberOfCalls(child, calls);
 		}
+	}
+
+	private static void addDurationStatistics(final AggregatedTrace trace) {
+		final TraceDurationVisitor traceDurationVisitor = new TraceDurationVisitor();
+
+		for (final Trace t : trace.getTraces()) {
+			traceDurationVisitor.visit(t);
+		}
+
+		traceDurationVisitor.addDurationStatistics(trace);
 	}
 
 	private static final class TraceDurationVisitor {
@@ -88,61 +93,70 @@ public final class AggregatedTraceStatisticsDecorator extends AbstractStage<Aggr
 
 			final List<Long> durationsOfCurrentEdge = this.durationsPerEdge.get(this.edgeIndex);
 
-			rootOperationCall.setMinDuration(this.findMinDuration(durationsOfCurrentEdge));
-			rootOperationCall.setMaxDuration(this.findMaxDuration(durationsOfCurrentEdge));
-			rootOperationCall.setAvgDuration(this.calculateAvgDuration(durationsOfCurrentEdge));
-			rootOperationCall.setTotalDuration(this.calculateTotalDuration(durationsOfCurrentEdge));
-			rootOperationCall.setMeanDuration(this.calculateMeanDuration(durationsOfCurrentEdge));
+			final Statistics statistics = this.calculateStatistics(durationsOfCurrentEdge);
+			rootOperationCall.setMinDuration(statistics.getMinDuration());
+			rootOperationCall.setMaxDuration(statistics.getMaxDuration());
+			rootOperationCall.setMeanDuration(statistics.getMeanDuration());
+			rootOperationCall.setTotalDuration(statistics.getTotalDuration());
+			rootOperationCall.setMedianDuration(statistics.getMedianDuration());
 
 			for (final AggregatedOperationCall child : rootOperationCall.getChildren()) {
 				this.addDurationStatistics(child);
 			}
 		}
 
-		private long findMinDuration(final List<Long> durations) {
-			long minDuration = Long.MAX_VALUE;
+		private Statistics calculateStatistics(final List<Long> durations) {
+			Collections.sort(durations);
 
-			for (final Long duration : durations) {
-				minDuration = Math.min(minDuration, duration);
-			}
-
-			return minDuration;
-		}
-
-		private long findMaxDuration(final List<Long> durations) {
-			long maxDuration = 0;
-
-			for (final Long duration : durations) {
-				maxDuration = Math.max(maxDuration, duration);
-			}
-
-			return maxDuration;
-		}
-
-		private long calculateAvgDuration(final List<Long> durations) {
 			long totalDuration = 0;
-
 			for (final Long duration : durations) {
 				totalDuration += duration;
 			}
 
-			return totalDuration / durations.size();
+			final long minDuration = durations.get(0);
+			final long maxDuration = durations.get(durations.size() - 1);
+			final long meanDuration = totalDuration / durations.size();
+			final long medianDuration = durations.get(durations.size() / 2);
+
+			return new Statistics(totalDuration, meanDuration, medianDuration, minDuration, maxDuration);
 		}
 
-		private long calculateTotalDuration(final List<Long> durations) {
-			long totalDuration = 0;
+		private static class Statistics {
 
-			for (final Long duration : durations) {
-				totalDuration += duration;
+			private final long totalDuration;
+			private final long meanDuration;
+			private final long medianDuration;
+			private final long minDuration;
+			private final long maxDuration;
+
+			public Statistics(final long totalDuration, final long meanDuration, final long medianDuration, final long minDuration, final long maxDuration) {
+				this.totalDuration = totalDuration;
+				this.meanDuration = meanDuration;
+				this.medianDuration = medianDuration;
+				this.minDuration = minDuration;
+				this.maxDuration = maxDuration;
 			}
 
-			return totalDuration;
-		}
+			public long getTotalDuration() {
+				return this.totalDuration;
+			}
 
-		private long calculateMeanDuration(final List<Long> durationsOfCurrentEdge) {
-			Collections.sort(durationsOfCurrentEdge);
+			public long getMeanDuration() {
+				return this.meanDuration;
+			}
 
-			return durationsOfCurrentEdge.get(durationsOfCurrentEdge.size() / 2);
+			public long getMedianDuration() {
+				return this.medianDuration;
+			}
+
+			public long getMinDuration() {
+				return this.minDuration;
+			}
+
+			public long getMaxDuration() {
+				return this.maxDuration;
+			}
+
 		}
 
 	}

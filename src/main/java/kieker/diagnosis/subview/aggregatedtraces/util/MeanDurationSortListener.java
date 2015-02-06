@@ -25,8 +25,8 @@ public final class MeanDurationSortListener extends AbstractTraceTreeColumnSortL
 
 	@Override
 	protected int compare(final AggregatedTrace fstTrace, final AggregatedTrace sndTrace) {
-		final long fstMeanDuration = fstTrace.getRootOperationCall().getMeanDuration();
-		final long sndMeanDuration = sndTrace.getRootOperationCall().getMeanDuration();
+		final long fstMeanDuration = fstTrace.getRootOperationCall().getMedianDuration();
+		final long sndMeanDuration = sndTrace.getRootOperationCall().getMedianDuration();
 
 		return Long.compare(fstMeanDuration, sndMeanDuration);
 	}

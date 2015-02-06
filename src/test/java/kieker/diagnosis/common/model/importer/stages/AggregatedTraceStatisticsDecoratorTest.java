@@ -52,8 +52,8 @@ public final class AggregatedTraceStatisticsDecoratorTest {
 
 		assertThat(trace.getRootOperationCall().getMinDuration(), is(7L));
 		assertThat(trace.getRootOperationCall().getMaxDuration(), is(44L));
-		assertThat(trace.getRootOperationCall().getAvgDuration(), is(22L));
-		assertThat(trace.getRootOperationCall().getMeanDuration(), is(15L));
+		assertThat(trace.getRootOperationCall().getMeanDuration(), is(22L));
+		assertThat(trace.getRootOperationCall().getMedianDuration(), is(15L));
 	}
 
 }

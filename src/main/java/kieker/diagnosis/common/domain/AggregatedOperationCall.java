@@ -25,10 +25,10 @@ package kieker.diagnosis.common.domain;
 public final class AggregatedOperationCall extends AbstractOperationCall<AggregatedOperationCall> {
 
 	private long totalDuration;
-	private long meanDuration;
+	private long medianDuration;
 	private long minDuration;
 	private long maxDuration;
-	private long avgDuration;
+	private long meanDuration;
 	private int calls;
 
 	public AggregatedOperationCall(final OperationCall call) {
@@ -50,12 +50,12 @@ public final class AggregatedOperationCall extends AbstractOperationCall<Aggrega
 		this.totalDuration = totalDuration;
 	}
 
-	public long getMeanDuration() {
-		return this.meanDuration;
+	public long getMedianDuration() {
+		return this.medianDuration;
 	}
 
-	public void setMeanDuration(final long meanDuration) {
-		this.meanDuration = meanDuration;
+	public void setMedianDuration(final long meanDuration) {
+		this.medianDuration = meanDuration;
 	}
 
 	public long getMinDuration() {
@@ -74,12 +74,12 @@ public final class AggregatedOperationCall extends AbstractOperationCall<Aggrega
 		this.maxDuration = maxDuration;
 	}
 
-	public long getAvgDuration() {
-		return this.avgDuration;
+	public long getMeanDuration() {
+		return this.meanDuration;
 	}
 
-	public void setAvgDuration(final long avgDuration) {
-		this.avgDuration = avgDuration;
+	public void setMeanDuration(final long avgDuration) {
+		this.meanDuration = avgDuration;
 	}
 
 	public int getCalls() {

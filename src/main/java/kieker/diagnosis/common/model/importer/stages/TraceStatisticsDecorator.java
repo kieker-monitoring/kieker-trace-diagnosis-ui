@@ -28,48 +28,50 @@ public final class TraceStatisticsDecorator extends AbstractStage<Trace, Trace> 
 
 	@Override
 	public void execute(final Trace trace) {
-		TraceStatisticsDecorator.addTraceDepth(trace.getRootOperationCall());
-		TraceStatisticsDecorator.addTraceSize(trace.getRootOperationCall());
-		TraceStatisticsDecorator.addPercentValues(trace.getRootOperationCall(), trace.getRootOperationCall().getDuration());
+		addTraceDepth(trace.getRootOperationCall());
+		addTraceSize(trace.getRootOperationCall());
+		addPercentValues(trace.getRootOperationCall(), trace.getRootOperationCall().getDuration());
 
 		super.send(trace);
 	}
 
-	private static int addTraceDepth(final OperationCall rootOperationCall) {
-		int traceDepth = 0;
+	private static int addTraceDepth(final OperationCall call) {
+		final int traceDepth;
 
-		if (!rootOperationCall.getChildren().isEmpty()) {
+		if (call.getChildren().isEmpty()) {
+			traceDepth = 0;
+		} else {
 			int maxTraceDepthOfChildren = 0;
-			for (final OperationCall child : rootOperationCall.getChildren()) {
-				final int traceDepthOfChild = TraceStatisticsDecorator.addTraceDepth(child);
-				maxTraceDepthOfChildren = (traceDepthOfChild > maxTraceDepthOfChildren) ? traceDepthOfChild : maxTraceDepthOfChildren;
+
+			for (final OperationCall child : call.getChildren()) {
+				final int traceDepthOfChild = addTraceDepth(child);
+				maxTraceDepthOfChildren = Math.max(traceDepthOfChild, maxTraceDepthOfChildren);
 			}
 
 			traceDepth = 1 + maxTraceDepthOfChildren;
 		}
 
-		rootOperationCall.setStackDepth(traceDepth);
-
+		call.setStackDepth(traceDepth);
 		return traceDepth;
 	}
 
-	private static int addTraceSize(final OperationCall rootOperationCall) {
+	private static int addTraceSize(final OperationCall call) {
 		int traceSize = 1;
 
-		for (final OperationCall child : rootOperationCall.getChildren()) {
-			final int traceSizeOfChild = TraceStatisticsDecorator.addTraceSize(child);
+		for (final OperationCall child : call.getChildren()) {
+			final int traceSizeOfChild = addTraceSize(child);
 			traceSize += traceSizeOfChild;
 		}
 
-		rootOperationCall.setStackSize(traceSize);
-
+		call.setStackSize(traceSize);
 		return traceSize;
 	}
 
 	private static void addPercentValues(final OperationCall call, final long rootDuration) {
 		call.setPercent((100.0f * call.getDuration()) / rootDuration);
+
 		for (final OperationCall child : call.getChildren()) {
-			TraceStatisticsDecorator.addPercentValues(child, call.getDuration());
+			addPercentValues(child, call.getDuration());
 		}
 	}
 

@@ -267,8 +267,8 @@ public final class View implements ISubView, Observer {
 
 		final String minDuration = (call.getMinDuration() + " " + this.modelProxy.getShortTimeUnit()).trim();
 		final String maxDuration = (call.getMaxDuration() + " " + this.modelProxy.getShortTimeUnit()).trim();
-		final String meanDuration = (call.getMeanDuration() + " " + this.modelProxy.getShortTimeUnit()).trim();
-		final String avgDuration = (call.getAvgDuration() + " " + this.modelProxy.getShortTimeUnit()).trim();
+		final String meanDuration = (call.getMedianDuration() + " " + this.modelProxy.getShortTimeUnit()).trim();
+		final String avgDuration = (call.getMeanDuration() + " " + this.modelProxy.getShortTimeUnit()).trim();
 		final String totalDuration = (call.getTotalDuration() + " " + this.modelProxy.getShortTimeUnit()).trim();
 
 		this.lblMinimalDurationDisplay.setText(minDuration);
