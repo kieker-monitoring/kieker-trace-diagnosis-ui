@@ -67,7 +67,7 @@ apply plugin: 'cpd'
 tasks.cpd {
 	source = sourceSets.main.allJava
   
-	reports.xml.destination = file('build/reports/cpd/cpd.xml')
+	reports.xml.destination = file('build/reports/cpd/main.xml')
 }
 
 apply plugin: 'checkstyle'
