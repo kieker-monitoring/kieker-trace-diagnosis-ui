@@ -23,10 +23,12 @@ import java.util.List;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.misc.KiekerMetadataRecord;
+import kieker.diagnosis.common.domain.AggregatedOperationCall;
 import kieker.diagnosis.common.domain.AggregatedTrace;
 import kieker.diagnosis.common.domain.OperationCall;
 import kieker.diagnosis.common.domain.Trace;
 import kieker.diagnosis.common.model.importer.stages.FailedCallFilter;
+import kieker.diagnosis.common.model.importer.stages.OperationCallAggregator;
 import kieker.diagnosis.common.model.importer.stages.OperationCallExtractor;
 import kieker.diagnosis.common.model.importer.stages.ReadingComposite;
 import kieker.diagnosis.common.model.importer.stages.TraceAggregationComposite;
@@ -54,6 +56,9 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 	private final List<OperationCall> operationCalls = new ArrayList<>(1000);
 	private final List<OperationCall> failedOperationCalls = new ArrayList<>(1000);
 
+	private final List<AggregatedOperationCall> aggregatedOperationCalls = new ArrayList<>(1000);
+	private final List<AggregatedOperationCall> aggregatedFailedOperationCalls = new ArrayList<>(1000);
+
 	private final List<AggregatedTrace> aggregatedTraces = new ArrayList<>(1000);
 	private final List<AggregatedTrace> failedAggregatedTraces = new ArrayList<>(1000);
 	private final List<AggregatedTrace> failureContainingAggregatedTraces = new ArrayList<>(1000);
@@ -73,6 +78,11 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 		final Distributor<OperationCall> distributor2 = new Distributor<>(new CopyByReferenceStrategy());
 		final FailedCallFilter<OperationCall> failedCallFilter = new FailedCallFilter<>();
 		final CollectorSink<OperationCall> failedCallCollector = new CollectorSink<>(this.failedOperationCalls);
+		final OperationCallAggregator callAggregator = new OperationCallAggregator();
+		final CollectorSink<AggregatedOperationCall> aggCallCollector = new CollectorSink<>(this.aggregatedOperationCalls);
+		final FailedCallFilter<AggregatedOperationCall> aggFailedCallFilter = new FailedCallFilter<>();
+		final CollectorSink<AggregatedOperationCall> aggFailedCallCollector = new CollectorSink<>(this.aggregatedFailedOperationCalls);
+		final Distributor<AggregatedOperationCall> distributor3 = new Distributor<>(new CopyByReferenceStrategy());
 
 		// Connect the stages
 		final IPipeFactory pipeFactory = AnalysisConfiguration.PIPE_FACTORY_REGISTRY.getPipeFactory(ThreadCommunication.INTRA, PipeOrdering.ARBITRARY, false);
@@ -83,6 +93,11 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 		pipeFactory.create(operationCallExtractor.getOutputPort(), distributor2.getInputPort());
 		pipeFactory.create(distributor2.getNewOutputPort(), callCollector.getInputPort());
 		pipeFactory.create(distributor2.getNewOutputPort(), failedCallFilter.getInputPort());
+		pipeFactory.create(distributor2.getNewOutputPort(), callAggregator.getInputPort());
+		pipeFactory.create(callAggregator.getOutputPort(), distributor3.getInputPort());
+		pipeFactory.create(distributor3.getNewOutputPort(), aggCallCollector.getInputPort());
+		pipeFactory.create(distributor3.getNewOutputPort(), aggFailedCallFilter.getInputPort());
+		pipeFactory.create(aggFailedCallFilter.getOutputPort(), aggFailedCallCollector.getInputPort());
 		pipeFactory.create(failedCallFilter.getOutputPort(), failedCallCollector.getInputPort());
 		pipeFactory.create(distributor.getNewOutputPort(), aggregation.getInputPort());
 		pipeFactory.create(typeFilter.getOutputPortForType(KiekerMetadataRecord.class), metadataCollector.getInputPort());
@@ -125,6 +140,14 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 
 	public List<OperationCall> getFailedOperationCalls() {
 		return this.failedOperationCalls;
+	}
+
+	public List<AggregatedOperationCall> getAggregatedOperationCalls() {
+		return this.aggregatedOperationCalls;
+	}
+
+	public List<AggregatedOperationCall> getAggregatedFailedOperationCalls() {
+		return this.aggregatedFailedOperationCalls;
 	}
 
 }

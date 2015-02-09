@@ -24,6 +24,7 @@ import java.util.Observable;
 import java.util.concurrent.TimeUnit;
 
 import kieker.common.record.misc.KiekerMetadataRecord;
+import kieker.diagnosis.common.domain.AggregatedOperationCall;
 import kieker.diagnosis.common.domain.AggregatedTrace;
 import kieker.diagnosis.common.domain.OperationCall;
 import kieker.diagnosis.common.domain.Trace;
@@ -45,6 +46,9 @@ public final class DataModel extends Observable {
 	private List<AggregatedTrace> failureAggregatedContainingTraces = Collections.emptyList();
 	private List<OperationCall> operationCalls = Collections.emptyList();
 	private List<OperationCall> failedOperationCalls = Collections.emptyList();
+	private List<AggregatedOperationCall> aggregatedOperationCalls = Collections.emptyList();
+	private List<AggregatedOperationCall> aggregatedFailedOperationCalls = Collections.emptyList();
+
 	private String shortTimeUnit = "";
 
 	public void loadMonitoringLogFromFS(final String directory) {
@@ -63,6 +67,8 @@ public final class DataModel extends Observable {
 		this.failureAggregatedContainingTraces = analysisConfiguration.getFailureContainingAggregatedTracesList();
 		this.operationCalls = analysisConfiguration.getOperationCalls();
 		this.failedOperationCalls = analysisConfiguration.getFailedOperationCalls();
+		this.aggregatedOperationCalls = analysisConfiguration.getAggregatedOperationCalls();
+		this.aggregatedFailedOperationCalls = analysisConfiguration.getAggregatedFailedOperationCalls();
 
 		final List<KiekerMetadataRecord> metadataRecords = analysisConfiguration.getMetadataRecords();
 		if (!metadataRecords.isEmpty()) {
@@ -143,6 +149,14 @@ public final class DataModel extends Observable {
 
 	public List<OperationCall> getFailedOperationCalls() {
 		return new ArrayList<>(this.failedOperationCalls);
+	}
+
+	public List<AggregatedOperationCall> getAggregatedOperationCalls() {
+		return new ArrayList<>(this.aggregatedOperationCalls);
+	}
+
+	public List<AggregatedOperationCall> getAggregatedFailedOperationCalls() {
+		return new ArrayList<>(this.aggregatedFailedOperationCalls);
 	}
 
 }

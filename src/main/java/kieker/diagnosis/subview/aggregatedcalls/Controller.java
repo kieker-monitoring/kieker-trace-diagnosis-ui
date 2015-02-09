@@ -19,7 +19,6 @@ package kieker.diagnosis.subview.aggregatedcalls;
 import java.util.List;
 
 import kieker.diagnosis.common.domain.AggregatedOperationCall;
-import kieker.diagnosis.common.domain.OperationCall;
 import kieker.diagnosis.common.model.DataModel;
 import kieker.diagnosis.common.model.PropertiesModel;
 import kieker.diagnosis.subview.Filter;
@@ -37,7 +36,7 @@ public final class Controller implements ISubController, SelectionListener {
 	private final Model model;
 
 	public Controller(final Filter filter, final DataModel dataModel, final PropertiesModel propertiesModel) {
-		final IModel<OperationCall> modelProxy = Controller.createModelProxy(dataModel, filter);
+		final IModel<AggregatedOperationCall> modelProxy = Controller.createModelProxy(dataModel, filter);
 		this.model = new Model();
 
 		this.view = new View(modelProxy, this.model, propertiesModel, this);
@@ -60,7 +59,7 @@ public final class Controller implements ISubController, SelectionListener {
 		// Just implemented for the interface
 	}
 
-	private static IModel<OperationCall> createModelProxy(final DataModel dataModel, final Filter filter) {
+	private static IModel<AggregatedOperationCall> createModelProxy(final DataModel dataModel, final Filter filter) {
 		if (filter == Filter.JUST_FAILED) {
 			return new FailedOperationCallsModelProxy(dataModel);
 		} else {
@@ -68,28 +67,28 @@ public final class Controller implements ISubController, SelectionListener {
 		}
 	}
 
-	private static final class FailedOperationCallsModelProxy extends AbstractDataModelProxy<OperationCall> {
+	private static final class FailedOperationCallsModelProxy extends AbstractDataModelProxy<AggregatedOperationCall> {
 
 		public FailedOperationCallsModelProxy(final DataModel dataModel) {
 			super(dataModel);
 		}
 
 		@Override
-		public List<OperationCall> getContent() {
-			return super.getDataModel().getFailedOperationCalls();
+		public List<AggregatedOperationCall> getContent() {
+			return super.getDataModel().getAggregatedFailedOperationCalls();
 		}
 
 	}
 
-	private static final class OperationCallsModelProxy extends AbstractDataModelProxy<OperationCall> {
+	private static final class OperationCallsModelProxy extends AbstractDataModelProxy<AggregatedOperationCall> {
 
 		public OperationCallsModelProxy(final DataModel dataModel) {
 			super(dataModel);
 		}
 
 		@Override
-		public List<OperationCall> getContent() {
-			return super.getDataModel().getOperationCalls();
+		public List<AggregatedOperationCall> getContent() {
+			return super.getDataModel().getAggregatedOperationCalls();
 		}
 
 	}

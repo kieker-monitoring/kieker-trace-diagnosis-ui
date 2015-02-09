@@ -21,20 +21,26 @@ import java.util.Observable;
 import java.util.Observer;
 
 import kieker.diagnosis.common.domain.AggregatedOperationCall;
-import kieker.diagnosis.common.domain.OperationCall;
 import kieker.diagnosis.common.model.PropertiesModel;
+import kieker.diagnosis.common.model.PropertiesModel.ComponentNames;
+import kieker.diagnosis.common.model.PropertiesModel.OperationNames;
 import kieker.diagnosis.subview.ISubView;
 import kieker.diagnosis.subview.util.IModel;
+import kieker.diagnosis.subview.util.NameConverter;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 public final class View implements ISubView, Observer {
@@ -57,11 +63,11 @@ public final class View implements ISubView, Observer {
 	private Label lblTraceEquivalence;
 	private Table table;
 	private final Model model;
-	private final IModel<OperationCall> modelProxy;
+	private final IModel<AggregatedOperationCall> modelProxy;
 	private final PropertiesModel propertiesModel;
 	private final Controller controller;
 
-	public View(final IModel<OperationCall> modelProxy, final Model model, final PropertiesModel propertiesModel, final Controller controller) {
+	public View(final IModel<AggregatedOperationCall> modelProxy, final Model model, final PropertiesModel propertiesModel, final Controller controller) {
 		this.model = model;
 		this.modelProxy = modelProxy;
 		this.propertiesModel = propertiesModel;
@@ -92,7 +98,7 @@ public final class View implements ISubView, Observer {
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		this.table = new Table(sashForm, SWT.BORDER | SWT.FULL_SELECTION);
+		this.table = new Table(sashForm, SWT.BORDER | SWT.FULL_SELECTION | SWT.VIRTUAL);
 		this.table.setHeaderVisible(true);
 		this.table.setLinesVisible(true);
 
@@ -123,6 +129,10 @@ public final class View implements ISubView, Observer {
 		final TableColumn tblclmnMedianDuration = new TableColumn(this.table, SWT.NONE);
 		tblclmnMedianDuration.setWidth(100);
 		tblclmnMedianDuration.setText("Median Duration");
+
+		final TableColumn tblclmnMaximalDuration = new TableColumn(this.table, SWT.NONE);
+		tblclmnMaximalDuration.setWidth(100);
+		tblclmnMaximalDuration.setText("Maximal Duration");
 
 		final TableColumn tblclmnTotalDuration = new TableColumn(this.table, SWT.NONE);
 		tblclmnTotalDuration.setWidth(100);
@@ -219,6 +229,7 @@ public final class View implements ISubView, Observer {
 		this.lblTraceEquivalence = new Label(this.statusBar, SWT.NONE);
 		this.lblTraceEquivalence.setText("0 Aggregated Operation Calls");
 
+		this.table.addListener(SWT.SetData, new DataProvider());
 		this.table.addSelectionListener(this.controller);
 	}
 
@@ -247,7 +258,7 @@ public final class View implements ISubView, Observer {
 	}
 
 	private void updateTable() {
-		final List<OperationCall> calls = this.modelProxy.getContent();
+		final List<AggregatedOperationCall> calls = this.modelProxy.getContent();
 
 		this.table.setData(calls);
 		this.table.setItemCount(calls.size());
@@ -293,6 +304,46 @@ public final class View implements ISubView, Observer {
 		}
 
 		this.detailComposite.layout();
+	}
+
+	private class DataProvider implements Listener {
+
+		@Override
+		@SuppressWarnings("unchecked")
+		public void handleEvent(final Event event) {
+			// Get the necessary information from the event
+			final Table table = (Table) event.widget;
+			final TableItem item = (TableItem) event.item;
+			final int tableIndex = event.index;
+
+			// Get the data for the current row
+			final List<AggregatedOperationCall> calls = (List<AggregatedOperationCall>) table.getData();
+			final AggregatedOperationCall call = calls.get(tableIndex);
+
+			// Get the data to display
+			String componentName = call.getComponent();
+			if (View.this.propertiesModel.getComponentNames() == ComponentNames.SHORT) {
+				componentName = NameConverter.toShortComponentName(componentName);
+			}
+			String operationString = call.getOperation();
+			if (View.this.propertiesModel.getOperationNames() == OperationNames.SHORT) {
+				operationString = NameConverter.toShortOperationName(operationString);
+			}
+
+			final String shortTimeUnit = View.this.modelProxy.getShortTimeUnit().trim();
+			item.setText(new String[] { call.getContainer(), componentName, operationString, Long.toString(call.getCalls()),
+					Long.toString(call.getMinDuration()) + " " + shortTimeUnit, Long.toString(call.getMeanDuration()) + " " + shortTimeUnit,
+				Long.toString(call.getMedianDuration()) + " " + shortTimeUnit, Long.toString(call.getMaxDuration()) + " " + shortTimeUnit,
+				Long.toString(call.getTotalDuration()) + " " + shortTimeUnit });
+
+			if (call.isFailed()) {
+				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+				item.setForeground(colorRed);
+			}
+
+			item.setData(call);
+		}
+
 	}
 
 }
