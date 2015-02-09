@@ -17,6 +17,7 @@
 package kieker.diagnosis.common.model.importer.stages;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -73,7 +74,7 @@ final class LegacyTraceReconstructor extends AbstractStage<OperationExecutionRec
 		}
 
 		public Trace reconstructTrace() {
-			this.records.sort(new Comparator<OperationExecutionRecord>() {
+			Collections.sort(this.records, new Comparator<OperationExecutionRecord>() {
 
 				@Override
 				public int compare(final OperationExecutionRecord o1, final OperationExecutionRecord o2) {
