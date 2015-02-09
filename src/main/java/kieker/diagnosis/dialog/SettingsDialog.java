@@ -22,6 +22,7 @@ import kieker.diagnosis.common.model.PropertiesModel;
 import kieker.diagnosis.common.model.PropertiesModel.ComponentNames;
 import kieker.diagnosis.common.model.PropertiesModel.GraphvizGenerator;
 import kieker.diagnosis.common.model.PropertiesModel.OperationNames;
+import kieker.diagnosis.common.util.Mapper;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -54,10 +55,25 @@ public final class SettingsDialog extends Dialog {
 	private Combo comboBoxComponentNames;
 	private Combo comboBoxGraphvizGenerator;
 
+	private Mapper<TimeUnit, Integer> timeUnitMapper;
+
 	public SettingsDialog(final Shell parent, final int style, final PropertiesModel model) {
 		super(parent, style);
 
 		this.model = model;
+		this.initializeMapper();
+	}
+
+	private void initializeMapper() {
+		this.timeUnitMapper = new Mapper<>();
+
+		this.timeUnitMapper.map(TimeUnit.NANOSECONDS).to(0);
+		this.timeUnitMapper.map(TimeUnit.MICROSECONDS).to(1);
+		this.timeUnitMapper.map(TimeUnit.MILLISECONDS).to(2);
+		this.timeUnitMapper.map(TimeUnit.SECONDS).to(3);
+		this.timeUnitMapper.map(TimeUnit.MINUTES).to(4);
+		this.timeUnitMapper.map(TimeUnit.HOURS).to(5);
+		this.timeUnitMapper.map(TimeUnit.DAYS).to(6);
 	}
 
 	public int open() {
@@ -87,7 +103,7 @@ public final class SettingsDialog extends Dialog {
 	private void loadSettings() {
 		this.textGraphvizPath.setText(this.model.getGraphvizPath());
 		this.comboBoxGraphvizGenerator.select(this.model.getGraphvizGenerator() == GraphvizGenerator.DOT ? 0 : 1);
-		this.comboBoxTimeUnit.select(this.timeUnitToIndex(this.model.getTimeunit()));
+		this.comboBoxTimeUnit.select(this.timeUnitMapper.resolve(this.model.getTimeunit()));
 		this.comboBoxOperationNames.select(this.model.getOperationNames() == OperationNames.SHORT ? 0 : 1);
 		this.comboBoxComponentNames.select(this.model.getComponentNames() == ComponentNames.SHORT ? 0 : 1);
 	}
@@ -97,77 +113,11 @@ public final class SettingsDialog extends Dialog {
 
 		this.model.setGraphvizPath(this.textGraphvizPath.getText());
 		this.model.setGraphvizGenerator(this.comboBoxGraphvizGenerator.getSelectionIndex() == 0 ? GraphvizGenerator.DOT : GraphvizGenerator.NEATO);
-		this.model.setTimeunit(this.indexToTimeUnit());
+		this.model.setTimeunit(this.timeUnitMapper.invertedResolve(this.comboBoxTimeUnit.getSelectionIndex()));
 		this.model.setOperationNames(this.comboBoxOperationNames.getSelectionIndex() == 0 ? OperationNames.SHORT : OperationNames.LONG);
 		this.model.setComponentNames(this.comboBoxComponentNames.getSelectionIndex() == 0 ? ComponentNames.SHORT : ComponentNames.LONG);
 
 		this.model.commitModification();
-	}
-
-	private int timeUnitToIndex(final TimeUnit timeunit) {
-		final int result;
-
-		switch (timeunit) {
-		case DAYS:
-			result = 6;
-			break;
-		case HOURS:
-			result = 5;
-			break;
-		case MICROSECONDS:
-			result = 1;
-			break;
-		case MILLISECONDS:
-			result = 2;
-			break;
-		case MINUTES:
-			result = 4;
-			break;
-		case NANOSECONDS:
-			result = 0;
-			break;
-		case SECONDS:
-			result = 3;
-			break;
-		default:
-			result = 0;
-			break;
-		}
-
-		return result;
-	}
-
-	private TimeUnit indexToTimeUnit() {
-		final TimeUnit result;
-
-		switch (this.comboBoxTimeUnit.getSelectionIndex()) {
-		case 0:
-			result = TimeUnit.NANOSECONDS;
-			break;
-		case 1:
-			result = TimeUnit.MICROSECONDS;
-			break;
-		case 2:
-			result = TimeUnit.MILLISECONDS;
-			break;
-		case 3:
-			result = TimeUnit.SECONDS;
-			break;
-		case 4:
-			result = TimeUnit.MINUTES;
-			break;
-		case 5:
-			result = TimeUnit.HOURS;
-			break;
-		case 6:
-			result = TimeUnit.DAYS;
-			break;
-		default:
-			result = TimeUnit.NANOSECONDS;
-			break;
-		}
-
-		return result;
 	}
 
 	private void createContents() {
