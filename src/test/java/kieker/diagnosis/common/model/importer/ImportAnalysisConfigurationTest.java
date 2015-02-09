@@ -32,7 +32,7 @@ public final class ImportAnalysisConfigurationTest {
 
 	@Test
 	public void exampleLogImportShouldWork() {
-		final ImportAnalysisConfiguration configuration = new ImportAnalysisConfiguration(new File("example/monitoring log"));
+		final ImportAnalysisConfiguration configuration = new ImportAnalysisConfiguration(new File("example/event monitoring log"));
 		final Analysis analysis = new Analysis(configuration);
 		analysis.start();
 

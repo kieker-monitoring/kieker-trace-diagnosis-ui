@@ -1,0 +1,114 @@
+/***************************************************************************
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
+package kieker.diagnosis.common.model.importer.stages;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.diagnosis.common.domain.OperationCall;
+import kieker.diagnosis.common.domain.Trace;
+
+/**
+ * Reconstruct traces based on the incoming instances of {@code OperationExecutionRecord}.
+ *
+ * @author Nils Christian Ehmke
+ */
+final class LegacyTraceReconstructor extends AbstractStage<OperationExecutionRecord, Trace> {
+
+	private final Map<Long, TraceBuffer> traceBuffers = new HashMap<>();
+
+	@Override
+	protected void execute(final OperationExecutionRecord input) {
+		this.handleOperationExecutionRecord(input);
+	}
+
+	private void handleOperationExecutionRecord(final OperationExecutionRecord input) {
+		final long traceID = input.getTraceId();
+		if (!this.traceBuffers.containsKey(traceID)) {
+			this.traceBuffers.put(traceID, new TraceBuffer(traceID));
+		}
+		final TraceBuffer traceBuffer = this.traceBuffers.get(traceID);
+
+		traceBuffer.handleEvent(input);
+		if (traceBuffer.isTraceComplete()) {
+			final Trace trace = traceBuffer.reconstructTrace();
+			super.send(trace);
+		}
+	}
+
+	private static final class TraceBuffer {
+
+		private final List<OperationExecutionRecord> records = new ArrayList<>();
+		private final long traceID;
+		private boolean traceComplete = false;
+
+		public TraceBuffer(final long traceID) {
+			this.traceID = traceID;
+		}
+
+		public void handleEvent(final OperationExecutionRecord record) {
+			this.records.add(record);
+
+			if ((record.getEoi() == 0) && (record.getEss() == 0)) {
+				this.traceComplete = true;
+			}
+		}
+
+		public Trace reconstructTrace() {
+			this.records.sort(new Comparator<OperationExecutionRecord>() {
+
+				@Override
+				public int compare(final OperationExecutionRecord o1, final OperationExecutionRecord o2) {
+					return Long.compare(o1.getEoi(), o2.getEoi());
+				}
+			});
+
+			OperationCall root = null;
+			OperationCall header = null;
+			final int ess = 0;
+			for (final OperationExecutionRecord record : this.records) {
+				final OperationCall newCall = new OperationCall(record.getHostname(), record.getOperationSignature(), record.getOperationSignature(), this.traceID);
+				newCall.setDuration(record.getTout() - record.getTin());
+
+				if (record.getEoi() == 0) {
+					root = newCall;
+					header = root;
+				}
+
+				header.addChild(newCall);
+				if (record.getEss() > ess) {
+					header = newCall;
+				} else if (record.getEss() < ess) {
+					header = header.getParent();
+				}
+
+			}
+
+			return new Trace(root, this.traceID);
+		}
+
+		public boolean isTraceComplete() {
+			return this.traceComplete;
+		}
+
+	}
+
+}
