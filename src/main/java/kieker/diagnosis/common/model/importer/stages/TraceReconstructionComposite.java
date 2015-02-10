@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.diagnosis.common.domain.Trace;
 import teetime.framework.CompositeStage;
@@ -31,8 +33,10 @@ import teetime.framework.pipe.PipeFactoryRegistry;
 import teetime.framework.pipe.PipeFactoryRegistry.PipeOrdering;
 import teetime.framework.pipe.PipeFactoryRegistry.ThreadCommunication;
 import teetime.stage.CollectorSink;
+import teetime.stage.MultipleInstanceOfFilter;
 import teetime.stage.basic.distributor.CopyByReferenceStrategy;
 import teetime.stage.basic.distributor.Distributor;
+import teetime.stage.basic.merger.Merger;
 
 /**
  * This class is a composite {@code TeeTime} stage, which reconstruct traces based on the incoming records, adds statistical data and stores the traces.
@@ -41,8 +45,7 @@ import teetime.stage.basic.distributor.Distributor;
  */
 public final class TraceReconstructionComposite extends CompositeStage {
 
-	private final TraceReconstructor reconstructor;
-
+	private final MultipleInstanceOfFilter<IMonitoringRecord> typeFilter;
 	private final CollectorSink<Trace> tracesCollector;
 	private final CollectorSink<Trace> failedTracesCollector;
 	private final CollectorSink<Trace> failureContainingTracesCollector;
@@ -51,11 +54,14 @@ public final class TraceReconstructionComposite extends CompositeStage {
 	private final OutputPort<Trace> outputPort;
 
 	public TraceReconstructionComposite(final List<Trace> traces, final List<Trace> failedTraces, final List<Trace> failureContainingTraces) {
-		this.reconstructor = new TraceReconstructor();
+		final TraceReconstructor reconstructor = new TraceReconstructor();
+		final LegacyTraceReconstructor legacyReconstructor = new LegacyTraceReconstructor();
 		final Distributor<Trace> distributor = new Distributor<>(new CopyByReferenceStrategy());
 		final FailedTraceFilter<Trace> failedTraceFilter = new FailedTraceFilter<>();
+		final Merger<Trace> merger = new Merger<>();
 		final FailureContainingTraceFilter<Trace> failureContainingTraceFilter = new FailureContainingTraceFilter<>();
 
+		this.typeFilter = new MultipleInstanceOfFilter<>();
 		this.tracesCollector = new CollectorSink<>(traces);
 		this.failedTracesCollector = new CollectorSink<>(failedTraces);
 		this.failureContainingTracesCollector = new CollectorSink<>(failureContainingTraces);
@@ -64,19 +70,22 @@ public final class TraceReconstructionComposite extends CompositeStage {
 		this.outputPort = this.statisticsDecorator.getOutputPort();
 
 		final IPipeFactory pipeFactory = PipeFactoryRegistry.INSTANCE.getPipeFactory(ThreadCommunication.INTRA, PipeOrdering.ARBITRARY, false);
-		pipeFactory.create(this.reconstructor.getOutputPort(), distributor.getInputPort());
 
+		pipeFactory.create(this.typeFilter.getOutputPortForType(IFlowRecord.class), reconstructor.getInputPort());
+		pipeFactory.create(this.typeFilter.getOutputPortForType(OperationExecutionRecord.class), legacyReconstructor.getInputPort());
+		pipeFactory.create(reconstructor.getOutputPort(), merger.getNewInputPort());
+		pipeFactory.create(legacyReconstructor.getOutputPort(), merger.getNewInputPort());
+		pipeFactory.create(merger.getOutputPort(), distributor.getInputPort());
 		pipeFactory.create(distributor.getNewOutputPort(), this.tracesCollector.getInputPort());
 		pipeFactory.create(distributor.getNewOutputPort(), failedTraceFilter.getInputPort());
 		pipeFactory.create(distributor.getNewOutputPort(), failureContainingTraceFilter.getInputPort());
 		pipeFactory.create(distributor.getNewOutputPort(), this.statisticsDecorator.getInputPort());
-
 		pipeFactory.create(failedTraceFilter.getOutputPort(), this.failedTracesCollector.getInputPort());
 		pipeFactory.create(failureContainingTraceFilter.getOutputPort(), this.failureContainingTracesCollector.getInputPort());
 	}
 
-	public InputPort<IFlowRecord> getInputPort() {
-		return this.reconstructor.getInputPort();
+	public InputPort<IMonitoringRecord> getInputPort() {
+		return this.typeFilter.getInputPort();
 	}
 
 	public OutputPort<Trace> getOutputPort() {
@@ -85,7 +94,7 @@ public final class TraceReconstructionComposite extends CompositeStage {
 
 	@Override
 	protected Stage getFirstStage() {
-		return this.reconstructor;
+		return this.typeFilter;
 	}
 
 	@Override

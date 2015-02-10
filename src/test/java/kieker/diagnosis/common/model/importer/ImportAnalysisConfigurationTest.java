@@ -18,7 +18,6 @@ package kieker.diagnosis.common.model.importer;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertThat;
 
@@ -37,12 +36,27 @@ public final class ImportAnalysisConfigurationTest {
 		analysis.start();
 
 		assertThat(configuration.getMetadataRecords(), hasSize(1));
-		assertThat(configuration.getTracesList(), is(not(empty())));
-		assertThat(configuration.getAggregatedTraces(), is(not(empty())));
-		assertThat(configuration.getFailedTracesList(), is(not(empty())));
-		assertThat(configuration.getFailureContainingTracesList(), is(not(empty())));
-		assertThat(configuration.getFailedAggregatedTracesList(), is(not(empty())));
-		assertThat(configuration.getFailureContainingAggregatedTracesList(), is(not(empty())));
+		assertThat(configuration.getTracesList(), hasSize(100));
+		assertThat(configuration.getAggregatedTraces(), hasSize(4));
+		assertThat(configuration.getFailedTracesList(), hasSize(3));
+		assertThat(configuration.getFailureContainingTracesList(), hasSize(4));
+		assertThat(configuration.getFailedAggregatedTracesList(), hasSize(2));
+		assertThat(configuration.getFailureContainingAggregatedTracesList(), hasSize(3));
+	}
+
+	@Test
+	public void exampleLegacyLogImportShouldWork() {
+		final ImportAnalysisConfiguration configuration = new ImportAnalysisConfiguration(new File("example/execution monitoring log"));
+		final Analysis analysis = new Analysis(configuration);
+		analysis.start();
+
+		assertThat(configuration.getMetadataRecords(), hasSize(1));
+		assertThat(configuration.getTracesList(), hasSize(1635));
+		assertThat(configuration.getAggregatedTraces(), hasSize(4));
+		assertThat(configuration.getFailedTracesList(), is(empty()));
+		assertThat(configuration.getFailureContainingTracesList(), is(empty()));
+		assertThat(configuration.getFailedAggregatedTracesList(), is(empty()));
+		assertThat(configuration.getFailureContainingAggregatedTracesList(), is(empty()));
 	}
 
 	@Test

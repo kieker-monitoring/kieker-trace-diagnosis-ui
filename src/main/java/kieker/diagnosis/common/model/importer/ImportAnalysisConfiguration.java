@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.diagnosis.common.domain.AggregatedOperationCall;
 import kieker.diagnosis.common.domain.AggregatedTrace;
@@ -87,7 +86,7 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 		// Connect the stages
 		final IPipeFactory pipeFactory = AnalysisConfiguration.PIPE_FACTORY_REGISTRY.getPipeFactory(ThreadCommunication.INTRA, PipeOrdering.ARBITRARY, false);
 		pipeFactory.create(reader.getOutputPort(), typeFilter.getInputPort());
-		pipeFactory.create(typeFilter.getOutputPortForType(IFlowRecord.class), reconstruction.getInputPort());
+		pipeFactory.create(typeFilter.getOutputPortForType(IMonitoringRecord.class), reconstruction.getInputPort());
 		pipeFactory.create(reconstruction.getOutputPort(), distributor.getInputPort());
 		pipeFactory.create(distributor.getNewOutputPort(), operationCallExtractor.getInputPort());
 		pipeFactory.create(operationCallExtractor.getOutputPort(), distributor2.getInputPort());

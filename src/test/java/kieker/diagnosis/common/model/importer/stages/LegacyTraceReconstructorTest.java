@@ -52,16 +52,28 @@ public class LegacyTraceReconstructorTest {
 	}
 
 	@Test
-	public void nestedCallReconstructionShouldWork() throws Exception {
-		this.reconstructorUnderTest.execute(new OperationExecutionRecord("operation2", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 1, 1));
-		this.reconstructorUnderTest.execute(new OperationExecutionRecord("operation3", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 2, 1));
-		this.reconstructorUnderTest.execute(new OperationExecutionRecord("operation4", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 3, 2));
-		this.reconstructorUnderTest.execute(new OperationExecutionRecord("operation1", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 0, 0));
+	public void separationOfComponentShouldWork() throws Exception {
+		this.reconstructorUnderTest.execute(new OperationExecutionRecord("bookstoreTracing.Catalog.getBook(boolean)", "1", 42, 15L, 20L, "SRV1", 0, 0));
 
 		assertThat(this.traceCollectorList, hasSize(1));
-		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getOperation(), is("operation1"));
-		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getChildren().get(1).getOperation(), is("operation2"));
+		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getContainer(), is("SRV1"));
+		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getComponent(), is("bookstoreTracing.Catalog"));
+		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getOperation(), is("bookstoreTracing.Catalog.getBook(boolean)"));
+	}
+
+	@Test
+	public void nestedCallReconstructionShouldWork() throws Exception {
+		this.reconstructorUnderTest.execute(new OperationExecutionRecord("B", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 1, 1));
+		this.reconstructorUnderTest.execute(new OperationExecutionRecord("C", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 2, 1));
+		this.reconstructorUnderTest.execute(new OperationExecutionRecord("D", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 3, 2));
+		this.reconstructorUnderTest.execute(new OperationExecutionRecord("A", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 0, 0));
+
+		assertThat(this.traceCollectorList, hasSize(1));
+		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getOperation(), is("A"));
 		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getDuration(), is(10L));
+		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getChildren().get(0).getOperation(), is("B"));
+		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getChildren().get(1).getOperation(), is("C"));
+		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getChildren().get(1).getChildren().get(0).getOperation(), is("D"));
 	}
 
 	@Test

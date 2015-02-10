@@ -84,26 +84,30 @@ final class LegacyTraceReconstructor extends AbstractStage<OperationExecutionRec
 
 			OperationCall root = null;
 			OperationCall header = null;
-			final int ess = 0;
+			int ess = 0;
 			for (final OperationExecutionRecord record : this.records) {
-				final OperationCall newCall = new OperationCall(record.getHostname(), record.getOperationSignature(), record.getOperationSignature(), this.traceID);
+				final OperationCall newCall = new OperationCall(record.getHostname(), this.extractComponent(record.getOperationSignature()), record.getOperationSignature(),
+						this.traceID);
 				newCall.setDuration(record.getTout() - record.getTin());
 
-				if (record.getEoi() == 0) {
-					root = newCall;
-					header = root;
-				}
-
-				header.addChild(newCall);
-				if (record.getEss() > ess) {
-					header = newCall;
-				} else if (record.getEss() < ess) {
+				if ((record.getEss() <= ess) && (ess != 0)) {
 					header = header.getParent();
 				}
 
+				if (root == null) {
+					root = newCall;
+				} else {
+					header.addChild(newCall);
+				}
+				header = newCall;
+				ess = record.getEss();
 			}
 
 			return new Trace(root, this.traceID);
+		}
+
+		private String extractComponent(final String operationSignature) {
+			return operationSignature.replaceFirst("\\.\\w*\\(.*", "");
 		}
 
 		public boolean isTraceComplete() {
