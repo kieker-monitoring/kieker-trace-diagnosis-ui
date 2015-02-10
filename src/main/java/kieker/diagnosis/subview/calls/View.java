@@ -273,7 +273,7 @@ public final class View implements ISubView, Observer {
 
 			final String shortTimeUnit = View.this.modelProxy.getShortTimeUnit().trim();
 			item.setText(new String[] { call.getContainer(), componentName, operationString, Long.toString(call.getDuration()) + " " + shortTimeUnit,
-				Long.toString(call.getTraceID()) });
+					Long.toString(call.getTraceID()) });
 
 			if (call.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);

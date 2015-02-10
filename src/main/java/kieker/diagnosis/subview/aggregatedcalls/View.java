@@ -25,6 +25,13 @@ import kieker.diagnosis.common.model.PropertiesModel;
 import kieker.diagnosis.common.model.PropertiesModel.ComponentNames;
 import kieker.diagnosis.common.model.PropertiesModel.OperationNames;
 import kieker.diagnosis.subview.ISubView;
+import kieker.diagnosis.subview.aggregatedcalls.util.ComponentSortListener;
+import kieker.diagnosis.subview.aggregatedcalls.util.ContainerSortListener;
+import kieker.diagnosis.subview.aggregatedcalls.util.MaximalDurationSortListener;
+import kieker.diagnosis.subview.aggregatedcalls.util.MedianDurationSortListener;
+import kieker.diagnosis.subview.aggregatedcalls.util.MinimalDurationSortListener;
+import kieker.diagnosis.subview.aggregatedcalls.util.OperationSortListener;
+import kieker.diagnosis.subview.aggregatedcalls.util.TotalDurationSortListener;
 import kieker.diagnosis.subview.util.IModel;
 import kieker.diagnosis.subview.util.NameConverter;
 
@@ -231,6 +238,14 @@ public final class View implements ISubView, Observer {
 
 		this.table.addListener(SWT.SetData, new DataProvider());
 		this.table.addSelectionListener(this.controller);
+
+		tblclmnComponent.addSelectionListener(new ComponentSortListener());
+		tblclmnExecutionContainer.addSelectionListener(new ContainerSortListener());
+		tblclmnOperation.addSelectionListener(new OperationSortListener());
+		tblclmnMinimalDuration.addSelectionListener(new MinimalDurationSortListener());
+		tblclmnMaximalDuration.addSelectionListener(new MaximalDurationSortListener());
+		tblclmnMedianDuration.addSelectionListener(new MedianDurationSortListener());
+		tblclmnTotalDuration.addSelectionListener(new TotalDurationSortListener());
 	}
 
 	@Override
