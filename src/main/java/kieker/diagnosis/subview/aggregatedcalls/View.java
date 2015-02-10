@@ -25,6 +25,8 @@ import kieker.diagnosis.common.model.PropertiesModel;
 import kieker.diagnosis.common.model.PropertiesModel.ComponentNames;
 import kieker.diagnosis.common.model.PropertiesModel.OperationNames;
 import kieker.diagnosis.subview.ISubView;
+import kieker.diagnosis.subview.aggregatedcalls.util.AverageDurationSortListener;
+import kieker.diagnosis.subview.aggregatedcalls.util.CallsSortListener;
 import kieker.diagnosis.subview.aggregatedcalls.util.ComponentSortListener;
 import kieker.diagnosis.subview.aggregatedcalls.util.ContainerSortListener;
 import kieker.diagnosis.subview.aggregatedcalls.util.MaximalDurationSortListener;
@@ -246,6 +248,8 @@ public final class View implements ISubView, Observer {
 		tblclmnMaximalDuration.addSelectionListener(new MaximalDurationSortListener());
 		tblclmnMedianDuration.addSelectionListener(new MedianDurationSortListener());
 		tblclmnTotalDuration.addSelectionListener(new TotalDurationSortListener());
+		tblclmnNumberOfCalls.addSelectionListener(new CallsSortListener());
+		tblclmnMeanDuration.addSelectionListener(new AverageDurationSortListener());
 	}
 
 	@Override
@@ -347,9 +351,9 @@ public final class View implements ISubView, Observer {
 
 			final String shortTimeUnit = View.this.modelProxy.getShortTimeUnit().trim();
 			item.setText(new String[] { call.getContainer(), componentName, operationString, Long.toString(call.getCalls()),
-					Long.toString(call.getMinDuration()) + " " + shortTimeUnit, Long.toString(call.getMeanDuration()) + " " + shortTimeUnit,
-				Long.toString(call.getMedianDuration()) + " " + shortTimeUnit, Long.toString(call.getMaxDuration()) + " " + shortTimeUnit,
-				Long.toString(call.getTotalDuration()) + " " + shortTimeUnit });
+				Long.toString(call.getMinDuration()) + " " + shortTimeUnit, Long.toString(call.getMeanDuration()) + " " + shortTimeUnit,
+					Long.toString(call.getMedianDuration()) + " " + shortTimeUnit, Long.toString(call.getMaxDuration()) + " " + shortTimeUnit,
+					Long.toString(call.getTotalDuration()) + " " + shortTimeUnit });
 
 			if (call.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);

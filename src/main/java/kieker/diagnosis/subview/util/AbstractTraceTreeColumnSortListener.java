@@ -72,7 +72,7 @@ public abstract class AbstractTraceTreeColumnSortListener<T extends AbstractTrac
 		public int compare(final T fstTrace, final T sndTrace) {
 			int result;
 
-			if (AbstractTraceTreeColumnSortListener.this.direction == SWT.DOWN) {
+			if (AbstractTraceTreeColumnSortListener.this.direction == SWT.UP) {
 				result = AbstractTraceTreeColumnSortListener.this.compare(fstTrace, sndTrace);
 			} else {
 				result = AbstractTraceTreeColumnSortListener.this.compare(sndTrace, fstTrace);

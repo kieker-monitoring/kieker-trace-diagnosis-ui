@@ -50,7 +50,7 @@ public abstract class AbstractCallTableColumnSortListener<T extends AbstractOper
 			this.direction = ((this.direction == SWT.UP) ? SWT.DOWN : SWT.UP);
 		} else {
 			table.setSortColumn(currentColumn);
-			this.direction = SWT.UP;
+			this.direction = SWT.DOWN;
 		}
 
 		// Sort the data
@@ -72,7 +72,7 @@ public abstract class AbstractCallTableColumnSortListener<T extends AbstractOper
 		public int compare(final T fstCall, final T sndCall) {
 			int result;
 
-			if (AbstractCallTableColumnSortListener.this.direction == SWT.DOWN) {
+			if (AbstractCallTableColumnSortListener.this.direction == SWT.UP) {
 				result = AbstractCallTableColumnSortListener.this.compare(fstCall, sndCall);
 			} else {
 				result = AbstractCallTableColumnSortListener.this.compare(sndCall, fstCall);
