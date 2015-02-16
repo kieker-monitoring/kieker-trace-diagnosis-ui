@@ -19,7 +19,7 @@ package kieker.diagnosis.subview.calls.util;
 import kieker.diagnosis.common.domain.OperationCall;
 import kieker.diagnosis.subview.util.AbstractCallTableColumnSortListener;
 
-public class ComponentSortListener extends AbstractCallTableColumnSortListener<OperationCall> {
+public final class ComponentSortListener extends AbstractCallTableColumnSortListener<OperationCall> {
 
 	private static final long serialVersionUID = 1L;
 

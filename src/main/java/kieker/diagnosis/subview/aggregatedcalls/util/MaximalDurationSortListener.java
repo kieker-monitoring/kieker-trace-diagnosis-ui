@@ -19,7 +19,7 @@ package kieker.diagnosis.subview.aggregatedcalls.util;
 import kieker.diagnosis.common.domain.AggregatedOperationCall;
 import kieker.diagnosis.subview.util.AbstractCallTableColumnSortListener;
 
-public class MaximalDurationSortListener extends AbstractCallTableColumnSortListener<AggregatedOperationCall> {
+public final class MaximalDurationSortListener extends AbstractCallTableColumnSortListener<AggregatedOperationCall> {
 
 	private static final long serialVersionUID = 1L;
 

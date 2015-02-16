@@ -16,6 +16,7 @@
 
 package kieker.diagnosis.common.model.importer.stages;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -74,13 +75,7 @@ final class LegacyTraceReconstructor extends AbstractStage<OperationExecutionRec
 		}
 
 		public Trace reconstructTrace() {
-			Collections.sort(this.records, new Comparator<OperationExecutionRecord>() {
-
-				@Override
-				public int compare(final OperationExecutionRecord o1, final OperationExecutionRecord o2) {
-					return Long.compare(o1.getEoi(), o2.getEoi());
-				}
-			});
+			Collections.sort(this.records, new EOIComparator());
 
 			OperationCall root = null;
 			OperationCall header = null;
@@ -112,6 +107,17 @@ final class LegacyTraceReconstructor extends AbstractStage<OperationExecutionRec
 
 		public boolean isTraceComplete() {
 			return this.traceComplete;
+		}
+
+		private static final class EOIComparator implements Comparator<OperationExecutionRecord>, Serializable {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public int compare(final OperationExecutionRecord o1, final OperationExecutionRecord o2) {
+				return Long.compare(o1.getEoi(), o2.getEoi());
+			}
+
 		}
 
 	}
