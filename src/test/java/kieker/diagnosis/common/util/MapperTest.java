@@ -48,6 +48,7 @@ public class MapperTest {
 		mapper.map(2).to("Two");
 
 		assertThat(mapper.resolve(1), is("One"));
+		assertThat(mapper.resolve(2), is("Two"));
 	}
 
 	@Test
