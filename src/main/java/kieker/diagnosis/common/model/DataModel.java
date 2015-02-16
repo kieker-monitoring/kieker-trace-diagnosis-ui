@@ -29,6 +29,7 @@ import kieker.diagnosis.common.domain.AggregatedTrace;
 import kieker.diagnosis.common.domain.OperationCall;
 import kieker.diagnosis.common.domain.Trace;
 import kieker.diagnosis.common.model.importer.ImportAnalysisConfiguration;
+import kieker.diagnosis.common.util.Mapper;
 import teetime.framework.Analysis;
 
 /**
@@ -37,6 +38,8 @@ import teetime.framework.Analysis;
  * @author Nils Christian Ehmke
  */
 public final class DataModel extends Observable {
+
+	private final Mapper<TimeUnit, String> shortTimeUnitMapper = new Mapper<>();
 
 	private List<Trace> traces = Collections.emptyList();
 	private List<Trace> failureContainingTraces = Collections.emptyList();
@@ -50,6 +53,20 @@ public final class DataModel extends Observable {
 	private List<AggregatedOperationCall> aggregatedFailedOperationCalls = Collections.emptyList();
 
 	private String shortTimeUnit = "";
+
+	public DataModel() {
+		this.initializeMapper();
+	}
+
+	private void initializeMapper() {
+		this.shortTimeUnitMapper.map(TimeUnit.NANOSECONDS).to("ns");
+		this.shortTimeUnitMapper.map(TimeUnit.MICROSECONDS).to("us");
+		this.shortTimeUnitMapper.map(TimeUnit.MILLISECONDS).to("ms");
+		this.shortTimeUnitMapper.map(TimeUnit.SECONDS).to("s");
+		this.shortTimeUnitMapper.map(TimeUnit.MINUTES).to("m");
+		this.shortTimeUnitMapper.map(TimeUnit.HOURS).to("h");
+		this.shortTimeUnitMapper.map(TimeUnit.DAYS).to("d");
+	}
 
 	public void loadMonitoringLogFromFS(final String directory) {
 		// Load and analyze the monitoring logs from the given directory
@@ -83,36 +100,7 @@ public final class DataModel extends Observable {
 	}
 
 	private String convertToShortTimeUnit(final TimeUnit timeUnit) {
-		final String result;
-
-		switch (timeUnit) {
-		case DAYS:
-			result = "d";
-			break;
-		case HOURS:
-			result = "h";
-			break;
-		case MICROSECONDS:
-			result = "us";
-			break;
-		case MILLISECONDS:
-			result = "ms";
-			break;
-		case MINUTES:
-			result = "m";
-			break;
-		case NANOSECONDS:
-			result = "ns";
-			break;
-		case SECONDS:
-			result = "s";
-			break;
-		default:
-			result = "";
-			break;
-		}
-
-		return result;
+		return this.shortTimeUnitMapper.resolve(timeUnit);
 	}
 
 	public String getShortTimeUnit() {
