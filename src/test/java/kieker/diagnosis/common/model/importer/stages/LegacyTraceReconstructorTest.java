@@ -27,89 +27,128 @@ import java.util.List;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.diagnosis.common.domain.Trace;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import teetime.framework.Analysis;
 import teetime.framework.AnalysisConfiguration;
 import teetime.framework.pipe.IPipeFactory;
+import teetime.framework.pipe.PipeFactoryRegistry.PipeOrdering;
+import teetime.framework.pipe.PipeFactoryRegistry.ThreadCommunication;
 import teetime.framework.pipe.SingleElementPipeFactory;
 import teetime.stage.CollectorSink;
 import teetime.stage.InitialElementProducer;
 import teetime.stage.InstanceOfFilter;
+import teetime.stage.IterableProducer;
 import teetime.stage.className.ClassNameRegistryRepository;
 import teetime.stage.io.filesystem.Dir2RecordsFilter;
 
 public class LegacyTraceReconstructorTest {
 
-	private List<Trace> traceCollectorList;
-	private LegacyTraceReconstructor reconstructorUnderTest;
-	private CollectorSink<Trace> traceCollector;
-
-	@Before
-	public void initializeTraceReconstructor() {
-		this.traceCollectorList = new ArrayList<>();
-
-		this.reconstructorUnderTest = new LegacyTraceReconstructor();
-		this.traceCollector = new CollectorSink<>(this.traceCollectorList);
-
-		final IPipeFactory pipeFactory = new SingleElementPipeFactory();
-		pipeFactory.create(this.reconstructorUnderTest.getOutputPort(), this.traceCollector.getInputPort());
-	}
-
 	@Test
 	public void singleCallReconstructionShouldWork() throws Exception {
-		this.reconstructorUnderTest.execute(new OperationExecutionRecord("operation", OperationExecutionRecord.NO_SESSION_ID, 42, 15L, 20L, "localhost", 0, 0));
+		final List<OperationExecutionRecord> input = new ArrayList<>();
+		input.add(new OperationExecutionRecord("operation", OperationExecutionRecord.NO_SESSION_ID, 42, 15L, 20L, "localhost", 0, 0));
 
-		assertThat(this.traceCollectorList, hasSize(1));
-		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getOperation(), is("operation"));
-		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getDuration(), is(5L));
-		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getTraceID(), is(42L));
+		final ReconstructionConfiguration configuration = new ReconstructionConfiguration(input);
+		final Analysis analysis = new Analysis(configuration);
+		analysis.start();
+
+		assertThat(configuration.getOutput(), hasSize(1));
+		assertThat(configuration.getOutput().get(0).getRootOperationCall().getOperation(), is("operation"));
+		assertThat(configuration.getOutput().get(0).getRootOperationCall().getDuration(), is(5L));
+		assertThat(configuration.getOutput().get(0).getRootOperationCall().getTraceID(), is(42L));
 	}
 
 	@Test
 	public void separationOfComponentShouldWork() throws Exception {
-		this.reconstructorUnderTest.execute(new OperationExecutionRecord("bookstoreTracing.Catalog.getBook(boolean)", "1", 42, 15L, 20L, "SRV1", 0, 0));
+		final List<OperationExecutionRecord> input = new ArrayList<>();
+		input.add(new OperationExecutionRecord("bookstoreTracing.Catalog.getBook(boolean)", "1", 42, 15L, 20L, "SRV1", 0, 0));
 
-		assertThat(this.traceCollectorList, hasSize(1));
-		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getContainer(), is("SRV1"));
-		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getComponent(), is("bookstoreTracing.Catalog"));
-		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getOperation(), is("bookstoreTracing.Catalog.getBook(boolean)"));
+		final ReconstructionConfiguration configuration = new ReconstructionConfiguration(input);
+		final Analysis analysis = new Analysis(configuration);
+		analysis.start();
+
+		assertThat(configuration.getOutput(), hasSize(1));
+		assertThat(configuration.getOutput().get(0).getRootOperationCall().getContainer(), is("SRV1"));
+		assertThat(configuration.getOutput().get(0).getRootOperationCall().getComponent(), is("bookstoreTracing.Catalog"));
+		assertThat(configuration.getOutput().get(0).getRootOperationCall().getOperation(), is("bookstoreTracing.Catalog.getBook(boolean)"));
 	}
 
 	@Test
 	public void nestedCallReconstructionShouldWork() throws Exception {
-		this.reconstructorUnderTest.execute(new OperationExecutionRecord("B", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 1, 1));
-		this.reconstructorUnderTest.execute(new OperationExecutionRecord("C", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 2, 1));
-		this.reconstructorUnderTest.execute(new OperationExecutionRecord("D", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 3, 2));
-		this.reconstructorUnderTest.execute(new OperationExecutionRecord("A", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 0, 0));
+		final List<OperationExecutionRecord> input = new ArrayList<>();
+		input.add(new OperationExecutionRecord("B", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 1, 1));
+		input.add(new OperationExecutionRecord("C", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 2, 1));
+		input.add(new OperationExecutionRecord("D", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 3, 2));
+		input.add(new OperationExecutionRecord("A", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 0, 0));
 
-		assertThat(this.traceCollectorList, hasSize(1));
-		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getOperation(), is("A"));
-		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getDuration(), is(10L));
-		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getChildren().get(0).getOperation(), is("B"));
-		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getChildren().get(1).getOperation(), is("C"));
-		assertThat(this.traceCollectorList.get(0).getRootOperationCall().getChildren().get(1).getChildren().get(0).getOperation(), is("D"));
+		final ReconstructionConfiguration configuration = new ReconstructionConfiguration(input);
+		final Analysis analysis = new Analysis(configuration);
+		analysis.start();
+
+		assertThat(configuration.getOutput(), hasSize(1));
+		assertThat(configuration.getOutput().get(0).getRootOperationCall().getOperation(), is("A"));
+		assertThat(configuration.getOutput().get(0).getRootOperationCall().getDuration(), is(10L));
+		assertThat(configuration.getOutput().get(0).getRootOperationCall().getChildren().get(0).getOperation(), is("B"));
+		assertThat(configuration.getOutput().get(0).getRootOperationCall().getChildren().get(1).getOperation(), is("C"));
+		assertThat(configuration.getOutput().get(0).getRootOperationCall().getChildren().get(1).getChildren().get(0).getOperation(), is("D"));
 	}
 
 	@Test
 	public void exampleLogReconstructionShouldWork() throws Exception {
-		final AnalysisConfiguration analysisConfiguration = new AnalysisConfiguration();
-
-		final InitialElementProducer<File> producer = new InitialElementProducer<>(new File("example/execution monitoring log"));
-		final Dir2RecordsFilter reader = new Dir2RecordsFilter(new ClassNameRegistryRepository());
-		final InstanceOfFilter<Object, OperationExecutionRecord> typeFilter = new InstanceOfFilter<>(OperationExecutionRecord.class);
-
-		final IPipeFactory pipeFactory = new SingleElementPipeFactory();
-		pipeFactory.create(producer.getOutputPort(), reader.getInputPort());
-		pipeFactory.create(reader.getOutputPort(), typeFilter.getInputPort());
-		pipeFactory.create(typeFilter.getOutputPort(), this.reconstructorUnderTest.getInputPort());
-
-		analysisConfiguration.addThreadableStage(producer);
-		final Analysis analysis = new Analysis(analysisConfiguration);
+		final ExampleLogReconstructionConfiguration configuration = new ExampleLogReconstructionConfiguration();
+		final Analysis analysis = new Analysis(configuration);
 		analysis.start();
 
-		assertThat(this.traceCollectorList, hasSize(1635));
+		assertThat(configuration.getOutput(), hasSize(1635));
+	}
+
+	private static class ReconstructionConfiguration extends AnalysisConfiguration {
+
+		private final List<Trace> traceCollectorList = new ArrayList<>();
+
+		public ReconstructionConfiguration(final List<OperationExecutionRecord> input) {
+			final IterableProducer<OperationExecutionRecord> producer = new IterableProducer<>(input);
+			final LegacyTraceReconstructor reconstructor = new LegacyTraceReconstructor();
+			final CollectorSink<Trace> collector = new CollectorSink<>(this.traceCollectorList);
+
+			final IPipeFactory pipeFactory = AnalysisConfiguration.PIPE_FACTORY_REGISTRY.getPipeFactory(ThreadCommunication.INTRA, PipeOrdering.ARBITRARY, false);
+			pipeFactory.create(producer.getOutputPort(), reconstructor.getInputPort());
+			pipeFactory.create(reconstructor.getOutputPort(), collector.getInputPort());
+
+			this.addThreadableStage(producer);
+		}
+
+		public List<Trace> getOutput() {
+			return this.traceCollectorList;
+		}
+
+	}
+
+	private static class ExampleLogReconstructionConfiguration extends AnalysisConfiguration {
+
+		private final List<Trace> traceCollectorList = new ArrayList<>();
+
+		public ExampleLogReconstructionConfiguration() {
+			final InitialElementProducer<File> producer = new InitialElementProducer<>(new File("example/execution monitoring log"));
+			final Dir2RecordsFilter reader = new Dir2RecordsFilter(new ClassNameRegistryRepository());
+			final InstanceOfFilter<Object, OperationExecutionRecord> typeFilter = new InstanceOfFilter<>(OperationExecutionRecord.class);
+			final LegacyTraceReconstructor reconstructor = new LegacyTraceReconstructor();
+			final CollectorSink<Trace> collector = new CollectorSink<>(this.traceCollectorList);
+
+			final IPipeFactory pipeFactory = new SingleElementPipeFactory();
+			pipeFactory.create(producer.getOutputPort(), reader.getInputPort());
+			pipeFactory.create(reader.getOutputPort(), typeFilter.getInputPort());
+			pipeFactory.create(typeFilter.getOutputPort(), reconstructor.getInputPort());
+			pipeFactory.create(reconstructor.getOutputPort(), collector.getInputPort());
+
+			this.addThreadableStage(producer);
+		}
+
+		public List<Trace> getOutput() {
+			return this.traceCollectorList;
+		}
+
 	}
 
 }
