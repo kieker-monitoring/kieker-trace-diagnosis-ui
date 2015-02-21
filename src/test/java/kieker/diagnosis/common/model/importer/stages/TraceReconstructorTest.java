@@ -147,7 +147,7 @@ public final class TraceReconstructorTest {
 		private final List<Trace> traceCollectorList = new ArrayList<>();
 
 		public ReconstructionConfiguration(final List<IFlowRecord> input) {
-			final IterableProducer<List<IFlowRecord>, IFlowRecord> producer = new IterableProducer<>(input);
+			final IterableProducer<IFlowRecord> producer = new IterableProducer<>(input);
 			final TraceReconstructor reconstructor = new TraceReconstructor();
 			final CollectorSink<Trace> collector = new CollectorSink<>(this.traceCollectorList);
 
