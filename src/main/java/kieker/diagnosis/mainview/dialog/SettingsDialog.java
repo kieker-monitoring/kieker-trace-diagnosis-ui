@@ -103,7 +103,7 @@ public final class SettingsDialog extends Dialog {
 	private void loadSettings() {
 		this.textGraphvizPath.setText(this.model.getGraphvizPath());
 		this.comboBoxGraphvizGenerator.select(this.model.getGraphvizGenerator() == GraphvizGenerator.DOT ? 0 : 1);
-		this.comboBoxTimeUnit.select(this.timeUnitMapper.resolve(this.model.getTimeunit()));
+		this.comboBoxTimeUnit.select(this.timeUnitMapper.resolve(this.model.getTimeUnit()));
 		this.comboBoxOperationNames.select(this.model.getOperationNames() == OperationNames.SHORT ? 0 : 1);
 		this.comboBoxComponentNames.select(this.model.getComponentNames() == ComponentNames.SHORT ? 0 : 1);
 	}
@@ -113,7 +113,7 @@ public final class SettingsDialog extends Dialog {
 
 		this.model.setGraphvizPath(this.textGraphvizPath.getText());
 		this.model.setGraphvizGenerator(this.comboBoxGraphvizGenerator.getSelectionIndex() == 0 ? GraphvizGenerator.DOT : GraphvizGenerator.NEATO);
-		this.model.setTimeunit(this.timeUnitMapper.invertedResolve(this.comboBoxTimeUnit.getSelectionIndex()));
+		this.model.setTimeUnit(this.timeUnitMapper.invertedResolve(this.comboBoxTimeUnit.getSelectionIndex()));
 		this.model.setOperationNames(this.comboBoxOperationNames.getSelectionIndex() == 0 ? OperationNames.SHORT : OperationNames.LONG);
 		this.model.setComponentNames(this.comboBoxComponentNames.getSelectionIndex() == 0 ? ComponentNames.SHORT : ComponentNames.LONG);
 

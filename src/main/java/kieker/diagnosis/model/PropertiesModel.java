@@ -36,7 +36,7 @@ public final class PropertiesModel extends Observable {
 
 	private String graphvizPath;
 	private GraphvizGenerator graphvizGenerator;
-	private TimeUnit timeunit;
+	private TimeUnit timeUnit;
 	private ComponentNames componentNames;
 	private OperationNames operationNames;
 
@@ -49,7 +49,7 @@ public final class PropertiesModel extends Observable {
 
 		this.graphvizPath = preferences.get(PropertiesModel.KEY_GRAPHVIZ_PATH, ".");
 		this.graphvizGenerator = GraphvizGenerator.valueOf(preferences.get(PropertiesModel.KEY_GRAPHVIZ_GENERATOR, GraphvizGenerator.DOT.name()));
-		this.timeunit = TimeUnit.valueOf(preferences.get(PropertiesModel.KEY_TIMEUNIT, TimeUnit.NANOSECONDS.name()));
+		this.timeUnit = TimeUnit.valueOf(preferences.get(PropertiesModel.KEY_TIMEUNIT, TimeUnit.NANOSECONDS.name()));
 		this.componentNames = ComponentNames.valueOf(preferences.get(PropertiesModel.KEY_COMPONENTS, ComponentNames.LONG.name()));
 		this.operationNames = OperationNames.valueOf(preferences.get(PropertiesModel.KEY_OPERATIONS, OperationNames.SHORT.name()));
 	}
@@ -59,7 +59,7 @@ public final class PropertiesModel extends Observable {
 
 		preferences.put(PropertiesModel.KEY_GRAPHVIZ_PATH, this.graphvizPath);
 		preferences.put(PropertiesModel.KEY_GRAPHVIZ_GENERATOR, this.graphvizGenerator.name());
-		preferences.put(PropertiesModel.KEY_TIMEUNIT, this.timeunit.name());
+		preferences.put(PropertiesModel.KEY_TIMEUNIT, this.timeUnit.name());
 		preferences.put(PropertiesModel.KEY_COMPONENTS, this.componentNames.name());
 		preferences.put(PropertiesModel.KEY_OPERATIONS, this.operationNames.name());
 
@@ -90,12 +90,12 @@ public final class PropertiesModel extends Observable {
 		this.notifyObserversAndSaveSettings();
 	}
 
-	public TimeUnit getTimeunit() {
-		return this.timeunit;
+	public TimeUnit getTimeUnit() {
+		return this.timeUnit;
 	}
 
-	public void setTimeunit(final TimeUnit timeunit) {
-		this.timeunit = timeunit;
+	public void setTimeUnit(final TimeUnit timeUnit) {
+		this.timeUnit = timeUnit;
 
 		this.notifyObserversAndSaveSettings();
 	}

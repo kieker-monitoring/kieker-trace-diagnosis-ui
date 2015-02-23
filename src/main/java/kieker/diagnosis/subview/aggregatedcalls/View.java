@@ -295,13 +295,13 @@ public final class View implements ISubView, Observer {
 	private void updateDetailComposite() {
 		final AggregatedOperationCall call = this.model.getCurrentActiveCall();
 
-		final String shortTimeUnit = NameConverter.toShortTimeUnit(this.propertiesModel.getTimeunit());
+		final String shortTimeUnit = NameConverter.toShortTimeUnit(this.propertiesModel.getTimeUnit());
 
-		final String minDuration = this.propertiesModel.getTimeunit().convert(call.getMinDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
-		final String maxDuration = this.propertiesModel.getTimeunit().convert(call.getMaxDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
-		final String meanDuration = this.propertiesModel.getTimeunit().convert(call.getMedianDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
-		final String avgDuration = this.propertiesModel.getTimeunit().convert(call.getMeanDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
-		final String totalDuration = this.propertiesModel.getTimeunit().convert(call.getTotalDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+		final String minDuration = this.propertiesModel.getTimeUnit().convert(call.getMinDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+		final String maxDuration = this.propertiesModel.getTimeUnit().convert(call.getMaxDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+		final String meanDuration = this.propertiesModel.getTimeUnit().convert(call.getMedianDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+		final String avgDuration = this.propertiesModel.getTimeUnit().convert(call.getMeanDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+		final String totalDuration = this.propertiesModel.getTimeUnit().convert(call.getTotalDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
 
 		this.lblMinimalDurationDisplay.setText(minDuration);
 		this.lblMaximalDurationDisplay.setText(maxDuration);
@@ -351,13 +351,13 @@ public final class View implements ISubView, Observer {
 				operationString = NameConverter.toShortOperationName(operationString);
 			}
 
-			final String shortTimeUnit = NameConverter.toShortTimeUnit(View.this.propertiesModel.getTimeunit());
+			final String shortTimeUnit = NameConverter.toShortTimeUnit(View.this.propertiesModel.getTimeUnit());
 
-			final String minDuration = View.this.propertiesModel.getTimeunit().convert(call.getMinDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
-			final String maxDuration = View.this.propertiesModel.getTimeunit().convert(call.getMaxDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
-			final String meanDuration = View.this.propertiesModel.getTimeunit().convert(call.getMedianDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
-			final String avgDuration = View.this.propertiesModel.getTimeunit().convert(call.getMeanDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
-			final String totalDuration = View.this.propertiesModel.getTimeunit().convert(call.getTotalDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+			final String minDuration = View.this.propertiesModel.getTimeUnit().convert(call.getMinDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+			final String maxDuration = View.this.propertiesModel.getTimeUnit().convert(call.getMaxDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+			final String meanDuration = View.this.propertiesModel.getTimeUnit().convert(call.getMedianDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+			final String avgDuration = View.this.propertiesModel.getTimeUnit().convert(call.getMeanDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+			final String totalDuration = View.this.propertiesModel.getTimeUnit().convert(call.getTotalDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
 
 			item.setText(new String[] { call.getContainer(), componentName, operationString, Long.toString(call.getCalls()), minDuration, avgDuration, meanDuration, maxDuration,
 				totalDuration });

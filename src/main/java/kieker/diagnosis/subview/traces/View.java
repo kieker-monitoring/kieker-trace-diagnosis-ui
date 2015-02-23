@@ -266,8 +266,8 @@ public final class View implements Observer, ISubView {
 	private void updateDetailComposite() {
 		final OperationCall call = this.tracesSubViewModel.getCurrentActiveCall();
 
-		final String shortTimeUnit = NameConverter.toShortTimeUnit(View.this.propertiesModel.getTimeunit());
-		final long duration = this.propertiesModel.getTimeunit().convert(call.getDuration(), this.modelProxy.getSourceTimeUnit());
+		final String shortTimeUnit = NameConverter.toShortTimeUnit(View.this.propertiesModel.getTimeUnit());
+		final long duration = this.propertiesModel.getTimeUnit().convert(call.getDuration(), this.modelProxy.getSourceTimeUnit());
 		final String durationString = duration + " " + shortTimeUnit;
 
 		this.lblTraceIdDisplay.setText(Long.toString(call.getTraceID()));
@@ -326,8 +326,8 @@ public final class View implements Observer, ISubView {
 				operationString = NameConverter.toShortOperationName(operationString);
 			}
 
-			final String shortTimeUnit = NameConverter.toShortTimeUnit(View.this.propertiesModel.getTimeunit());
-			final long duration = View.this.propertiesModel.getTimeunit().convert(call.getDuration(), View.this.modelProxy.getSourceTimeUnit());
+			final String shortTimeUnit = NameConverter.toShortTimeUnit(View.this.propertiesModel.getTimeUnit());
+			final long duration = View.this.propertiesModel.getTimeUnit().convert(call.getDuration(), View.this.modelProxy.getSourceTimeUnit());
 			final String durationString = duration + " " + shortTimeUnit;
 
 			item.setText(new String[] { call.getContainer(), componentName, operationString, durationString, String.format("%.1f%%", call.getPercent()),

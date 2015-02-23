@@ -37,7 +37,7 @@ public final class PropertiesModelTest {
 
 		model.startModification();
 
-		model.setTimeunit(TimeUnit.NANOSECONDS);
+		model.setTimeUnit(TimeUnit.NANOSECONDS);
 		assertThat(observer.isFlag(), is(false));
 
 		model.commitModification();
@@ -51,18 +51,18 @@ public final class PropertiesModelTest {
 		final PropertiesModel model = new PropertiesModel();
 		model.addObserver(observer);
 
-		model.setTimeunit(TimeUnit.NANOSECONDS);
+		model.setTimeUnit(TimeUnit.NANOSECONDS);
 		assertThat(observer.isFlag(), is(true));
 	}
 
 	@Test
 	public void settingShouldBePersisted() {
 		final PropertiesModel fstModel = new PropertiesModel();
-		fstModel.setTimeunit(TimeUnit.NANOSECONDS);
-		fstModel.setTimeunit(TimeUnit.MICROSECONDS);
+		fstModel.setTimeUnit(TimeUnit.NANOSECONDS);
+		fstModel.setTimeUnit(TimeUnit.MICROSECONDS);
 
 		final PropertiesModel sndModel = new PropertiesModel();
-		assertThat(sndModel.getTimeunit(), is(TimeUnit.MICROSECONDS));
+		assertThat(sndModel.getTimeUnit(), is(TimeUnit.MICROSECONDS));
 	}
 
 	private static class BooleanObserver implements Observer {
