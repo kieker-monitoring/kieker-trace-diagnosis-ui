@@ -295,11 +295,13 @@ public final class View implements ISubView, Observer {
 	private void updateDetailComposite() {
 		final AggregatedOperationCall call = this.model.getCurrentActiveCall();
 
-		final String minDuration = (call.getMinDuration() + " " + this.modelProxy.getShortTimeUnit()).trim();
-		final String maxDuration = (call.getMaxDuration() + " " + this.modelProxy.getShortTimeUnit()).trim();
-		final String meanDuration = (call.getMedianDuration() + " " + this.modelProxy.getShortTimeUnit()).trim();
-		final String avgDuration = (call.getMeanDuration() + " " + this.modelProxy.getShortTimeUnit()).trim();
-		final String totalDuration = (call.getTotalDuration() + " " + this.modelProxy.getShortTimeUnit()).trim();
+		final String shortTimeUnit = NameConverter.toShortTimeUnit(this.propertiesModel.getTimeunit());
+
+		final String minDuration = this.propertiesModel.getTimeunit().convert(call.getMinDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+		final String maxDuration = this.propertiesModel.getTimeunit().convert(call.getMaxDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+		final String meanDuration = this.propertiesModel.getTimeunit().convert(call.getMedianDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+		final String avgDuration = this.propertiesModel.getTimeunit().convert(call.getMeanDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+		final String totalDuration = this.propertiesModel.getTimeunit().convert(call.getTotalDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
 
 		this.lblMinimalDurationDisplay.setText(minDuration);
 		this.lblMaximalDurationDisplay.setText(maxDuration);
@@ -349,11 +351,16 @@ public final class View implements ISubView, Observer {
 				operationString = NameConverter.toShortOperationName(operationString);
 			}
 
-			final String shortTimeUnit = View.this.modelProxy.getShortTimeUnit().trim();
-			item.setText(new String[] { call.getContainer(), componentName, operationString, Long.toString(call.getCalls()),
-				Long.toString(call.getMinDuration()) + " " + shortTimeUnit, Long.toString(call.getMeanDuration()) + " " + shortTimeUnit,
-					Long.toString(call.getMedianDuration()) + " " + shortTimeUnit, Long.toString(call.getMaxDuration()) + " " + shortTimeUnit,
-					Long.toString(call.getTotalDuration()) + " " + shortTimeUnit });
+			final String shortTimeUnit = NameConverter.toShortTimeUnit(View.this.propertiesModel.getTimeunit());
+
+			final String minDuration = View.this.propertiesModel.getTimeunit().convert(call.getMinDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+			final String maxDuration = View.this.propertiesModel.getTimeunit().convert(call.getMaxDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+			final String meanDuration = View.this.propertiesModel.getTimeunit().convert(call.getMedianDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+			final String avgDuration = View.this.propertiesModel.getTimeunit().convert(call.getMeanDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+			final String totalDuration = View.this.propertiesModel.getTimeunit().convert(call.getTotalDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+
+			item.setText(new String[] { call.getContainer(), componentName, operationString, Long.toString(call.getCalls()), minDuration, avgDuration, meanDuration, maxDuration,
+				totalDuration });
 
 			if (call.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);

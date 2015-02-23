@@ -18,6 +18,7 @@ package kieker.diagnosis.subview.util;
 
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.TimeUnit;
 
 import kieker.diagnosis.model.DataModel;
 
@@ -37,11 +38,12 @@ public abstract class AbstractDataModelProxy<T> extends Observable implements IM
 	}
 
 	@Override
-	public final String getShortTimeUnit() {
-		return this.dataModel.getShortTimeUnit();
+	public final TimeUnit getSourceTimeUnit() {
+		return this.dataModel.getTimeUnit();
 	}
 
 	protected final DataModel getDataModel() {
 		return this.dataModel;
 	}
+
 }

@@ -24,7 +24,6 @@ import java.util.Observable;
 import java.util.concurrent.TimeUnit;
 
 import kieker.common.record.misc.KiekerMetadataRecord;
-import kieker.diagnosis.common.Mapper;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
@@ -39,8 +38,6 @@ import teetime.framework.Analysis;
  */
 public final class DataModel extends Observable {
 
-	private final Mapper<TimeUnit, String> shortTimeUnitMapper = new Mapper<>();
-
 	private List<Trace> traces = Collections.emptyList();
 	private List<Trace> failureContainingTraces = Collections.emptyList();
 	private List<Trace> failedTraces = Collections.emptyList();
@@ -51,22 +48,7 @@ public final class DataModel extends Observable {
 	private List<OperationCall> failedOperationCalls = Collections.emptyList();
 	private List<AggregatedOperationCall> aggregatedOperationCalls = Collections.emptyList();
 	private List<AggregatedOperationCall> aggregatedFailedOperationCalls = Collections.emptyList();
-
-	private String shortTimeUnit = "";
-
-	public DataModel() {
-		this.initializeMapper();
-	}
-
-	private void initializeMapper() {
-		this.shortTimeUnitMapper.map(TimeUnit.NANOSECONDS).to("ns");
-		this.shortTimeUnitMapper.map(TimeUnit.MICROSECONDS).to("us");
-		this.shortTimeUnitMapper.map(TimeUnit.MILLISECONDS).to("ms");
-		this.shortTimeUnitMapper.map(TimeUnit.SECONDS).to("s");
-		this.shortTimeUnitMapper.map(TimeUnit.MINUTES).to("m");
-		this.shortTimeUnitMapper.map(TimeUnit.HOURS).to("h");
-		this.shortTimeUnitMapper.map(TimeUnit.DAYS).to("d");
-	}
+	private TimeUnit timeUnit;
 
 	public void loadMonitoringLogFromFS(final String directory) {
 		// Load and analyze the monitoring logs from the given directory
@@ -90,21 +72,13 @@ public final class DataModel extends Observable {
 		final List<KiekerMetadataRecord> metadataRecords = analysisConfiguration.getMetadataRecords();
 		if (!metadataRecords.isEmpty()) {
 			final KiekerMetadataRecord metadataRecord = metadataRecords.get(0);
-			this.shortTimeUnit = this.convertToShortTimeUnit(TimeUnit.valueOf(metadataRecord.getTimeUnit()));
+			this.timeUnit = TimeUnit.valueOf(metadataRecord.getTimeUnit());
 		} else {
-			this.shortTimeUnit = "";
+			this.timeUnit = TimeUnit.NANOSECONDS;
 		}
 
 		this.setChanged();
 		this.notifyObservers();
-	}
-
-	private String convertToShortTimeUnit(final TimeUnit timeUnit) {
-		return this.shortTimeUnitMapper.resolve(timeUnit);
-	}
-
-	public String getShortTimeUnit() {
-		return this.shortTimeUnit;
 	}
 
 	public List<Trace> getTracesCopy() {
@@ -145,6 +119,10 @@ public final class DataModel extends Observable {
 
 	public List<AggregatedOperationCall> getAggregatedFailedOperationCalls() {
 		return new ArrayList<>(this.aggregatedFailedOperationCalls);
+	}
+
+	public TimeUnit getTimeUnit() {
+		return this.timeUnit;
 	}
 
 }

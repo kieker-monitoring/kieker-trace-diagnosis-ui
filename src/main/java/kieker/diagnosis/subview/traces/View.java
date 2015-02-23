@@ -53,7 +53,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 public final class View implements Observer, ISubView {
 
 	private static final String N_A = "N/A";
-	private final IModel<Trace> model;
+	private final IModel<Trace> modelProxy;
 	private final Model tracesSubViewModel;
 	private final SelectionListener controller;
 	private Composite composite;
@@ -73,7 +73,7 @@ public final class View implements Observer, ISubView {
 	private Composite statusBar;
 
 	public View(final IModel<Trace> model, final Model tracesSubViewModel, final PropertiesModel propertiesModel, final SelectionListener controller) {
-		this.model = model;
+		this.modelProxy = model;
 		this.propertiesModel = propertiesModel;
 		this.tracesSubViewModel = tracesSubViewModel;
 		this.controller = controller;
@@ -229,7 +229,7 @@ public final class View implements Observer, ISubView {
 
 	@Override
 	public void update(final Observable observable, final Object obj) {
-		if (observable == this.model) {
+		if (observable == this.modelProxy) {
 			this.updateTree();
 			this.updateStatusBar();
 		}
@@ -242,12 +242,12 @@ public final class View implements Observer, ISubView {
 	}
 
 	private void updateStatusBar() {
-		this.lblTraces.setText(this.model.getContent().size() + " Trace(s)");
+		this.lblTraces.setText(this.modelProxy.getContent().size() + " Trace(s)");
 		this.statusBar.getParent().layout();
 	}
 
 	private void updateTree() {
-		final List<Trace> records = this.model.getContent();
+		final List<Trace> records = this.modelProxy.getContent();
 
 		this.tree.setData(records);
 		this.tree.setItemCount(records.size());
@@ -264,21 +264,23 @@ public final class View implements Observer, ISubView {
 	}
 
 	private void updateDetailComposite() {
-		final OperationCall operationCall = this.tracesSubViewModel.getCurrentActiveCall();
+		final OperationCall call = this.tracesSubViewModel.getCurrentActiveCall();
 
-		final String duration = (Long.toString(operationCall.getDuration()) + " " + this.model.getShortTimeUnit()).trim();
+		final String shortTimeUnit = NameConverter.toShortTimeUnit(View.this.propertiesModel.getTimeunit());
+		final long duration = this.propertiesModel.getTimeunit().convert(call.getDuration(), this.modelProxy.getSourceTimeUnit());
+		final String durationString = duration + " " + shortTimeUnit;
 
-		this.lblTraceIdDisplay.setText(Long.toString(operationCall.getTraceID()));
-		this.lblDurationDisplay.setText(duration);
+		this.lblTraceIdDisplay.setText(Long.toString(call.getTraceID()));
+		this.lblDurationDisplay.setText(durationString);
 
-		this.lblExecutionContainerDisplay.setText(operationCall.getContainer());
-		this.lblComponentDisplay.setText(operationCall.getComponent());
-		this.lblOperationDisplay.setText(operationCall.getOperation());
-		this.lblTraceDepthDisplay.setText(Integer.toString(operationCall.getStackDepth()));
-		this.lblTraceSizeDisplay.setText(Integer.toString(operationCall.getStackSize()));
+		this.lblExecutionContainerDisplay.setText(call.getContainer());
+		this.lblComponentDisplay.setText(call.getComponent());
+		this.lblOperationDisplay.setText(call.getOperation());
+		this.lblTraceDepthDisplay.setText(Integer.toString(call.getStackDepth()));
+		this.lblTraceSizeDisplay.setText(Integer.toString(call.getStackSize()));
 
-		if (operationCall.isFailed()) {
-			this.lblFailedDisplay.setText("Yes (" + operationCall.getFailedCause() + ")");
+		if (call.isFailed()) {
+			this.lblFailedDisplay.setText("Yes (" + call.getFailedCause() + ")");
 			this.lblFailedDisplay.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
 			this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
 		} else {
@@ -302,37 +304,42 @@ public final class View implements Observer, ISubView {
 			final TreeItem parent = item.getParentItem();
 
 			// Decide whether the current item is a root or not
-			final OperationCall operationCall;
+			final OperationCall call;
 			final String traceID;
 
 			if (parent == null) {
 				final Trace trace = ((List<Trace>) tree.getData()).get(tableIndex);
 
-				operationCall = trace.getRootOperationCall();
+				call = trace.getRootOperationCall();
 				traceID = Long.toString(trace.getTraceID());
 			} else {
-				operationCall = ((OperationCall) parent.getData()).getChildren().get(tableIndex);
+				call = ((OperationCall) parent.getData()).getChildren().get(tableIndex);
 				traceID = "";
 			}
 
-			String componentName = operationCall.getComponent();
+			String componentName = call.getComponent();
 			if (View.this.propertiesModel.getComponentNames() == ComponentNames.SHORT) {
 				componentName = NameConverter.toShortComponentName(componentName);
 			}
-			String operationString = operationCall.getOperation();
+			String operationString = call.getOperation();
 			if (View.this.propertiesModel.getOperationNames() == OperationNames.SHORT) {
 				operationString = NameConverter.toShortOperationName(operationString);
 			}
-			final String duration = (Long.toString(operationCall.getDuration()) + " " + View.this.model.getShortTimeUnit()).trim();
-			item.setText(new String[] { operationCall.getContainer(), componentName, operationString, duration, String.format("%.1f%%", operationCall.getPercent()), traceID });
 
-			if (operationCall.isFailed()) {
+			final String shortTimeUnit = NameConverter.toShortTimeUnit(View.this.propertiesModel.getTimeunit());
+			final long duration = View.this.propertiesModel.getTimeunit().convert(call.getDuration(), View.this.modelProxy.getSourceTimeUnit());
+			final String durationString = duration + " " + shortTimeUnit;
+
+			item.setText(new String[] { call.getContainer(), componentName, operationString, durationString, String.format("%.1f%%", call.getPercent()),
+				traceID });
+
+			if (call.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 				item.setForeground(colorRed);
 			}
 
-			item.setData(operationCall);
-			item.setItemCount(operationCall.getChildren().size());
+			item.setData(call);
+			item.setItemCount(call.getChildren().size());
 		}
 	}
 

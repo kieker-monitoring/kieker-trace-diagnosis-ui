@@ -59,7 +59,7 @@ public final class View implements Observer, ISubView {
 	private static final String N_A = "N/A";
 	private final Model aggregatedTracesSubViewModel;
 	private final SelectionListener controller;
-	private final IModel<AggregatedTrace> model;
+	private final IModel<AggregatedTrace> modelProxy;
 	private Composite composite;
 	private Tree tree;
 	private Composite detailComposite;
@@ -82,7 +82,7 @@ public final class View implements Observer, ISubView {
 
 	public View(final IModel<AggregatedTrace> model, final Model aggregatedTracesSubViewModel, final PropertiesModel propertiesModel, final SelectionListener controller) {
 		this.controller = controller;
-		this.model = model;
+		this.modelProxy = model;
 		this.propertiesModel = propertiesModel;
 		this.aggregatedTracesSubViewModel = aggregatedTracesSubViewModel;
 
@@ -278,7 +278,7 @@ public final class View implements Observer, ISubView {
 
 	@Override
 	public void update(final Observable observable, final Object obj) {
-		if (observable == this.model) {
+		if (observable == this.modelProxy) {
 			this.updateTree();
 			this.updateStatusBar();
 		}
@@ -291,12 +291,12 @@ public final class View implements Observer, ISubView {
 	}
 
 	private void updateStatusBar() {
-		this.lblTraceEquivalence.setText(this.model.getContent().size() + " Trace Equivalence Class(es)");
+		this.lblTraceEquivalence.setText(this.modelProxy.getContent().size() + " Trace Equivalence Class(es)");
 		this.statusBar.getParent().layout();
 	}
 
 	private void updateTree() {
-		final List<AggregatedTrace> traces = this.model.getContent();
+		final List<AggregatedTrace> traces = this.modelProxy.getContent();
 
 		this.tree.setData(traces);
 		this.tree.setItemCount(traces.size());
@@ -315,11 +315,13 @@ public final class View implements Observer, ISubView {
 	private void updateDetailComposite() {
 		final AggregatedOperationCall call = this.aggregatedTracesSubViewModel.getCurrentActiveCall();
 
-		final String minDuration = (call.getMinDuration() + " " + this.model.getShortTimeUnit()).trim();
-		final String maxDuration = (call.getMaxDuration() + " " + this.model.getShortTimeUnit()).trim();
-		final String meanDuration = (call.getMedianDuration() + " " + this.model.getShortTimeUnit()).trim();
-		final String avgDuration = (call.getMeanDuration() + " " + this.model.getShortTimeUnit()).trim();
-		final String totalDuration = (call.getTotalDuration() + " " + this.model.getShortTimeUnit()).trim();
+		final String shortTimeUnit = NameConverter.toShortTimeUnit(this.propertiesModel.getTimeunit());
+
+		final String minDuration = this.propertiesModel.getTimeunit().convert(call.getMinDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+		final String maxDuration = this.propertiesModel.getTimeunit().convert(call.getMaxDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+		final String meanDuration = this.propertiesModel.getTimeunit().convert(call.getMedianDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+		final String avgDuration = this.propertiesModel.getTimeunit().convert(call.getMeanDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+		final String totalDuration = this.propertiesModel.getTimeunit().convert(call.getTotalDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
 
 		this.lblMinimalDurationDisplay.setText(minDuration);
 		this.lblMaximalDurationDisplay.setText(maxDuration);
@@ -359,46 +361,48 @@ public final class View implements Observer, ISubView {
 			final TreeItem parent = item.getParentItem();
 
 			// Decide whether the current item is a root or not
-			final AggregatedOperationCall operationCall;
+			final AggregatedOperationCall call;
 
 			if (parent == null) {
 				final AggregatedTrace trace = ((List<AggregatedTrace>) tree.getData()).get(tableIndex);
 
-				operationCall = trace.getRootOperationCall();
+				call = trace.getRootOperationCall();
 			} else {
-				operationCall = ((AggregatedOperationCall) parent.getData()).getChildren().get(tableIndex);
+				call = ((AggregatedOperationCall) parent.getData()).getChildren().get(tableIndex);
 			}
 
-			String componentName = operationCall.getComponent();
+			String componentName = call.getComponent();
 			if (View.this.propertiesModel.getComponentNames() == ComponentNames.SHORT) {
 				componentName = NameConverter.toShortComponentName(componentName);
 			}
-			String operationString = operationCall.getOperation();
+			String operationString = call.getOperation();
 			if (View.this.propertiesModel.getOperationNames() == OperationNames.SHORT) {
 				operationString = NameConverter.toShortOperationName(operationString);
 			}
 
-			final String minDuration = (operationCall.getMinDuration() + " " + View.this.model.getShortTimeUnit()).trim();
-			final String maxDuration = (operationCall.getMaxDuration() + " " + View.this.model.getShortTimeUnit()).trim();
-			final String avgDuration = (operationCall.getMeanDuration() + " " + View.this.model.getShortTimeUnit()).trim();
-			final String meanDuration = (operationCall.getMedianDuration() + " " + View.this.model.getShortTimeUnit()).trim();
-			final String totalDuration = (operationCall.getTotalDuration() + " " + View.this.model.getShortTimeUnit()).trim();
+			final String shortTimeUnit = NameConverter.toShortTimeUnit(View.this.propertiesModel.getTimeunit());
+
+			final String minDuration = View.this.propertiesModel.getTimeunit().convert(call.getMinDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+			final String maxDuration = View.this.propertiesModel.getTimeunit().convert(call.getMaxDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+			final String meanDuration = View.this.propertiesModel.getTimeunit().convert(call.getMedianDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+			final String avgDuration = View.this.propertiesModel.getTimeunit().convert(call.getMeanDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+			final String totalDuration = View.this.propertiesModel.getTimeunit().convert(call.getTotalDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
 
 			if (parent != null) {
-				item.setText(new String[] { operationCall.getContainer(), componentName, operationString, "", minDuration, avgDuration, meanDuration, maxDuration,
-					totalDuration, });
+				item.setText(new String[] { call.getContainer(), componentName, operationString, "", minDuration, avgDuration, meanDuration, maxDuration,
+						totalDuration, });
 			} else {
-				item.setText(new String[] { operationCall.getContainer(), componentName, operationString, Integer.toString(operationCall.getCalls()), minDuration, avgDuration,
-					meanDuration, maxDuration, totalDuration, });
+				item.setText(new String[] { call.getContainer(), componentName, operationString, Integer.toString(call.getCalls()), minDuration, avgDuration,
+						meanDuration, maxDuration, totalDuration, });
 			}
 
-			if (operationCall.isFailed()) {
+			if (call.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 				item.setForeground(colorRed);
 			}
 
-			item.setData(operationCall);
-			item.setItemCount(operationCall.getChildren().size());
+			item.setData(call);
+			item.setItemCount(call.getChildren().size());
 		}
 	}
 

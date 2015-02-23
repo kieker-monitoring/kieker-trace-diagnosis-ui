@@ -205,9 +205,11 @@ public final class View implements ISubView, Observer {
 	private void updateDetailComposite() {
 		final OperationCall call = this.model.getCurrentActiveCall();
 
-		final String duration = (call.getDuration() + " " + this.modelProxy.getShortTimeUnit()).trim();
+		final String shortTimeUnit = NameConverter.toShortTimeUnit(this.propertiesModel.getTimeunit());
+		final long duration = this.propertiesModel.getTimeunit().convert(call.getDuration(), this.modelProxy.getSourceTimeUnit());
+		final String durationString = duration + " " + shortTimeUnit;
 
-		this.lblMinimalDurationDisplay.setText(duration);
+		this.lblMinimalDurationDisplay.setText(durationString);
 
 		this.lblExecutionContainerDisplay.setText(call.getContainer());
 		this.lblComponentDisplay.setText(call.getComponent());
@@ -271,9 +273,10 @@ public final class View implements ISubView, Observer {
 				operationString = NameConverter.toShortOperationName(operationString);
 			}
 
-			final String shortTimeUnit = View.this.modelProxy.getShortTimeUnit().trim();
-			item.setText(new String[] { call.getContainer(), componentName, operationString, Long.toString(call.getDuration()) + " " + shortTimeUnit,
-					Long.toString(call.getTraceID()) });
+			final String shortTimeUnit = NameConverter.toShortTimeUnit(View.this.propertiesModel.getTimeunit());
+			final long duration = View.this.propertiesModel.getTimeunit().convert(call.getDuration(), View.this.modelProxy.getSourceTimeUnit());
+
+			item.setText(new String[] { call.getContainer(), componentName, operationString, Long.toString(duration) + " " + shortTimeUnit, Long.toString(call.getTraceID()) });
 
 			if (call.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);

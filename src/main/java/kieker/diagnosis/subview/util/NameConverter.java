@@ -16,9 +16,33 @@
 
 package kieker.diagnosis.subview.util;
 
+import java.util.concurrent.TimeUnit;
+
+import kieker.diagnosis.common.Mapper;
+
 public final class NameConverter {
 
+	private static Mapper<TimeUnit, String> shortTimeUnitMapper = new Mapper<>();
+
 	private NameConverter() {}
+
+	static {
+		initializeMapper();
+	}
+
+	private static void initializeMapper() {
+		NameConverter.shortTimeUnitMapper.map(TimeUnit.NANOSECONDS).to("ns");
+		NameConverter.shortTimeUnitMapper.map(TimeUnit.MICROSECONDS).to("us");
+		NameConverter.shortTimeUnitMapper.map(TimeUnit.MILLISECONDS).to("ms");
+		NameConverter.shortTimeUnitMapper.map(TimeUnit.SECONDS).to("s");
+		NameConverter.shortTimeUnitMapper.map(TimeUnit.MINUTES).to("m");
+		NameConverter.shortTimeUnitMapper.map(TimeUnit.HOURS).to("h");
+		NameConverter.shortTimeUnitMapper.map(TimeUnit.DAYS).to("d");
+	}
+
+	public static String toShortTimeUnit(final TimeUnit timeUnit) {
+		return NameConverter.shortTimeUnitMapper.resolve(timeUnit);
+	}
 
 	public static String toShortComponentName(final String componentName) {
 		final int lastPointPos = componentName.lastIndexOf('.');
