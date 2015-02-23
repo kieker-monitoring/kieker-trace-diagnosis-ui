@@ -18,7 +18,7 @@ package kieker.diagnosis.subview.traces;
 
 import java.util.Observable;
 
-import kieker.diagnosis.common.domain.OperationCall;
+import kieker.diagnosis.domain.OperationCall;
 
 public final class Model extends Observable {
 

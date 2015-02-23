@@ -18,10 +18,10 @@ package kieker.diagnosis.subview.traces;
 
 import java.util.List;
 
-import kieker.diagnosis.common.domain.OperationCall;
-import kieker.diagnosis.common.domain.Trace;
-import kieker.diagnosis.common.model.DataModel;
-import kieker.diagnosis.common.model.PropertiesModel;
+import kieker.diagnosis.domain.OperationCall;
+import kieker.diagnosis.domain.Trace;
+import kieker.diagnosis.model.DataModel;
+import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.subview.Filter;
 import kieker.diagnosis.subview.ISubController;
 import kieker.diagnosis.subview.ISubView;

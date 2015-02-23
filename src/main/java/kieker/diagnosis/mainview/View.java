@@ -20,8 +20,8 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-import kieker.diagnosis.common.model.PropertiesModel;
-import kieker.diagnosis.dialog.SettingsDialog;
+import kieker.diagnosis.mainview.dialog.SettingsDialog;
+import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.subview.ISubView;
 
 import org.eclipse.swt.SWT;

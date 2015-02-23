@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import kieker.diagnosis.common.domain.AbstractTrace;
+import kieker.diagnosis.domain.AbstractTrace;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;

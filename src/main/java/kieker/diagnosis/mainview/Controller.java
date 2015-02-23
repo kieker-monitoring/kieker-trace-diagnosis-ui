@@ -22,9 +22,9 @@ import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-import kieker.diagnosis.common.model.DataModel;
-import kieker.diagnosis.common.model.PropertiesModel;
-import kieker.diagnosis.dialog.SettingsDialog;
+import kieker.diagnosis.mainview.dialog.SettingsDialog;
+import kieker.diagnosis.model.DataModel;
+import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.subview.Filter;
 import kieker.diagnosis.subview.ISubController;
 import kieker.diagnosis.subview.ISubView;

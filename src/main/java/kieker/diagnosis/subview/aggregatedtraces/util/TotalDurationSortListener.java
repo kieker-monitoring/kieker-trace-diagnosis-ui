@@ -16,7 +16,7 @@
 
 package kieker.diagnosis.subview.aggregatedtraces.util;
 
-import kieker.diagnosis.common.domain.AggregatedTrace;
+import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.subview.util.AbstractTraceTreeColumnSortListener;
 
 public final class TotalDurationSortListener extends AbstractTraceTreeColumnSortListener<AggregatedTrace> {

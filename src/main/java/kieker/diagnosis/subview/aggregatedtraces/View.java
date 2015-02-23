@@ -20,11 +20,11 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import kieker.diagnosis.common.domain.AggregatedOperationCall;
-import kieker.diagnosis.common.domain.AggregatedTrace;
-import kieker.diagnosis.common.model.PropertiesModel;
-import kieker.diagnosis.common.model.PropertiesModel.ComponentNames;
-import kieker.diagnosis.common.model.PropertiesModel.OperationNames;
+import kieker.diagnosis.domain.AggregatedOperationCall;
+import kieker.diagnosis.domain.AggregatedTrace;
+import kieker.diagnosis.model.PropertiesModel;
+import kieker.diagnosis.model.PropertiesModel.ComponentNames;
+import kieker.diagnosis.model.PropertiesModel.OperationNames;
 import kieker.diagnosis.subview.ISubView;
 import kieker.diagnosis.subview.aggregatedtraces.util.AvgDurationSortListener;
 import kieker.diagnosis.subview.aggregatedtraces.util.CallsSortListener;

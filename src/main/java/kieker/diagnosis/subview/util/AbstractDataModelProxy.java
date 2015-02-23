@@ -19,7 +19,7 @@ package kieker.diagnosis.subview.util;
 import java.util.Observable;
 import java.util.Observer;
 
-import kieker.diagnosis.common.model.DataModel;
+import kieker.diagnosis.model.DataModel;
 
 public abstract class AbstractDataModelProxy<T> extends Observable implements IModel<T>, Observer {
 

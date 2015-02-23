@@ -16,7 +16,7 @@
 
 package kieker.diagnosis.subview.util;
 
-import kieker.diagnosis.common.domain.AbstractTrace;
+import kieker.diagnosis.domain.AbstractTrace;
 
 public final class OperationSortListener extends AbstractTraceTreeColumnSortListener<AbstractTrace<?>> {
 

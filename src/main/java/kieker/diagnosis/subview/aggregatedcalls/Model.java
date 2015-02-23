@@ -18,7 +18,7 @@ package kieker.diagnosis.subview.aggregatedcalls;
 
 import java.util.Observable;
 
-import kieker.diagnosis.common.domain.AggregatedOperationCall;
+import kieker.diagnosis.domain.AggregatedOperationCall;
 
 public final class Model extends Observable {
 

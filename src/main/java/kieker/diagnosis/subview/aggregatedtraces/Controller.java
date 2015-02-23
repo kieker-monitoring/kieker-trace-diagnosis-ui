@@ -18,10 +18,10 @@ package kieker.diagnosis.subview.aggregatedtraces;
 
 import java.util.List;
 
-import kieker.diagnosis.common.domain.AggregatedOperationCall;
-import kieker.diagnosis.common.domain.AggregatedTrace;
-import kieker.diagnosis.common.model.DataModel;
-import kieker.diagnosis.common.model.PropertiesModel;
+import kieker.diagnosis.domain.AggregatedOperationCall;
+import kieker.diagnosis.domain.AggregatedTrace;
+import kieker.diagnosis.model.DataModel;
+import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.subview.Filter;
 import kieker.diagnosis.subview.ISubController;
 import kieker.diagnosis.subview.ISubView;
