@@ -22,13 +22,18 @@ import java.util.Map;
 public final class Mapper<I, O> {
 
 	private final Map<I, O> internalMap = new HashMap<>();
+	public O defaultValue;
 
 	public To map(final I key) {
 		return new To(key);
 	}
 
+	public To mapPerDefault() {
+		return new To();
+	}
+
 	public O resolve(final I key) {
-		return this.internalMap.get(key);
+		return this.internalMap.getOrDefault(key, this.defaultValue);
 	}
 
 	public I invertedResolve(final O value) {
@@ -43,13 +48,24 @@ public final class Mapper<I, O> {
 	public final class To {
 
 		private final I key;
+		private final boolean keyAvailable;
 
 		To(final I key) {
 			this.key = key;
+			this.keyAvailable = true;
+		}
+
+		public To() {
+			this.key = null;
+			this.keyAvailable = false;
 		}
 
 		public void to(final O value) { // NOPMD (the method name may be short, but this is acceptable in this case)
-			Mapper.this.internalMap.put(this.key, value);
+			if (this.keyAvailable) {
+				Mapper.this.internalMap.put(this.key, value);
+			} else {
+				Mapper.this.defaultValue = value;
+			}
 		}
 
 	}

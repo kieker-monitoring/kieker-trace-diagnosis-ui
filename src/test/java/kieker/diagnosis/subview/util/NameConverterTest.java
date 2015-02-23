@@ -19,6 +19,8 @@ package kieker.diagnosis.subview.util;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.concurrent.TimeUnit;
+
 import org.junit.Test;
 
 public class NameConverterTest {
@@ -49,6 +51,62 @@ public class NameConverterTest {
 		final String result = NameConverter.toShortOperationName("public final kieker.examples.bookstore.CRM kieker.examples.bookstore.Catalog.getBook(boolean)");
 
 		assertThat(result, is("getBook(...)"));
+	}
+
+	@Test
+	public void toShortTimeUnitForNanosecondsShouldWork() {
+		final String result = NameConverter.toShortTimeUnit(TimeUnit.NANOSECONDS);
+
+		assertThat(result, is("ns"));
+	}
+
+	@Test
+	public void toShortTimeUnitForMicrosecondsShouldWork() {
+		final String result = NameConverter.toShortTimeUnit(TimeUnit.MICROSECONDS);
+
+		assertThat(result, is("us"));
+	}
+
+	@Test
+	public void toShortTimeUnitForMillisecondsShouldWork() {
+		final String result = NameConverter.toShortTimeUnit(TimeUnit.MILLISECONDS);
+
+		assertThat(result, is("ms"));
+	}
+
+	@Test
+	public void toShortTimeUnitForSecondsShouldWork() {
+		final String result = NameConverter.toShortTimeUnit(TimeUnit.SECONDS);
+
+		assertThat(result, is("s"));
+	}
+
+	@Test
+	public void toShortTimeUnitForMinutesShouldWork() {
+		final String result = NameConverter.toShortTimeUnit(TimeUnit.MINUTES);
+
+		assertThat(result, is("m"));
+	}
+
+	@Test
+	public void toShortTimeUnitForHoursShouldWork() {
+		final String result = NameConverter.toShortTimeUnit(TimeUnit.HOURS);
+
+		assertThat(result, is("h"));
+	}
+
+	@Test
+	public void toShortTimeUnitForDaysShouldWork() {
+		final String result = NameConverter.toShortTimeUnit(TimeUnit.DAYS);
+
+		assertThat(result, is("d"));
+	}
+
+	@Test
+	public void toShortTimeUnitForNullShouldReturnEmptyString() {
+		final String result = NameConverter.toShortTimeUnit(null);
+
+		assertThat(result, is(""));
 	}
 
 }

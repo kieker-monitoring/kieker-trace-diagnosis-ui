@@ -19,7 +19,6 @@ package kieker.diagnosis.common;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
-import kieker.diagnosis.common.Mapper;
 
 import org.junit.Test;
 
@@ -69,6 +68,27 @@ public class MapperTest {
 		mapper.map(1).to("One");
 
 		assertThat(mapper.invertedResolve("One"), is(1));
+	}
+
+	@Test
+	public void defaultMappingShouldWork() {
+		final Mapper<Integer, String> mapper = new Mapper<>();
+
+		mapper.mapPerDefault().to("N/A");
+		mapper.map(1).to("One");
+
+		assertThat(mapper.resolve(1), is("One"));
+		assertThat(mapper.resolve(2), is("N/A"));
+	}
+
+	@Test
+	public void defaultMappingDoesNotConflictWithNullMapping() {
+		final Mapper<Integer, String> mapper = new Mapper<>();
+
+		mapper.mapPerDefault().to("N/A");
+		mapper.map(null).to("Zero");
+
+		assertThat(mapper.resolve(null), is("Zero"));
 	}
 
 }

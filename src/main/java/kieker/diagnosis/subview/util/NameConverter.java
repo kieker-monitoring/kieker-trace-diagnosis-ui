@@ -38,6 +38,7 @@ public final class NameConverter {
 		NameConverter.shortTimeUnitMapper.map(TimeUnit.MINUTES).to("m");
 		NameConverter.shortTimeUnitMapper.map(TimeUnit.HOURS).to("h");
 		NameConverter.shortTimeUnitMapper.map(TimeUnit.DAYS).to("d");
+		NameConverter.shortTimeUnitMapper.mapPerDefault().to("");
 	}
 
 	public static String toShortTimeUnit(final TimeUnit timeUnit) {
