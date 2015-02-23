@@ -20,7 +20,6 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
-import kieker.diagnosis.domain.AbstractOperationCall;
 
 import org.junit.Test;
 
@@ -96,6 +95,16 @@ public abstract class AbstractOperationCallTest<T extends AbstractOperationCall<
 		sndCall.addChild(this.createOperationCall("container2", "component1", "operation1"));
 
 		assertThat(fstCall, is(not(equalTo(sndCall))));
+	}
+
+	@Test
+	public void toDotForCallTreeShouldWorkForSimpleCase() {
+		final T call = this.createOperationCall("container", "component", "operation");
+
+		call.addChild(this.createOperationCall("container1", "component1", "operation1"));
+		call.addChild(this.createOperationCall("container2", "component2", "operation2"));
+
+		assertThat(call.toDotForCallTree(), is("digraph G {rankdir = TB;node [shape = none];operation;operation -> operation1;operation -> operation2;operation2;operation1;}"));
 	}
 
 }
