@@ -40,7 +40,7 @@ public final class Mapper<I, O> {
 		return null;
 	}
 
-	public class To {
+	public final class To {
 
 		private final I key;
 
@@ -48,7 +48,7 @@ public final class Mapper<I, O> {
 			this.key = key;
 		}
 
-		public void to(final O value) {
+		public void to(final O value) { // NOPMD (the method name may be short, but this is acceptable in this case)
 			Mapper.this.internalMap.put(this.key, value);
 		}
 

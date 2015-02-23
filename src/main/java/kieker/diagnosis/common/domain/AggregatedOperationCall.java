@@ -42,9 +42,9 @@ public final class AggregatedOperationCall extends AbstractOperationCall<Aggrega
 		this.setStackSize(call.getStackSize());
 	}
 
-	public AggregatedOperationCall(final String container, final String component, final String operation, final String failedCause, final long totalDuration,
-			final long medianDuration,
-			final long minDuration, final long maxDuration, final long meanDuration, final int calls) {
+	public AggregatedOperationCall(final String container, final String component, final String operation, // NOPMD (a long parameter list cannot be avoided)
+			final String failedCause, final long totalDuration, final long medianDuration, final long minDuration, final long maxDuration, final long meanDuration,
+			final int calls) {
 		super(container, component, operation);
 
 		this.totalDuration = totalDuration;

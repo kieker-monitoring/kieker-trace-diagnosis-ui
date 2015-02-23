@@ -43,8 +43,8 @@ public final class OperationCallHandlerComposite extends CompositeStage {
 	private final CollectorSink<AggregatedOperationCall> aggCallCollector;
 	private final CollectorSink<AggregatedOperationCall> aggFailedCallCollector;
 
-	public OperationCallHandlerComposite(final List<OperationCall> operationCalls, final List<OperationCall> failedOperationCalls, final List<AggregatedOperationCall> aggOperationCalls,
-			final List<AggregatedOperationCall> aggFailedOperationCalls) {
+	public OperationCallHandlerComposite(final List<OperationCall> operationCalls, final List<OperationCall> failedOperationCalls,
+			final List<AggregatedOperationCall> aggOperationCalls, final List<AggregatedOperationCall> aggFailedOperationCalls) {
 		this.operationCallExtractor = new OperationCallExtractor();
 		this.callCollector = new CollectorSink<>(operationCalls);
 		final Distributor<OperationCall> distributor1 = new Distributor<>(new CopyByReferenceStrategy());
