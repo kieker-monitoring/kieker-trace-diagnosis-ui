@@ -33,7 +33,11 @@ public final class Mapper<I, O> {
 	}
 
 	public O resolve(final I key) {
-		return this.internalMap.getOrDefault(key, this.defaultValue);
+		if (this.internalMap.containsKey(key)) {
+			return this.internalMap.get(key);
+		} else {
+			return this.defaultValue;
+		}
 	}
 
 	public I invertedResolve(final O value) {
