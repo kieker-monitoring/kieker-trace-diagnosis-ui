@@ -24,10 +24,6 @@ import kieker.common.record.IMonitoringRecord;
 import teetime.framework.CompositeStage;
 import teetime.framework.OutputPort;
 import teetime.framework.Stage;
-import teetime.framework.pipe.IPipeFactory;
-import teetime.framework.pipe.PipeFactoryRegistry;
-import teetime.framework.pipe.PipeFactoryRegistry.PipeOrdering;
-import teetime.framework.pipe.PipeFactoryRegistry.ThreadCommunication;
 import teetime.stage.InitialElementProducer;
 import teetime.stage.className.ClassNameRegistryRepository;
 import teetime.stage.io.filesystem.Dir2RecordsFilter;
@@ -46,8 +42,7 @@ public final class ReadingComposite extends CompositeStage {
 		this.producer = new InitialElementProducer<>(importDirectory);
 		this.reader = new Dir2RecordsFilter(new ClassNameRegistryRepository());
 
-		final IPipeFactory pipeFactory = PipeFactoryRegistry.INSTANCE.getPipeFactory(ThreadCommunication.INTRA, PipeOrdering.ARBITRARY, false);
-		pipeFactory.create(this.producer.getOutputPort(), this.reader.getInputPort());
+		super.connectStages(this.producer.getOutputPort(), this.reader.getInputPort());
 	}
 
 	public OutputPort<IMonitoringRecord> getOutputPort() {

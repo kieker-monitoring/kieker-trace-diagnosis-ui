@@ -26,10 +26,6 @@ import kieker.diagnosis.domain.Trace;
 import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;
 import teetime.framework.Stage;
-import teetime.framework.pipe.IPipeFactory;
-import teetime.framework.pipe.PipeFactoryRegistry;
-import teetime.framework.pipe.PipeFactoryRegistry.PipeOrdering;
-import teetime.framework.pipe.PipeFactoryRegistry.ThreadCommunication;
 import teetime.stage.CollectorSink;
 import teetime.stage.basic.distributor.CopyByReferenceStrategy;
 import teetime.stage.basic.distributor.Distributor;
@@ -58,17 +54,15 @@ public final class OperationCallHandlerComposite extends CompositeStage {
 
 		this.inputPort = this.operationCallExtractor.getInputPort();
 
-		// Connect the stages
-		final IPipeFactory pipeFactory = PipeFactoryRegistry.INSTANCE.getPipeFactory(ThreadCommunication.INTRA, PipeOrdering.ARBITRARY, false);
-		pipeFactory.create(this.operationCallExtractor.getOutputPort(), distributor1.getInputPort());
-		pipeFactory.create(distributor1.getNewOutputPort(), this.callCollector.getInputPort());
-		pipeFactory.create(distributor1.getNewOutputPort(), failedCallFilter.getInputPort());
-		pipeFactory.create(distributor1.getNewOutputPort(), callAggregator.getInputPort());
-		pipeFactory.create(callAggregator.getOutputPort(), distributor2.getInputPort());
-		pipeFactory.create(distributor2.getNewOutputPort(), this.aggCallCollector.getInputPort());
-		pipeFactory.create(distributor2.getNewOutputPort(), aggFailedCallFilter.getInputPort());
-		pipeFactory.create(aggFailedCallFilter.getOutputPort(), this.aggFailedCallCollector.getInputPort());
-		pipeFactory.create(failedCallFilter.getOutputPort(), this.failedCallCollector.getInputPort());
+		super.connectStages(this.operationCallExtractor.getOutputPort(), distributor1.getInputPort());
+		super.connectStages(distributor1.getNewOutputPort(), this.callCollector.getInputPort());
+		super.connectStages(distributor1.getNewOutputPort(), failedCallFilter.getInputPort());
+		super.connectStages(distributor1.getNewOutputPort(), callAggregator.getInputPort());
+		super.connectStages(callAggregator.getOutputPort(), distributor2.getInputPort());
+		super.connectStages(distributor2.getNewOutputPort(), this.aggCallCollector.getInputPort());
+		super.connectStages(distributor2.getNewOutputPort(), aggFailedCallFilter.getInputPort());
+		super.connectStages(aggFailedCallFilter.getOutputPort(), this.aggFailedCallCollector.getInputPort());
+		super.connectStages(failedCallFilter.getOutputPort(), this.failedCallCollector.getInputPort());
 	}
 
 	public InputPort<Trace> getInputPort() {

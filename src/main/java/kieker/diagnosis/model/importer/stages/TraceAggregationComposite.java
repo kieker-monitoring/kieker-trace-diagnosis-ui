@@ -25,10 +25,6 @@ import kieker.diagnosis.domain.Trace;
 import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;
 import teetime.framework.Stage;
-import teetime.framework.pipe.IPipeFactory;
-import teetime.framework.pipe.PipeFactoryRegistry;
-import teetime.framework.pipe.PipeFactoryRegistry.PipeOrdering;
-import teetime.framework.pipe.PipeFactoryRegistry.ThreadCommunication;
 import teetime.stage.CollectorSink;
 import teetime.stage.basic.distributor.CopyByReferenceStrategy;
 import teetime.stage.basic.distributor.Distributor;
@@ -47,7 +43,8 @@ public final class TraceAggregationComposite extends CompositeStage {
 	private final CollectorSink<AggregatedTrace> failureContainingTracesCollector;
 	private final AggregatedTraceStatisticsDecorator statisticsDecorator;
 
-	public TraceAggregationComposite(final List<AggregatedTrace> traces, final List<AggregatedTrace> failedTraces, final List<AggregatedTrace> failureContainingTraces) {
+	public TraceAggregationComposite(final List<AggregatedTrace> traces, final List<AggregatedTrace> failedTraces,
+			final List<AggregatedTrace> failureContainingTraces) {
 		this.aggregator = new TraceAggregator();
 		this.statisticsDecorator = new AggregatedTraceStatisticsDecorator();
 
@@ -59,16 +56,15 @@ public final class TraceAggregationComposite extends CompositeStage {
 		this.failedTracesCollector = new CollectorSink<>(failedTraces);
 		this.failureContainingTracesCollector = new CollectorSink<>(failureContainingTraces);
 
-		final IPipeFactory pipeFactory = PipeFactoryRegistry.INSTANCE.getPipeFactory(ThreadCommunication.INTRA, PipeOrdering.ARBITRARY, false);
-		pipeFactory.create(this.aggregator.getOutputPort(), this.statisticsDecorator.getInputPort());
-		pipeFactory.create(this.statisticsDecorator.getOutputPort(), distributor.getInputPort());
+		super.connectStages(this.aggregator.getOutputPort(), this.statisticsDecorator.getInputPort());
+		super.connectStages(this.statisticsDecorator.getOutputPort(), distributor.getInputPort());
 
-		pipeFactory.create(distributor.getNewOutputPort(), this.tracesCollector.getInputPort());
-		pipeFactory.create(distributor.getNewOutputPort(), failedTraceFilter.getInputPort());
-		pipeFactory.create(distributor.getNewOutputPort(), failureContainingTraceFilter.getInputPort());
+		super.connectStages(distributor.getNewOutputPort(), this.tracesCollector.getInputPort());
+		super.connectStages(distributor.getNewOutputPort(), failedTraceFilter.getInputPort());
+		super.connectStages(distributor.getNewOutputPort(), failureContainingTraceFilter.getInputPort());
 
-		pipeFactory.create(failedTraceFilter.getOutputPort(), this.failedTracesCollector.getInputPort());
-		pipeFactory.create(failureContainingTraceFilter.getOutputPort(), this.failureContainingTracesCollector.getInputPort());
+		super.connectStages(failedTraceFilter.getOutputPort(), this.failedTracesCollector.getInputPort());
+		super.connectStages(failureContainingTraceFilter.getOutputPort(), this.failureContainingTracesCollector.getInputPort());
 	}
 
 	public InputPort<Trace> getInputPort() {

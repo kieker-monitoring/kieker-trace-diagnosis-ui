@@ -28,10 +28,6 @@ import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
 import teetime.framework.Stage;
-import teetime.framework.pipe.IPipeFactory;
-import teetime.framework.pipe.PipeFactoryRegistry;
-import teetime.framework.pipe.PipeFactoryRegistry.PipeOrdering;
-import teetime.framework.pipe.PipeFactoryRegistry.ThreadCommunication;
 import teetime.stage.CollectorSink;
 import teetime.stage.MultipleInstanceOfFilter;
 import teetime.stage.basic.distributor.CopyByReferenceStrategy;
@@ -69,19 +65,17 @@ public final class TraceReconstructionComposite extends CompositeStage {
 
 		this.outputPort = this.statisticsDecorator.getOutputPort();
 
-		final IPipeFactory pipeFactory = PipeFactoryRegistry.INSTANCE.getPipeFactory(ThreadCommunication.INTRA, PipeOrdering.ARBITRARY, false);
-
-		pipeFactory.create(this.typeFilter.getOutputPortForType(IFlowRecord.class), reconstructor.getInputPort());
-		pipeFactory.create(this.typeFilter.getOutputPortForType(OperationExecutionRecord.class), legacyReconstructor.getInputPort());
-		pipeFactory.create(reconstructor.getOutputPort(), merger.getNewInputPort());
-		pipeFactory.create(legacyReconstructor.getOutputPort(), merger.getNewInputPort());
-		pipeFactory.create(merger.getOutputPort(), distributor.getInputPort());
-		pipeFactory.create(distributor.getNewOutputPort(), this.tracesCollector.getInputPort());
-		pipeFactory.create(distributor.getNewOutputPort(), failedTraceFilter.getInputPort());
-		pipeFactory.create(distributor.getNewOutputPort(), failureContainingTraceFilter.getInputPort());
-		pipeFactory.create(distributor.getNewOutputPort(), this.statisticsDecorator.getInputPort());
-		pipeFactory.create(failedTraceFilter.getOutputPort(), this.failedTracesCollector.getInputPort());
-		pipeFactory.create(failureContainingTraceFilter.getOutputPort(), this.failureContainingTracesCollector.getInputPort());
+		super.connectStages(this.typeFilter.getOutputPortForType(IFlowRecord.class), reconstructor.getInputPort());
+		super.connectStages(this.typeFilter.getOutputPortForType(OperationExecutionRecord.class), legacyReconstructor.getInputPort());
+		super.connectStages(reconstructor.getOutputPort(), merger.getNewInputPort());
+		super.connectStages(legacyReconstructor.getOutputPort(), merger.getNewInputPort());
+		super.connectStages(merger.getOutputPort(), distributor.getInputPort());
+		super.connectStages(distributor.getNewOutputPort(), this.tracesCollector.getInputPort());
+		super.connectStages(distributor.getNewOutputPort(), failedTraceFilter.getInputPort());
+		super.connectStages(distributor.getNewOutputPort(), failureContainingTraceFilter.getInputPort());
+		super.connectStages(distributor.getNewOutputPort(), this.statisticsDecorator.getInputPort());
+		super.connectStages(failedTraceFilter.getOutputPort(), this.failedTracesCollector.getInputPort());
+		super.connectStages(failureContainingTraceFilter.getOutputPort(), this.failureContainingTracesCollector.getInputPort());
 	}
 
 	public InputPort<IMonitoringRecord> getInputPort() {
