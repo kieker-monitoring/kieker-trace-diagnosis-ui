@@ -30,7 +30,7 @@ import kieker.diagnosis.domain.Trace;
 
 /**
  * Reconstruct traces based on the incoming instances of {@code OperationExecutionRecord}.
- *
+ * 
  * @author Nils Christian Ehmke
  */
 final class LegacyTraceReconstructor extends AbstractStage<OperationExecutionRecord, Trace> {
@@ -85,8 +85,11 @@ final class LegacyTraceReconstructor extends AbstractStage<OperationExecutionRec
 						this.traceID);
 				newCall.setDuration(record.getTout() - record.getTin());
 
-				if ((record.getEss() <= ess) && (ess != 0)) {
+				// There can be "jumps" in the ess, as the operation execution records do not log the return jumps of methods. Therefore multiple of these jumps can be hidden.
+				int currentEss = record.getEss();
+				while ((currentEss <= ess) && (ess != 0)) {
 					header = header.getParent();
+					currentEss++;
 				}
 
 				if (root == null) {

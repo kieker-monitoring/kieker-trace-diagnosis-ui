@@ -27,7 +27,6 @@ import java.util.List;
 
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.diagnosis.domain.Trace;
-import kieker.diagnosis.model.importer.stages.LegacyTraceReconstructor;
 
 import org.junit.Test;
 
@@ -49,7 +48,7 @@ public class LegacyTraceReconstructorTest {
 		records.add(new OperationExecutionRecord("operation", OperationExecutionRecord.NO_SESSION_ID, 42, 15L, 20L, "localhost", 0, 0));
 
 		final LegacyTraceReconstructor reconstructor = new LegacyTraceReconstructor();
-		List<Trace> result = testStageBySending(records).to(reconstructor.getInputPort()).andReceivingFrom(reconstructor.getOutputPort());
+		final List<Trace> result = testStageBySending(records).to(reconstructor.getInputPort()).andReceivingFrom(reconstructor.getOutputPort());
 
 		assertThat(result, hasSize(1));
 		assertThat(result.get(0).getRootOperationCall().getOperation(), is("operation"));
@@ -63,7 +62,7 @@ public class LegacyTraceReconstructorTest {
 		records.add(new OperationExecutionRecord("bookstoreTracing.Catalog.getBook(boolean)", "1", 42, 15L, 20L, "SRV1", 0, 0));
 
 		final LegacyTraceReconstructor reconstructor = new LegacyTraceReconstructor();
-		List<Trace> result = testStageBySending(records).to(reconstructor.getInputPort()).andReceivingFrom(reconstructor.getOutputPort());
+		final List<Trace> result = testStageBySending(records).to(reconstructor.getInputPort()).andReceivingFrom(reconstructor.getOutputPort());
 
 		assertThat(result, hasSize(1));
 		assertThat(result.get(0).getRootOperationCall().getContainer(), is("SRV1"));
@@ -80,7 +79,7 @@ public class LegacyTraceReconstructorTest {
 		records.add(new OperationExecutionRecord("A", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 0, 0));
 
 		final LegacyTraceReconstructor reconstructor = new LegacyTraceReconstructor();
-		List<Trace> result = testStageBySending(records).to(reconstructor.getInputPort()).andReceivingFrom(reconstructor.getOutputPort());
+		final List<Trace> result = testStageBySending(records).to(reconstructor.getInputPort()).andReceivingFrom(reconstructor.getOutputPort());
 
 		assertThat(result, hasSize(1));
 		assertThat(result.get(0).getRootOperationCall().getOperation(), is("A"));
@@ -88,6 +87,26 @@ public class LegacyTraceReconstructorTest {
 		assertThat(result.get(0).getRootOperationCall().getChildren().get(0).getOperation(), is("B"));
 		assertThat(result.get(0).getRootOperationCall().getChildren().get(1).getOperation(), is("C"));
 		assertThat(result.get(0).getRootOperationCall().getChildren().get(1).getChildren().get(0).getOperation(), is("D"));
+	}
+
+	@Test
+	public void nestedCallWithEssJumpsReconstructionShouldWork() throws Exception {
+		final List<OperationExecutionRecord> records = new ArrayList<>();
+		records.add(new OperationExecutionRecord("B", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 1, 1));
+		records.add(new OperationExecutionRecord("C", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 2, 2));
+		records.add(new OperationExecutionRecord("D", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 2, 3));
+		records.add(new OperationExecutionRecord("E", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 3, 1));
+		records.add(new OperationExecutionRecord("A", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 0, 0));
+
+		final LegacyTraceReconstructor reconstructor = new LegacyTraceReconstructor();
+		final List<Trace> result = testStageBySending(records).to(reconstructor.getInputPort()).andReceivingFrom(reconstructor.getOutputPort());
+
+		assertThat(result, hasSize(1));
+		assertThat(result.get(0).getRootOperationCall().getOperation(), is("A"));
+		assertThat(result.get(0).getRootOperationCall().getDuration(), is(10L));
+		assertThat(result.get(0).getRootOperationCall().getChildren(), hasSize(2));
+		assertThat(result.get(0).getRootOperationCall().getChildren().get(0).getOperation(), is("B"));
+		assertThat(result.get(0).getRootOperationCall().getChildren().get(1).getOperation(), is("E"));
 	}
 
 	@Test
