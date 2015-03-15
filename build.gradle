@@ -214,3 +214,16 @@ task distSrcTar(type: Tar) {
 task distAllSrc(dependsOn: [distSrcZip, distSrcTar]) {
 	description = 'Bundles the source files of the project.'
 }
+
+def regexpReplaceInFile(File file, String searchExp, String replaceExp) {
+	String contents = file.getText('UTF-8')
+	contents = contents.replaceAll(searchExp, replaceExp)
+	file.write(contents, 'UTF-8')
+}
+
+task updateLicenseHeaderYear() << {
+	FileTree tree = fileTree(dir: 'src', include: '**/*.java')
+	tree.each { File file ->
+		regexpReplaceInFile(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2015 Kieker Project')
+	}
+}
