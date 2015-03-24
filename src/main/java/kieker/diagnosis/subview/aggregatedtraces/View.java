@@ -37,6 +37,8 @@ import kieker.diagnosis.subview.util.ContainerSortListener;
 import kieker.diagnosis.subview.util.IModel;
 import kieker.diagnosis.subview.util.NameConverter;
 import kieker.diagnosis.subview.util.OperationSortListener;
+import kieker.diagnosis.subview.util.TraceDepthSortListener;
+import kieker.diagnosis.subview.util.TraceSizeSortListener;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -125,6 +127,14 @@ public final class View implements Observer, ISubView {
 		final TreeColumn trclmnOperation = new TreeColumn(this.tree, SWT.NONE);
 		trclmnOperation.setWidth(100);
 		trclmnOperation.setText("Operation");
+
+		final TreeColumn trclmnTraceDepth = new TreeColumn(this.tree, SWT.RIGHT);
+		trclmnTraceDepth.setWidth(100);
+		trclmnTraceDepth.setText("Trace Depth");
+
+		final TreeColumn trclmnTraceSize = new TreeColumn(this.tree, SWT.RIGHT);
+		trclmnTraceSize.setWidth(100);
+		trclmnTraceSize.setText("Trace Size");
 
 		final TreeColumn trclmnCalls = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnCalls.setWidth(100);
@@ -269,6 +279,8 @@ public final class View implements Observer, ISubView {
 		trclmnMeanDuration.addSelectionListener(new MeanDurationSortListener());
 		trclmnCalls.addSelectionListener(new CallsSortListener());
 		trclmnTotalDuration.addSelectionListener(new TotalDurationSortListener());
+		trclmnTraceDepth.addSelectionListener(new TraceDepthSortListener());
+		trclmnTraceSize.addSelectionListener(new TraceSizeSortListener());
 	}
 
 	@Override
@@ -389,11 +401,11 @@ public final class View implements Observer, ISubView {
 			final String totalDuration = View.this.propertiesModel.getTimeUnit().convert(call.getTotalDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
 
 			if (parent != null) {
-				item.setText(new String[] { call.getContainer(), componentName, operationString, "", minDuration, avgDuration, meanDuration, maxDuration,
-						totalDuration, });
+				item.setText(new String[] { call.getContainer(), componentName, operationString, "", Integer.toString(call.getStackDepth()), Integer.toString(call.getStackSize()),
+					minDuration, avgDuration, meanDuration, maxDuration, totalDuration, });
 			} else {
-				item.setText(new String[] { call.getContainer(), componentName, operationString, Integer.toString(call.getCalls()), minDuration, avgDuration,
-						meanDuration, maxDuration, totalDuration, });
+				item.setText(new String[] { call.getContainer(), componentName, operationString, Integer.toString(call.getStackDepth()), Integer.toString(call.getStackSize()),
+					Integer.toString(call.getCalls()), minDuration, avgDuration, meanDuration, maxDuration, totalDuration, });
 			}
 
 			if (call.isFailed()) {

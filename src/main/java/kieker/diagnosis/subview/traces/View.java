@@ -33,6 +33,8 @@ import kieker.diagnosis.subview.util.ContainerSortListener;
 import kieker.diagnosis.subview.util.IModel;
 import kieker.diagnosis.subview.util.NameConverter;
 import kieker.diagnosis.subview.util.OperationSortListener;
+import kieker.diagnosis.subview.util.TraceDepthSortListener;
+import kieker.diagnosis.subview.util.TraceSizeSortListener;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -117,6 +119,14 @@ public final class View implements Observer, ISubView {
 		final TreeColumn trclmnOperation = new TreeColumn(this.tree, SWT.NONE);
 		trclmnOperation.setWidth(100);
 		trclmnOperation.setText("Operation");
+
+		final TreeColumn trclmnTraceDepth = new TreeColumn(this.tree, SWT.RIGHT);
+		trclmnTraceDepth.setWidth(100);
+		trclmnTraceDepth.setText("Trace Depth");
+
+		final TreeColumn trclmnTraceSize = new TreeColumn(this.tree, SWT.RIGHT);
+		trclmnTraceSize.setWidth(100);
+		trclmnTraceSize.setText("Trace Size");
 
 		final TreeColumn trclmnDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnDuration.setWidth(100);
@@ -216,6 +226,8 @@ public final class View implements Observer, ISubView {
 		trclmnOperation.addSelectionListener(new OperationSortListener());
 		trclmnDuration.addSelectionListener(new DurationSortListener());
 		trclmnTraceId.addSelectionListener(new TraceIDSortListener());
+		trclmnTraceDepth.addSelectionListener(new TraceDepthSortListener());
+		trclmnTraceSize.addSelectionListener(new TraceSizeSortListener());
 	}
 
 	public Tree getTree() {
@@ -330,8 +342,8 @@ public final class View implements Observer, ISubView {
 			final long duration = View.this.propertiesModel.getTimeUnit().convert(call.getDuration(), View.this.modelProxy.getSourceTimeUnit());
 			final String durationString = duration + " " + shortTimeUnit;
 
-			item.setText(new String[] { call.getContainer(), componentName, operationString, durationString, String.format("%.1f%%", call.getPercent()),
-				traceID });
+			item.setText(new String[] { call.getContainer(), componentName, operationString, Integer.toString(call.getStackDepth()), Integer.toString(call.getStackSize()),
+				durationString, String.format("%.1f%%", call.getPercent()), traceID });
 
 			if (call.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
