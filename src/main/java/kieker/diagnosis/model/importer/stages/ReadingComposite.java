@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import kieker.common.record.IMonitoringRecord;
-import teetime.framework.CompositeStage;
+import teetime.framework.AbstractCompositeStage;
 import teetime.framework.OutputPort;
 import teetime.framework.Stage;
 import teetime.stage.InitialElementProducer;
@@ -33,7 +33,7 @@ import teetime.stage.io.filesystem.Dir2RecordsFilter;
  *
  * @author Nils Christian Ehmke
  */
-public final class ReadingComposite extends CompositeStage {
+public final class ReadingComposite extends AbstractCompositeStage {
 
 	private final InitialElementProducer<File> producer;
 	private final Dir2RecordsFilter reader;

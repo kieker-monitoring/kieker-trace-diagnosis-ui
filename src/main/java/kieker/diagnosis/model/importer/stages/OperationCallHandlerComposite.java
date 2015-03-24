@@ -23,14 +23,14 @@ import java.util.List;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
-import teetime.framework.CompositeStage;
+import teetime.framework.AbstractCompositeStage;
 import teetime.framework.InputPort;
 import teetime.framework.Stage;
 import teetime.stage.CollectorSink;
 import teetime.stage.basic.distributor.CopyByReferenceStrategy;
 import teetime.stage.basic.distributor.Distributor;
 
-public final class OperationCallHandlerComposite extends CompositeStage {
+public final class OperationCallHandlerComposite extends AbstractCompositeStage {
 
 	private final InputPort<Trace> inputPort;
 	private final OperationCallExtractor operationCallExtractor;

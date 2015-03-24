@@ -24,7 +24,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.diagnosis.domain.Trace;
-import teetime.framework.CompositeStage;
+import teetime.framework.AbstractCompositeStage;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
 import teetime.framework.Stage;
@@ -39,7 +39,7 @@ import teetime.stage.basic.merger.Merger;
  *
  * @author Nils Christian Ehmke
  */
-public final class TraceReconstructionComposite extends CompositeStage {
+public final class TraceReconstructionComposite extends AbstractCompositeStage {
 
 	private final MultipleInstanceOfFilter<IMonitoringRecord> typeFilter;
 	private final CollectorSink<Trace> tracesCollector;

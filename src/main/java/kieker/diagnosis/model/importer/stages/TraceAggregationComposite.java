@@ -22,7 +22,7 @@ import java.util.List;
 
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.Trace;
-import teetime.framework.CompositeStage;
+import teetime.framework.AbstractCompositeStage;
 import teetime.framework.InputPort;
 import teetime.framework.Stage;
 import teetime.stage.CollectorSink;
@@ -34,7 +34,7 @@ import teetime.stage.basic.distributor.Distributor;
  *
  * @author Nils Christian Ehmke
  */
-public final class TraceAggregationComposite extends CompositeStage {
+public final class TraceAggregationComposite extends AbstractCompositeStage {
 
 	private final TraceAggregator aggregator;
 
