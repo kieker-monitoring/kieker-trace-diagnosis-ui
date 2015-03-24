@@ -24,7 +24,6 @@ import java.util.Arrays;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
-import kieker.diagnosis.model.importer.stages.AggregatedTraceStatisticsDecorator;
 
 import org.junit.Test;
 
@@ -32,9 +31,9 @@ public final class AggregatedTraceStatisticsDecoratorTest {
 
 	@Test
 	public void minMaxMeanAndAvgCalculationForSingleCallShouldWork() throws Exception {
-		final OperationCall call1 = new OperationCall("", "", "", 43);
-		final OperationCall call2 = new OperationCall("", "", "", 44);
-		final OperationCall call3 = new OperationCall("", "", "", 45);
+		final OperationCall call1 = new OperationCall("", "", "", 43, 0);
+		final OperationCall call2 = new OperationCall("", "", "", 44, 0);
+		final OperationCall call3 = new OperationCall("", "", "", 45, 0);
 
 		call1.setDuration(15);
 		call2.setDuration(7);

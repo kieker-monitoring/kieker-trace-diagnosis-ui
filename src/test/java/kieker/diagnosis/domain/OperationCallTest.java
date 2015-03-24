@@ -19,7 +19,6 @@ package kieker.diagnosis.domain;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
-import kieker.diagnosis.domain.OperationCall;
 
 import org.junit.Test;
 
@@ -27,8 +26,8 @@ public final class OperationCallTest extends AbstractOperationCallTest<Operation
 
 	@Test
 	public void addingChildrenShouldUpdateTheParent() {
-		final OperationCall call = new OperationCall("", "", "", 42);
-		final OperationCall child = new OperationCall("", "", "", 42);
+		final OperationCall call = new OperationCall("", "", "", 42, 0);
+		final OperationCall child = new OperationCall("", "", "", 42, 0);
 
 		call.addChild(child);
 
@@ -37,16 +36,16 @@ public final class OperationCallTest extends AbstractOperationCallTest<Operation
 
 	@Test
 	public void equalsForDifferentTIDsShouldWork() {
-		final OperationCall fstCall = new OperationCall("container", "component", "operation", 42);
-		final OperationCall sndCall = new OperationCall("container", "component", "operation", 43);
+		final OperationCall fstCall = new OperationCall("container", "component", "operation", 42, 0);
+		final OperationCall sndCall = new OperationCall("container", "component", "operation", 43, 0);
 
 		assertThat(fstCall, is(equalTo(sndCall)));
 	}
 
 	@Test
 	public void equalsForDifferentDurationsShouldWork() {
-		final OperationCall fstCall = new OperationCall("container", "component", "operation", 42);
-		final OperationCall sndCall = new OperationCall("container", "component", "operation", 42);
+		final OperationCall fstCall = new OperationCall("container", "component", "operation", 42, 0);
+		final OperationCall sndCall = new OperationCall("container", "component", "operation", 42, 0);
 
 		fstCall.setDuration(100);
 		sndCall.setDuration(200);
@@ -56,7 +55,7 @@ public final class OperationCallTest extends AbstractOperationCallTest<Operation
 
 	@Override
 	protected OperationCall createOperationCall(final String container, final String component, final String operation) {
-		return new OperationCall(container, component, operation, -1);
+		return new OperationCall(container, component, operation, -1, 0);
 	}
 
 }

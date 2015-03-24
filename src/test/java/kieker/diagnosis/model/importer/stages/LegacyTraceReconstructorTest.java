@@ -132,7 +132,7 @@ public class LegacyTraceReconstructorTest {
 			final IPipeFactory pipeFactory = new SingleElementPipeFactory();
 			pipeFactory.create(producer.getOutputPort(), reader.getInputPort());
 			pipeFactory.create(reader.getOutputPort(), typeFilter.getInputPort());
-			pipeFactory.create(typeFilter.getOutputPort(), reconstructor.getInputPort());
+			pipeFactory.create(typeFilter.getMatchedOutputPort(), reconstructor.getInputPort());
 			pipeFactory.create(reconstructor.getOutputPort(), collector.getInputPort());
 
 			this.addThreadableStage(producer);

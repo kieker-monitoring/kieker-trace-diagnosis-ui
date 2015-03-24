@@ -18,8 +18,6 @@ package kieker.diagnosis.domain;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import kieker.diagnosis.domain.AggregatedOperationCall;
-import kieker.diagnosis.domain.OperationCall;
 
 import org.junit.Test;
 
@@ -27,7 +25,7 @@ public final class AggregatedOperationCallTest extends AbstractOperationCallTest
 
 	@Test
 	public void constructorShouldCopySingleOperationCall() {
-		final OperationCall call = new OperationCall("container", "component", "operation", 42);
+		final OperationCall call = new OperationCall("container", "component", "operation", 42, 0);
 		final AggregatedOperationCall aggregatedCall = new AggregatedOperationCall(call);
 
 		assertThat(aggregatedCall.getContainer(), is("container"));
@@ -37,9 +35,9 @@ public final class AggregatedOperationCallTest extends AbstractOperationCallTest
 
 	@Test
 	public void constructorShouldCopyNestedOperationCall() {
-		final OperationCall call = new OperationCall("container", "component", "operation", 42);
-		call.addChild(new OperationCall("container1", "component1", "operation1", 42));
-		call.addChild(new OperationCall("container2", "component2", "operation2", 42));
+		final OperationCall call = new OperationCall("container", "component", "operation", 42, 0);
+		call.addChild(new OperationCall("container1", "component1", "operation1", 42, 0));
+		call.addChild(new OperationCall("container2", "component2", "operation2", 42, 0));
 
 		final AggregatedOperationCall aggregatedCall = new AggregatedOperationCall(call);
 
@@ -58,7 +56,7 @@ public final class AggregatedOperationCallTest extends AbstractOperationCallTest
 
 	@Test
 	public void constructorShouldCopyStatistics() {
-		final OperationCall call = new OperationCall("container", "component", "operation", 42);
+		final OperationCall call = new OperationCall("container", "component", "operation", 42, 0);
 		call.setStackSize(1);
 
 		final AggregatedOperationCall aggregatedCall = new AggregatedOperationCall(call);
@@ -68,7 +66,7 @@ public final class AggregatedOperationCallTest extends AbstractOperationCallTest
 
 	@Override
 	protected AggregatedOperationCall createOperationCall(final String container, final String component, final String operation) {
-		return new AggregatedOperationCall(new OperationCall(container, component, operation, -1));
+		return new AggregatedOperationCall(new OperationCall(container, component, operation, -1, 0));
 	}
 
 }

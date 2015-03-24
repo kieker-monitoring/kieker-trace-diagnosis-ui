@@ -82,10 +82,11 @@ final class LegacyTraceReconstructor extends AbstractStage<OperationExecutionRec
 			int ess = 0;
 			for (final OperationExecutionRecord record : this.records) {
 				final OperationCall newCall = new OperationCall(record.getHostname(), this.extractComponent(record.getOperationSignature()), record.getOperationSignature(),
-						this.traceID);
+						this.traceID, record.getLoggingTimestamp());
 				newCall.setDuration(record.getTout() - record.getTin());
 
-				// There can be "jumps" in the ess, as the operation execution records do not log the return jumps of methods. Therefore multiple of these jumps can be hidden.
+				// There can be "jumps" in the ess, as the operation execution records do not log the return jumps of methods. Therefore multiple of these jumps can
+				// be hidden.
 				int currentEss = record.getEss();
 				while ((currentEss <= ess) && (ess != 0)) {
 					header = header.getParent();

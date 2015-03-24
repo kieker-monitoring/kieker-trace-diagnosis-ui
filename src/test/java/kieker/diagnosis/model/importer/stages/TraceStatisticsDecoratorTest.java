@@ -21,7 +21,6 @@ import static org.hamcrest.number.IsCloseTo.closeTo;
 import static org.junit.Assert.assertThat;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
-import kieker.diagnosis.model.importer.stages.TraceStatisticsDecorator;
 
 import org.junit.Test;
 
@@ -29,11 +28,11 @@ public final class TraceStatisticsDecoratorTest {
 
 	@Test
 	public void percentCalculationShouldWork() throws Exception {
-		final OperationCall rootCall = new OperationCall("", "", "", 42);
-		final OperationCall child1 = new OperationCall("", "", "", 42);
-		final OperationCall child2 = new OperationCall("", "", "", 42);
-		final OperationCall child3 = new OperationCall("", "", "", 42);
-		final OperationCall child4 = new OperationCall("", "", "", 42);
+		final OperationCall rootCall = new OperationCall("", "", "", 42, 0);
+		final OperationCall child1 = new OperationCall("", "", "", 42, 0);
+		final OperationCall child2 = new OperationCall("", "", "", 42, 0);
+		final OperationCall child3 = new OperationCall("", "", "", 42, 0);
+		final OperationCall child4 = new OperationCall("", "", "", 42, 0);
 
 		rootCall.setDuration(100);
 		child1.setDuration(70);
@@ -63,12 +62,12 @@ public final class TraceStatisticsDecoratorTest {
 
 	@Test
 	public void traceDepthCalculationInCommonCaseShouldWork() throws Exception {
-		final OperationCall rootCall = new OperationCall("", "", "", 1);
+		final OperationCall rootCall = new OperationCall("", "", "", 1, 0);
 
-		rootCall.addChild(new OperationCall("", "", "", 1));
-		rootCall.addChild(new OperationCall("", "", "", 1));
+		rootCall.addChild(new OperationCall("", "", "", 1, 0));
+		rootCall.addChild(new OperationCall("", "", "", 1, 0));
 
-		rootCall.getChildren().get(0).addChild(new OperationCall("", "", "", 1));
+		rootCall.getChildren().get(0).addChild(new OperationCall("", "", "", 1, 0));
 
 		final Trace trace = new Trace(rootCall, 1);
 
@@ -82,7 +81,7 @@ public final class TraceStatisticsDecoratorTest {
 
 	@Test
 	public void traceDepthCalculationForNoChildrenShouldWork() throws Exception {
-		final OperationCall rootCall = new OperationCall("", "", "", 1);
+		final OperationCall rootCall = new OperationCall("", "", "", 1, 0);
 
 		final Trace trace = new Trace(rootCall, 1);
 
@@ -96,12 +95,12 @@ public final class TraceStatisticsDecoratorTest {
 
 	@Test
 	public void traceSizeCalculationInCommonCaseShouldWork() throws Exception {
-		final OperationCall rootCall = new OperationCall("", "", "", 42);
+		final OperationCall rootCall = new OperationCall("", "", "", 42, 0);
 
-		final OperationCall child1 = new OperationCall("", "", "", 42);
-		final OperationCall child2 = new OperationCall("", "", "", 42);
-		final OperationCall child3 = new OperationCall("", "", "", 42);
-		final OperationCall child4 = new OperationCall("", "", "", 42);
+		final OperationCall child1 = new OperationCall("", "", "", 42, 0);
+		final OperationCall child2 = new OperationCall("", "", "", 42, 0);
+		final OperationCall child3 = new OperationCall("", "", "", 42, 0);
+		final OperationCall child4 = new OperationCall("", "", "", 42, 0);
 
 		rootCall.addChild(child1);
 		rootCall.addChild(child2);
@@ -121,7 +120,7 @@ public final class TraceStatisticsDecoratorTest {
 
 	@Test
 	public void traceSizeCalculationForNoChildrenShouldWork() throws Exception {
-		final OperationCall rootCall = new OperationCall("", "", "", 1);
+		final OperationCall rootCall = new OperationCall("", "", "", 1, 0);
 
 		final Trace trace = new Trace(rootCall, 1);
 

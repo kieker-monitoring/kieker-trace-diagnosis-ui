@@ -29,6 +29,7 @@ import kieker.diagnosis.subview.calls.util.ComponentSortListener;
 import kieker.diagnosis.subview.calls.util.ContainerSortListener;
 import kieker.diagnosis.subview.calls.util.DurationSortListener;
 import kieker.diagnosis.subview.calls.util.OperationSortListener;
+import kieker.diagnosis.subview.calls.util.TimestampSortListener;
 import kieker.diagnosis.subview.calls.util.TraceIDSortListener;
 import kieker.diagnosis.subview.util.IModel;
 import kieker.diagnosis.subview.util.NameConverter;
@@ -122,6 +123,10 @@ public final class View implements ISubView, Observer {
 		tblclmnTotalDuration.setWidth(100);
 		tblclmnTotalDuration.setText("Trace ID");
 
+		final TableColumn tblclmnTimestamp = new TableColumn(this.table, SWT.NONE);
+		tblclmnTimestamp.setWidth(100);
+		tblclmnTimestamp.setText("Timestamp");
+
 		this.detailComposite = new Composite(sashForm, SWT.BORDER);
 		this.detailComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.detailComposite.setLayout(new GridLayout(2, false));
@@ -181,6 +186,7 @@ public final class View implements ISubView, Observer {
 		tblclmnOperation.addSelectionListener(new OperationSortListener());
 		tblclmnMinimalDuration.addSelectionListener(new DurationSortListener());
 		tblclmnTotalDuration.addSelectionListener(new TraceIDSortListener());
+		tblclmnTimestamp.addSelectionListener(new TimestampSortListener());
 	}
 
 	@Override
@@ -276,7 +282,8 @@ public final class View implements ISubView, Observer {
 			final String shortTimeUnit = NameConverter.toShortTimeUnit(View.this.propertiesModel.getTimeUnit());
 			final long duration = View.this.propertiesModel.getTimeUnit().convert(call.getDuration(), View.this.modelProxy.getSourceTimeUnit());
 
-			item.setText(new String[] { call.getContainer(), componentName, operationString, Long.toString(duration) + " " + shortTimeUnit, Long.toString(call.getTraceID()) });
+			item.setText(new String[] { call.getContainer(), componentName, operationString, Long.toString(duration) + " " + shortTimeUnit, Long.toString(call.getTraceID()),
+				Long.toString(call.getTimestamp()) });
 
 			if (call.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);

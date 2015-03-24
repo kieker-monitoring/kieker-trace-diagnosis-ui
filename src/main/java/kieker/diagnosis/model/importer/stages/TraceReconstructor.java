@@ -31,8 +31,8 @@ import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 
 /**
- * Reconstruct traces based on the incoming instances of {@code IFlowRecord}. Currently only {@link TraceMetadata}, {@link BeforeOperationEvent} and {@link AfterOperationEvent}
- * instances are supported.
+ * Reconstruct traces based on the incoming instances of {@code IFlowRecord}. Currently only {@link TraceMetadata}, {@link BeforeOperationEvent} and
+ * {@link AfterOperationEvent} instances are supported.
  * 
  * @author Nils Christian Ehmke
  */
@@ -91,7 +91,7 @@ final class TraceReconstructor extends AbstractStage<IFlowRecord, Trace> {
 		private void handleBeforeOperationEventRecord(final BeforeOperationEvent record) {
 			this.stack.push(record);
 
-			final OperationCall newCall = new OperationCall(this.hostname, record.getClassSignature(), record.getOperationSignature(), this.traceID);
+			final OperationCall newCall = new OperationCall(this.hostname, record.getClassSignature(), record.getOperationSignature(), this.traceID, record.getLoggingTimestamp());
 			if (this.root == null) {
 				this.root = newCall;
 			} else {

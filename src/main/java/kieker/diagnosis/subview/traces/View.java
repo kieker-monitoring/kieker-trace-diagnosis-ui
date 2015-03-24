@@ -27,6 +27,7 @@ import kieker.diagnosis.model.PropertiesModel.ComponentNames;
 import kieker.diagnosis.model.PropertiesModel.OperationNames;
 import kieker.diagnosis.subview.ISubView;
 import kieker.diagnosis.subview.traces.util.DurationSortListener;
+import kieker.diagnosis.subview.traces.util.TimestampSortListener;
 import kieker.diagnosis.subview.traces.util.TraceIDSortListener;
 import kieker.diagnosis.subview.util.ComponentSortListener;
 import kieker.diagnosis.subview.util.ContainerSortListener;
@@ -136,9 +137,13 @@ public final class View implements Observer, ISubView {
 		trclmnPercent.setWidth(100);
 		trclmnPercent.setText("Percent");
 
-		final TreeColumn trclmnTraceId = new TreeColumn(this.tree, SWT.NONE);
+		final TreeColumn trclmnTraceId = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnTraceId.setWidth(100);
 		trclmnTraceId.setText("Trace ID");
+
+		final TreeColumn trclmnTimestamp = new TreeColumn(this.tree, SWT.NONE);
+		trclmnTimestamp.setWidth(100);
+		trclmnTimestamp.setText("Timestamp");
 
 		this.detailComposite = new Composite(sashForm, SWT.BORDER);
 		this.detailComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -228,6 +233,7 @@ public final class View implements Observer, ISubView {
 		trclmnTraceId.addSelectionListener(new TraceIDSortListener());
 		trclmnTraceDepth.addSelectionListener(new TraceDepthSortListener());
 		trclmnTraceSize.addSelectionListener(new TraceSizeSortListener());
+		trclmnTimestamp.addSelectionListener(new TimestampSortListener());
 	}
 
 	public Tree getTree() {
@@ -343,7 +349,7 @@ public final class View implements Observer, ISubView {
 			final String durationString = duration + " " + shortTimeUnit;
 
 			item.setText(new String[] { call.getContainer(), componentName, operationString, Integer.toString(call.getStackDepth()), Integer.toString(call.getStackSize()),
-				durationString, String.format("%.1f%%", call.getPercent()), traceID });
+				durationString, String.format("%.1f%%", call.getPercent()), traceID, Long.toString(call.getTimestamp()) });
 
 			if (call.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
