@@ -83,6 +83,7 @@ public final class SettingsDialog extends Dialog {
 
 		this.shlSettings.open();
 		this.shlSettings.layout();
+		this.shlSettings.pack();
 		final Display display = this.getParent().getDisplay();
 
 		final Rectangle screenSize = display.getPrimaryMonitor().getBounds();
