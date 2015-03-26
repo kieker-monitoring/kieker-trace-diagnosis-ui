@@ -48,10 +48,12 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 	}
 
 	public AbstractOperationCall(final String container, final String component, final String operation, final String failedCause) {
-		this.container = container;
-		this.component = component;
-		this.operation = operation;
-		this.failedCause = failedCause;
+		this.container = container.intern();
+		this.component = component.intern();
+		this.operation = operation.intern();
+		if (failedCause != null) {
+		  this.failedCause = failedCause.intern();
+		}
 	}
 
 	public void addChild(final T child) {
@@ -99,7 +101,10 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 	}
 
 	public final void setFailedCause(final String failedCause) {
-		this.failedCause = failedCause;
+	    this.failedCause = failedCause;
+	    if (this.failedCause != null) {
+	      this.failedCause =   this.failedCause.intern();
+	    }
 	}
 
 	public final boolean containsFailure() {

@@ -82,43 +82,43 @@ public final class DataModel extends Observable {
 	}
 
 	public List<Trace> getTracesCopy() {
-		return new ArrayList<>(this.traces);
+		return this.traces;
 	}
 
 	public List<Trace> getFailedTracesCopy() {
-		return new ArrayList<>(this.failedTraces);
+		return this.failedTraces;
 	}
 
 	public List<Trace> getFailureContainingTracesCopy() {
-		return new ArrayList<>(this.failureContainingTraces);
+		return this.failureContainingTraces;
 	}
 
 	public List<AggregatedTrace> getAggregatedTracesCopy() {
-		return new ArrayList<>(this.aggregatedTraces);
+		return this.aggregatedTraces;
 	}
 
 	public List<AggregatedTrace> getFailedAggregatedTracesCopy() {
-		return new ArrayList<>(this.failedAggregatedTraces);
+		return this.failedAggregatedTraces;
 	}
 
 	public List<AggregatedTrace> getFailureContainingAggregatedTracesCopy() {
-		return new ArrayList<>(this.failureAggregatedContainingTraces);
+		return this.failureAggregatedContainingTraces;
 	}
 
 	public List<OperationCall> getOperationCalls() {
-		return new ArrayList<>(this.operationCalls);
+		return this.operationCalls;
 	}
 
 	public List<OperationCall> getFailedOperationCalls() {
-		return new ArrayList<>(this.failedOperationCalls);
+		return this.failedOperationCalls;
 	}
 
 	public List<AggregatedOperationCall> getAggregatedOperationCalls() {
-		return new ArrayList<>(this.aggregatedOperationCalls);
+		return this.aggregatedOperationCalls;
 	}
 
 	public List<AggregatedOperationCall> getAggregatedFailedOperationCalls() {
-		return new ArrayList<>(this.aggregatedFailedOperationCalls);
+		return this.aggregatedFailedOperationCalls;
 	}
 
 	public TimeUnit getTimeUnit() {

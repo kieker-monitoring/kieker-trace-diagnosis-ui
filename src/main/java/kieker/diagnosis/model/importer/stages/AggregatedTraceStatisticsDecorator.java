@@ -19,6 +19,7 @@ package kieker.diagnosis.model.importer.stages;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
@@ -32,11 +33,16 @@ import kieker.diagnosis.domain.Trace;
  */
 public final class AggregatedTraceStatisticsDecorator extends AbstractStage<AggregatedTrace, AggregatedTrace> {
 
+  private long counter;
+  
 	@Override
 	public void execute(final AggregatedTrace trace) {
 		addNumberOfCalls(trace.getRootOperationCall(), trace.getTraces().size());
 		addDurationStatistics(trace);
 
+		// The references are no longer needed
+		trace.getTraces().clear();
+		
 		super.send(trace);
 	}
 
