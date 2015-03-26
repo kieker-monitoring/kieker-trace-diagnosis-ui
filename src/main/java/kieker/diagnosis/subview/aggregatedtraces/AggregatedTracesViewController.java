@@ -14,45 +14,41 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.mainview;
+package kieker.diagnosis.subview.aggregatedtraces;
 
-import org.eclipse.swt.graphics.Cursor;
+import kieker.diagnosis.domain.AggregatedOperationCall;
+import kieker.diagnosis.subview.ISubController;
+import kieker.diagnosis.subview.ISubView;
+
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * The model of the main view.
- * 
- * @author Nils Christian Ehmke
- */
-
 @Component
-public final class Model {
+public final class AggregatedTracesViewController implements ISubController, SelectionListener {
 
 	@Autowired
-	private View view;
+	private AggregatedTracesView view;
 
-	private Cursor cursor;
-	private String currentActiveSubViewKey;
+	@Autowired
+	private AggregatedTracesViewModel model;
 
-	public Cursor getCursor() {
-		return this.cursor;
+	@Override
+	public ISubView getView() {
+		return this.view;
 	}
 
-	public void setCursor(final Cursor cursor) {
-		this.cursor = cursor;
-
-		this.view.notifyAboutChangedCursor();
+	@Override
+	public void widgetSelected(final SelectionEvent e) {
+		if ((e.item != null) && (e.item.getData() instanceof AggregatedOperationCall)) {
+			this.model.setOperationCall((AggregatedOperationCall) e.item.getData());
+		}
 	}
 
-	public String getCurrentActiveSubViewKey() {
-		return this.currentActiveSubViewKey;
-	}
-
-	public void setCurrentActiveSubView(final String currentActiveSubViewKey) {
-		this.currentActiveSubViewKey = currentActiveSubViewKey;
-
-		this.view.notifyAboutChangedSubView();
+	@Override
+	public void widgetDefaultSelected(final SelectionEvent e) {
+		// Just implemented for the interface
 	}
 
 }

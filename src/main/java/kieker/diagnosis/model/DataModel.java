@@ -17,7 +17,6 @@
 package kieker.diagnosis.model;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
@@ -29,13 +28,17 @@ import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.model.importer.ImportAnalysisConfiguration;
+
+import org.springframework.stereotype.Repository;
+
 import teetime.framework.Analysis;
 
 /**
  * A container for data used within this application.
- *
+ * 
  * @author Nils Christian Ehmke
  */
+@Repository
 public final class DataModel extends Observable {
 
 	private List<Trace> traces = Collections.emptyList();

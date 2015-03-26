@@ -16,10 +16,6 @@
 
 package kieker.diagnosis.mainview;
 
-import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
-
 import kieker.diagnosis.mainview.dialog.SettingsDialog;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.subview.ISubView;
@@ -39,18 +35,26 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Widget;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * The main view of the application. For the most part it uses sub-views to show data.
- *
+ * 
  * @author Nils Christian Ehmke
  */
-public final class View implements Observer {
+@Component
+public final class View {
 
-	private final PropertiesModel propertiesModel;
-	private final Model model;
-	private final Controller controller;
-	private final Map<String, ISubView> subViews;
+	@Autowired
+	private PropertiesModel propertiesModel;
+
+	@Autowired
+	private Model model;
+
+	@Autowired
+	private Controller controller;
+
 	private Shell shell;
 	private Composite subViewComposite;
 	private StackLayout subViewLayout;
@@ -66,23 +70,10 @@ public final class View implements Observer {
 	private TreeItem trtmExplorer;
 	private TreeItem trtmTraces;
 	private TreeItem trtmAggregatedTraces;
-	private TreeItem trtmJustFailedTraces;
-	private TreeItem trtmJustTracesContaining;
-	private TreeItem trtmJustFailedAggTraces;
-	private TreeItem trtmJustAggTracesContaining;
 	private MenuItem mntmAbout;
 	private MenuItem mntmSettings;
 	private TreeItem trtmAggregatedOperationCalls;
-	private TreeItem trtmJustFailedAggregated;
 	private TreeItem trtmOperationCalls;
-	private TreeItem trtmJustFailedOperation;
-
-	public View(final Model mainViewModel, final Controller controller, final Map<String, ISubView> subViews, final PropertiesModel propertiesModel) {
-		this.model = mainViewModel;
-		this.propertiesModel = propertiesModel;
-		this.subViews = subViews;
-		this.controller = controller;
-	}
 
 	public void show() {
 		final Display display = Display.getDefault();
@@ -111,40 +102,16 @@ public final class View implements Observer {
 		return this.trtmTraces;
 	}
 
-	public TreeItem getTrtmJustFailedTraces() {
-		return this.trtmJustFailedTraces;
-	}
-
 	public TreeItem getTrtmAggregatedTraces() {
 		return this.trtmAggregatedTraces;
-	}
-
-	public TreeItem getTrtmJustTracesContaining() {
-		return this.trtmJustTracesContaining;
-	}
-
-	public TreeItem getTrtmJustFailedAggTraces() {
-		return this.trtmJustFailedAggTraces;
-	}
-
-	public TreeItem getTrtmJustAggTracesContaining() {
-		return this.trtmJustAggTracesContaining;
 	}
 
 	public Widget getTrtmAggregatedOperationCalls() {
 		return this.trtmAggregatedOperationCalls;
 	}
 
-	public Widget getTrtmFailedAggregatedOperationCalls() {
-		return this.trtmJustFailedAggregated;
-	}
-
 	public TreeItem getTrtmOperationCalls() {
 		return this.trtmOperationCalls;
-	}
-
-	public TreeItem getTrtmJustFailedOperation() {
-		return this.trtmJustFailedOperation;
 	}
 
 	public MenuItem getMntmExit() {
@@ -203,36 +170,19 @@ public final class View implements Observer {
 
 		this.trtmTraces = new TreeItem(this.trtmExplorer, SWT.NONE);
 		this.trtmTraces.setText("Traces");
-
-		this.trtmJustFailedTraces = new TreeItem(this.trtmTraces, SWT.NONE);
-		this.trtmJustFailedTraces.setText("Just Failed Traces");
-
-		this.trtmJustTracesContaining = new TreeItem(this.trtmTraces, SWT.NONE);
-		this.trtmJustTracesContaining.setText("Just Traces Containing Failures");
 		this.trtmTraces.setExpanded(true);
 
 		this.trtmAggregatedTraces = new TreeItem(this.trtmExplorer, 0);
 		this.trtmAggregatedTraces.setText("Aggregated Traces");
 
-		this.trtmJustFailedAggTraces = new TreeItem(this.trtmAggregatedTraces, SWT.NONE);
-		this.trtmJustFailedAggTraces.setText("Just Failed Traces");
-
-		this.trtmJustAggTracesContaining = new TreeItem(this.trtmAggregatedTraces, SWT.NONE);
-		this.trtmJustAggTracesContaining.setText("Just Traces Containing Failures");
 		this.trtmAggregatedTraces.setExpanded(true);
 
 		this.trtmOperationCalls = new TreeItem(this.trtmExplorer, SWT.NONE);
 		this.trtmOperationCalls.setText("Operation Calls");
 
-		this.trtmJustFailedOperation = new TreeItem(this.trtmOperationCalls, SWT.NONE);
-		this.trtmJustFailedOperation.setText("Just Failed Operation Calls");
-		this.trtmOperationCalls.setExpanded(true);
-
 		this.trtmAggregatedOperationCalls = new TreeItem(this.trtmExplorer, SWT.NONE);
 		this.trtmAggregatedOperationCalls.setText("Aggregated Operation Calls");
 
-		this.trtmJustFailedAggregated = new TreeItem(this.trtmAggregatedOperationCalls, SWT.NONE);
-		this.trtmJustFailedAggregated.setText("Just Failed Operation Calls");
 		this.trtmAggregatedOperationCalls.setExpanded(true);
 		this.trtmExplorer.setExpanded(true);
 
@@ -241,7 +191,7 @@ public final class View implements Observer {
 		this.subViewComposite.setLayout(this.subViewLayout);
 		sashForm.setWeights(new int[] { 1, 4 });
 
-		for (final ISubView subview : this.subViews.values()) {
+		for (final ISubView subview : this.controller.getSubViews().values()) {
 			subview.createComposite(this.subViewComposite);
 		}
 
@@ -278,8 +228,6 @@ public final class View implements Observer {
 	}
 
 	private void addLogic() {
-		this.model.addObserver(this);
-
 		this.tree.addSelectionListener(this.controller);
 
 		this.mntmExit.addSelectionListener(this.controller);
@@ -289,21 +237,22 @@ public final class View implements Observer {
 		this.mntmSettings.addSelectionListener(this.controller);
 	}
 
-	@Override
-	public void update(final Observable observable, final Object obj) {
-		if (observable == this.model) {
-			this.handleChangedSubView();
-			this.handleChangedCursor();
-		}
+	public void notifyAboutChangedCursor() {
+		this.handleChangedCursor();
+	}
+
+	public void notifyAboutChangedSubView() {
+		this.handleChangedSubView();
 	}
 
 	private void handleChangedSubView() {
 		final String subViewKey = this.model.getCurrentActiveSubViewKey();
 
-		final ISubView subViewToShow = this.subViews.get(subViewKey);
+		final ISubView subViewToShow = this.controller.getSubViews().get(subViewKey);
 		final Composite compositeToShow = (subViewToShow != null) ? subViewToShow.getComposite() : null; // NOPMD (null assigment)
 
 		this.subViewLayout.topControl = compositeToShow;
+
 		this.subViewComposite.layout();
 	}
 

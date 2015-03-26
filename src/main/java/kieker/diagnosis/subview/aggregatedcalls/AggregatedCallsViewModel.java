@@ -14,25 +14,44 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.subview.traces;
+package kieker.diagnosis.subview.aggregatedcalls;
 
-import java.util.Observable;
+import kieker.diagnosis.domain.AggregatedOperationCall;
 
-import kieker.diagnosis.domain.OperationCall;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public final class Model extends Observable {
+@Component
+public final class AggregatedCallsViewModel {
 
-	private OperationCall operationCall;
+	@Autowired
+	private AggregatedCallsView view;
 
-	public OperationCall getCurrentActiveCall() {
+	private Filter filter = Filter.NONE;
+	private AggregatedOperationCall operationCall;
+
+	public Filter getFilter() {
+		return this.filter;
+	}
+
+	public void setFilter(final Filter filter) {
+		this.filter = filter;
+
+		this.view.notifyAboutChangedFilter();
+	}
+
+	public AggregatedOperationCall getOperationCall() {
 		return this.operationCall;
 	}
 
-	public void setCurrentActiveCall(final OperationCall operationCall) {
+	public void setOperationCall(final AggregatedOperationCall operationCall) {
 		this.operationCall = operationCall;
 
-		this.setChanged();
-		this.notifyObservers();
+		this.view.notifyAboutChangedOperationCall();
+	}
+
+	public static enum Filter {
+		NONE, JUST_FAILED
 	}
 
 }

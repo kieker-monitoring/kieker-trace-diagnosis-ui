@@ -16,23 +16,42 @@
 
 package kieker.diagnosis.subview.calls;
 
-import java.util.Observable;
-
 import kieker.diagnosis.domain.OperationCall;
 
-public final class Model extends Observable {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
+public final class CallsViewModel {
+
+	@Autowired
+	private CallsView view;
+
+	private Filter filter = Filter.NONE;
 	private OperationCall operationCall;
 
-	public OperationCall getCurrentActiveCall() {
+	public Filter getFilter() {
+		return this.filter;
+	}
+
+	public void setFilter(final Filter filter) {
+		this.filter = filter;
+
+		this.view.notifyAboutChangedFilter();
+	}
+
+	public OperationCall getOperationCall() {
 		return this.operationCall;
 	}
 
-	public void setCurrentActiveCall(final OperationCall operationCall) {
+	public void setOperationCall(final OperationCall operationCall) {
 		this.operationCall = operationCall;
 
-		this.setChanged();
-		this.notifyObservers();
+		this.view.notifyAboutChangedOperationCall();
+	}
+
+	public static enum Filter {
+		NONE, JUST_FAILED
 	}
 
 }

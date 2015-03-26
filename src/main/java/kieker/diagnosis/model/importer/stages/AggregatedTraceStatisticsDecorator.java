@@ -19,7 +19,6 @@ package kieker.diagnosis.model.importer.stages;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
@@ -27,22 +26,21 @@ import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 
 /**
- * This class is a {@code TeeTime} stage adding statistics (via the corresponding setters) to instances of {@link AggregatedTrace}. The traces are forwarded to the output port.
- *
+ * This class is a {@code TeeTime} stage adding statistics (via the corresponding setters) to instances of {@link AggregatedTrace}. The traces are forwarded to the
+ * output port.
+ * 
  * @author Nils Christian Ehmke
  */
 public final class AggregatedTraceStatisticsDecorator extends AbstractStage<AggregatedTrace, AggregatedTrace> {
 
-  private long counter;
-  
 	@Override
 	public void execute(final AggregatedTrace trace) {
-		addNumberOfCalls(trace.getRootOperationCall(), trace.getTraces().size());
-		addDurationStatistics(trace);
+		AggregatedTraceStatisticsDecorator.addNumberOfCalls(trace.getRootOperationCall(), trace.getTraces().size());
+		AggregatedTraceStatisticsDecorator.addDurationStatistics(trace);
 
 		// The references are no longer needed
 		trace.getTraces().clear();
-		
+
 		super.send(trace);
 	}
 
@@ -50,7 +48,7 @@ public final class AggregatedTraceStatisticsDecorator extends AbstractStage<Aggr
 		call.setCalls(calls);
 
 		for (final AggregatedOperationCall child : call.getChildren()) {
-			addNumberOfCalls(child, calls);
+			AggregatedTraceStatisticsDecorator.addNumberOfCalls(child, calls);
 		}
 	}
 

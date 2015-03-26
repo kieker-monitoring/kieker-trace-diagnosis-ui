@@ -16,12 +16,16 @@
 
 package kieker.diagnosis.subview.aggregatedtraces;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.annotation.PostConstruct;
+
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
+import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.model.PropertiesModel.ComponentNames;
 import kieker.diagnosis.model.PropertiesModel.OperationNames;
@@ -34,7 +38,6 @@ import kieker.diagnosis.subview.aggregatedtraces.util.MinDurationSortListener;
 import kieker.diagnosis.subview.aggregatedtraces.util.TotalDurationSortListener;
 import kieker.diagnosis.subview.util.ComponentSortListener;
 import kieker.diagnosis.subview.util.ContainerSortListener;
-import kieker.diagnosis.subview.util.IModel;
 import kieker.diagnosis.subview.util.NameConverter;
 import kieker.diagnosis.subview.util.OperationSortListener;
 import kieker.diagnosis.subview.util.TraceDepthSortListener;
@@ -55,13 +58,26 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.wb.swt.SWTResourceManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public final class View implements Observer, ISubView {
+@Component
+public final class AggregatedTracesView implements Observer, ISubView {
 
 	private static final String N_A = "N/A";
-	private final Model aggregatedTracesSubViewModel;
-	private final SelectionListener controller;
-	private final IModel<AggregatedTrace> modelProxy;
+
+	@Autowired
+	private AggregatedTracesViewModel model;
+
+	@Autowired
+	private SelectionListener controller;
+
+	@Autowired
+	private DataModel dataModel;
+
+	@Autowired
+	private PropertiesModel propertiesModel;
+
 	private Composite composite;
 	private Tree tree;
 	private Composite detailComposite;
@@ -77,20 +93,14 @@ public final class View implements Observer, ISubView {
 	private Label lblTraceSizeDisplay;
 	private Label lblExecutionContainerDisplay;
 	private Label lblFailed;
-	private final PropertiesModel propertiesModel;
 	private Label lblTotalDurationDisplay;
 	private Composite statusBar;
 	private Label lblTraceEquivalence;
 
-	public View(final IModel<AggregatedTrace> model, final Model aggregatedTracesSubViewModel, final PropertiesModel propertiesModel, final SelectionListener controller) {
-		this.controller = controller;
-		this.modelProxy = model;
-		this.propertiesModel = propertiesModel;
-		this.aggregatedTracesSubViewModel = aggregatedTracesSubViewModel;
-
-		model.addObserver(this);
-		aggregatedTracesSubViewModel.addObserver(this);
-		propertiesModel.addObserver(this);
+	@PostConstruct
+	public void initialize() {
+		this.dataModel.addObserver(this);
+		this.propertiesModel.addObserver(this);
 	}
 
 	/**
@@ -170,7 +180,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblExecutionContainerDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblExecutionContainerDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblExecutionContainerDisplay.setText(View.N_A);
+		this.lblExecutionContainerDisplay.setText(AggregatedTracesView.N_A);
 
 		final Label lblComponent = new Label(this.detailComposite, SWT.NONE);
 		lblComponent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -178,7 +188,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblComponentDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblComponentDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblComponentDisplay.setText(View.N_A);
+		this.lblComponentDisplay.setText(AggregatedTracesView.N_A);
 
 		final Label lblOperation = new Label(this.detailComposite, SWT.NONE);
 		lblOperation.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -186,7 +196,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblOperationDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblOperationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblOperationDisplay.setText(View.N_A);
+		this.lblOperationDisplay.setText(AggregatedTracesView.N_A);
 
 		final Label lblNumberOfCalls = new Label(this.detailComposite, SWT.NONE);
 		lblNumberOfCalls.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -194,7 +204,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblNumberOfCallsDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblNumberOfCallsDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblNumberOfCallsDisplay.setText(View.N_A);
+		this.lblNumberOfCallsDisplay.setText(AggregatedTracesView.N_A);
 
 		final Label lblMinimalDuration = new Label(this.detailComposite, SWT.NONE);
 		lblMinimalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -202,7 +212,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblMinimalDurationDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblMinimalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblMinimalDurationDisplay.setText(View.N_A);
+		this.lblMinimalDurationDisplay.setText(AggregatedTracesView.N_A);
 
 		final Label lblAverageDuration = new Label(this.detailComposite, SWT.NONE);
 		lblAverageDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -210,7 +220,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblAverageDurationDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblAverageDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblAverageDurationDisplay.setText(View.N_A);
+		this.lblAverageDurationDisplay.setText(AggregatedTracesView.N_A);
 
 		final Label lblMeanDuration = new Label(this.detailComposite, SWT.NONE);
 		lblMeanDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -218,7 +228,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblMeanDurationDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblMeanDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblMeanDurationDisplay.setText(View.N_A);
+		this.lblMeanDurationDisplay.setText(AggregatedTracesView.N_A);
 
 		final Label lblMaximalDuration = new Label(this.detailComposite, SWT.NONE);
 		lblMaximalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -226,7 +236,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblMaximalDurationDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblMaximalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblMaximalDurationDisplay.setText(View.N_A);
+		this.lblMaximalDurationDisplay.setText(AggregatedTracesView.N_A);
 
 		final Label lblTotalDuration = new Label(this.detailComposite, SWT.NONE);
 		lblTotalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -234,7 +244,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblTotalDurationDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblTotalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblTotalDurationDisplay.setText(View.N_A);
+		this.lblTotalDurationDisplay.setText(AggregatedTracesView.N_A);
 
 		this.lblFailed = new Label(this.detailComposite, SWT.NONE);
 		this.lblFailed.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -242,7 +252,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblFailedDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblFailedDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblFailedDisplay.setText(View.N_A);
+		this.lblFailedDisplay.setText(AggregatedTracesView.N_A);
 
 		final Label lblTraceDepth = new Label(this.detailComposite, SWT.NONE);
 		lblTraceDepth.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -250,7 +260,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblTraceDepthDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblTraceDepthDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblTraceDepthDisplay.setText(View.N_A);
+		this.lblTraceDepthDisplay.setText(AggregatedTracesView.N_A);
 
 		final Label lblTraceSize = new Label(this.detailComposite, SWT.NONE);
 		lblTraceSize.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -258,7 +268,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblTraceSizeDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblTraceSizeDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblTraceSizeDisplay.setText(View.N_A);
+		this.lblTraceSizeDisplay.setText(AggregatedTracesView.N_A);
 		sashForm.setWeights(new int[] { 2, 1 });
 
 		this.statusBar = new Composite(this.composite, SWT.NONE);
@@ -290,25 +300,58 @@ public final class View implements Observer, ISubView {
 
 	@Override
 	public void update(final Observable observable, final Object obj) {
-		if (observable == this.modelProxy) {
+		if (observable == this.dataModel) {
 			this.updateTree();
 			this.updateStatusBar();
-		}
-		if (observable == this.aggregatedTracesSubViewModel) {
-			this.updateDetailComposite();
 		}
 		if (observable == this.propertiesModel) {
 			this.clearTree();
 		}
 	}
 
+	public void notifyAboutChangedFilter() {
+		this.updateTree();
+		this.updateStatusBar();
+		this.updateDetailComposite();
+	}
+
+	public void notifyAboutChangedOperationCall() {
+		this.updateDetailComposite();
+	}
+
 	private void updateStatusBar() {
-		this.lblTraceEquivalence.setText(this.modelProxy.getContent().size() + " Trace Equivalence Class(es)");
+		switch (this.model.getFilter()) {
+		case JUST_FAILED:
+			this.lblTraceEquivalence.setText(this.dataModel.getFailedTracesCopy().size() + "Failed Trace Equivalence Class(es)");
+			break;
+		case JUST_FAILURE_CONTAINING:
+			this.lblTraceEquivalence.setText(this.dataModel.getFailureContainingTracesCopy().size() + "Failure Containing Trace Equivalence Class(es)");
+			break;
+		case NONE:
+			this.lblTraceEquivalence.setText(this.dataModel.getTracesCopy().size() + " Trace Equivalence Class(es)");
+			break;
+		}
+
 		this.statusBar.getParent().layout();
 	}
 
 	private void updateTree() {
-		final List<AggregatedTrace> traces = this.modelProxy.getContent();
+		final List<AggregatedTrace> traces;
+
+		switch (this.model.getFilter()) {
+		case JUST_FAILED:
+			traces = this.dataModel.getFailedAggregatedTracesCopy();
+			break;
+		case JUST_FAILURE_CONTAINING:
+			traces = this.dataModel.getFailureContainingAggregatedTracesCopy();
+			break;
+		case NONE:
+			traces = this.dataModel.getAggregatedTracesCopy();
+			break;
+		default:
+			traces = Collections.emptyList();
+			break;
+		}
 
 		this.tree.setData(traces);
 		this.tree.setItemCount(traces.size());
@@ -325,39 +368,40 @@ public final class View implements Observer, ISubView {
 	}
 
 	private void updateDetailComposite() {
-		final AggregatedOperationCall call = this.aggregatedTracesSubViewModel.getCurrentActiveCall();
+		final AggregatedOperationCall call = this.model.getOperationCall();
 
-		final String shortTimeUnit = NameConverter.toShortTimeUnit(this.propertiesModel.getTimeUnit());
+		if (call != null) {
+			final String shortTimeUnit = NameConverter.toShortTimeUnit(this.propertiesModel.getTimeUnit());
 
-		final String minDuration = this.propertiesModel.getTimeUnit().convert(call.getMinDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
-		final String maxDuration = this.propertiesModel.getTimeUnit().convert(call.getMaxDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
-		final String meanDuration = this.propertiesModel.getTimeUnit().convert(call.getMedianDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
-		final String avgDuration = this.propertiesModel.getTimeUnit().convert(call.getMeanDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
-		final String totalDuration = this.propertiesModel.getTimeUnit().convert(call.getTotalDuration(), this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+			final String minDuration = this.propertiesModel.getTimeUnit().convert(call.getMinDuration(), this.dataModel.getTimeUnit()) + " " + shortTimeUnit;
+			final String maxDuration = this.propertiesModel.getTimeUnit().convert(call.getMaxDuration(), this.dataModel.getTimeUnit()) + " " + shortTimeUnit;
+			final String meanDuration = this.propertiesModel.getTimeUnit().convert(call.getMedianDuration(), this.dataModel.getTimeUnit()) + " " + shortTimeUnit;
+			final String avgDuration = this.propertiesModel.getTimeUnit().convert(call.getMeanDuration(), this.dataModel.getTimeUnit()) + " " + shortTimeUnit;
+			final String totalDuration = this.propertiesModel.getTimeUnit().convert(call.getTotalDuration(), this.dataModel.getTimeUnit()) + " " + shortTimeUnit;
 
-		this.lblMinimalDurationDisplay.setText(minDuration);
-		this.lblMaximalDurationDisplay.setText(maxDuration);
-		this.lblAverageDurationDisplay.setText(avgDuration);
-		this.lblMeanDurationDisplay.setText(meanDuration);
-		this.lblTotalDurationDisplay.setText(totalDuration);
+			this.lblMinimalDurationDisplay.setText(minDuration);
+			this.lblMaximalDurationDisplay.setText(maxDuration);
+			this.lblAverageDurationDisplay.setText(avgDuration);
+			this.lblMeanDurationDisplay.setText(meanDuration);
+			this.lblTotalDurationDisplay.setText(totalDuration);
 
-		this.lblExecutionContainerDisplay.setText(call.getContainer());
-		this.lblComponentDisplay.setText(call.getComponent());
-		this.lblOperationDisplay.setText(call.getOperation());
-		this.lblTraceDepthDisplay.setText(Integer.toString(call.getStackDepth()));
-		this.lblTraceSizeDisplay.setText(Integer.toString(call.getStackSize()));
-		this.lblNumberOfCallsDisplay.setText(Integer.toString(call.getCalls()));
+			this.lblExecutionContainerDisplay.setText(call.getContainer());
+			this.lblComponentDisplay.setText(call.getComponent());
+			this.lblOperationDisplay.setText(call.getOperation());
+			this.lblTraceDepthDisplay.setText(Integer.toString(call.getStackDepth()));
+			this.lblTraceSizeDisplay.setText(Integer.toString(call.getStackSize()));
+			this.lblNumberOfCallsDisplay.setText(Integer.toString(call.getCalls()));
 
-		if (call.isFailed()) {
-			this.lblFailedDisplay.setText("Yes (" + call.getFailedCause() + ")");
-			this.lblFailedDisplay.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
-			this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
-		} else {
-			this.lblFailedDisplay.setText("No");
-			this.lblFailedDisplay.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-			this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+			if (call.isFailed()) {
+				this.lblFailedDisplay.setText("Yes (" + call.getFailedCause() + ")");
+				this.lblFailedDisplay.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+				this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+			} else {
+				this.lblFailedDisplay.setText("No");
+				this.lblFailedDisplay.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+				this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+			}
 		}
-
 		this.detailComposite.layout();
 	}
 
@@ -384,21 +428,26 @@ public final class View implements Observer, ISubView {
 			}
 
 			String componentName = call.getComponent();
-			if (View.this.propertiesModel.getComponentNames() == ComponentNames.SHORT) {
+			if (AggregatedTracesView.this.propertiesModel.getComponentNames() == ComponentNames.SHORT) {
 				componentName = NameConverter.toShortComponentName(componentName);
 			}
 			String operationString = call.getOperation();
-			if (View.this.propertiesModel.getOperationNames() == OperationNames.SHORT) {
+			if (AggregatedTracesView.this.propertiesModel.getOperationNames() == OperationNames.SHORT) {
 				operationString = NameConverter.toShortOperationName(operationString);
 			}
 
-			final String shortTimeUnit = NameConverter.toShortTimeUnit(View.this.propertiesModel.getTimeUnit());
+			final String shortTimeUnit = NameConverter.toShortTimeUnit(AggregatedTracesView.this.propertiesModel.getTimeUnit());
 
-			final String minDuration = View.this.propertiesModel.getTimeUnit().convert(call.getMinDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
-			final String maxDuration = View.this.propertiesModel.getTimeUnit().convert(call.getMaxDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
-			final String meanDuration = View.this.propertiesModel.getTimeUnit().convert(call.getMedianDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
-			final String avgDuration = View.this.propertiesModel.getTimeUnit().convert(call.getMeanDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
-			final String totalDuration = View.this.propertiesModel.getTimeUnit().convert(call.getTotalDuration(), View.this.modelProxy.getSourceTimeUnit()) + " " + shortTimeUnit;
+			final String minDuration = AggregatedTracesView.this.propertiesModel.getTimeUnit().convert(call.getMinDuration(), AggregatedTracesView.this.dataModel.getTimeUnit())
+					+ " " + shortTimeUnit;
+			final String maxDuration = AggregatedTracesView.this.propertiesModel.getTimeUnit().convert(call.getMaxDuration(), AggregatedTracesView.this.dataModel.getTimeUnit())
+					+ " " + shortTimeUnit;
+			final String meanDuration = AggregatedTracesView.this.propertiesModel.getTimeUnit()
+					.convert(call.getMedianDuration(), AggregatedTracesView.this.dataModel.getTimeUnit()) + " " + shortTimeUnit;
+			final String avgDuration = AggregatedTracesView.this.propertiesModel.getTimeUnit().convert(call.getMeanDuration(), AggregatedTracesView.this.dataModel.getTimeUnit())
+					+ " " + shortTimeUnit;
+			final String totalDuration = AggregatedTracesView.this.propertiesModel.getTimeUnit()
+					.convert(call.getTotalDuration(), AggregatedTracesView.this.dataModel.getTimeUnit()) + " " + shortTimeUnit;
 
 			if (parent != null) {
 				item.setText(new String[] { call.getContainer(), componentName, operationString, "", Integer.toString(call.getStackDepth()), Integer.toString(call.getStackSize()),

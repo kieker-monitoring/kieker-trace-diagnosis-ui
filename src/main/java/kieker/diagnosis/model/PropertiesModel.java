@@ -22,6 +22,9 @@ import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public final class PropertiesModel extends Observable {
 
 	private static final String KEY_TIMEUNIT = "timeunit";

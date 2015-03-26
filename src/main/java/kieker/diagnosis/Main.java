@@ -18,9 +18,11 @@ package kieker.diagnosis;
 
 import kieker.diagnosis.mainview.Controller;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 /**
  * Contains the main method of this application.
- *
+ * 
  * @author Nils Christian Ehmke
  */
 public final class Main {
@@ -29,13 +31,19 @@ public final class Main {
 
 	/**
 	 * The main method of this application.
-	 *
+	 * 
 	 * @param args
 	 *            The command line arguments. They have no effect.
 	 */
 	public static void main(final String[] args) {
-		final Controller controller = new Controller();
-		controller.showView();
+		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+			context.scan("kieker.diagnosis");
+			context.refresh();
+
+			final Controller controller = context.getBean(Controller.class);
+			controller.showView();
+		}
+
 	}
 
 }

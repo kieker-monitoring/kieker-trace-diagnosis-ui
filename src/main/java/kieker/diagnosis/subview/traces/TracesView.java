@@ -16,12 +16,16 @@
 
 package kieker.diagnosis.subview.traces; // NOPMD (to many imports)
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.annotation.PostConstruct;
+
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
+import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.model.PropertiesModel.ComponentNames;
 import kieker.diagnosis.model.PropertiesModel.OperationNames;
@@ -31,7 +35,6 @@ import kieker.diagnosis.subview.traces.util.TimestampSortListener;
 import kieker.diagnosis.subview.traces.util.TraceIDSortListener;
 import kieker.diagnosis.subview.util.ComponentSortListener;
 import kieker.diagnosis.subview.util.ContainerSortListener;
-import kieker.diagnosis.subview.util.IModel;
 import kieker.diagnosis.subview.util.NameConverter;
 import kieker.diagnosis.subview.util.OperationSortListener;
 import kieker.diagnosis.subview.util.TraceDepthSortListener;
@@ -39,7 +42,6 @@ import kieker.diagnosis.subview.util.TraceSizeSortListener;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -52,13 +54,26 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.wb.swt.SWTResourceManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public final class View implements Observer, ISubView {
+@Component
+public final class TracesView implements Observer, ISubView {
 
 	private static final String N_A = "N/A";
-	private final IModel<Trace> modelProxy;
-	private final Model tracesSubViewModel;
-	private final SelectionListener controller;
+
+	@Autowired
+	private DataModel dataModel;
+
+	@Autowired
+	private TracesViewModel model;
+
+	@Autowired
+	private TracesViewController controller;
+
+	@Autowired
+	private PropertiesModel propertiesModel;
+
 	private Composite composite;
 	private Tree tree;
 	private Composite detailComposite;
@@ -71,19 +86,13 @@ public final class View implements Observer, ISubView {
 	private Label lblComponentDisplay;
 	private Label lblExecutionContainerDisplay;
 	private Label lblFailed;
-	private final PropertiesModel propertiesModel;
 	private Label lblTraces;
 	private Composite statusBar;
 
-	public View(final IModel<Trace> model, final Model tracesSubViewModel, final PropertiesModel propertiesModel, final SelectionListener controller) {
-		this.modelProxy = model;
-		this.propertiesModel = propertiesModel;
-		this.tracesSubViewModel = tracesSubViewModel;
-		this.controller = controller;
-
-		model.addObserver(this);
-		tracesSubViewModel.addObserver(this);
-		propertiesModel.addObserver(this);
+	@PostConstruct
+	public void initialize() {
+		this.dataModel.addObserver(this);
+		this.propertiesModel.addObserver(this);
 	}
 
 	/**
@@ -155,7 +164,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblExecutionContainerDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblExecutionContainerDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblExecutionContainerDisplay.setText(View.N_A);
+		this.lblExecutionContainerDisplay.setText(TracesView.N_A);
 
 		final Label lblComponent = new Label(this.detailComposite, SWT.NONE);
 		lblComponent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -163,7 +172,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblComponentDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblComponentDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblComponentDisplay.setText(View.N_A);
+		this.lblComponentDisplay.setText(TracesView.N_A);
 
 		final Label lblOperation = new Label(this.detailComposite, SWT.NONE);
 		lblOperation.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -171,7 +180,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblOperationDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblOperationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblOperationDisplay.setText(View.N_A);
+		this.lblOperationDisplay.setText(TracesView.N_A);
 
 		final Label lblDuration = new Label(this.detailComposite, SWT.NONE);
 		lblDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -179,7 +188,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblDurationDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblDurationDisplay.setText(View.N_A);
+		this.lblDurationDisplay.setText(TracesView.N_A);
 
 		final Label lblTraceId = new Label(this.detailComposite, SWT.NONE);
 		lblTraceId.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -188,7 +197,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblTraceIdDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblTraceIdDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblTraceIdDisplay.setText(View.N_A);
+		this.lblTraceIdDisplay.setText(TracesView.N_A);
 
 		this.lblFailed = new Label(this.detailComposite, SWT.NONE);
 		this.lblFailed.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -196,7 +205,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblFailedDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblFailedDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblFailedDisplay.setText(View.N_A);
+		this.lblFailedDisplay.setText(TracesView.N_A);
 
 		final Label lblTraceDepth = new Label(this.detailComposite, SWT.NONE);
 		lblTraceDepth.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -204,7 +213,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblTraceDepthDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblTraceDepthDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblTraceDepthDisplay.setText(View.N_A);
+		this.lblTraceDepthDisplay.setText(TracesView.N_A);
 
 		final Label lblTraceSize = new Label(this.detailComposite, SWT.NONE);
 		lblTraceSize.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -212,7 +221,7 @@ public final class View implements Observer, ISubView {
 
 		this.lblTraceSizeDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblTraceSizeDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblTraceSizeDisplay.setText(View.N_A);
+		this.lblTraceSizeDisplay.setText(TracesView.N_A);
 
 		sashForm.setWeights(new int[] { 2, 1 });
 
@@ -247,25 +256,58 @@ public final class View implements Observer, ISubView {
 
 	@Override
 	public void update(final Observable observable, final Object obj) {
-		if (observable == this.modelProxy) {
+		if (observable == this.dataModel) {
 			this.updateTree();
 			this.updateStatusBar();
-		}
-		if (observable == this.tracesSubViewModel) {
-			this.updateDetailComposite();
 		}
 		if (observable == this.propertiesModel) {
 			this.clearTree();
 		}
 	}
 
+	public void notifyAboutChangedFilter() {
+		this.updateTree();
+		this.updateStatusBar();
+		this.updateDetailComposite();
+	}
+
+	public void notifyAboutChangedOperationCall() {
+		this.updateDetailComposite();
+	}
+
 	private void updateStatusBar() {
-		this.lblTraces.setText(this.modelProxy.getContent().size() + " Trace(s)");
+		switch (this.model.getFilter()) {
+		case JUST_FAILED:
+			this.lblTraces.setText(this.dataModel.getFailedTracesCopy().size() + "Failed Trace(s)");
+			break;
+		case JUST_FAILURE_CONTAINING:
+			this.lblTraces.setText(this.dataModel.getFailureContainingTracesCopy().size() + "Failure Containing Trace(s)");
+			break;
+		case NONE:
+			this.lblTraces.setText(this.dataModel.getTracesCopy().size() + " Trace(s)");
+			break;
+		}
+
 		this.statusBar.getParent().layout();
 	}
 
 	private void updateTree() {
-		final List<Trace> records = this.modelProxy.getContent();
+		final List<Trace> records;
+		switch (this.model.getFilter()) {
+		case JUST_FAILED:
+			records = this.dataModel.getFailedTracesCopy();
+			break;
+		case JUST_FAILURE_CONTAINING:
+			records = this.dataModel.getFailureContainingTracesCopy();
+			break;
+		case NONE:
+			records = this.dataModel.getTracesCopy();
+			break;
+		default:
+			records = Collections.emptyList();
+			break;
+
+		}
 
 		this.tree.setData(records);
 		this.tree.setItemCount(records.size());
@@ -282,31 +324,32 @@ public final class View implements Observer, ISubView {
 	}
 
 	private void updateDetailComposite() {
-		final OperationCall call = this.tracesSubViewModel.getCurrentActiveCall();
+		final OperationCall call = this.model.getOperationCall();
 
-		final String shortTimeUnit = NameConverter.toShortTimeUnit(View.this.propertiesModel.getTimeUnit());
-		final long duration = this.propertiesModel.getTimeUnit().convert(call.getDuration(), this.modelProxy.getSourceTimeUnit());
-		final String durationString = duration + " " + shortTimeUnit;
+		if (call != null) {
+			final String shortTimeUnit = NameConverter.toShortTimeUnit(TracesView.this.propertiesModel.getTimeUnit());
+			final long duration = this.propertiesModel.getTimeUnit().convert(call.getDuration(), this.dataModel.getTimeUnit());
+			final String durationString = duration + " " + shortTimeUnit;
 
-		this.lblTraceIdDisplay.setText(Long.toString(call.getTraceID()));
-		this.lblDurationDisplay.setText(durationString);
+			this.lblTraceIdDisplay.setText(Long.toString(call.getTraceID()));
+			this.lblDurationDisplay.setText(durationString);
 
-		this.lblExecutionContainerDisplay.setText(call.getContainer());
-		this.lblComponentDisplay.setText(call.getComponent());
-		this.lblOperationDisplay.setText(call.getOperation());
-		this.lblTraceDepthDisplay.setText(Integer.toString(call.getStackDepth()));
-		this.lblTraceSizeDisplay.setText(Integer.toString(call.getStackSize()));
+			this.lblExecutionContainerDisplay.setText(call.getContainer());
+			this.lblComponentDisplay.setText(call.getComponent());
+			this.lblOperationDisplay.setText(call.getOperation());
+			this.lblTraceDepthDisplay.setText(Integer.toString(call.getStackDepth()));
+			this.lblTraceSizeDisplay.setText(Integer.toString(call.getStackSize()));
 
-		if (call.isFailed()) {
-			this.lblFailedDisplay.setText("Yes (" + call.getFailedCause() + ")");
-			this.lblFailedDisplay.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
-			this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
-		} else {
-			this.lblFailedDisplay.setText("No");
-			this.lblFailedDisplay.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-			this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+			if (call.isFailed()) {
+				this.lblFailedDisplay.setText("Yes (" + call.getFailedCause() + ")");
+				this.lblFailedDisplay.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+				this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+			} else {
+				this.lblFailedDisplay.setText("No");
+				this.lblFailedDisplay.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+				this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+			}
 		}
-
 		this.detailComposite.layout();
 	}
 
@@ -336,16 +379,16 @@ public final class View implements Observer, ISubView {
 			}
 
 			String componentName = call.getComponent();
-			if (View.this.propertiesModel.getComponentNames() == ComponentNames.SHORT) {
+			if (TracesView.this.propertiesModel.getComponentNames() == ComponentNames.SHORT) {
 				componentName = NameConverter.toShortComponentName(componentName);
 			}
 			String operationString = call.getOperation();
-			if (View.this.propertiesModel.getOperationNames() == OperationNames.SHORT) {
+			if (TracesView.this.propertiesModel.getOperationNames() == OperationNames.SHORT) {
 				operationString = NameConverter.toShortOperationName(operationString);
 			}
 
-			final String shortTimeUnit = NameConverter.toShortTimeUnit(View.this.propertiesModel.getTimeUnit());
-			final long duration = View.this.propertiesModel.getTimeUnit().convert(call.getDuration(), View.this.modelProxy.getSourceTimeUnit());
+			final String shortTimeUnit = NameConverter.toShortTimeUnit(TracesView.this.propertiesModel.getTimeUnit());
+			final long duration = TracesView.this.propertiesModel.getTimeUnit().convert(call.getDuration(), TracesView.this.dataModel.getTimeUnit());
 			final String durationString = duration + " " + shortTimeUnit;
 
 			item.setText(new String[] { call.getContainer(), componentName, operationString, Integer.toString(call.getStackDepth()), Integer.toString(call.getStackSize()),

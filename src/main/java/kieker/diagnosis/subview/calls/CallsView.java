@@ -20,18 +20,21 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.annotation.PostConstruct;
+
 import kieker.diagnosis.domain.OperationCall;
+import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.model.PropertiesModel.ComponentNames;
 import kieker.diagnosis.model.PropertiesModel.OperationNames;
 import kieker.diagnosis.subview.ISubView;
+import kieker.diagnosis.subview.calls.CallsViewModel.Filter;
 import kieker.diagnosis.subview.calls.util.ComponentSortListener;
 import kieker.diagnosis.subview.calls.util.ContainerSortListener;
 import kieker.diagnosis.subview.calls.util.DurationSortListener;
 import kieker.diagnosis.subview.calls.util.OperationSortListener;
 import kieker.diagnosis.subview.calls.util.TimestampSortListener;
 import kieker.diagnosis.subview.calls.util.TraceIDSortListener;
-import kieker.diagnosis.subview.util.IModel;
 import kieker.diagnosis.subview.util.NameConverter;
 
 import org.eclipse.swt.SWT;
@@ -48,19 +51,31 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.wb.swt.SWTResourceManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public final class View implements ISubView, Observer {
+@Component
+public final class CallsView implements ISubView, Observer {
 
 	private static final String N_A = "N/A";
+
+	@Autowired
+	private DataModel dataModel;
+
+	@Autowired
+	private CallsViewModel model;
+
+	@Autowired
+	private PropertiesModel propertiesModel;
+
+	@Autowired
+	private CallsViewController controller;
+
 	private Composite composite;
 	private Composite detailComposite;
 	private Composite statusBar;
 	private Label lblTraceEquivalence;
 	private Table table;
-	private final IModel<OperationCall> modelProxy;
-	private final PropertiesModel propertiesModel;
-	private final Model model;
-	private final Controller controller;
 	private Label lblFailedDisplay;
 	private Label lblMinimalDurationDisplay;
 	private Label lblOperationDisplay;
@@ -68,15 +83,10 @@ public final class View implements ISubView, Observer {
 	private Label lblExecutionContainerDisplay;
 	private Label lblFailed;
 
-	public View(final IModel<OperationCall> modelProxy, final Model model, final PropertiesModel propertiesModel, final Controller controller) {
-		this.modelProxy = modelProxy;
-		this.model = model;
-		this.propertiesModel = propertiesModel;
-		this.controller = controller;
-
-		modelProxy.addObserver(this);
-		model.addObserver(this);
-		propertiesModel.addObserver(this);
+	@PostConstruct
+	public void initialize() {
+		this.dataModel.addObserver(this);
+		this.propertiesModel.addObserver(this);
 	}
 
 	/**
@@ -137,7 +147,7 @@ public final class View implements ISubView, Observer {
 
 		this.lblExecutionContainerDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblExecutionContainerDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblExecutionContainerDisplay.setText(View.N_A);
+		this.lblExecutionContainerDisplay.setText(CallsView.N_A);
 
 		final Label lblComponent = new Label(this.detailComposite, SWT.NONE);
 		lblComponent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -145,7 +155,7 @@ public final class View implements ISubView, Observer {
 
 		this.lblComponentDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblComponentDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblComponentDisplay.setText(View.N_A);
+		this.lblComponentDisplay.setText(CallsView.N_A);
 
 		final Label lblOperation = new Label(this.detailComposite, SWT.NONE);
 		lblOperation.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -153,7 +163,7 @@ public final class View implements ISubView, Observer {
 
 		this.lblOperationDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblOperationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblOperationDisplay.setText(View.N_A);
+		this.lblOperationDisplay.setText(CallsView.N_A);
 
 		final Label lblMinimalDuration = new Label(this.detailComposite, SWT.NONE);
 		lblMinimalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -161,7 +171,7 @@ public final class View implements ISubView, Observer {
 
 		this.lblMinimalDurationDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblMinimalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblMinimalDurationDisplay.setText(View.N_A);
+		this.lblMinimalDurationDisplay.setText(CallsView.N_A);
 
 		this.lblFailed = new Label(this.detailComposite, SWT.NONE);
 		this.lblFailed.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -169,7 +179,7 @@ public final class View implements ISubView, Observer {
 
 		this.lblFailedDisplay = new Label(this.detailComposite, SWT.NONE);
 		this.lblFailedDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblFailedDisplay.setText(View.N_A);
+		this.lblFailedDisplay.setText(CallsView.N_A);
 		sashForm.setWeights(new int[] { 2, 1 });
 
 		this.statusBar = new Composite(this.composite, SWT.NONE);
@@ -196,51 +206,68 @@ public final class View implements ISubView, Observer {
 
 	@Override
 	public void update(final Observable observable, final Object obj) {
-		if (observable == this.modelProxy) {
+		if (observable == this.dataModel) {
 			this.updateTable();
 			this.updateStatusBar();
-		}
-		if (observable == this.model) {
-			this.updateDetailComposite();
 		}
 		if (observable == this.propertiesModel) {
 			this.clearTable();
 		}
 	}
 
+	public void notifyAboutChangedFilter() {
+		this.updateTable();
+		this.updateStatusBar();
+		this.updateDetailComposite();
+	}
+
+	public void notifyAboutChangedOperationCall() {
+		this.updateDetailComposite();
+	}
+
 	private void updateDetailComposite() {
-		final OperationCall call = this.model.getCurrentActiveCall();
+		final OperationCall call = this.model.getOperationCall();
 
-		final String shortTimeUnit = NameConverter.toShortTimeUnit(this.propertiesModel.getTimeUnit());
-		final long duration = this.propertiesModel.getTimeUnit().convert(call.getDuration(), this.modelProxy.getSourceTimeUnit());
-		final String durationString = duration + " " + shortTimeUnit;
+		if (call != null) {
+			final String shortTimeUnit = NameConverter.toShortTimeUnit(this.propertiesModel.getTimeUnit());
+			final long duration = this.propertiesModel.getTimeUnit().convert(call.getDuration(), this.dataModel.getTimeUnit());
+			final String durationString = duration + " " + shortTimeUnit;
 
-		this.lblMinimalDurationDisplay.setText(durationString);
+			this.lblMinimalDurationDisplay.setText(durationString);
 
-		this.lblExecutionContainerDisplay.setText(call.getContainer());
-		this.lblComponentDisplay.setText(call.getComponent());
-		this.lblOperationDisplay.setText(call.getOperation());
+			this.lblExecutionContainerDisplay.setText(call.getContainer());
+			this.lblComponentDisplay.setText(call.getComponent());
+			this.lblOperationDisplay.setText(call.getOperation());
 
-		if (call.isFailed()) {
-			this.lblFailedDisplay.setText("Yes (" + call.getFailedCause() + ")");
-			this.lblFailedDisplay.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
-			this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
-		} else {
-			this.lblFailedDisplay.setText("No");
-			this.lblFailedDisplay.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-			this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+			if (call.isFailed()) {
+				this.lblFailedDisplay.setText("Yes (" + call.getFailedCause() + ")");
+				this.lblFailedDisplay.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+				this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+			} else {
+				this.lblFailedDisplay.setText("No");
+				this.lblFailedDisplay.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+				this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+			}
 		}
-
 		this.detailComposite.layout();
 	}
 
 	private void updateStatusBar() {
-		this.lblTraceEquivalence.setText(this.modelProxy.getContent().size() + " Operation Call(s)");
+		if (this.model.getFilter() == Filter.NONE) {
+			this.lblTraceEquivalence.setText(this.dataModel.getOperationCalls().size() + " Operation Call(s)");
+		} else {
+			this.lblTraceEquivalence.setText(this.dataModel.getFailedOperationCalls().size() + " Failed Operation Call(s)");
+		}
 		this.statusBar.getParent().layout();
 	}
 
 	private void updateTable() {
-		final List<OperationCall> calls = this.modelProxy.getContent();
+		final List<OperationCall> calls;
+		if (this.model.getFilter() == Filter.NONE) {
+			calls = this.dataModel.getOperationCalls();
+		} else {
+			calls = this.dataModel.getFailedOperationCalls();
+		}
 
 		this.table.setData(calls);
 		this.table.setItemCount(calls.size());
@@ -271,16 +298,16 @@ public final class View implements ISubView, Observer {
 
 			// Get the data to display
 			String componentName = call.getComponent();
-			if (View.this.propertiesModel.getComponentNames() == ComponentNames.SHORT) {
+			if (CallsView.this.propertiesModel.getComponentNames() == ComponentNames.SHORT) {
 				componentName = NameConverter.toShortComponentName(componentName);
 			}
 			String operationString = call.getOperation();
-			if (View.this.propertiesModel.getOperationNames() == OperationNames.SHORT) {
+			if (CallsView.this.propertiesModel.getOperationNames() == OperationNames.SHORT) {
 				operationString = NameConverter.toShortOperationName(operationString);
 			}
 
-			final String shortTimeUnit = NameConverter.toShortTimeUnit(View.this.propertiesModel.getTimeUnit());
-			final long duration = View.this.propertiesModel.getTimeUnit().convert(call.getDuration(), View.this.modelProxy.getSourceTimeUnit());
+			final String shortTimeUnit = NameConverter.toShortTimeUnit(CallsView.this.propertiesModel.getTimeUnit());
+			final long duration = CallsView.this.propertiesModel.getTimeUnit().convert(call.getDuration(), CallsView.this.dataModel.getTimeUnit());
 
 			item.setText(new String[] { call.getContainer(), componentName, operationString, Long.toString(duration) + " " + shortTimeUnit, Long.toString(call.getTraceID()),
 				Long.toString(call.getTimestamp()) });

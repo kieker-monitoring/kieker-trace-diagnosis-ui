@@ -22,65 +22,64 @@ import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
+import javax.annotation.PostConstruct;
+
 import kieker.diagnosis.mainview.dialog.SettingsDialog;
 import kieker.diagnosis.model.DataModel;
-import kieker.diagnosis.model.PropertiesModel;
-import kieker.diagnosis.subview.Filter;
-import kieker.diagnosis.subview.ISubController;
 import kieker.diagnosis.subview.ISubView;
+import kieker.diagnosis.subview.aggregatedcalls.AggregatedCallsViewController;
+import kieker.diagnosis.subview.aggregatedtraces.AggregatedTracesViewController;
+import kieker.diagnosis.subview.calls.CallsViewController;
+import kieker.diagnosis.subview.traces.TracesViewController;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Display;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * The main controller of this application. It is responsible for creating top level models, further sub-controllers, and for creating and controlling the
  * application's main view. The sub-views and their corresponding models are created by the sub-controllers.
- *
+ * 
  * @author Nils Christian Ehmke
  */
+@Component
 public final class Controller implements SelectionListener {
 
 	private static final Logger LOGGER = Logger.getGlobal();
 
-	private final View mainView;
-	private final DataModel dataModel;
-	private final Model mainViewModel;
+	@Autowired
+	private DataModel dataModel;
 
-	public Controller() {
-		// Create the top models
-		this.dataModel = new DataModel();
-		final PropertiesModel propertiesModel = new PropertiesModel();
+	@Autowired
+	private AggregatedTracesViewController aggregatedTracesViewController;
 
-		// Create the sub-controllers
-		final ISubController subViewController1 = new kieker.diagnosis.subview.aggregatedtraces.Controller(Filter.NONE, this.dataModel, propertiesModel);
-		final ISubController subViewController2 = new kieker.diagnosis.subview.traces.Controller(Filter.JUST_FAILED, this.dataModel, propertiesModel);
-		final ISubController subViewController3 = new kieker.diagnosis.subview.traces.Controller(Filter.NONE, this.dataModel, propertiesModel);
-		final ISubController subViewController4 = new kieker.diagnosis.subview.traces.Controller(Filter.JUST_FAILURE_CONTAINING, this.dataModel, propertiesModel);
-		final ISubController subViewController5 = new kieker.diagnosis.subview.aggregatedtraces.Controller(Filter.JUST_FAILED, this.dataModel, propertiesModel);
-		final ISubController subViewController6 = new kieker.diagnosis.subview.aggregatedtraces.Controller(Filter.JUST_FAILURE_CONTAINING, this.dataModel, propertiesModel);
-		final ISubController subViewController7 = new kieker.diagnosis.subview.aggregatedcalls.Controller(Filter.NONE, this.dataModel, propertiesModel);
-		final ISubController subViewController8 = new kieker.diagnosis.subview.aggregatedcalls.Controller(Filter.JUST_FAILED, this.dataModel, propertiesModel);
-		final ISubController subViewController9 = new kieker.diagnosis.subview.calls.Controller(Filter.NONE, this.dataModel, propertiesModel);
-		final ISubController subViewController10 = new kieker.diagnosis.subview.calls.Controller(Filter.JUST_FAILED, this.dataModel, propertiesModel);
+	@Autowired
+	private CallsViewController callsViewController;
 
-		// Get the sub-views from the controllers
-		final Map<String, ISubView> subViews = new HashMap<>();
-		subViews.put(SubView.AGGREGATED_TRACES_SUB_VIEW.name(), subViewController1.getView());
-		subViews.put(SubView.FAILED_TRACES_SUB_VIEW.name(), subViewController2.getView());
-		subViews.put(SubView.TRACES_SUB_VIEW.name(), subViewController3.getView());
-		subViews.put(SubView.FAILURE_CONTAINING_TRACES_SUB_VIEW.name(), subViewController4.getView());
-		subViews.put(SubView.FAILED_AGGREGATED_TRACES_SUB_VIEW.name(), subViewController5.getView());
-		subViews.put(SubView.FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW.name(), subViewController6.getView());
-		subViews.put(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW.name(), subViewController7.getView());
-		subViews.put(SubView.FAILED_AGGREGATED_OPERATION_CALLS_SUB_VIEW.name(), subViewController8.getView());
-		subViews.put(SubView.OPERATION_CALLS_SUB_VIEW.name(), subViewController9.getView());
-		subViews.put(SubView.FAILED_OPERATION_CALLS_SUB_VIEW.name(), subViewController10.getView());
+	@Autowired
+	private TracesViewController tracesViewController;
 
-		// Create the main model and the main view
-		this.mainViewModel = new Model();
-		this.mainView = new View(this.mainViewModel, this, subViews, propertiesModel);
+	@Autowired
+	private AggregatedCallsViewController aggregatedCallsViewController;
+
+	@Autowired
+	private View mainView;
+
+	@Autowired
+	private Model mainViewModel;
+
+	private Map<String, ISubView> subViews;
+
+	@PostConstruct
+	public void initialize() {
+		this.subViews = new HashMap<>();
+		this.subViews.put(SubView.AGGREGATED_TRACES_SUB_VIEW.name(), this.aggregatedTracesViewController.getView());
+		this.subViews.put(SubView.TRACES_SUB_VIEW.name(), this.tracesViewController.getView());
+		this.subViews.put(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW.name(), this.aggregatedCallsViewController.getView());
+		this.subViews.put(SubView.OPERATION_CALLS_SUB_VIEW.name(), this.callsViewController.getView());
 	}
 
 	public void showView() {
@@ -139,29 +138,11 @@ public final class Controller implements SelectionListener {
 		if (e.item == this.mainView.getTrtmAggregatedTraces()) {
 			this.mainViewModel.setCurrentActiveSubView(SubView.AGGREGATED_TRACES_SUB_VIEW.name());
 		}
-		if (e.item == this.mainView.getTrtmJustFailedTraces()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.FAILED_TRACES_SUB_VIEW.name());
-		}
-		if (e.item == this.mainView.getTrtmJustTracesContaining()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.FAILURE_CONTAINING_TRACES_SUB_VIEW.name());
-		}
-		if (e.item == this.mainView.getTrtmJustFailedAggTraces()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.FAILED_AGGREGATED_TRACES_SUB_VIEW.name());
-		}
-		if (e.item == this.mainView.getTrtmJustAggTracesContaining()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW.name());
-		}
 		if (e.item == this.mainView.getTrtmAggregatedOperationCalls()) {
 			this.mainViewModel.setCurrentActiveSubView(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW.name());
 		}
-		if (e.item == this.mainView.getTrtmFailedAggregatedOperationCalls()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.FAILED_AGGREGATED_OPERATION_CALLS_SUB_VIEW.name());
-		}
 		if (e.item == this.mainView.getTrtmOperationCalls()) {
 			this.mainViewModel.setCurrentActiveSubView(SubView.OPERATION_CALLS_SUB_VIEW.name());
-		}
-		if (e.item == this.mainView.getTrtmJustFailedOperation()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.FAILED_OPERATION_CALLS_SUB_VIEW.name());
 		}
 	}
 
@@ -170,10 +151,12 @@ public final class Controller implements SelectionListener {
 		// Nothing to do here. This method is just required by the interface.
 	}
 
+	public Map<String, ISubView> getSubViews() {
+		return this.subViews;
+	}
+
 	public enum SubView {
-		TRACES_SUB_VIEW, FAILED_TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, FAILURE_CONTAINING_TRACES_SUB_VIEW, FAILED_AGGREGATED_TRACES_SUB_VIEW,
-		FAILURE_CONTAINING_AGGREGATED_TRACES_SUB_VIEW, AGGREGATED_OPERATION_CALLS_SUB_VIEW, FAILED_AGGREGATED_OPERATION_CALLS_SUB_VIEW, OPERATION_CALLS_SUB_VIEW,
-		FAILED_OPERATION_CALLS_SUB_VIEW,
+		TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, AGGREGATED_OPERATION_CALLS_SUB_VIEW, OPERATION_CALLS_SUB_VIEW,
 	}
 
 }
