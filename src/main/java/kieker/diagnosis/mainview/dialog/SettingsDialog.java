@@ -19,6 +19,7 @@ package kieker.diagnosis.mainview.dialog;
 import java.util.concurrent.TimeUnit;
 
 import kieker.diagnosis.common.Mapper;
+import kieker.diagnosis.common.Messages;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.model.PropertiesModel.ComponentNames;
 import kieker.diagnosis.model.PropertiesModel.OperationNames;
@@ -38,9 +39,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
-import swing2swt.layout.FlowLayout;
-import kieker.diagnosis.common.Messages;
-
 public final class SettingsDialog extends Dialog {
 
 	private final PropertiesModel model;
@@ -54,7 +52,8 @@ public final class SettingsDialog extends Dialog {
 
 	private Mapper<TimeUnit, Integer> timeUnitMapper;
 
-	public SettingsDialog(final Shell parent, final int style, final PropertiesModel model) {
+	public SettingsDialog(final Shell parent, final int style,
+			final PropertiesModel model) {
 		super(parent, style);
 
 		this.model = model;
@@ -84,7 +83,9 @@ public final class SettingsDialog extends Dialog {
 		final Display display = this.getParent().getDisplay();
 
 		final Rectangle screenSize = display.getPrimaryMonitor().getBounds();
-		this.shlSettings.setLocation((screenSize.width - this.shlSettings.getBounds().width) / 2, (screenSize.height - this.shlSettings.getBounds().height) / 2);
+		this.shlSettings.setLocation(
+				(screenSize.width - this.shlSettings.getBounds().width) / 2,
+				(screenSize.height - this.shlSettings.getBounds().height) / 2);
 
 		while (!this.shlSettings.isDisposed()) {
 			if (!display.readAndDispatch()) {
@@ -95,23 +96,34 @@ public final class SettingsDialog extends Dialog {
 	}
 
 	private void loadSettings() {
-		this.comboBoxTimeUnit.select(this.timeUnitMapper.resolve(this.model.getTimeUnit()));
-		this.comboBoxOperationNames.select(this.model.getOperationNames() == OperationNames.SHORT ? 0 : 1);
-		this.comboBoxComponentNames.select(this.model.getComponentNames() == ComponentNames.SHORT ? 0 : 1);
+		this.comboBoxTimeUnit.select(this.timeUnitMapper.resolve(this.model
+				.getTimeUnit()));
+		this.comboBoxOperationNames
+				.select(this.model.getOperationNames() == OperationNames.SHORT ? 0
+						: 1);
+		this.comboBoxComponentNames
+				.select(this.model.getComponentNames() == ComponentNames.SHORT ? 0
+						: 1);
 	}
 
 	private void saveSettings() {
 		this.model.startModification();
 
-		this.model.setTimeUnit(this.timeUnitMapper.invertedResolve(this.comboBoxTimeUnit.getSelectionIndex()));
-		this.model.setOperationNames(this.comboBoxOperationNames.getSelectionIndex() == 0 ? OperationNames.SHORT : OperationNames.LONG);
-		this.model.setComponentNames(this.comboBoxComponentNames.getSelectionIndex() == 0 ? ComponentNames.SHORT : ComponentNames.LONG);
+		this.model.setTimeUnit(this.timeUnitMapper
+				.invertedResolve(this.comboBoxTimeUnit.getSelectionIndex()));
+		this.model.setOperationNames(this.comboBoxOperationNames
+				.getSelectionIndex() == 0 ? OperationNames.SHORT
+				: OperationNames.LONG);
+		this.model.setComponentNames(this.comboBoxComponentNames
+				.getSelectionIndex() == 0 ? ComponentNames.SHORT
+				: ComponentNames.LONG);
 
 		this.model.commitModification();
 	}
 
 	private void createContents() {
-		this.shlSettings = new Shell(this.getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+		this.shlSettings = new Shell(this.getParent(), SWT.DIALOG_TRIM
+				| SWT.APPLICATION_MODAL);
 		this.shlSettings.setText(Messages.getString("settings")); //$NON-NLS-1$
 		this.shlSettings.setLayout(new GridLayout(1, false));
 
@@ -123,29 +135,40 @@ public final class SettingsDialog extends Dialog {
 		lblTimeUnit.setText(Messages.getString("timeUnit")); //$NON-NLS-1$
 
 		this.comboBoxTimeUnit = new Combo(grpAppearance, SWT.READ_ONLY);
-		this.comboBoxTimeUnit.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		this.comboBoxTimeUnit.setItems(new String[] { "Nanoseconds (ns)", "Microseconds (\u00B5s)", "Milliseconds (ms)", "Seconds (s)", "Minutes (m)", "Hours (h)", "Days (d)" });
+		this.comboBoxTimeUnit.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+				true, false, 1, 1));
+		this.comboBoxTimeUnit.setItems(new String[] { "Nanoseconds (ns)",
+				"Microseconds (\u00B5s)", "Milliseconds (ms)", "Seconds (s)",
+				"Minutes (m)", "Hours (h)", "Days (d)" });
 		this.comboBoxTimeUnit.select(0);
 
 		final Label lblOperationNames = new Label(grpAppearance, SWT.NONE);
 		lblOperationNames.setText(Messages.getString("operations")); //$NON-NLS-1$
 
 		this.comboBoxOperationNames = new Combo(grpAppearance, SWT.READ_ONLY);
-		this.comboBoxOperationNames.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		this.comboBoxOperationNames.setItems(new String[] { "getBook(...)", "public void kieker.examples.bookstore.Catalog.getBook(boolean)" });
+		this.comboBoxOperationNames.setLayoutData(new GridData(SWT.FILL,
+				SWT.CENTER, true, false, 1, 1));
+		this.comboBoxOperationNames
+				.setItems(new String[] { "getBook(...)",
+						"public void kieker.examples.bookstore.Catalog.getBook(boolean)" });
 		this.comboBoxOperationNames.select(0);
 
 		final Label lblComponentNames = new Label(grpAppearance, SWT.NONE);
 		lblComponentNames.setText(Messages.getString("components")); //$NON-NLS-1$
 
 		this.comboBoxComponentNames = new Combo(grpAppearance, SWT.READ_ONLY);
-		this.comboBoxComponentNames.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		this.comboBoxComponentNames.setItems(new String[] { "Catalog", "kieker.examples.bookstore.Catalog" });
+		this.comboBoxComponentNames.setLayoutData(new GridData(SWT.FILL,
+				SWT.CENTER, true, false, 1, 1));
+		this.comboBoxComponentNames.setItems(new String[] { "Catalog",
+				"kieker.examples.bookstore.Catalog" });
 		this.comboBoxComponentNames.select(0);
 
 		final Composite composite = new Composite(this.shlSettings, SWT.NONE);
-		composite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
-		composite.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		composite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true,
+				false, 1, 1));
+		final GridLayout gl_composite = new GridLayout();
+		gl_composite.numColumns = 2;
+		composite.setLayout(gl_composite);
 
 		final Button btnOkay = new Button(composite, SWT.NONE);
 		btnOkay.addSelectionListener(new SelectionAdapter() {
