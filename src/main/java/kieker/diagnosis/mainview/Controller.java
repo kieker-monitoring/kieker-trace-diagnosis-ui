@@ -25,12 +25,12 @@ import javax.annotation.PostConstruct;
 import kieker.diagnosis.common.Mapper;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.mainview.dialog.SettingsDialog;
+import kieker.diagnosis.mainview.subview.ISubView;
+import kieker.diagnosis.mainview.subview.aggregatedcalls.AggregatedCallsViewController;
+import kieker.diagnosis.mainview.subview.aggregatedtraces.AggregatedTracesViewController;
+import kieker.diagnosis.mainview.subview.calls.CallsViewController;
+import kieker.diagnosis.mainview.subview.traces.TracesViewController;
 import kieker.diagnosis.model.DataModel;
-import kieker.diagnosis.subview.ISubView;
-import kieker.diagnosis.subview.aggregatedcalls.AggregatedCallsViewController;
-import kieker.diagnosis.subview.aggregatedtraces.AggregatedTracesViewController;
-import kieker.diagnosis.subview.calls.CallsViewController;
-import kieker.diagnosis.subview.traces.TracesViewController;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;

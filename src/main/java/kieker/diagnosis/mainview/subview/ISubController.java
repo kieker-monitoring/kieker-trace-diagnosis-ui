@@ -14,46 +14,15 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.mainview;
-
-import kieker.diagnosis.mainview.subview.ISubView;
-
-import org.eclipse.swt.graphics.Cursor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+package kieker.diagnosis.mainview.subview;
 
 /**
- * The model of the main view.
- * 
+ * A commons interface for all sub-controllers to reduce dependencies.
+ *
  * @author Nils Christian Ehmke
  */
-@Component
-public final class Model {
+public interface ISubController {
 
-	@Autowired
-	private View view;
-
-	private Cursor cursor;
-	private ISubView activeSubView;
-
-	public Cursor getCursor() {
-		return this.cursor;
-	}
-
-	public void setCursor(final Cursor cursor) {
-		this.cursor = cursor;
-
-		this.view.notifyAboutChangedCursor();
-	}
-
-	public ISubView getActiveSubView() {
-		return this.activeSubView;
-	}
-
-	public void setActiveSubView(final ISubView activeSubView) {
-		this.activeSubView = activeSubView;
-
-		this.view.notifyAboutChangedSubView();
-	}
+	public ISubView getView();
 
 }

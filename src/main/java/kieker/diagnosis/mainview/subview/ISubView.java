@@ -14,46 +14,19 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.mainview;
+package kieker.diagnosis.mainview.subview;
 
-import kieker.diagnosis.mainview.subview.ISubView;
-
-import org.eclipse.swt.graphics.Cursor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.eclipse.swt.widgets.Composite;
 
 /**
- * The model of the main view.
- * 
+ * An interface for classes representing sub-views within the main view.
+ *
  * @author Nils Christian Ehmke
  */
-@Component
-public final class Model {
+public interface ISubView {
 
-	@Autowired
-	private View view;
+	public void createComposite(final Composite parent);
 
-	private Cursor cursor;
-	private ISubView activeSubView;
-
-	public Cursor getCursor() {
-		return this.cursor;
-	}
-
-	public void setCursor(final Cursor cursor) {
-		this.cursor = cursor;
-
-		this.view.notifyAboutChangedCursor();
-	}
-
-	public ISubView getActiveSubView() {
-		return this.activeSubView;
-	}
-
-	public void setActiveSubView(final ISubView activeSubView) {
-		this.activeSubView = activeSubView;
-
-		this.view.notifyAboutChangedSubView();
-	}
+	public Composite getComposite();
 
 }

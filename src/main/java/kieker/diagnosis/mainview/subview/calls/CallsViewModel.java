@@ -14,46 +14,44 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.mainview;
+package kieker.diagnosis.mainview.subview.calls;
 
-import kieker.diagnosis.mainview.subview.ISubView;
+import kieker.diagnosis.domain.OperationCall;
 
-import org.eclipse.swt.graphics.Cursor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * The model of the main view.
- * 
- * @author Nils Christian Ehmke
- */
 @Component
-public final class Model {
+public final class CallsViewModel {
 
 	@Autowired
-	private View view;
+	private CallsView view;
 
-	private Cursor cursor;
-	private ISubView activeSubView;
+	private Filter filter = Filter.NONE;
+	private OperationCall operationCall;
 
-	public Cursor getCursor() {
-		return this.cursor;
+	public Filter getFilter() {
+		return this.filter;
 	}
 
-	public void setCursor(final Cursor cursor) {
-		this.cursor = cursor;
+	public void setFilter(final Filter filter) {
+		this.filter = filter;
 
-		this.view.notifyAboutChangedCursor();
+		this.view.notifyAboutChangedFilter();
 	}
 
-	public ISubView getActiveSubView() {
-		return this.activeSubView;
+	public OperationCall getOperationCall() {
+		return this.operationCall;
 	}
 
-	public void setActiveSubView(final ISubView activeSubView) {
-		this.activeSubView = activeSubView;
+	public void setOperationCall(final OperationCall operationCall) {
+		this.operationCall = operationCall;
 
-		this.view.notifyAboutChangedSubView();
+		this.view.notifyAboutChangedOperationCall();
+	}
+
+	public static enum Filter {
+		NONE, JUST_FAILED
 	}
 
 }

@@ -19,8 +19,8 @@ package kieker.diagnosis.mainview;
 import java.util.ResourceBundle;
 
 import kieker.diagnosis.mainview.dialog.SettingsDialog;
+import kieker.diagnosis.mainview.subview.ISubView;
 import kieker.diagnosis.model.PropertiesModel;
-import kieker.diagnosis.subview.ISubView;
 
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
@@ -62,14 +62,11 @@ public final class View {
 	private Shell shell;
 	private Composite subViewComposite;
 	private StackLayout subViewLayout;
-
 	private MessageBox aboutDialog;
 	private DirectoryDialog directoryDialog;
 	private SettingsDialog settingsDialog;
-
 	private MenuItem mntmExit;
 	private MenuItem mntmOpenMonitoringLog;
-
 	private Tree tree;
 	private TreeItem trtmExplorer;
 	private TreeItem trtmTraces;
@@ -78,8 +75,7 @@ public final class View {
 	private MenuItem mntmSettings;
 	private TreeItem trtmAggregatedOperationCalls;
 	private TreeItem trtmOperationCalls;
-
-	private ProgressMonitorDialog ivProgressMonitorDialog;
+	private ProgressMonitorDialog progressMonitorDialog;
 
 	public void show() {
 		final Display display = Display.getDefault();
@@ -149,7 +145,7 @@ public final class View {
 	}
 
 	public ProgressMonitorDialog getProgressMonitorDialog() {
-		return this.ivProgressMonitorDialog;
+		return this.progressMonitorDialog;
 	}
 
 	public Tree getTree() {
@@ -193,8 +189,8 @@ public final class View {
 		this.aboutDialog = new MessageBox(this.shell, SWT.ICON_INFORMATION);
 		this.settingsDialog = new SettingsDialog(this.shell, SWT.NONE, this.propertiesModel);
 
-		this.ivProgressMonitorDialog = new ProgressMonitorDialog(this.shell);
-		this.ivProgressMonitorDialog.setCancelable(false);
+		this.progressMonitorDialog = new ProgressMonitorDialog(this.shell);
+		this.progressMonitorDialog.setCancelable(false);
 
 		this.aboutDialog.setText(BUNDLE.getString("View.mntmAbout.text"));
 		this.aboutDialog.setMessage("Kieker Trace Diagnosis - 1.0-SNAPSHOT\n\nCopyright 2015 Kieker Project (http://kieker-monitoring.net)");
