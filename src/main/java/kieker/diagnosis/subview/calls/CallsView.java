@@ -53,6 +53,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -117,7 +118,7 @@ public final class CallsView implements ISubView, Observer {
 		gl_composite.horizontalSpacing = 0;
 		this.composite.setLayout(gl_composite);
 
-		this.filterComposite = new Composite(composite, SWT.NONE);
+		this.filterComposite = new Composite(this.composite, SWT.NONE);
 		final GridLayout gl_filterComposite = new GridLayout(2, false);
 		gl_composite.verticalSpacing = 0;
 		gl_composite.marginHeight = 0;
@@ -125,11 +126,11 @@ public final class CallsView implements ISubView, Observer {
 		gl_composite.horizontalSpacing = 0;
 		this.filterComposite.setLayout(gl_filterComposite);
 
-		ivBtn1 = new Button(filterComposite, SWT.RADIO);
-		ivBtn1.setText("Show All Calls");
-		ivBtn1.setSelection(true);
-		ivBtn2 = new Button(filterComposite, SWT.RADIO);
-		ivBtn2.setText("Show Only Failed Calls");
+		this.ivBtn1 = new Button(this.filterComposite, SWT.RADIO);
+		this.ivBtn1.setText("Show All Calls");
+		this.ivBtn1.setSelection(true);
+		this.ivBtn2 = new Button(this.filterComposite, SWT.RADIO);
+		this.ivBtn2.setText("Show Only Failed Calls");
 
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -162,15 +163,15 @@ public final class CallsView implements ISubView, Observer {
 		tblclmnTimestamp.setWidth(100);
 		tblclmnTimestamp.setText("Timestamp");
 
-		ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		this.ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 
-		this.detailComposite = new Composite(ivSc, SWT.NONE);
+		this.detailComposite = new Composite(this.ivSc, SWT.NONE);
 		this.detailComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.detailComposite.setLayout(new GridLayout(2, false));
- 
-		ivSc.setContent(detailComposite);
-		ivSc.setExpandHorizontal(true);
-		ivSc.setExpandVertical(true); 
+
+		this.ivSc.setContent(this.detailComposite);
+		this.ivSc.setExpandHorizontal(true);
+		this.ivSc.setExpandVertical(true);
 
 		final Label lblExecutionContainer = new Label(this.detailComposite, SWT.NONE);
 		lblExecutionContainer.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -229,16 +230,16 @@ public final class CallsView implements ISubView, Observer {
 		tblclmnTotalDuration.addSelectionListener(new TraceIDSortListener());
 		tblclmnTimestamp.addSelectionListener(new TimestampSortListener());
 
-		ivBtn1.addSelectionListener(controller);
-		ivBtn2.addSelectionListener(controller);
+		this.ivBtn1.addSelectionListener(this.controller);
+		this.ivBtn2.addSelectionListener(this.controller);
 	}
 
 	public Button getBtn1() {
-		return ivBtn1;
+		return this.ivBtn1;
 	}
 
 	public Button getBtn2() {
-		return ivBtn2;
+		return this.ivBtn2;
 	}
 
 	@Override
@@ -292,7 +293,7 @@ public final class CallsView implements ISubView, Observer {
 			}
 		}
 		this.detailComposite.layout();
-		ivSc.setMinSize(detailComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		this.ivSc.setMinSize(this.detailComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
 	private void updateStatusBar() {
@@ -359,6 +360,10 @@ public final class CallsView implements ISubView, Observer {
 			item.setData(call);
 		}
 
+	}
+
+	public Widget getTable() {
+		return this.table;
 	}
 
 }

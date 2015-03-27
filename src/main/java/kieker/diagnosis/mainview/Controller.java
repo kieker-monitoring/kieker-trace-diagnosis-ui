@@ -24,6 +24,7 @@ import java.util.prefs.Preferences;
 
 import javax.annotation.PostConstruct;
 
+import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.mainview.dialog.SettingsDialog;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.subview.ISubView;
@@ -66,10 +67,10 @@ public final class Controller implements SelectionListener {
 	private AggregatedCallsViewController aggregatedCallsViewController;
 
 	@Autowired
-	private View mainView;
+	private View view;
 
 	@Autowired
-	private Model mainViewModel;
+	private Model model;
 
 	private Map<String, ISubView> subViews;
 
@@ -83,7 +84,7 @@ public final class Controller implements SelectionListener {
 	}
 
 	public void showView() {
-		this.mainView.show();
+		this.view.show();
 	}
 
 	@Override
@@ -93,21 +94,21 @@ public final class Controller implements SelectionListener {
 	}
 
 	private void handlePotentialMenuSelection(final SelectionEvent e) {
-		if (e.widget == this.mainView.getMntmOpenMonitoringLog()) {
+		if (e.widget == this.view.getMntmOpenMonitoringLog()) {
 			final Preferences preferences = Preferences.userNodeForPackage(Controller.class);
 			final String filterPath = preferences.get("lastimportpath", ".");
 
-			this.mainView.getDirectoryDialog().setFilterPath(filterPath);
-			final String selectedDirectory = this.mainView.getDirectoryDialog().open();
+			this.view.getDirectoryDialog().setFilterPath(filterPath);
+			final String selectedDirectory = this.view.getDirectoryDialog().open();
 
 			if (null != selectedDirectory) {
-				this.mainViewModel.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_WAIT));
+				this.model.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_WAIT));
 
-				this.mainView.getProgressMonitorDialog().open();
+				this.view.getProgressMonitorDialog().open();
 				this.dataModel.loadMonitoringLogFromFS(selectedDirectory);
-				this.mainView.getProgressMonitorDialog().close();
+				this.view.getProgressMonitorDialog().close();
 
-				this.mainViewModel.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_ARROW));
+				this.model.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_ARROW));
 
 				preferences.put("lastimportpath", selectedDirectory);
 				try {
@@ -118,36 +119,42 @@ public final class Controller implements SelectionListener {
 			}
 		}
 
-		if (e.widget == this.mainView.getMntmSettings()) {
-			final SettingsDialog settingsDialog = this.mainView.getSettingsDialog();
+		if (e.widget == this.view.getMntmSettings()) {
+			final SettingsDialog settingsDialog = this.view.getSettingsDialog();
 			settingsDialog.open();
 		}
 
-		if (e.widget == this.mainView.getMntmExit()) {
-			this.mainView.close();
+		if (e.widget == this.view.getMntmExit()) {
+			this.view.close();
 		}
 
-		if (e.widget == this.mainView.getMntmAbout()) {
-			this.mainView.getAboutDialog().open();
+		if (e.widget == this.view.getMntmAbout()) {
+			this.view.getAboutDialog().open();
 		}
 	}
 
 	private void handlePotentialTreeSelection(final SelectionEvent e) { // NOPMD (this method violates some metrics. This is acceptable, as it is readable)
-		if (e.item == this.mainView.getTrtmExplorer()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.NONE.name());
+		if (e.item == this.view.getTrtmExplorer()) {
+			this.model.setCurrentActiveSubView(SubView.NONE.name());
 		}
-		if (e.item == this.mainView.getTrtmTraces()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.TRACES_SUB_VIEW.name());
+		if (e.item == this.view.getTrtmTraces()) {
+			this.model.setCurrentActiveSubView(SubView.TRACES_SUB_VIEW.name());
 		}
-		if (e.item == this.mainView.getTrtmAggregatedTraces()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.AGGREGATED_TRACES_SUB_VIEW.name());
+		if (e.item == this.view.getTrtmAggregatedTraces()) {
+			this.model.setCurrentActiveSubView(SubView.AGGREGATED_TRACES_SUB_VIEW.name());
 		}
-		if (e.item == this.mainView.getTrtmAggregatedOperationCalls()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW.name());
+		if (e.item == this.view.getTrtmAggregatedOperationCalls()) {
+			this.model.setCurrentActiveSubView(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW.name());
 		}
-		if (e.item == this.mainView.getTrtmOperationCalls()) {
-			this.mainViewModel.setCurrentActiveSubView(SubView.OPERATION_CALLS_SUB_VIEW.name());
+		if (e.item == this.view.getTrtmOperationCalls()) {
+			this.model.setCurrentActiveSubView(SubView.OPERATION_CALLS_SUB_VIEW.name());
 		}
+	}
+
+	public void jumpToCorrespondingTrace(final OperationCall call) {
+		this.view.getTree().select(this.view.getTrtmTraces());
+		this.model.setCurrentActiveSubView(SubView.TRACES_SUB_VIEW.name());
+		this.tracesViewController.jumpToCorrespondingTrace(call);
 	}
 
 	@Override

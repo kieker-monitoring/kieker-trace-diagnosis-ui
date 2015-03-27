@@ -100,7 +100,6 @@ public final class AggregatedTracesView implements Observer, ISubView {
 	private Label lblTraceEquivalence;
 
 	private Composite filterComposite;
-
 	private Button ivBtn1;
 
 	private Button ivBtn2;

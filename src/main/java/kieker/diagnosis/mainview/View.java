@@ -270,4 +270,8 @@ public final class View {
 		this.shell.setCursor(this.model.getCursor());
 	}
 
+	public Tree getTree() {
+		return this.tree;
+	}
+
 }

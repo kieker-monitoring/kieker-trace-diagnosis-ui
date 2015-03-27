@@ -17,6 +17,7 @@
 package kieker.diagnosis.subview.calls;
 
 import kieker.diagnosis.domain.OperationCall;
+import kieker.diagnosis.mainview.Controller;
 import kieker.diagnosis.subview.ISubController;
 import kieker.diagnosis.subview.ISubView;
 import kieker.diagnosis.subview.calls.CallsViewModel.Filter;
@@ -28,6 +29,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public final class CallsViewController implements ISubController, SelectionListener {
+
+	@Autowired
+	private Controller masterController;
 
 	@Autowired
 	private CallsViewModel model;
@@ -42,10 +46,10 @@ public final class CallsViewController implements ISubController, SelectionListe
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
-		if (e.widget == view.getBtn1()) {
+		if (e.widget == this.view.getBtn1()) {
 			this.model.setFilter(Filter.NONE);
-		} 
-		if (e.widget == view.getBtn2()) {
+		}
+		if (e.widget == this.view.getBtn2()) {
 			this.model.setFilter(Filter.JUST_FAILED);
 		}
 		if ((e.item != null) && (e.item.getData() instanceof OperationCall)) {
@@ -55,7 +59,9 @@ public final class CallsViewController implements ISubController, SelectionListe
 
 	@Override
 	public void widgetDefaultSelected(final SelectionEvent e) {
-		// Just implemented for the interface
+		if (e.widget == this.view.getTable()) {
+			this.masterController.jumpToCorrespondingTrace((OperationCall) e.item.getData());
+		}
 	}
 
 }

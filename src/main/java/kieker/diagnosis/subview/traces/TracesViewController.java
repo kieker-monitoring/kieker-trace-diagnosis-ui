@@ -47,13 +47,13 @@ public final class TracesViewController implements ISubController, SelectionList
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
-		if (e.widget == view.getBtn1()) {
+		if (e.widget == this.view.getBtn1()) {
 			this.model.setFilter(Filter.NONE);
-		} 
-		if (e.widget == view.getBtn2()) {
+		}
+		if (e.widget == this.view.getBtn2()) {
 			this.model.setFilter(Filter.JUST_FAILED);
 		}
-		if (e.widget == view.getBtn3()) {
+		if (e.widget == this.view.getBtn3()) {
 			this.model.setFilter(Filter.JUST_FAILURE_CONTAINING);
 		}
 		if ((e.item != null) && (e.item.getData() instanceof OperationCall)) {
@@ -64,6 +64,11 @@ public final class TracesViewController implements ISubController, SelectionList
 	@Override
 	public void widgetDefaultSelected(final SelectionEvent e) {
 		// Just implemented for the interface
+	}
+
+	public void jumpToCorrespondingTrace(final OperationCall call) {
+		this.model.setFilter(Filter.NONE);
+		this.view.jumpToCorrespondingTrace(call);
 	}
 
 }
