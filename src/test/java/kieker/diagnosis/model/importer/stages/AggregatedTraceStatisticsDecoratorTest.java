@@ -19,6 +19,7 @@ package kieker.diagnosis.model.importer.stages;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import kieker.diagnosis.domain.AggregatedTrace;
@@ -43,7 +44,8 @@ public final class AggregatedTraceStatisticsDecoratorTest {
 		final Trace trace2 = new Trace(call2, 44);
 		final Trace trace3 = new Trace(call3, 45);
 
-		final AggregatedTrace trace = new AggregatedTrace(Arrays.asList(trace1, trace2, trace3));
+		// We have to create an array list here as the later clean-operation wouldn't be supported by the list from Arrays.asList(...)
+		final AggregatedTrace trace = new AggregatedTrace(new ArrayList<>(Arrays.asList(trace1, trace2, trace3)));
 
 		final AggregatedTraceStatisticsDecorator decorator = new AggregatedTraceStatisticsDecorator();
 
