@@ -45,11 +45,13 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
@@ -77,17 +79,25 @@ public final class TracesView implements Observer, ISubView {
 	private Composite composite;
 	private Tree tree;
 	private Composite detailComposite;
-	private Label lblTraceIdDisplay;
-	private Label lblDurationDisplay;
-	private Label lblFailedDisplay;
-	private Label lblTraceDepthDisplay;
-	private Label lblTraceSizeDisplay;
-	private Label lblOperationDisplay;
-	private Label lblComponentDisplay;
-	private Label lblExecutionContainerDisplay;
+	private Text lblTraceIdDisplay;
+	private Text lblDurationDisplay;
+	private Text lblFailedDisplay;
+	private Text lblTraceDepthDisplay;
+	private Text lblTraceSizeDisplay;
+	private Text lblOperationDisplay;
+	private Text lblComponentDisplay;
+	private Text lblExecutionContainerDisplay;
 	private Label lblFailed;
 	private Label lblTraces;
 	private Composite statusBar;
+
+	private Composite filterComposite;
+
+	private Button ivBtn1;
+
+	private Button ivBtn2;
+
+	private Button ivBtn3;
 
 	@PostConstruct
 	public void initialize() {
@@ -111,6 +121,22 @@ public final class TracesView implements Observer, ISubView {
 		gl_composite.marginWidth = 0;
 		gl_composite.horizontalSpacing = 0;
 		this.composite.setLayout(gl_composite);
+
+		this.filterComposite = new Composite(composite, SWT.NONE);
+		final GridLayout gl_filterComposite = new GridLayout(3, false);
+		gl_composite.verticalSpacing = 0;
+		gl_composite.marginHeight = 0;
+		gl_composite.marginWidth = 0;
+		gl_composite.horizontalSpacing = 0;
+		this.filterComposite.setLayout(gl_filterComposite);
+
+		ivBtn1 = new Button(filterComposite, SWT.RADIO);
+		ivBtn1.setText("Show All Traces");
+		ivBtn1.setSelection(true);
+		ivBtn2 = new Button(filterComposite, SWT.RADIO);
+		ivBtn2.setText("Show Only Failed Traces");
+		ivBtn3 = new Button(filterComposite, SWT.RADIO);
+		ivBtn3.setText("Show Only Traces Containing Failures");
 
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -162,7 +188,7 @@ public final class TracesView implements Observer, ISubView {
 		lblExecutionContainer.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblExecutionContainer.setText("Execution Container:");
 
-		this.lblExecutionContainerDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblExecutionContainerDisplay =  new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblExecutionContainerDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblExecutionContainerDisplay.setText(TracesView.N_A);
 
@@ -170,7 +196,7 @@ public final class TracesView implements Observer, ISubView {
 		lblComponent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblComponent.setText("Component:");
 
-		this.lblComponentDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblComponentDisplay =  new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblComponentDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblComponentDisplay.setText(TracesView.N_A);
 
@@ -178,7 +204,7 @@ public final class TracesView implements Observer, ISubView {
 		lblOperation.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblOperation.setText("Operation:");
 
-		this.lblOperationDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblOperationDisplay =  new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblOperationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblOperationDisplay.setText(TracesView.N_A);
 
@@ -186,7 +212,7 @@ public final class TracesView implements Observer, ISubView {
 		lblDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblDuration.setText("Duration:");
 
-		this.lblDurationDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblDurationDisplay =  new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblDurationDisplay.setText(TracesView.N_A);
 
@@ -195,7 +221,7 @@ public final class TracesView implements Observer, ISubView {
 		lblTraceId.setBounds(0, 0, 55, 15);
 		lblTraceId.setText("Trace ID:");
 
-		this.lblTraceIdDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblTraceIdDisplay =  new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblTraceIdDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblTraceIdDisplay.setText(TracesView.N_A);
 
@@ -203,7 +229,7 @@ public final class TracesView implements Observer, ISubView {
 		this.lblFailed.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblFailed.setText("Failed:");
 
-		this.lblFailedDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblFailedDisplay =  new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblFailedDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblFailedDisplay.setText(TracesView.N_A);
 
@@ -211,7 +237,7 @@ public final class TracesView implements Observer, ISubView {
 		lblTraceDepth.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblTraceDepth.setText("Trace Depth:");
 
-		this.lblTraceDepthDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblTraceDepthDisplay =  new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblTraceDepthDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblTraceDepthDisplay.setText(TracesView.N_A);
 
@@ -219,7 +245,7 @@ public final class TracesView implements Observer, ISubView {
 		lblTraceSize.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblTraceSize.setText("Trace Size:");
 
-		this.lblTraceSizeDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblTraceSizeDisplay =  new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblTraceSizeDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblTraceSizeDisplay.setText(TracesView.N_A);
 
@@ -243,6 +269,22 @@ public final class TracesView implements Observer, ISubView {
 		trclmnTraceDepth.addSelectionListener(new TraceDepthSortListener());
 		trclmnTraceSize.addSelectionListener(new TraceSizeSortListener());
 		trclmnTimestamp.addSelectionListener(new TimestampSortListener());
+
+		ivBtn1.addSelectionListener(controller);
+		ivBtn2.addSelectionListener(controller);
+		ivBtn3.addSelectionListener(controller);
+	}
+
+	public Button getBtn1() {
+		return ivBtn1;
+	}
+
+	public Button getBtn2() {
+		return ivBtn2;
+	}
+
+	public Button getBtn3() {
+		return ivBtn3;
 	}
 
 	public Tree getTree() {

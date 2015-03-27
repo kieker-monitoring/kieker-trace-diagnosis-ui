@@ -19,6 +19,7 @@ package kieker.diagnosis.subview.traces;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.subview.ISubController;
 import kieker.diagnosis.subview.ISubView;
+import kieker.diagnosis.subview.traces.TracesViewModel.Filter;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -46,6 +47,15 @@ public final class TracesViewController implements ISubController, SelectionList
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
+		if (e.widget == view.getBtn1()) {
+			this.model.setFilter(Filter.NONE);
+		} 
+		if (e.widget == view.getBtn2()) {
+			this.model.setFilter(Filter.JUST_FAILED);
+		}
+		if (e.widget == view.getBtn3()) {
+			this.model.setFilter(Filter.JUST_FAILURE_CONTAINING);
+		}
 		if ((e.item != null) && (e.item.getData() instanceof OperationCall)) {
 			this.model.setOperationCall((OperationCall) e.item.getData());
 		}

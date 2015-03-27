@@ -49,11 +49,13 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
@@ -70,7 +72,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 	private AggregatedTracesViewModel model;
 
 	@Autowired
-	private SelectionListener controller;
+	private AggregatedTracesViewController controller;
 
 	@Autowired
 	private DataModel dataModel;
@@ -81,21 +83,29 @@ public final class AggregatedTracesView implements Observer, ISubView {
 	private Composite composite;
 	private Tree tree;
 	private Composite detailComposite;
-	private Label lblComponentDisplay;
-	private Label lblOperationDisplay;
-	private Label lblNumberOfCallsDisplay;
-	private Label lblMinimalDurationDisplay;
-	private Label lblAverageDurationDisplay;
-	private Label lblMeanDurationDisplay;
-	private Label lblMaximalDurationDisplay;
-	private Label lblFailedDisplay;
-	private Label lblTraceDepthDisplay;
-	private Label lblTraceSizeDisplay;
-	private Label lblExecutionContainerDisplay;
+	private Text lblComponentDisplay;
+	private Text lblOperationDisplay;
+	private Text lblNumberOfCallsDisplay;
+	private Text lblMinimalDurationDisplay;
+	private Text lblAverageDurationDisplay;
+	private Text lblMeanDurationDisplay;
+	private Text lblMaximalDurationDisplay;
+	private Text lblFailedDisplay;
+	private Text lblTraceDepthDisplay;
+	private Text lblTraceSizeDisplay;
+	private Text lblExecutionContainerDisplay;
 	private Label lblFailed;
-	private Label lblTotalDurationDisplay;
+	private Text lblTotalDurationDisplay;
 	private Composite statusBar;
 	private Label lblTraceEquivalence;
+
+	private Composite filterComposite;
+
+	private Button ivBtn1;
+
+	private Button ivBtn2;
+
+	private Button ivBtn3;
 
 	@PostConstruct
 	public void initialize() {
@@ -119,6 +129,22 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		gl_composite.marginWidth = 0;
 		gl_composite.horizontalSpacing = 0;
 		this.composite.setLayout(gl_composite);
+
+		this.filterComposite = new Composite(composite, SWT.NONE);
+		final GridLayout gl_filterComposite = new GridLayout(3, false);
+		gl_composite.verticalSpacing = 0;
+		gl_composite.marginHeight = 0;
+		gl_composite.marginWidth = 0;
+		gl_composite.horizontalSpacing = 0;
+		this.filterComposite.setLayout(gl_filterComposite);
+
+		ivBtn1 = new Button(filterComposite, SWT.RADIO);
+		ivBtn1.setText("Show All Traces");
+		ivBtn1.setSelection(true);
+		ivBtn2 = new Button(filterComposite, SWT.RADIO);
+		ivBtn2.setText("Show Only Failed Traces");
+		ivBtn3 = new Button(filterComposite, SWT.RADIO);
+		ivBtn3.setText("Show Only Traces Containing Failures");
 
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -178,7 +204,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		lblExecutionContainer.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblExecutionContainer.setText("Execution Container:");
 
-		this.lblExecutionContainerDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblExecutionContainerDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblExecutionContainerDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblExecutionContainerDisplay.setText(AggregatedTracesView.N_A);
 
@@ -186,7 +212,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		lblComponent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblComponent.setText("Component:");
 
-		this.lblComponentDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblComponentDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblComponentDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblComponentDisplay.setText(AggregatedTracesView.N_A);
 
@@ -194,7 +220,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		lblOperation.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblOperation.setText("Operation:");
 
-		this.lblOperationDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblOperationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblOperationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblOperationDisplay.setText(AggregatedTracesView.N_A);
 
@@ -202,7 +228,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		lblNumberOfCalls.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblNumberOfCalls.setText("Number of Calls:");
 
-		this.lblNumberOfCallsDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblNumberOfCallsDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblNumberOfCallsDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblNumberOfCallsDisplay.setText(AggregatedTracesView.N_A);
 
@@ -210,7 +236,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		lblMinimalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblMinimalDuration.setText("Minimal Duration:");
 
-		this.lblMinimalDurationDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblMinimalDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblMinimalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblMinimalDurationDisplay.setText(AggregatedTracesView.N_A);
 
@@ -218,7 +244,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		lblAverageDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblAverageDuration.setText("Mean Duration:");
 
-		this.lblAverageDurationDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblAverageDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblAverageDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblAverageDurationDisplay.setText(AggregatedTracesView.N_A);
 
@@ -226,7 +252,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		lblMeanDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblMeanDuration.setText("Median Duration:");
 
-		this.lblMeanDurationDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblMeanDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblMeanDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblMeanDurationDisplay.setText(AggregatedTracesView.N_A);
 
@@ -234,7 +260,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		lblMaximalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblMaximalDuration.setText("Maximal Duration:");
 
-		this.lblMaximalDurationDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblMaximalDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblMaximalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblMaximalDurationDisplay.setText(AggregatedTracesView.N_A);
 
@@ -242,7 +268,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		lblTotalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblTotalDuration.setText("Total Duration:");
 
-		this.lblTotalDurationDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblTotalDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblTotalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblTotalDurationDisplay.setText(AggregatedTracesView.N_A);
 
@@ -250,7 +276,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		this.lblFailed.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblFailed.setText("Failed:");
 
-		this.lblFailedDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblFailedDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblFailedDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblFailedDisplay.setText(AggregatedTracesView.N_A);
 
@@ -258,7 +284,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		lblTraceDepth.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblTraceDepth.setText("Trace Depth:");
 
-		this.lblTraceDepthDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblTraceDepthDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblTraceDepthDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblTraceDepthDisplay.setText(AggregatedTracesView.N_A);
 
@@ -266,7 +292,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		lblTraceSize.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblTraceSize.setText("Trace Size:");
 
-		this.lblTraceSizeDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblTraceSizeDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblTraceSizeDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblTraceSizeDisplay.setText(AggregatedTracesView.N_A);
 		sashForm.setWeights(new int[] { 2, 1 });
@@ -291,6 +317,22 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		trclmnTotalDuration.addSelectionListener(new TotalDurationSortListener());
 		trclmnTraceDepth.addSelectionListener(new TraceDepthSortListener());
 		trclmnTraceSize.addSelectionListener(new TraceSizeSortListener());
+
+		ivBtn1.addSelectionListener(controller);
+		ivBtn2.addSelectionListener(controller);
+		ivBtn3.addSelectionListener(controller);
+	}
+
+	public Button getBtn1() {
+		return ivBtn1;
+	}
+
+	public Button getBtn2() {
+		return ivBtn2;
+	}
+
+	public Button getBtn3() {
+		return ivBtn3;
 	}
 
 	@Override

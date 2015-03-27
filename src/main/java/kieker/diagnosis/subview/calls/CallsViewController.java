@@ -19,6 +19,7 @@ package kieker.diagnosis.subview.calls;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.subview.ISubController;
 import kieker.diagnosis.subview.ISubView;
+import kieker.diagnosis.subview.calls.CallsViewModel.Filter;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -41,6 +42,12 @@ public final class CallsViewController implements ISubController, SelectionListe
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
+		if (e.widget == view.getBtn1()) {
+			this.model.setFilter(Filter.NONE);
+		} 
+		if (e.widget == view.getBtn2()) {
+			this.model.setFilter(Filter.JUST_FAILED);
+		}
 		if ((e.item != null) && (e.item.getData() instanceof OperationCall)) {
 			this.model.setOperationCall((OperationCall) e.item.getData());
 		}

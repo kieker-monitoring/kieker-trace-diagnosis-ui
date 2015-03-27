@@ -42,6 +42,7 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -50,6 +51,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -76,12 +78,18 @@ public final class CallsView implements ISubView, Observer {
 	private Composite statusBar;
 	private Label lblTraceEquivalence;
 	private Table table;
-	private Label lblFailedDisplay;
-	private Label lblMinimalDurationDisplay;
-	private Label lblOperationDisplay;
-	private Label lblComponentDisplay;
-	private Label lblExecutionContainerDisplay;
+	private Text lblFailedDisplay;
+	private Text lblMinimalDurationDisplay;
+	private Text lblOperationDisplay;
+	private Text lblComponentDisplay;
+	private Text lblExecutionContainerDisplay;
 	private Label lblFailed;
+
+	private Composite filterComposite;
+
+	private Button ivBtn1;
+
+	private Button ivBtn2;
 
 	@PostConstruct
 	public void initialize() {
@@ -105,6 +113,20 @@ public final class CallsView implements ISubView, Observer {
 		gl_composite.marginWidth = 0;
 		gl_composite.horizontalSpacing = 0;
 		this.composite.setLayout(gl_composite);
+
+		this.filterComposite = new Composite(composite, SWT.NONE);
+		final GridLayout gl_filterComposite = new GridLayout(2, false);
+		gl_composite.verticalSpacing = 0;
+		gl_composite.marginHeight = 0;
+		gl_composite.marginWidth = 0;
+		gl_composite.horizontalSpacing = 0;
+		this.filterComposite.setLayout(gl_filterComposite);
+
+		ivBtn1 = new Button(filterComposite, SWT.RADIO);
+		ivBtn1.setText("Show All Calls");
+		ivBtn1.setSelection(true);
+		ivBtn2 = new Button(filterComposite, SWT.RADIO);
+		ivBtn2.setText("Show Only Failed Calls");
 
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -145,7 +167,7 @@ public final class CallsView implements ISubView, Observer {
 		lblExecutionContainer.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblExecutionContainer.setText("Execution Container:");
 
-		this.lblExecutionContainerDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblExecutionContainerDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblExecutionContainerDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblExecutionContainerDisplay.setText(CallsView.N_A);
 
@@ -153,7 +175,7 @@ public final class CallsView implements ISubView, Observer {
 		lblComponent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblComponent.setText("Component:");
 
-		this.lblComponentDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblComponentDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblComponentDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblComponentDisplay.setText(CallsView.N_A);
 
@@ -161,7 +183,7 @@ public final class CallsView implements ISubView, Observer {
 		lblOperation.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblOperation.setText("Operation:");
 
-		this.lblOperationDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblOperationDisplay = new Text(this.detailComposite, SWT.READ_ONLY | SWT.NONE);
 		this.lblOperationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblOperationDisplay.setText(CallsView.N_A);
 
@@ -169,7 +191,7 @@ public final class CallsView implements ISubView, Observer {
 		lblMinimalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblMinimalDuration.setText("Duration:");
 
-		this.lblMinimalDurationDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblMinimalDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblMinimalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblMinimalDurationDisplay.setText(CallsView.N_A);
 
@@ -177,7 +199,7 @@ public final class CallsView implements ISubView, Observer {
 		this.lblFailed.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblFailed.setText("Failed:");
 
-		this.lblFailedDisplay = new Label(this.detailComposite, SWT.NONE);
+		this.lblFailedDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblFailedDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblFailedDisplay.setText(CallsView.N_A);
 		sashForm.setWeights(new int[] { 2, 1 });
@@ -197,6 +219,17 @@ public final class CallsView implements ISubView, Observer {
 		tblclmnMinimalDuration.addSelectionListener(new DurationSortListener());
 		tblclmnTotalDuration.addSelectionListener(new TraceIDSortListener());
 		tblclmnTimestamp.addSelectionListener(new TimestampSortListener());
+
+		ivBtn1.addSelectionListener(controller);
+		ivBtn2.addSelectionListener(controller);
+	}
+
+	public Button getBtn1() {
+		return ivBtn1;
+	}
+
+	public Button getBtn2() {
+		return ivBtn2;
 	}
 
 	@Override
@@ -276,10 +309,6 @@ public final class CallsView implements ISubView, Observer {
 
 	private void clearTable() {
 		this.table.clearAll();
-
-		for (final TableColumn column : this.table.getColumns()) {
-			column.pack();
-		}
 	}
 
 	private class DataProvider implements Listener {

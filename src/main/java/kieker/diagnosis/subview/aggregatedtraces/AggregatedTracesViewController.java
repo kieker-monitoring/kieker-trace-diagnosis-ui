@@ -19,6 +19,7 @@ package kieker.diagnosis.subview.aggregatedtraces;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.subview.ISubController;
 import kieker.diagnosis.subview.ISubView;
+import kieker.diagnosis.subview.aggregatedtraces.AggregatedTracesViewModel.Filter;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -41,6 +42,15 @@ public final class AggregatedTracesViewController implements ISubController, Sel
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
+		if (e.widget == view.getBtn1()) {
+			this.model.setFilter(Filter.NONE);
+		} 
+		if (e.widget == view.getBtn2()) {
+			this.model.setFilter(Filter.JUST_FAILED);
+		}
+		if (e.widget == view.getBtn3()) {
+			this.model.setFilter(Filter.JUST_FAILURE_CONTAINING);
+		}
 		if ((e.item != null) && (e.item.getData() instanceof AggregatedOperationCall)) {
 			this.model.setOperationCall((AggregatedOperationCall) e.item.getData());
 		}
