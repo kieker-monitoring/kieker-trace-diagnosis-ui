@@ -121,6 +121,10 @@ def commonDistBinConfiguration = {
 	into('lib') {
 		from configurations.runtime
 		from jar.archivePath 
+		from 'licenses'
+	}
+	into('.') {
+		from 'LICENSE'
 	}
 }
 
@@ -196,6 +200,8 @@ def commonDistSrcConfiguration = {
 	into ('src') { from 'src' }
 	into ('config') { from 'config' }
 	into ('example') { from 'example' }
+	into ('licenses') { from 'licenses' }
+	
 	from ('.') {
 		include 'LICENSE'
 		include 'README'
