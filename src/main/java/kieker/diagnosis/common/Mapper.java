@@ -65,7 +65,7 @@ public final class Mapper<I, O> {
 		}
 
 		public To() {
-			this.key = null;
+			this.key = null; // NOPMD (null assignment)
 			this.keyAvailable = false;
 		}
 

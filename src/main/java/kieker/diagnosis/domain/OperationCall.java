@@ -70,10 +70,10 @@ public final class OperationCall extends AbstractOperationCall<OperationCall> {
 	}
 
 	public long getTimestamp() {
-		return timestamp;
+		return this.timestamp;
 	}
 
-	public void setTimestamp(long timestamp) {
+	public void setTimestamp(final long timestamp) {
 		this.timestamp = timestamp;
 	}
 

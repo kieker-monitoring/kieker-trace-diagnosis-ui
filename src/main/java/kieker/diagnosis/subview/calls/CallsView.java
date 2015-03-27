@@ -87,13 +87,8 @@ public final class CallsView implements ISubView, Observer {
 	private Text lblComponentDisplay;
 	private Text lblExecutionContainerDisplay;
 	private Label lblFailed;
-
-	private Composite filterComposite;
-
 	private Button ivBtn1;
-
 	private Button ivBtn2;
-
 	private ScrolledComposite ivSc;
 
 	@PostConstruct
@@ -119,18 +114,18 @@ public final class CallsView implements ISubView, Observer {
 		gl_composite.horizontalSpacing = 0;
 		this.composite.setLayout(gl_composite);
 
-		this.filterComposite = new Composite(this.composite, SWT.NONE);
+		final Composite filterComposite = new Composite(this.composite, SWT.NONE);
 		final GridLayout gl_filterComposite = new GridLayout(2, false);
 		gl_composite.verticalSpacing = 0;
 		gl_composite.marginHeight = 0;
 		gl_composite.marginWidth = 0;
 		gl_composite.horizontalSpacing = 0;
-		this.filterComposite.setLayout(gl_filterComposite);
+		filterComposite.setLayout(gl_filterComposite);
 
-		this.ivBtn1 = new Button(this.filterComposite, SWT.RADIO);
+		this.ivBtn1 = new Button(filterComposite, SWT.RADIO);
 		this.ivBtn1.setText("Show All Calls");
 		this.ivBtn1.setSelection(true);
-		this.ivBtn2 = new Button(this.filterComposite, SWT.RADIO);
+		this.ivBtn2 = new Button(filterComposite, SWT.RADIO);
 		this.ivBtn2.setText("Show Only Failed Calls");
 
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);

@@ -91,15 +91,9 @@ public final class TracesView implements Observer, ISubView {
 	private Label lblFailed;
 	private Label lblTraces;
 	private Composite statusBar;
-
-	private Composite filterComposite;
-
 	private Button ivBtn1;
-
 	private Button ivBtn2;
-
 	private Button ivBtn3;
-
 	private ScrolledComposite ivSc;
 
 	@PostConstruct
@@ -125,20 +119,20 @@ public final class TracesView implements Observer, ISubView {
 		gl_composite.horizontalSpacing = 0;
 		this.composite.setLayout(gl_composite);
 
-		this.filterComposite = new Composite(this.composite, SWT.NONE);
+		final Composite filterComposite = new Composite(this.composite, SWT.NONE);
 		final GridLayout gl_filterComposite = new GridLayout(3, false);
 		gl_composite.verticalSpacing = 0;
 		gl_composite.marginHeight = 0;
 		gl_composite.marginWidth = 0;
 		gl_composite.horizontalSpacing = 0;
-		this.filterComposite.setLayout(gl_filterComposite);
+		filterComposite.setLayout(gl_filterComposite);
 
-		this.ivBtn1 = new Button(this.filterComposite, SWT.RADIO);
+		this.ivBtn1 = new Button(filterComposite, SWT.RADIO);
 		this.ivBtn1.setText("Show All Traces");
 		this.ivBtn1.setSelection(true);
-		this.ivBtn2 = new Button(this.filterComposite, SWT.RADIO);
+		this.ivBtn2 = new Button(filterComposite, SWT.RADIO);
 		this.ivBtn2.setText("Show Only Failed Traces");
-		this.ivBtn3 = new Button(this.filterComposite, SWT.RADIO);
+		this.ivBtn3 = new Button(filterComposite, SWT.RADIO);
 		this.ivBtn3.setText("Show Only Traces Containing Failures");
 
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);
@@ -336,6 +330,8 @@ public final class TracesView implements Observer, ISubView {
 			break;
 		case NONE:
 			this.lblTraces.setText(this.dataModel.getTracesCopy().size() + " Trace(s)");
+			break;
+		default:
 			break;
 		}
 

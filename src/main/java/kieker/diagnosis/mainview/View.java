@@ -164,7 +164,7 @@ public final class View {
 
 	private void handleChangedSubView() {
 		final ISubView subView = this.model.getActiveSubView();
-		final Composite compositeToShow = (subView != null) ? subView.getComposite() : null; // NOPMD (null assigment)
+		final Composite compositeToShow = (subView != null) ? subView.getComposite() : null; // NOPMD (null assignment)
 
 		this.subViewLayout.topControl = compositeToShow;
 
