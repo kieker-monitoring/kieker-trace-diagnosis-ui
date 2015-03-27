@@ -16,7 +16,8 @@
 
 package kieker.diagnosis.mainview;
 
-import kieker.diagnosis.common.Messages;
+import java.util.ResourceBundle;
+
 import kieker.diagnosis.mainview.dialog.SettingsDialog;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.subview.ISubView;
@@ -47,6 +48,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public final class View {
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("kieker.diagnosis.mainview.view"); //$NON-NLS-1$
 
 	@Autowired
 	private PropertiesModel propertiesModel;
@@ -182,7 +184,7 @@ public final class View {
 		this.shell = new Shell();
 		this.shell.setImage(null);
 		this.shell.setMaximized(true);
-		this.shell.setText(Messages.getString("applicationName")); //$NON-NLS-1$
+		this.shell.setText(BUNDLE.getString("View.shell.text")); //$NON-NLS-1$ 
 
 		this.shell.setImage(new Image(this.shell.getDisplay(), ClassLoader.getSystemClassLoader().getResourceAsStream("kieker-logo.png")));
 		this.shell.setLayout(new FillLayout(SWT.HORIZONTAL));
@@ -194,7 +196,7 @@ public final class View {
 		this.ivProgressMonitorDialog = new ProgressMonitorDialog(this.shell);
 		this.ivProgressMonitorDialog.setCancelable(false);
 
-		this.aboutDialog.setText("About...");
+		this.aboutDialog.setText(BUNDLE.getString("View.mntmAbout.text"));
 		this.aboutDialog.setMessage("Kieker Trace Diagnosis - 1.0-SNAPSHOT\n\nCopyright 2015 Kieker Project (http://kieker-monitoring.net)");
 
 		final SashForm sashForm = new SashForm(this.shell, SWT.NONE);
@@ -202,22 +204,22 @@ public final class View {
 		this.tree = new Tree(sashForm, SWT.BORDER);
 
 		this.trtmExplorer = new TreeItem(this.tree, SWT.NONE);
-		this.trtmExplorer.setText(Messages.getString("explorer")); //$NON-NLS-1$
+		this.trtmExplorer.setText(BUNDLE.getString("View.trtmExplorer.text(java.lang.String)")); //$NON-NLS-1$ 
 
 		this.trtmTraces = new TreeItem(this.trtmExplorer, SWT.NONE);
-		this.trtmTraces.setText(Messages.getString("traces")); //$NON-NLS-1$
+		this.trtmTraces.setText(BUNDLE.getString("View.trtmTraces.text(java.lang.String)")); //$NON-NLS-1$ 
 		this.trtmTraces.setExpanded(true);
 
 		this.trtmAggregatedTraces = new TreeItem(this.trtmExplorer, 0);
-		this.trtmAggregatedTraces.setText(Messages.getString("aggregatedTraces")); //$NON-NLS-1$
+		this.trtmAggregatedTraces.setText(BUNDLE.getString("View.trtmAggregatedTraces.text(java.lang.String)")); //$NON-NLS-1$ 
 
 		this.trtmAggregatedTraces.setExpanded(true);
 
 		this.trtmOperationCalls = new TreeItem(this.trtmExplorer, SWT.NONE);
-		this.trtmOperationCalls.setText(Messages.getString("operationCalls")); //$NON-NLS-1$
+		this.trtmOperationCalls.setText(BUNDLE.getString("View.trtmOperationCalls.text(java.lang.String)")); //$NON-NLS-1$ 
 
 		this.trtmAggregatedOperationCalls = new TreeItem(this.trtmExplorer, SWT.NONE);
-		this.trtmAggregatedOperationCalls.setText(Messages.getString("aggregatedOperationCalls")); //$NON-NLS-1$
+		this.trtmAggregatedOperationCalls.setText(BUNDLE.getString("View.trtmAggregatedOperationCalls.text(java.lang.String)")); //$NON-NLS-1$ 
 
 		this.trtmAggregatedOperationCalls.setExpanded(true);
 		this.trtmExplorer.setExpanded(true);
@@ -235,32 +237,32 @@ public final class View {
 		this.shell.setMenuBar(menu);
 
 		final MenuItem mntmFile = new MenuItem(menu, SWT.CASCADE);
-		mntmFile.setText(Messages.getString("file")); //$NON-NLS-1$
+		mntmFile.setText(BUNDLE.getString("View.mntmFile.text")); //$NON-NLS-1$ 
 
 		final Menu menu_1 = new Menu(mntmFile);
 		mntmFile.setMenu(menu_1);
 
 		this.mntmOpenMonitoringLog = new MenuItem(menu_1, SWT.NONE);
-		this.mntmOpenMonitoringLog.setText(Messages.getString("openMonitoringLog")); //$NON-NLS-1$
+		this.mntmOpenMonitoringLog.setText(BUNDLE.getString("View.mntmOpenMonitoringLog.text")); //$NON-NLS-1$ 
 
 		new MenuItem(menu_1, SWT.SEPARATOR);
 
 		this.mntmSettings = new MenuItem(menu_1, SWT.NONE);
-		this.mntmSettings.setText(Messages.getString("settings")); //$NON-NLS-1$
+		this.mntmSettings.setText(BUNDLE.getString("View.mntmSettings.text")); //$NON-NLS-1$ 
 
 		new MenuItem(menu_1, SWT.SEPARATOR);
 
 		this.mntmExit = new MenuItem(menu_1, SWT.NONE);
-		this.mntmExit.setText(Messages.getString("exit")); //$NON-NLS-1$
+		this.mntmExit.setText(BUNDLE.getString("View.mntmExit.text")); //$NON-NLS-1$ 
 
 		final MenuItem mntmHelp = new MenuItem(menu, SWT.CASCADE);
-		mntmHelp.setText(Messages.getString("help")); //$NON-NLS-1$
+		mntmHelp.setText(BUNDLE.getString("View.mntmHelp.text")); //$NON-NLS-1$ 
 
 		final Menu menu_3 = new Menu(mntmHelp);
 		mntmHelp.setMenu(menu_3);
 
 		this.mntmAbout = new MenuItem(menu_3, SWT.NONE);
-		this.mntmAbout.setText(Messages.getString("about")); //$NON-NLS-1$
+		this.mntmAbout.setText(BUNDLE.getString("View.mntmAbout.text")); //$NON-NLS-1$ 
 	}
 
 	private void addLogic() {

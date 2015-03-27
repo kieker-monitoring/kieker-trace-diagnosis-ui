@@ -19,10 +19,10 @@ package kieker.diagnosis.subview.aggregatedcalls;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
 
-import kieker.diagnosis.common.Messages;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
@@ -63,6 +63,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public final class AggregatedCallsView implements ISubView, Observer {
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("kieker.diagnosis.subview.aggregatedcalls.aggregatedcallsview"); //$NON-NLS-1$
 
 	private static final String N_A = "N/A";
 
@@ -92,10 +93,10 @@ public final class AggregatedCallsView implements ISubView, Observer {
 	private Label lblFailed;
 	private Text lblTotalDurationDisplay;
 	private Composite statusBar;
-	private Label lblTraceEquivalence;
+	private Label lblCounter;
 	private Table table;
-	private Button ivBtn1;
-	private Button ivBtn2;
+	private Button btnShowAll;
+	private Button btnShowJustFailed;
 	private ScrolledComposite ivSc;
 
 	@PostConstruct
@@ -129,11 +130,11 @@ public final class AggregatedCallsView implements ISubView, Observer {
 		gl_composite.horizontalSpacing = 0;
 		filterComposite.setLayout(gl_filterComposite);
 
-		this.ivBtn1 = new Button(filterComposite, SWT.RADIO);
-		this.ivBtn1.setText(Messages.getString("AggregatedCallsView.Btn1.text")); //$NON-NLS-1$
-		this.ivBtn1.setSelection(true);
-		this.ivBtn2 = new Button(filterComposite, SWT.RADIO);
-		this.ivBtn2.setText(Messages.getString("AggregatedCallsView.Btn2.text")); //$NON-NLS-1$
+		this.btnShowAll = new Button(filterComposite, SWT.RADIO);
+		this.btnShowAll.setText(BUNDLE.getString("AggregatedCallsView.btnShowAll.text")); //$NON-NLS-1$ 
+		this.btnShowAll.setSelection(true);
+		this.btnShowJustFailed = new Button(filterComposite, SWT.RADIO);
+		this.btnShowJustFailed.setText(BUNDLE.getString("AggregatedCallsView.btnShowJustFailed.text")); //$NON-NLS-1$ 
 
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -144,39 +145,39 @@ public final class AggregatedCallsView implements ISubView, Observer {
 
 		final TableColumn tblclmnExecutionContainer = new TableColumn(this.table, SWT.NONE);
 		tblclmnExecutionContainer.setWidth(100);
-		tblclmnExecutionContainer.setText(Messages.getString("executionContainer")); //$NON-NLS-1$
+		tblclmnExecutionContainer.setText(BUNDLE.getString("AggregatedCallsView.tblclmnExecutionContainer.text")); //$NON-NLS-1$ 
 
 		final TableColumn tblclmnComponent = new TableColumn(this.table, SWT.NONE);
 		tblclmnComponent.setWidth(100);
-		tblclmnComponent.setText(Messages.getString("component")); //$NON-NLS-1$
+		tblclmnComponent.setText(BUNDLE.getString("AggregatedCallsView.tblclmnComponent.text")); //$NON-NLS-1$ 
 
 		final TableColumn tblclmnOperation = new TableColumn(this.table, SWT.NONE);
 		tblclmnOperation.setWidth(100);
-		tblclmnOperation.setText(Messages.getString("operation")); //$NON-NLS-1$
+		tblclmnOperation.setText(BUNDLE.getString("AggregatedCallsView.tblclmnOperation.text")); //$NON-NLS-1$ 
 
 		final TableColumn tblclmnNumberOfCalls = new TableColumn(this.table, SWT.NONE);
 		tblclmnNumberOfCalls.setWidth(100);
-		tblclmnNumberOfCalls.setText(Messages.getString("AggregatedCallsView.tblclmnNumberOfCalls.text")); //$NON-NLS-1$
+		tblclmnNumberOfCalls.setText(BUNDLE.getString("AggregatedCallsView.tblclmnNumberOfCalls.text")); //$NON-NLS-1$ 
 
 		final TableColumn tblclmnMinimalDuration = new TableColumn(this.table, SWT.NONE);
 		tblclmnMinimalDuration.setWidth(100);
-		tblclmnMinimalDuration.setText(Messages.getString("minimalDuration")); //$NON-NLS-1$
+		tblclmnMinimalDuration.setText(BUNDLE.getString("AggregatedCallsView.tblclmnMinimalDuration.text")); //$NON-NLS-1$ 
 
 		final TableColumn tblclmnMeanDuration = new TableColumn(this.table, SWT.NONE);
 		tblclmnMeanDuration.setWidth(100);
-		tblclmnMeanDuration.setText(Messages.getString("meanDuration")); //$NON-NLS-1$
+		tblclmnMeanDuration.setText(BUNDLE.getString("AggregatedCallsView.tblclmnMeanDuration.text")); //$NON-NLS-1$ 
 
 		final TableColumn tblclmnMedianDuration = new TableColumn(this.table, SWT.NONE);
 		tblclmnMedianDuration.setWidth(100);
-		tblclmnMedianDuration.setText(Messages.getString("AggregatedCallsView.tblclmnMedianDuration.text")); //$NON-NLS-1$
+		tblclmnMedianDuration.setText(BUNDLE.getString("AggregatedCallsView.tblclmnMedianDuration.text")); //$NON-NLS-1$ 
 
 		final TableColumn tblclmnMaximalDuration = new TableColumn(this.table, SWT.NONE);
 		tblclmnMaximalDuration.setWidth(100);
-		tblclmnMaximalDuration.setText(Messages.getString("maximalDuration")); //$NON-NLS-1$
+		tblclmnMaximalDuration.setText(BUNDLE.getString("AggregatedCallsView.tblclmnMaximalDuration.text")); //$NON-NLS-1$ 
 
 		final TableColumn tblclmnTotalDuration = new TableColumn(this.table, SWT.NONE);
 		tblclmnTotalDuration.setWidth(100);
-		tblclmnTotalDuration.setText(Messages.getString("AggregatedCallsView.tblclmnTotalDuration.text")); //$NON-NLS-1$
+		tblclmnTotalDuration.setText(BUNDLE.getString("AggregatedCallsView.tblclmnTotalDuration.text")); //$NON-NLS-1$ 
 
 		this.ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 
@@ -190,7 +191,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 
 		final Label lblExecutionContainer = new Label(this.detailComposite, SWT.NONE);
 		lblExecutionContainer.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblExecutionContainer.setText(Messages.getString("executionContainer")); //$NON-NLS-1$
+		lblExecutionContainer.setText(BUNDLE.getString("AggregatedCallsView.lblExecutionContainer.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblExecutionContainerDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblExecutionContainerDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -198,7 +199,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 
 		final Label lblComponent = new Label(this.detailComposite, SWT.NONE);
 		lblComponent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblComponent.setText(Messages.getString("component")); //$NON-NLS-1$
+		lblComponent.setText(BUNDLE.getString("AggregatedCallsView.lblComponent.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblComponentDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblComponentDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -206,7 +207,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 
 		final Label lblOperation = new Label(this.detailComposite, SWT.NONE);
 		lblOperation.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblOperation.setText(Messages.getString("operation")); //$NON-NLS-1$
+		lblOperation.setText(BUNDLE.getString("AggregatedCallsView.lblOperation.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblOperationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblOperationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -214,7 +215,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 
 		final Label lblNumberOfCalls = new Label(this.detailComposite, SWT.NONE);
 		lblNumberOfCalls.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblNumberOfCalls.setText(Messages.getString("numberOfCalls")); //$NON-NLS-1$
+		lblNumberOfCalls.setText(BUNDLE.getString("AggregatedCallsView.lblNumberOfCalls.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblNumberOfCallsDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblNumberOfCallsDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -222,7 +223,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 
 		final Label lblMinimalDuration = new Label(this.detailComposite, SWT.NONE);
 		lblMinimalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblMinimalDuration.setText(Messages.getString("minimalDuration")); //$NON-NLS-1$
+		lblMinimalDuration.setText(BUNDLE.getString("AggregatedCallsView.lblMinimalDuration.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblMinimalDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblMinimalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -230,7 +231,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 
 		final Label lblAverageDuration = new Label(this.detailComposite, SWT.NONE);
 		lblAverageDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblAverageDuration.setText(Messages.getString("meanDuration")); //$NON-NLS-1$
+		lblAverageDuration.setText(BUNDLE.getString("AggregatedCallsView.lblAverageDuration.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblAverageDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblAverageDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -238,7 +239,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 
 		final Label lblMeanDuration = new Label(this.detailComposite, SWT.NONE);
 		lblMeanDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblMeanDuration.setText(Messages.getString("medianDuration")); //$NON-NLS-1$
+		lblMeanDuration.setText(BUNDLE.getString("AggregatedCallsView.lblMeanDuration.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblMeanDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblMeanDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -246,7 +247,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 
 		final Label lblMaximalDuration = new Label(this.detailComposite, SWT.NONE);
 		lblMaximalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblMaximalDuration.setText(Messages.getString("maximalDuration")); //$NON-NLS-1$
+		lblMaximalDuration.setText(BUNDLE.getString("AggregatedCallsView.lblMaximalDuration.text")); //$NON-NLS-1$ 
 
 		this.lblMaximalDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblMaximalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -254,7 +255,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 
 		final Label lblTotalDuration = new Label(this.detailComposite, SWT.NONE);
 		lblTotalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblTotalDuration.setText(Messages.getString("totalDuration")); //$NON-NLS-1$
+		lblTotalDuration.setText(BUNDLE.getString("AggregatedCallsView.lblTotalDuration.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblTotalDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblTotalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -262,7 +263,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 
 		this.lblFailed = new Label(this.detailComposite, SWT.NONE);
 		this.lblFailed.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblFailed.setText(Messages.getString("failed")); //$NON-NLS-1$
+		this.lblFailed.setText(BUNDLE.getString("AggregatedCallsView.lblFailed.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblFailedDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblFailedDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -272,8 +273,8 @@ public final class AggregatedCallsView implements ISubView, Observer {
 		this.statusBar = new Composite(this.composite, SWT.NONE);
 		this.statusBar.setLayout(new GridLayout(1, false));
 
-		this.lblTraceEquivalence = new Label(this.statusBar, SWT.NONE);
-		this.lblTraceEquivalence.setText(Messages.getString("AggregatedCallsView.lblTraceEquivalence.text")); //$NON-NLS-1$
+		this.lblCounter = new Label(this.statusBar, SWT.NONE);
+		this.lblCounter.setText("0 " + BUNDLE.getString("AggregatedCallsView.lblCounter.text")); //$NON-NLS-1$ 
 
 		this.table.addListener(SWT.SetData, new DataProvider());
 		this.table.addSelectionListener(this.controller);
@@ -288,16 +289,16 @@ public final class AggregatedCallsView implements ISubView, Observer {
 		tblclmnNumberOfCalls.addSelectionListener(new CallsSortListener());
 		tblclmnMeanDuration.addSelectionListener(new AverageDurationSortListener());
 
-		this.ivBtn1.addSelectionListener(this.controller);
-		this.ivBtn2.addSelectionListener(this.controller);
+		this.btnShowAll.addSelectionListener(this.controller);
+		this.btnShowJustFailed.addSelectionListener(this.controller);
 	}
 
 	public Button getBtn1() {
-		return this.ivBtn1;
+		return this.btnShowAll;
 	}
 
 	public Button getBtn2() {
-		return this.ivBtn2;
+		return this.btnShowJustFailed;
 	}
 
 	@Override
@@ -328,9 +329,9 @@ public final class AggregatedCallsView implements ISubView, Observer {
 
 	private void updateStatusBar() {
 		if (this.model.getFilter() == Filter.NONE) {
-			this.lblTraceEquivalence.setText(this.dataModel.getAggregatedOperationCalls().size() + " Aggregated Operation Call(s)");
+			this.lblCounter.setText(this.dataModel.getAggregatedOperationCalls().size() + " " + BUNDLE.getString("AggregatedCallsView.lblCounter.text"));
 		} else {
-			this.lblTraceEquivalence.setText(this.dataModel.getAggregatedFailedOperationCalls().size() + " Failed Aggregated Operation Call(s)");
+			this.lblCounter.setText(this.dataModel.getAggregatedFailedOperationCalls().size() + " " + BUNDLE.getString("AggregatedCallsView.lblCounter.text"));
 		}
 		this.statusBar.getParent().layout();
 	}

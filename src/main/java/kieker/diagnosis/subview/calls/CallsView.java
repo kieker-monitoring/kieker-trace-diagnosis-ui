@@ -19,10 +19,10 @@ package kieker.diagnosis.subview.calls;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
 
-import kieker.diagnosis.common.Messages;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
@@ -61,6 +61,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public final class CallsView implements ISubView, Observer {
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("kieker.diagnosis.subview.calls.callsview"); //$NON-NLS-1$
 
 	private static final String N_A = "N/A";
 
@@ -79,7 +80,7 @@ public final class CallsView implements ISubView, Observer {
 	private Composite composite;
 	private Composite detailComposite;
 	private Composite statusBar;
-	private Label lblTraceEquivalence;
+	private Label lbCounter;
 	private Table table;
 	private Text lblFailedDisplay;
 	private Text lblMinimalDurationDisplay;
@@ -87,8 +88,8 @@ public final class CallsView implements ISubView, Observer {
 	private Text lblComponentDisplay;
 	private Text lblExecutionContainerDisplay;
 	private Label lblFailed;
-	private Button ivBtn1;
-	private Button ivBtn2;
+	private Button btnShowAll;
+	private Button btnShowJustFailed;
 	private ScrolledComposite ivSc;
 
 	@PostConstruct
@@ -122,11 +123,11 @@ public final class CallsView implements ISubView, Observer {
 		gl_composite.horizontalSpacing = 0;
 		filterComposite.setLayout(gl_filterComposite);
 
-		this.ivBtn1 = new Button(filterComposite, SWT.RADIO);
-		this.ivBtn1.setText("Show All Calls");
-		this.ivBtn1.setSelection(true);
-		this.ivBtn2 = new Button(filterComposite, SWT.RADIO);
-		this.ivBtn2.setText("Show Only Failed Calls");
+		this.btnShowAll = new Button(filterComposite, SWT.RADIO);
+		this.btnShowAll.setText(BUNDLE.getString("CallsView.btnShowAll.text")); //$NON-NLS-1$ 
+		this.btnShowAll.setSelection(true);
+		this.btnShowJustFailed = new Button(filterComposite, SWT.RADIO);
+		this.btnShowJustFailed.setText(BUNDLE.getString("CallsView.btnShowJustFailed.text")); //$NON-NLS-1$ 
 
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -137,27 +138,27 @@ public final class CallsView implements ISubView, Observer {
 
 		final TableColumn tblclmnExecutionContainer = new TableColumn(this.table, SWT.NONE);
 		tblclmnExecutionContainer.setWidth(100);
-		tblclmnExecutionContainer.setText(Messages.getString("executionContainer")); //$NON-NLS-1$
+		tblclmnExecutionContainer.setText(BUNDLE.getString("CallsView.tblclmnExecutionContainer.text")); //$NON-NLS-1$ 
 
 		final TableColumn tblclmnComponent = new TableColumn(this.table, SWT.NONE);
 		tblclmnComponent.setWidth(100);
-		tblclmnComponent.setText("Component");
+		tblclmnComponent.setText(BUNDLE.getString("CallsView.tblclmnComponent.text")); //$NON-NLS-1$ 
 
 		final TableColumn tblclmnOperation = new TableColumn(this.table, SWT.NONE);
 		tblclmnOperation.setWidth(100);
-		tblclmnOperation.setText("Operation");
+		tblclmnOperation.setText(BUNDLE.getString("CallsView.tblclmnOperation.text")); //$NON-NLS-1$ 
 
-		final TableColumn tblclmnMinimalDuration = new TableColumn(this.table, SWT.NONE);
-		tblclmnMinimalDuration.setWidth(100);
-		tblclmnMinimalDuration.setText("Duration");
+		final TableColumn tblclmnDuration = new TableColumn(this.table, SWT.NONE);
+		tblclmnDuration.setWidth(100);
+		tblclmnDuration.setText(BUNDLE.getString("CallsView.tblclmnDuration.text")); //$NON-NLS-1$ 
 
-		final TableColumn tblclmnTotalDuration = new TableColumn(this.table, SWT.NONE);
-		tblclmnTotalDuration.setWidth(100);
-		tblclmnTotalDuration.setText("Trace ID");
+		final TableColumn tblclmnTraceID = new TableColumn(this.table, SWT.NONE);
+		tblclmnTraceID.setWidth(100);
+		tblclmnTraceID.setText(BUNDLE.getString("CallsView.tblclmnTraceID.text")); //$NON-NLS-1$ 
 
 		final TableColumn tblclmnTimestamp = new TableColumn(this.table, SWT.NONE);
 		tblclmnTimestamp.setWidth(100);
-		tblclmnTimestamp.setText("Timestamp");
+		tblclmnTimestamp.setText(BUNDLE.getString("CallsView.tblclmnTimestamp.text")); //$NON-NLS-1$ 
 
 		this.ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 
@@ -171,7 +172,7 @@ public final class CallsView implements ISubView, Observer {
 
 		final Label lblExecutionContainer = new Label(this.detailComposite, SWT.NONE);
 		lblExecutionContainer.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblExecutionContainer.setText(Messages.getString("executionContainer") + ":"); //$NON-NLS-1$
+		lblExecutionContainer.setText(BUNDLE.getString("CallsView.lblExecutionContainer.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblExecutionContainerDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblExecutionContainerDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -179,7 +180,7 @@ public final class CallsView implements ISubView, Observer {
 
 		final Label lblComponent = new Label(this.detailComposite, SWT.NONE);
 		lblComponent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblComponent.setText(Messages.getString("component") + ":"); //$NON-NLS-1$
+		lblComponent.setText(BUNDLE.getString("CallsView.lblComponent.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblComponentDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblComponentDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -187,15 +188,15 @@ public final class CallsView implements ISubView, Observer {
 
 		final Label lblOperation = new Label(this.detailComposite, SWT.NONE);
 		lblOperation.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblOperation.setText(Messages.getString("operation") + ":"); //$NON-NLS-1$
+		lblOperation.setText(BUNDLE.getString("CallsView.lblOperation.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblOperationDisplay = new Text(this.detailComposite, SWT.READ_ONLY | SWT.NONE);
 		this.lblOperationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblOperationDisplay.setText(CallsView.N_A);
 
-		final Label lblMinimalDuration = new Label(this.detailComposite, SWT.NONE);
-		lblMinimalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblMinimalDuration.setText("Duration:");
+		final Label lblDuration = new Label(this.detailComposite, SWT.NONE);
+		lblDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		lblDuration.setText(BUNDLE.getString("CallsView.lblDuration.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblMinimalDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblMinimalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -203,7 +204,7 @@ public final class CallsView implements ISubView, Observer {
 
 		this.lblFailed = new Label(this.detailComposite, SWT.NONE);
 		this.lblFailed.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblFailed.setText("Failed:");
+		this.lblFailed.setText(BUNDLE.getString("CallsView.lblFailed.text")); //$NON-NLS-1$ 
 
 		this.lblFailedDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblFailedDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -213,8 +214,8 @@ public final class CallsView implements ISubView, Observer {
 		this.statusBar = new Composite(this.composite, SWT.NONE);
 		this.statusBar.setLayout(new GridLayout(1, false));
 
-		this.lblTraceEquivalence = new Label(this.statusBar, SWT.NONE);
-		this.lblTraceEquivalence.setText("0 Operation Calls");
+		this.lbCounter = new Label(this.statusBar, SWT.NONE);
+		this.lbCounter.setText("0 " + BUNDLE.getString("CallsView.lbCounter.text")); //$NON-NLS-1$ 
 
 		this.table.addListener(SWT.SetData, new DataProvider());
 		this.table.addSelectionListener(this.controller);
@@ -222,20 +223,20 @@ public final class CallsView implements ISubView, Observer {
 		tblclmnComponent.addSelectionListener(new ComponentSortListener());
 		tblclmnExecutionContainer.addSelectionListener(new ContainerSortListener());
 		tblclmnOperation.addSelectionListener(new OperationSortListener());
-		tblclmnMinimalDuration.addSelectionListener(new DurationSortListener());
-		tblclmnTotalDuration.addSelectionListener(new TraceIDSortListener());
+		tblclmnDuration.addSelectionListener(new DurationSortListener());
+		tblclmnTraceID.addSelectionListener(new TraceIDSortListener());
 		tblclmnTimestamp.addSelectionListener(new TimestampSortListener());
 
-		this.ivBtn1.addSelectionListener(this.controller);
-		this.ivBtn2.addSelectionListener(this.controller);
+		this.btnShowAll.addSelectionListener(this.controller);
+		this.btnShowJustFailed.addSelectionListener(this.controller);
 	}
 
 	public Button getBtn1() {
-		return this.ivBtn1;
+		return this.btnShowAll;
 	}
 
 	public Button getBtn2() {
-		return this.ivBtn2;
+		return this.btnShowJustFailed;
 	}
 
 	@Override
@@ -294,9 +295,9 @@ public final class CallsView implements ISubView, Observer {
 
 	private void updateStatusBar() {
 		if (this.model.getFilter() == Filter.NONE) {
-			this.lblTraceEquivalence.setText(this.dataModel.getOperationCalls().size() + " Operation Call(s)");
+			this.lbCounter.setText(this.dataModel.getOperationCalls().size() + " " + BUNDLE.getString("CallsView.lbCounter.text"));
 		} else {
-			this.lblTraceEquivalence.setText(this.dataModel.getFailedOperationCalls().size() + " Failed Operation Call(s)");
+			this.lbCounter.setText(this.dataModel.getFailedOperationCalls().size() + " " + BUNDLE.getString("CallsView.lbCounter.text"));
 		}
 		this.statusBar.getParent().layout();
 	}

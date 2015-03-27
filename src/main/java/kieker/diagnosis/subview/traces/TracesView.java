@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
 
@@ -62,6 +63,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public final class TracesView implements Observer, ISubView {
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("kieker.diagnosis.subview.traces.tracesview"); //$NON-NLS-1$
 
 	private static final String N_A = "N/A";
 
@@ -89,11 +91,11 @@ public final class TracesView implements Observer, ISubView {
 	private Text lblComponentDisplay;
 	private Text lblExecutionContainerDisplay;
 	private Label lblFailed;
-	private Label lblTraces;
+	private Label lblCounter;
 	private Composite statusBar;
-	private Button ivBtn1;
-	private Button ivBtn2;
-	private Button ivBtn3;
+	private Button btnShowAll;
+	private Button btnShowJustFailed;
+	private Button showJustFailureContaining;
 	private ScrolledComposite ivSc;
 
 	@PostConstruct
@@ -127,13 +129,13 @@ public final class TracesView implements Observer, ISubView {
 		gl_composite.horizontalSpacing = 0;
 		filterComposite.setLayout(gl_filterComposite);
 
-		this.ivBtn1 = new Button(filterComposite, SWT.RADIO);
-		this.ivBtn1.setText("Show All Traces");
-		this.ivBtn1.setSelection(true);
-		this.ivBtn2 = new Button(filterComposite, SWT.RADIO);
-		this.ivBtn2.setText("Show Only Failed Traces");
-		this.ivBtn3 = new Button(filterComposite, SWT.RADIO);
-		this.ivBtn3.setText("Show Only Traces Containing Failures");
+		this.btnShowAll = new Button(filterComposite, SWT.RADIO);
+		this.btnShowAll.setText(BUNDLE.getString("TracesView.btnShowAll.text")); //$NON-NLS-1$ 
+		this.btnShowAll.setSelection(true);
+		this.btnShowJustFailed = new Button(filterComposite, SWT.RADIO);
+		this.btnShowJustFailed.setText(BUNDLE.getString("TracesView.btnShowJustFailed.text")); //$NON-NLS-1$ 
+		this.showJustFailureContaining = new Button(filterComposite, SWT.RADIO);
+		this.showJustFailureContaining.setText(BUNDLE.getString("TracesView.showJustFailureContaining.text")); //$NON-NLS-1$ 
 
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -143,39 +145,39 @@ public final class TracesView implements Observer, ISubView {
 
 		final TreeColumn trclmnExecutionContainer = new TreeColumn(this.tree, SWT.NONE);
 		trclmnExecutionContainer.setWidth(100);
-		trclmnExecutionContainer.setText("Execution Container");
+		trclmnExecutionContainer.setText(BUNDLE.getString("TracesView.trclmnExecutionContainer.text")); //$NON-NLS-1$ 
 
 		final TreeColumn trclmnComponent = new TreeColumn(this.tree, SWT.NONE);
 		trclmnComponent.setWidth(100);
-		trclmnComponent.setText("Component");
+		trclmnComponent.setText(BUNDLE.getString("TracesView.trclmnComponent.text")); //$NON-NLS-1$ 
 
 		final TreeColumn trclmnOperation = new TreeColumn(this.tree, SWT.NONE);
 		trclmnOperation.setWidth(100);
-		trclmnOperation.setText("Operation");
+		trclmnOperation.setText(BUNDLE.getString("TracesView.trclmnOperation.text")); //$NON-NLS-1$ 
 
 		final TreeColumn trclmnTraceDepth = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnTraceDepth.setWidth(100);
-		trclmnTraceDepth.setText("Trace Depth");
+		trclmnTraceDepth.setText(BUNDLE.getString("TracesView.trclmnTraceDepth.text")); //$NON-NLS-1$ 
 
 		final TreeColumn trclmnTraceSize = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnTraceSize.setWidth(100);
-		trclmnTraceSize.setText("Trace Size");
+		trclmnTraceSize.setText(BUNDLE.getString("TracesView.trclmnTraceSize.text")); //$NON-NLS-1$ 
 
 		final TreeColumn trclmnDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnDuration.setWidth(100);
-		trclmnDuration.setText("Duration");
+		trclmnDuration.setText(BUNDLE.getString("TracesView.trclmnDuration.text")); //$NON-NLS-1$ 
 
 		final TreeColumn trclmnPercent = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnPercent.setWidth(100);
-		trclmnPercent.setText("Percent");
+		trclmnPercent.setText(BUNDLE.getString("TracesView.trclmnPercent.text")); //$NON-NLS-1$ 
 
 		final TreeColumn trclmnTraceId = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnTraceId.setWidth(100);
-		trclmnTraceId.setText("Trace ID");
+		trclmnTraceId.setText(BUNDLE.getString("TracesView.trclmnTraceId.text")); //$NON-NLS-1$ 
 
 		final TreeColumn trclmnTimestamp = new TreeColumn(this.tree, SWT.NONE);
 		trclmnTimestamp.setWidth(100);
-		trclmnTimestamp.setText("Timestamp");
+		trclmnTimestamp.setText(BUNDLE.getString("TracesView.trclmnTimestamp.text")); //$NON-NLS-1$ 
 
 		this.ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 
@@ -189,7 +191,7 @@ public final class TracesView implements Observer, ISubView {
 
 		final Label lblExecutionContainer = new Label(this.detailComposite, SWT.NONE);
 		lblExecutionContainer.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblExecutionContainer.setText("Execution Container:");
+		lblExecutionContainer.setText(BUNDLE.getString("TracesView.lblExecutionContainer.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblExecutionContainerDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblExecutionContainerDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -197,7 +199,7 @@ public final class TracesView implements Observer, ISubView {
 
 		final Label lblComponent = new Label(this.detailComposite, SWT.NONE);
 		lblComponent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblComponent.setText("Component:");
+		lblComponent.setText(BUNDLE.getString("TracesView.lblComponent.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblComponentDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblComponentDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -205,7 +207,7 @@ public final class TracesView implements Observer, ISubView {
 
 		final Label lblOperation = new Label(this.detailComposite, SWT.NONE);
 		lblOperation.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblOperation.setText("Operation:");
+		lblOperation.setText(BUNDLE.getString("TracesView.lblOperation.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblOperationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblOperationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -213,7 +215,7 @@ public final class TracesView implements Observer, ISubView {
 
 		final Label lblDuration = new Label(this.detailComposite, SWT.NONE);
 		lblDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblDuration.setText("Duration:");
+		lblDuration.setText(BUNDLE.getString("TracesView.lblDuration.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -222,7 +224,7 @@ public final class TracesView implements Observer, ISubView {
 		final Label lblTraceId = new Label(this.detailComposite, SWT.NONE);
 		lblTraceId.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblTraceId.setBounds(0, 0, 55, 15);
-		lblTraceId.setText("Trace ID:");
+		lblTraceId.setText(BUNDLE.getString("TracesView.lblTraceId.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblTraceIdDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblTraceIdDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -230,7 +232,7 @@ public final class TracesView implements Observer, ISubView {
 
 		this.lblFailed = new Label(this.detailComposite, SWT.NONE);
 		this.lblFailed.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblFailed.setText("Failed:");
+		this.lblFailed.setText(BUNDLE.getString("TracesView.lblFailed.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblFailedDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblFailedDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -238,7 +240,7 @@ public final class TracesView implements Observer, ISubView {
 
 		final Label lblTraceDepth = new Label(this.detailComposite, SWT.NONE);
 		lblTraceDepth.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblTraceDepth.setText("Trace Depth:");
+		lblTraceDepth.setText(BUNDLE.getString("TracesView.lblTraceDepth.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblTraceDepthDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblTraceDepthDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -246,7 +248,7 @@ public final class TracesView implements Observer, ISubView {
 
 		final Label lblTraceSize = new Label(this.detailComposite, SWT.NONE);
 		lblTraceSize.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblTraceSize.setText("Trace Size:");
+		lblTraceSize.setText(BUNDLE.getString("TracesView.lblTraceSize.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblTraceSizeDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblTraceSizeDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -258,8 +260,8 @@ public final class TracesView implements Observer, ISubView {
 
 		this.statusBar.setLayout(new GridLayout(1, false));
 
-		this.lblTraces = new Label(this.statusBar, SWT.NONE);
-		this.lblTraces.setText("0 Traces");
+		this.lblCounter = new Label(this.statusBar, SWT.NONE);
+		this.lblCounter.setText("0 " + BUNDLE.getString("TracesView.lblCounter.text")); //$NON-NLS-1$ 
 
 		this.tree.addSelectionListener(this.controller);
 		this.tree.addListener(SWT.SetData, new DataProvider());
@@ -273,21 +275,21 @@ public final class TracesView implements Observer, ISubView {
 		trclmnTraceSize.addSelectionListener(new TraceSizeSortListener());
 		trclmnTimestamp.addSelectionListener(new TimestampSortListener());
 
-		this.ivBtn1.addSelectionListener(this.controller);
-		this.ivBtn2.addSelectionListener(this.controller);
-		this.ivBtn3.addSelectionListener(this.controller);
+		this.btnShowAll.addSelectionListener(this.controller);
+		this.btnShowJustFailed.addSelectionListener(this.controller);
+		this.showJustFailureContaining.addSelectionListener(this.controller);
 	}
 
 	public Button getBtn1() {
-		return this.ivBtn1;
+		return this.btnShowAll;
 	}
 
 	public Button getBtn2() {
-		return this.ivBtn2;
+		return this.btnShowJustFailed;
 	}
 
 	public Button getBtn3() {
-		return this.ivBtn3;
+		return this.showJustFailureContaining;
 	}
 
 	public Tree getTree() {
@@ -323,13 +325,13 @@ public final class TracesView implements Observer, ISubView {
 	private void updateStatusBar() {
 		switch (this.model.getFilter()) {
 		case JUST_FAILED:
-			this.lblTraces.setText(this.dataModel.getFailedTracesCopy().size() + " Failed Trace(s)");
+			this.lblCounter.setText(this.dataModel.getFailedTracesCopy().size() + " " + BUNDLE.getString("TracesView.lblCounter.text"));
 			break;
 		case JUST_FAILURE_CONTAINING:
-			this.lblTraces.setText(this.dataModel.getFailureContainingTracesCopy().size() + " Failure Containing Trace(s)");
+			this.lblCounter.setText(this.dataModel.getFailureContainingTracesCopy().size() + " " + BUNDLE.getString("TracesView.lblCounter.text"));
 			break;
 		case NONE:
-			this.lblTraces.setText(this.dataModel.getTracesCopy().size() + " Trace(s)");
+			this.lblCounter.setText(this.dataModel.getTracesCopy().size() + " " + BUNDLE.getString("TracesView.lblCounter.text"));
 			break;
 		default:
 			break;
@@ -412,7 +414,7 @@ public final class TracesView implements Observer, ISubView {
 			}
 			idxCounter++;
 		}
-		this.ivBtn1.setSelection(true);
+		this.btnShowAll.setSelection(true);
 	}
 
 	private class DataProvider implements Listener {

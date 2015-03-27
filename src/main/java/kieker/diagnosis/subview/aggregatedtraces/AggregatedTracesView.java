@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
 
@@ -65,6 +66,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public final class AggregatedTracesView implements Observer, ISubView {
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("kieker.diagnosis.subview.aggregatedtraces.aggregatedtracesview"); //$NON-NLS-1$
 
 	private static final String N_A = "N/A";
 
@@ -97,13 +99,13 @@ public final class AggregatedTracesView implements Observer, ISubView {
 	private Label lblFailed;
 	private Text lblTotalDurationDisplay;
 	private Composite statusBar;
-	private Label lblTraceEquivalence;
+	private Label lblCounter;
 
-	private Button ivBtn1;
+	private Button btnShowAll;
 
-	private Button ivBtn2;
+	private Button btnShowJustFailed;
 
-	private Button ivBtn3;
+	private Button btnShowJustFailureContaining;
 
 	private ScrolledComposite ivSc;
 
@@ -138,13 +140,13 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		gl_composite.horizontalSpacing = 0;
 		filterComposite.setLayout(gl_filterComposite);
 
-		this.ivBtn1 = new Button(filterComposite, SWT.RADIO);
-		this.ivBtn1.setText("Show All Traces");
-		this.ivBtn1.setSelection(true);
-		this.ivBtn2 = new Button(filterComposite, SWT.RADIO);
-		this.ivBtn2.setText("Show Only Failed Traces");
-		this.ivBtn3 = new Button(filterComposite, SWT.RADIO);
-		this.ivBtn3.setText("Show Only Traces Containing Failures");
+		this.btnShowAll = new Button(filterComposite, SWT.RADIO);
+		this.btnShowAll.setText(BUNDLE.getString("AggregatedTracesView.btnShowAll.text")); //$NON-NLS-1$ 
+		this.btnShowAll.setSelection(true);
+		this.btnShowJustFailed = new Button(filterComposite, SWT.RADIO);
+		this.btnShowJustFailed.setText(BUNDLE.getString("AggregatedTracesView.btnShowJustFailed.text")); //$NON-NLS-1$ 
+		this.btnShowJustFailureContaining = new Button(filterComposite, SWT.RADIO);
+		this.btnShowJustFailureContaining.setText(BUNDLE.getString("AggregatedTracesView.btnShowJustFailureContaining.text")); //$NON-NLS-1$ 
 
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -154,47 +156,47 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final TreeColumn trclmnExecutionContainer = new TreeColumn(this.tree, SWT.NONE);
 		trclmnExecutionContainer.setWidth(100);
-		trclmnExecutionContainer.setText("Execution Container");
+		trclmnExecutionContainer.setText(BUNDLE.getString("AggregatedTracesView.trclmnExecutionContainer.text")); //$NON-NLS-1$ 
 
 		final TreeColumn trclmnComponent = new TreeColumn(this.tree, SWT.NONE);
 		trclmnComponent.setWidth(100);
-		trclmnComponent.setText("Component");
+		trclmnComponent.setText(BUNDLE.getString("AggregatedTracesView.trclmnComponent.text")); //$NON-NLS-1$ 
 
 		final TreeColumn trclmnOperation = new TreeColumn(this.tree, SWT.NONE);
 		trclmnOperation.setWidth(100);
-		trclmnOperation.setText("Operation");
+		trclmnOperation.setText(BUNDLE.getString("AggregatedTracesView.trclmnOperation.text")); //$NON-NLS-1$ 
 
 		final TreeColumn trclmnTraceDepth = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnTraceDepth.setWidth(100);
-		trclmnTraceDepth.setText("Trace Depth");
+		trclmnTraceDepth.setText(BUNDLE.getString("AggregatedTracesView.trclmnTraceDepth.text")); //$NON-NLS-1$ 
 
 		final TreeColumn trclmnTraceSize = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnTraceSize.setWidth(100);
-		trclmnTraceSize.setText("Trace Size");
+		trclmnTraceSize.setText(BUNDLE.getString("AggregatedTracesView.trclmnTraceSize.text")); //$NON-NLS-1$ 
 
 		final TreeColumn trclmnCalls = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnCalls.setWidth(100);
-		trclmnCalls.setText("Number of Calls");
+		trclmnCalls.setText(BUNDLE.getString("AggregatedTracesView.trclmnCalls.text")); //$NON-NLS-1$ 
 
 		final TreeColumn trclmnMinimalDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnMinimalDuration.setWidth(100);
-		trclmnMinimalDuration.setText("Minimal Duration");
+		trclmnMinimalDuration.setText(BUNDLE.getString("AggregatedTracesView.trclmnMinimalDuration.text")); //$NON-NLS-1$ 
 
 		final TreeColumn trclmnAverageDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnAverageDuration.setWidth(100);
-		trclmnAverageDuration.setText("Mean Duration");
+		trclmnAverageDuration.setText(BUNDLE.getString("AggregatedTracesView.trclmnAverageDuration.text")); //$NON-NLS-1$ 
 
 		final TreeColumn trclmnMeanDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnMeanDuration.setWidth(100);
-		trclmnMeanDuration.setText("Median Duration");
+		trclmnMeanDuration.setText(BUNDLE.getString("AggregatedTracesView.trclmnMeanDuration.text")); //$NON-NLS-1$ 
 
 		final TreeColumn trclmnMaximalDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnMaximalDuration.setWidth(100);
-		trclmnMaximalDuration.setText("Maximal Duration");
+		trclmnMaximalDuration.setText(BUNDLE.getString("AggregatedTracesView.trclmnMaximalDuration.text")); //$NON-NLS-1$ 
 
 		final TreeColumn trclmnTotalDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnTotalDuration.setWidth(100);
-		trclmnTotalDuration.setText("Total Duration");
+		trclmnTotalDuration.setText(BUNDLE.getString("AggregatedTracesView.trclmnTotalDuration.text")); //$NON-NLS-1$ 
 
 		this.ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 
@@ -208,7 +210,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblExecutionContainer = new Label(this.detailComposite, SWT.NONE);
 		lblExecutionContainer.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblExecutionContainer.setText("Execution Container:");
+		lblExecutionContainer.setText(BUNDLE.getString("AggregatedTracesView.lblExecutionContainer.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblExecutionContainerDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblExecutionContainerDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -216,7 +218,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblComponent = new Label(this.detailComposite, SWT.NONE);
 		lblComponent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblComponent.setText("Component:");
+		lblComponent.setText(BUNDLE.getString("AggregatedTracesView.lblComponent.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblComponentDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblComponentDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -224,7 +226,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblOperation = new Label(this.detailComposite, SWT.NONE);
 		lblOperation.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblOperation.setText("Operation:");
+		lblOperation.setText(BUNDLE.getString("AggregatedTracesView.lblOperation.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblOperationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblOperationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -232,7 +234,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblNumberOfCalls = new Label(this.detailComposite, SWT.NONE);
 		lblNumberOfCalls.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblNumberOfCalls.setText("Number of Calls:");
+		lblNumberOfCalls.setText(BUNDLE.getString("AggregatedTracesView.lblNumberOfCalls.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblNumberOfCallsDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblNumberOfCallsDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -240,7 +242,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblMinimalDuration = new Label(this.detailComposite, SWT.NONE);
 		lblMinimalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblMinimalDuration.setText("Minimal Duration:");
+		lblMinimalDuration.setText(BUNDLE.getString("AggregatedTracesView.lblMinimalDuration.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblMinimalDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblMinimalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -248,7 +250,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblAverageDuration = new Label(this.detailComposite, SWT.NONE);
 		lblAverageDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblAverageDuration.setText("Mean Duration:");
+		lblAverageDuration.setText(BUNDLE.getString("AggregatedTracesView.lblAverageDuration.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblAverageDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblAverageDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -256,7 +258,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblMeanDuration = new Label(this.detailComposite, SWT.NONE);
 		lblMeanDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblMeanDuration.setText("Median Duration:");
+		lblMeanDuration.setText(BUNDLE.getString("AggregatedTracesView.lblMeanDuration.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblMeanDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblMeanDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -264,7 +266,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblMaximalDuration = new Label(this.detailComposite, SWT.NONE);
 		lblMaximalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblMaximalDuration.setText("Maximal Duration:");
+		lblMaximalDuration.setText(BUNDLE.getString("AggregatedTracesView.lblMaximalDuration.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblMaximalDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblMaximalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -272,7 +274,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblTotalDuration = new Label(this.detailComposite, SWT.NONE);
 		lblTotalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblTotalDuration.setText("Total Duration:");
+		lblTotalDuration.setText(BUNDLE.getString("AggregatedTracesView.lblTotalDuration.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblTotalDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblTotalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -280,7 +282,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		this.lblFailed = new Label(this.detailComposite, SWT.NONE);
 		this.lblFailed.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblFailed.setText("Failed:");
+		this.lblFailed.setText(BUNDLE.getString("AggregatedTracesView.lblFailed.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblFailedDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblFailedDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -288,7 +290,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblTraceDepth = new Label(this.detailComposite, SWT.NONE);
 		lblTraceDepth.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblTraceDepth.setText("Trace Depth:");
+		lblTraceDepth.setText(BUNDLE.getString("AggregatedTracesView.lblTraceDepth.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblTraceDepthDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblTraceDepthDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -296,7 +298,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblTraceSize = new Label(this.detailComposite, SWT.NONE);
 		lblTraceSize.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblTraceSize.setText("Trace Size:");
+		lblTraceSize.setText(BUNDLE.getString("AggregatedTracesView.lblTraceSize.text") + ":"); //$NON-NLS-1$ 
 
 		this.lblTraceSizeDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblTraceSizeDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -306,8 +308,8 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		this.statusBar = new Composite(this.composite, SWT.NONE);
 		this.statusBar.setLayout(new GridLayout(1, false));
 
-		this.lblTraceEquivalence = new Label(this.statusBar, SWT.NONE);
-		this.lblTraceEquivalence.setText("0 Trace Equivalence Classes");
+		this.lblCounter = new Label(this.statusBar, SWT.NONE);
+		this.lblCounter.setText("0 " + BUNDLE.getString("AggregatedTracesView.lblCounter.text") + ":"); //$NON-NLS-1$ 
 
 		this.tree.addSelectionListener(this.controller);
 		this.tree.addListener(SWT.SetData, new DataProvider());
@@ -324,21 +326,21 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		trclmnTraceDepth.addSelectionListener(new TraceDepthSortListener());
 		trclmnTraceSize.addSelectionListener(new TraceSizeSortListener());
 
-		this.ivBtn1.addSelectionListener(this.controller);
-		this.ivBtn2.addSelectionListener(this.controller);
-		this.ivBtn3.addSelectionListener(this.controller);
+		this.btnShowAll.addSelectionListener(this.controller);
+		this.btnShowJustFailed.addSelectionListener(this.controller);
+		this.btnShowJustFailureContaining.addSelectionListener(this.controller);
 	}
 
 	public Button getBtn1() {
-		return this.ivBtn1;
+		return this.btnShowAll;
 	}
 
 	public Button getBtn2() {
-		return this.ivBtn2;
+		return this.btnShowJustFailed;
 	}
 
 	public Button getBtn3() {
-		return this.ivBtn3;
+		return this.btnShowJustFailureContaining;
 	}
 
 	@Override
@@ -370,13 +372,13 @@ public final class AggregatedTracesView implements Observer, ISubView {
 	private void updateStatusBar() {
 		switch (this.model.getFilter()) {
 		case JUST_FAILED:
-			this.lblTraceEquivalence.setText(this.dataModel.getFailedTracesCopy().size() + " Failed Trace Equivalence Class(es)");
+			this.lblCounter.setText(this.dataModel.getFailedTracesCopy().size() + " " + BUNDLE.getString("AggregatedTracesView.lblCounter.text"));
 			break;
 		case JUST_FAILURE_CONTAINING:
-			this.lblTraceEquivalence.setText(this.dataModel.getFailureContainingTracesCopy().size() + " Failure Containing Trace Equivalence Class(es)");
+			this.lblCounter.setText(this.dataModel.getFailureContainingTracesCopy().size() + " " + BUNDLE.getString("AggregatedTracesView.lblCounter.text"));
 			break;
 		case NONE:
-			this.lblTraceEquivalence.setText(this.dataModel.getTracesCopy().size() + " Trace Equivalence Class(es)");
+			this.lblCounter.setText(this.dataModel.getTracesCopy().size() + " " + BUNDLE.getString("AggregatedTracesView.lblCounter.text"));
 			break;
 		default:
 			break;
