@@ -39,6 +39,7 @@ import kieker.diagnosis.subview.util.NameConverter;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -90,6 +91,8 @@ public final class CallsView implements ISubView, Observer {
 	private Button ivBtn1;
 
 	private Button ivBtn2;
+
+	private ScrolledComposite ivSc;
 
 	@PostConstruct
 	public void initialize() {
@@ -159,9 +162,15 @@ public final class CallsView implements ISubView, Observer {
 		tblclmnTimestamp.setWidth(100);
 		tblclmnTimestamp.setText("Timestamp");
 
-		this.detailComposite = new Composite(sashForm, SWT.BORDER);
+		ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+
+		this.detailComposite = new Composite(ivSc, SWT.NONE);
 		this.detailComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.detailComposite.setLayout(new GridLayout(2, false));
+ 
+		ivSc.setContent(detailComposite);
+		ivSc.setExpandHorizontal(true);
+		ivSc.setExpandVertical(true); 
 
 		final Label lblExecutionContainer = new Label(this.detailComposite, SWT.NONE);
 		lblExecutionContainer.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -283,6 +292,7 @@ public final class CallsView implements ISubView, Observer {
 			}
 		}
 		this.detailComposite.layout();
+		ivSc.setMinSize(detailComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
 	private void updateStatusBar() {

@@ -42,6 +42,7 @@ import kieker.diagnosis.subview.util.TraceSizeSortListener;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -98,6 +99,8 @@ public final class TracesView implements Observer, ISubView {
 	private Button ivBtn2;
 
 	private Button ivBtn3;
+
+	private ScrolledComposite ivSc;
 
 	@PostConstruct
 	public void initialize() {
@@ -180,9 +183,15 @@ public final class TracesView implements Observer, ISubView {
 		trclmnTimestamp.setWidth(100);
 		trclmnTimestamp.setText("Timestamp");
 
-		this.detailComposite = new Composite(sashForm, SWT.BORDER);
+		ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+
+		this.detailComposite = new Composite(ivSc, SWT.NONE);
 		this.detailComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.detailComposite.setLayout(new GridLayout(2, false));
+
+		ivSc.setContent(detailComposite);
+		ivSc.setExpandHorizontal(true);
+		ivSc.setExpandVertical(true); 
 
 		final Label lblExecutionContainer = new Label(this.detailComposite, SWT.NONE);
 		lblExecutionContainer.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -320,10 +329,10 @@ public final class TracesView implements Observer, ISubView {
 	private void updateStatusBar() {
 		switch (this.model.getFilter()) {
 		case JUST_FAILED:
-			this.lblTraces.setText(this.dataModel.getFailedTracesCopy().size() + "Failed Trace(s)");
+			this.lblTraces.setText(this.dataModel.getFailedTracesCopy().size() + " Failed Trace(s)");
 			break;
 		case JUST_FAILURE_CONTAINING:
-			this.lblTraces.setText(this.dataModel.getFailureContainingTracesCopy().size() + "Failure Containing Trace(s)");
+			this.lblTraces.setText(this.dataModel.getFailureContainingTracesCopy().size() + " Failure Containing Trace(s)");
 			break;
 		case NONE:
 			this.lblTraces.setText(this.dataModel.getTracesCopy().size() + " Trace(s)");
@@ -393,6 +402,7 @@ public final class TracesView implements Observer, ISubView {
 			}
 		}
 		this.detailComposite.layout();
+		ivSc.setMinSize(detailComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
 	private class DataProvider implements Listener {

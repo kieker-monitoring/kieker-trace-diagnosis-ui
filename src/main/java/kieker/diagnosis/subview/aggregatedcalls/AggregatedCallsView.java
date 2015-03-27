@@ -42,6 +42,7 @@ import kieker.diagnosis.subview.util.NameConverter;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -99,6 +100,8 @@ public final class AggregatedCallsView implements ISubView, Observer {
 
 	private Button ivBtn2;
 
+	private ScrolledComposite ivSc;
+
 	@PostConstruct
 	public void initialize() {
 		this.dataModel.addObserver(this);
@@ -129,7 +132,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 		gl_composite.marginWidth = 0;
 		gl_composite.horizontalSpacing = 0;
 		this.filterComposite.setLayout(gl_filterComposite);
- 
+
 		ivBtn1 = new Button(filterComposite, SWT.RADIO);
 		ivBtn1.setText("Show All Calls");
 		ivBtn1.setSelection(true);
@@ -179,13 +182,19 @@ public final class AggregatedCallsView implements ISubView, Observer {
 		tblclmnTotalDuration.setWidth(100);
 		tblclmnTotalDuration.setText("Total Duration");
 
-		this.detailComposite = new Composite(sashForm, SWT.BORDER);
+		ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+
+		this.detailComposite = new Composite(ivSc, SWT.NONE);
 		this.detailComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.detailComposite.setLayout(new GridLayout(2, false));
 
+		ivSc.setContent(detailComposite);
+		ivSc.setExpandHorizontal(true);
+		ivSc.setExpandVertical(true); 
+
 		final Label lblExecutionContainer = new Label(this.detailComposite, SWT.NONE);
 		lblExecutionContainer.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblExecutionContainer.setText("Execution Container:"); 
+		lblExecutionContainer.setText("Execution Container:");
 
 		this.lblExecutionContainerDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblExecutionContainerDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -195,7 +204,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 		lblComponent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblComponent.setText("Component:");
 
-		this.lblComponentDisplay =new Text(this.detailComposite, SWT.READ_ONLY);
+		this.lblComponentDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblComponentDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblComponentDisplay.setText(AggregatedCallsView.N_A);
 
@@ -211,7 +220,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 		lblNumberOfCalls.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblNumberOfCalls.setText("Number of Calls:");
 
-		this.lblNumberOfCallsDisplay =new Text(this.detailComposite, SWT.READ_ONLY);
+		this.lblNumberOfCallsDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblNumberOfCallsDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblNumberOfCallsDisplay.setText(AggregatedCallsView.N_A);
 
@@ -219,7 +228,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 		lblMinimalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblMinimalDuration.setText("Minimal Duration:");
 
-		this.lblMinimalDurationDisplay =new Text(this.detailComposite, SWT.READ_ONLY);
+		this.lblMinimalDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblMinimalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblMinimalDurationDisplay.setText(AggregatedCallsView.N_A);
 
@@ -243,7 +252,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 		lblMaximalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblMaximalDuration.setText("Maximal Duration:");
 
-		this.lblMaximalDurationDisplay =new Text(this.detailComposite, SWT.READ_ONLY);
+		this.lblMaximalDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblMaximalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblMaximalDurationDisplay.setText(AggregatedCallsView.N_A);
 
@@ -259,7 +268,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 		this.lblFailed.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblFailed.setText("Failed:");
 
-		this.lblFailedDisplay =new Text(this.detailComposite, SWT.READ_ONLY);
+		this.lblFailedDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblFailedDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.lblFailedDisplay.setText(AggregatedCallsView.N_A);
 		sashForm.setWeights(new int[] { 2, 1 });
@@ -381,7 +390,8 @@ public final class AggregatedCallsView implements ISubView, Observer {
 				this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 			}
 		}
-		this.detailComposite.layout();
+		this.detailComposite.layout(); 
+		ivSc.setMinSize(detailComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
 	private class DataProvider implements Listener {

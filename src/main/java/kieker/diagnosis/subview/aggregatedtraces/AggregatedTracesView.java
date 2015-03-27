@@ -45,6 +45,7 @@ import kieker.diagnosis.subview.util.TraceSizeSortListener;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
@@ -106,6 +107,8 @@ public final class AggregatedTracesView implements Observer, ISubView {
 	private Button ivBtn2;
 
 	private Button ivBtn3;
+
+	private ScrolledComposite ivSc;
 
 	@PostConstruct
 	public void initialize() {
@@ -196,9 +199,15 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		trclmnTotalDuration.setWidth(100);
 		trclmnTotalDuration.setText("Total Duration");
 
-		this.detailComposite = new Composite(sashForm, SWT.BORDER);
+		ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+
+		this.detailComposite = new Composite(ivSc, SWT.NONE);
 		this.detailComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.detailComposite.setLayout(new GridLayout(2, false));
+
+		ivSc.setContent(detailComposite);
+		ivSc.setExpandHorizontal(true);
+		ivSc.setExpandVertical(true); 
 
 		final Label lblExecutionContainer = new Label(this.detailComposite, SWT.NONE);
 		lblExecutionContainer.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -364,10 +373,10 @@ public final class AggregatedTracesView implements Observer, ISubView {
 	private void updateStatusBar() {
 		switch (this.model.getFilter()) {
 		case JUST_FAILED:
-			this.lblTraceEquivalence.setText(this.dataModel.getFailedTracesCopy().size() + "Failed Trace Equivalence Class(es)");
+			this.lblTraceEquivalence.setText(this.dataModel.getFailedTracesCopy().size() + " Failed Trace Equivalence Class(es)");
 			break;
 		case JUST_FAILURE_CONTAINING:
-			this.lblTraceEquivalence.setText(this.dataModel.getFailureContainingTracesCopy().size() + "Failure Containing Trace Equivalence Class(es)");
+			this.lblTraceEquivalence.setText(this.dataModel.getFailureContainingTracesCopy().size() + " Failure Containing Trace Equivalence Class(es)");
 			break;
 		case NONE:
 			this.lblTraceEquivalence.setText(this.dataModel.getTracesCopy().size() + " Trace Equivalence Class(es)");
@@ -445,6 +454,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 			}
 		}
 		this.detailComposite.layout();
+		ivSc.setMinSize(detailComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
 	private class DataProvider implements Listener {
