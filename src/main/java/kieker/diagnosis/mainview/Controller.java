@@ -16,15 +16,15 @@
 
 package kieker.diagnosis.mainview;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import javax.annotation.PostConstruct;
 
+import kieker.diagnosis.common.Mapper;
 import kieker.diagnosis.domain.OperationCall;
+import kieker.diagnosis.mainview.Model.SubView;
 import kieker.diagnosis.mainview.dialog.SettingsDialog;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.subview.ISubView;
@@ -41,8 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * The main controller of this application. It is responsible for creating top level models, further sub-controllers, and for creating and controlling the
- * application's main view. The sub-views and their corresponding models are created by the sub-controllers.
+ * The main controller of this application. It is responsible for controlling the application's main window.
  * 
  * @author Nils Christian Ehmke
  */
@@ -72,15 +71,15 @@ public final class Controller implements SelectionListener {
 	@Autowired
 	private Model model;
 
-	private Map<String, ISubView> subViews;
+	private Mapper<SubView, ISubView> subViewMapper;
 
 	@PostConstruct
 	public void initialize() {
-		this.subViews = new HashMap<>();
-		this.subViews.put(SubView.AGGREGATED_TRACES_SUB_VIEW.name(), this.aggregatedTracesViewController.getView());
-		this.subViews.put(SubView.TRACES_SUB_VIEW.name(), this.tracesViewController.getView());
-		this.subViews.put(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW.name(), this.aggregatedCallsViewController.getView());
-		this.subViews.put(SubView.OPERATION_CALLS_SUB_VIEW.name(), this.callsViewController.getView());
+		this.subViewMapper = new Mapper<>();
+		this.subViewMapper.map(SubView.AGGREGATED_TRACES_SUB_VIEW).to(this.aggregatedTracesViewController.getView());
+		this.subViewMapper.map(SubView.TRACES_SUB_VIEW).to(this.tracesViewController.getView());
+		this.subViewMapper.map(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW).to(this.aggregatedCallsViewController.getView());
+		this.subViewMapper.map(SubView.OPERATION_CALLS_SUB_VIEW).to(this.callsViewController.getView());
 	}
 
 	public void showView() {
@@ -135,25 +134,25 @@ public final class Controller implements SelectionListener {
 
 	private void handlePotentialTreeSelection(final SelectionEvent e) { // NOPMD (this method violates some metrics. This is acceptable, as it is readable)
 		if (e.item == this.view.getTrtmExplorer()) {
-			this.model.setCurrentActiveSubView(SubView.NONE.name());
+			this.model.setActiveSubView(SubView.NONE);
 		}
 		if (e.item == this.view.getTrtmTraces()) {
-			this.model.setCurrentActiveSubView(SubView.TRACES_SUB_VIEW.name());
+			this.model.setActiveSubView(SubView.TRACES_SUB_VIEW);
 		}
 		if (e.item == this.view.getTrtmAggregatedTraces()) {
-			this.model.setCurrentActiveSubView(SubView.AGGREGATED_TRACES_SUB_VIEW.name());
+			this.model.setActiveSubView(SubView.AGGREGATED_TRACES_SUB_VIEW);
 		}
 		if (e.item == this.view.getTrtmAggregatedOperationCalls()) {
-			this.model.setCurrentActiveSubView(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW.name());
+			this.model.setActiveSubView(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW);
 		}
 		if (e.item == this.view.getTrtmOperationCalls()) {
-			this.model.setCurrentActiveSubView(SubView.OPERATION_CALLS_SUB_VIEW.name());
+			this.model.setActiveSubView(SubView.OPERATION_CALLS_SUB_VIEW);
 		}
 	}
 
 	public void jumpToCorrespondingTrace(final OperationCall call) {
 		this.view.getTree().select(this.view.getTrtmTraces());
-		this.model.setCurrentActiveSubView(SubView.TRACES_SUB_VIEW.name());
+		this.model.setActiveSubView(SubView.TRACES_SUB_VIEW);
 		this.tracesViewController.jumpToCorrespondingTrace(call);
 	}
 
@@ -162,12 +161,8 @@ public final class Controller implements SelectionListener {
 		// Nothing to do here. This method is just required by the interface.
 	}
 
-	public Map<String, ISubView> getSubViews() {
-		return this.subViews;
-	}
-
-	public enum SubView {
-		TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, AGGREGATED_OPERATION_CALLS_SUB_VIEW, OPERATION_CALLS_SUB_VIEW,
+	public Mapper<SubView, ISubView> getSubViews() {
+		return this.subViewMapper;
 	}
 
 }

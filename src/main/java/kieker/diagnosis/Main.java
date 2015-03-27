@@ -21,7 +21,7 @@ import kieker.diagnosis.mainview.Controller;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
- * Contains the main method of this application.
+ * Contains the main method of this application. Do not move this class without changing the scanned package name for the Spring context.
  * 
  * @author Nils Christian Ehmke
  */
@@ -30,14 +30,15 @@ public final class Main {
 	private Main() {}
 
 	/**
-	 * The main method of this application.
+	 * The main method of this application. It initializes the Spring context and uses the main controller to start everything.
 	 * 
 	 * @param args
-	 *            The command line arguments. They have no effect.
+	 *            The command line arguments. They have currently no effect.
 	 */
 	public static void main(final String[] args) {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-			context.scan("kieker.diagnosis");
+			final String applicationPackageName = Main.class.getPackage().getName();
+			context.scan(applicationPackageName);
 			context.refresh();
 
 			final Controller controller = context.getBean(Controller.class);

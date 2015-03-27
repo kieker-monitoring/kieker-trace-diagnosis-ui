@@ -16,6 +16,7 @@
 
 package kieker.diagnosis.common;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,6 +48,10 @@ public final class Mapper<I, O> {
 			}
 		}
 		return null;
+	}
+
+	public Collection<O> values() {
+		return this.internalMap.values();
 	}
 
 	public final class To {

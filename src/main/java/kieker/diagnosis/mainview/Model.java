@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component;
  * 
  * @author Nils Christian Ehmke
  */
-
 @Component
 public final class Model {
 
@@ -33,7 +32,7 @@ public final class Model {
 	private View view;
 
 	private Cursor cursor;
-	private String currentActiveSubViewKey;
+	private SubView activeSubView;
 
 	public Cursor getCursor() {
 		return this.cursor;
@@ -45,14 +44,18 @@ public final class Model {
 		this.view.notifyAboutChangedCursor();
 	}
 
-	public String getCurrentActiveSubViewKey() {
-		return this.currentActiveSubViewKey;
+	public SubView getActiveSubView() {
+		return this.activeSubView;
 	}
 
-	public void setCurrentActiveSubView(final String currentActiveSubViewKey) {
-		this.currentActiveSubViewKey = currentActiveSubViewKey;
+	public void setActiveSubView(final SubView activeSubView) {
+		this.activeSubView = activeSubView;
 
 		this.view.notifyAboutChangedSubView();
+	}
+
+	public enum SubView {
+		TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, AGGREGATED_OPERATION_CALLS_SUB_VIEW, OPERATION_CALLS_SUB_VIEW,
 	}
 
 }

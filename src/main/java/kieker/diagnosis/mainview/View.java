@@ -16,6 +16,7 @@
 
 package kieker.diagnosis.mainview;
 
+import kieker.diagnosis.mainview.Model.SubView;
 import kieker.diagnosis.mainview.dialog.SettingsDialog;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.subview.ISubView;
@@ -256,9 +257,9 @@ public final class View {
 	}
 
 	private void handleChangedSubView() {
-		final String subViewKey = this.model.getCurrentActiveSubViewKey();
+		final SubView subView = this.model.getActiveSubView();
 
-		final ISubView subViewToShow = this.controller.getSubViews().get(subViewKey);
+		final ISubView subViewToShow = this.controller.getSubViews().resolve(subView);
 		final Composite compositeToShow = (subViewToShow != null) ? subViewToShow.getComposite() : null; // NOPMD (null assigment)
 
 		this.subViewLayout.topControl = compositeToShow;
