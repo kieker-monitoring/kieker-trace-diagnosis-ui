@@ -22,6 +22,7 @@ import java.util.Observer;
 
 import javax.annotation.PostConstruct;
 
+import kieker.diagnosis.common.Messages;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
@@ -141,7 +142,7 @@ public final class CallsView implements ISubView, Observer {
 
 		final TableColumn tblclmnExecutionContainer = new TableColumn(this.table, SWT.NONE);
 		tblclmnExecutionContainer.setWidth(100);
-		tblclmnExecutionContainer.setText("Execution Container");
+		tblclmnExecutionContainer.setText(Messages.getString("executionContainer")); //$NON-NLS-1$
 
 		final TableColumn tblclmnComponent = new TableColumn(this.table, SWT.NONE);
 		tblclmnComponent.setWidth(100);
@@ -175,7 +176,7 @@ public final class CallsView implements ISubView, Observer {
 
 		final Label lblExecutionContainer = new Label(this.detailComposite, SWT.NONE);
 		lblExecutionContainer.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblExecutionContainer.setText("Execution Container:");
+		lblExecutionContainer.setText(Messages.getString("executionContainer") + ":"); //$NON-NLS-1$
 
 		this.lblExecutionContainerDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblExecutionContainerDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -183,7 +184,7 @@ public final class CallsView implements ISubView, Observer {
 
 		final Label lblComponent = new Label(this.detailComposite, SWT.NONE);
 		lblComponent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblComponent.setText("Component:");
+		lblComponent.setText(Messages.getString("component") + ":"); //$NON-NLS-1$
 
 		this.lblComponentDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblComponentDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -191,7 +192,7 @@ public final class CallsView implements ISubView, Observer {
 
 		final Label lblOperation = new Label(this.detailComposite, SWT.NONE);
 		lblOperation.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblOperation.setText("Operation:");
+		lblOperation.setText(Messages.getString("operation") + ":"); //$NON-NLS-1$
 
 		this.lblOperationDisplay = new Text(this.detailComposite, SWT.READ_ONLY | SWT.NONE);
 		this.lblOperationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));

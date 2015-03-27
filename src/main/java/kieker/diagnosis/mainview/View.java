@@ -16,6 +16,7 @@
 
 package kieker.diagnosis.mainview;
 
+import kieker.diagnosis.common.Messages;
 import kieker.diagnosis.mainview.dialog.SettingsDialog;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.subview.ISubView;
@@ -181,7 +182,7 @@ public final class View {
 		this.shell = new Shell();
 		this.shell.setImage(null);
 		this.shell.setMaximized(true);
-		this.shell.setText("Kieker Trace Diagnosis");
+		this.shell.setText(Messages.getString("applicationName")); //$NON-NLS-1$
 
 		this.shell.setImage(new Image(this.shell.getDisplay(), ClassLoader.getSystemClassLoader().getResourceAsStream("kieker-logo.png")));
 		this.shell.setLayout(new FillLayout(SWT.HORIZONTAL));
@@ -201,22 +202,22 @@ public final class View {
 		this.tree = new Tree(sashForm, SWT.BORDER);
 
 		this.trtmExplorer = new TreeItem(this.tree, SWT.NONE);
-		this.trtmExplorer.setText("Explorer");
+		this.trtmExplorer.setText(Messages.getString("explorer")); //$NON-NLS-1$
 
 		this.trtmTraces = new TreeItem(this.trtmExplorer, SWT.NONE);
-		this.trtmTraces.setText("Traces");
+		this.trtmTraces.setText(Messages.getString("traces")); //$NON-NLS-1$
 		this.trtmTraces.setExpanded(true);
 
 		this.trtmAggregatedTraces = new TreeItem(this.trtmExplorer, 0);
-		this.trtmAggregatedTraces.setText("Aggregated Traces");
+		this.trtmAggregatedTraces.setText(Messages.getString("aggregatedTraces")); //$NON-NLS-1$
 
 		this.trtmAggregatedTraces.setExpanded(true);
 
 		this.trtmOperationCalls = new TreeItem(this.trtmExplorer, SWT.NONE);
-		this.trtmOperationCalls.setText("Operation Calls");
+		this.trtmOperationCalls.setText(Messages.getString("operationCalls")); //$NON-NLS-1$
 
 		this.trtmAggregatedOperationCalls = new TreeItem(this.trtmExplorer, SWT.NONE);
-		this.trtmAggregatedOperationCalls.setText("Aggregated Operation Calls");
+		this.trtmAggregatedOperationCalls.setText(Messages.getString("aggregatedOperationCalls")); //$NON-NLS-1$
 
 		this.trtmAggregatedOperationCalls.setExpanded(true);
 		this.trtmExplorer.setExpanded(true);
@@ -234,32 +235,32 @@ public final class View {
 		this.shell.setMenuBar(menu);
 
 		final MenuItem mntmFile = new MenuItem(menu, SWT.CASCADE);
-		mntmFile.setText("File");
+		mntmFile.setText(Messages.getString("file")); //$NON-NLS-1$
 
 		final Menu menu_1 = new Menu(mntmFile);
 		mntmFile.setMenu(menu_1);
 
 		this.mntmOpenMonitoringLog = new MenuItem(menu_1, SWT.NONE);
-		this.mntmOpenMonitoringLog.setText("Open Monitoring Log");
+		this.mntmOpenMonitoringLog.setText(Messages.getString("openMonitoringLog")); //$NON-NLS-1$
 
 		new MenuItem(menu_1, SWT.SEPARATOR);
 
 		this.mntmSettings = new MenuItem(menu_1, SWT.NONE);
-		this.mntmSettings.setText("Settings");
+		this.mntmSettings.setText(Messages.getString("settings")); //$NON-NLS-1$
 
 		new MenuItem(menu_1, SWT.SEPARATOR);
 
 		this.mntmExit = new MenuItem(menu_1, SWT.NONE);
-		this.mntmExit.setText("Exit");
+		this.mntmExit.setText(Messages.getString("exit")); //$NON-NLS-1$
 
 		final MenuItem mntmHelp = new MenuItem(menu, SWT.CASCADE);
-		mntmHelp.setText("Help");
+		mntmHelp.setText(Messages.getString("help")); //$NON-NLS-1$
 
 		final Menu menu_3 = new Menu(mntmHelp);
 		mntmHelp.setMenu(menu_3);
 
 		this.mntmAbout = new MenuItem(menu_3, SWT.NONE);
-		this.mntmAbout.setText("About...");
+		this.mntmAbout.setText(Messages.getString("about")); //$NON-NLS-1$
 	}
 
 	private void addLogic() {

@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 import swing2swt.layout.FlowLayout;
+import kieker.diagnosis.common.Messages;
 
 public final class SettingsDialog extends Dialog {
 
@@ -111,15 +112,15 @@ public final class SettingsDialog extends Dialog {
 
 	private void createContents() {
 		this.shlSettings = new Shell(this.getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
-		this.shlSettings.setText("Settings");
+		this.shlSettings.setText(Messages.getString("settings")); //$NON-NLS-1$
 		this.shlSettings.setLayout(new GridLayout(1, false));
 
 		final Group grpAppearance = new Group(this.shlSettings, SWT.NONE);
-		grpAppearance.setText("Appearance");
+		grpAppearance.setText(Messages.getString("appearance")); //$NON-NLS-1$
 		grpAppearance.setLayout(new GridLayout(2, false));
 
 		final Label lblTimeUnit = new Label(grpAppearance, SWT.NONE);
-		lblTimeUnit.setText("Time Unit:");
+		lblTimeUnit.setText(Messages.getString("timeUnit")); //$NON-NLS-1$
 
 		this.comboBoxTimeUnit = new Combo(grpAppearance, SWT.READ_ONLY);
 		this.comboBoxTimeUnit.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -127,7 +128,7 @@ public final class SettingsDialog extends Dialog {
 		this.comboBoxTimeUnit.select(0);
 
 		final Label lblOperationNames = new Label(grpAppearance, SWT.NONE);
-		lblOperationNames.setText("Operations:");
+		lblOperationNames.setText(Messages.getString("operations")); //$NON-NLS-1$
 
 		this.comboBoxOperationNames = new Combo(grpAppearance, SWT.READ_ONLY);
 		this.comboBoxOperationNames.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -135,7 +136,7 @@ public final class SettingsDialog extends Dialog {
 		this.comboBoxOperationNames.select(0);
 
 		final Label lblComponentNames = new Label(grpAppearance, SWT.NONE);
-		lblComponentNames.setText("Components:");
+		lblComponentNames.setText(Messages.getString("components")); //$NON-NLS-1$
 
 		this.comboBoxComponentNames = new Combo(grpAppearance, SWT.READ_ONLY);
 		this.comboBoxComponentNames.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -157,7 +158,7 @@ public final class SettingsDialog extends Dialog {
 				SettingsDialog.this.shlSettings.close();
 			}
 		});
-		btnOkay.setText("OK");
+		btnOkay.setText(Messages.getString("ok")); //$NON-NLS-1$
 
 		final Button btnCancel = new Button(composite, SWT.NONE);
 		btnCancel.addSelectionListener(new SelectionAdapter() {
@@ -167,7 +168,7 @@ public final class SettingsDialog extends Dialog {
 				SettingsDialog.this.shlSettings.close();
 			}
 		});
-		btnCancel.setText("Cancel");
+		btnCancel.setText(Messages.getString("cancel")); //$NON-NLS-1$
 	}
 
 }
