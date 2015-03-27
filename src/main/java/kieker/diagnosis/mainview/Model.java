@@ -16,6 +16,8 @@
 
 package kieker.diagnosis.mainview;
 
+import kieker.diagnosis.subview.ISubView;
+
 import org.eclipse.swt.graphics.Cursor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,7 +34,7 @@ public final class Model {
 	private View view;
 
 	private Cursor cursor;
-	private SubView activeSubView;
+	private ISubView activeSubView;
 
 	public Cursor getCursor() {
 		return this.cursor;
@@ -44,18 +46,14 @@ public final class Model {
 		this.view.notifyAboutChangedCursor();
 	}
 
-	public SubView getActiveSubView() {
+	public ISubView getActiveSubView() {
 		return this.activeSubView;
 	}
 
-	public void setActiveSubView(final SubView activeSubView) {
+	public void setActiveSubView(final ISubView activeSubView) {
 		this.activeSubView = activeSubView;
 
 		this.view.notifyAboutChangedSubView();
-	}
-
-	public enum SubView {
-		TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, AGGREGATED_OPERATION_CALLS_SUB_VIEW, OPERATION_CALLS_SUB_VIEW,
 	}
 
 }

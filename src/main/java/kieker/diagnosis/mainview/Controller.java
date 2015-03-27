@@ -24,7 +24,6 @@ import javax.annotation.PostConstruct;
 
 import kieker.diagnosis.common.Mapper;
 import kieker.diagnosis.domain.OperationCall;
-import kieker.diagnosis.mainview.Model.SubView;
 import kieker.diagnosis.mainview.dialog.SettingsDialog;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.subview.ISubView;
@@ -92,67 +91,9 @@ public final class Controller implements SelectionListener {
 		this.handlePotentialMenuSelection(e);
 	}
 
-	private void handlePotentialMenuSelection(final SelectionEvent e) {
-		if (e.widget == this.view.getMntmOpenMonitoringLog()) {
-			final Preferences preferences = Preferences.userNodeForPackage(Controller.class);
-			final String filterPath = preferences.get("lastimportpath", ".");
-
-			this.view.getDirectoryDialog().setFilterPath(filterPath);
-			final String selectedDirectory = this.view.getDirectoryDialog().open();
-
-			if (null != selectedDirectory) {
-				this.model.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_WAIT));
-
-				this.view.getProgressMonitorDialog().open();
-				this.dataModel.loadMonitoringLogFromFS(selectedDirectory);
-				this.view.getProgressMonitorDialog().close();
-
-				this.model.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_ARROW));
-
-				preferences.put("lastimportpath", selectedDirectory);
-				try {
-					preferences.flush();
-				} catch (final BackingStoreException ex) {
-					Controller.LOGGER.warning(ex.getLocalizedMessage());
-				}
-			}
-		}
-
-		if (e.widget == this.view.getMntmSettings()) {
-			final SettingsDialog settingsDialog = this.view.getSettingsDialog();
-			settingsDialog.open();
-		}
-
-		if (e.widget == this.view.getMntmExit()) {
-			this.view.close();
-		}
-
-		if (e.widget == this.view.getMntmAbout()) {
-			this.view.getAboutDialog().open();
-		}
-	}
-
-	private void handlePotentialTreeSelection(final SelectionEvent e) { // NOPMD (this method violates some metrics. This is acceptable, as it is readable)
-		if (e.item == this.view.getTrtmExplorer()) {
-			this.model.setActiveSubView(SubView.NONE);
-		}
-		if (e.item == this.view.getTrtmTraces()) {
-			this.model.setActiveSubView(SubView.TRACES_SUB_VIEW);
-		}
-		if (e.item == this.view.getTrtmAggregatedTraces()) {
-			this.model.setActiveSubView(SubView.AGGREGATED_TRACES_SUB_VIEW);
-		}
-		if (e.item == this.view.getTrtmAggregatedOperationCalls()) {
-			this.model.setActiveSubView(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW);
-		}
-		if (e.item == this.view.getTrtmOperationCalls()) {
-			this.model.setActiveSubView(SubView.OPERATION_CALLS_SUB_VIEW);
-		}
-	}
-
 	public void jumpToCorrespondingTrace(final OperationCall call) {
 		this.view.getTree().select(this.view.getTrtmTraces());
-		this.model.setActiveSubView(SubView.TRACES_SUB_VIEW);
+		this.model.setActiveSubView(this.subViewMapper.resolve(SubView.TRACES_SUB_VIEW));
 		this.tracesViewController.jumpToCorrespondingTrace(call);
 	}
 
@@ -163,6 +104,69 @@ public final class Controller implements SelectionListener {
 
 	public Mapper<SubView, ISubView> getSubViews() {
 		return this.subViewMapper;
+	}
+
+	private void handlePotentialMenuSelection(final SelectionEvent e) {
+		if (e.widget == this.view.getMntmOpenMonitoringLog()) {
+			this.openMonitoringLog();
+		}
+		if (e.widget == this.view.getMntmSettings()) {
+			final SettingsDialog settingsDialog = this.view.getSettingsDialog();
+			settingsDialog.open();
+		}
+		if (e.widget == this.view.getMntmExit()) {
+			this.view.close();
+		}
+		if (e.widget == this.view.getMntmAbout()) {
+			this.view.getAboutDialog().open();
+		}
+	}
+
+	private void handlePotentialTreeSelection(final SelectionEvent e) { // NOPMD (this method violates some metrics. This is acceptable, as it is readable)
+		if (e.item == this.view.getTrtmExplorer()) {
+			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.NONE));
+		}
+		if (e.item == this.view.getTrtmTraces()) {
+			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.TRACES_SUB_VIEW));
+		}
+		if (e.item == this.view.getTrtmAggregatedTraces()) {
+			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.AGGREGATED_TRACES_SUB_VIEW));
+		}
+		if (e.item == this.view.getTrtmAggregatedOperationCalls()) {
+			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW));
+		}
+		if (e.item == this.view.getTrtmOperationCalls()) {
+			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.OPERATION_CALLS_SUB_VIEW));
+		}
+	}
+
+	private void openMonitoringLog() {
+		final Preferences preferences = Preferences.userNodeForPackage(Controller.class);
+		final String filterPath = preferences.get("lastimportpath", ".");
+
+		this.view.getDirectoryDialog().setFilterPath(filterPath);
+		final String selectedDirectory = this.view.getDirectoryDialog().open();
+
+		if (null != selectedDirectory) {
+			this.model.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_WAIT));
+
+			this.view.getProgressMonitorDialog().open();
+			this.dataModel.loadMonitoringLogFromFS(selectedDirectory);
+			this.view.getProgressMonitorDialog().close();
+
+			this.model.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_ARROW));
+
+			preferences.put("lastimportpath", selectedDirectory);
+			try {
+				preferences.flush();
+			} catch (final BackingStoreException ex) {
+				Controller.LOGGER.warning(ex.getLocalizedMessage());
+			}
+		}
+	}
+
+	public enum SubView {
+		TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, AGGREGATED_OPERATION_CALLS_SUB_VIEW, OPERATION_CALLS_SUB_VIEW,
 	}
 
 }

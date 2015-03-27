@@ -16,7 +16,6 @@
 
 package kieker.diagnosis.mainview;
 
-import kieker.diagnosis.mainview.Model.SubView;
 import kieker.diagnosis.mainview.dialog.SettingsDialog;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.subview.ISubView;
@@ -150,6 +149,31 @@ public final class View {
 		return this.ivProgressMonitorDialog;
 	}
 
+	public Tree getTree() {
+		return this.tree;
+	}
+
+	public void notifyAboutChangedCursor() {
+		this.handleChangedCursor();
+	}
+
+	public void notifyAboutChangedSubView() {
+		this.handleChangedSubView();
+	}
+
+	private void handleChangedSubView() {
+		final ISubView subView = this.model.getActiveSubView();
+		final Composite compositeToShow = (subView != null) ? subView.getComposite() : null; // NOPMD (null assigment)
+
+		this.subViewLayout.topControl = compositeToShow;
+
+		this.subViewComposite.layout();
+	}
+
+	private void handleChangedCursor() {
+		this.shell.setCursor(this.model.getCursor());
+	}
+
 	/**
 	 * @wbp.parser.entryPoint
 	 */
@@ -246,33 +270,6 @@ public final class View {
 		this.mntmAbout.addSelectionListener(this.controller);
 
 		this.mntmSettings.addSelectionListener(this.controller);
-	}
-
-	public void notifyAboutChangedCursor() {
-		this.handleChangedCursor();
-	}
-
-	public void notifyAboutChangedSubView() {
-		this.handleChangedSubView();
-	}
-
-	private void handleChangedSubView() {
-		final SubView subView = this.model.getActiveSubView();
-
-		final ISubView subViewToShow = this.controller.getSubViews().resolve(subView);
-		final Composite compositeToShow = (subViewToShow != null) ? subViewToShow.getComposite() : null; // NOPMD (null assigment)
-
-		this.subViewLayout.topControl = compositeToShow;
-
-		this.subViewComposite.layout();
-	}
-
-	private void handleChangedCursor() {
-		this.shell.setCursor(this.model.getCursor());
-	}
-
-	public Tree getTree() {
-		return this.tree;
 	}
 
 }
