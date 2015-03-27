@@ -20,6 +20,7 @@ import kieker.diagnosis.mainview.dialog.SettingsDialog;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.subview.ISubView;
 
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
@@ -74,6 +75,8 @@ public final class View {
 	private MenuItem mntmSettings;
 	private TreeItem trtmAggregatedOperationCalls;
 	private TreeItem trtmOperationCalls;
+
+	private ProgressMonitorDialog ivProgressMonitorDialog;
 
 	public void show() {
 		final Display display = Display.getDefault();
@@ -142,6 +145,10 @@ public final class View {
 		return this.aboutDialog;
 	}
 
+	public ProgressMonitorDialog getProgressMonitorDialog() {
+		return this.ivProgressMonitorDialog;
+	}
+
 	/**
 	 * @wbp.parser.entryPoint
 	 */
@@ -157,6 +164,9 @@ public final class View {
 		this.directoryDialog = new DirectoryDialog(this.shell);
 		this.aboutDialog = new MessageBox(this.shell, SWT.ICON_INFORMATION);
 		this.settingsDialog = new SettingsDialog(this.shell, SWT.NONE, this.propertiesModel);
+
+		this.ivProgressMonitorDialog = new ProgressMonitorDialog(this.shell);
+		this.ivProgressMonitorDialog.setCancelable(false);
 
 		this.aboutDialog.setText("About...");
 		this.aboutDialog.setMessage("Kieker Trace Diagnosis - 1.0-SNAPSHOT\n\nCopyright 2015 Kieker Project (http://kieker-monitoring.net)");

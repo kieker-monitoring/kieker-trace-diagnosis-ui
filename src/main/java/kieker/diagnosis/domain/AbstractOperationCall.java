@@ -17,8 +17,6 @@
 package kieker.diagnosis.domain;
 
 import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -183,28 +181,6 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 		return true;
 	}
 
-	public final String toDotForCallTree() {
-		final Deque<AbstractOperationCall<T>> stack = new LinkedList<>();
-		final StringBuilder sb = new StringBuilder();
-
-		sb.append("digraph G {");
-		sb.append("rankdir = TB;");
-		sb.append("node [shape = none];");
-
-		stack.push(this);
-		while (!stack.isEmpty()) {
-			final AbstractOperationCall<T> call = stack.pop();
-			sb.append(call.operation).append(';');
-
-			for (final AbstractOperationCall<T> child : call.children) {
-				sb.append(call.operation).append(" -> ").append(child.operation).append(';');
-				stack.push(child);
-			}
-		}
-
-		sb.append("}");
-
-		return sb.toString();
-	}
+	
 
 }

@@ -21,26 +21,24 @@ import java.util.concurrent.TimeUnit;
 import kieker.diagnosis.common.Mapper;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.model.PropertiesModel.ComponentNames;
-import kieker.diagnosis.model.PropertiesModel.GraphvizGenerator;
 import kieker.diagnosis.model.PropertiesModel.OperationNames;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
+
+import swing2swt.layout.FlowLayout;
 
 public final class SettingsDialog extends Dialog {
 
@@ -49,11 +47,9 @@ public final class SettingsDialog extends Dialog {
 	private int result;
 	private Shell shlSettings;
 
-	private Text textGraphvizPath;
 	private Combo comboBoxTimeUnit;
 	private Combo comboBoxOperationNames;
 	private Combo comboBoxComponentNames;
-	private Combo comboBoxGraphvizGenerator;
 
 	private Mapper<TimeUnit, Integer> timeUnitMapper;
 
@@ -81,9 +77,9 @@ public final class SettingsDialog extends Dialog {
 
 		this.loadSettings();
 
-		this.shlSettings.open();
-		this.shlSettings.layout();
 		this.shlSettings.pack();
+
+		this.shlSettings.open();
 		final Display display = this.getParent().getDisplay();
 
 		final Rectangle screenSize = display.getPrimaryMonitor().getBounds();
@@ -97,13 +93,7 @@ public final class SettingsDialog extends Dialog {
 		return this.result;
 	}
 
-	public String getGraphvizPath() {
-		return this.textGraphvizPath.getText();
-	}
-
 	private void loadSettings() {
-		this.textGraphvizPath.setText(this.model.getGraphvizPath());
-		this.comboBoxGraphvizGenerator.select(this.model.getGraphvizGenerator() == GraphvizGenerator.DOT ? 0 : 1);
 		this.comboBoxTimeUnit.select(this.timeUnitMapper.resolve(this.model.getTimeUnit()));
 		this.comboBoxOperationNames.select(this.model.getOperationNames() == OperationNames.SHORT ? 0 : 1);
 		this.comboBoxComponentNames.select(this.model.getComponentNames() == ComponentNames.SHORT ? 0 : 1);
@@ -112,8 +102,6 @@ public final class SettingsDialog extends Dialog {
 	private void saveSettings() {
 		this.model.startModification();
 
-		this.model.setGraphvizPath(this.textGraphvizPath.getText());
-		this.model.setGraphvizGenerator(this.comboBoxGraphvizGenerator.getSelectionIndex() == 0 ? GraphvizGenerator.DOT : GraphvizGenerator.NEATO);
 		this.model.setTimeUnit(this.timeUnitMapper.invertedResolve(this.comboBoxTimeUnit.getSelectionIndex()));
 		this.model.setOperationNames(this.comboBoxOperationNames.getSelectionIndex() == 0 ? OperationNames.SHORT : OperationNames.LONG);
 		this.model.setComponentNames(this.comboBoxComponentNames.getSelectionIndex() == 0 ? ComponentNames.SHORT : ComponentNames.LONG);
@@ -123,17 +111,10 @@ public final class SettingsDialog extends Dialog {
 
 	private void createContents() {
 		this.shlSettings = new Shell(this.getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
-		this.shlSettings.setSize(440, 300);
 		this.shlSettings.setText("Settings");
-		this.shlSettings.setLayout(new FormLayout());
+		this.shlSettings.setLayout(new GridLayout(1, false));
 
 		final Group grpAppearance = new Group(this.shlSettings, SWT.NONE);
-		final FormData fd_grpAppearance = new FormData();
-		fd_grpAppearance.top = new FormAttachment(0, 10);
-		fd_grpAppearance.left = new FormAttachment(0, 10);
-		fd_grpAppearance.bottom = new FormAttachment(0, 117);
-		fd_grpAppearance.right = new FormAttachment(0, 424);
-		grpAppearance.setLayoutData(fd_grpAppearance);
 		grpAppearance.setText("Appearance");
 		grpAppearance.setLayout(new GridLayout(2, false));
 
@@ -161,36 +142,11 @@ public final class SettingsDialog extends Dialog {
 		this.comboBoxComponentNames.setItems(new String[] { "Catalog", "kieker.examples.bookstore.Catalog" });
 		this.comboBoxComponentNames.select(0);
 
-		final Group grpDependencyAndCall = new Group(this.shlSettings, SWT.NONE);
-		grpDependencyAndCall.setLayout(new GridLayout(3, false));
-		final FormData fd_grpDependencyAndCall = new FormData();
-		fd_grpDependencyAndCall.top = new FormAttachment(grpAppearance, 18);
-		fd_grpDependencyAndCall.left = new FormAttachment(0, 10);
-		fd_grpDependencyAndCall.right = new FormAttachment(100, -10);
-		grpDependencyAndCall.setLayoutData(fd_grpDependencyAndCall);
-		grpDependencyAndCall.setText("Dependency and Call Graph Generation");
+		final Composite composite = new Composite(this.shlSettings, SWT.NONE);
+		composite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
+		composite.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		final Label lblGraphviz = new Label(grpDependencyAndCall, SWT.NONE);
-		lblGraphviz.setText("Graphviz Directory:");
-
-		this.textGraphvizPath = new Text(grpDependencyAndCall, SWT.BORDER);
-		this.textGraphvizPath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-
-		final Button btnBrowse = new Button(grpDependencyAndCall, SWT.NONE);
-		btnBrowse.setText("Browse");
-
-		final Label lblGenerator = new Label(grpDependencyAndCall, SWT.NONE);
-		lblGenerator.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblGenerator.setText("Generator:");
-
-		this.comboBoxGraphvizGenerator = new Combo(grpDependencyAndCall, SWT.READ_ONLY);
-		this.comboBoxGraphvizGenerator.setItems(new String[] { "Dot", "Neato" });
-		this.comboBoxGraphvizGenerator.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		this.comboBoxGraphvizGenerator.select(0);
-		new Label(grpDependencyAndCall, SWT.NONE);
-
-		final Button btnOkay = new Button(this.shlSettings, SWT.NONE);
-		fd_grpDependencyAndCall.bottom = new FormAttachment(btnOkay, -20);
+		final Button btnOkay = new Button(composite, SWT.NONE);
 		btnOkay.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
@@ -201,13 +157,9 @@ public final class SettingsDialog extends Dialog {
 				SettingsDialog.this.shlSettings.close();
 			}
 		});
-		final FormData fd_btnOkay = new FormData();
-		fd_btnOkay.bottom = new FormAttachment(100, -10);
-		fd_btnOkay.left = new FormAttachment(0, 290);
-		btnOkay.setLayoutData(fd_btnOkay);
 		btnOkay.setText("OK");
 
-		final Button btnCancel = new Button(this.shlSettings, SWT.NONE);
+		final Button btnCancel = new Button(composite, SWT.NONE);
 		btnCancel.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
@@ -215,12 +167,6 @@ public final class SettingsDialog extends Dialog {
 				SettingsDialog.this.shlSettings.close();
 			}
 		});
-		fd_btnOkay.right = new FormAttachment(100, -80);
-		final FormData fd_btnCancel = new FormData();
-		fd_btnCancel.top = new FormAttachment(btnOkay, 0, SWT.TOP);
-		fd_btnCancel.left = new FormAttachment(btnOkay, 6);
-		fd_btnCancel.right = new FormAttachment(100, -10);
-		btnCancel.setLayoutData(fd_btnCancel);
 		btnCancel.setText("Cancel");
 	}
 

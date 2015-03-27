@@ -102,7 +102,11 @@ public final class Controller implements SelectionListener {
 
 			if (null != selectedDirectory) {
 				this.mainViewModel.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_WAIT));
+
+				this.mainView.getProgressMonitorDialog().open();
 				this.dataModel.loadMonitoringLogFromFS(selectedDirectory);
+				this.mainView.getProgressMonitorDialog().close();
+
 				this.mainViewModel.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_ARROW));
 
 				preferences.put("lastimportpath", selectedDirectory);

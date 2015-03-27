@@ -46,7 +46,6 @@ import kieker.diagnosis.subview.util.TraceSizeSortListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -133,7 +132,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		gl_composite.horizontalSpacing = 0;
 		this.composite.setLayout(gl_composite);
 
-		this.filterComposite = new Composite(composite, SWT.NONE);
+		this.filterComposite = new Composite(this.composite, SWT.NONE);
 		final GridLayout gl_filterComposite = new GridLayout(3, false);
 		gl_composite.verticalSpacing = 0;
 		gl_composite.marginHeight = 0;
@@ -141,13 +140,13 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		gl_composite.horizontalSpacing = 0;
 		this.filterComposite.setLayout(gl_filterComposite);
 
-		ivBtn1 = new Button(filterComposite, SWT.RADIO);
-		ivBtn1.setText("Show All Traces");
-		ivBtn1.setSelection(true);
-		ivBtn2 = new Button(filterComposite, SWT.RADIO);
-		ivBtn2.setText("Show Only Failed Traces");
-		ivBtn3 = new Button(filterComposite, SWT.RADIO);
-		ivBtn3.setText("Show Only Traces Containing Failures");
+		this.ivBtn1 = new Button(this.filterComposite, SWT.RADIO);
+		this.ivBtn1.setText("Show All Traces");
+		this.ivBtn1.setSelection(true);
+		this.ivBtn2 = new Button(this.filterComposite, SWT.RADIO);
+		this.ivBtn2.setText("Show Only Failed Traces");
+		this.ivBtn3 = new Button(this.filterComposite, SWT.RADIO);
+		this.ivBtn3.setText("Show Only Traces Containing Failures");
 
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -199,15 +198,15 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		trclmnTotalDuration.setWidth(100);
 		trclmnTotalDuration.setText("Total Duration");
 
-		ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		this.ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 
-		this.detailComposite = new Composite(ivSc, SWT.NONE);
+		this.detailComposite = new Composite(this.ivSc, SWT.NONE);
 		this.detailComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		this.detailComposite.setLayout(new GridLayout(2, false));
 
-		ivSc.setContent(detailComposite);
-		ivSc.setExpandHorizontal(true);
-		ivSc.setExpandVertical(true); 
+		this.ivSc.setContent(this.detailComposite);
+		this.ivSc.setExpandHorizontal(true);
+		this.ivSc.setExpandVertical(true);
 
 		final Label lblExecutionContainer = new Label(this.detailComposite, SWT.NONE);
 		lblExecutionContainer.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -327,21 +326,21 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		trclmnTraceDepth.addSelectionListener(new TraceDepthSortListener());
 		trclmnTraceSize.addSelectionListener(new TraceSizeSortListener());
 
-		ivBtn1.addSelectionListener(controller);
-		ivBtn2.addSelectionListener(controller);
-		ivBtn3.addSelectionListener(controller);
+		this.ivBtn1.addSelectionListener(this.controller);
+		this.ivBtn2.addSelectionListener(this.controller);
+		this.ivBtn3.addSelectionListener(this.controller);
 	}
 
 	public Button getBtn1() {
-		return ivBtn1;
+		return this.ivBtn1;
 	}
 
 	public Button getBtn2() {
-		return ivBtn2;
+		return this.ivBtn2;
 	}
 
 	public Button getBtn3() {
-		return ivBtn3;
+		return this.ivBtn3;
 	}
 
 	@Override
@@ -454,7 +453,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 			}
 		}
 		this.detailComposite.layout();
-		ivSc.setMinSize(detailComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		this.ivSc.setMinSize(this.detailComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
 	private class DataProvider implements Listener {

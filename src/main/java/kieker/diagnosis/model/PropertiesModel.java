@@ -30,7 +30,6 @@ public final class PropertiesModel extends Observable {
 	private static final String KEY_TIMEUNIT = "timeunit";
 	private static final String KEY_OPERATIONS = "operations";
 	private static final String KEY_COMPONENTS = "components";
-	private static final String KEY_GRAPHVIZ_GENERATOR = "graphvizgenerator";
 	private static final String KEY_GRAPHVIZ_PATH = "graphvizpath";
 
 	private static final Logger LOGGER = Logger.getGlobal();
@@ -38,7 +37,6 @@ public final class PropertiesModel extends Observable {
 	private boolean commit = true;
 
 	private String graphvizPath;
-	private GraphvizGenerator graphvizGenerator;
 	private TimeUnit timeUnit;
 	private ComponentNames componentNames;
 	private OperationNames operationNames;
@@ -51,7 +49,6 @@ public final class PropertiesModel extends Observable {
 		final Preferences preferences = Preferences.userNodeForPackage(PropertiesModel.class);
 
 		this.graphvizPath = preferences.get(PropertiesModel.KEY_GRAPHVIZ_PATH, ".");
-		this.graphvizGenerator = GraphvizGenerator.valueOf(preferences.get(PropertiesModel.KEY_GRAPHVIZ_GENERATOR, GraphvizGenerator.DOT.name()));
 		this.timeUnit = TimeUnit.valueOf(preferences.get(PropertiesModel.KEY_TIMEUNIT, TimeUnit.NANOSECONDS.name()));
 		this.componentNames = ComponentNames.valueOf(preferences.get(PropertiesModel.KEY_COMPONENTS, ComponentNames.LONG.name()));
 		this.operationNames = OperationNames.valueOf(preferences.get(PropertiesModel.KEY_OPERATIONS, OperationNames.SHORT.name()));
@@ -61,7 +58,6 @@ public final class PropertiesModel extends Observable {
 		final Preferences preferences = Preferences.userNodeForPackage(PropertiesModel.class);
 
 		preferences.put(PropertiesModel.KEY_GRAPHVIZ_PATH, this.graphvizPath);
-		preferences.put(PropertiesModel.KEY_GRAPHVIZ_GENERATOR, this.graphvizGenerator.name());
 		preferences.put(PropertiesModel.KEY_TIMEUNIT, this.timeUnit.name());
 		preferences.put(PropertiesModel.KEY_COMPONENTS, this.componentNames.name());
 		preferences.put(PropertiesModel.KEY_OPERATIONS, this.operationNames.name());
@@ -79,16 +75,6 @@ public final class PropertiesModel extends Observable {
 
 	public void setGraphvizPath(final String graphvizPath) {
 		this.graphvizPath = graphvizPath;
-
-		this.notifyObserversAndSaveSettings();
-	}
-
-	public GraphvizGenerator getGraphvizGenerator() {
-		return this.graphvizGenerator;
-	}
-
-	public void setGraphvizGenerator(final GraphvizGenerator graphvizGenerator) {
-		this.graphvizGenerator = graphvizGenerator;
 
 		this.notifyObserversAndSaveSettings();
 	}
@@ -139,10 +125,6 @@ public final class PropertiesModel extends Observable {
 			this.notifyObservers();
 			this.saveSettings();
 		}
-	}
-
-	public enum GraphvizGenerator {
-		DOT, NEATO
 	}
 
 	public enum ComponentNames {
