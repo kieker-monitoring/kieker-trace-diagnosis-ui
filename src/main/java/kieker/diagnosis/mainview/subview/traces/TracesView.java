@@ -67,17 +67,13 @@ public final class TracesView implements Observer, ISubView {
 
 	private static final String N_A = "N/A";
 
-	@Autowired
-	private DataModel dataModel;
+	@Autowired private DataModel dataModel;
 
-	@Autowired
-	private TracesViewModel model;
+	@Autowired private TracesViewModel model;
 
-	@Autowired
-	private TracesViewController controller;
+	@Autowired private TracesViewController controller;
 
-	@Autowired
-	private PropertiesModel propertiesModel;
+	@Autowired private PropertiesModel propertiesModel;
 
 	private List<Trace> cachedDataModelContent;
 
@@ -292,6 +288,8 @@ public final class TracesView implements Observer, ISubView {
 		trclmnTraceDepth.addSelectionListener(new TraceDepthSortListener());
 		trclmnTraceSize.addSelectionListener(new TraceSizeSortListener());
 		trclmnTimestamp.addSelectionListener(new TimestampSortListener());
+
+		this.updateStatusBar();
 	}
 
 	public Button getBtn1() {
@@ -348,7 +346,9 @@ public final class TracesView implements Observer, ISubView {
 			this.updateStatusBar();
 		}
 		if (observable == this.propertiesModel) {
+			this.tree.setItemCount(Math.min(this.cachedDataModelContent.size(), this.propertiesModel.getMaxTracesToShow()));
 			this.clearTree();
+			this.updateStatusBar();
 		}
 	}
 
@@ -371,13 +371,14 @@ public final class TracesView implements Observer, ISubView {
 	}
 
 	private void updateStatusBar() {
-		this.lblCounter.setText(this.cachedDataModelContent.size() + " " + BUNDLE.getString("TracesView.lblCounter.text"));
+		final String str = String.format(BUNDLE.getString("TracesView.lblCounter.text"), this.propertiesModel.getMaxTracesToShow());
+		this.lblCounter.setText(this.cachedDataModelContent.size() + " " + str);
 		this.statusBar.getParent().layout();
 	}
 
 	private void updateTree() {
 		this.tree.setData(this.cachedDataModelContent);
-		this.tree.setItemCount(this.cachedDataModelContent.size());
+		this.tree.setItemCount(Math.min(this.cachedDataModelContent.size(), this.propertiesModel.getMaxTracesToShow()));
 
 		this.clearTree();
 	}

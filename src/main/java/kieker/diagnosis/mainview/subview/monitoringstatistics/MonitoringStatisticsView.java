@@ -83,20 +83,22 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 
 		final File importDirectory = this.dataModel.getImportDirectory();
 
-		float importDirectorySize = this.calculateDirectorySize(importDirectory);
+		if (importDirectory != null) {
+			float importDirectorySize = this.calculateDirectorySize(importDirectory);
 
-		String importDirectorySizeString = N_A;
-		for (final String unit : UNITS) {
-			if (importDirectorySize >= 1024) {
-				importDirectorySize /= 1024.0f;
-			} else {
-				importDirectorySizeString = String.format("%.1f %s", importDirectorySize, unit);
-				break;
+			String importDirectorySizeString = N_A;
+			for (final String unit : UNITS) {
+				if (importDirectorySize >= 1024) {
+					importDirectorySize /= 1024.0f;
+				} else {
+					importDirectorySizeString = String.format("%.1f %s", importDirectorySize, unit);
+					break;
+				}
 			}
-		}
 
-		this.lblMonitoringLogDisplay.setText(importDirectory.getAbsolutePath());
-		this.lblMonitoringLogSizeDisplay.setText(importDirectorySizeString);
+			this.lblMonitoringLogDisplay.setText(importDirectory.getAbsolutePath());
+			this.lblMonitoringLogSizeDisplay.setText(importDirectorySizeString);
+		}
 		this.lblAnalysisTimeDisplay.setText(analysisDuration);
 		// this.lblBeginOfMonitoringDisplay.setText(Integer.toString(this.dataModel.getOperationCalls(null).size()));
 		// this.lblEndOfMonitoringDisplay.setText(Integer.toString(this.dataModel.getOperationCalls(null).size()));

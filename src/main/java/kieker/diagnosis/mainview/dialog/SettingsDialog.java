@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Spinner;
 
 public final class SettingsDialog extends Dialog {
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("kieker.diagnosis.mainview.dialog.settingsdialog"); //$NON-NLS-1$
@@ -52,6 +53,8 @@ public final class SettingsDialog extends Dialog {
 	private Combo comboBoxComponentNames;
 
 	private Mapper<TimeUnit, Integer> timeUnitMapper;
+
+	private Spinner spinner;
 
 	public SettingsDialog(final Shell parent, final int style,
 			final PropertiesModel model) {
@@ -98,6 +101,7 @@ public final class SettingsDialog extends Dialog {
 		this.comboBoxTimeUnit.select(this.timeUnitMapper.resolve(this.model.getTimeUnit()));
 		this.comboBoxOperationNames.select(this.model.getOperationNames() == OperationNames.SHORT ? 0 : 1);
 		this.comboBoxComponentNames.select(this.model.getComponentNames() == ComponentNames.SHORT ? 0 : 1);
+		this.spinner.setSelection(this.model.getMaxTracesToShow());
 	}
 
 	private void saveSettings() {
@@ -106,6 +110,7 @@ public final class SettingsDialog extends Dialog {
 		this.model.setTimeUnit(this.timeUnitMapper.invertedResolve(this.comboBoxTimeUnit.getSelectionIndex()));
 		this.model.setOperationNames(this.comboBoxOperationNames.getSelectionIndex() == 0 ? OperationNames.SHORT : OperationNames.LONG);
 		this.model.setComponentNames(this.comboBoxComponentNames.getSelectionIndex() == 0 ? ComponentNames.SHORT : ComponentNames.LONG);
+		this.model.setMaxTracesToShow(this.spinner.getSelection());
 
 		this.model.commitModification();
 	}
@@ -150,6 +155,15 @@ public final class SettingsDialog extends Dialog {
 		this.comboBoxComponentNames.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		this.comboBoxComponentNames.setItems(new String[] { "Catalog", "kieker.examples.bookstore.Catalog" });
 		this.comboBoxComponentNames.select(0);
+
+		final Label lblLimitNumberOf = new Label(grpAppearance, SWT.NONE);
+		lblLimitNumberOf.setText(BUNDLE.getString("SettingsDialog.lblLimitNumberOf.text")); //$NON-NLS-1$
+
+		this.spinner = new Spinner(grpAppearance, SWT.BORDER);
+		this.spinner.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		this.spinner.setMaximum(1000000);
+		this.spinner.setMinimum(1);
+		this.spinner.setSelection(100);
 
 		final Composite composite = new Composite(this.shlSettings, SWT.NONE);
 		composite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
