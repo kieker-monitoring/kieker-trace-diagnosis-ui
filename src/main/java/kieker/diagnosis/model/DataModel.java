@@ -56,12 +56,16 @@ public final class DataModel extends Observable {
 	private List<OperationCall> failedOperationCalls = Collections.emptyList();
 	private List<AggregatedOperationCall> aggregatedOperationCalls = Collections.emptyList();
 	private List<AggregatedOperationCall> aggregatedFailedOperationCalls = Collections.emptyList();
+	private File importDirectory;
 	private TimeUnit timeUnit;
+	private long analysisDurationInMS;
 
 	public void loadMonitoringLogFromFS(final String directory) {
+		final long tin = System.currentTimeMillis();
+
 		// Load and analyze the monitoring logs from the given directory
-		final File importDirectory = new File(directory);
-		final ImportAnalysisConfiguration analysisConfiguration = new ImportAnalysisConfiguration(importDirectory);
+		this.importDirectory = new File(directory);
+		final ImportAnalysisConfiguration analysisConfiguration = new ImportAnalysisConfiguration(this.importDirectory);
 		final Analysis analysis = new Analysis(analysisConfiguration);
 		analysis.start();
 
@@ -85,8 +89,20 @@ public final class DataModel extends Observable {
 			this.timeUnit = TimeUnit.NANOSECONDS;
 		}
 
+		final long tout = System.currentTimeMillis();
+
+		this.analysisDurationInMS = tout - tin;
+
 		this.setChanged();
 		this.notifyObservers();
+	}
+
+	public File getImportDirectory() {
+		return this.importDirectory;
+	}
+
+	public long getAnalysisDurationInMS() {
+		return this.analysisDurationInMS;
 	}
 
 	public List<Trace> getTraces(final String regExpr) {

@@ -80,6 +80,7 @@ public final class View {
 	private TreeItem trtmExplorer;
 	private TreeItem trtmTraces;
 	private Tree tree;
+	private TreeItem trtmMonitoringLogStatistics;
 
 	public void show() {
 		final Display display = Display.getDefault();
@@ -118,6 +119,10 @@ public final class View {
 
 	public TreeItem getTrtmOperationCalls() {
 		return this.trtmOperationCalls;
+	}
+
+	public TreeItem getTrtmMonitoringLogStatistics() {
+		return this.trtmMonitoringLogStatistics;
 	}
 
 	public MenuItem getMntmExit() {
@@ -222,6 +227,9 @@ public final class View {
 		this.trtmAggregatedOperationCalls.setText(BUNDLE.getString("View.trtmAggregatedOperationCalls.text(java.lang.String)")); //$NON-NLS-1$ 
 
 		this.trtmAggregatedOperationCalls.setExpanded(true);
+
+		this.trtmMonitoringLogStatistics = new TreeItem(this.trtmExplorer, SWT.NONE);
+		this.trtmMonitoringLogStatistics.setText(BUNDLE.getString("View.trtmMonitoringLogStatistics.text(java.lang.String)")); //$NON-NLS-1$
 		this.trtmExplorer.setExpanded(true);
 
 		this.subViewLayout = new StackLayout();
@@ -271,7 +279,6 @@ public final class View {
 		this.mntmExit.addSelectionListener(this.controller);
 		this.mntmOpenMonitoringLog.addSelectionListener(this.controller);
 		this.mntmAbout.addSelectionListener(this.controller);
-
 		this.mntmSettings.addSelectionListener(this.controller);
 	}
 

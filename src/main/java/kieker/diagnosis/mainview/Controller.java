@@ -29,6 +29,7 @@ import kieker.diagnosis.mainview.subview.ISubView;
 import kieker.diagnosis.mainview.subview.aggregatedcalls.AggregatedCallsViewController;
 import kieker.diagnosis.mainview.subview.aggregatedtraces.AggregatedTracesViewController;
 import kieker.diagnosis.mainview.subview.calls.CallsViewController;
+import kieker.diagnosis.mainview.subview.monitoringstatistics.MonitoringStatisticsViewController;
 import kieker.diagnosis.mainview.subview.traces.TracesViewController;
 import kieker.diagnosis.model.DataModel;
 
@@ -67,6 +68,9 @@ public final class Controller implements SelectionListener {
 	private AggregatedCallsViewController aggregatedCallsViewController;
 
 	@Autowired
+	private MonitoringStatisticsViewController monitoringStatisticsViewController;
+
+	@Autowired
 	private View view;
 
 	@Autowired
@@ -81,6 +85,8 @@ public final class Controller implements SelectionListener {
 		this.subViewMapper.map(SubView.TRACES_SUB_VIEW).to(this.tracesViewController.getView());
 		this.subViewMapper.map(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW).to(this.aggregatedCallsViewController.getView());
 		this.subViewMapper.map(SubView.OPERATION_CALLS_SUB_VIEW).to(this.callsViewController.getView());
+		this.subViewMapper.map(SubView.MONITORING_STATISTICS_VIEW).to(this.monitoringStatisticsViewController.getView());
+
 	}
 
 	public void showView() {
@@ -140,6 +146,9 @@ public final class Controller implements SelectionListener {
 		if (e.item == this.view.getTrtmOperationCalls()) {
 			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.OPERATION_CALLS_SUB_VIEW));
 		}
+		if (e.item == this.view.getTrtmMonitoringLogStatistics()) {
+			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.MONITORING_STATISTICS_VIEW));
+		}
 	}
 
 	private void openMonitoringLog() {
@@ -168,7 +177,7 @@ public final class Controller implements SelectionListener {
 	}
 
 	public enum SubView {
-		TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, AGGREGATED_OPERATION_CALLS_SUB_VIEW, OPERATION_CALLS_SUB_VIEW,
+		TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, AGGREGATED_OPERATION_CALLS_SUB_VIEW, OPERATION_CALLS_SUB_VIEW, MONITORING_STATISTICS_VIEW,
 	}
 
 }
