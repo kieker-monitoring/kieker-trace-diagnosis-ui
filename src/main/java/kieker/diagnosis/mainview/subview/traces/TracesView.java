@@ -16,7 +16,6 @@
 
 package kieker.diagnosis.mainview.subview.traces; // NOPMD (to many imports)
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -79,6 +78,8 @@ public final class TracesView implements Observer, ISubView {
 	@Autowired
 	private PropertiesModel propertiesModel;
 
+	private List<Trace> cachedDataModelContent;
+
 	private Composite composite;
 	private Tree tree;
 	private Composite detailComposite;
@@ -101,6 +102,7 @@ public final class TracesView implements Observer, ISubView {
 
 	@PostConstruct
 	public void initialize() {
+		this.updateCachedDataModelContent();
 		this.dataModel.addObserver(this);
 		this.propertiesModel.addObserver(this);
 	}
@@ -320,9 +322,27 @@ public final class TracesView implements Observer, ISubView {
 		return this.composite;
 	}
 
+	private void updateCachedDataModelContent() {
+		switch (this.model.getFilter()) {
+		case JUST_FAILED:
+			this.cachedDataModelContent = this.dataModel.getFailedTracesCopy(this.model.getRegExpr());
+			break;
+		case JUST_FAILURE_CONTAINING:
+			this.cachedDataModelContent = this.dataModel.getFailureContainingTracesCopy(this.model.getRegExpr());
+			break;
+		case NONE:
+			this.cachedDataModelContent = this.dataModel.getTracesCopy(this.model.getRegExpr());
+			break;
+		default:
+			break;
+
+		}
+	}
+
 	@Override
 	public void update(final Observable observable, final Object obj) {
 		if (observable == this.dataModel) {
+			this.updateCachedDataModelContent();
 			this.updateTree();
 			this.updateStatusBar();
 		}
@@ -332,6 +352,7 @@ public final class TracesView implements Observer, ISubView {
 	}
 
 	public void notifyAboutChangedFilter() {
+		this.updateCachedDataModelContent();
 		this.updateTree();
 		this.updateStatusBar();
 		this.updateDetailComposite();
@@ -342,50 +363,20 @@ public final class TracesView implements Observer, ISubView {
 	}
 
 	public void notifyAboutChangedRegExpr() {
+		this.updateCachedDataModelContent();
 		this.updateTree();
 		this.updateStatusBar();
 		this.updateDetailComposite();
 	}
 
 	private void updateStatusBar() {
-		// TODO: Just get the model data once to improve performance. We are using a potential regexp here...
-		switch (this.model.getFilter()) {
-		case JUST_FAILED:
-			this.lblCounter.setText(this.dataModel.getFailedTracesCopy(this.model.getRegExpr()).size() + " " + BUNDLE.getString("TracesView.lblCounter.text"));
-			break;
-		case JUST_FAILURE_CONTAINING:
-			this.lblCounter.setText(this.dataModel.getFailureContainingTracesCopy(this.model.getRegExpr()).size() + " " + BUNDLE.getString("TracesView.lblCounter.text"));
-			break;
-		case NONE:
-			this.lblCounter.setText(this.dataModel.getTracesCopy(this.model.getRegExpr()).size() + " " + BUNDLE.getString("TracesView.lblCounter.text"));
-			break;
-		default:
-			break;
-		}
-
+		this.lblCounter.setText(this.cachedDataModelContent.size() + " " + BUNDLE.getString("TracesView.lblCounter.text"));
 		this.statusBar.getParent().layout();
 	}
 
 	private void updateTree() {
-		final List<Trace> records;
-		switch (this.model.getFilter()) {
-		case JUST_FAILED:
-			records = this.dataModel.getFailedTracesCopy(this.model.getRegExpr());
-			break;
-		case JUST_FAILURE_CONTAINING:
-			records = this.dataModel.getFailureContainingTracesCopy(this.model.getRegExpr());
-			break;
-		case NONE:
-			records = this.dataModel.getTracesCopy(this.model.getRegExpr());
-			break;
-		default:
-			records = Collections.emptyList();
-			break;
-
-		}
-
-		this.tree.setData(records);
-		this.tree.setItemCount(records.size());
+		this.tree.setData(this.cachedDataModelContent);
+		this.tree.setItemCount(this.cachedDataModelContent.size());
 
 		this.clearTree();
 	}

@@ -77,6 +77,8 @@ public final class CallsView implements ISubView, Observer {
 	@Autowired
 	private CallsViewController controller;
 
+	private List<OperationCall> cachedDataModelContent;
+
 	private Composite composite;
 	private Composite detailComposite;
 	private Composite statusBar;
@@ -95,6 +97,7 @@ public final class CallsView implements ISubView, Observer {
 
 	@PostConstruct
 	public void initialize() {
+		this.updateCachedDataModelContent();
 		this.dataModel.addObserver(this);
 		this.propertiesModel.addObserver(this);
 	}
@@ -255,9 +258,18 @@ public final class CallsView implements ISubView, Observer {
 		return this.composite;
 	}
 
+	private void updateCachedDataModelContent() {
+		if (this.model.getFilter() == Filter.NONE) {
+			this.cachedDataModelContent = this.dataModel.getOperationCalls(this.model.getRegExpr());
+		} else {
+			this.cachedDataModelContent = this.dataModel.getFailedOperationCalls(this.model.getRegExpr());
+		}
+	}
+
 	@Override
 	public void update(final Observable observable, final Object obj) {
 		if (observable == this.dataModel) {
+			this.updateCachedDataModelContent();
 			this.updateTable();
 			this.updateStatusBar();
 		}
@@ -267,6 +279,7 @@ public final class CallsView implements ISubView, Observer {
 	}
 
 	public void notifyAboutChangedFilter() {
+		this.updateCachedDataModelContent();
 		this.updateTable();
 		this.updateStatusBar();
 		this.updateDetailComposite();
@@ -277,6 +290,7 @@ public final class CallsView implements ISubView, Observer {
 	}
 
 	public void notifyAboutChangedRegExpr() {
+		this.updateCachedDataModelContent();
 		this.updateTable();
 		this.updateStatusBar();
 		this.updateDetailComposite();
@@ -311,25 +325,13 @@ public final class CallsView implements ISubView, Observer {
 	}
 
 	private void updateStatusBar() {
-		// TODO: Just get the model data once to improve performance. We are using a potential regexp here...
-		if (this.model.getFilter() == Filter.NONE) {
-			this.lbCounter.setText(this.dataModel.getOperationCalls(this.model.getRegExpr()).size() + " " + BUNDLE.getString("CallsView.lbCounter.text"));
-		} else {
-			this.lbCounter.setText(this.dataModel.getFailedOperationCalls(this.model.getRegExpr()).size() + " " + BUNDLE.getString("CallsView.lbCounter.text"));
-		}
-		this.statusBar.getParent().layout();
+		this.lbCounter.setText(this.cachedDataModelContent.size() + " " + BUNDLE.getString("CallsView.lbCounter.text"));
 	}
 
 	private void updateTable() {
-		final List<OperationCall> calls;
-		if (this.model.getFilter() == Filter.NONE) {
-			calls = this.dataModel.getOperationCalls(this.model.getRegExpr());
-		} else {
-			calls = this.dataModel.getFailedOperationCalls(this.model.getRegExpr());
-		}
+		this.table.setData(this.cachedDataModelContent);
+		this.table.setItemCount(this.cachedDataModelContent.size());
 
-		this.table.setData(calls);
-		this.table.setItemCount(calls.size());
 		this.clearTable();
 	}
 

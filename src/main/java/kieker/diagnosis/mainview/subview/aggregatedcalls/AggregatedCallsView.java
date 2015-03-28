@@ -79,6 +79,8 @@ public final class AggregatedCallsView implements ISubView, Observer {
 	@Autowired
 	private AggregatedCallsViewController controller;
 
+	private List<AggregatedOperationCall> cachedDataModelContent;
+
 	private Composite composite;
 	private Composite detailComposite;
 	private Text lblComponentDisplay;
@@ -102,6 +104,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 
 	@PostConstruct
 	public void initialize() {
+		this.updateCachedDataModelContent();
 		this.dataModel.addObserver(this);
 		this.propertiesModel.addObserver(this);
 	}
@@ -317,9 +320,18 @@ public final class AggregatedCallsView implements ISubView, Observer {
 		return this.composite;
 	}
 
+	private void updateCachedDataModelContent() {
+		if (this.model.getFilter() == Filter.NONE) {
+			this.cachedDataModelContent = this.dataModel.getAggregatedOperationCalls(this.model.getRegExpr());
+		} else {
+			this.cachedDataModelContent = this.dataModel.getAggregatedFailedOperationCalls(this.model.getRegExpr());
+		}
+	}
+
 	@Override
 	public void update(final Observable observable, final Object obj) {
 		if (observable == this.dataModel) {
+			this.updateCachedDataModelContent();
 			this.updateTable();
 			this.updateStatusBar();
 		}
@@ -329,6 +341,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 	}
 
 	public void notifyAboutChangedFilter() {
+		this.updateCachedDataModelContent();
 		this.updateTable();
 		this.updateStatusBar();
 		this.updateDetailComposite();
@@ -339,33 +352,20 @@ public final class AggregatedCallsView implements ISubView, Observer {
 	}
 
 	public void notifyAboutChangedRegExpr() {
+		this.updateCachedDataModelContent();
 		this.updateTable();
 		this.updateStatusBar();
 		this.updateDetailComposite();
 	}
 
 	private void updateStatusBar() {
-		// TODO: Just get the model data once to improve performance. We are using a potential regexp here...
-		if (this.model.getFilter() == Filter.NONE) {
-			this.lblCounter.setText(this.dataModel.getAggregatedOperationCalls(this.model.getRegExpr()).size() + " " + BUNDLE.getString("AggregatedCallsView.lblCounter.text"));
-		} else {
-			this.lblCounter.setText(this.dataModel.getAggregatedFailedOperationCalls(this.model.getRegExpr()).size() + " "
-					+ BUNDLE.getString("AggregatedCallsView.lblCounter.text"));
-		}
+		this.lblCounter.setText(this.cachedDataModelContent.size() + " " + BUNDLE.getString("AggregatedCallsView.lblCounter.text"));
 		this.statusBar.getParent().layout();
 	}
 
 	private void updateTable() {
-		final List<AggregatedOperationCall> calls;
-
-		if (this.model.getFilter() == Filter.NONE) {
-			calls = this.dataModel.getAggregatedOperationCalls(this.model.getRegExpr());
-		} else {
-			calls = this.dataModel.getAggregatedFailedOperationCalls(this.model.getRegExpr());
-		}
-
-		this.table.setData(calls);
-		this.table.setItemCount(calls.size());
+		this.table.setData(this.cachedDataModelContent);
+		this.table.setItemCount(this.cachedDataModelContent.size());
 		this.clearTable();
 	}
 
