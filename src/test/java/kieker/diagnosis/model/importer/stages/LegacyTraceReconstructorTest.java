@@ -113,7 +113,7 @@ public class LegacyTraceReconstructorTest {
 	public void exampleLogReconstructionShouldWork() throws Exception {
 		final ExampleLogReconstructionConfiguration configuration = new ExampleLogReconstructionConfiguration();
 		final Analysis analysis = new Analysis(configuration);
-		analysis.start();
+		analysis.execute();
 
 		assertThat(configuration.getOutput(), hasSize(1635));
 	}

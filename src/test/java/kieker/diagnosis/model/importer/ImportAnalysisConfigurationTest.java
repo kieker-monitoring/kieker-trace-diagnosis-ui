@@ -23,8 +23,6 @@ import static org.junit.Assert.assertThat;
 
 import java.io.File;
 
-import kieker.diagnosis.model.importer.ImportAnalysisConfiguration;
-
 import org.junit.Test;
 
 import teetime.framework.Analysis;
@@ -35,7 +33,7 @@ public final class ImportAnalysisConfigurationTest {
 	public void exampleLogImportShouldWork() {
 		final ImportAnalysisConfiguration configuration = new ImportAnalysisConfiguration(new File("example/event monitoring log"));
 		final Analysis analysis = new Analysis(configuration);
-		analysis.start();
+		analysis.execute();
 
 		assertThat(configuration.getMetadataRecords(), hasSize(1));
 		assertThat(configuration.getTracesList(), hasSize(100));
@@ -50,7 +48,7 @@ public final class ImportAnalysisConfigurationTest {
 	public void exampleLegacyLogImportShouldWork() {
 		final ImportAnalysisConfiguration configuration = new ImportAnalysisConfiguration(new File("example/execution monitoring log"));
 		final Analysis analysis = new Analysis(configuration);
-		analysis.start();
+		analysis.execute();
 
 		assertThat(configuration.getMetadataRecords(), hasSize(1));
 		assertThat(configuration.getTracesList(), hasSize(1635));
@@ -65,7 +63,7 @@ public final class ImportAnalysisConfigurationTest {
 	public void nonExistingLogShouldNotLeadToCrash() {
 		final ImportAnalysisConfiguration configuration = new ImportAnalysisConfiguration(new File("nonExistingLog"));
 		final Analysis analysis = new Analysis(configuration);
-		analysis.start();
+		analysis.execute();
 
 		assertThat(configuration.getMetadataRecords(), is(empty()));
 		assertThat(configuration.getTracesList(), is(empty()));

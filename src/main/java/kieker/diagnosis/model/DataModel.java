@@ -67,7 +67,7 @@ public final class DataModel extends Observable {
 		this.importDirectory = new File(directory);
 		final ImportAnalysisConfiguration analysisConfiguration = new ImportAnalysisConfiguration(this.importDirectory);
 		final Analysis analysis = new Analysis(analysisConfiguration);
-		analysis.start();
+		analysis.execute();
 
 		// Store the results from the analysis
 		this.traces = analysisConfiguration.getTracesList();
