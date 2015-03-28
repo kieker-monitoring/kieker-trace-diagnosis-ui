@@ -123,6 +123,7 @@ def commonDistBinConfiguration = {
 		from jar.archivePath 
 		from 'licenses'
 	}
+	into ('example') { from 'example' }
 	into('.') {
 		from 'LICENSE'
 	}
