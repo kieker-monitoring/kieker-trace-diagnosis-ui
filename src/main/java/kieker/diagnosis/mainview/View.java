@@ -48,6 +48,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public final class View {
+
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("kieker.diagnosis.mainview.view"); //$NON-NLS-1$
 
 	@Autowired
@@ -59,23 +60,26 @@ public final class View {
 	@Autowired
 	private Controller controller;
 
-	private Shell shell;
 	private Composite subViewComposite;
 	private StackLayout subViewLayout;
-	private MessageBox aboutDialog;
+	private Shell shell;
+
+	private ProgressMonitorDialog progressMonitorDialog;
 	private DirectoryDialog directoryDialog;
 	private SettingsDialog settingsDialog;
+	private MessageBox aboutDialog;
+
 	private MenuItem mntmExit;
 	private MenuItem mntmOpenMonitoringLog;
-	private Tree tree;
-	private TreeItem trtmExplorer;
-	private TreeItem trtmTraces;
-	private TreeItem trtmAggregatedTraces;
 	private MenuItem mntmAbout;
 	private MenuItem mntmSettings;
+
 	private TreeItem trtmAggregatedOperationCalls;
+	private TreeItem trtmAggregatedTraces;
 	private TreeItem trtmOperationCalls;
-	private ProgressMonitorDialog progressMonitorDialog;
+	private TreeItem trtmExplorer;
+	private TreeItem trtmTraces;
+	private Tree tree;
 
 	public void show() {
 		final Display display = Display.getDefault();
@@ -186,12 +190,12 @@ public final class View {
 		this.shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 
 		this.directoryDialog = new DirectoryDialog(this.shell);
-		this.aboutDialog = new MessageBox(this.shell, SWT.ICON_INFORMATION);
 		this.settingsDialog = new SettingsDialog(this.shell, SWT.NONE, this.propertiesModel);
 
 		this.progressMonitorDialog = new ProgressMonitorDialog(this.shell);
 		this.progressMonitorDialog.setCancelable(false);
 
+		this.aboutDialog = new MessageBox(this.shell, SWT.ICON_INFORMATION);
 		this.aboutDialog.setText(BUNDLE.getString("View.mntmAbout.text"));
 		this.aboutDialog.setMessage("Kieker Trace Diagnosis - 1.0-SNAPSHOT\n\nCopyright 2015 Kieker Project (http://kieker-monitoring.net)");
 

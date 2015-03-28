@@ -17,9 +17,9 @@
 package kieker.diagnosis.domain;
 
 /**
- * This class represents an aggregated operation call within this application. It adds some properties that are only available due to aggregation, like the average duration of all
- * calls.
- *
+ * This class represents an aggregated operation call within this application. It adds some properties that are only available due to aggregation, like the average
+ * duration of all calls.
+ * 
  * @author Nils Christian Ehmke
  */
 public final class AggregatedOperationCall extends AbstractOperationCall<AggregatedOperationCall> {

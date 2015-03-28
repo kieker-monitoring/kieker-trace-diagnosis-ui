@@ -23,7 +23,7 @@ import java.util.Map;
 public final class Mapper<I, O> {
 
 	private final Map<I, O> internalMap = new HashMap<>();
-	public O defaultValue;
+	private O defaultValue;
 
 	public To map(final I key) {
 		return new To(key);

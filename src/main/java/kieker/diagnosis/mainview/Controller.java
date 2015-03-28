@@ -47,6 +47,8 @@ import org.springframework.stereotype.Component;
 @Component
 public final class Controller implements SelectionListener {
 
+	private static final String KEY_LAST_IMPORT_PATH = "lastimportpath";
+
 	private static final Logger LOGGER = Logger.getGlobal();
 
 	@Autowired
@@ -142,7 +144,7 @@ public final class Controller implements SelectionListener {
 
 	private void openMonitoringLog() {
 		final Preferences preferences = Preferences.userNodeForPackage(Controller.class);
-		final String filterPath = preferences.get("lastimportpath", ".");
+		final String filterPath = preferences.get(KEY_LAST_IMPORT_PATH, ".");
 
 		this.view.getDirectoryDialog().setFilterPath(filterPath);
 		final String selectedDirectory = this.view.getDirectoryDialog().open();
@@ -156,7 +158,7 @@ public final class Controller implements SelectionListener {
 
 			this.model.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_ARROW));
 
-			preferences.put("lastimportpath", selectedDirectory);
+			preferences.put(KEY_LAST_IMPORT_PATH, selectedDirectory);
 			try {
 				preferences.flush();
 			} catch (final BackingStoreException ex) {
