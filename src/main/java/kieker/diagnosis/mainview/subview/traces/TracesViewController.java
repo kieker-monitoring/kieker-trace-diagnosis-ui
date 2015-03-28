@@ -23,6 +23,8 @@ import kieker.diagnosis.mainview.subview.traces.TracesViewModel.Filter;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +34,7 @@ import org.springframework.stereotype.Component;
  * @author Nils Christian Ehmke
  */
 @Component
-public final class TracesViewController implements ISubController, SelectionListener {
+public final class TracesViewController implements ISubController, SelectionListener, TraverseListener {
 
 	@Autowired
 	private TracesView view;
@@ -69,6 +71,13 @@ public final class TracesViewController implements ISubController, SelectionList
 	public void jumpToCorrespondingTrace(final OperationCall call) {
 		this.model.setFilter(Filter.NONE);
 		this.view.jumpToCorrespondingTrace(call);
+	}
+
+	@Override
+	public void keyTraversed(final TraverseEvent e) {
+		if (e.widget == this.view.getTextFilter()) {
+			this.model.setRegExpr(this.view.getTextFilter().getText());
+		}
 	}
 
 }

@@ -108,6 +108,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 	private Button btnShowJustFailureContaining;
 
 	private ScrolledComposite ivSc;
+	private Text filterText;
 
 	@PostConstruct
 	public void initialize() {
@@ -147,6 +148,10 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		this.btnShowJustFailed.setText(BUNDLE.getString("AggregatedTracesView.btnShowJustFailed.text")); //$NON-NLS-1$ 
 		this.btnShowJustFailureContaining = new Button(filterComposite, SWT.RADIO);
 		this.btnShowJustFailureContaining.setText(BUNDLE.getString("AggregatedTracesView.btnShowJustFailureContaining.text")); //$NON-NLS-1$ 
+
+		this.filterText = new Text(filterComposite, SWT.BORDER);
+		this.filterText.setMessage(BUNDLE.getString("AggregatedTracesView.text.message")); //$NON-NLS-1$
+		this.filterText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
 
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -326,9 +331,15 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		trclmnTraceDepth.addSelectionListener(new TraceDepthSortListener());
 		trclmnTraceSize.addSelectionListener(new TraceSizeSortListener());
 
+		this.filterText.addTraverseListener(this.controller);
+
 		this.btnShowAll.addSelectionListener(this.controller);
 		this.btnShowJustFailed.addSelectionListener(this.controller);
 		this.btnShowJustFailureContaining.addSelectionListener(this.controller);
+	}
+
+	public Text getFilterText() {
+		return this.filterText;
 	}
 
 	public Button getBtn1() {
@@ -369,16 +380,24 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		this.updateDetailComposite();
 	}
 
+	public void notifyAboutChangedRegExpr() {
+		this.updateTree();
+		this.updateStatusBar();
+		this.updateDetailComposite();
+	}
+
 	private void updateStatusBar() {
+		// TODO: Just get the model data once to improve performance. We are using a potential regexp here...
 		switch (this.model.getFilter()) {
 		case JUST_FAILED:
-			this.lblCounter.setText(this.dataModel.getFailedTracesCopy().size() + " " + BUNDLE.getString("AggregatedTracesView.lblCounter.text"));
+			this.lblCounter.setText(this.dataModel.getFailedAggregatedTracesCopy(this.model.getRegExpr()).size() + " " + BUNDLE.getString("AggregatedTracesView.lblCounter.text"));
 			break;
 		case JUST_FAILURE_CONTAINING:
-			this.lblCounter.setText(this.dataModel.getFailureContainingTracesCopy().size() + " " + BUNDLE.getString("AggregatedTracesView.lblCounter.text"));
+			this.lblCounter.setText(this.dataModel.getFailureContainingAggregatedTracesCopy(this.model.getRegExpr()).size() + " "
+					+ BUNDLE.getString("AggregatedTracesView.lblCounter.text"));
 			break;
 		case NONE:
-			this.lblCounter.setText(this.dataModel.getTracesCopy().size() + " " + BUNDLE.getString("AggregatedTracesView.lblCounter.text"));
+			this.lblCounter.setText(this.dataModel.getAggregatedTracesCopy(this.model.getRegExpr()).size() + " " + BUNDLE.getString("AggregatedTracesView.lblCounter.text"));
 			break;
 		default:
 			break;
@@ -392,13 +411,13 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		switch (this.model.getFilter()) {
 		case JUST_FAILED:
-			traces = this.dataModel.getFailedAggregatedTracesCopy();
+			traces = this.dataModel.getFailedAggregatedTracesCopy(this.model.getRegExpr());
 			break;
 		case JUST_FAILURE_CONTAINING:
-			traces = this.dataModel.getFailureContainingAggregatedTracesCopy();
+			traces = this.dataModel.getFailureContainingAggregatedTracesCopy(this.model.getRegExpr());
 			break;
 		case NONE:
-			traces = this.dataModel.getAggregatedTracesCopy();
+			traces = this.dataModel.getAggregatedTracesCopy(this.model.getRegExpr());
 			break;
 		default:
 			traces = Collections.emptyList();

@@ -24,11 +24,13 @@ import kieker.diagnosis.mainview.subview.calls.CallsViewModel.Filter;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class CallsViewController implements ISubController, SelectionListener {
+public final class CallsViewController implements ISubController, SelectionListener, TraverseListener {
 
 	@Autowired
 	private Controller masterController;
@@ -64,4 +66,10 @@ public final class CallsViewController implements ISubController, SelectionListe
 		}
 	}
 
+	@Override
+	public void keyTraversed(final TraverseEvent e) {
+		if (e.widget == this.view.getFilterText()) {
+			this.model.setRegExpr(this.view.getFilterText().getText());
+		}
+	}
 }

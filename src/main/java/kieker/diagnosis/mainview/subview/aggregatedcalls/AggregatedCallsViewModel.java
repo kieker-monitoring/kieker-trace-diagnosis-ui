@@ -30,6 +30,8 @@ public final class AggregatedCallsViewModel {
 	private Filter filter = Filter.NONE;
 	private AggregatedOperationCall operationCall;
 
+	private String regExpr;
+
 	public Filter getFilter() {
 		return this.filter;
 	}
@@ -48,6 +50,16 @@ public final class AggregatedCallsViewModel {
 		this.operationCall = operationCall;
 
 		this.view.notifyAboutChangedOperationCall();
+	}
+
+	public String getRegExpr() {
+		return this.regExpr;
+	}
+
+	public void setRegExpr(final String regExpr) {
+		this.regExpr = regExpr;
+
+		this.view.notifyAboutChangedRegExpr();
 	}
 
 	public static enum Filter {

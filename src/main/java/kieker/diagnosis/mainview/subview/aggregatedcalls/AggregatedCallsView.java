@@ -98,6 +98,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 	private Button btnShowAll;
 	private Button btnShowJustFailed;
 	private ScrolledComposite ivSc;
+	private Text filterText;
 
 	@PostConstruct
 	public void initialize() {
@@ -135,6 +136,10 @@ public final class AggregatedCallsView implements ISubView, Observer {
 		this.btnShowAll.setSelection(true);
 		this.btnShowJustFailed = new Button(filterComposite, SWT.RADIO);
 		this.btnShowJustFailed.setText(BUNDLE.getString("AggregatedCallsView.btnShowJustFailed.text")); //$NON-NLS-1$ 
+
+		this.filterText = new Text(filterComposite, SWT.BORDER);
+		this.filterText.setMessage(BUNDLE.getString("AggregatedCallsView.text.message")); //$NON-NLS-1$
+		this.filterText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -289,8 +294,14 @@ public final class AggregatedCallsView implements ISubView, Observer {
 		tblclmnNumberOfCalls.addSelectionListener(new CallsSortListener());
 		tblclmnMeanDuration.addSelectionListener(new AverageDurationSortListener());
 
+		this.filterText.addTraverseListener(this.controller);
+
 		this.btnShowAll.addSelectionListener(this.controller);
 		this.btnShowJustFailed.addSelectionListener(this.controller);
+	}
+
+	public Text getFilterText() {
+		return this.filterText;
 	}
 
 	public Button getBtn1() {
@@ -327,11 +338,19 @@ public final class AggregatedCallsView implements ISubView, Observer {
 		this.updateDetailComposite();
 	}
 
+	public void notifyAboutChangedRegExpr() {
+		this.updateTable();
+		this.updateStatusBar();
+		this.updateDetailComposite();
+	}
+
 	private void updateStatusBar() {
+		// TODO: Just get the model data once to improve performance. We are using a potential regexp here...
 		if (this.model.getFilter() == Filter.NONE) {
-			this.lblCounter.setText(this.dataModel.getAggregatedOperationCalls().size() + " " + BUNDLE.getString("AggregatedCallsView.lblCounter.text"));
+			this.lblCounter.setText(this.dataModel.getAggregatedOperationCalls(this.model.getRegExpr()).size() + " " + BUNDLE.getString("AggregatedCallsView.lblCounter.text"));
 		} else {
-			this.lblCounter.setText(this.dataModel.getAggregatedFailedOperationCalls().size() + " " + BUNDLE.getString("AggregatedCallsView.lblCounter.text"));
+			this.lblCounter.setText(this.dataModel.getAggregatedFailedOperationCalls(this.model.getRegExpr()).size() + " "
+					+ BUNDLE.getString("AggregatedCallsView.lblCounter.text"));
 		}
 		this.statusBar.getParent().layout();
 	}
@@ -340,9 +359,9 @@ public final class AggregatedCallsView implements ISubView, Observer {
 		final List<AggregatedOperationCall> calls;
 
 		if (this.model.getFilter() == Filter.NONE) {
-			calls = this.dataModel.getAggregatedOperationCalls();
+			calls = this.dataModel.getAggregatedOperationCalls(this.model.getRegExpr());
 		} else {
-			calls = this.dataModel.getAggregatedFailedOperationCalls();
+			calls = this.dataModel.getAggregatedFailedOperationCalls(this.model.getRegExpr());
 		}
 
 		this.table.setData(calls);

@@ -17,12 +17,17 @@
 package kieker.diagnosis.model;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import kieker.common.record.misc.KiekerMetadataRecord;
+import kieker.diagnosis.domain.AbstractOperationCall;
+import kieker.diagnosis.domain.AbstractTrace;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
@@ -84,44 +89,81 @@ public final class DataModel extends Observable {
 		this.notifyObservers();
 	}
 
-	public List<Trace> getTracesCopy() {
-		return this.traces;
+	public List<Trace> getTracesCopy(final String regExpr) {
+		return this.filterTracesIfNecessary(this.traces, regExpr);
 	}
 
-	public List<Trace> getFailedTracesCopy() {
-		return this.failedTraces;
+	public List<Trace> getFailedTracesCopy(final String regExpr) {
+		return this.filterTracesIfNecessary(this.failedTraces, regExpr);
 	}
 
-	public List<Trace> getFailureContainingTracesCopy() {
-		return this.failureContainingTraces;
+	public List<Trace> getFailureContainingTracesCopy(final String regExpr) {
+		return this.filterTracesIfNecessary(this.failureContainingTraces, regExpr);
 	}
 
-	public List<AggregatedTrace> getAggregatedTracesCopy() {
-		return this.aggregatedTraces;
+	public List<AggregatedTrace> getAggregatedTracesCopy(final String regExpr) {
+		return this.filterTracesIfNecessary(this.aggregatedTraces, regExpr);
 	}
 
-	public List<AggregatedTrace> getFailedAggregatedTracesCopy() {
-		return this.failedAggregatedTraces;
+	public List<AggregatedTrace> getFailedAggregatedTracesCopy(final String regExpr) {
+		return this.filterTracesIfNecessary(this.failedAggregatedTraces, regExpr);
 	}
 
-	public List<AggregatedTrace> getFailureContainingAggregatedTracesCopy() {
-		return this.failureAggregatedContainingTraces;
+	public List<AggregatedTrace> getFailureContainingAggregatedTracesCopy(final String regExpr) {
+		return this.filterTracesIfNecessary(this.failureAggregatedContainingTraces, regExpr);
 	}
 
-	public List<OperationCall> getOperationCalls() {
-		return this.operationCalls;
+	public List<OperationCall> getOperationCalls(final String regExpr) {
+		return this.filterCallsIfNecessary(this.operationCalls, regExpr);
 	}
 
-	public List<OperationCall> getFailedOperationCalls() {
-		return this.failedOperationCalls;
+	public List<OperationCall> getFailedOperationCalls(final String regExpr) {
+		return this.filterCallsIfNecessary(this.failedOperationCalls, regExpr);
 	}
 
-	public List<AggregatedOperationCall> getAggregatedOperationCalls() {
-		return this.aggregatedOperationCalls;
+	public List<AggregatedOperationCall> getAggregatedOperationCalls(final String regExpr) {
+		return this.filterCallsIfNecessary(this.aggregatedOperationCalls, regExpr);
 	}
 
-	public List<AggregatedOperationCall> getAggregatedFailedOperationCalls() {
-		return this.aggregatedFailedOperationCalls;
+	public List<AggregatedOperationCall> getAggregatedFailedOperationCalls(final String regExpr) {
+		return this.filterCallsIfNecessary(this.aggregatedFailedOperationCalls, regExpr);
+	}
+
+	private <T extends AbstractTrace<?>> List<T> filterTracesIfNecessary(final List<T> traces, final String regExpr) {
+		if ((regExpr == null) || regExpr.isEmpty() || !this.isRegex(regExpr)) {
+			return traces;
+		}
+
+		final List<T> result = new ArrayList<>();
+		for (final T trace : traces) {
+			if (trace.getRootOperationCall().getOperation().matches(regExpr)) {
+				result.add(trace);
+			}
+		}
+		return result;
+	}
+
+	private <T extends AbstractOperationCall<?>> List<T> filterCallsIfNecessary(final List<T> calls, final String regExpr) {
+		if ((regExpr == null) || regExpr.isEmpty() || !this.isRegex(regExpr)) {
+			return calls;
+		}
+
+		final List<T> result = new ArrayList<>();
+		for (final T call : calls) {
+			if (call.getOperation().matches(regExpr)) {
+				result.add(call);
+			}
+		}
+		return result;
+	}
+
+	private boolean isRegex(final String str) {
+		try {
+			Pattern.compile(str);
+			return true;
+		} catch (final PatternSyntaxException e) {
+			return false;
+		}
 	}
 
 	public TimeUnit getTimeUnit() {

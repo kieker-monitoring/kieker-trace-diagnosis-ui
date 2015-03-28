@@ -91,6 +91,7 @@ public final class CallsView implements ISubView, Observer {
 	private Button btnShowAll;
 	private Button btnShowJustFailed;
 	private ScrolledComposite ivSc;
+	private Text filterText;
 
 	@PostConstruct
 	public void initialize() {
@@ -128,6 +129,10 @@ public final class CallsView implements ISubView, Observer {
 		this.btnShowAll.setSelection(true);
 		this.btnShowJustFailed = new Button(filterComposite, SWT.RADIO);
 		this.btnShowJustFailed.setText(BUNDLE.getString("CallsView.btnShowJustFailed.text")); //$NON-NLS-1$ 
+
+		this.filterText = new Text(filterComposite, SWT.BORDER);
+		this.filterText.setMessage(BUNDLE.getString("CallsView.text.message")); //$NON-NLS-1$
+		this.filterText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -227,8 +232,14 @@ public final class CallsView implements ISubView, Observer {
 		tblclmnTraceID.addSelectionListener(new TraceIDSortListener());
 		tblclmnTimestamp.addSelectionListener(new TimestampSortListener());
 
+		this.filterText.addTraverseListener(this.controller);
+
 		this.btnShowAll.addSelectionListener(this.controller);
 		this.btnShowJustFailed.addSelectionListener(this.controller);
+	}
+
+	public Text getFilterText() {
+		return this.filterText;
 	}
 
 	public Button getBtn1() {
@@ -265,6 +276,12 @@ public final class CallsView implements ISubView, Observer {
 		this.updateDetailComposite();
 	}
 
+	public void notifyAboutChangedRegExpr() {
+		this.updateTable();
+		this.updateStatusBar();
+		this.updateDetailComposite();
+	}
+
 	private void updateDetailComposite() {
 		final OperationCall call = this.model.getOperationCall();
 
@@ -294,10 +311,11 @@ public final class CallsView implements ISubView, Observer {
 	}
 
 	private void updateStatusBar() {
+		// TODO: Just get the model data once to improve performance. We are using a potential regexp here...
 		if (this.model.getFilter() == Filter.NONE) {
-			this.lbCounter.setText(this.dataModel.getOperationCalls().size() + " " + BUNDLE.getString("CallsView.lbCounter.text"));
+			this.lbCounter.setText(this.dataModel.getOperationCalls(this.model.getRegExpr()).size() + " " + BUNDLE.getString("CallsView.lbCounter.text"));
 		} else {
-			this.lbCounter.setText(this.dataModel.getFailedOperationCalls().size() + " " + BUNDLE.getString("CallsView.lbCounter.text"));
+			this.lbCounter.setText(this.dataModel.getFailedOperationCalls(this.model.getRegExpr()).size() + " " + BUNDLE.getString("CallsView.lbCounter.text"));
 		}
 		this.statusBar.getParent().layout();
 	}
@@ -305,9 +323,9 @@ public final class CallsView implements ISubView, Observer {
 	private void updateTable() {
 		final List<OperationCall> calls;
 		if (this.model.getFilter() == Filter.NONE) {
-			calls = this.dataModel.getOperationCalls();
+			calls = this.dataModel.getOperationCalls(this.model.getRegExpr());
 		} else {
-			calls = this.dataModel.getFailedOperationCalls();
+			calls = this.dataModel.getFailedOperationCalls(this.model.getRegExpr());
 		}
 
 		this.table.setData(calls);

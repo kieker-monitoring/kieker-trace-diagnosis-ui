@@ -97,6 +97,7 @@ public final class TracesView implements Observer, ISubView {
 	private Button btnShowJustFailed;
 	private Button showJustFailureContaining;
 	private ScrolledComposite ivSc;
+	private Text textFilter;
 
 	@PostConstruct
 	public void initialize() {
@@ -122,6 +123,7 @@ public final class TracesView implements Observer, ISubView {
 		this.composite.setLayout(gl_composite);
 
 		final Composite filterComposite = new Composite(this.composite, SWT.NONE);
+		filterComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
 		final GridLayout gl_filterComposite = new GridLayout(3, false);
 		gl_composite.verticalSpacing = 0;
 		gl_composite.marginHeight = 0;
@@ -132,10 +134,21 @@ public final class TracesView implements Observer, ISubView {
 		this.btnShowAll = new Button(filterComposite, SWT.RADIO);
 		this.btnShowAll.setText(BUNDLE.getString("TracesView.btnShowAll.text")); //$NON-NLS-1$ 
 		this.btnShowAll.setSelection(true);
+
+		this.btnShowAll.addSelectionListener(this.controller);
 		this.btnShowJustFailed = new Button(filterComposite, SWT.RADIO);
+		this.btnShowJustFailed.setSize(142, 16);
 		this.btnShowJustFailed.setText(BUNDLE.getString("TracesView.btnShowJustFailed.text")); //$NON-NLS-1$ 
+		this.btnShowJustFailed.addSelectionListener(this.controller);
 		this.showJustFailureContaining = new Button(filterComposite, SWT.RADIO);
-		this.showJustFailureContaining.setText(BUNDLE.getString("TracesView.showJustFailureContaining.text")); //$NON-NLS-1$ 
+		this.showJustFailureContaining.setSize(206, 16);
+		this.showJustFailureContaining.setText(BUNDLE.getString("TracesView.showJustFailureContaining.text"));
+		this.showJustFailureContaining.addSelectionListener(this.controller);
+
+		this.textFilter = new Text(filterComposite, SWT.BORDER);
+		this.textFilter.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 3, 1));
+		this.textFilter.setBounds(0, 0, 76, 21);
+		this.textFilter.setMessage(BUNDLE.getString("TracesView.textFilter.message"));
 
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -266,6 +279,8 @@ public final class TracesView implements Observer, ISubView {
 		this.tree.addSelectionListener(this.controller);
 		this.tree.addListener(SWT.SetData, new DataProvider());
 
+		this.textFilter.addTraverseListener(this.controller);
+
 		trclmnExecutionContainer.addSelectionListener(new ContainerSortListener());
 		trclmnComponent.addSelectionListener(new ComponentSortListener());
 		trclmnOperation.addSelectionListener(new OperationSortListener());
@@ -274,10 +289,6 @@ public final class TracesView implements Observer, ISubView {
 		trclmnTraceDepth.addSelectionListener(new TraceDepthSortListener());
 		trclmnTraceSize.addSelectionListener(new TraceSizeSortListener());
 		trclmnTimestamp.addSelectionListener(new TimestampSortListener());
-
-		this.btnShowAll.addSelectionListener(this.controller);
-		this.btnShowJustFailed.addSelectionListener(this.controller);
-		this.showJustFailureContaining.addSelectionListener(this.controller);
 	}
 
 	public Button getBtn1() {
@@ -294,6 +305,14 @@ public final class TracesView implements Observer, ISubView {
 
 	public Tree getTree() {
 		return this.tree;
+	}
+
+	public Text getTextFilter() {
+		return this.textFilter;
+	}
+
+	public void setTextFilter(final Text textFilter) {
+		this.textFilter = textFilter;
 	}
 
 	@Override
@@ -322,16 +341,23 @@ public final class TracesView implements Observer, ISubView {
 		this.updateDetailComposite();
 	}
 
+	public void notifyAboutChangedRegExpr() {
+		this.updateTree();
+		this.updateStatusBar();
+		this.updateDetailComposite();
+	}
+
 	private void updateStatusBar() {
+		// TODO: Just get the model data once to improve performance. We are using a potential regexp here...
 		switch (this.model.getFilter()) {
 		case JUST_FAILED:
-			this.lblCounter.setText(this.dataModel.getFailedTracesCopy().size() + " " + BUNDLE.getString("TracesView.lblCounter.text"));
+			this.lblCounter.setText(this.dataModel.getFailedTracesCopy(this.model.getRegExpr()).size() + " " + BUNDLE.getString("TracesView.lblCounter.text"));
 			break;
 		case JUST_FAILURE_CONTAINING:
-			this.lblCounter.setText(this.dataModel.getFailureContainingTracesCopy().size() + " " + BUNDLE.getString("TracesView.lblCounter.text"));
+			this.lblCounter.setText(this.dataModel.getFailureContainingTracesCopy(this.model.getRegExpr()).size() + " " + BUNDLE.getString("TracesView.lblCounter.text"));
 			break;
 		case NONE:
-			this.lblCounter.setText(this.dataModel.getTracesCopy().size() + " " + BUNDLE.getString("TracesView.lblCounter.text"));
+			this.lblCounter.setText(this.dataModel.getTracesCopy(this.model.getRegExpr()).size() + " " + BUNDLE.getString("TracesView.lblCounter.text"));
 			break;
 		default:
 			break;
@@ -344,13 +370,13 @@ public final class TracesView implements Observer, ISubView {
 		final List<Trace> records;
 		switch (this.model.getFilter()) {
 		case JUST_FAILED:
-			records = this.dataModel.getFailedTracesCopy();
+			records = this.dataModel.getFailedTracesCopy(this.model.getRegExpr());
 			break;
 		case JUST_FAILURE_CONTAINING:
-			records = this.dataModel.getFailureContainingTracesCopy();
+			records = this.dataModel.getFailureContainingTracesCopy(this.model.getRegExpr());
 			break;
 		case NONE:
-			records = this.dataModel.getTracesCopy();
+			records = this.dataModel.getTracesCopy(this.model.getRegExpr());
 			break;
 		default:
 			records = Collections.emptyList();

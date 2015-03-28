@@ -23,11 +23,13 @@ import kieker.diagnosis.mainview.subview.aggregatedcalls.AggregatedCallsViewMode
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class AggregatedCallsViewController implements ISubController, SelectionListener {
+public final class AggregatedCallsViewController implements ISubController, SelectionListener, TraverseListener {
 
 	@Autowired
 	private AggregatedCallsView view;
@@ -42,10 +44,10 @@ public final class AggregatedCallsViewController implements ISubController, Sele
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
-		if (e.widget == view.getBtn1()) {
+		if (e.widget == this.view.getBtn1()) {
 			this.model.setFilter(Filter.NONE);
-		} 
-		if (e.widget == view.getBtn2()) {
+		}
+		if (e.widget == this.view.getBtn2()) {
 			this.model.setFilter(Filter.JUST_FAILED);
 		}
 		if ((e.item != null) && (e.item.getData() instanceof AggregatedOperationCall)) {
@@ -58,4 +60,10 @@ public final class AggregatedCallsViewController implements ISubController, Sele
 		// Just implemented for the interface
 	}
 
+	@Override
+	public void keyTraversed(final TraverseEvent e) {
+		if (e.widget == this.view.getFilterText()) {
+			this.model.setRegExpr(this.view.getFilterText().getText());
+		}
+	}
 }
