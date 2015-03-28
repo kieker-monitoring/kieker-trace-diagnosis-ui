@@ -89,27 +89,27 @@ public final class DataModel extends Observable {
 		this.notifyObservers();
 	}
 
-	public List<Trace> getTracesCopy(final String regExpr) {
+	public List<Trace> getTraces(final String regExpr) {
 		return this.filterTracesIfNecessary(this.traces, regExpr);
 	}
 
-	public List<Trace> getFailedTracesCopy(final String regExpr) {
+	public List<Trace> getFailedTraces(final String regExpr) {
 		return this.filterTracesIfNecessary(this.failedTraces, regExpr);
 	}
 
-	public List<Trace> getFailureContainingTracesCopy(final String regExpr) {
+	public List<Trace> getFailureContainingTraces(final String regExpr) {
 		return this.filterTracesIfNecessary(this.failureContainingTraces, regExpr);
 	}
 
-	public List<AggregatedTrace> getAggregatedTracesCopy(final String regExpr) {
+	public List<AggregatedTrace> getAggregatedTraces(final String regExpr) {
 		return this.filterTracesIfNecessary(this.aggregatedTraces, regExpr);
 	}
 
-	public List<AggregatedTrace> getFailedAggregatedTracesCopy(final String regExpr) {
+	public List<AggregatedTrace> getFailedAggregatedTraces(final String regExpr) {
 		return this.filterTracesIfNecessary(this.failedAggregatedTraces, regExpr);
 	}
 
-	public List<AggregatedTrace> getFailureContainingAggregatedTracesCopy(final String regExpr) {
+	public List<AggregatedTrace> getFailureContainingAggregatedTraces(final String regExpr) {
 		return this.filterTracesIfNecessary(this.failureAggregatedContainingTraces, regExpr);
 	}
 

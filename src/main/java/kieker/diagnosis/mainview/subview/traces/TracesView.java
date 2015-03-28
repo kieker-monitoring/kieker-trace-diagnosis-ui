@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
@@ -325,13 +326,13 @@ public final class TracesView implements Observer, ISubView {
 	private void updateCachedDataModelContent() {
 		switch (this.model.getFilter()) {
 		case JUST_FAILED:
-			this.cachedDataModelContent = this.dataModel.getFailedTracesCopy(this.model.getRegExpr());
+			this.cachedDataModelContent = this.dataModel.getFailedTraces(this.model.getRegExpr());
 			break;
 		case JUST_FAILURE_CONTAINING:
-			this.cachedDataModelContent = this.dataModel.getFailureContainingTracesCopy(this.model.getRegExpr());
+			this.cachedDataModelContent = this.dataModel.getFailureContainingTraces(this.model.getRegExpr());
 			break;
 		case NONE:
-			this.cachedDataModelContent = this.dataModel.getTracesCopy(this.model.getRegExpr());
+			this.cachedDataModelContent = this.dataModel.getTraces(this.model.getRegExpr());
 			break;
 		default:
 			break;
@@ -468,12 +469,14 @@ public final class TracesView implements Observer, ISubView {
 				operationString = NameConverter.toShortOperationName(operationString);
 			}
 
-			final String shortTimeUnit = NameConverter.toShortTimeUnit(TracesView.this.propertiesModel.getTimeUnit());
-			final long duration = TracesView.this.propertiesModel.getTimeUnit().convert(call.getDuration(), TracesView.this.dataModel.getTimeUnit());
-			final String durationString = duration + " " + shortTimeUnit;
+			final TimeUnit sourceTimeUnit = TracesView.this.dataModel.getTimeUnit();
+			final TimeUnit targetTimeUnit = TracesView.this.propertiesModel.getTimeUnit();
+			final String shortTimeUnit = NameConverter.toShortTimeUnit(targetTimeUnit);
+
+			final String duration = targetTimeUnit.convert(call.getDuration(), sourceTimeUnit) + " " + shortTimeUnit;
 
 			item.setText(new String[] { call.getContainer(), componentName, operationString, Integer.toString(call.getStackDepth()), Integer.toString(call.getStackSize()),
-				durationString, String.format("%.1f%%", call.getPercent()), traceID, Long.toString(call.getTimestamp()) });
+				duration, String.format("%.1f%%", call.getPercent()), traceID, Long.toString(call.getTimestamp()) });
 
 			if (call.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);

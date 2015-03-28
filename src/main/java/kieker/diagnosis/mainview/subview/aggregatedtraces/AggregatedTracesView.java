@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
@@ -364,13 +365,13 @@ public final class AggregatedTracesView implements Observer, ISubView {
 	private void updateCachedDataModelContent() {
 		switch (this.model.getFilter()) {
 		case JUST_FAILED:
-			this.cachedDataModelContent = this.dataModel.getFailedAggregatedTracesCopy(this.model.getRegExpr());
+			this.cachedDataModelContent = this.dataModel.getFailedAggregatedTraces(this.model.getRegExpr());
 			break;
 		case JUST_FAILURE_CONTAINING:
-			this.cachedDataModelContent = this.dataModel.getFailureContainingAggregatedTracesCopy(this.model.getRegExpr());
+			this.cachedDataModelContent = this.dataModel.getFailureContainingAggregatedTraces(this.model.getRegExpr());
 			break;
 		case NONE:
-			this.cachedDataModelContent = this.dataModel.getAggregatedTracesCopy(this.model.getRegExpr());
+			this.cachedDataModelContent = this.dataModel.getAggregatedTraces(this.model.getRegExpr());
 			break;
 		default:
 			break;
@@ -497,18 +498,15 @@ public final class AggregatedTracesView implements Observer, ISubView {
 				operationString = NameConverter.toShortOperationName(operationString);
 			}
 
-			final String shortTimeUnit = NameConverter.toShortTimeUnit(AggregatedTracesView.this.propertiesModel.getTimeUnit());
+			final TimeUnit sourceTimeUnit = AggregatedTracesView.this.dataModel.getTimeUnit();
+			final TimeUnit targetTimeUnit = AggregatedTracesView.this.propertiesModel.getTimeUnit();
+			final String shortTimeUnit = NameConverter.toShortTimeUnit(targetTimeUnit);
 
-			final String minDuration = AggregatedTracesView.this.propertiesModel.getTimeUnit().convert(call.getMinDuration(), AggregatedTracesView.this.dataModel.getTimeUnit())
-					+ " " + shortTimeUnit;
-			final String maxDuration = AggregatedTracesView.this.propertiesModel.getTimeUnit().convert(call.getMaxDuration(), AggregatedTracesView.this.dataModel.getTimeUnit())
-					+ " " + shortTimeUnit;
-			final String meanDuration = AggregatedTracesView.this.propertiesModel.getTimeUnit()
-					.convert(call.getMedianDuration(), AggregatedTracesView.this.dataModel.getTimeUnit()) + " " + shortTimeUnit;
-			final String avgDuration = AggregatedTracesView.this.propertiesModel.getTimeUnit().convert(call.getMeanDuration(), AggregatedTracesView.this.dataModel.getTimeUnit())
-					+ " " + shortTimeUnit;
-			final String totalDuration = AggregatedTracesView.this.propertiesModel.getTimeUnit()
-					.convert(call.getTotalDuration(), AggregatedTracesView.this.dataModel.getTimeUnit()) + " " + shortTimeUnit;
+			final String minDuration = targetTimeUnit.convert(call.getMinDuration(), sourceTimeUnit) + " " + shortTimeUnit;
+			final String maxDuration = targetTimeUnit.convert(call.getMaxDuration(), sourceTimeUnit) + " " + shortTimeUnit;
+			final String meanDuration = targetTimeUnit.convert(call.getMedianDuration(), sourceTimeUnit) + " " + shortTimeUnit;
+			final String avgDuration = targetTimeUnit.convert(call.getMeanDuration(), sourceTimeUnit) + " " + shortTimeUnit;
+			final String totalDuration = targetTimeUnit.convert(call.getTotalDuration(), sourceTimeUnit) + " " + shortTimeUnit;
 
 			if (parent != null) {
 				item.setText(new String[] { call.getContainer(), componentName, operationString, "", Integer.toString(call.getStackDepth()), Integer.toString(call.getStackSize()),

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
@@ -364,11 +365,13 @@ public final class CallsView implements ISubView, Observer {
 				operationString = NameConverter.toShortOperationName(operationString);
 			}
 
-			final String shortTimeUnit = NameConverter.toShortTimeUnit(CallsView.this.propertiesModel.getTimeUnit());
-			final long duration = CallsView.this.propertiesModel.getTimeUnit().convert(call.getDuration(), CallsView.this.dataModel.getTimeUnit());
+			final TimeUnit sourceTimeUnit = CallsView.this.dataModel.getTimeUnit();
+			final TimeUnit targetTimeUnit = CallsView.this.propertiesModel.getTimeUnit();
+			final String shortTimeUnit = NameConverter.toShortTimeUnit(targetTimeUnit);
 
-			item.setText(new String[] { call.getContainer(), componentName, operationString, Long.toString(duration) + " " + shortTimeUnit, Long.toString(call.getTraceID()),
-				Long.toString(call.getTimestamp()) });
+			final String duration = targetTimeUnit.convert(call.getDuration(), sourceTimeUnit) + " " + shortTimeUnit;
+
+			item.setText(new String[] { call.getContainer(), componentName, operationString, duration, Long.toString(call.getTraceID()), Long.toString(call.getTimestamp()) });
 
 			if (call.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);

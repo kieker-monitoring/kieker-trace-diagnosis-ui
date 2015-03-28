@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
@@ -434,23 +435,15 @@ public final class AggregatedCallsView implements ISubView, Observer {
 				operationString = NameConverter.toShortOperationName(operationString);
 			}
 
-			final String shortTimeUnit = NameConverter.toShortTimeUnit(AggregatedCallsView.this.propertiesModel.getTimeUnit());
+			final TimeUnit sourceTimeUnit = AggregatedCallsView.this.dataModel.getTimeUnit();
+			final TimeUnit targetTimeUnit = AggregatedCallsView.this.propertiesModel.getTimeUnit();
+			final String shortTimeUnit = NameConverter.toShortTimeUnit(targetTimeUnit);
 
-			final String minDuration = AggregatedCallsView.this.propertiesModel.getTimeUnit().convert(call.getMinDuration(),
-					AggregatedCallsView.this.dataModel.getTimeUnit())
-					+ " " + shortTimeUnit;
-			final String maxDuration = AggregatedCallsView.this.propertiesModel.getTimeUnit().convert(call.getMaxDuration(),
-					AggregatedCallsView.this.dataModel.getTimeUnit())
-					+ " " + shortTimeUnit;
-			final String meanDuration = AggregatedCallsView.this.propertiesModel.getTimeUnit().convert(call.getMedianDuration(),
-					AggregatedCallsView.this.dataModel.getTimeUnit())
-					+ " " + shortTimeUnit;
-			final String avgDuration = AggregatedCallsView.this.propertiesModel.getTimeUnit().convert(call.getMeanDuration(),
-					AggregatedCallsView.this.dataModel.getTimeUnit())
-					+ " " + shortTimeUnit;
-			final String totalDuration = AggregatedCallsView.this.propertiesModel.getTimeUnit().convert(call.getTotalDuration(),
-					AggregatedCallsView.this.dataModel.getTimeUnit())
-					+ " " + shortTimeUnit;
+			final String minDuration = targetTimeUnit.convert(call.getMinDuration(), sourceTimeUnit) + " " + shortTimeUnit;
+			final String maxDuration = targetTimeUnit.convert(call.getMaxDuration(), sourceTimeUnit) + " " + shortTimeUnit;
+			final String meanDuration = targetTimeUnit.convert(call.getMedianDuration(), sourceTimeUnit) + " " + shortTimeUnit;
+			final String avgDuration = targetTimeUnit.convert(call.getMeanDuration(), sourceTimeUnit) + " " + shortTimeUnit;
+			final String totalDuration = targetTimeUnit.convert(call.getTotalDuration(), sourceTimeUnit) + " " + shortTimeUnit;
 
 			item.setText(new String[] { call.getContainer(), componentName, operationString, Long.toString(call.getCalls()), minDuration, avgDuration, meanDuration, maxDuration,
 				totalDuration });
