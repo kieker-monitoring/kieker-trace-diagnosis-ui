@@ -326,6 +326,7 @@ public final class CallsView implements ISubView, Observer {
 
 	private void updateStatusBar() {
 		this.lbCounter.setText(this.cachedDataModelContent.size() + " " + BUNDLE.getString("CallsView.lbCounter.text"));
+		this.statusBar.getParent().layout();
 	}
 
 	private void updateTable() {
