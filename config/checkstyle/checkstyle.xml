@@ -65,8 +65,6 @@
     <module name="ImportOrder"/>
     
     <module name="JavadocType"><property name="severity" value="info"/></module>
-    <module name="JavadocMethod"><property name="severity" value="info"/></module>
-    <module name="JavadocVariable"><property name="severity" value="info"/></module>
     <module name="JavadocStyle"/>
     
     <module name="BooleanExpressionComplexity"/>
