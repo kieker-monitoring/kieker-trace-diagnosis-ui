@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 @Component
 public final class MonitoringStatisticsViewController implements ISubController {
 
-	private @Autowired MonitoringStatisticsView view;
+	@Autowired private MonitoringStatisticsView view;
 
 	@Override
 	public ISubView getView() {

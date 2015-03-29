@@ -48,10 +48,10 @@ public final class CallsViewController implements ISubController, SelectionListe
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
-		if (e.widget == this.view.getBtn1()) {
+		if (e.widget == this.view.getBtnShowAll()) {
 			this.model.setFilter(Filter.NONE);
 		}
-		if (e.widget == this.view.getBtn2()) {
+		if (e.widget == this.view.getBtnShowJustFailed()) {
 			this.model.setFilter(Filter.JUST_FAILED);
 		}
 		if ((e.item != null) && (e.item.getData() instanceof OperationCall)) {

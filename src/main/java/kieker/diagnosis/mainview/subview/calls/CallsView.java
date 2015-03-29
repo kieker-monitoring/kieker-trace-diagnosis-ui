@@ -67,11 +67,11 @@ public final class CallsView implements ISubView, Observer {
 
 	private static final String N_A = "N/A";
 
-	private @Autowired DataModel dataModel;
-	private @Autowired PropertiesModel propertiesModel;
+	@Autowired private DataModel dataModel;
+	@Autowired private PropertiesModel propertiesModel;
 
-	private @Autowired CallsViewModel model;
-	private @Autowired CallsViewController controller;
+	@Autowired private CallsViewModel model;
+	@Autowired private CallsViewController controller;
 
 	private List<OperationCall> cachedDataModelContent;
 
@@ -237,31 +237,6 @@ public final class CallsView implements ISubView, Observer {
 		this.btnShowJustFailed.addSelectionListener(this.controller);
 	}
 
-	public Text getFilterText() {
-		return this.filterText;
-	}
-
-	public Button getBtn1() {
-		return this.btnShowAll;
-	}
-
-	public Button getBtn2() {
-		return this.btnShowJustFailed;
-	}
-
-	@Override
-	public Composite getComposite() {
-		return this.composite;
-	}
-
-	private void updateCachedDataModelContent() {
-		if (this.model.getFilter() == Filter.NONE) {
-			this.cachedDataModelContent = this.dataModel.getOperationCalls(this.model.getRegExpr());
-		} else {
-			this.cachedDataModelContent = this.dataModel.getFailedOperationCalls(this.model.getRegExpr());
-		}
-	}
-
 	@Override
 	public void update(final Observable observable, final Object obj) {
 		if (observable == this.dataModel) {
@@ -274,13 +249,6 @@ public final class CallsView implements ISubView, Observer {
 		}
 	}
 
-	public void notifyAboutChangedFilter() {
-		this.updateCachedDataModelContent();
-		this.updateTable();
-		this.updateStatusBar();
-		this.updateDetailComposite();
-	}
-
 	public void notifyAboutChangedOperationCall() {
 		this.updateDetailComposite();
 	}
@@ -290,6 +258,21 @@ public final class CallsView implements ISubView, Observer {
 		this.updateTable();
 		this.updateStatusBar();
 		this.updateDetailComposite();
+	}
+
+	public void notifyAboutChangedFilter() {
+		this.updateCachedDataModelContent();
+		this.updateTable();
+		this.updateStatusBar();
+		this.updateDetailComposite();
+	}
+
+	private void updateCachedDataModelContent() {
+		if (this.model.getFilter() == Filter.NONE) {
+			this.cachedDataModelContent = this.dataModel.getOperationCalls(this.model.getRegExpr());
+		} else {
+			this.cachedDataModelContent = this.dataModel.getFailedOperationCalls(this.model.getRegExpr());
+		}
 	}
 
 	private void updateDetailComposite() {
@@ -316,6 +299,7 @@ public final class CallsView implements ISubView, Observer {
 				this.lblFailed.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 			}
 		}
+
 		this.detailComposite.layout();
 		this.ivSc.setMinSize(this.detailComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
@@ -332,10 +316,34 @@ public final class CallsView implements ISubView, Observer {
 		this.clearTable();
 	}
 
+	@Override
+	public Composite getComposite() {
+		return this.composite;
+	}
+
 	private void clearTable() {
 		this.table.clearAll();
 	}
 
+	public Text getFilterText() {
+		return this.filterText;
+	}
+
+	public Button getBtnShowAll() {
+		return this.btnShowAll;
+	}
+
+	public Button getBtnShowJustFailed() {
+		return this.btnShowJustFailed;
+	}
+
+	public Widget getTable() {
+		return this.table;
+	}
+
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private class DataProvider implements Listener {
 
 		@Override
@@ -376,10 +384,6 @@ public final class CallsView implements ISubView, Observer {
 			item.setData(call);
 		}
 
-	}
-
-	public Widget getTable() {
-		return this.table;
 	}
 
 }

@@ -45,13 +45,13 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("kieker.diagnosis.mainview.subview.monitoringstatistics.monitoringstatisticsview"); //$NON-NLS-1$
 
-	private static final String UNITS[] = { "Bytes", "Kilobytes", "Megabytes", "Gigabytes" };
+	private static final String[] UNITS = { "Bytes", "Kilobytes", "Megabytes", "Gigabytes" };
 	private static final float SIZE_OF_BYTE = 1024.0f;
 
 	private static final String N_A = "N/A";
 
-	private @Autowired PropertiesModel propertiesModel;
-	private @Autowired DataModel dataModel;
+	@Autowired private PropertiesModel propertiesModel;
+	@Autowired private DataModel dataModel;
 
 	private Composite composite;
 	private Label lblMonitoringLogDisplay;

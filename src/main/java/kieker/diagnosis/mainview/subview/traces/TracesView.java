@@ -480,7 +480,7 @@ public final class TracesView implements Observer, ISubView {
 			final String duration = targetTimeUnit.convert(call.getDuration(), sourceTimeUnit) + " " + shortTimeUnit;
 
 			item.setText(new String[] { call.getContainer(), componentName, operationString, Integer.toString(call.getStackDepth()), Integer.toString(call.getStackSize()),
-				duration, String.format("%.1f%%", call.getPercent()), traceID, Long.toString(call.getTimestamp()) });
+				duration, String.format("%.1f%%", call.getPercent()), traceID, Long.toString(call.getTimestamp()), });
 
 			if (call.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);

@@ -52,7 +52,7 @@ final class LegacyTraceReconstructor extends AbstractStage<OperationExecutionRec
 		traceBuffer.handleEvent(input);
 		if (traceBuffer.isTraceComplete()) {
 			final Trace trace = traceBuffer.reconstructTrace();
-			traceBuffers.remove(traceID);
+			this.traceBuffers.remove(traceID);
 			super.send(trace);
 		}
 	}
