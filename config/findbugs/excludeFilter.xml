@@ -6,12 +6,12 @@
 	</Match>
   
 	<Match>
-    <Class name="kieker.diagnosis.subview.util.AbstractTraceTreeColumnSortListener$TraceComparator" />
+    <Class name="kieker.diagnosis.mainview.subview.util.AbstractTraceTreeColumnSortListener$TraceComparator" />
     <Bug pattern="SE_INNER_CLASS" />
 	</Match>
   
   <Match>
-    <Class name="kieker.diagnosis.subview.util.AbstractCallTableColumnSortListener$CallComparator" />
+    <Class name="kieker.diagnosis.mainview.subview.util.AbstractCallTableColumnSortListener$CallComparator" />
     <Bug pattern="SE_INNER_CLASS" />
 	</Match>
   
