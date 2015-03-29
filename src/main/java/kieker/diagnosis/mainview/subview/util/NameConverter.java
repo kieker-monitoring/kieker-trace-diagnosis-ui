@@ -20,6 +20,9 @@ import java.util.concurrent.TimeUnit;
 
 import kieker.diagnosis.common.Mapper;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public final class NameConverter {
 
 	private static Mapper<TimeUnit, String> shortTimeUnitMapper = new Mapper<>();

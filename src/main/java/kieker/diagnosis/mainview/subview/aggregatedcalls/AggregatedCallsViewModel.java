@@ -21,11 +21,13 @@ import kieker.diagnosis.domain.AggregatedOperationCall;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 @Component
 public final class AggregatedCallsViewModel {
 
-	@Autowired
-	private AggregatedCallsView view;
+	@Autowired private AggregatedCallsView view;
 
 	private Filter filter = Filter.NONE;
 	private AggregatedOperationCall operationCall;

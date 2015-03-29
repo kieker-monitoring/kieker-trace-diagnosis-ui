@@ -18,6 +18,9 @@ package kieker.diagnosis.mainview.subview.util;
 
 import kieker.diagnosis.domain.AbstractTrace;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public final class TraceSizeSortListener extends AbstractTraceTreeColumnSortListener<AbstractTrace<?>> {
 
 	private static final long serialVersionUID = 1L;

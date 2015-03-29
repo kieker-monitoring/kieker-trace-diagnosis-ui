@@ -29,6 +29,9 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public abstract class AbstractCallTableColumnSortListener<T extends AbstractOperationCall<?>> extends SelectionAdapter implements Serializable {
 
 	private static final long serialVersionUID = 1L;

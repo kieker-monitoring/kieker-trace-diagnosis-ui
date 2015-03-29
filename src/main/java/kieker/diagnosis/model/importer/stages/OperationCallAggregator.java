@@ -25,6 +25,9 @@ import java.util.Map;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.OperationCall;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public final class OperationCallAggregator extends AbstractStage<OperationCall, AggregatedOperationCall> {
 
 	private final Map<String, List<OperationCall>> aggregationMap = new HashMap<>();

@@ -19,6 +19,9 @@ package kieker.diagnosis.mainview.subview.traces.util;
 import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.mainview.subview.util.AbstractTraceTreeColumnSortListener;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public final class TimestampSortListener extends AbstractTraceTreeColumnSortListener<Trace> {
 
 	private static final long serialVersionUID = 1L;

@@ -37,15 +37,18 @@ import org.eclipse.swt.widgets.Label;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 @Component
 public final class MonitoringStatisticsView implements ISubView, Observer {
 
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("kieker.diagnosis.mainview.subview.monitoringstatistics.monitoringstatisticsview"); //$NON-NLS-1$
-	private static final String UNITS[] = { "Bytes", "Kilobytes", "Megabytes", "Gigabytes" };
-	private static final String N_A = "N/A";
 
-	private @Autowired MonitoringStatisticsViewController controller;
-	private @Autowired MonitoringStatisticsViewModel model;
+	private static final String UNITS[] = { "Bytes", "Kilobytes", "Megabytes", "Gigabytes" };
+	private static final float SIZE_OF_BYTE = 1024.0f;
+
+	private static final String N_A = "N/A";
 
 	private @Autowired PropertiesModel propertiesModel;
 	private @Autowired DataModel dataModel;
@@ -54,8 +57,6 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 	private Label lblMonitoringLogDisplay;
 	private Label lblMonitoringLogSizeDisplay;
 	private Label lblAnalysisTimeDisplay;
-	private Label lblBeginOfMonitoringDisplay;
-	private Label lblEndOfMonitoringDisplay;
 	private Label lblNumberOfCallsDisplay;
 	private Label lblNumberOfFailedDisplay;
 	private Label lblNumberOfAggregatedCallsDisplay;
@@ -66,7 +67,6 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 	private Label lblNumberOfAggregatedTracesDisplay;
 	private Label lblNumberOfAggregatedFailedTracesDisplay;
 	private Label lblNumberOfAggregatedFailureTracesDisplay;
-	private Label lblNonreconstructableTracesDisplay;
 
 	@PostConstruct
 	public void initialize() {
@@ -84,21 +84,13 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 		final File importDirectory = this.dataModel.getImportDirectory();
 
 		if (importDirectory != null) {
-			float importDirectorySize = this.calculateDirectorySize(importDirectory);
-
-			String importDirectorySizeString = N_A;
-			for (final String unit : UNITS) {
-				if (importDirectorySize >= 1024) {
-					importDirectorySize /= 1024.0f;
-				} else {
-					importDirectorySizeString = String.format("%.1f %s", importDirectorySize, unit);
-					break;
-				}
-			}
+			final float importDirectorySize = this.calculateDirectorySize(importDirectory);
+			final String importDirectorySizeString = this.assembleSizeString(importDirectorySize);
 
 			this.lblMonitoringLogDisplay.setText(importDirectory.getAbsolutePath());
 			this.lblMonitoringLogSizeDisplay.setText(importDirectorySizeString);
 		}
+
 		this.lblAnalysisTimeDisplay.setText(analysisDuration);
 		// this.lblBeginOfMonitoringDisplay.setText(Integer.toString(this.dataModel.getOperationCalls(null).size()));
 		// this.lblEndOfMonitoringDisplay.setText(Integer.toString(this.dataModel.getOperationCalls(null).size()));
@@ -115,6 +107,22 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 		// this.lblNonreconstructableTracesDisplay.setText(Integer.toString(this.dataModel.getOperationCalls(null).size()));
 
 		this.composite.layout();
+	}
+
+	private String assembleSizeString(final float size) {
+		String importDirectorySizeString = N_A;
+
+		float newSize = size;
+		for (final String unit : UNITS) {
+			if (newSize >= SIZE_OF_BYTE) {
+				newSize /= SIZE_OF_BYTE;
+			} else {
+				importDirectorySizeString = String.format("%.1f %s", newSize, unit);
+				break;
+			}
+		}
+
+		return importDirectorySizeString;
 	}
 
 	private long calculateDirectorySize(final File file) {
@@ -169,14 +177,14 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 		final Label lblBeginOfMonitoring = new Label(this.composite, SWT.NONE);
 		lblBeginOfMonitoring.setText(BUNDLE.getString("MonitoringStatisticsView.lblBeginOfMonitoring.text") + ":"); //$NON-NLS-1$
 
-		this.lblBeginOfMonitoringDisplay = new Label(this.composite, SWT.NONE);
-		this.lblBeginOfMonitoringDisplay.setText(N_A);
+		final Label lblBeginOfMonitoringDisplay = new Label(this.composite, SWT.NONE);
+		lblBeginOfMonitoringDisplay.setText(N_A);
 
 		final Label lblEndOfMonitoring = new Label(this.composite, SWT.NONE);
 		lblEndOfMonitoring.setText(BUNDLE.getString("MonitoringStatisticsView.lblEndOfMonitoring.text") + ":"); //$NON-NLS-1$
 
-		this.lblEndOfMonitoringDisplay = new Label(this.composite, SWT.NONE);
-		this.lblEndOfMonitoringDisplay.setText(N_A);
+		final Label lblEndOfMonitoringDisplay = new Label(this.composite, SWT.NONE);
+		lblEndOfMonitoringDisplay.setText(N_A);
 
 		final Label lblLine3 = new Label(this.composite, SWT.SEPARATOR | SWT.HORIZONTAL);
 		lblLine3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
@@ -247,8 +255,8 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 		final Label lblNonreconstructableTraces = new Label(this.composite, SWT.NONE);
 		lblNonreconstructableTraces.setText(BUNDLE.getString("MonitoringStatisticsView.lblNonreconstructableTraces.text") + ":"); //$NON-NLS-1$
 
-		this.lblNonreconstructableTracesDisplay = new Label(this.composite, SWT.NONE);
-		this.lblNonreconstructableTracesDisplay.setText(N_A);
+		final Label lblNonreconstructableTracesDisplay = new Label(this.composite, SWT.NONE);
+		lblNonreconstructableTracesDisplay.setText(N_A);
 	}
 
 	@Override

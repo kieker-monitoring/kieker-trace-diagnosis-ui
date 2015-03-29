@@ -28,14 +28,15 @@ import org.eclipse.swt.events.TraverseListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 @Component
 public final class AggregatedCallsViewController implements ISubController, SelectionListener, TraverseListener {
 
-	@Autowired
-	private AggregatedCallsView view;
+	@Autowired private AggregatedCallsView view;
 
-	@Autowired
-	private AggregatedCallsViewModel model;
+	@Autowired private AggregatedCallsViewModel model;
 
 	@Override
 	public ISubView getView() {

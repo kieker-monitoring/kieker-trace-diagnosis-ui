@@ -19,6 +19,9 @@ package kieker.diagnosis.model.importer.stages;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public final class OperationCallExtractor extends AbstractStage<Trace, OperationCall> {
 
 	@Override

@@ -40,7 +40,11 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public final class SettingsDialog extends Dialog {
+
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("kieker.diagnosis.mainview.dialog.settingsdialog"); //$NON-NLS-1$
 
 	private final PropertiesModel model;

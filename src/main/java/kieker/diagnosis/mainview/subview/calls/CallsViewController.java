@@ -29,17 +29,17 @@ import org.eclipse.swt.events.TraverseListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 @Component
 public final class CallsViewController implements ISubController, SelectionListener, TraverseListener {
 
-	@Autowired
-	private Controller masterController;
+	@Autowired private Controller masterController;
 
-	@Autowired
-	private CallsViewModel model;
+	@Autowired private CallsViewModel model;
 
-	@Autowired
-	private CallsView view;
+	@Autowired private CallsView view;
 
 	@Override
 	public ISubView getView() {

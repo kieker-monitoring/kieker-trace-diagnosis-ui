@@ -20,16 +20,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This is an abstract base for classes representing operation calls (also called executions) within this application. As it can has multiple children, an instance of this class
- * can represent a whole call tree. This class implements the both methods {@link OperationCall#equals(Object)} and {@link OperationCall#hashCode()}, allowing to easily check
- * whether two traces are equal and should be in the same equivalence class.
- *
+ * This is an abstract base for classes representing operation calls (also called executions) within this application. As it can has multiple children, an instance
+ * of this class can represent a whole call tree. This class implements the both methods {@link OperationCall#equals(Object)} and {@link OperationCall#hashCode()},
+ * allowing to easily check whether two traces are equal and should be in the same equivalence class.
+ * 
  * @author Nils Christian Ehmke
- *
+ * 
  * @param <T>
  *            The precise type of the children. This should usually be the implementing class itself.
  */
-public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> {
+public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> { // NOPMD (Cyclomatic Complexity).
 
 	private final List<T> children = new ArrayList<>();
 
@@ -50,7 +50,7 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 		this.component = component.intern();
 		this.operation = operation.intern();
 		if (failedCause != null) {
-		  this.failedCause = failedCause.intern();
+			this.failedCause = failedCause.intern();
 		}
 	}
 
@@ -99,10 +99,10 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 	}
 
 	public final void setFailedCause(final String failedCause) {
-	    this.failedCause = failedCause;
-	    if (this.failedCause != null) {
-	      this.failedCause =   this.failedCause.intern();
-	    }
+		this.failedCause = failedCause;
+		if (this.failedCause != null) {
+			this.failedCause = this.failedCause.intern();
+		}
 	}
 
 	public final boolean containsFailure() {
@@ -180,7 +180,5 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 		}
 		return true;
 	}
-
-	
 
 }

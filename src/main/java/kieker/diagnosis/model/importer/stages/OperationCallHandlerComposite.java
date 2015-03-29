@@ -30,6 +30,9 @@ import teetime.stage.CollectorSink;
 import teetime.stage.basic.distributor.CopyByReferenceStrategy;
 import teetime.stage.basic.distributor.Distributor;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public final class OperationCallHandlerComposite extends AbstractCompositeStage {
 
 	private final InputPort<Trace> inputPort;

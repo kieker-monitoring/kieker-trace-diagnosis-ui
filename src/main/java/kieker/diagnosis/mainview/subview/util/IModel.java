@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Observer;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public interface IModel<T> {
 
 	public List<T> getContent();

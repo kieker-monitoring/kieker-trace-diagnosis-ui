@@ -19,6 +19,9 @@ package kieker.diagnosis.mainview.subview.calls.util;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.mainview.subview.util.AbstractCallTableColumnSortListener;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public final class ContainerSortListener extends AbstractCallTableColumnSortListener<OperationCall> {
 
 	private static final long serialVersionUID = 1L;

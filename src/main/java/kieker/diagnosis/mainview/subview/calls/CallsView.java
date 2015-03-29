@@ -62,21 +62,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 public final class CallsView implements ISubView, Observer {
+
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("kieker.diagnosis.mainview.subview.calls.callsview"); //$NON-NLS-1$
 
 	private static final String N_A = "N/A";
 
-	@Autowired
-	private DataModel dataModel;
+	private @Autowired DataModel dataModel;
+	private @Autowired PropertiesModel propertiesModel;
 
-	@Autowired
-	private CallsViewModel model;
-
-	@Autowired
-	private PropertiesModel propertiesModel;
-
-	@Autowired
-	private CallsViewController controller;
+	private @Autowired CallsViewModel model;
+	private @Autowired CallsViewController controller;
 
 	private List<OperationCall> cachedDataModelContent;
 

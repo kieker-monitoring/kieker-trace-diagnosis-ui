@@ -24,6 +24,9 @@ import java.util.prefs.Preferences;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 @Component
 public final class PropertiesModel extends Observable {
 

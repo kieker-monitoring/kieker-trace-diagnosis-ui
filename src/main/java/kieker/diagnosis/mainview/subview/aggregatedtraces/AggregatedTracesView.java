@@ -64,23 +64,22 @@ import org.eclipse.wb.swt.SWTResourceManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 @Component
 public final class AggregatedTracesView implements Observer, ISubView {
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("kieker.diagnosis.mainview.subview.aggregatedtraces.aggregatedtracesview"); //$NON-NLS-1$
 
 	private static final String N_A = "N/A";
 
-	@Autowired
-	private AggregatedTracesViewModel model;
+	@Autowired private AggregatedTracesViewModel model;
 
-	@Autowired
-	private AggregatedTracesViewController controller;
+	@Autowired private AggregatedTracesViewController controller;
 
-	@Autowired
-	private DataModel dataModel;
+	@Autowired private DataModel dataModel;
 
-	@Autowired
-	private PropertiesModel propertiesModel;
+	@Autowired private PropertiesModel propertiesModel;
 
 	private List<AggregatedTrace> cachedDataModelContent;
 

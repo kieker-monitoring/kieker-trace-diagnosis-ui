@@ -61,6 +61,9 @@ import org.eclipse.wb.swt.SWTResourceManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 @Component
 public final class TracesView implements Observer, ISubView {
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("kieker.diagnosis.mainview.subview.traces.tracesview"); //$NON-NLS-1$
@@ -108,7 +111,7 @@ public final class TracesView implements Observer, ISubView {
 	 * @wbp.parser.entryPoint
 	 */
 	@Override
-	public void createComposite(final Composite parent) {
+	public void createComposite(final Composite parent) { // NOPMD (This method violates some metrics)
 		if (this.composite != null) {
 			this.composite.dispose();
 		}

@@ -22,10 +22,12 @@ import kieker.diagnosis.mainview.subview.ISubView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 @Component
 public final class MonitoringStatisticsViewController implements ISubController {
 
-	private @Autowired MonitoringStatisticsViewModel model;
 	private @Autowired MonitoringStatisticsView view;
 
 	@Override
