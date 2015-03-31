@@ -59,6 +59,9 @@ public final class DataModel extends Observable {
 	private File importDirectory;
 	private TimeUnit timeUnit;
 	private long analysisDurationInMS;
+    private int incompleteTraces;
+    private long beginTimestamp;
+    private long endTimestamp;
 
 	public void loadMonitoringLogFromFS(final String directory) {
 		final long tin = System.currentTimeMillis();
@@ -80,7 +83,10 @@ public final class DataModel extends Observable {
 		this.failedOperationCalls = analysisConfiguration.getFailedOperationCalls();
 		this.aggregatedOperationCalls = analysisConfiguration.getAggregatedOperationCalls();
 		this.aggregatedFailedOperationCalls = analysisConfiguration.getAggregatedFailedOperationCalls();
-
+		this.incompleteTraces = analysisConfiguration.countIncompleteTraces();
+		beginTimestamp = analysisConfiguration.getBeginTimestamp();
+		endTimestamp = analysisConfiguration.getEndTimestamp();
+		
 		final List<KiekerMetadataRecord> metadataRecords = analysisConfiguration.getMetadataRecords();
 		if (!metadataRecords.isEmpty()) {
 			final KiekerMetadataRecord metadataRecord = metadataRecords.get(0);
@@ -96,6 +102,18 @@ public final class DataModel extends Observable {
 		this.setChanged();
 		this.notifyObservers();
 	}
+	
+	public long getBeginTimestamp() {
+      return beginTimestamp;
+    }
+
+   public long getEndTimestamp() {
+       return endTimestamp;
+   }
+	
+	public int countIncompleteTraces() {
+      return incompleteTraces;
+    } 
 
 	public File getImportDirectory() {
 		return this.importDirectory;

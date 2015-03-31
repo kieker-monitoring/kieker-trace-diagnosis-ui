@@ -40,6 +40,10 @@ final class TraceReconstructor extends AbstractStage<IFlowRecord, Trace> {
 
 	private final Map<Long, TraceBuffer> traceBuffers = new HashMap<>();
 
+	public int countIncompleteTraces() {
+		return this.traceBuffers.size();
+	}
+
 	@Override
 	protected void execute(final IFlowRecord input) {
 		if (input instanceof TraceMetadata) {

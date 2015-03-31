@@ -17,6 +17,9 @@
 package kieker.diagnosis.mainview.subview.monitoringstatistics;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
@@ -67,6 +70,9 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 	private Label lblNumberOfAggregatedTracesDisplay;
 	private Label lblNumberOfAggregatedFailedTracesDisplay;
 	private Label lblNumberOfAggregatedFailureTracesDisplay;
+	private Label lblNonreconstructableTracesDisplay;
+	private Label lblBeginOfMonitoringDisplay;
+	private Label lblEndOfMonitoringDisplay;
 
 	@PostConstruct
 	public void initialize() {
@@ -92,8 +98,11 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 		}
 
 		this.lblAnalysisTimeDisplay.setText(analysisDuration);
-		// this.lblBeginOfMonitoringDisplay.setText(Integer.toString(this.dataModel.getOperationCalls(null).size()));
-		// this.lblEndOfMonitoringDisplay.setText(Integer.toString(this.dataModel.getOperationCalls(null).size()));
+
+		final DateFormat formatter = new SimpleDateFormat();
+
+		this.lblBeginOfMonitoringDisplay.setText(formatter.format(new Date(TimeUnit.MILLISECONDS.convert(this.dataModel.getBeginTimestamp(), this.dataModel.getTimeUnit()))));
+		this.lblEndOfMonitoringDisplay.setText(formatter.format(new Date(TimeUnit.MILLISECONDS.convert(this.dataModel.getEndTimestamp(), this.dataModel.getTimeUnit()))));
 		this.lblNumberOfCallsDisplay.setText(Integer.toString(this.dataModel.getOperationCalls(null).size()));
 		this.lblNumberOfFailedDisplay.setText(Integer.toString(this.dataModel.getFailedOperationCalls(null).size()));
 		this.lblNumberOfAggregatedCallsDisplay.setText(Integer.toString(this.dataModel.getAggregatedOperationCalls(null).size()));
@@ -104,7 +113,7 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 		this.lblNumberOfAggregatedTracesDisplay.setText(Integer.toString(this.dataModel.getAggregatedTraces(null).size()));
 		this.lblNumberOfAggregatedFailedTracesDisplay.setText(Integer.toString(this.dataModel.getFailedAggregatedTraces(null).size()));
 		this.lblNumberOfAggregatedFailureTracesDisplay.setText(Integer.toString(this.dataModel.getFailureContainingAggregatedTraces(null).size()));
-		// this.lblNonreconstructableTracesDisplay.setText(Integer.toString(this.dataModel.getOperationCalls(null).size()));
+		this.lblNonreconstructableTracesDisplay.setText(Integer.toString(this.dataModel.countIncompleteTraces()));
 
 		this.composite.layout();
 	}
@@ -177,14 +186,14 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 		final Label lblBeginOfMonitoring = new Label(this.composite, SWT.NONE);
 		lblBeginOfMonitoring.setText(BUNDLE.getString("MonitoringStatisticsView.lblBeginOfMonitoring.text") + ":"); //$NON-NLS-1$
 
-		final Label lblBeginOfMonitoringDisplay = new Label(this.composite, SWT.NONE);
-		lblBeginOfMonitoringDisplay.setText(N_A);
+		this.lblBeginOfMonitoringDisplay = new Label(this.composite, SWT.NONE);
+		this.lblBeginOfMonitoringDisplay.setText(N_A);
 
 		final Label lblEndOfMonitoring = new Label(this.composite, SWT.NONE);
 		lblEndOfMonitoring.setText(BUNDLE.getString("MonitoringStatisticsView.lblEndOfMonitoring.text") + ":"); //$NON-NLS-1$
 
-		final Label lblEndOfMonitoringDisplay = new Label(this.composite, SWT.NONE);
-		lblEndOfMonitoringDisplay.setText(N_A);
+		this.lblEndOfMonitoringDisplay = new Label(this.composite, SWT.NONE);
+		this.lblEndOfMonitoringDisplay.setText(N_A);
 
 		final Label lblLine3 = new Label(this.composite, SWT.SEPARATOR | SWT.HORIZONTAL);
 		lblLine3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
@@ -255,8 +264,8 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 		final Label lblNonreconstructableTraces = new Label(this.composite, SWT.NONE);
 		lblNonreconstructableTraces.setText(BUNDLE.getString("MonitoringStatisticsView.lblNonreconstructableTraces.text") + ":"); //$NON-NLS-1$
 
-		final Label lblNonreconstructableTracesDisplay = new Label(this.composite, SWT.NONE);
-		lblNonreconstructableTracesDisplay.setText(N_A);
+		this.lblNonreconstructableTracesDisplay = new Label(this.composite, SWT.NONE);
+		this.lblNonreconstructableTracesDisplay.setText(N_A);
 	}
 
 	@Override

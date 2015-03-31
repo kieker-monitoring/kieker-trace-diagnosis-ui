@@ -36,7 +36,7 @@ import teetime.stage.basic.merger.Merger;
 
 /**
  * This class is a composite {@code TeeTime} stage, which reconstruct traces based on the incoming records, adds statistical data and stores the traces.
- *
+ * 
  * @author Nils Christian Ehmke
  */
 public final class TraceReconstructionComposite extends AbstractCompositeStage {
@@ -46,12 +46,11 @@ public final class TraceReconstructionComposite extends AbstractCompositeStage {
 	private final CollectorSink<Trace> failedTracesCollector;
 	private final CollectorSink<Trace> failureContainingTracesCollector;
 	private final TraceStatisticsDecorator statisticsDecorator;
-
 	private final OutputPort<Trace> outputPort;
+	private final LegacyTraceReconstructor legacyReconstructor;
+	private final TraceReconstructor reconstructor;
 
 	public TraceReconstructionComposite(final List<Trace> traces, final List<Trace> failedTraces, final List<Trace> failureContainingTraces) {
-		final TraceReconstructor reconstructor = new TraceReconstructor();
-		final LegacyTraceReconstructor legacyReconstructor = new LegacyTraceReconstructor();
 		final Distributor<Trace> distributor = new Distributor<>(new CopyByReferenceStrategy());
 		final FailedTraceFilter<Trace> failedTraceFilter = new FailedTraceFilter<>();
 		final Merger<Trace> merger = new Merger<>();
@@ -62,13 +61,15 @@ public final class TraceReconstructionComposite extends AbstractCompositeStage {
 		this.failedTracesCollector = new CollectorSink<>(failedTraces);
 		this.failureContainingTracesCollector = new CollectorSink<>(failureContainingTraces);
 		this.statisticsDecorator = new TraceStatisticsDecorator();
+		this.reconstructor = new TraceReconstructor();
+		this.legacyReconstructor = new LegacyTraceReconstructor();
 
 		this.outputPort = this.statisticsDecorator.getOutputPort();
 
-		super.connectStages(this.typeFilter.getOutputPortForType(IFlowRecord.class), reconstructor.getInputPort());
-		super.connectStages(this.typeFilter.getOutputPortForType(OperationExecutionRecord.class), legacyReconstructor.getInputPort());
-		super.connectStages(reconstructor.getOutputPort(), merger.getNewInputPort());
-		super.connectStages(legacyReconstructor.getOutputPort(), merger.getNewInputPort());
+		super.connectStages(this.typeFilter.getOutputPortForType(IFlowRecord.class), this.reconstructor.getInputPort());
+		super.connectStages(this.typeFilter.getOutputPortForType(OperationExecutionRecord.class), this.legacyReconstructor.getInputPort());
+		super.connectStages(this.reconstructor.getOutputPort(), merger.getNewInputPort());
+		super.connectStages(this.legacyReconstructor.getOutputPort(), merger.getNewInputPort());
 		super.connectStages(merger.getOutputPort(), distributor.getInputPort());
 		super.connectStages(distributor.getNewOutputPort(), this.tracesCollector.getInputPort());
 		super.connectStages(distributor.getNewOutputPort(), failedTraceFilter.getInputPort());
@@ -76,6 +77,10 @@ public final class TraceReconstructionComposite extends AbstractCompositeStage {
 		super.connectStages(distributor.getNewOutputPort(), this.statisticsDecorator.getInputPort());
 		super.connectStages(failedTraceFilter.getOutputPort(), this.failedTracesCollector.getInputPort());
 		super.connectStages(failureContainingTraceFilter.getOutputPort(), this.failureContainingTracesCollector.getInputPort());
+	}
+
+	public int countIncompleteTraces() {
+		return this.reconstructor.countIncompleteTraces() + this.legacyReconstructor.countIncompleteTraces();
 	}
 
 	public InputPort<IMonitoringRecord> getInputPort() {

@@ -37,6 +37,10 @@ final class LegacyTraceReconstructor extends AbstractStage<OperationExecutionRec
 
 	private final Map<Long, TraceBuffer> traceBuffers = new HashMap<>();
 
+	public int countIncompleteTraces() {
+		return this.traceBuffers.size();
+	}
+
 	@Override
 	protected void execute(final OperationExecutionRecord input) {
 		this.handleOperationExecutionRecord(input);

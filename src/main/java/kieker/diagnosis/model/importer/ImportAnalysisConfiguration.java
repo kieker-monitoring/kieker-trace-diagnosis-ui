@@ -26,6 +26,7 @@ import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
+import kieker.diagnosis.model.importer.stages.BeginEndOfMonitoringDetector;
 import kieker.diagnosis.model.importer.stages.OperationCallHandlerComposite;
 import kieker.diagnosis.model.importer.stages.ReadingComposite;
 import kieker.diagnosis.model.importer.stages.TraceAggregationComposite;
@@ -41,7 +42,7 @@ import teetime.stage.basic.distributor.Distributor;
 
 /**
  * A {@code TeeTime} configuration for the import and analysis of monitoring logs.
- *
+ * 
  * @author Nils Christian Ehmke
  */
 public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
@@ -61,29 +62,46 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 	private final List<AggregatedTrace> failureContainingAggregatedTraces = new ArrayList<>(1000);
 
 	private final List<KiekerMetadataRecord> metadataRecords = new ArrayList<>(1000);
+	private final TraceReconstructionComposite reconstruction;
+	private final BeginEndOfMonitoringDetector beginEndOfMonitoringDetector;
 
 	public ImportAnalysisConfiguration(final File importDirectory) {
 		// Create the stages
 		final ReadingComposite reader = new ReadingComposite(importDirectory);
 		final MultipleInstanceOfFilter<IMonitoringRecord> typeFilter = new MultipleInstanceOfFilter<>();
-		final TraceReconstructionComposite reconstruction = new TraceReconstructionComposite(this.traces, this.failedTraces, this.failureContainingTraces);
 		final Distributor<Trace> distributor = new Distributor<>(new CopyByReferenceStrategy());
 		final TraceAggregationComposite aggregation = new TraceAggregationComposite(this.aggregatedTraces, this.failedAggregatedTraces, this.failureContainingAggregatedTraces);
 		final CollectorSink<KiekerMetadataRecord> metadataCollector = new CollectorSink<>(this.metadataRecords);
 		final OperationCallHandlerComposite operationCallHandler = new OperationCallHandlerComposite(this.operationCalls, this.failedOperationCalls, this.aggregatedOperationCalls,
 				this.aggregatedFailedOperationCalls);
 
+		this.beginEndOfMonitoringDetector = new BeginEndOfMonitoringDetector();
+		this.reconstruction = new TraceReconstructionComposite(this.traces, this.failedTraces, this.failureContainingTraces);
+
 		// Connect the stages
 		final IPipeFactory pipeFactory = AnalysisConfiguration.PIPE_FACTORY_REGISTRY.getPipeFactory(ThreadCommunication.INTRA, PipeOrdering.ARBITRARY, false);
 		pipeFactory.create(reader.getOutputPort(), typeFilter.getInputPort());
-		pipeFactory.create(typeFilter.getOutputPortForType(IMonitoringRecord.class), reconstruction.getInputPort());
-		pipeFactory.create(reconstruction.getOutputPort(), distributor.getInputPort());
+		pipeFactory.create(typeFilter.getOutputPortForType(IMonitoringRecord.class), this.beginEndOfMonitoringDetector.getInputPort());
+		pipeFactory.create(this.beginEndOfMonitoringDetector.getOutputPort(), this.reconstruction.getInputPort());
+		pipeFactory.create(this.reconstruction.getOutputPort(), distributor.getInputPort());
 		pipeFactory.create(distributor.getNewOutputPort(), operationCallHandler.getInputPort());
 		pipeFactory.create(distributor.getNewOutputPort(), aggregation.getInputPort());
 		pipeFactory.create(typeFilter.getOutputPortForType(KiekerMetadataRecord.class), metadataCollector.getInputPort());
 
 		// Make sure that the producer is executed by the analysis
 		super.addThreadableStage(reader);
+	}
+
+	public long getBeginTimestamp() {
+		return this.beginEndOfMonitoringDetector.getBeginTimestamp();
+	}
+
+	public long getEndTimestamp() {
+		return this.beginEndOfMonitoringDetector.getEndTimestamp();
+	}
+
+	public int countIncompleteTraces() {
+		return this.reconstruction.countIncompleteTraces();
 	}
 
 	public List<Trace> getTracesList() {
