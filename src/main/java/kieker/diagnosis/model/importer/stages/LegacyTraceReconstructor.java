@@ -61,6 +61,9 @@ final class LegacyTraceReconstructor extends AbstractStage<OperationExecutionRec
 		}
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private static final class TraceBuffer {
 
 		private final List<OperationExecutionRecord> records = new ArrayList<>();
@@ -118,6 +121,9 @@ final class LegacyTraceReconstructor extends AbstractStage<OperationExecutionRec
 			return this.traceComplete;
 		}
 
+		/**
+		 * @author Nils Christian Ehmke
+		 */
 		private static final class EOIComparator implements Comparator<OperationExecutionRecord>, Serializable {
 
 			private static final long serialVersionUID = 1L;

@@ -8,5 +8,9 @@
   <suppress files="SWTResourceManager.java" checks=".*" />
   
   <suppress files="Main.java" checks="UncommentedMainCheck" />
+  <suppress files="AggregatedOperationCall.java" checks="ParameterNumberCheck" />
   <suppress files="AbstractOperationCall.java" checks="DesignForExtensionCheck|CyclomaticComplexityCheck|NPathComplexityCheck" />
+  <suppress files="TracesView.java" checks="MethodLengthCheck" lines="113"/>
+  <suppress files="AggregatedTracesView.java" checks="MethodLengthCheck" lines="124"/>
+  <suppress files="AggregatedCallsView" checks="MethodLengthCheck" lines="116"/>
 </suppressions>

@@ -72,6 +72,9 @@ final class TraceReconstructor extends AbstractStage<IFlowRecord, Trace> {
 		}
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private static final class TraceBuffer {
 
 		private final String hostname;
