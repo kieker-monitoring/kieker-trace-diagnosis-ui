@@ -52,29 +52,21 @@ public final class Controller implements SelectionListener {
 
 	private static final Logger LOGGER = Logger.getGlobal();
 
-	@Autowired
-	private DataModel dataModel;
+	@Autowired private DataModel dataModel;
 
-	@Autowired
-	private AggregatedTracesViewController aggregatedTracesViewController;
+	@Autowired private AggregatedTracesViewController aggregatedTracesViewController;
 
-	@Autowired
-	private CallsViewController callsViewController;
+	@Autowired private CallsViewController callsViewController;
 
-	@Autowired
-	private TracesViewController tracesViewController;
+	@Autowired private TracesViewController tracesViewController;
 
-	@Autowired
-	private AggregatedCallsViewController aggregatedCallsViewController;
+	@Autowired private AggregatedCallsViewController aggregatedCallsViewController;
 
-	@Autowired
-	private MonitoringStatisticsViewController monitoringStatisticsViewController;
+	@Autowired private MonitoringStatisticsViewController monitoringStatisticsViewController;
 
-	@Autowired
-	private View view;
+	@Autowired private View view;
 
-	@Autowired
-	private Model model;
+	@Autowired private Model model;
 
 	private Mapper<SubView, ISubView> subViewMapper;
 
@@ -176,6 +168,9 @@ public final class Controller implements SelectionListener {
 		}
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	public enum SubView {
 		TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, AGGREGATED_OPERATION_CALLS_SUB_VIEW, OPERATION_CALLS_SUB_VIEW, MONITORING_STATISTICS_VIEW,
 	}

@@ -144,10 +144,16 @@ public final class PropertiesModel extends Observable {
 		}
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	public enum ComponentNames {
 		SHORT, LONG
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	public enum OperationNames {
 		SHORT, LONG
 	}

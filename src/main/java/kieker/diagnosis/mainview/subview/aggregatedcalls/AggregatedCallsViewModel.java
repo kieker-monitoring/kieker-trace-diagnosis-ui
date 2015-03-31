@@ -64,6 +64,9 @@ public final class AggregatedCallsViewModel {
 		this.view.notifyAboutChangedRegExpr();
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	public static enum Filter {
 		NONE, JUST_FAILED
 	}

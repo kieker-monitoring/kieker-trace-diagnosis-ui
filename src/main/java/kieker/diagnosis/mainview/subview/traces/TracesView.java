@@ -439,6 +439,9 @@ public final class TracesView implements Observer, ISubView {
 		this.btnShowAll.setSelection(true);
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private class DataProvider implements Listener {
 
 		@Override

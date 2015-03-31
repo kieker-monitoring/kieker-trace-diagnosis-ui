@@ -62,6 +62,9 @@ public final class AggregatedTraceStatisticsDecorator extends AbstractStage<Aggr
 		traceDurationVisitor.addDurationStatistics(trace);
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private static final class TraceDurationVisitor {
 
 		private final List<List<Long>> durationsPerEdge = new ArrayList<>();
@@ -125,6 +128,9 @@ public final class AggregatedTraceStatisticsDecorator extends AbstractStage<Aggr
 			return new Statistics(totalDuration, meanDuration, medianDuration, minDuration, maxDuration);
 		}
 
+		/**
+		 * @author Nils Christian Ehmke
+		 */
 		private static class Statistics {
 
 			private final long totalDuration;

@@ -83,6 +83,9 @@ public final class OperationCallAggregator extends AbstractStage<OperationCall, 
 		return new Statistics(totalDuration, meanDuration, medianDuration, minDuration, maxDuration);
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private static class Statistics {
 
 		private final long totalDuration;

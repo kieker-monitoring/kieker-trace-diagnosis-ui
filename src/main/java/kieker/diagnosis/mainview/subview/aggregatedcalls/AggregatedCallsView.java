@@ -411,6 +411,9 @@ public final class AggregatedCallsView implements ISubView, Observer {
 		this.ivSc.setMinSize(this.detailComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private class DataProvider implements Listener {
 
 		@Override
@@ -446,7 +449,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 			final String totalDuration = targetTimeUnit.convert(call.getTotalDuration(), sourceTimeUnit) + " " + shortTimeUnit;
 
 			item.setText(new String[] { call.getContainer(), componentName, operationString, Long.toString(call.getCalls()), minDuration, avgDuration, meanDuration, maxDuration,
-				totalDuration });
+				totalDuration, });
 
 			if (call.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);

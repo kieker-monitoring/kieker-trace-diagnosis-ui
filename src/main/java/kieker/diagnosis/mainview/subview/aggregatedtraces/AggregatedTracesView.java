@@ -466,6 +466,9 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		this.ivSc.setMinSize(this.detailComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private class DataProvider implements Listener {
 
 		@Override

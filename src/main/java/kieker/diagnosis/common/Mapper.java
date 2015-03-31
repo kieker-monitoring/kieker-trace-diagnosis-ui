@@ -20,6 +20,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Nils Christian Ehmke
+ * 
+ * @param <I>
+ *            The type of the keys.
+ * @param <O>
+ *            The type of the values.
+ */
 public final class Mapper<I, O> {
 
 	private final Map<I, O> internalMap = new HashMap<>();
@@ -54,6 +62,9 @@ public final class Mapper<I, O> {
 		return this.internalMap.values();
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	public final class To {
 
 		private final I key;

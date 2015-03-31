@@ -64,6 +64,9 @@ public final class AggregatedTracesViewModel {
 		this.view.notifyAboutChangedRegExpr();
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	public static enum Filter {
 		NONE, JUST_FAILED, JUST_FAILURE_CONTAINING
 	}
