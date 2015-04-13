@@ -26,7 +26,7 @@ import kieker.diagnosis.domain.Trace;
 
 /**
  * This stage aggregates incoming traces into trace equivalence classes.
- * 
+ *
  * @author Nils Christian Ehmke
  */
 public final class TraceAggregator extends AbstractStage<Trace, AggregatedTrace> {
@@ -44,10 +44,7 @@ public final class TraceAggregator extends AbstractStage<Trace, AggregatedTrace>
 
 	@Override
 	public void onTerminating() throws Exception { // NOPMD (the throws clause is forced by the framework)
-		for (final List<Trace> aggregationList : this.aggregationMap.values()) {
-			final AggregatedTrace aggregatedTrace = new AggregatedTrace(aggregationList);
-			super.send(aggregatedTrace);
-		}
+		this.aggregationMap.values().forEach(list -> super.send(new AggregatedTrace(list)));
 
 		super.onTerminating();
 	}

@@ -36,7 +36,7 @@ import teetime.stage.basic.merger.Merger;
 
 /**
  * This class is a composite {@code TeeTime} stage, which reconstruct traces based on the incoming records, adds statistical data and stores the traces.
- * 
+ *
  * @author Nils Christian Ehmke
  */
 public final class TraceReconstructionComposite extends AbstractCompositeStage {
@@ -52,9 +52,9 @@ public final class TraceReconstructionComposite extends AbstractCompositeStage {
 
 	public TraceReconstructionComposite(final List<Trace> traces, final List<Trace> failedTraces, final List<Trace> failureContainingTraces) {
 		final Distributor<Trace> distributor = new Distributor<>(new CopyByReferenceStrategy());
-		final FailedTraceFilter<Trace> failedTraceFilter = new FailedTraceFilter<>();
+		final Filter<Trace> failedTraceFilter = new Filter<>(trace -> trace.getRootOperationCall().isFailed());
 		final Merger<Trace> merger = new Merger<>();
-		final FailureContainingTraceFilter<Trace> failureContainingTraceFilter = new FailureContainingTraceFilter<>();
+		final Filter<Trace> failureContainingTraceFilter = new Filter<>(trace -> trace.getRootOperationCall().containsFailure());
 
 		this.typeFilter = new MultipleInstanceOfFilter<>();
 		this.tracesCollector = new CollectorSink<>(traces);

@@ -47,11 +47,11 @@ public final class OperationCallHandlerComposite extends AbstractCompositeStage 
 		this.operationCallExtractor = new OperationCallExtractor();
 		this.callCollector = new CollectorSink<>(operationCalls);
 		final Distributor<OperationCall> distributor1 = new Distributor<>(new CopyByReferenceStrategy());
-		final FailedCallFilter<OperationCall> failedCallFilter = new FailedCallFilter<>();
+		final Filter<OperationCall> failedCallFilter = new Filter<>(OperationCall::isFailed);
 		this.failedCallCollector = new CollectorSink<>(failedOperationCalls);
 		final OperationCallAggregator callAggregator = new OperationCallAggregator();
 		this.aggCallCollector = new CollectorSink<>(aggOperationCalls);
-		final FailedCallFilter<AggregatedOperationCall> aggFailedCallFilter = new FailedCallFilter<>();
+		final Filter<AggregatedOperationCall> aggFailedCallFilter = new Filter<>(AggregatedOperationCall::isFailed);
 		this.aggFailedCallCollector = new CollectorSink<>(aggFailedOperationCalls);
 		final Distributor<AggregatedOperationCall> distributor2 = new Distributor<>(new CopyByReferenceStrategy());
 

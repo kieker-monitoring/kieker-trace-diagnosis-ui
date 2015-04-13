@@ -16,21 +16,27 @@
 
 package kieker.diagnosis.model.importer.stages;
 
-import kieker.diagnosis.domain.AbstractTrace;
+import java.util.function.Predicate;
 
 /**
- * This stage filters incoming traces and forwards only those which are failed or contain a failure in the call tree.
+ * This stage filters incoming objects and forwards only those which meet the given predicate.
  *
  * @author Nils Christian Ehmke
  *
  * @param <T>
- *            The precise type of the incoming and outgoing traces.
+ *            The precise type of the incoming and outgoing object.
  */
-public final class FailureContainingTraceFilter<T extends AbstractTrace<?>> extends AbstractStage<T, T> {
+public final class Filter<T> extends AbstractStage<T, T> {
+
+	private final Predicate<T> predicate;
+
+	public Filter(final Predicate<T> predicate) {
+		this.predicate = predicate;
+	}
 
 	@Override
 	protected void execute(final T element) {
-		if (element.getRootOperationCall().containsFailure()) {
+		if (this.predicate.test(element)) {
 			super.send(element);
 		}
 	}
