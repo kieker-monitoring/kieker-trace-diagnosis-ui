@@ -20,8 +20,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import kieker.diagnosis.domain.AbstractOperationCall;
+import java.util.function.Function;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -32,12 +31,16 @@ import org.eclipse.swt.widgets.TableColumn;
 /**
  * @author Nils Christian Ehmke
  */
-public abstract class AbstractCallTableColumnSortListener<T extends AbstractOperationCall<?>> extends SelectionAdapter implements Serializable {
+public final class CallTableColumnSortListener<T> extends SelectionAdapter implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private final CallComparator comparator = new CallComparator();
+	private final Comparator<T> comparator;
 	private int direction;
+
+	public <R extends Comparable<R>> CallTableColumnSortListener(final Function<T, R> attributeExtractor) {
+		this.comparator = Comparator.comparing(attributeExtractor);
+	}
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -58,32 +61,11 @@ public abstract class AbstractCallTableColumnSortListener<T extends AbstractOper
 
 		// Sort the data
 		final List<T> entries = (List<T>) table.getData();
-		Collections.sort(entries, this.comparator);
+		Collections.sort(entries, this.direction == SWT.UP ? this.comparator : this.comparator.reversed());
 
 		// Update the data displayed in the table
 		table.setSortDirection(this.direction);
 		table.clearAll();
-	}
-
-	protected abstract int compare(final T fstCall, final T sndCall);
-
-	private final class CallComparator implements Comparator<T>, Serializable {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public int compare(final T fstCall, final T sndCall) {
-			int result;
-
-			if (AbstractCallTableColumnSortListener.this.direction == SWT.UP) {
-				result = AbstractCallTableColumnSortListener.this.compare(fstCall, sndCall);
-			} else {
-				result = AbstractCallTableColumnSortListener.this.compare(sndCall, fstCall);
-			}
-
-			return result;
-		}
-
 	}
 
 }
