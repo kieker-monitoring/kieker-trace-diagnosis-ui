@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 
 import kieker.diagnosis.domain.AbstractTrace;
 
@@ -32,12 +33,16 @@ import org.eclipse.swt.widgets.TreeColumn;
 /**
  * @author Nils Christian Ehmke
  */
-public abstract class AbstractTraceTreeColumnSortListener<T extends AbstractTrace<?>> extends SelectionAdapter implements Serializable {
+public final class TraceTreeColumnSortListener<T extends AbstractTrace<?>> extends SelectionAdapter implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private final TraceComparator comparator = new TraceComparator();
+	private final Comparator<T> comparator;
 	private int direction;
+
+	public <R extends Comparable<R>> TraceTreeColumnSortListener(final Function<T, R> attributeExtractor) {
+		this.comparator = Comparator.comparing(attributeExtractor);
+	}
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -58,32 +63,11 @@ public abstract class AbstractTraceTreeColumnSortListener<T extends AbstractTrac
 
 		// Sort the data
 		final List<T> entries = (List<T>) tree.getData();
-		Collections.sort(entries, this.comparator);
+		Collections.sort(entries, this.direction == SWT.UP ? this.comparator : this.comparator.reversed());
 
 		// Update the data displayed in the table
 		tree.setSortDirection(this.direction);
 		tree.clearAll(true);
-	}
-
-	protected abstract int compare(final T fstTrace, final T sndTrace);
-
-	private final class TraceComparator implements Comparator<T>, Serializable {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public int compare(final T fstTrace, final T sndTrace) {
-			int result;
-
-			if (AbstractTraceTreeColumnSortListener.this.direction == SWT.UP) {
-				result = AbstractTraceTreeColumnSortListener.this.compare(fstTrace, sndTrace);
-			} else {
-				result = AbstractTraceTreeColumnSortListener.this.compare(sndTrace, fstTrace);
-			}
-
-			return result;
-		}
-
 	}
 
 }

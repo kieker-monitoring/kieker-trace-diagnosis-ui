@@ -441,7 +441,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 			final String totalDuration = targetTimeUnit.convert(call.getTotalDuration(), sourceTimeUnit) + " " + shortTimeUnit;
 
 			item.setText(new String[] { call.getContainer(), componentName, operationString, Long.toString(call.getCalls()), minDuration, avgDuration, meanDuration, maxDuration,
-					totalDuration, });
+				totalDuration, });
 
 			if (call.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
