@@ -27,18 +27,8 @@ import javax.annotation.PostConstruct;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.mainview.subview.ISubView;
-import kieker.diagnosis.mainview.subview.aggregatedtraces.util.AvgDurationSortListener;
-import kieker.diagnosis.mainview.subview.aggregatedtraces.util.CallsSortListener;
-import kieker.diagnosis.mainview.subview.aggregatedtraces.util.MaxDurationSortListener;
-import kieker.diagnosis.mainview.subview.aggregatedtraces.util.MeanDurationSortListener;
-import kieker.diagnosis.mainview.subview.aggregatedtraces.util.MinDurationSortListener;
-import kieker.diagnosis.mainview.subview.aggregatedtraces.util.TotalDurationSortListener;
-import kieker.diagnosis.mainview.subview.util.ComponentSortListener;
-import kieker.diagnosis.mainview.subview.util.ContainerSortListener;
 import kieker.diagnosis.mainview.subview.util.NameConverter;
-import kieker.diagnosis.mainview.subview.util.OperationSortListener;
-import kieker.diagnosis.mainview.subview.util.TraceDepthSortListener;
-import kieker.diagnosis.mainview.subview.util.TraceSizeSortListener;
+import kieker.diagnosis.mainview.subview.util.TraceTreeColumnSortListener;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.model.PropertiesModel.ComponentNames;
@@ -144,15 +134,15 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		filterComposite.setLayout(gl_filterComposite);
 
 		this.btnShowAll = new Button(filterComposite, SWT.RADIO);
-		this.btnShowAll.setText(BUNDLE.getString("AggregatedTracesView.btnShowAll.text")); //$NON-NLS-1$ 
+		this.btnShowAll.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.btnShowAll.text")); //$NON-NLS-1$
 		this.btnShowAll.setSelection(true);
 		this.btnShowJustFailed = new Button(filterComposite, SWT.RADIO);
-		this.btnShowJustFailed.setText(BUNDLE.getString("AggregatedTracesView.btnShowJustFailed.text")); //$NON-NLS-1$ 
+		this.btnShowJustFailed.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.btnShowJustFailed.text")); //$NON-NLS-1$
 		this.btnShowJustFailureContaining = new Button(filterComposite, SWT.RADIO);
-		this.btnShowJustFailureContaining.setText(BUNDLE.getString("AggregatedTracesView.btnShowJustFailureContaining.text")); //$NON-NLS-1$ 
+		this.btnShowJustFailureContaining.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.btnShowJustFailureContaining.text")); //$NON-NLS-1$
 
 		this.filterText = new Text(filterComposite, SWT.BORDER);
-		this.filterText.setMessage(BUNDLE.getString("AggregatedTracesView.text.message")); //$NON-NLS-1$
+		this.filterText.setMessage(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.text.message")); //$NON-NLS-1$
 		this.filterText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
 
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);
@@ -163,47 +153,47 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final TreeColumn trclmnExecutionContainer = new TreeColumn(this.tree, SWT.NONE);
 		trclmnExecutionContainer.setWidth(100);
-		trclmnExecutionContainer.setText(BUNDLE.getString("AggregatedTracesView.trclmnExecutionContainer.text")); //$NON-NLS-1$ 
+		trclmnExecutionContainer.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.trclmnExecutionContainer.text")); //$NON-NLS-1$
 
 		final TreeColumn trclmnComponent = new TreeColumn(this.tree, SWT.NONE);
 		trclmnComponent.setWidth(100);
-		trclmnComponent.setText(BUNDLE.getString("AggregatedTracesView.trclmnComponent.text")); //$NON-NLS-1$ 
+		trclmnComponent.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.trclmnComponent.text")); //$NON-NLS-1$
 
 		final TreeColumn trclmnOperation = new TreeColumn(this.tree, SWT.NONE);
 		trclmnOperation.setWidth(100);
-		trclmnOperation.setText(BUNDLE.getString("AggregatedTracesView.trclmnOperation.text")); //$NON-NLS-1$ 
+		trclmnOperation.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.trclmnOperation.text")); //$NON-NLS-1$
 
 		final TreeColumn trclmnTraceDepth = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnTraceDepth.setWidth(100);
-		trclmnTraceDepth.setText(BUNDLE.getString("AggregatedTracesView.trclmnTraceDepth.text")); //$NON-NLS-1$ 
+		trclmnTraceDepth.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.trclmnTraceDepth.text")); //$NON-NLS-1$
 
 		final TreeColumn trclmnTraceSize = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnTraceSize.setWidth(100);
-		trclmnTraceSize.setText(BUNDLE.getString("AggregatedTracesView.trclmnTraceSize.text")); //$NON-NLS-1$ 
+		trclmnTraceSize.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.trclmnTraceSize.text")); //$NON-NLS-1$
 
 		final TreeColumn trclmnCalls = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnCalls.setWidth(100);
-		trclmnCalls.setText(BUNDLE.getString("AggregatedTracesView.trclmnCalls.text")); //$NON-NLS-1$ 
+		trclmnCalls.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.trclmnCalls.text")); //$NON-NLS-1$
 
 		final TreeColumn trclmnMinimalDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnMinimalDuration.setWidth(100);
-		trclmnMinimalDuration.setText(BUNDLE.getString("AggregatedTracesView.trclmnMinimalDuration.text")); //$NON-NLS-1$ 
+		trclmnMinimalDuration.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.trclmnMinimalDuration.text")); //$NON-NLS-1$
 
 		final TreeColumn trclmnAverageDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnAverageDuration.setWidth(100);
-		trclmnAverageDuration.setText(BUNDLE.getString("AggregatedTracesView.trclmnAverageDuration.text")); //$NON-NLS-1$ 
+		trclmnAverageDuration.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.trclmnAverageDuration.text")); //$NON-NLS-1$
 
 		final TreeColumn trclmnMeanDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnMeanDuration.setWidth(100);
-		trclmnMeanDuration.setText(BUNDLE.getString("AggregatedTracesView.trclmnMeanDuration.text")); //$NON-NLS-1$ 
+		trclmnMeanDuration.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.trclmnMeanDuration.text")); //$NON-NLS-1$
 
 		final TreeColumn trclmnMaximalDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnMaximalDuration.setWidth(100);
-		trclmnMaximalDuration.setText(BUNDLE.getString("AggregatedTracesView.trclmnMaximalDuration.text")); //$NON-NLS-1$ 
+		trclmnMaximalDuration.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.trclmnMaximalDuration.text")); //$NON-NLS-1$
 
 		final TreeColumn trclmnTotalDuration = new TreeColumn(this.tree, SWT.RIGHT);
 		trclmnTotalDuration.setWidth(100);
-		trclmnTotalDuration.setText(BUNDLE.getString("AggregatedTracesView.trclmnTotalDuration.text")); //$NON-NLS-1$ 
+		trclmnTotalDuration.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.trclmnTotalDuration.text")); //$NON-NLS-1$
 
 		this.ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 
@@ -217,7 +207,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblExecutionContainer = new Label(this.detailComposite, SWT.NONE);
 		lblExecutionContainer.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblExecutionContainer.setText(BUNDLE.getString("AggregatedTracesView.lblExecutionContainer.text") + ":"); //$NON-NLS-1$ 
+		lblExecutionContainer.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.lblExecutionContainer.text") + ":"); //$NON-NLS-1$
 
 		this.lblExecutionContainerDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblExecutionContainerDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -225,7 +215,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblComponent = new Label(this.detailComposite, SWT.NONE);
 		lblComponent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblComponent.setText(BUNDLE.getString("AggregatedTracesView.lblComponent.text") + ":"); //$NON-NLS-1$ 
+		lblComponent.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.lblComponent.text") + ":"); //$NON-NLS-1$
 
 		this.lblComponentDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblComponentDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -233,7 +223,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblOperation = new Label(this.detailComposite, SWT.NONE);
 		lblOperation.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblOperation.setText(BUNDLE.getString("AggregatedTracesView.lblOperation.text") + ":"); //$NON-NLS-1$ 
+		lblOperation.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.lblOperation.text") + ":"); //$NON-NLS-1$
 
 		this.lblOperationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblOperationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -241,7 +231,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblNumberOfCalls = new Label(this.detailComposite, SWT.NONE);
 		lblNumberOfCalls.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblNumberOfCalls.setText(BUNDLE.getString("AggregatedTracesView.lblNumberOfCalls.text") + ":"); //$NON-NLS-1$ 
+		lblNumberOfCalls.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.lblNumberOfCalls.text") + ":"); //$NON-NLS-1$
 
 		this.lblNumberOfCallsDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblNumberOfCallsDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -249,7 +239,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblMinimalDuration = new Label(this.detailComposite, SWT.NONE);
 		lblMinimalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblMinimalDuration.setText(BUNDLE.getString("AggregatedTracesView.lblMinimalDuration.text") + ":"); //$NON-NLS-1$ 
+		lblMinimalDuration.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.lblMinimalDuration.text") + ":"); //$NON-NLS-1$
 
 		this.lblMinimalDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblMinimalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -257,7 +247,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblAverageDuration = new Label(this.detailComposite, SWT.NONE);
 		lblAverageDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblAverageDuration.setText(BUNDLE.getString("AggregatedTracesView.lblAverageDuration.text") + ":"); //$NON-NLS-1$ 
+		lblAverageDuration.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.lblAverageDuration.text") + ":"); //$NON-NLS-1$
 
 		this.lblAverageDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblAverageDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -265,7 +255,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblMeanDuration = new Label(this.detailComposite, SWT.NONE);
 		lblMeanDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblMeanDuration.setText(BUNDLE.getString("AggregatedTracesView.lblMeanDuration.text") + ":"); //$NON-NLS-1$ 
+		lblMeanDuration.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.lblMeanDuration.text") + ":"); //$NON-NLS-1$
 
 		this.lblMeanDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblMeanDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -273,7 +263,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblMaximalDuration = new Label(this.detailComposite, SWT.NONE);
 		lblMaximalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblMaximalDuration.setText(BUNDLE.getString("AggregatedTracesView.lblMaximalDuration.text") + ":"); //$NON-NLS-1$ 
+		lblMaximalDuration.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.lblMaximalDuration.text") + ":"); //$NON-NLS-1$
 
 		this.lblMaximalDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblMaximalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -281,7 +271,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblTotalDuration = new Label(this.detailComposite, SWT.NONE);
 		lblTotalDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblTotalDuration.setText(BUNDLE.getString("AggregatedTracesView.lblTotalDuration.text") + ":"); //$NON-NLS-1$ 
+		lblTotalDuration.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.lblTotalDuration.text") + ":"); //$NON-NLS-1$
 
 		this.lblTotalDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblTotalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -289,7 +279,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		this.lblFailed = new Label(this.detailComposite, SWT.NONE);
 		this.lblFailed.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblFailed.setText(BUNDLE.getString("AggregatedTracesView.lblFailed.text") + ":"); //$NON-NLS-1$ 
+		this.lblFailed.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.lblFailed.text") + ":"); //$NON-NLS-1$
 
 		this.lblFailedDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblFailedDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -297,7 +287,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblTraceDepth = new Label(this.detailComposite, SWT.NONE);
 		lblTraceDepth.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblTraceDepth.setText(BUNDLE.getString("AggregatedTracesView.lblTraceDepth.text") + ":"); //$NON-NLS-1$ 
+		lblTraceDepth.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.lblTraceDepth.text") + ":"); //$NON-NLS-1$
 
 		this.lblTraceDepthDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblTraceDepthDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -305,7 +295,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 		final Label lblTraceSize = new Label(this.detailComposite, SWT.NONE);
 		lblTraceSize.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblTraceSize.setText(BUNDLE.getString("AggregatedTracesView.lblTraceSize.text") + ":"); //$NON-NLS-1$ 
+		lblTraceSize.setText(AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.lblTraceSize.text") + ":"); //$NON-NLS-1$
 
 		this.lblTraceSizeDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblTraceSizeDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -316,22 +306,22 @@ public final class AggregatedTracesView implements Observer, ISubView {
 		this.statusBar.setLayout(new GridLayout(1, false));
 
 		this.lblCounter = new Label(this.statusBar, SWT.NONE);
-		this.lblCounter.setText("0 " + BUNDLE.getString("AggregatedTracesView.lblCounter.text") + ":"); //$NON-NLS-1$ 
+		this.lblCounter.setText("0 " + AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.lblCounter.text") + ":"); //$NON-NLS-1$
 
 		this.tree.addSelectionListener(this.controller);
 		this.tree.addListener(SWT.SetData, new DataProvider());
 
-		trclmnExecutionContainer.addSelectionListener(new ContainerSortListener());
-		trclmnComponent.addSelectionListener(new ComponentSortListener());
-		trclmnOperation.addSelectionListener(new OperationSortListener());
-		trclmnMinimalDuration.addSelectionListener(new MinDurationSortListener());
-		trclmnMaximalDuration.addSelectionListener(new MaxDurationSortListener());
-		trclmnAverageDuration.addSelectionListener(new AvgDurationSortListener());
-		trclmnMeanDuration.addSelectionListener(new MeanDurationSortListener());
-		trclmnCalls.addSelectionListener(new CallsSortListener());
-		trclmnTotalDuration.addSelectionListener(new TotalDurationSortListener());
-		trclmnTraceDepth.addSelectionListener(new TraceDepthSortListener());
-		trclmnTraceSize.addSelectionListener(new TraceSizeSortListener());
+		trclmnExecutionContainer.addSelectionListener(new TraceTreeColumnSortListener<AggregatedTrace>(trace -> trace.getRootOperationCall().getContainer()));
+		trclmnComponent.addSelectionListener(new TraceTreeColumnSortListener<AggregatedTrace>(trace -> trace.getRootOperationCall().getComponent()));
+		trclmnOperation.addSelectionListener(new TraceTreeColumnSortListener<AggregatedTrace>(trace -> trace.getRootOperationCall().getOperation()));
+		trclmnMinimalDuration.addSelectionListener(new TraceTreeColumnSortListener<AggregatedTrace>(trace -> trace.getRootOperationCall().getMinDuration()));
+		trclmnMaximalDuration.addSelectionListener(new TraceTreeColumnSortListener<AggregatedTrace>(trace -> trace.getRootOperationCall().getMaxDuration()));
+		trclmnAverageDuration.addSelectionListener(new TraceTreeColumnSortListener<AggregatedTrace>(trace -> trace.getRootOperationCall().getMedianDuration()));
+		trclmnMeanDuration.addSelectionListener(new TraceTreeColumnSortListener<AggregatedTrace>(trace -> trace.getRootOperationCall().getMeanDuration()));
+		trclmnTraceDepth.addSelectionListener(new TraceTreeColumnSortListener<AggregatedTrace>(trace -> trace.getRootOperationCall().getStackDepth()));
+		trclmnTraceSize.addSelectionListener(new TraceTreeColumnSortListener<AggregatedTrace>(trace -> trace.getRootOperationCall().getStackSize()));
+		trclmnCalls.addSelectionListener(new TraceTreeColumnSortListener<AggregatedTrace>(trace -> trace.getRootOperationCall().getCalls()));
+		trclmnTotalDuration.addSelectionListener(new TraceTreeColumnSortListener<AggregatedTrace>(trace -> trace.getRootOperationCall().getTotalDuration()));
 
 		this.filterText.addTraverseListener(this.controller);
 
@@ -408,7 +398,7 @@ public final class AggregatedTracesView implements Observer, ISubView {
 	}
 
 	private void updateStatusBar() {
-		this.lblCounter.setText(this.cachedDataModelContent.size() + " " + BUNDLE.getString("AggregatedTracesView.lblCounter.text"));
+		this.lblCounter.setText(this.cachedDataModelContent.size() + " " + AggregatedTracesView.BUNDLE.getString("AggregatedTracesView.lblCounter.text"));
 		this.statusBar.getParent().layout();
 	}
 
@@ -512,10 +502,10 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 			if (parent != null) {
 				item.setText(new String[] { call.getContainer(), componentName, operationString, "", Integer.toString(call.getStackDepth()), Integer.toString(call.getStackSize()),
-					minDuration, avgDuration, meanDuration, maxDuration, totalDuration, });
+						minDuration, avgDuration, meanDuration, maxDuration, totalDuration, });
 			} else {
 				item.setText(new String[] { call.getContainer(), componentName, operationString, Integer.toString(call.getStackDepth()), Integer.toString(call.getStackSize()),
-					Integer.toString(call.getCalls()), minDuration, avgDuration, meanDuration, maxDuration, totalDuration, });
+						Integer.toString(call.getCalls()), minDuration, avgDuration, meanDuration, maxDuration, totalDuration, });
 			}
 
 			if (call.isFailed()) {

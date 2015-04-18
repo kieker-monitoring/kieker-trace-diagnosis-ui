@@ -4,8 +4,8 @@ apply plugin: 'eclipse'
 mainClassName = 'kieker.diagnosis.Main'
 version = '1.0-SNAPSHOT'
 
-sourceCompatibility = '1.7'
-targetCompatibility = '1.7'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
 repositories {
 	mavenCentral()
@@ -49,20 +49,6 @@ dependencies {
 // Add the provided-scoped dependencies to the classpaths
 sourceSets.main.compileClasspath += configurations.providedCompile
 eclipse.classpath.plusConfigurations += [configurations.providedCompile]
-
-apply plugin: 'pmd'
-pmd { 
-	ignoreFailures = true
-
-	ruleSets = []
-	ruleSetFiles = files('config/pmd/ruleset.xml')
-}
-
-apply plugin: 'checkstyle'
-checkstyle {
-	ignoreFailures = true
-	showViolations = false
-}
 
 apply plugin: 'findbugs'
 findbugs { 

@@ -27,12 +27,7 @@ import javax.annotation.PostConstruct;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.mainview.subview.ISubView;
 import kieker.diagnosis.mainview.subview.calls.CallsViewModel.Filter;
-import kieker.diagnosis.mainview.subview.calls.util.ComponentSortListener;
-import kieker.diagnosis.mainview.subview.calls.util.ContainerSortListener;
-import kieker.diagnosis.mainview.subview.calls.util.DurationSortListener;
-import kieker.diagnosis.mainview.subview.calls.util.OperationSortListener;
-import kieker.diagnosis.mainview.subview.calls.util.TimestampSortListener;
-import kieker.diagnosis.mainview.subview.calls.util.TraceIDSortListener;
+import kieker.diagnosis.mainview.subview.util.CallTableColumnSortListener;
 import kieker.diagnosis.mainview.subview.util.NameConverter;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
@@ -124,13 +119,13 @@ public final class CallsView implements ISubView, Observer {
 		filterComposite.setLayout(gl_filterComposite);
 
 		this.btnShowAll = new Button(filterComposite, SWT.RADIO);
-		this.btnShowAll.setText(BUNDLE.getString("CallsView.btnShowAll.text")); //$NON-NLS-1$ 
+		this.btnShowAll.setText(CallsView.BUNDLE.getString("CallsView.btnShowAll.text")); //$NON-NLS-1$
 		this.btnShowAll.setSelection(true);
 		this.btnShowJustFailed = new Button(filterComposite, SWT.RADIO);
-		this.btnShowJustFailed.setText(BUNDLE.getString("CallsView.btnShowJustFailed.text")); //$NON-NLS-1$ 
+		this.btnShowJustFailed.setText(CallsView.BUNDLE.getString("CallsView.btnShowJustFailed.text")); //$NON-NLS-1$
 
 		this.filterText = new Text(filterComposite, SWT.BORDER);
-		this.filterText.setMessage(BUNDLE.getString("CallsView.text.message")); //$NON-NLS-1$
+		this.filterText.setMessage(CallsView.BUNDLE.getString("CallsView.text.message")); //$NON-NLS-1$
 		this.filterText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);
@@ -142,27 +137,27 @@ public final class CallsView implements ISubView, Observer {
 
 		final TableColumn tblclmnExecutionContainer = new TableColumn(this.table, SWT.NONE);
 		tblclmnExecutionContainer.setWidth(100);
-		tblclmnExecutionContainer.setText(BUNDLE.getString("CallsView.tblclmnExecutionContainer.text")); //$NON-NLS-1$ 
+		tblclmnExecutionContainer.setText(CallsView.BUNDLE.getString("CallsView.tblclmnExecutionContainer.text")); //$NON-NLS-1$
 
 		final TableColumn tblclmnComponent = new TableColumn(this.table, SWT.NONE);
 		tblclmnComponent.setWidth(100);
-		tblclmnComponent.setText(BUNDLE.getString("CallsView.tblclmnComponent.text")); //$NON-NLS-1$ 
+		tblclmnComponent.setText(CallsView.BUNDLE.getString("CallsView.tblclmnComponent.text")); //$NON-NLS-1$
 
 		final TableColumn tblclmnOperation = new TableColumn(this.table, SWT.NONE);
 		tblclmnOperation.setWidth(100);
-		tblclmnOperation.setText(BUNDLE.getString("CallsView.tblclmnOperation.text")); //$NON-NLS-1$ 
+		tblclmnOperation.setText(CallsView.BUNDLE.getString("CallsView.tblclmnOperation.text")); //$NON-NLS-1$
 
 		final TableColumn tblclmnDuration = new TableColumn(this.table, SWT.NONE);
 		tblclmnDuration.setWidth(100);
-		tblclmnDuration.setText(BUNDLE.getString("CallsView.tblclmnDuration.text")); //$NON-NLS-1$ 
+		tblclmnDuration.setText(CallsView.BUNDLE.getString("CallsView.tblclmnDuration.text")); //$NON-NLS-1$
 
 		final TableColumn tblclmnTraceID = new TableColumn(this.table, SWT.NONE);
 		tblclmnTraceID.setWidth(100);
-		tblclmnTraceID.setText(BUNDLE.getString("CallsView.tblclmnTraceID.text")); //$NON-NLS-1$ 
+		tblclmnTraceID.setText(CallsView.BUNDLE.getString("CallsView.tblclmnTraceID.text")); //$NON-NLS-1$
 
 		final TableColumn tblclmnTimestamp = new TableColumn(this.table, SWT.NONE);
 		tblclmnTimestamp.setWidth(100);
-		tblclmnTimestamp.setText(BUNDLE.getString("CallsView.tblclmnTimestamp.text")); //$NON-NLS-1$ 
+		tblclmnTimestamp.setText(CallsView.BUNDLE.getString("CallsView.tblclmnTimestamp.text")); //$NON-NLS-1$
 
 		this.ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 
@@ -176,7 +171,7 @@ public final class CallsView implements ISubView, Observer {
 
 		final Label lblExecutionContainer = new Label(this.detailComposite, SWT.NONE);
 		lblExecutionContainer.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblExecutionContainer.setText(BUNDLE.getString("CallsView.lblExecutionContainer.text") + ":"); //$NON-NLS-1$ 
+		lblExecutionContainer.setText(CallsView.BUNDLE.getString("CallsView.lblExecutionContainer.text") + ":"); //$NON-NLS-1$
 
 		this.lblExecutionContainerDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblExecutionContainerDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -184,7 +179,7 @@ public final class CallsView implements ISubView, Observer {
 
 		final Label lblComponent = new Label(this.detailComposite, SWT.NONE);
 		lblComponent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblComponent.setText(BUNDLE.getString("CallsView.lblComponent.text") + ":"); //$NON-NLS-1$ 
+		lblComponent.setText(CallsView.BUNDLE.getString("CallsView.lblComponent.text") + ":"); //$NON-NLS-1$
 
 		this.lblComponentDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblComponentDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -192,7 +187,7 @@ public final class CallsView implements ISubView, Observer {
 
 		final Label lblOperation = new Label(this.detailComposite, SWT.NONE);
 		lblOperation.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblOperation.setText(BUNDLE.getString("CallsView.lblOperation.text") + ":"); //$NON-NLS-1$ 
+		lblOperation.setText(CallsView.BUNDLE.getString("CallsView.lblOperation.text") + ":"); //$NON-NLS-1$
 
 		this.lblOperationDisplay = new Text(this.detailComposite, SWT.READ_ONLY | SWT.NONE);
 		this.lblOperationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -200,7 +195,7 @@ public final class CallsView implements ISubView, Observer {
 
 		final Label lblDuration = new Label(this.detailComposite, SWT.NONE);
 		lblDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblDuration.setText(BUNDLE.getString("CallsView.lblDuration.text") + ":"); //$NON-NLS-1$ 
+		lblDuration.setText(CallsView.BUNDLE.getString("CallsView.lblDuration.text") + ":"); //$NON-NLS-1$
 
 		this.lblMinimalDurationDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblMinimalDurationDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -208,7 +203,7 @@ public final class CallsView implements ISubView, Observer {
 
 		this.lblFailed = new Label(this.detailComposite, SWT.NONE);
 		this.lblFailed.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		this.lblFailed.setText(BUNDLE.getString("CallsView.lblFailed.text")); //$NON-NLS-1$ 
+		this.lblFailed.setText(CallsView.BUNDLE.getString("CallsView.lblFailed.text")); //$NON-NLS-1$
 
 		this.lblFailedDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblFailedDisplay.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -219,17 +214,17 @@ public final class CallsView implements ISubView, Observer {
 		this.statusBar.setLayout(new GridLayout(1, false));
 
 		this.lbCounter = new Label(this.statusBar, SWT.NONE);
-		this.lbCounter.setText("0 " + BUNDLE.getString("CallsView.lbCounter.text")); //$NON-NLS-1$ 
+		this.lbCounter.setText("0 " + CallsView.BUNDLE.getString("CallsView.lbCounter.text")); //$NON-NLS-1$
 
 		this.table.addListener(SWT.SetData, new DataProvider());
 		this.table.addSelectionListener(this.controller);
 
-		tblclmnComponent.addSelectionListener(new ComponentSortListener());
-		tblclmnExecutionContainer.addSelectionListener(new ContainerSortListener());
-		tblclmnOperation.addSelectionListener(new OperationSortListener());
-		tblclmnDuration.addSelectionListener(new DurationSortListener());
-		tblclmnTraceID.addSelectionListener(new TraceIDSortListener());
-		tblclmnTimestamp.addSelectionListener(new TimestampSortListener());
+		tblclmnComponent.addSelectionListener(new CallTableColumnSortListener<OperationCall>(OperationCall::getComponent));
+		tblclmnExecutionContainer.addSelectionListener(new CallTableColumnSortListener<OperationCall>(OperationCall::getContainer));
+		tblclmnOperation.addSelectionListener(new CallTableColumnSortListener<OperationCall>(OperationCall::getOperation));
+		tblclmnDuration.addSelectionListener(new CallTableColumnSortListener<OperationCall>(OperationCall::getDuration));
+		tblclmnTraceID.addSelectionListener(new CallTableColumnSortListener<OperationCall>(OperationCall::getTraceID));
+		tblclmnTimestamp.addSelectionListener(new CallTableColumnSortListener<OperationCall>(OperationCall::getTimestamp));
 
 		this.filterText.addTraverseListener(this.controller);
 
@@ -305,7 +300,7 @@ public final class CallsView implements ISubView, Observer {
 	}
 
 	private void updateStatusBar() {
-		this.lbCounter.setText(this.cachedDataModelContent.size() + " " + BUNDLE.getString("CallsView.lbCounter.text"));
+		this.lbCounter.setText(this.cachedDataModelContent.size() + " " + CallsView.BUNDLE.getString("CallsView.lbCounter.text"));
 		this.statusBar.getParent().layout();
 	}
 

@@ -32,9 +32,7 @@ public final class OperationCallExtractor extends AbstractStage<Trace, Operation
 	private void sendAllCalls(final OperationCall call) {
 		super.send(call);
 
-		for (final OperationCall child : call.getChildren()) {
-			this.sendAllCalls(child);
-		}
+		call.getChildren().forEach(child -> this.sendAllCalls(child));
 	}
 
 }

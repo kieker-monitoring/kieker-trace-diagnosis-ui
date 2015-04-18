@@ -14,23 +14,31 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.mainview.subview.util;
+package kieker.diagnosis.model.importer.stages;
 
-import kieker.diagnosis.domain.AbstractTrace;
+import java.util.function.Predicate;
 
 /**
+ * This stage filters incoming objects and forwards only those which meet the given predicate.
+ *
  * @author Nils Christian Ehmke
+ *
+ * @param <T>
+ *            The precise type of the incoming and outgoing object.
  */
-public final class OperationSortListener extends AbstractTraceTreeColumnSortListener<AbstractTrace<?>> {
+public final class Filter<T> extends AbstractStage<T, T> {
 
-	private static final long serialVersionUID = 1L;
+	private final Predicate<T> predicate;
+
+	public Filter(final Predicate<T> predicate) {
+		this.predicate = predicate;
+	}
 
 	@Override
-	protected int compare(final AbstractTrace<?> fstTrace, final AbstractTrace<?> sndTrace) {
-		final String fstOperation = fstTrace.getRootOperationCall().getOperation();
-		final String sndOperation = sndTrace.getRootOperationCall().getOperation();
-
-		return fstOperation.compareTo(sndOperation);
+	protected void execute(final T element) {
+		if (this.predicate.test(element)) {
+			super.send(element);
+		}
 	}
 
 }

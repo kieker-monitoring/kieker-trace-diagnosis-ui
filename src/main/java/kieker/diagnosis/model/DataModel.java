@@ -17,13 +17,13 @@
 package kieker.diagnosis.model;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
 
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.diagnosis.domain.AbstractOperationCall;
@@ -40,7 +40,7 @@ import teetime.framework.Analysis;
 
 /**
  * A container for data used within this application.
- * 
+ *
  * @author Nils Christian Ehmke
  */
 @Repository
@@ -168,13 +168,7 @@ public final class DataModel extends Observable {
 			return traces;
 		}
 
-		final List<T> result = new ArrayList<>();
-		for (final T trace : traces) {
-			if (trace.getRootOperationCall().getOperation().matches(regExpr)) {
-				result.add(trace);
-			}
-		}
-		return result;
+		return traces.parallelStream().filter(trace -> trace.getRootOperationCall().getOperation().matches(regExpr)).collect(Collectors.toList());
 	}
 
 	private <T extends AbstractOperationCall<?>> List<T> filterCallsIfNecessary(final List<T> calls, final String regExpr) {
@@ -182,13 +176,7 @@ public final class DataModel extends Observable {
 			return calls;
 		}
 
-		final List<T> result = new ArrayList<>();
-		for (final T call : calls) {
-			if (call.getOperation().matches(regExpr)) {
-				result.add(call);
-			}
-		}
-		return result;
+		return calls.parallelStream().filter(call -> call.getOperation().matches(regExpr)).collect(Collectors.toList());
 	}
 
 	private boolean isRegex(final String str) {

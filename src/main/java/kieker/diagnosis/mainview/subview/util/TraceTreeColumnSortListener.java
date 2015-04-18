@@ -20,70 +20,54 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 
-import kieker.diagnosis.domain.AbstractOperationCall;
+import kieker.diagnosis.domain.AbstractTrace;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
 
 /**
  * @author Nils Christian Ehmke
  */
-public abstract class AbstractCallTableColumnSortListener<T extends AbstractOperationCall<?>> extends SelectionAdapter implements Serializable {
+public final class TraceTreeColumnSortListener<T extends AbstractTrace<?>> extends SelectionAdapter implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private final CallComparator comparator = new CallComparator();
+	private final Comparator<T> comparator;
 	private int direction;
+
+	public <R extends Comparable<R>> TraceTreeColumnSortListener(final Function<T, R> attributeExtractor) {
+		this.comparator = Comparator.comparing(attributeExtractor);
+	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public final void widgetSelected(final SelectionEvent event) {
 		// Get the necessary information from the event
-		final TableColumn currentColumn = (TableColumn) event.widget;
-		final Table table = currentColumn.getParent();
-		final TableColumn sortColumn = table.getSortColumn();
+		final TreeColumn currentColumn = (TreeColumn) event.widget;
+		final Tree tree = currentColumn.getParent();
+		final TreeColumn sortColumn = tree.getSortColumn();
 
 		// Determine new sort column and direction
-		this.direction = table.getSortDirection();
+		this.direction = tree.getSortDirection();
 		if (sortColumn == currentColumn) {
 			this.direction = ((this.direction == SWT.UP) ? SWT.DOWN : SWT.UP);
 		} else {
-			table.setSortColumn(currentColumn);
-			this.direction = SWT.DOWN;
+			tree.setSortColumn(currentColumn);
+			this.direction = SWT.UP;
 		}
 
 		// Sort the data
-		final List<T> entries = (List<T>) table.getData();
-		Collections.sort(entries, this.comparator);
+		final List<T> entries = (List<T>) tree.getData();
+		Collections.sort(entries, this.direction == SWT.UP ? this.comparator : this.comparator.reversed());
 
 		// Update the data displayed in the table
-		table.setSortDirection(this.direction);
-		table.clearAll();
-	}
-
-	protected abstract int compare(final T fstCall, final T sndCall);
-
-	private final class CallComparator implements Comparator<T>, Serializable {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public int compare(final T fstCall, final T sndCall) {
-			int result;
-
-			if (AbstractCallTableColumnSortListener.this.direction == SWT.UP) {
-				result = AbstractCallTableColumnSortListener.this.compare(fstCall, sndCall);
-			} else {
-				result = AbstractCallTableColumnSortListener.this.compare(sndCall, fstCall);
-			}
-
-			return result;
-		}
-
+		tree.setSortDirection(this.direction);
+		tree.clearAll(true);
 	}
 
 }

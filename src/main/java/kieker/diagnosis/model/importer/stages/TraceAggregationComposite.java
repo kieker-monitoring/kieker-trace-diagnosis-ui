@@ -49,9 +49,8 @@ public final class TraceAggregationComposite extends AbstractCompositeStage {
 		this.statisticsDecorator = new AggregatedTraceStatisticsDecorator();
 
 		final Distributor<AggregatedTrace> distributor = new Distributor<>(new CopyByReferenceStrategy());
-		final FailedTraceFilter<AggregatedTrace> failedTraceFilter = new FailedTraceFilter<>();
-		final FailureContainingTraceFilter<AggregatedTrace> failureContainingTraceFilter = new FailureContainingTraceFilter<>();
-
+		final Filter<AggregatedTrace> failedTraceFilter = new Filter<>(trace -> trace.getRootOperationCall().isFailed());
+		final Filter<AggregatedTrace> failureContainingTraceFilter = new Filter<>(trace -> trace.getRootOperationCall().containsFailure());
 		this.tracesCollector = new CollectorSink<>(traces);
 		this.failedTracesCollector = new CollectorSink<>(failedTraces);
 		this.failureContainingTracesCollector = new CollectorSink<>(failureContainingTraces);

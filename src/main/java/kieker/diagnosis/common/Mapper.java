@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @param <I>
  *            The type of the keys.
  * @param <O>
@@ -50,12 +50,7 @@ public final class Mapper<I, O> {
 	}
 
 	public I invertedResolve(final O value) {
-		for (final Map.Entry<I, O> entry : this.internalMap.entrySet()) {
-			if (value.equals(entry.getValue())) {
-				return entry.getKey();
-			}
-		}
-		return null;
+		return this.internalMap.entrySet().parallelStream().filter(entry -> value.equals(entry.getValue())).map(Map.Entry::getKey).findFirst().orElse(null);
 	}
 
 	public Collection<O> values() {
