@@ -16,8 +16,6 @@
 
 package kieker.diagnosis.model.importer.stages;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import kieker.common.record.IMonitoringRecord;
@@ -94,11 +92,6 @@ public final class TraceReconstructionComposite extends AbstractCompositeStage {
 	@Override
 	protected Stage getFirstStage() {
 		return this.typeFilter;
-	}
-
-	@Override
-	protected Collection<? extends Stage> getLastStages() {
-		return Arrays.asList(this.tracesCollector, this.failedTracesCollector, this.failureContainingTracesCollector, this.statisticsDecorator);
 	}
 
 }

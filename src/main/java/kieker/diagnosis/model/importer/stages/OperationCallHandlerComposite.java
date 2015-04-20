@@ -16,8 +16,6 @@
 
 package kieker.diagnosis.model.importer.stages;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import kieker.diagnosis.domain.AggregatedOperationCall;
@@ -77,8 +75,4 @@ public final class OperationCallHandlerComposite extends AbstractCompositeStage 
 		return this.operationCallExtractor;
 	}
 
-	@Override
-	protected Collection<? extends Stage> getLastStages() {
-		return Arrays.asList(this.callCollector, this.failedCallCollector, this.aggCallCollector, this.aggFailedCallCollector);
-	}
 }

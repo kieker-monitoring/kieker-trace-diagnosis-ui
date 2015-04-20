@@ -32,8 +32,8 @@ public final class ImportAnalysisConfigurationTest {
 	@Test
 	public void exampleLogImportShouldWork() {
 		final ImportAnalysisConfiguration configuration = new ImportAnalysisConfiguration(new File("example/event monitoring log"));
-		final Analysis analysis = new Analysis(configuration);
-		analysis.execute();
+		final Analysis<ImportAnalysisConfiguration> analysis = new Analysis<>(configuration);
+		analysis.executeBlocking();
 
 		assertThat(configuration.getMetadataRecords(), hasSize(1));
 		assertThat(configuration.getTracesList(), hasSize(100));
@@ -47,8 +47,8 @@ public final class ImportAnalysisConfigurationTest {
 	@Test
 	public void exampleLegacyLogImportShouldWork() {
 		final ImportAnalysisConfiguration configuration = new ImportAnalysisConfiguration(new File("example/execution monitoring log"));
-		final Analysis analysis = new Analysis(configuration);
-		analysis.execute();
+		final Analysis<ImportAnalysisConfiguration> analysis = new Analysis<>(configuration);
+		analysis.executeBlocking();
 
 		assertThat(configuration.getMetadataRecords(), hasSize(1));
 		assertThat(configuration.getTracesList(), hasSize(1635));
@@ -62,8 +62,8 @@ public final class ImportAnalysisConfigurationTest {
 	@Test
 	public void nonExistingLogShouldNotLeadToCrash() {
 		final ImportAnalysisConfiguration configuration = new ImportAnalysisConfiguration(new File("nonExistingLog"));
-		final Analysis analysis = new Analysis(configuration);
-		analysis.execute();
+		final Analysis<ImportAnalysisConfiguration> analysis = new Analysis<>(configuration);
+		analysis.executeBlocking();
 
 		assertThat(configuration.getMetadataRecords(), is(empty()));
 		assertThat(configuration.getTracesList(), is(empty()));

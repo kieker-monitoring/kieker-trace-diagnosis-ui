@@ -69,8 +69,8 @@ public final class DataModel extends Observable {
 		// Load and analyze the monitoring logs from the given directory
 		this.importDirectory = new File(directory);
 		final ImportAnalysisConfiguration analysisConfiguration = new ImportAnalysisConfiguration(this.importDirectory);
-		final Analysis analysis = new Analysis(analysisConfiguration);
-		analysis.execute();
+		final Analysis<ImportAnalysisConfiguration> analysis = new Analysis<>(analysisConfiguration);
+		analysis.executeBlocking();
 
 		// Store the results from the analysis
 		this.traces = analysisConfiguration.getTracesList();

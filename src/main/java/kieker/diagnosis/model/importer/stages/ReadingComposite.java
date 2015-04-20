@@ -17,8 +17,6 @@
 package kieker.diagnosis.model.importer.stages;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collection;
 
 import kieker.common.record.IMonitoringRecord;
 import teetime.framework.AbstractCompositeStage;
@@ -52,11 +50,6 @@ public final class ReadingComposite extends AbstractCompositeStage {
 	@Override
 	protected Stage getFirstStage() {
 		return this.producer;
-	}
-
-	@Override
-	protected Collection<? extends Stage> getLastStages() {
-		return Arrays.asList(this.reader);
 	}
 
 }

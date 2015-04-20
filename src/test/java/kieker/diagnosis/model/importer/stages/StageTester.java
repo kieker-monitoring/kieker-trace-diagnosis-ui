@@ -61,8 +61,8 @@ public final class StageTester {
 
 		public <O> List<O> andReceivingFrom(final OutputPort<O> outputPort) {
 			final Configuration<I, O> configuration = new Configuration<I, O>(this.input, this.inputPort, outputPort);
-			final Analysis analysis = new Analysis(configuration);
-			analysis.execute();
+			final Analysis<Configuration<I, O>> analysis = new Analysis<>(configuration);
+			analysis.executeBlocking();
 
 			return configuration.getOutput();
 		}
