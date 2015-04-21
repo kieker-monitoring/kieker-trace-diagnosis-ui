@@ -16,6 +16,18 @@
 
 package kieker.diagnosis.mainview.subview.traces;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javafx.collections.ListChangeListener.Change;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableView;
+import kieker.diagnosis.domain.OperationCall;
+import kieker.diagnosis.domain.Trace;
+import kieker.diagnosis.model.DataModel;
+
 /**
  * The sub-controller responsible for the sub-view presenting the available traces.
  *
@@ -23,4 +35,58 @@ package kieker.diagnosis.mainview.subview.traces;
  */
 public final class TracesViewController {
 
+	private final DataModel dataModel = DataModel.getInstance();
+
+	@FXML private TreeTableView<OperationCall> treetable;
+
+	public void initialize() {
+		this.reloadTreetable();
+		this.dataModel.getTraces("").addListener((final Change<? extends Trace> c) -> this.reloadTreetable());
+	}
+
+	private void reloadTreetable() {
+		final List<Trace> traces = this.dataModel.getTraces("");
+		final TreeItem<OperationCall> root = new TreeItem<>();
+		this.treetable.setRoot(root);
+		this.treetable.setShowRoot(false);
+
+		for (final Trace trace : traces) {
+			root.getChildren().add(new LazyCallTreeItem(trace.getRootOperationCall()));
+		}
+	}
+
+	private static final class LazyCallTreeItem extends TreeItem<OperationCall> {
+
+		private boolean childrenInitialized = false;
+
+		public LazyCallTreeItem(final OperationCall value) {
+			super(value);
+		}
+
+		@Override
+		public ObservableList<TreeItem<OperationCall>> getChildren() {
+			if (!this.childrenInitialized) {
+				this.initializeChildren();
+			}
+
+			return super.getChildren();
+		}
+
+		@Override
+		public boolean isLeaf() {
+			return super.getValue().getChildren().isEmpty();
+		}
+
+		private void initializeChildren() {
+			this.childrenInitialized = true;
+
+			final List<TreeItem<OperationCall>> result = new ArrayList<>();
+
+			for (final OperationCall child : super.getValue().getChildren()) {
+				result.add(new LazyCallTreeItem(child));
+			}
+
+			super.getChildren().setAll(result);
+		}
+	}
 }

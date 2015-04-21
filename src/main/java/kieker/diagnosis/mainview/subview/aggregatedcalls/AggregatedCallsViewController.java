@@ -16,10 +16,22 @@
 
 package kieker.diagnosis.mainview.subview.aggregatedcalls;
 
+import javafx.fxml.FXML;
+import javafx.scene.control.TableView;
+import kieker.diagnosis.domain.AggregatedOperationCall;
+import kieker.diagnosis.model.DataModel;
 
 /**
  * @author Nils Christian Ehmke
  */
 public final class AggregatedCallsViewController {
+
+	private final DataModel dataModel = DataModel.getInstance();
+
+	@FXML private TableView<AggregatedOperationCall> table;
+
+	public void initialize() {
+		this.table.setItems(this.dataModel.getAggregatedOperationCalls(""));
+	}
 
 }

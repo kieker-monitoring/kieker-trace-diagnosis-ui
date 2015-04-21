@@ -25,6 +25,8 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.diagnosis.domain.AbstractOperationCall;
 import kieker.diagnosis.domain.AbstractTrace;
@@ -44,15 +46,15 @@ public final class DataModel extends Observable {
 
 	private static final DataModel INSTANCE = new DataModel();
 
-	private List<Trace> traces = Collections.emptyList();
+	private final ObservableList<Trace> traces = FXCollections.observableArrayList();
 	private List<Trace> failureContainingTraces = Collections.emptyList();
 	private List<Trace> failedTraces = Collections.emptyList();
 	private List<AggregatedTrace> aggregatedTraces = Collections.emptyList();
 	private List<AggregatedTrace> failedAggregatedTraces = Collections.emptyList();
 	private List<AggregatedTrace> failureAggregatedContainingTraces = Collections.emptyList();
-	private List<OperationCall> operationCalls = Collections.emptyList();
+	private final ObservableList<OperationCall> operationCalls = FXCollections.observableArrayList();
 	private List<OperationCall> failedOperationCalls = Collections.emptyList();
-	private List<AggregatedOperationCall> aggregatedOperationCalls = Collections.emptyList();
+	private final ObservableList<AggregatedOperationCall> aggregatedOperationCalls = FXCollections.observableArrayList();
 	private List<AggregatedOperationCall> aggregatedFailedOperationCalls = Collections.emptyList();
 	private File importDirectory;
 	private TimeUnit timeUnit;
@@ -64,24 +66,24 @@ public final class DataModel extends Observable {
 	private DataModel() {}
 
 	public void loadMonitoringLogFromFS(final File importDirectory) {
+		this.importDirectory = importDirectory;
 		final long tin = System.currentTimeMillis();
 
 		// Load and analyze the monitoring logs from the given directory
-		this.importDirectory = importDirectory;
 		final ImportAnalysisConfiguration analysisConfiguration = new ImportAnalysisConfiguration(this.importDirectory);
 		final Analysis<ImportAnalysisConfiguration> analysis = new Analysis<>(analysisConfiguration);
 		analysis.executeBlocking();
 
 		// Store the results from the analysis
-		this.traces = analysisConfiguration.getTracesList();
+		this.traces.setAll(analysisConfiguration.getTracesList());
 		this.failedTraces = analysisConfiguration.getFailedTracesList();
 		this.failureContainingTraces = analysisConfiguration.getFailureContainingTracesList();
 		this.aggregatedTraces = analysisConfiguration.getAggregatedTraces();
 		this.failedAggregatedTraces = analysisConfiguration.getFailedAggregatedTracesList();
 		this.failureAggregatedContainingTraces = analysisConfiguration.getFailureContainingAggregatedTracesList();
-		this.operationCalls = analysisConfiguration.getOperationCalls();
+		this.operationCalls.setAll(analysisConfiguration.getOperationCalls());
 		this.failedOperationCalls = analysisConfiguration.getFailedOperationCalls();
-		this.aggregatedOperationCalls = analysisConfiguration.getAggregatedOperationCalls();
+		this.aggregatedOperationCalls.setAll(analysisConfiguration.getAggregatedOperationCalls());
 		this.aggregatedFailedOperationCalls = analysisConfiguration.getAggregatedFailedOperationCalls();
 		this.incompleteTraces = analysisConfiguration.countIncompleteTraces();
 		this.beginTimestamp = analysisConfiguration.getBeginTimestamp();
@@ -123,8 +125,9 @@ public final class DataModel extends Observable {
 		return this.analysisDurationInMS;
 	}
 
-	public List<Trace> getTraces(final String regExpr) {
-		return this.filterTracesIfNecessary(this.traces, regExpr);
+	public ObservableList<Trace> getTraces(final String regExpr) {
+		return this.traces;
+		// return this.filterTracesIfNecessary(this.traces, regExpr);
 	}
 
 	public List<Trace> getFailedTraces(final String regExpr) {
@@ -147,16 +150,17 @@ public final class DataModel extends Observable {
 		return this.filterTracesIfNecessary(this.failureAggregatedContainingTraces, regExpr);
 	}
 
-	public List<OperationCall> getOperationCalls(final String regExpr) {
-		return this.filterCallsIfNecessary(this.operationCalls, regExpr);
+	public ObservableList<OperationCall> getOperationCalls() {
+		return this.operationCalls;
 	}
 
 	public List<OperationCall> getFailedOperationCalls(final String regExpr) {
 		return this.filterCallsIfNecessary(this.failedOperationCalls, regExpr);
 	}
 
-	public List<AggregatedOperationCall> getAggregatedOperationCalls(final String regExpr) {
-		return this.filterCallsIfNecessary(this.aggregatedOperationCalls, regExpr);
+	public ObservableList<AggregatedOperationCall> getAggregatedOperationCalls(final String regExpr) {
+		return this.aggregatedOperationCalls;
+		// return this.filterCallsIfNecessary(this.aggregatedOperationCalls, regExpr);
 	}
 
 	public List<AggregatedOperationCall> getAggregatedFailedOperationCalls(final String regExpr) {

@@ -16,9 +16,65 @@
 
 package kieker.diagnosis.mainview.subview.calls;
 
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import javafx.fxml.FXML;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import kieker.diagnosis.domain.OperationCall;
+import kieker.diagnosis.model.DataModel;
+
 /**
  * @author Nils Christian Ehmke
  */
 public final class CallsViewController {
+
+	private final DataModel dataModel = DataModel.getInstance();
+
+	private FilteredList<OperationCall> fstFilteredData;
+	private FilteredList<OperationCall> sndFilteredData;
+
+	@FXML private TableView<OperationCall> table;
+	@FXML private TextField regexpfilter;
+
+	public void initialize() {
+		this.fstFilteredData = new FilteredList<>(this.dataModel.getOperationCalls());
+		this.sndFilteredData = new FilteredList<OperationCall>(this.fstFilteredData);
+		final SortedList<OperationCall> sortedData = new SortedList<>(this.sndFilteredData);
+
+		sortedData.comparatorProperty().bind(this.table.comparatorProperty());
+
+		this.table.setItems(sortedData);
+	}
+
+	public void showAllMethods() {
+		this.fstFilteredData.setPredicate(null);
+	}
+
+	public void showJustFailedMethods() {
+		this.fstFilteredData.setPredicate(call -> call.isFailed());
+	}
+
+	public void useRegExp() {
+		final String regExpr = this.regexpfilter.getText();
+
+		if ((regExpr == null) || regExpr.isEmpty() || !this.isRegex(regExpr)) {
+			this.sndFilteredData.setPredicate(null);
+		}
+
+		this.sndFilteredData.setPredicate(call -> call.getOperation().matches(regExpr));
+	}
+
+	private boolean isRegex(final String str) {
+		try {
+			Pattern.compile(str);
+			return true;
+		} catch (final PatternSyntaxException e) {
+			return false;
+		}
+	}
 
 }
