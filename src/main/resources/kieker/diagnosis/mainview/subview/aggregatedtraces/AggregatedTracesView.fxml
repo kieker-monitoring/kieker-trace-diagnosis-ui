@@ -22,7 +22,7 @@
 			toggleGroup="$togglegroup" />
 	</HBox>
 
-	<TreeTableView fx:id="table" GridPane.hgrow="ALWAYS"
+	<TreeTableView fx:id="treetable" GridPane.hgrow="ALWAYS"
 		GridPane.vgrow="ALWAYS" GridPane.rowIndex="1" tableMenuButtonVisible="true">
 
 		<columns>

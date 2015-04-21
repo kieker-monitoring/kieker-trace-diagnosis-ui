@@ -31,7 +31,7 @@ public final class AggregatedCallsViewController {
 	@FXML private TableView<AggregatedOperationCall> table;
 
 	public void initialize() {
-		this.table.setItems(this.dataModel.getAggregatedOperationCalls(""));
+		this.table.setItems(this.dataModel.getAggregatedOperationCalls());
 	}
 
 }

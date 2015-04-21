@@ -36,34 +36,21 @@ public final class OperationCallHandlerComposite extends AbstractCompositeStage 
 	private final InputPort<Trace> inputPort;
 	private final OperationCallExtractor operationCallExtractor;
 	private final CollectorSink<OperationCall> callCollector;
-	private final CollectorSink<OperationCall> failedCallCollector;
 	private final CollectorSink<AggregatedOperationCall> aggCallCollector;
-	private final CollectorSink<AggregatedOperationCall> aggFailedCallCollector;
 
-	public OperationCallHandlerComposite(final List<OperationCall> operationCalls, final List<OperationCall> failedOperationCalls,
-			final List<AggregatedOperationCall> aggOperationCalls, final List<AggregatedOperationCall> aggFailedOperationCalls) {
+	public OperationCallHandlerComposite(final List<OperationCall> operationCalls, final List<AggregatedOperationCall> aggOperationCalls) {
 		this.operationCallExtractor = new OperationCallExtractor();
 		this.callCollector = new CollectorSink<>(operationCalls);
-		final Distributor<OperationCall> distributor1 = new Distributor<>(new CopyByReferenceStrategy());
-		final Filter<OperationCall> failedCallFilter = new Filter<>(OperationCall::isFailed);
-		this.failedCallCollector = new CollectorSink<>(failedOperationCalls);
+		final Distributor<OperationCall> distributor = new Distributor<>(new CopyByReferenceStrategy());
 		final OperationCallAggregator callAggregator = new OperationCallAggregator();
 		this.aggCallCollector = new CollectorSink<>(aggOperationCalls);
-		final Filter<AggregatedOperationCall> aggFailedCallFilter = new Filter<>(AggregatedOperationCall::isFailed);
-		this.aggFailedCallCollector = new CollectorSink<>(aggFailedOperationCalls);
-		final Distributor<AggregatedOperationCall> distributor2 = new Distributor<>(new CopyByReferenceStrategy());
 
 		this.inputPort = this.operationCallExtractor.getInputPort();
 
-		super.connectPorts(this.operationCallExtractor.getOutputPort(), distributor1.getInputPort());
-		super.connectPorts(distributor1.getNewOutputPort(), this.callCollector.getInputPort());
-		super.connectPorts(distributor1.getNewOutputPort(), failedCallFilter.getInputPort());
-		super.connectPorts(distributor1.getNewOutputPort(), callAggregator.getInputPort());
-		super.connectPorts(callAggregator.getOutputPort(), distributor2.getInputPort());
-		super.connectPorts(distributor2.getNewOutputPort(), this.aggCallCollector.getInputPort());
-		super.connectPorts(distributor2.getNewOutputPort(), aggFailedCallFilter.getInputPort());
-		super.connectPorts(aggFailedCallFilter.getOutputPort(), this.aggFailedCallCollector.getInputPort());
-		super.connectPorts(failedCallFilter.getOutputPort(), this.failedCallCollector.getInputPort());
+		super.connectPorts(this.operationCallExtractor.getOutputPort(), distributor.getInputPort());
+		super.connectPorts(distributor.getNewOutputPort(), this.callCollector.getInputPort());
+		super.connectPorts(distributor.getNewOutputPort(), callAggregator.getInputPort());
+		super.connectPorts(callAggregator.getOutputPort(), this.aggCallCollector.getInputPort());
 	}
 
 	public InputPort<Trace> getInputPort() {

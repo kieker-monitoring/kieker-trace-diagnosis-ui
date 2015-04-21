@@ -41,23 +41,17 @@ public final class TraceReconstructionComposite extends AbstractCompositeStage {
 
 	private final MultipleInstanceOfFilter<IMonitoringRecord> typeFilter;
 	private final CollectorSink<Trace> tracesCollector;
-	private final CollectorSink<Trace> failedTracesCollector;
-	private final CollectorSink<Trace> failureContainingTracesCollector;
 	private final TraceStatisticsDecorator statisticsDecorator;
 	private final OutputPort<Trace> outputPort;
 	private final LegacyTraceReconstructor legacyReconstructor;
 	private final TraceReconstructor reconstructor;
 
-	public TraceReconstructionComposite(final List<Trace> traces, final List<Trace> failedTraces, final List<Trace> failureContainingTraces) {
+	public TraceReconstructionComposite(final List<Trace> traces) {
 		final Distributor<Trace> distributor = new Distributor<>(new CopyByReferenceStrategy());
-		final Filter<Trace> failedTraceFilter = new Filter<>(trace -> trace.getRootOperationCall().isFailed());
 		final Merger<Trace> merger = new Merger<>();
-		final Filter<Trace> failureContainingTraceFilter = new Filter<>(trace -> trace.getRootOperationCall().containsFailure());
 
 		this.typeFilter = new MultipleInstanceOfFilter<>();
 		this.tracesCollector = new CollectorSink<>(traces);
-		this.failedTracesCollector = new CollectorSink<>(failedTraces);
-		this.failureContainingTracesCollector = new CollectorSink<>(failureContainingTraces);
 		this.statisticsDecorator = new TraceStatisticsDecorator();
 		this.reconstructor = new TraceReconstructor();
 		this.legacyReconstructor = new LegacyTraceReconstructor();
@@ -70,11 +64,7 @@ public final class TraceReconstructionComposite extends AbstractCompositeStage {
 		super.connectPorts(this.legacyReconstructor.getOutputPort(), merger.getNewInputPort());
 		super.connectPorts(merger.getOutputPort(), distributor.getInputPort());
 		super.connectPorts(distributor.getNewOutputPort(), this.tracesCollector.getInputPort());
-		super.connectPorts(distributor.getNewOutputPort(), failedTraceFilter.getInputPort());
-		super.connectPorts(distributor.getNewOutputPort(), failureContainingTraceFilter.getInputPort());
 		super.connectPorts(distributor.getNewOutputPort(), this.statisticsDecorator.getInputPort());
-		super.connectPorts(failedTraceFilter.getOutputPort(), this.failedTracesCollector.getInputPort());
-		super.connectPorts(failureContainingTraceFilter.getOutputPort(), this.failureContainingTracesCollector.getInputPort());
 	}
 
 	public int countIncompleteTraces() {

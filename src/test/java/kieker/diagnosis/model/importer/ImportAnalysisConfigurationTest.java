@@ -38,10 +38,10 @@ public final class ImportAnalysisConfigurationTest {
 		assertThat(configuration.getMetadataRecords(), hasSize(1));
 		assertThat(configuration.getTracesList(), hasSize(100));
 		assertThat(configuration.getAggregatedTraces(), hasSize(4));
-		assertThat(configuration.getFailedTracesList(), hasSize(3));
-		assertThat(configuration.getFailureContainingTracesList(), hasSize(4));
-		assertThat(configuration.getFailedAggregatedTracesList(), hasSize(2));
-		assertThat(configuration.getFailureContainingAggregatedTracesList(), hasSize(3));
+		assertThat(configuration.getTracesList().stream().filter(t -> t.getRootOperationCall().isFailed()).count(), is(3L));
+		assertThat(configuration.getTracesList().stream().filter(t -> t.getRootOperationCall().containsFailure()).count(), is(4L));
+		assertThat(configuration.getAggregatedTraces().stream().filter(t -> t.getRootOperationCall().isFailed()).count(), is(2L));
+		assertThat(configuration.getAggregatedTraces().stream().filter(t -> t.getRootOperationCall().containsFailure()).count(), is(3L));
 	}
 
 	@Test
@@ -53,10 +53,10 @@ public final class ImportAnalysisConfigurationTest {
 		assertThat(configuration.getMetadataRecords(), hasSize(1));
 		assertThat(configuration.getTracesList(), hasSize(1635));
 		assertThat(configuration.getAggregatedTraces(), hasSize(4));
-		assertThat(configuration.getFailedTracesList(), is(empty()));
-		assertThat(configuration.getFailureContainingTracesList(), is(empty()));
-		assertThat(configuration.getFailedAggregatedTracesList(), is(empty()));
-		assertThat(configuration.getFailureContainingAggregatedTracesList(), is(empty()));
+		assertThat(configuration.getTracesList().stream().filter(t -> t.getRootOperationCall().isFailed()).count(), is(0L));
+		assertThat(configuration.getTracesList().stream().filter(t -> t.getRootOperationCall().containsFailure()).count(), is(0L));
+		assertThat(configuration.getAggregatedTraces().stream().filter(t -> t.getRootOperationCall().isFailed()).count(), is(0L));
+		assertThat(configuration.getAggregatedTraces().stream().filter(t -> t.getRootOperationCall().containsFailure()).count(), is(0L));
 	}
 
 	@Test
@@ -68,10 +68,10 @@ public final class ImportAnalysisConfigurationTest {
 		assertThat(configuration.getMetadataRecords(), is(empty()));
 		assertThat(configuration.getTracesList(), is(empty()));
 		assertThat(configuration.getAggregatedTraces(), is(empty()));
-		assertThat(configuration.getFailedTracesList(), is(empty()));
-		assertThat(configuration.getFailureContainingTracesList(), is(empty()));
-		assertThat(configuration.getFailedAggregatedTracesList(), is(empty()));
-		assertThat(configuration.getFailureContainingAggregatedTracesList(), is(empty()));
+		assertThat(configuration.getTracesList().stream().filter(t -> t.getRootOperationCall().isFailed()).count(), is(0L));
+		assertThat(configuration.getTracesList().stream().filter(t -> t.getRootOperationCall().containsFailure()).count(), is(0L));
+		assertThat(configuration.getAggregatedTraces().stream().filter(t -> t.getRootOperationCall().isFailed()).count(), is(0L));
+		assertThat(configuration.getAggregatedTraces().stream().filter(t -> t.getRootOperationCall().containsFailure()).count(), is(0L));
 	}
 
 }

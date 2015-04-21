@@ -16,9 +16,39 @@
 
 package kieker.diagnosis.mainview.subview.aggregatedtraces;
 
+import java.util.List;
+
+import javafx.collections.ListChangeListener.Change;
+import javafx.fxml.FXML;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableView;
+import kieker.diagnosis.domain.AggregatedOperationCall;
+import kieker.diagnosis.domain.AggregatedTrace;
+import kieker.diagnosis.mainview.subview.util.LazyOperationCallTreeItem;
+import kieker.diagnosis.model.DataModel;
+
 /**
  * @author Nils Christian Ehmke
  */
 public final class AggregatedTracesViewController {
 
+	private final DataModel dataModel = DataModel.getInstance();
+
+	@FXML private TreeTableView<AggregatedOperationCall> treetable;
+
+	public void initialize() {
+		this.reloadTreetable();
+		this.dataModel.getAggregatedTraces().addListener((final Change<? extends AggregatedTrace> c) -> this.reloadTreetable());
+	}
+
+	private void reloadTreetable() {
+		final List<AggregatedTrace> traces = this.dataModel.getAggregatedTraces();
+		final TreeItem<AggregatedOperationCall> root = new TreeItem<>();
+		this.treetable.setRoot(root);
+		this.treetable.setShowRoot(false);
+
+		for (final AggregatedTrace trace : traces) {
+			root.getChildren().add(new LazyOperationCallTreeItem<AggregatedOperationCall>(trace.getRootOperationCall()));
+		}
+	}
 }

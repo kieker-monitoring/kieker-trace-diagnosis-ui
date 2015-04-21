@@ -24,8 +24,6 @@ import teetime.framework.AbstractCompositeStage;
 import teetime.framework.InputPort;
 import teetime.framework.Stage;
 import teetime.stage.CollectorSink;
-import teetime.stage.basic.distributor.CopyByReferenceStrategy;
-import teetime.stage.basic.distributor.Distributor;
 
 /**
  * This is a composite {@code TeeTime} stage which aggregates incoming traces, adds statistical data and stores the aggregated traces.
@@ -35,33 +33,16 @@ import teetime.stage.basic.distributor.Distributor;
 public final class TraceAggregationComposite extends AbstractCompositeStage {
 
 	private final TraceAggregator aggregator;
-
 	private final CollectorSink<AggregatedTrace> tracesCollector;
-	private final CollectorSink<AggregatedTrace> failedTracesCollector;
-	private final CollectorSink<AggregatedTrace> failureContainingTracesCollector;
 	private final AggregatedTraceStatisticsDecorator statisticsDecorator;
 
-	public TraceAggregationComposite(final List<AggregatedTrace> traces, final List<AggregatedTrace> failedTraces,
-			final List<AggregatedTrace> failureContainingTraces) {
+	public TraceAggregationComposite(final List<AggregatedTrace> traces) {
 		this.aggregator = new TraceAggregator();
 		this.statisticsDecorator = new AggregatedTraceStatisticsDecorator();
-
-		final Distributor<AggregatedTrace> distributor = new Distributor<>(new CopyByReferenceStrategy());
-		final Filter<AggregatedTrace> failedTraceFilter = new Filter<>(trace -> trace.getRootOperationCall().isFailed());
-		final Filter<AggregatedTrace> failureContainingTraceFilter = new Filter<>(trace -> trace.getRootOperationCall().containsFailure());
 		this.tracesCollector = new CollectorSink<>(traces);
-		this.failedTracesCollector = new CollectorSink<>(failedTraces);
-		this.failureContainingTracesCollector = new CollectorSink<>(failureContainingTraces);
 
 		super.connectPorts(this.aggregator.getOutputPort(), this.statisticsDecorator.getInputPort());
-		super.connectPorts(this.statisticsDecorator.getOutputPort(), distributor.getInputPort());
-
-		super.connectPorts(distributor.getNewOutputPort(), this.tracesCollector.getInputPort());
-		super.connectPorts(distributor.getNewOutputPort(), failedTraceFilter.getInputPort());
-		super.connectPorts(distributor.getNewOutputPort(), failureContainingTraceFilter.getInputPort());
-
-		super.connectPorts(failedTraceFilter.getOutputPort(), this.failedTracesCollector.getInputPort());
-		super.connectPorts(failureContainingTraceFilter.getOutputPort(), this.failureContainingTracesCollector.getInputPort());
+		super.connectPorts(this.statisticsDecorator.getOutputPort(), this.tracesCollector.getInputPort());
 	}
 
 	public InputPort<Trace> getInputPort() {
