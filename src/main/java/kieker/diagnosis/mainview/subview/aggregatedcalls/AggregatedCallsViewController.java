@@ -16,53 +16,10 @@
 
 package kieker.diagnosis.mainview.subview.aggregatedcalls;
 
-import kieker.diagnosis.domain.AggregatedOperationCall;
-import kieker.diagnosis.mainview.subview.ISubController;
-import kieker.diagnosis.mainview.subview.ISubView;
-import kieker.diagnosis.mainview.subview.aggregatedcalls.AggregatedCallsViewModel.Filter;
-
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
 
 /**
  * @author Nils Christian Ehmke
  */
+public final class AggregatedCallsViewController {
 
-public final class AggregatedCallsViewController implements ISubController, SelectionListener, TraverseListener {
-
-	private AggregatedCallsView view;
-
-	private AggregatedCallsViewModel model;
-
-	@Override
-	public ISubView getView() {
-		return this.view;
-	}
-
-	@Override
-	public void widgetSelected(final SelectionEvent e) {
-		if (e.widget == this.view.getBtn1()) {
-			this.model.setFilter(Filter.NONE);
-		}
-		if (e.widget == this.view.getBtn2()) {
-			this.model.setFilter(Filter.JUST_FAILED);
-		}
-		if ((e.item != null) && (e.item.getData() instanceof AggregatedOperationCall)) {
-			this.model.setOperationCall((AggregatedOperationCall) e.item.getData());
-		}
-	}
-
-	@Override
-	public void widgetDefaultSelected(final SelectionEvent e) {
-		// Just implemented for the interface
-	}
-
-	@Override
-	public void keyTraversed(final TraverseEvent e) {
-		if (e.widget == this.view.getFilterText()) {
-			this.model.setRegExpr(this.view.getFilterText().getText());
-		}
-	}
 }

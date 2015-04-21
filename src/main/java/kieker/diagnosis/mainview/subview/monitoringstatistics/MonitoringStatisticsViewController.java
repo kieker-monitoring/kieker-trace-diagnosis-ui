@@ -16,20 +16,9 @@
 
 package kieker.diagnosis.mainview.subview.monitoringstatistics;
 
-import kieker.diagnosis.mainview.subview.ISubController;
-import kieker.diagnosis.mainview.subview.ISubView;
-
 /**
  * @author Nils Christian Ehmke
  */
-
-public final class MonitoringStatisticsViewController implements ISubController {
-
-	private MonitoringStatisticsView view;
-
-	@Override
-	public ISubView getView() {
-		return this.view;
-	}
+public final class MonitoringStatisticsViewController {
 
 }

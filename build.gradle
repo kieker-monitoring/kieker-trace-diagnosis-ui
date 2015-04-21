@@ -9,46 +9,19 @@ targetCompatibility = '1.8'
 
 repositories {
 	mavenCentral()
-	maven { url 'https://swt-repo.googlecode.com/svn/repo/' }
 	maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' } 
 	maven { url 'https://jitpack.io' }
 }
 
-configurations { 
-	windowsX86Runtime
-	windowsX64Runtime
-	linuxX86Runtime
-	linuxX64Runtime
-		  
-	providedCompile 
-}
-
 dependencies {
-	// One of the runtime dependencies has to be used during the compilation. Modify this entry for Eclipse depending on your development JRE.
-	if (System.properties['os.name'].toLowerCase().contains('windows')) {
-	    providedCompile 'org.eclipse.swt:org.eclipse.swt.win32.win32.x86_64:4.4'
-	} else {
-	    providedCompile 'org.eclipse.swt:org.eclipse.swt.gtk.linux.x86_64:4.4'
-	}
-	
-	windowsX86Runtime 'org.eclipse.swt:org.eclipse.swt.win32.win32.x86:4.4'
-	windowsX64Runtime 'org.eclipse.swt:org.eclipse.swt.win32.win32.x86_64:4.4'
-	linuxX86Runtime 'org.eclipse.swt:org.eclipse.swt.gtk.linux.x86:4.4'
-	linuxX64Runtime 'org.eclipse.swt:org.eclipse.swt.gtk.linux.x86_64:4.4'
-
 	compile 'net.sourceforge.teetime:teetime:1.1-SNAPSHOT'
 	compile 'net.sourceforge.teetime-stages:teetime-stages:1.0-SNAPSHOT'
 	compile 'net.kieker-monitoring:kieker:1.11'
-	compile 'org.eclipse:jface:3.2.1-M20060908-1000'
 
 	testCompile 'org.hamcrest:hamcrest-core:1.3'
 	testCompile 'org.hamcrest:hamcrest-library:1.3'
 	testCompile 'junit:junit:4.12'
 }
-
-// Add the provided-scoped dependencies to the classpaths
-sourceSets.main.compileClasspath += configurations.providedCompile
-eclipse.classpath.plusConfigurations += [configurations.providedCompile]
 
 apply plugin: 'findbugs'
 findbugs { 
@@ -59,31 +32,11 @@ findbugs {
 	excludeFilter = file('config/findbugs/excludeFilter.xml')
 }
 
-def commonStartScriptConfiguration = {
+task createStartScript(type: CreateStartScripts) {
 	mainClassName = project.mainClassName
 	applicationName = 'start' 
 	outputDir = new File(project.buildDir, 'scripts')
 	classpath = jar.outputs.files + project.configurations.runtime 
-}
-
-task createStartScriptWinX86(type: CreateStartScripts) {
-	configure commonStartScriptConfiguration
-	classpath += project.configurations.windowsX86Runtime
-}
-
-task createStartScriptWinX64(type: CreateStartScripts) {
-	configure commonStartScriptConfiguration
-	classpath += project.configurations.windowsX64Runtime
-}
-
-task createStartScriptLinuxX86(type: CreateStartScripts) {
-	configure commonStartScriptConfiguration
-	classpath += project.configurations.linuxX86Runtime 
-}
-
-task createStartScriptLinuxX64(type: CreateStartScripts) {
-	configure commonStartScriptConfiguration
-	classpath += project.configurations.linuxX64Runtime
 }
 
 def commonDistBinConfiguration = {
@@ -98,69 +51,30 @@ def commonDistBinConfiguration = {
 	}
 }
 
-task distBinWinX86(type: Zip, dependsOn: [jar, createStartScriptWinX86]) {
-	description = 'Bundles the project as a JVM application with OS specific libs and script for Windows x86.'
-	classifier = 'windows_x86'
+task distBinWin(type: Zip, dependsOn: [jar, createStartScript]) {
+	description = 'Bundles the project as a JVM application with OS specific libs and script for Windows.'
+	classifier = 'windows'
 
 	configure commonDistBinConfiguration
 
 	into ('bin') {
-		from createStartScriptWinX86.getWindowsScript()
-	}
-
-	into('lib') {
-		from configurations.windowsX86Runtime
+		from createStartScript.getWindowsScript()
 	}
 }
 
-task distBinWinX64(type: Zip, dependsOn: [jar, createStartScriptWinX64]) {
-	description = 'Bundles the project as a JVM application with OS specific libs and script for Windows x64.'
-	classifier = 'windows_x64'
-
-	configure commonDistBinConfiguration
-
-	into ('bin') {
-		from createStartScriptWinX64.getWindowsScript()
-	}
-
-	into('lib') {
-		from configurations.windowsX64Runtime
-	}
-}
-
-task distBinLinuxX86(type: Tar, dependsOn: [jar, createStartScriptLinuxX86]) {
-	description = 'Bundles the project as a JVM application with OS specific libs and script for Linux x86.'
-	classifier = 'linux_x86'
+task distBinLinux(type: Tar, dependsOn: [jar, createStartScript]) {
+	description = 'Bundles the project as a JVM application with OS specific libs and script for Linux.'
+	classifier = 'linux'
 	compression = Compression.GZIP
 
 	configure commonDistBinConfiguration
 
 	into ('bin') {
-		from createStartScriptLinuxX86.getUnixScript()
-	}
-
-	into('lib') {
-		from configurations.linuxX86Runtime
+		from createStartScript.getUnixScript()
 	}
 }
 
-task distBinLinuxX64(type: Tar, dependsOn: [jar, createStartScriptLinuxX64]) {
-	description = 'Bundles the project as a JVM application with OS specific libs and script for Linux x64.'
-	classifier = 'linux_x64'
-	compression = Compression.GZIP
-
-	configure commonDistBinConfiguration
-
-	into ('bin') {
-		from createStartScriptLinuxX64.getUnixScript()
-	}
-
-	into('lib') {
-		from configurations.linuxX64Runtime
-	}
-}
-
-task distAllBin(dependsOn: [distBinWinX86, distBinWinX64, distBinLinuxX86, distBinLinuxX64]) {
+task distAllBin(dependsOn: [distBinWin, distBinLinux]) {
 	description = 'Bundles the project as a JVM application with OS specific libs and scripts for all platforms.'
 }
 

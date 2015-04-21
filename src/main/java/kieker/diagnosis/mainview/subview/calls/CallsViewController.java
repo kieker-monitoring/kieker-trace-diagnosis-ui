@@ -16,58 +16,9 @@
 
 package kieker.diagnosis.mainview.subview.calls;
 
-import kieker.diagnosis.domain.OperationCall;
-import kieker.diagnosis.mainview.Controller;
-import kieker.diagnosis.mainview.subview.ISubController;
-import kieker.diagnosis.mainview.subview.ISubView;
-import kieker.diagnosis.mainview.subview.calls.CallsViewModel.Filter;
-
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
-
 /**
  * @author Nils Christian Ehmke
  */
+public final class CallsViewController {
 
-public final class CallsViewController implements ISubController, SelectionListener, TraverseListener {
-
-	private Controller masterController;
-
-	private CallsViewModel model;
-
-	private CallsView view;
-
-	@Override
-	public ISubView getView() {
-		return this.view;
-	}
-
-	@Override
-	public void widgetSelected(final SelectionEvent e) {
-		if (e.widget == this.view.getBtnShowAll()) {
-			this.model.setFilter(Filter.NONE);
-		}
-		if (e.widget == this.view.getBtnShowJustFailed()) {
-			this.model.setFilter(Filter.JUST_FAILED);
-		}
-		if ((e.item != null) && (e.item.getData() instanceof OperationCall)) {
-			this.model.setOperationCall((OperationCall) e.item.getData());
-		}
-	}
-
-	@Override
-	public void widgetDefaultSelected(final SelectionEvent e) {
-		if (e.widget == this.view.getTable()) {
-			this.masterController.jumpToCorrespondingTrace((OperationCall) e.item.getData());
-		}
-	}
-
-	@Override
-	public void keyTraversed(final TraverseEvent e) {
-		if (e.widget == this.view.getFilterText()) {
-			this.model.setRegExpr(this.view.getFilterText().getText());
-		}
-	}
 }
