@@ -1,0 +1,35 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane fx:id="view" xmlns:fx="http://javafx.com/fxml"
+	AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0"
+	AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+
+	<vgap>10</vgap>
+
+	<HBox>
+		<spacing>10</spacing>
+
+		<fx:define>
+			<ToggleGroup fx:id="togglegroup" />
+		</fx:define>
+
+		<RadioButton text="%AggregatedTracesView.btnShowAll.text"
+			selected="true" toggleGroup="$togglegroup" />
+		<RadioButton text="%AggregatedTracesView.btnShowJustFailed.text"
+			toggleGroup="$togglegroup" />
+		<RadioButton text="%AggregatedTracesView.btnShowJustFailureContaining.text"
+			toggleGroup="$togglegroup" />
+	</HBox>
+
+	<TreeTableView fx:id="table" GridPane.hgrow="ALWAYS"
+		GridPane.vgrow="ALWAYS" GridPane.rowIndex="1" tableMenuButtonVisible="true">
+
+		<columns>
+			<TreeTableColumn
+				text="%AggregatedTracesView.trclmnExecutionContainer.text" />
+		</columns>
+
+	</TreeTableView>
+
+</GridPane>

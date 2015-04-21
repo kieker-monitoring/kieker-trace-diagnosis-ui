@@ -192,4 +192,9 @@ public final class DataModel extends Observable {
 		return this.timeUnit;
 	}
 
+	public static DataModel getInstance() {
+		// To be removed
+		return new DataModel();
+	}
+
 }

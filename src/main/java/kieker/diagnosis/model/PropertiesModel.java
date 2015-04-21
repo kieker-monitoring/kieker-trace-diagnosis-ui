@@ -57,7 +57,7 @@ public final class PropertiesModel extends Observable {
 		this.timeUnit = TimeUnit.valueOf(preferences.get(PropertiesModel.KEY_TIMEUNIT, TimeUnit.NANOSECONDS.name()));
 		this.componentNames = ComponentNames.valueOf(preferences.get(PropertiesModel.KEY_COMPONENTS, ComponentNames.LONG.name()));
 		this.operationNames = OperationNames.valueOf(preferences.get(PropertiesModel.KEY_OPERATIONS, OperationNames.SHORT.name()));
-		this.maxTracesToShow = Integer.parseInt(preferences.get(KEY_MAX_TRACES, "1000000"));
+		this.maxTracesToShow = Integer.parseInt(preferences.get(PropertiesModel.KEY_MAX_TRACES, "1000000"));
 	}
 
 	private void saveSettings() {
@@ -67,7 +67,7 @@ public final class PropertiesModel extends Observable {
 		preferences.put(PropertiesModel.KEY_TIMEUNIT, this.timeUnit.name());
 		preferences.put(PropertiesModel.KEY_COMPONENTS, this.componentNames.name());
 		preferences.put(PropertiesModel.KEY_OPERATIONS, this.operationNames.name());
-		preferences.put(KEY_MAX_TRACES, Integer.toString(this.maxTracesToShow));
+		preferences.put(PropertiesModel.KEY_MAX_TRACES, Integer.toString(this.maxTracesToShow));
 
 		try {
 			preferences.flush();
@@ -156,6 +156,11 @@ public final class PropertiesModel extends Observable {
 	 */
 	public enum OperationNames {
 		SHORT, LONG
+	}
+
+	public static PropertiesModel getInstance() {
+		// To be removed
+		return new PropertiesModel();
 	}
 
 }

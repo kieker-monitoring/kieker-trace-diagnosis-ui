@@ -1,0 +1,66 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.*?>
+
+<GridPane fx:id="view" xmlns:fx="http://javafx.com/fxml"
+	fx:controller="kieker.diagnosis.mainview.subview.traces.TracesViewController"
+	AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0"
+	AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+
+	<vgap>10</vgap>
+
+	<HBox>
+		<spacing>10</spacing>
+
+		<fx:define>
+			<ToggleGroup fx:id="togglegroup" />
+		</fx:define>
+
+		<RadioButton text="%TracesView.btnShowAll.text" selected="true"
+			toggleGroup="$togglegroup" />
+		<RadioButton text="%TracesView.btnShowJustFailed.text"
+			toggleGroup="$togglegroup" />
+		<RadioButton text="%TracesView.showJustFailureContaining.text"
+			toggleGroup="$togglegroup" />
+	</HBox>
+
+	<TreeTableView fx:id="treetable" GridPane.hgrow="ALWAYS"
+		GridPane.vgrow="ALWAYS" GridPane.rowIndex="1" tableMenuButtonVisible="true">
+		<columns>
+			<TreeTableColumn text="%TracesView.trclmnExecutionContainer.text">
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory property="container" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%TracesView.trclmnComponent.text">
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory property="component" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%TracesView.trclmnOperation.text">
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory property="operation" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%TracesView.trclmnTraceDepth.text">
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory property="stackDepth" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%TracesView.trclmnTraceSize.text">
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory property="stackSize" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%TracesView.trclmnDuration.text" />
+			<TreeTableColumn text="%TracesView.trclmnPercent.text" />
+			<TreeTableColumn text="%TracesView.trclmnTraceId.text" />
+		</columns>
+	</TreeTableView>
+
+</GridPane>

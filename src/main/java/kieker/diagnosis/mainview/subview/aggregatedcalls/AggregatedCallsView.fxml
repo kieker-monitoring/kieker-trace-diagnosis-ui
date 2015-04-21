@@ -1,0 +1,144 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.*?>
+
+<GridPane xmlns:fx="http://javafx.com/fxml"
+	fx:controller="kieker.diagnosis.mainview.subview.aggregatedcalls.AggregatedCallsViewController"
+	AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0"
+	AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+
+	<vgap>10</vgap>
+
+	<HBox GridPane.rowIndex="0">
+		<spacing>10</spacing>
+
+		<fx:define>
+			<ToggleGroup fx:id="togglegroup" />
+		</fx:define>
+
+		<RadioButton text="%AggregatedCallsView.btnShowAll.text"
+			selected="true" toggleGroup="$togglegroup" />
+		<RadioButton text="%AggregatedCallsView.btnShowJustFailed.text"
+			toggleGroup="$togglegroup" />
+	</HBox>
+	
+	<TextField promptText="%AggregatedCallsView.text.message" fx:id="regexpfilter"
+		GridPane.rowIndex="1" />
+
+	<TableView fx:id="table" GridPane.hgrow="ALWAYS"
+		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true">
+		<columns>
+			<TableColumn text="%AggregatedCallsView.tblclmnExecutionContainer.text">
+				<cellValueFactory>
+					<PropertyValueFactory property="container" />
+				</cellValueFactory>
+			</TableColumn>
+
+			<TableColumn text="%AggregatedCallsView.tblclmnComponent.text">
+				<cellValueFactory>
+					<PropertyValueFactory property="container" />
+				</cellValueFactory>
+			</TableColumn>
+
+			<TableColumn text="%AggregatedCallsView.tblclmnOperation.text">
+				<cellValueFactory>
+					<PropertyValueFactory property="container" />
+				</cellValueFactory>
+			</TableColumn>
+
+			<TableColumn text="%AggregatedCallsView.tblclmnNumberOfCalls.text">
+				<cellValueFactory>
+					<PropertyValueFactory property="container" />
+				</cellValueFactory>
+			</TableColumn>
+
+			<TableColumn text="%AggregatedCallsView.tblclmnMinimalDuration.text">
+				<cellValueFactory>
+					<kieker.diagnosis.mainview.subview.util.DurationCellFactory
+						property="minDuration" />
+				</cellValueFactory>
+			</TableColumn>
+
+			<TableColumn text="%AggregatedCallsView.tblclmnMeanDuration.text">
+				<cellValueFactory>
+					<kieker.diagnosis.mainview.subview.util.DurationCellFactory
+						property="meanDuration" />
+				</cellValueFactory>
+			</TableColumn>
+
+			<TableColumn text="%AggregatedCallsView.tblclmnMedianDuration.text">
+				<cellValueFactory>
+					<kieker.diagnosis.mainview.subview.util.DurationCellFactory
+						property="medianDuration" />
+				</cellValueFactory>
+			</TableColumn>
+
+			<TableColumn text="%AggregatedCallsView.tblclmnMaximalDuration.text">
+				<cellValueFactory>
+					<kieker.diagnosis.mainview.subview.util.DurationCellFactory
+						property="maxDuration" />
+				</cellValueFactory>
+			</TableColumn>
+
+			<TableColumn text="%AggregatedCallsView.tblclmnTotalDuration.text">
+				<cellValueFactory>
+					<kieker.diagnosis.mainview.subview.util.DurationCellFactory
+						property="totalDuration" />
+				</cellValueFactory>
+			</TableColumn>
+
+		</columns>
+	</TableView>
+
+	<GridPane fx:id="detailpanel" GridPane.rowIndex="4">
+		<TextField text="%AggregatedCallsView.tblclmnExecutionContainer.text"
+			editable="false" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="1" GridPane.columnIndex="2" />
+
+		<TextField text="%AggregatedCallsView.tblclmnComponent.text"
+			editable="false" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="2" GridPane.columnIndex="2" />
+
+		<TextField text="%AggregatedCallsView.tblclmnOperation.text"
+			editable="false" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="3" GridPane.columnIndex="2" />
+
+		<TextField text="%AggregatedCallsView.tblclmnMinimalDuration.text"
+			editable="false" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="4" GridPane.columnIndex="2" />
+
+		<TextField text="%AggregatedCallsView.tblclmnMeanDuration.text"
+			editable="false" GridPane.rowIndex="5" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="5" GridPane.columnIndex="2" />
+
+		<TextField text="%AggregatedCallsView.tblclmnMedianDuration.text"
+			editable="false" GridPane.rowIndex="6" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="6" GridPane.columnIndex="2" />
+
+		<TextField text="%AggregatedCallsView.tblclmnMaximalDuration.text"
+			editable="false" GridPane.rowIndex="7" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="7" GridPane.columnIndex="2" />
+
+		<TextField text="%AggregatedCallsView.tblclmnTotalDuration.text"
+			editable="false" GridPane.rowIndex="8" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="8" GridPane.columnIndex="2" />
+
+		<TextField
+			text="%AggregatedCallsView.tblclmnNumberOfCalls.text"
+			editable="false" GridPane.rowIndex="9" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="9" GridPane.columnIndex="2" />
+	</GridPane>
+
+	<HBox fx:id="statusbar" GridPane.rowIndex="5">
+		<TextField text="%AggregatedCallsView.lblCounter.text" editable="false" />
+	</HBox>
+</GridPane>
