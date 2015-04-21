@@ -33,9 +33,6 @@ import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.model.importer.ImportAnalysisConfiguration;
-
-import org.springframework.stereotype.Repository;
-
 import teetime.framework.Analysis;
 
 /**
@@ -43,8 +40,9 @@ import teetime.framework.Analysis;
  *
  * @author Nils Christian Ehmke
  */
-@Repository
 public final class DataModel extends Observable {
+
+	private static final DataModel INSTANCE = new DataModel();
 
 	private List<Trace> traces = Collections.emptyList();
 	private List<Trace> failureContainingTraces = Collections.emptyList();
@@ -63,11 +61,13 @@ public final class DataModel extends Observable {
 	private long beginTimestamp;
 	private long endTimestamp;
 
-	public void loadMonitoringLogFromFS(final String directory) {
+	private DataModel() {}
+
+	public void loadMonitoringLogFromFS(final File importDirectory) {
 		final long tin = System.currentTimeMillis();
 
 		// Load and analyze the monitoring logs from the given directory
-		this.importDirectory = new File(directory);
+		this.importDirectory = importDirectory;
 		final ImportAnalysisConfiguration analysisConfiguration = new ImportAnalysisConfiguration(this.importDirectory);
 		final Analysis<ImportAnalysisConfiguration> analysis = new Analysis<>(analysisConfiguration);
 		analysis.executeBlocking();
@@ -193,8 +193,7 @@ public final class DataModel extends Observable {
 	}
 
 	public static DataModel getInstance() {
-		// To be removed
-		return new DataModel();
+		return DataModel.INSTANCE;
 	}
 
 }

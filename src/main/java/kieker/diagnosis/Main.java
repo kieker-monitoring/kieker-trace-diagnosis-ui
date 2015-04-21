@@ -16,35 +16,45 @@
 
 package kieker.diagnosis;
 
-import kieker.diagnosis.mainview.Controller;
+import java.net.URL;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 /**
- * Contains the main method of this application. Do not move this class without changing the scanned package name for the Spring context.
- * 
+ * Contains the main method of this application.
+ *
  * @author Nils Christian Ehmke
  */
-public final class Main {
-
-	private Main() {}
+public final class Main extends Application {
 
 	/**
-	 * The main method of this application. It initializes the Spring context and uses the main controller to start everything.
-	 * 
+	 * The main method of this application. It initializes the JavaFX context and uses the main controller to start everything.
+	 *
 	 * @param args
 	 *            The command line arguments. They have currently no effect.
 	 */
 	public static void main(final String[] args) {
-		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-			final String applicationPackageName = Main.class.getPackage().getName();
-			context.scan(applicationPackageName);
-			context.refresh();
+		Application.launch(args);
+	}
 
-			final Controller controller = context.getBean(Controller.class);
-			controller.showView();
-		}
+	@Override
+	public void start(final Stage stage) throws Exception {
+		final URL resource = Main.class.getClassLoader().getResource("kieker/diagnosis/mainview/View.fxml");
+		final Pane pane = (Pane) FXMLLoader.load(resource, ResourceBundle.getBundle("kieker.diagnosis.mainview.view", Locale.getDefault()));
+		final Scene root = new Scene(pane);
+		stage.setScene(root);
 
+		stage.getIcons().add(new Image("kieker-logo.png"));
+		stage.setTitle("Kieker Trace Diagnosis - 1.0-SNAPSHOT");
+		stage.setMaximized(true);
+		stage.show();
 	}
 
 }
