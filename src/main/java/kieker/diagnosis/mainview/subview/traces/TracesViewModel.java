@@ -18,16 +18,13 @@ package kieker.diagnosis.mainview.subview.traces;
 
 import kieker.diagnosis.domain.OperationCall;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 /**
  * @author Nils Christian Ehmke
  */
-@Component
+
 public final class TracesViewModel {
 
-	@Autowired private TracesView view;
+	private TracesView view;
 
 	private Filter filter = Filter.NONE;
 	private OperationCall operationCall;

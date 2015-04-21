@@ -25,21 +25,17 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * The sub-controller responsible for the sub-view presenting the available traces.
- * 
+ *
  * @author Nils Christian Ehmke
  */
-@Component
+
 public final class TracesViewController implements ISubController, SelectionListener, TraverseListener {
 
-	@Autowired
 	private TracesView view;
 
-	@Autowired
 	private TracesViewModel model;
 
 	@Override

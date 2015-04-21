@@ -25,18 +25,16 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Nils Christian Ehmke
  */
-@Component
+
 public final class AggregatedTracesViewController implements ISubController, SelectionListener, TraverseListener {
 
-	@Autowired private AggregatedTracesView view;
+	private AggregatedTracesView view;
 
-	@Autowired private AggregatedTracesViewModel model;
+	private AggregatedTracesViewModel model;
 
 	@Override
 	public ISubView getView() {

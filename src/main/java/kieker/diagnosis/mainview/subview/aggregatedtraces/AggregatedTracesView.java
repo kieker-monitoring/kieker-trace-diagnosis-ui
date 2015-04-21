@@ -51,25 +51,23 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.wb.swt.SWTResourceManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Nils Christian Ehmke
  */
-@Component
+
 public final class AggregatedTracesView implements Observer, ISubView {
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("kieker.diagnosis.mainview.subview.aggregatedtraces.aggregatedtracesview"); //$NON-NLS-1$
 
 	private static final String N_A = "N/A";
 
-	@Autowired private AggregatedTracesViewModel model;
+	private AggregatedTracesViewModel model;
 
-	@Autowired private AggregatedTracesViewController controller;
+	private AggregatedTracesViewController controller;
 
-	@Autowired private DataModel dataModel;
+	private DataModel dataModel;
 
-	@Autowired private PropertiesModel propertiesModel;
+	private PropertiesModel propertiesModel;
 
 	private List<AggregatedTrace> cachedDataModelContent;
 
@@ -502,10 +500,10 @@ public final class AggregatedTracesView implements Observer, ISubView {
 
 			if (parent != null) {
 				item.setText(new String[] { call.getContainer(), componentName, operationString, "", Integer.toString(call.getStackDepth()), Integer.toString(call.getStackSize()),
-						minDuration, avgDuration, meanDuration, maxDuration, totalDuration, });
+					minDuration, avgDuration, meanDuration, maxDuration, totalDuration, });
 			} else {
 				item.setText(new String[] { call.getContainer(), componentName, operationString, Integer.toString(call.getStackDepth()), Integer.toString(call.getStackSize()),
-						Integer.toString(call.getCalls()), minDuration, avgDuration, meanDuration, maxDuration, totalDuration, });
+					Integer.toString(call.getCalls()), minDuration, avgDuration, meanDuration, maxDuration, totalDuration, });
 			}
 
 			if (call.isFailed()) {

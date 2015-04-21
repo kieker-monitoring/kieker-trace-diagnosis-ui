@@ -52,21 +52,18 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.wb.swt.SWTResourceManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
 public final class CallsView implements ISubView, Observer {
 
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("kieker.diagnosis.mainview.subview.calls.callsview"); //$NON-NLS-1$
 
 	private static final String N_A = "N/A";
 
-	@Autowired private DataModel dataModel;
-	@Autowired private PropertiesModel propertiesModel;
+	private DataModel dataModel;
+	private PropertiesModel propertiesModel;
 
-	@Autowired private CallsViewModel model;
-	@Autowired private CallsViewController controller;
+	private CallsViewModel model;
+	private CallsViewController controller;
 
 	private List<OperationCall> cachedDataModelContent;
 

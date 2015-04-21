@@ -51,26 +51,24 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Nils Christian Ehmke
  */
-@Component
+
 public final class AggregatedCallsView implements ISubView, Observer {
 
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("kieker.diagnosis.mainview.subview.aggregatedcalls.aggregatedcallsview"); //$NON-NLS-1$
 
 	private static final String N_A = "N/A";
 
-	@Autowired private AggregatedCallsViewModel model;
+	private AggregatedCallsViewModel model;
 
-	@Autowired private DataModel dataModel;
+	private DataModel dataModel;
 
-	@Autowired private PropertiesModel propertiesModel;
+	private PropertiesModel propertiesModel;
 
-	@Autowired private AggregatedCallsViewController controller;
+	private AggregatedCallsViewController controller;
 
 	private List<AggregatedOperationCall> cachedDataModelContent;
 
@@ -441,7 +439,7 @@ public final class AggregatedCallsView implements ISubView, Observer {
 			final String totalDuration = targetTimeUnit.convert(call.getTotalDuration(), sourceTimeUnit) + " " + shortTimeUnit;
 
 			item.setText(new String[] { call.getContainer(), componentName, operationString, Long.toString(call.getCalls()), minDuration, avgDuration, meanDuration, maxDuration,
-				totalDuration, });
+					totalDuration, });
 
 			if (call.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);

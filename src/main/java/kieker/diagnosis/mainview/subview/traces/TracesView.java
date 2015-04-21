@@ -51,25 +51,23 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.wb.swt.SWTResourceManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Nils Christian Ehmke
  */
-@Component
+
 public final class TracesView implements Observer, ISubView {
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("kieker.diagnosis.mainview.subview.traces.tracesview"); //$NON-NLS-1$
 
 	private static final String N_A = "N/A";
 
-	@Autowired private DataModel dataModel;
+	private DataModel dataModel;
 
-	@Autowired private TracesViewModel model;
+	private TracesViewModel model;
 
-	@Autowired private TracesViewController controller;
+	private TracesViewController controller;
 
-	@Autowired private PropertiesModel propertiesModel;
+	private PropertiesModel propertiesModel;
 
 	private List<Trace> cachedDataModelContent;
 
@@ -476,7 +474,7 @@ public final class TracesView implements Observer, ISubView {
 			final String duration = targetTimeUnit.convert(call.getDuration(), sourceTimeUnit) + " " + shortTimeUnit;
 
 			item.setText(new String[] { call.getContainer(), componentName, operationString, Integer.toString(call.getStackDepth()), Integer.toString(call.getStackSize()),
-					duration, String.format("%.1f%%", call.getPercent()), traceID, Long.toString(call.getTimestamp()), });
+				duration, String.format("%.1f%%", call.getPercent()), traceID, Long.toString(call.getTimestamp()), });
 
 			if (call.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(SWT.COLOR_RED);

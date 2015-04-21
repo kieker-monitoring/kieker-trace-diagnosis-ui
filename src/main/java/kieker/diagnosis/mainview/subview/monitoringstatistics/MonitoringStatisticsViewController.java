@@ -19,16 +19,13 @@ package kieker.diagnosis.mainview.subview.monitoringstatistics;
 import kieker.diagnosis.mainview.subview.ISubController;
 import kieker.diagnosis.mainview.subview.ISubView;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 /**
  * @author Nils Christian Ehmke
  */
-@Component
+
 public final class MonitoringStatisticsViewController implements ISubController {
 
-	@Autowired private MonitoringStatisticsView view;
+	private MonitoringStatisticsView view;
 
 	@Override
 	public ISubView getView() {

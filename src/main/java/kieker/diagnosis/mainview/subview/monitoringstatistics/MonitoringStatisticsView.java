@@ -37,13 +37,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Nils Christian Ehmke
  */
-@Component
+
 public final class MonitoringStatisticsView implements ISubView, Observer {
 
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("kieker.diagnosis.mainview.subview.monitoringstatistics.monitoringstatisticsview"); //$NON-NLS-1$
@@ -53,8 +51,8 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 
 	private static final String N_A = "N/A";
 
-	@Autowired private PropertiesModel propertiesModel;
-	@Autowired private DataModel dataModel;
+	private PropertiesModel propertiesModel;
+	private DataModel dataModel;
 
 	private Composite composite;
 	private Label lblMonitoringLogDisplay;
@@ -119,12 +117,12 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 	}
 
 	private String assembleSizeString(final float size) {
-		String importDirectorySizeString = N_A;
+		String importDirectorySizeString = MonitoringStatisticsView.N_A;
 
 		float newSize = size;
-		for (final String unit : UNITS) {
-			if (newSize >= SIZE_OF_BYTE) {
-				newSize /= SIZE_OF_BYTE;
+		for (final String unit : MonitoringStatisticsView.UNITS) {
+			if (newSize >= MonitoringStatisticsView.SIZE_OF_BYTE) {
+				newSize /= MonitoringStatisticsView.SIZE_OF_BYTE;
 			} else {
 				importDirectorySizeString = String.format("%.1f %s", newSize, unit);
 				break;
@@ -159,113 +157,113 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 		this.composite.setLayout(new GridLayout(2, false));
 
 		final Label lblMonitoringLog = new Label(this.composite, SWT.NONE);
-		lblMonitoringLog.setText(BUNDLE.getString("MonitoringStatisticsView.lblMonitoringLog.text") + ":"); //$NON-NLS-1$
+		lblMonitoringLog.setText(MonitoringStatisticsView.BUNDLE.getString("MonitoringStatisticsView.lblMonitoringLog.text") + ":"); //$NON-NLS-1$
 
 		this.lblMonitoringLogDisplay = new Label(this.composite, SWT.NONE);
 		this.lblMonitoringLogDisplay.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		this.lblMonitoringLogDisplay.setText(N_A);
+		this.lblMonitoringLogDisplay.setText(MonitoringStatisticsView.N_A);
 
 		final Label lblLine1 = new Label(this.composite, SWT.SEPARATOR | SWT.HORIZONTAL);
 		lblLine1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 
 		final Label lblMonitoringLogSize = new Label(this.composite, SWT.NONE);
-		lblMonitoringLogSize.setText(BUNDLE.getString("MonitoringStatisticsView.lblMonitoringLogSize.text") + ":"); //$NON-NLS-1$
+		lblMonitoringLogSize.setText(MonitoringStatisticsView.BUNDLE.getString("MonitoringStatisticsView.lblMonitoringLogSize.text") + ":"); //$NON-NLS-1$
 
 		this.lblMonitoringLogSizeDisplay = new Label(this.composite, SWT.NONE);
-		this.lblMonitoringLogSizeDisplay.setText(N_A);
+		this.lblMonitoringLogSizeDisplay.setText(MonitoringStatisticsView.N_A);
 
 		final Label lblAnalysisTime = new Label(this.composite, SWT.NONE);
-		lblAnalysisTime.setText(BUNDLE.getString("MonitoringStatisticsView.lblAnalysisTime.text") + ":"); //$NON-NLS-1$
+		lblAnalysisTime.setText(MonitoringStatisticsView.BUNDLE.getString("MonitoringStatisticsView.lblAnalysisTime.text") + ":"); //$NON-NLS-1$
 
 		this.lblAnalysisTimeDisplay = new Label(this.composite, SWT.NONE);
-		this.lblAnalysisTimeDisplay.setText(N_A);
+		this.lblAnalysisTimeDisplay.setText(MonitoringStatisticsView.N_A);
 
 		final Label lblLine2 = new Label(this.composite, SWT.SEPARATOR | SWT.HORIZONTAL);
 		lblLine2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 
 		final Label lblBeginOfMonitoring = new Label(this.composite, SWT.NONE);
-		lblBeginOfMonitoring.setText(BUNDLE.getString("MonitoringStatisticsView.lblBeginOfMonitoring.text") + ":"); //$NON-NLS-1$
+		lblBeginOfMonitoring.setText(MonitoringStatisticsView.BUNDLE.getString("MonitoringStatisticsView.lblBeginOfMonitoring.text") + ":"); //$NON-NLS-1$
 
 		this.lblBeginOfMonitoringDisplay = new Label(this.composite, SWT.NONE);
-		this.lblBeginOfMonitoringDisplay.setText(N_A);
+		this.lblBeginOfMonitoringDisplay.setText(MonitoringStatisticsView.N_A);
 
 		final Label lblEndOfMonitoring = new Label(this.composite, SWT.NONE);
-		lblEndOfMonitoring.setText(BUNDLE.getString("MonitoringStatisticsView.lblEndOfMonitoring.text") + ":"); //$NON-NLS-1$
+		lblEndOfMonitoring.setText(MonitoringStatisticsView.BUNDLE.getString("MonitoringStatisticsView.lblEndOfMonitoring.text") + ":"); //$NON-NLS-1$
 
 		this.lblEndOfMonitoringDisplay = new Label(this.composite, SWT.NONE);
-		this.lblEndOfMonitoringDisplay.setText(N_A);
+		this.lblEndOfMonitoringDisplay.setText(MonitoringStatisticsView.N_A);
 
 		final Label lblLine3 = new Label(this.composite, SWT.SEPARATOR | SWT.HORIZONTAL);
 		lblLine3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 
 		final Label lblNumberOfCalls = new Label(this.composite, SWT.NONE);
-		lblNumberOfCalls.setText(BUNDLE.getString("MonitoringStatisticsView.lblNumberOfCalls.text") + ":"); //$NON-NLS-1$
+		lblNumberOfCalls.setText(MonitoringStatisticsView.BUNDLE.getString("MonitoringStatisticsView.lblNumberOfCalls.text") + ":"); //$NON-NLS-1$
 
 		this.lblNumberOfCallsDisplay = new Label(this.composite, SWT.NONE);
-		this.lblNumberOfCallsDisplay.setText(N_A);
+		this.lblNumberOfCallsDisplay.setText(MonitoringStatisticsView.N_A);
 
 		final Label lblNumberOfFailed = new Label(this.composite, SWT.NONE);
-		lblNumberOfFailed.setText(BUNDLE.getString("MonitoringStatisticsView.lblNumberOfFailed.text") + ":"); //$NON-NLS-1$
+		lblNumberOfFailed.setText(MonitoringStatisticsView.BUNDLE.getString("MonitoringStatisticsView.lblNumberOfFailed.text") + ":"); //$NON-NLS-1$
 
 		this.lblNumberOfFailedDisplay = new Label(this.composite, SWT.NONE);
-		this.lblNumberOfFailedDisplay.setText(N_A);
+		this.lblNumberOfFailedDisplay.setText(MonitoringStatisticsView.N_A);
 
 		final Label lblNumberOfAggregatedCalls = new Label(this.composite, SWT.NONE);
-		lblNumberOfAggregatedCalls.setText(BUNDLE.getString("MonitoringStatisticsView.lblNumberOfAggregated.text") + ":"); //$NON-NLS-1$
+		lblNumberOfAggregatedCalls.setText(MonitoringStatisticsView.BUNDLE.getString("MonitoringStatisticsView.lblNumberOfAggregated.text") + ":"); //$NON-NLS-1$
 
 		this.lblNumberOfAggregatedCallsDisplay = new Label(this.composite, SWT.NONE);
-		this.lblNumberOfAggregatedCallsDisplay.setText(N_A);
+		this.lblNumberOfAggregatedCallsDisplay.setText(MonitoringStatisticsView.N_A);
 
 		final Label lblNumberOfAggregatedFailedCalls = new Label(this.composite, SWT.NONE);
-		lblNumberOfAggregatedFailedCalls.setText(BUNDLE.getString("MonitoringStatisticsView.lblNumberOfAggregated_1.text") + ":"); //$NON-NLS-1$
+		lblNumberOfAggregatedFailedCalls.setText(MonitoringStatisticsView.BUNDLE.getString("MonitoringStatisticsView.lblNumberOfAggregated_1.text") + ":"); //$NON-NLS-1$
 
 		this.lblNumberOfAggregatedFailedCallsDisplay = new Label(this.composite, SWT.NONE);
-		this.lblNumberOfAggregatedFailedCallsDisplay.setText(N_A);
+		this.lblNumberOfAggregatedFailedCallsDisplay.setText(MonitoringStatisticsView.N_A);
 
 		final Label lblNumberOfTraces = new Label(this.composite, SWT.NONE);
-		lblNumberOfTraces.setText(BUNDLE.getString("MonitoringStatisticsView.lblNumberOfReconstructed.text") + ":"); //$NON-NLS-1$
+		lblNumberOfTraces.setText(MonitoringStatisticsView.BUNDLE.getString("MonitoringStatisticsView.lblNumberOfReconstructed.text") + ":"); //$NON-NLS-1$
 
 		this.lblNumberOfTracesDisplay = new Label(this.composite, SWT.NONE);
-		this.lblNumberOfTracesDisplay.setText(N_A);
+		this.lblNumberOfTracesDisplay.setText(MonitoringStatisticsView.N_A);
 
 		final Label lblNumberOfFailedTraces = new Label(this.composite, SWT.NONE);
-		lblNumberOfFailedTraces.setText(BUNDLE.getString("MonitoringStatisticsView.lblNumberOfReconstructed_2.text") + ":"); //$NON-NLS-1$
+		lblNumberOfFailedTraces.setText(MonitoringStatisticsView.BUNDLE.getString("MonitoringStatisticsView.lblNumberOfReconstructed_2.text") + ":"); //$NON-NLS-1$
 
 		this.lblNumberOfFailedTracesDisplay = new Label(this.composite, SWT.NONE);
-		this.lblNumberOfFailedTracesDisplay.setText(N_A);
+		this.lblNumberOfFailedTracesDisplay.setText(MonitoringStatisticsView.N_A);
 
 		final Label lblNumberOfFailureTraces = new Label(this.composite, SWT.NONE);
-		lblNumberOfFailureTraces.setText(BUNDLE.getString("MonitoringStatisticsView.lblNumberOfReconstructed_3.text") + ":"); //$NON-NLS-1$
+		lblNumberOfFailureTraces.setText(MonitoringStatisticsView.BUNDLE.getString("MonitoringStatisticsView.lblNumberOfReconstructed_3.text") + ":"); //$NON-NLS-1$
 
 		this.lblNumberOfFailureTracesDisplay = new Label(this.composite, SWT.NONE);
-		this.lblNumberOfFailureTracesDisplay.setText(N_A);
+		this.lblNumberOfFailureTracesDisplay.setText(MonitoringStatisticsView.N_A);
 
 		final Label lblNumberOfAggregatedTraces = new Label(this.composite, SWT.NONE);
-		lblNumberOfAggregatedTraces.setText(BUNDLE.getString("MonitoringStatisticsView.lblNumberOfReconstructed_1.text") + ":"); //$NON-NLS-1$
+		lblNumberOfAggregatedTraces.setText(MonitoringStatisticsView.BUNDLE.getString("MonitoringStatisticsView.lblNumberOfReconstructed_1.text") + ":"); //$NON-NLS-1$
 
 		this.lblNumberOfAggregatedTracesDisplay = new Label(this.composite, SWT.NONE);
-		this.lblNumberOfAggregatedTracesDisplay.setText(N_A);
+		this.lblNumberOfAggregatedTracesDisplay.setText(MonitoringStatisticsView.N_A);
 
 		final Label lblNumberOfAggregatedFailedTraces = new Label(this.composite, SWT.NONE);
-		lblNumberOfAggregatedFailedTraces.setText(BUNDLE.getString("MonitoringStatisticsView.lblNumberOfReconstructed_4.text") + ":"); //$NON-NLS-1$
+		lblNumberOfAggregatedFailedTraces.setText(MonitoringStatisticsView.BUNDLE.getString("MonitoringStatisticsView.lblNumberOfReconstructed_4.text") + ":"); //$NON-NLS-1$
 
 		this.lblNumberOfAggregatedFailedTracesDisplay = new Label(this.composite, SWT.NONE);
-		this.lblNumberOfAggregatedFailedTracesDisplay.setText(N_A);
+		this.lblNumberOfAggregatedFailedTracesDisplay.setText(MonitoringStatisticsView.N_A);
 
 		final Label lblNumberOfAggregatedFailureTraces = new Label(this.composite, SWT.NONE);
-		lblNumberOfAggregatedFailureTraces.setText(BUNDLE.getString("MonitoringStatisticsView.lblNumberOfReconstructed_5.text") + ":"); //$NON-NLS-1$
+		lblNumberOfAggregatedFailureTraces.setText(MonitoringStatisticsView.BUNDLE.getString("MonitoringStatisticsView.lblNumberOfReconstructed_5.text") + ":"); //$NON-NLS-1$
 
 		this.lblNumberOfAggregatedFailureTracesDisplay = new Label(this.composite, SWT.NONE);
-		this.lblNumberOfAggregatedFailureTracesDisplay.setText(N_A);
+		this.lblNumberOfAggregatedFailureTracesDisplay.setText(MonitoringStatisticsView.N_A);
 
 		final Label lblLine4 = new Label(this.composite, SWT.SEPARATOR | SWT.HORIZONTAL);
 		lblLine4.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 
 		final Label lblNonreconstructableTraces = new Label(this.composite, SWT.NONE);
-		lblNonreconstructableTraces.setText(BUNDLE.getString("MonitoringStatisticsView.lblNonreconstructableTraces.text") + ":"); //$NON-NLS-1$
+		lblNonreconstructableTraces.setText(MonitoringStatisticsView.BUNDLE.getString("MonitoringStatisticsView.lblNonreconstructableTraces.text") + ":"); //$NON-NLS-1$
 
 		this.lblNonreconstructableTracesDisplay = new Label(this.composite, SWT.NONE);
-		this.lblNonreconstructableTracesDisplay.setText(N_A);
+		this.lblNonreconstructableTracesDisplay.setText(MonitoringStatisticsView.N_A);
 	}
 
 	@Override

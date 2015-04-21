@@ -26,20 +26,18 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Nils Christian Ehmke
  */
-@Component
+
 public final class CallsViewController implements ISubController, SelectionListener, TraverseListener {
 
-	@Autowired private Controller masterController;
+	private Controller masterController;
 
-	@Autowired private CallsViewModel model;
+	private CallsViewModel model;
 
-	@Autowired private CallsView view;
+	private CallsView view;
 
 	@Override
 	public ISubView getView() {

@@ -18,16 +18,13 @@ package kieker.diagnosis.mainview.subview.aggregatedtraces;
 
 import kieker.diagnosis.domain.AggregatedOperationCall;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 /**
  * @author Nils Christian Ehmke
  */
-@Component
+
 public final class AggregatedTracesViewModel {
 
-	@Autowired private AggregatedTracesView view;
+	private AggregatedTracesView view;
 
 	private Filter filter = Filter.NONE;
 	private AggregatedOperationCall operationCall;
