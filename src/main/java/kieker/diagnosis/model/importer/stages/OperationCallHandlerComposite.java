@@ -55,15 +55,15 @@ public final class OperationCallHandlerComposite extends AbstractCompositeStage 
 
 		this.inputPort = this.operationCallExtractor.getInputPort();
 
-		super.connectStages(this.operationCallExtractor.getOutputPort(), distributor1.getInputPort());
-		super.connectStages(distributor1.getNewOutputPort(), this.callCollector.getInputPort());
-		super.connectStages(distributor1.getNewOutputPort(), failedCallFilter.getInputPort());
-		super.connectStages(distributor1.getNewOutputPort(), callAggregator.getInputPort());
-		super.connectStages(callAggregator.getOutputPort(), distributor2.getInputPort());
-		super.connectStages(distributor2.getNewOutputPort(), this.aggCallCollector.getInputPort());
-		super.connectStages(distributor2.getNewOutputPort(), aggFailedCallFilter.getInputPort());
-		super.connectStages(aggFailedCallFilter.getOutputPort(), this.aggFailedCallCollector.getInputPort());
-		super.connectStages(failedCallFilter.getOutputPort(), this.failedCallCollector.getInputPort());
+		super.connectPorts(this.operationCallExtractor.getOutputPort(), distributor1.getInputPort());
+		super.connectPorts(distributor1.getNewOutputPort(), this.callCollector.getInputPort());
+		super.connectPorts(distributor1.getNewOutputPort(), failedCallFilter.getInputPort());
+		super.connectPorts(distributor1.getNewOutputPort(), callAggregator.getInputPort());
+		super.connectPorts(callAggregator.getOutputPort(), distributor2.getInputPort());
+		super.connectPorts(distributor2.getNewOutputPort(), this.aggCallCollector.getInputPort());
+		super.connectPorts(distributor2.getNewOutputPort(), aggFailedCallFilter.getInputPort());
+		super.connectPorts(aggFailedCallFilter.getOutputPort(), this.aggFailedCallCollector.getInputPort());
+		super.connectPorts(failedCallFilter.getOutputPort(), this.failedCallCollector.getInputPort());
 	}
 
 	public InputPort<Trace> getInputPort() {

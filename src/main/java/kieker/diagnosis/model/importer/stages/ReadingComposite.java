@@ -40,7 +40,7 @@ public final class ReadingComposite extends AbstractCompositeStage {
 		this.producer = new InitialElementProducer<>(importDirectory);
 		this.reader = new Dir2RecordsFilter(new ClassNameRegistryRepository());
 
-		super.connectStages(this.producer.getOutputPort(), this.reader.getInputPort());
+		super.connectPorts(this.producer.getOutputPort(), this.reader.getInputPort());
 	}
 
 	public OutputPort<IMonitoringRecord> getOutputPort() {

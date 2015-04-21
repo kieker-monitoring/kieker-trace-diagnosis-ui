@@ -23,9 +23,6 @@ import teetime.framework.Analysis;
 import teetime.framework.AnalysisConfiguration;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
-import teetime.framework.pipe.IPipeFactory;
-import teetime.framework.pipe.PipeFactoryRegistry.PipeOrdering;
-import teetime.framework.pipe.PipeFactoryRegistry.ThreadCommunication;
 import teetime.stage.CollectorSink;
 import teetime.stage.IterableProducer;
 
@@ -76,9 +73,8 @@ public final class StageTester {
 			final IterableProducer<I> producer = new IterableProducer<>(input);
 			final CollectorSink<O> collector = new CollectorSink<>(this.collectorList);
 
-			final IPipeFactory pipeFactory = AnalysisConfiguration.PIPE_FACTORY_REGISTRY.getPipeFactory(ThreadCommunication.INTRA, PipeOrdering.ARBITRARY, false);
-			pipeFactory.create(producer.getOutputPort(), inputPort);
-			pipeFactory.create(outputPort, collector.getInputPort());
+			AnalysisConfiguration.connectIntraThreads(producer.getOutputPort(), inputPort);
+			AnalysisConfiguration.connectIntraThreads(outputPort, collector.getInputPort());
 
 			this.addThreadableStage(producer);
 		}

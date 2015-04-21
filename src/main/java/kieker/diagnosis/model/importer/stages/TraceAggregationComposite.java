@@ -53,15 +53,15 @@ public final class TraceAggregationComposite extends AbstractCompositeStage {
 		this.failedTracesCollector = new CollectorSink<>(failedTraces);
 		this.failureContainingTracesCollector = new CollectorSink<>(failureContainingTraces);
 
-		super.connectStages(this.aggregator.getOutputPort(), this.statisticsDecorator.getInputPort());
-		super.connectStages(this.statisticsDecorator.getOutputPort(), distributor.getInputPort());
+		super.connectPorts(this.aggregator.getOutputPort(), this.statisticsDecorator.getInputPort());
+		super.connectPorts(this.statisticsDecorator.getOutputPort(), distributor.getInputPort());
 
-		super.connectStages(distributor.getNewOutputPort(), this.tracesCollector.getInputPort());
-		super.connectStages(distributor.getNewOutputPort(), failedTraceFilter.getInputPort());
-		super.connectStages(distributor.getNewOutputPort(), failureContainingTraceFilter.getInputPort());
+		super.connectPorts(distributor.getNewOutputPort(), this.tracesCollector.getInputPort());
+		super.connectPorts(distributor.getNewOutputPort(), failedTraceFilter.getInputPort());
+		super.connectPorts(distributor.getNewOutputPort(), failureContainingTraceFilter.getInputPort());
 
-		super.connectStages(failedTraceFilter.getOutputPort(), this.failedTracesCollector.getInputPort());
-		super.connectStages(failureContainingTraceFilter.getOutputPort(), this.failureContainingTracesCollector.getInputPort());
+		super.connectPorts(failedTraceFilter.getOutputPort(), this.failedTracesCollector.getInputPort());
+		super.connectPorts(failureContainingTraceFilter.getOutputPort(), this.failureContainingTracesCollector.getInputPort());
 	}
 
 	public InputPort<Trace> getInputPort() {

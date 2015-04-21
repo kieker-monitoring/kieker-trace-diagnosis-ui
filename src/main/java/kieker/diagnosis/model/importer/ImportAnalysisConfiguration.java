@@ -32,9 +32,6 @@ import kieker.diagnosis.model.importer.stages.ReadingComposite;
 import kieker.diagnosis.model.importer.stages.TraceAggregationComposite;
 import kieker.diagnosis.model.importer.stages.TraceReconstructionComposite;
 import teetime.framework.AnalysisConfiguration;
-import teetime.framework.pipe.IPipeFactory;
-import teetime.framework.pipe.PipeFactoryRegistry.PipeOrdering;
-import teetime.framework.pipe.PipeFactoryRegistry.ThreadCommunication;
 import teetime.stage.CollectorSink;
 import teetime.stage.MultipleInstanceOfFilter;
 import teetime.stage.basic.distributor.CopyByReferenceStrategy;
@@ -79,14 +76,13 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 		this.reconstruction = new TraceReconstructionComposite(this.traces, this.failedTraces, this.failureContainingTraces);
 
 		// Connect the stages
-		final IPipeFactory pipeFactory = AnalysisConfiguration.PIPE_FACTORY_REGISTRY.getPipeFactory(ThreadCommunication.INTRA, PipeOrdering.ARBITRARY, false);
-		pipeFactory.create(reader.getOutputPort(), typeFilter.getInputPort());
-		pipeFactory.create(typeFilter.getOutputPortForType(IMonitoringRecord.class), this.beginEndOfMonitoringDetector.getInputPort());
-		pipeFactory.create(this.beginEndOfMonitoringDetector.getOutputPort(), this.reconstruction.getInputPort());
-		pipeFactory.create(this.reconstruction.getOutputPort(), distributor.getInputPort());
-		pipeFactory.create(distributor.getNewOutputPort(), operationCallHandler.getInputPort());
-		pipeFactory.create(distributor.getNewOutputPort(), aggregation.getInputPort());
-		pipeFactory.create(typeFilter.getOutputPortForType(KiekerMetadataRecord.class), metadataCollector.getInputPort());
+		AnalysisConfiguration.connectIntraThreads(reader.getOutputPort(), typeFilter.getInputPort());
+		AnalysisConfiguration.connectIntraThreads(typeFilter.getOutputPortForType(IMonitoringRecord.class), this.beginEndOfMonitoringDetector.getInputPort());
+		AnalysisConfiguration.connectIntraThreads(this.beginEndOfMonitoringDetector.getOutputPort(), this.reconstruction.getInputPort());
+		AnalysisConfiguration.connectIntraThreads(this.reconstruction.getOutputPort(), distributor.getInputPort());
+		AnalysisConfiguration.connectIntraThreads(distributor.getNewOutputPort(), operationCallHandler.getInputPort());
+		AnalysisConfiguration.connectIntraThreads(distributor.getNewOutputPort(), aggregation.getInputPort());
+		AnalysisConfiguration.connectIntraThreads(typeFilter.getOutputPortForType(KiekerMetadataRecord.class), metadataCollector.getInputPort());
 
 		// Make sure that the producer is executed by the analysis
 		super.addThreadableStage(reader);
