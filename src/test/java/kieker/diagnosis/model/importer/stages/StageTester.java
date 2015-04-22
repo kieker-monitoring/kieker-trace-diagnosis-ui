@@ -24,7 +24,7 @@ import teetime.framework.AnalysisConfiguration;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
 import teetime.stage.CollectorSink;
-import teetime.stage.IterableProducer;
+import teetime.stage.InitialElementProducer;
 
 public final class StageTester {
 
@@ -70,7 +70,7 @@ public final class StageTester {
 		private final List<O> collectorList = new ArrayList<>();
 
 		public Configuration(final Iterable<I> input, final InputPort<I> inputPort, final OutputPort<O> outputPort) {
-			final IterableProducer<I> producer = new IterableProducer<>(input);
+			final InitialElementProducer<I> producer = new InitialElementProducer<>(input);
 			final CollectorSink<O> collector = new CollectorSink<>(this.collectorList);
 
 			AnalysisConfiguration.connectIntraThreads(producer.getOutputPort(), inputPort);
