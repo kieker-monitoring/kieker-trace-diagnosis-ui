@@ -2,5 +2,63 @@
 <?import javafx.scene.layout.*?>
 
 <GridPane fx:id="view" xmlns:fx="http://javafx.com/fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-	
+
+	<Label text="%MonitoringStatisticsView.lblMonitoringLog.text" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+	<TextField text="N/A" GridPane.fillWidth="true" editable="false" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+
+	<Label text="%MonitoringStatisticsView.lblMonitoringLogSize.text" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+	<TextField text="N/A" GridPane.fillWidth="true" editable="false" GridPane.rowIndex="2" GridPane.columnIndex="2" />
+
+	<Separator GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="2" />
+
+	<Label text="%MonitoringStatisticsView.lblAnalysisTime.text" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+	<TextField text="N/A" GridPane.fillWidth="true" editable="false" GridPane.rowIndex="4" GridPane.columnIndex="2" />
+
+ 	<Separator GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.columnSpan="2"  />
+
+	<Label text="%MonitoringStatisticsView.lblBeginOfMonitoring.text" GridPane.rowIndex="6" GridPane.columnIndex="1" />
+	<TextField text="N/A" GridPane.fillWidth="true" editable="false" GridPane.rowIndex="6" GridPane.columnIndex="2" />
+
+	<Label text="%MonitoringStatisticsView.lblEndOfMonitoring.text" GridPane.rowIndex="7" GridPane.columnIndex="1" />
+	<TextField text="N/A" GridPane.fillWidth="true" editable="false" GridPane.rowIndex="7" GridPane.columnIndex="2" />
+
+	<Separator GridPane.rowIndex="8" GridPane.columnIndex="1" GridPane.columnSpan="2" />
+
+	<Label text="%MonitoringStatisticsView.lblNumberOfCalls.text" GridPane.rowIndex="9" GridPane.columnIndex="1" />
+	<TextField text="N/A" GridPane.fillWidth="true" editable="false" GridPane.rowIndex="9" GridPane.columnIndex="2" />
+
+	<Label text="%MonitoringStatisticsView.lblNumberOfFailed.text" GridPane.rowIndex="10" GridPane.columnIndex="1" />
+	<TextField text="N/A" GridPane.fillWidth="true" editable="false" GridPane.rowIndex="10" GridPane.columnIndex="2" />
+
+	<Label text="%MonitoringStatisticsView.lblNumberOfAggregated.text" GridPane.rowIndex="11" GridPane.columnIndex="1" />
+	<TextField text="N/A" GridPane.fillWidth="true" editable="false" GridPane.rowIndex="11" GridPane.columnIndex="2" />
+
+	<Label text="%MonitoringStatisticsView.lblNumberOfAggregated_1.text" GridPane.rowIndex="12" GridPane.columnIndex="1" />
+	<TextField text="N/A" GridPane.fillWidth="true" editable="false" GridPane.rowIndex="12" GridPane.columnIndex="2" />
+
+	<Separator GridPane.rowIndex="13" GridPane.columnIndex="1" GridPane.columnSpan="2" />
+
+	<Label text="%MonitoringStatisticsView.lblNumberOfReconstructed.text" GridPane.rowIndex="14" GridPane.columnIndex="1" />
+	<TextField text="N/A" GridPane.fillWidth="true" editable="false" GridPane.rowIndex="14" GridPane.columnIndex="2" />
+
+	<Label text="%MonitoringStatisticsView.lblNumberOfReconstructed_2.text" GridPane.rowIndex="15" GridPane.columnIndex="1" />
+	<TextField text="N/A" GridPane.fillWidth="true" editable="false" GridPane.rowIndex="15" GridPane.columnIndex="2" />
+
+	<Label text="%MonitoringStatisticsView.lblNumberOfReconstructed_3.text" GridPane.rowIndex="16" GridPane.columnIndex="1" />
+	<TextField text="N/A" GridPane.fillWidth="true" editable="false" GridPane.rowIndex="16" GridPane.columnIndex="2" />
+
+	<Label text="%MonitoringStatisticsView.lblNumberOfReconstructed_1.text"  GridPane.rowIndex="17" GridPane.columnIndex="1" />
+	<TextField text="N/A" GridPane.fillWidth="true" editable="false" GridPane.rowIndex="17" GridPane.columnIndex="2" />
+
+	<Label text="%MonitoringStatisticsView.lblNumberOfReconstructed_4.text"	GridPane.rowIndex="18" GridPane.columnIndex="1" />
+	<TextField text="N/A" GridPane.fillWidth="true" editable="false" GridPane.rowIndex="18" GridPane.columnIndex="2" />
+
+	<Label text="%MonitoringStatisticsView.lblNumberOfReconstructed_5.text" GridPane.rowIndex="19" GridPane.columnIndex="1" />
+	<TextField text="N/A" GridPane.fillWidth="true" editable="false" GridPane.rowIndex="19" GridPane.columnIndex="2" />
+
+	<Separator GridPane.rowIndex="20" GridPane.columnIndex="1" GridPane.columnSpan="2" />
+
+	<Label text="%MonitoringStatisticsView.lblNonreconstructableTraces.text" GridPane.rowIndex="21" GridPane.columnIndex="1" />
+	<TextField text="N/A" GridPane.fillWidth="true" editable="false" GridPane.rowIndex="21" GridPane.columnIndex="2" />
+
 </GridPane>
