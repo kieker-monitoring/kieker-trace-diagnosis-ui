@@ -1,13 +1,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane fx:id="view" xmlns:fx="http://javafx.com/fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+<GridPane fx:id="view" xmlns:fx="http://javafx.com/fxml" fx:controller="kieker.diagnosis.mainview.subview.monitoringstatistics.MonitoringStatisticsViewController" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
 
 	<Label text="%MonitoringStatisticsView.lblMonitoringLog.text" GridPane.rowIndex="1" GridPane.columnIndex="1" />
-	<TextField text="N/A" GridPane.fillWidth="true" editable="false" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="monitoringlog" GridPane.rowIndex="1" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" />
 
 	<Label text="%MonitoringStatisticsView.lblMonitoringLogSize.text" GridPane.rowIndex="2" GridPane.columnIndex="1" />
-	<TextField text="N/A" GridPane.fillWidth="true" editable="false" GridPane.rowIndex="2" GridPane.columnIndex="2" />
+	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="monitoringsize"  GridPane.rowIndex="2" GridPane.columnIndex="2" />
 
 	<Separator GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="2" />
 

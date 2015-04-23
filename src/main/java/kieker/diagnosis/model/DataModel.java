@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.concurrent.TimeUnit;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import kieker.common.record.misc.KiekerMetadataRecord;
@@ -45,7 +47,7 @@ public final class DataModel extends Observable {
 	private final ObservableList<OperationCall> operationCalls = FXCollections.observableArrayList();
 	private final ObservableList<AggregatedOperationCall> aggregatedOperationCalls = FXCollections.observableArrayList();
 
-	private File importDirectory;
+	private final ObjectProperty<File> importDirectory = new SimpleObjectProperty<File>();
 	private TimeUnit timeUnit;
 	private long analysisDurationInMS;
 	private int incompleteTraces;
@@ -55,11 +57,11 @@ public final class DataModel extends Observable {
 	private DataModel() {}
 
 	public void loadMonitoringLogFromFS(final File importDirectory) {
-		this.importDirectory = importDirectory;
+		this.importDirectory.set(importDirectory);
 		final long tin = System.currentTimeMillis();
 
 		// Load and analyze the monitoring logs from the given directory
-		final ImportAnalysisConfiguration analysisConfiguration = new ImportAnalysisConfiguration(this.importDirectory);
+		final ImportAnalysisConfiguration analysisConfiguration = new ImportAnalysisConfiguration(importDirectory);
 		final Analysis<ImportAnalysisConfiguration> analysis = new Analysis<>(analysisConfiguration);
 		analysis.executeBlocking();
 
@@ -101,7 +103,7 @@ public final class DataModel extends Observable {
 		return this.incompleteTraces;
 	}
 
-	public File getImportDirectory() {
+	public ObjectProperty<File> getImportDirectory() {
 		return this.importDirectory;
 	}
 
