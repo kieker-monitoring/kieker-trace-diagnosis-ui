@@ -47,12 +47,13 @@ public final class DataModel extends Observable {
 	private final ObservableList<OperationCall> operationCalls = FXCollections.observableArrayList();
 	private final ObservableList<AggregatedOperationCall> aggregatedOperationCalls = FXCollections.observableArrayList();
 
-	private final ObjectProperty<File> importDirectory = new SimpleObjectProperty<File>();
+	private final ObjectProperty<File> importDirectory = new SimpleObjectProperty<>();
+	private final ObjectProperty<Long> analysisDurationInMS = new SimpleObjectProperty<>(0L);
+
 	private TimeUnit timeUnit;
-	private long analysisDurationInMS;
-	private int incompleteTraces;
-	private long beginTimestamp;
-	private long endTimestamp;
+	private final ObjectProperty<Integer> incompleteTraces = new SimpleObjectProperty<>(0);
+	private final ObjectProperty<Long> beginTimestamp = new SimpleObjectProperty<>();
+	private final ObjectProperty<Long> endTimestamp = new SimpleObjectProperty<>();
 
 	private DataModel() {}
 
@@ -71,9 +72,9 @@ public final class DataModel extends Observable {
 		this.operationCalls.setAll(analysisConfiguration.getOperationCalls());
 		this.aggregatedOperationCalls.setAll(analysisConfiguration.getAggregatedOperationCalls());
 
-		this.incompleteTraces = analysisConfiguration.countIncompleteTraces();
-		this.beginTimestamp = analysisConfiguration.getBeginTimestamp();
-		this.endTimestamp = analysisConfiguration.getEndTimestamp();
+		this.incompleteTraces.set(analysisConfiguration.countIncompleteTraces());
+		this.beginTimestamp.set(analysisConfiguration.getBeginTimestamp());
+		this.endTimestamp.set(analysisConfiguration.getEndTimestamp());
 
 		final List<KiekerMetadataRecord> metadataRecords = analysisConfiguration.getMetadataRecords();
 		if (!metadataRecords.isEmpty()) {
@@ -85,21 +86,21 @@ public final class DataModel extends Observable {
 
 		final long tout = System.currentTimeMillis();
 
-		this.analysisDurationInMS = tout - tin;
+		this.analysisDurationInMS.set(tout - tin);
 
 		this.setChanged();
 		this.notifyObservers();
 	}
 
-	public long getBeginTimestamp() {
+	public ObjectProperty<Long> getBeginTimestamp() {
 		return this.beginTimestamp;
 	}
 
-	public long getEndTimestamp() {
+	public ObjectProperty<Long> getEndTimestamp() {
 		return this.endTimestamp;
 	}
 
-	public int countIncompleteTraces() {
+	public ObjectProperty<Integer> countIncompleteTraces() {
 		return this.incompleteTraces;
 	}
 
@@ -107,7 +108,7 @@ public final class DataModel extends Observable {
 		return this.importDirectory;
 	}
 
-	public long getAnalysisDurationInMS() {
+	public ObjectProperty<Long> getAnalysisDurationInMS() {
 		return this.analysisDurationInMS;
 	}
 
