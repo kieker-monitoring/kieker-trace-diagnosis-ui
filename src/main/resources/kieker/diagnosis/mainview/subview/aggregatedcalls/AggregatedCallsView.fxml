@@ -16,14 +16,11 @@
 			<ToggleGroup fx:id="togglegroup" />
 		</fx:define>
 
-		<RadioButton text="%AggregatedCallsView.btnShowAll.text"
-			selected="true" toggleGroup="$togglegroup" />
-		<RadioButton text="%AggregatedCallsView.btnShowJustFailed.text"
-			toggleGroup="$togglegroup" />
+		<RadioButton text="%AggregatedCallsView.btnShowAll.text" selected="true" toggleGroup="$togglegroup" onAction="#showAllMethods" />
+		<RadioButton text="%AggregatedCallsView.btnShowJustFailed.text" toggleGroup="$togglegroup" onAction="#showJustFailedMethods" />
 	</HBox>
 	
-	<TextField promptText="%AggregatedCallsView.text.message" fx:id="regexpfilter"
-		GridPane.rowIndex="1" />
+	<TextField promptText="%AggregatedCallsView.text.message" fx:id="regexpfilter" GridPane.rowIndex="1" />
 
 	<TableView fx:id="table" GridPane.hgrow="ALWAYS"
 		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true">

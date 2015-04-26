@@ -31,15 +31,16 @@ import kieker.diagnosis.domain.Trace;
  */
 public final class TraceAggregator extends AbstractStage<Trace, AggregatedTrace> {
 
-	private final Map<Trace, List<Trace>> aggregationMap = new HashMap<>();
+	private final Map<TraceWrapper, List<Trace>> aggregationMap = new HashMap<>();
 
 	@Override
 	protected void execute(final Trace trace) {
-		if (!this.aggregationMap.containsKey(trace)) {
+		final TraceWrapper wrapper = new TraceWrapper(trace);
+		if (!this.aggregationMap.containsKey(wrapper)) {
 			final List<Trace> aggregationList = new ArrayList<>();
-			this.aggregationMap.put(trace, aggregationList);
+			this.aggregationMap.put(wrapper, aggregationList);
 		}
-		this.aggregationMap.get(trace).add(trace);
+		this.aggregationMap.get(wrapper).add(trace);
 	}
 
 	@Override
@@ -47,6 +48,26 @@ public final class TraceAggregator extends AbstractStage<Trace, AggregatedTrace>
 		this.aggregationMap.values().forEach(list -> super.send(new AggregatedTrace(list)));
 
 		super.onTerminating();
+	}
+
+	private static class TraceWrapper {
+
+		private final Trace trace;
+
+		public TraceWrapper(final Trace trace) {
+			this.trace = trace;
+		}
+
+		@Override
+		public int hashCode() {
+			return this.trace.calculateHashCode();
+		}
+
+		@Override
+		public boolean equals(final Object obj) {
+			return this.trace.isEqualTo(((TraceWrapper) obj).trace);
+		}
+
 	}
 
 }

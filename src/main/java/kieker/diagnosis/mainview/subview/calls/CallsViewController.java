@@ -38,11 +38,13 @@ public final class CallsViewController {
 	private FilteredList<OperationCall> sndFilteredData;
 
 	@FXML private TableView<OperationCall> table;
+
 	@FXML private TextField regexpfilter;
 
 	public void initialize() {
 		this.fstFilteredData = new FilteredList<>(this.dataModel.getOperationCalls());
 		this.sndFilteredData = new FilteredList<OperationCall>(this.fstFilteredData);
+
 		final SortedList<OperationCall> sortedData = new SortedList<>(this.sndFilteredData);
 
 		sortedData.comparatorProperty().bind(this.table.comparatorProperty());

@@ -23,9 +23,9 @@ import java.util.List;
  * This is an abstract base for classes representing operation calls (also called executions) within this application. As it can has multiple children, an instance
  * of this class can represent a whole call tree. This class implements the both methods {@link OperationCall#equals(Object)} and {@link OperationCall#hashCode()},
  * allowing to easily check whether two traces are equal and should be in the same equivalence class.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @param <T>
  *            The precise type of the children. This should usually be the implementing class itself.
  */
@@ -118,21 +118,29 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 		return false;
 	}
 
-	@Override
-	public final int hashCode() { // NOPMD (this method violates some metrics)
+	public final int calculateHashCode() { // NOPMD (this method violates some metrics)
 		final int prime = 31;
 		int result = 1;
-		result = (prime * result) + ((this.children == null) ? 0 : this.children.hashCode());
+
+		result = (prime * result) + ((this.children == null) ? 0 : this.calculateHashCodeForChildren());
 		result = (prime * result) + ((this.component == null) ? 0 : this.component.hashCode());
 		result = (prime * result) + ((this.container == null) ? 0 : this.container.hashCode());
 		result = (prime * result) + ((this.failedCause == null) ? 0 : this.failedCause.hashCode());
 		result = (prime * result) + ((this.operation == null) ? 0 : this.operation.hashCode());
+
 		return result;
 	}
 
-	@Override
+	private final int calculateHashCodeForChildren() {
+		int hashCode = 1;
+		for (final T child : this.children) {
+			hashCode = (31 * hashCode) + (child == null ? 0 : child.calculateHashCode());
+		}
+		return hashCode;
+	}
+
 	@SuppressWarnings("unchecked")
-	public final boolean equals(final Object obj) { // NOPMD (this method violates some metrics)
+	public final boolean isEqualTo(final Object obj) { // NOPMD (this method violates some metrics)
 		if (this == obj) {
 			return true;
 		}
@@ -147,8 +155,17 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 			if (other.getChildren() != null) {
 				return false;
 			}
-		} else if (!this.children.equals(other.getChildren())) {
-			return false;
+		} else {
+			final int length1 = this.children.size();
+			final int length2 = other.getChildren().size();
+			if (length1 != length2) {
+				return false;
+			}
+			for (int i = 0; i < length1; i++) {
+				if (!this.children.get(i).isEqualTo(other.getChildren().get(i))) {
+					return false;
+				}
+			}
 		}
 		if (this.component == null) {
 			if (other.getComponent() != null) {

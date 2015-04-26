@@ -16,6 +16,9 @@
 
 package kieker.diagnosis.domain;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsNot;
@@ -31,7 +34,7 @@ public abstract class AbstractOperationCallTest<T extends AbstractOperationCall<
 		final T fstCall = this.createOperationCall("", "", "");
 		final T sndCall = null;
 
-		Assert.assertThat(fstCall, Is.is(IsNot.not(IsEqual.equalTo(sndCall))));
+		assertFalse(fstCall.isEqualTo(sndCall));
 	}
 
 	@Test
@@ -39,7 +42,7 @@ public abstract class AbstractOperationCallTest<T extends AbstractOperationCall<
 		final T fstCall = this.createOperationCall("", "", "");
 		final T sndCall = fstCall;
 
-		Assert.assertThat(fstCall, Is.is(IsEqual.equalTo(sndCall)));
+		assertTrue(fstCall.isEqualTo(sndCall));
 	}
 
 	@Test
@@ -47,7 +50,7 @@ public abstract class AbstractOperationCallTest<T extends AbstractOperationCall<
 		final T fstCall = this.createOperationCall("container", "component", "operation");
 		final T sndCall = this.createOperationCall("container", "component", "operation");
 
-		Assert.assertThat(fstCall, Is.is(IsEqual.equalTo(sndCall)));
+		assertTrue(fstCall.isEqualTo(sndCall));
 	}
 
 	@Test
@@ -63,7 +66,7 @@ public abstract class AbstractOperationCallTest<T extends AbstractOperationCall<
 		final T fstCall = this.createOperationCall("container", "component1", "operation");
 		final T sndCall = this.createOperationCall("container", "component2", "operation");
 
-		Assert.assertThat(fstCall, Is.is(IsNot.not(IsEqual.equalTo(sndCall))));
+		assertFalse(fstCall.isEqualTo(sndCall));
 	}
 
 	@Test
@@ -71,7 +74,7 @@ public abstract class AbstractOperationCallTest<T extends AbstractOperationCall<
 		final T fstCall = this.createOperationCall("container", "component", "operation1");
 		final T sndCall = this.createOperationCall("container", "component", "operation2");
 
-		Assert.assertThat(fstCall, Is.is(IsNot.not(IsEqual.equalTo(sndCall))));
+		assertFalse(fstCall.isEqualTo(sndCall));
 	}
 
 	@Test
@@ -82,7 +85,7 @@ public abstract class AbstractOperationCallTest<T extends AbstractOperationCall<
 		fstCall.addChild(this.createOperationCall("container1", "component1", "operation1"));
 		sndCall.addChild(this.createOperationCall("container1", "component1", "operation1"));
 
-		Assert.assertThat(fstCall, Is.is(IsEqual.equalTo(sndCall)));
+		assertTrue(fstCall.isEqualTo(sndCall));
 	}
 
 	@Test
@@ -93,7 +96,7 @@ public abstract class AbstractOperationCallTest<T extends AbstractOperationCall<
 		fstCall.addChild(this.createOperationCall("container1", "component1", "operation1"));
 		sndCall.addChild(this.createOperationCall("container2", "component1", "operation1"));
 
-		Assert.assertThat(fstCall, Is.is(IsNot.not(IsEqual.equalTo(sndCall))));
+		assertFalse(fstCall.isEqualTo(sndCall));
 	}
 
 }

@@ -16,10 +16,8 @@
 			<ToggleGroup fx:id="togglegroup" />
 		</fx:define>
 
-		<RadioButton text="%CallsView.btnShowAll.text" selected="true"
-			toggleGroup="$togglegroup" onAction="#showAllMethods" />
-		<RadioButton text="%CallsView.btnShowJustFailed.text"
-			toggleGroup="$togglegroup" onAction="#showJustFailedMethods" />
+		<RadioButton text="%CallsView.btnShowAll.text" selected="true" toggleGroup="$togglegroup" onAction="#showAllMethods" />
+		<RadioButton text="%CallsView.btnShowJustFailed.text" toggleGroup="$togglegroup" onAction="#showJustFailedMethods" />
 	</HBox>
 
 	<TextField promptText="%CallsView.text.message" onAction="#useRegExp" fx:id="regexpfilter"
@@ -49,8 +47,7 @@
 
 			<TableColumn text="%CallsView.tblclmnDuration.text">
 				<cellValueFactory>
-					<kieker.diagnosis.mainview.subview.util.DurationCellFactory
-						property="duration" />
+					<kieker.diagnosis.mainview.subview.util.DurationCellFactory property="duration" />
 				</cellValueFactory>
 			</TableColumn>
 

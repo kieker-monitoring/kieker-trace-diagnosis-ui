@@ -18,7 +18,6 @@ package kieker.diagnosis.model;
 
 import java.io.File;
 import java.util.List;
-import java.util.Observable;
 import java.util.concurrent.TimeUnit;
 
 import javafx.beans.property.ObjectProperty;
@@ -38,7 +37,7 @@ import teetime.framework.Analysis;
  *
  * @author Nils Christian Ehmke
  */
-public final class DataModel extends Observable {
+public final class DataModel {
 
 	private static final DataModel INSTANCE = new DataModel();
 
@@ -87,9 +86,6 @@ public final class DataModel extends Observable {
 		final long tout = System.currentTimeMillis();
 
 		this.analysisDurationInMS.set(tout - tin);
-
-		this.setChanged();
-		this.notifyObservers();
 	}
 
 	public ObjectProperty<Long> getBeginTimestamp() {
