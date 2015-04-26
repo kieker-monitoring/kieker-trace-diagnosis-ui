@@ -43,6 +43,7 @@ public final class AggregatedCallsViewController {
 	public void initialize() {
 		this.fstFilteredData = new FilteredList<>(this.dataModel.getAggregatedOperationCalls());
 		this.sndFilteredData = new FilteredList<AggregatedOperationCall>(this.fstFilteredData);
+
 		final SortedList<AggregatedOperationCall> sortedData = new SortedList<>(this.sndFilteredData);
 
 		sortedData.comparatorProperty().bind(this.table.comparatorProperty());

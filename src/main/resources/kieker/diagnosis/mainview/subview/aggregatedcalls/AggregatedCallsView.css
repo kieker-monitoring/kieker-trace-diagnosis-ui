@@ -11,3 +11,7 @@
 #detailpanel, #statusbar {
 	-fx-border-color: lightgray;
 }
+
+.failed {
+	-fx-text-fill: red;
+}

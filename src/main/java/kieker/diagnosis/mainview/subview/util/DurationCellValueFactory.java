@@ -11,14 +11,14 @@ import javafx.util.Callback;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
 
-public class DurationCellFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<String>> {
+public class DurationCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<String>> {
 
 	private final DataModel dataModel = DataModel.getInstance();
 	private final PropertiesModel propertiesModel = PropertiesModel.getInstance();
 
 	private final String property;
 
-	public DurationCellFactory(@NamedArg(value = "property") final String property) {
+	public DurationCellValueFactory(@NamedArg(value = "property") final String property) {
 		this.property = property.substring(0, 1).toUpperCase() + property.substring(1);
 	}
 

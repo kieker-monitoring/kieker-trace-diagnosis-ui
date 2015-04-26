@@ -38,7 +38,6 @@ public final class CallsViewController {
 	private FilteredList<OperationCall> sndFilteredData;
 
 	@FXML private TableView<OperationCall> table;
-
 	@FXML private TextField regexpfilter;
 
 	public void initialize() {

@@ -28,36 +28,54 @@
 
 		<columns>
 			<TableColumn text="%CallsView.tblclmnExecutionContainer.text">
+				<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.FailedTableCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<PropertyValueFactory property="container" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%CallsView.tblclmnComponent.text">
+				<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.FailedTableCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<PropertyValueFactory property="component" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%CallsView.tblclmnOperation.text">
+				<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.FailedTableCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<PropertyValueFactory property="operation" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%CallsView.tblclmnDuration.text">
+				<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.DurationTableCellFactory />
+				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.mainview.subview.util.DurationCellFactory property="duration" />
+					<kieker.diagnosis.mainview.subview.util.DurationCellValueFactory property="duration" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%CallsView.tblclmnTraceID.text">
+				<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.FailedTableCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<PropertyValueFactory property="traceID" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%CallsView.tblclmnTimestamp.text">
+				<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.FailedTableCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<PropertyValueFactory property="timestamp" />
 				</cellValueFactory>
