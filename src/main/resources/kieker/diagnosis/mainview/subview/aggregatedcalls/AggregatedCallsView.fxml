@@ -57,7 +57,7 @@
 					<kieker.diagnosis.mainview.subview.util.FailedTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<PropertyValueFactory property="container" />
+					<PropertyValueFactory property="calls" />
 				</cellValueFactory>
 			</TableColumn>
 

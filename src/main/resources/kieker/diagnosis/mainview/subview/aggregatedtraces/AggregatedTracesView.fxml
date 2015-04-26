@@ -1,7 +1,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.*?>
 
-<GridPane fx:id="view" xmlns:fx="http://javafx.com/fxml"
+<GridPane fx:id="view" xmlns:fx="http://javafx.com/fxml" fx:controller="kieker.diagnosis.mainview.subview.aggregatedtraces.AggregatedTracesViewController"
 	AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0"
 	AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
 
@@ -25,11 +26,48 @@
 	<TreeTableView fx:id="treetable" GridPane.hgrow="ALWAYS"
 		GridPane.vgrow="ALWAYS" GridPane.rowIndex="1" tableMenuButtonVisible="true">
 
-		<columns>
-			<TreeTableColumn
-				text="%AggregatedTracesView.trclmnExecutionContainer.text" />
+	<columns>
+			<TreeTableColumn text="%AggregatedTracesView.trclmnExecutionContainer.text">
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory property="container" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%AggregatedTracesView.trclmnComponent.text">
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory property="component" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%AggregatedTracesView.trclmnOperation.text">
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory property="operation" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%AggregatedTracesView.trclmnCalls.text">
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%AggregatedTracesView.trclmnTraceDepth.text">
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory property="stackDepth" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%AggregatedTracesView.trclmnTraceSize.text">
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory property="stackSize" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%AggregatedTracesView.trclmnMinimalDuration.text" />
+			<TreeTableColumn text="%AggregatedTracesView.trclmnAverageDuration.text" />
+			<TreeTableColumn text="%AggregatedTracesView.trclmnMeanDuration.text" />
+			<TreeTableColumn text="%AggregatedTracesView.trclmnMaximalDuration.text" />
+			<TreeTableColumn text="%AggregatedTracesView.trclmnTotalDuration.text" />
 		</columns>
-
+	
+	
 	</TreeTableView>
 
 </GridPane>
