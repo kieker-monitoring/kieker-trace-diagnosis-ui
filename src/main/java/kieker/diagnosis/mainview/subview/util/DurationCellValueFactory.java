@@ -11,7 +11,7 @@ import javafx.util.Callback;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
 
-public class DurationCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<String>> {
+public class DurationCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<Long>> {
 
 	private final DataModel dataModel = DataModel.getInstance();
 	private final PropertiesModel propertiesModel = PropertiesModel.getInstance();
@@ -23,7 +23,7 @@ public class DurationCellValueFactory implements Callback<CellDataFeatures<?, St
 	}
 
 	@Override
-	public ObservableValue<String> call(final CellDataFeatures<?, String> call) {
+	public ObservableValue<Long> call(final CellDataFeatures<?, String> call) {
 		try {
 			final TimeUnit srcTimeUnit = this.dataModel.getTimeUnit();
 			final TimeUnit dstTimeUnit = this.propertiesModel.getTimeUnit();
@@ -32,7 +32,7 @@ public class DurationCellValueFactory implements Callback<CellDataFeatures<?, St
 			final long duration = (long) getter.invoke(call.getValue(), new Object[0]);
 
 			final long newDuration = dstTimeUnit.convert(duration, srcTimeUnit);
-			return new ReadOnlyObjectWrapper<String>(newDuration + " " + NameConverter.toShortTimeUnit(dstTimeUnit));
+			return new ReadOnlyObjectWrapper<Long>(newDuration);
 		} catch (final Exception ex) {
 			ex.printStackTrace();
 			return null;
