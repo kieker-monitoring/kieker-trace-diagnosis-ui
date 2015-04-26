@@ -24,7 +24,7 @@
 		GridPane.rowIndex="1" />
 
 	<TableView fx:id="table" GridPane.hgrow="ALWAYS"
-		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true">
+		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true" onMouseClicked="#selectCall" >
 
 		<columns>
 			<TableColumn text="%CallsView.tblclmnExecutionContainer.text">
@@ -88,30 +88,30 @@
 		<TextField text="%CallsView.tblclmnExecutionContainer.text"
 			editable="false" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="1" GridPane.columnIndex="2" />
+			GridPane.rowIndex="1" GridPane.columnIndex="2" fx:id="container" GridPane.hgrow="ALWAYS" />
 
 		<TextField text="%CallsView.tblclmnComponent.text" editable="false"
 			GridPane.rowIndex="2" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="2" GridPane.columnIndex="2" />
+			GridPane.rowIndex="2" GridPane.columnIndex="2" fx:id="component" />
 
 		<TextField text="%CallsView.lblOperation.text" editable="false"
 			GridPane.rowIndex="3" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="3" GridPane.columnIndex="2" />
+			GridPane.rowIndex="3" GridPane.columnIndex="2" fx:id="operation" />
 
 		<TextField text="%CallsView.lblDuration.text" editable="false"
 			GridPane.rowIndex="4" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="4" GridPane.columnIndex="2" />
+			GridPane.rowIndex="4" GridPane.columnIndex="2" fx:id="duration" />
 
 		<TextField text="%CallsView.lblFailed.text" editable="false"
 			GridPane.rowIndex="5" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="5" GridPane.columnIndex="2" />
+			GridPane.rowIndex="5" GridPane.columnIndex="2" fx:id="failed" />
 	</GridPane>
 
 	<HBox fx:id="statusbar" GridPane.rowIndex="4">
-		<TextField text="%CallsView.lbCounter.text" editable="false" />
+		<TextField text="%CallsView.lbCounter.text" editable="false" fx:id="counter" />
 	</HBox>
 </GridPane>

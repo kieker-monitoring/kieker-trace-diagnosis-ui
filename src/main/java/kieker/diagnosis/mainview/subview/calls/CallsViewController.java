@@ -16,14 +16,19 @@
 
 package kieker.diagnosis.mainview.subview.calls;
 
+import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.model.DataModel;
 
@@ -37,8 +42,19 @@ public final class CallsViewController {
 	private FilteredList<OperationCall> fstFilteredData;
 	private FilteredList<OperationCall> sndFilteredData;
 
+	private final SimpleObjectProperty<Optional<OperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
+
 	@FXML private TableView<OperationCall> table;
 	@FXML private TextField regexpfilter;
+
+	@FXML private TextField container;
+	@FXML private TextField component;
+	@FXML private TextField operation;
+	@FXML private TextField duration;
+	@FXML private TextField failed;
+	@FXML private TextField counter;
+
+	@FXML private ResourceBundle resources;
 
 	public void initialize() {
 		this.fstFilteredData = new FilteredList<>(this.dataModel.getOperationCalls());
@@ -49,6 +65,18 @@ public final class CallsViewController {
 		sortedData.comparatorProperty().bind(this.table.comparatorProperty());
 
 		this.table.setItems(sortedData);
+
+		this.container.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> call.getContainer()).orElse("N/A"), this.selection));
+		this.component.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> call.getComponent()).orElse("N/A"), this.selection));
+		this.operation.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> call.getOperation()).orElse("N/A"), this.selection));
+		this.duration.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> Long.toString(call.getDuration())).orElse("N/A"), this.selection));
+		this.failed.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> call.getFailedCause()).orElse("N/A"), this.selection));
+
+		this.counter.textProperty().bind(Bindings.createStringBinding(() -> sortedData.size() + " " + this.resources.getString("CallsView.lbCounter.text"), sortedData));
+	}
+
+	public void selectCall(final MouseEvent event) {
+		this.selection.set(Optional.of(this.table.getSelectionModel().getSelectedItem()));
 	}
 
 	public void showAllMethods() {
@@ -64,9 +92,9 @@ public final class CallsViewController {
 
 		if ((regExpr == null) || regExpr.isEmpty() || !this.isRegex(regExpr)) {
 			this.sndFilteredData.setPredicate(null);
+		} else {
+			this.sndFilteredData.setPredicate(call -> call.getOperation().matches(regExpr));
 		}
-
-		this.sndFilteredData.setPredicate(call -> call.getOperation().matches(regExpr));
 	}
 
 	private boolean isRegex(final String str) {

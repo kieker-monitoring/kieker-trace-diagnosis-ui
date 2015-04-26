@@ -64,9 +64,9 @@ public final class AggregatedCallsViewController {
 
 		if ((regExpr == null) || regExpr.isEmpty() || !this.isRegex(regExpr)) {
 			this.sndFilteredData.setPredicate(null);
+		} else {
+			this.sndFilteredData.setPredicate(call -> call.getOperation().matches(regExpr));
 		}
-
-		this.sndFilteredData.setPredicate(call -> call.getOperation().matches(regExpr));
 	}
 
 	private boolean isRegex(final String str) {
