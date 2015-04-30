@@ -19,6 +19,7 @@ package kieker.diagnosis.model.importer.stages;
 import java.util.List;
 
 import kieker.diagnosis.domain.AggregatedOperationCall;
+import kieker.diagnosis.domain.DatabaseOperationCall;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 import teetime.framework.AbstractCompositeStage;
@@ -39,7 +40,7 @@ public final class OperationCallHandlerComposite extends AbstractCompositeStage 
 	private final CollectorSink<OperationCall> failedCallCollector;
 	private final CollectorSink<AggregatedOperationCall> aggCallCollector;
 	private final CollectorSink<AggregatedOperationCall> aggFailedCallCollector;
-
+	
 	public OperationCallHandlerComposite(final List<OperationCall> operationCalls, final List<OperationCall> failedOperationCalls,
 			final List<AggregatedOperationCall> aggOperationCalls, final List<AggregatedOperationCall> aggFailedOperationCalls) {
 		this.operationCallExtractor = new OperationCallExtractor();
@@ -52,7 +53,7 @@ public final class OperationCallHandlerComposite extends AbstractCompositeStage 
 		final Filter<AggregatedOperationCall> aggFailedCallFilter = new Filter<>(AggregatedOperationCall::isFailed);
 		this.aggFailedCallCollector = new CollectorSink<>(aggFailedOperationCalls);
 		final Distributor<AggregatedOperationCall> distributor2 = new Distributor<>(new CopyByReferenceStrategy());
-
+		
 		this.inputPort = this.operationCallExtractor.getInputPort();
 
 		super.connectPorts(this.operationCallExtractor.getOutputPort(), distributor1.getInputPort());

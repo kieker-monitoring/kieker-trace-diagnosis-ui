@@ -25,11 +25,15 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
+import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.database.DatabaseEventRecord;
 import kieker.common.record.misc.KiekerMetadataRecord;
+import kieker.diagnosis.czi.DatabaseImportAnalysisConfiguration;
 import kieker.diagnosis.domain.AbstractOperationCall;
 import kieker.diagnosis.domain.AbstractTrace;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
+import kieker.diagnosis.domain.DatabaseOperationCall;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.model.importer.ImportAnalysisConfiguration;
@@ -42,6 +46,7 @@ import teetime.framework.Analysis;
  * A container for data used within this application.
  *
  * @author Nils Christian Ehmke
+ * @author Christian Zirkelbach
  */
 @Repository
 public final class DataModel extends Observable {
@@ -56,6 +61,11 @@ public final class DataModel extends Observable {
 	private List<OperationCall> failedOperationCalls = Collections.emptyList();
 	private List<AggregatedOperationCall> aggregatedOperationCalls = Collections.emptyList();
 	private List<AggregatedOperationCall> aggregatedFailedOperationCalls = Collections.emptyList();
+	
+	// TODO czi
+	private  List<DatabaseOperationCall> databaseOperationCalls = Collections.emptyList();
+//	private  List<DatabaseOperationCall> aggregatedDatabaseOperationCalls = Collections.emptyList();
+	
 	private File importDirectory;
 	private TimeUnit timeUnit;
 	private long analysisDurationInMS;
@@ -71,7 +81,7 @@ public final class DataModel extends Observable {
 		final ImportAnalysisConfiguration analysisConfiguration = new ImportAnalysisConfiguration(this.importDirectory);
 		final Analysis<ImportAnalysisConfiguration> analysis = new Analysis<>(analysisConfiguration);
 		analysis.executeBlocking();
-
+		
 		// Store the results from the analysis
 		this.traces = analysisConfiguration.getTracesList();
 		this.failedTraces = analysisConfiguration.getFailedTracesList();
@@ -84,6 +94,28 @@ public final class DataModel extends Observable {
 		this.aggregatedOperationCalls = analysisConfiguration.getAggregatedOperationCalls();
 		this.aggregatedFailedOperationCalls = analysisConfiguration.getAggregatedFailedOperationCalls();
 		this.incompleteTraces = analysisConfiguration.countIncompleteTraces();
+
+		// TODO czi
+		final DatabaseImportAnalysisConfiguration databaseOperationAnalysis = new DatabaseImportAnalysisConfiguration(this.importDirectory);
+		final Analysis<DatabaseImportAnalysisConfiguration> databaseAnalysis = new Analysis<>(databaseOperationAnalysis);
+		databaseAnalysis.executeBlocking();
+		
+		// Store the results from the analysis
+		this.databaseOperationCalls = databaseOperationAnalysis.getDatabaseOperationCalls();
+	
+		System.out.println("loaded operationCalls: " + operationCalls.size());
+		System.out.println("loaded databasOperationCalls: " + databaseOperationCalls.size());
+		
+		for (DatabaseOperationCall record : databaseOperationCalls) {
+			System.out.println(record.toString());
+		}
+		
+		
+		System.exit(0);
+		
+		//
+		
+		
 		this.beginTimestamp = analysisConfiguration.getBeginTimestamp();
 		this.endTimestamp = analysisConfiguration.getEndTimestamp();
 
@@ -150,7 +182,7 @@ public final class DataModel extends Observable {
 	public List<OperationCall> getOperationCalls(final String regExpr) {
 		return this.filterCallsIfNecessary(this.operationCalls, regExpr);
 	}
-
+	
 	public List<OperationCall> getFailedOperationCalls(final String regExpr) {
 		return this.filterCallsIfNecessary(this.failedOperationCalls, regExpr);
 	}

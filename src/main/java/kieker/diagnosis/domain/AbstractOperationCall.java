@@ -180,5 +180,4 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 		}
 		return true;
 	}
-
 }

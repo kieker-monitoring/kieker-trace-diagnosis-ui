@@ -69,9 +69,10 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 		final Distributor<Trace> distributor = new Distributor<>(new CopyByReferenceStrategy());
 		final TraceAggregationComposite aggregation = new TraceAggregationComposite(this.aggregatedTraces, this.failedAggregatedTraces, this.failureContainingAggregatedTraces);
 		final CollectorSink<KiekerMetadataRecord> metadataCollector = new CollectorSink<>(this.metadataRecords);
-		final OperationCallHandlerComposite operationCallHandler = new OperationCallHandlerComposite(this.operationCalls, this.failedOperationCalls, this.aggregatedOperationCalls,
-				this.aggregatedFailedOperationCalls);
 
+		final OperationCallHandlerComposite operationCallHandler = new OperationCallHandlerComposite(this.operationCalls, this.failedOperationCalls, this.aggregatedOperationCalls,
+				this.aggregatedFailedOperationCalls);	
+		
 		this.beginEndOfMonitoringDetector = new BeginEndOfMonitoringDetector();
 		this.reconstruction = new TraceReconstructionComposite(this.traces, this.failedTraces, this.failureContainingTraces);
 
@@ -143,5 +144,4 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 	public List<AggregatedOperationCall> getAggregatedFailedOperationCalls() {
 		return this.aggregatedFailedOperationCalls;
 	}
-
 }

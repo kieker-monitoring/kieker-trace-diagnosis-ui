@@ -23,6 +23,8 @@ import static org.junit.Assert.assertThat;
 
 import java.io.File;
 
+import kieker.diagnosis.model.importer.ImportAnalysisConfiguration;
+
 import org.junit.Test;
 
 import teetime.framework.Analysis;

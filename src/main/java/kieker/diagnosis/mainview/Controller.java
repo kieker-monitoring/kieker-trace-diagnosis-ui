@@ -57,10 +57,14 @@ public final class Controller implements SelectionListener {
 	@Autowired private AggregatedTracesViewController aggregatedTracesViewController;
 
 	@Autowired private CallsViewController callsViewController;
-
+	
 	@Autowired private TracesViewController tracesViewController;
-
+	
 	@Autowired private AggregatedCallsViewController aggregatedCallsViewController;
+	
+	// TODO czi
+	@Autowired private CallsViewController databaseCallsViewController;
+	@Autowired private AggregatedCallsViewController aggregatedDatabaseCallsViewController;
 
 	@Autowired private MonitoringStatisticsViewController monitoringStatisticsViewController;
 
@@ -77,8 +81,12 @@ public final class Controller implements SelectionListener {
 		this.subViewMapper.map(SubView.TRACES_SUB_VIEW).to(this.tracesViewController.getView());
 		this.subViewMapper.map(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW).to(this.aggregatedCallsViewController.getView());
 		this.subViewMapper.map(SubView.OPERATION_CALLS_SUB_VIEW).to(this.callsViewController.getView());
+		
+		// TODO czi
+		this.subViewMapper.map(SubView.OPERATION_CALLS_SUB_VIEW).to(this.databaseCallsViewController.getView());
+		this.subViewMapper.map(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW).to(this.aggregatedDatabaseCallsViewController.getView());
+		
 		this.subViewMapper.map(SubView.MONITORING_STATISTICS_VIEW).to(this.monitoringStatisticsViewController.getView());
-
 	}
 
 	public void showView() {
@@ -138,6 +146,15 @@ public final class Controller implements SelectionListener {
 		if (e.item == this.view.getTrtmOperationCalls()) {
 			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.OPERATION_CALLS_SUB_VIEW));
 		}
+		
+		// TODO czi
+		if (e.item == this.view.getTrtmAggregatedDatabaseOperationCalls()) {
+			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW));
+		}
+		if (e.item == this.view.getTrtmDatabaseOperationCalls()) {
+			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.OPERATION_CALLS_SUB_VIEW));
+		}
+		
 		if (e.item == this.view.getTrtmMonitoringLogStatistics()) {
 			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.MONITORING_STATISTICS_VIEW));
 		}

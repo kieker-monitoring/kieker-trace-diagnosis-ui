@@ -42,14 +42,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * The main view of the application. For the most part it uses sub-views to show data.
+ * The main view of the application. For the most part it uses sub-views to show
+ * data.
  * 
  * @author Nils Christian Ehmke
  */
 @Component
 public final class View {
 
-	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("kieker.diagnosis.mainview.view"); //$NON-NLS-1$
+	private static final ResourceBundle BUNDLE = ResourceBundle
+			.getBundle("kieker.diagnosis.mainview.view"); //$NON-NLS-1$
 
 	@Autowired
 	private PropertiesModel propertiesModel;
@@ -77,6 +79,11 @@ public final class View {
 	private TreeItem trtmAggregatedOperationCalls;
 	private TreeItem trtmAggregatedTraces;
 	private TreeItem trtmOperationCalls;
+
+	// TODO czi
+	private TreeItem trtmDatabaseOperationCalls;
+	private TreeItem trtmAggregatedDatabaseOperationCalls;
+
 	private TreeItem trtmExplorer;
 	private TreeItem trtmTraces;
 	private Tree tree;
@@ -119,6 +126,16 @@ public final class View {
 
 	public TreeItem getTrtmOperationCalls() {
 		return this.trtmOperationCalls;
+	}
+
+	// TODO czi
+	public TreeItem getTrtmDatabaseOperationCalls() {
+		return this.trtmDatabaseOperationCalls;
+	}
+
+	// TODO czi
+	public TreeItem getTrtmAggregatedDatabaseOperationCalls() {
+		return this.trtmAggregatedDatabaseOperationCalls;
 	}
 
 	public TreeItem getTrtmMonitoringLogStatistics() {
@@ -171,7 +188,8 @@ public final class View {
 
 	private void handleChangedSubView() {
 		final ISubView subView = this.model.getActiveSubView();
-		final Composite compositeToShow = (subView != null) ? subView.getComposite() : null; // NOPMD (null assignment)
+		final Composite compositeToShow = (subView != null) ? subView
+				.getComposite() : null; // NOPMD (null assignment)
 
 		this.subViewLayout.topControl = compositeToShow;
 
@@ -191,45 +209,73 @@ public final class View {
 		this.shell.setMaximized(true);
 		this.shell.setText(BUNDLE.getString("View.shell.text")); //$NON-NLS-1$ 
 
-		this.shell.setImage(new Image(this.shell.getDisplay(), ClassLoader.getSystemClassLoader().getResourceAsStream("kieker-logo.png")));
+		this.shell
+				.setImage(new Image(this.shell.getDisplay(), ClassLoader
+						.getSystemClassLoader().getResourceAsStream(
+								"kieker-logo.png")));
 		this.shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 
 		this.directoryDialog = new DirectoryDialog(this.shell);
-		this.settingsDialog = new SettingsDialog(this.shell, SWT.NONE, this.propertiesModel);
+		this.settingsDialog = new SettingsDialog(this.shell, SWT.NONE,
+				this.propertiesModel);
 
 		this.progressMonitorDialog = new ProgressMonitorDialog(this.shell);
 		this.progressMonitorDialog.setCancelable(false);
 
 		this.aboutDialog = new MessageBox(this.shell, SWT.ICON_INFORMATION);
 		this.aboutDialog.setText(BUNDLE.getString("View.mntmAbout.text"));
-		this.aboutDialog.setMessage("Kieker Trace Diagnosis - 1.0-SNAPSHOT\n\nCopyright 2015 Kieker Project (http://kieker-monitoring.net)");
+		this.aboutDialog
+				.setMessage("Kieker Trace Diagnosis - 1.0-SNAPSHOT\n\nCopyright 2015 Kieker Project (http://kieker-monitoring.net)");
 
 		final SashForm sashForm = new SashForm(this.shell, SWT.NONE);
 
 		this.tree = new Tree(sashForm, SWT.BORDER);
 
 		this.trtmExplorer = new TreeItem(this.tree, SWT.NONE);
-		this.trtmExplorer.setText(BUNDLE.getString("View.trtmExplorer.text(java.lang.String)")); //$NON-NLS-1$ 
+		this.trtmExplorer.setText(BUNDLE
+				.getString("View.trtmExplorer.text(java.lang.String)")); //$NON-NLS-1$ 
 
 		this.trtmTraces = new TreeItem(this.trtmExplorer, SWT.NONE);
-		this.trtmTraces.setText(BUNDLE.getString("View.trtmTraces.text(java.lang.String)")); //$NON-NLS-1$ 
+		this.trtmTraces.setText(BUNDLE
+				.getString("View.trtmTraces.text(java.lang.String)")); //$NON-NLS-1$ 
 		this.trtmTraces.setExpanded(true);
 
 		this.trtmAggregatedTraces = new TreeItem(this.trtmExplorer, 0);
-		this.trtmAggregatedTraces.setText(BUNDLE.getString("View.trtmAggregatedTraces.text(java.lang.String)")); //$NON-NLS-1$ 
+		this.trtmAggregatedTraces.setText(BUNDLE
+				.getString("View.trtmAggregatedTraces.text(java.lang.String)")); //$NON-NLS-1$ 
 
 		this.trtmAggregatedTraces.setExpanded(true);
 
 		this.trtmOperationCalls = new TreeItem(this.trtmExplorer, SWT.NONE);
-		this.trtmOperationCalls.setText(BUNDLE.getString("View.trtmOperationCalls.text(java.lang.String)")); //$NON-NLS-1$ 
+		this.trtmOperationCalls.setText(BUNDLE
+				.getString("View.trtmOperationCalls.text(java.lang.String)")); //$NON-NLS-1$ 
 
-		this.trtmAggregatedOperationCalls = new TreeItem(this.trtmExplorer, SWT.NONE);
-		this.trtmAggregatedOperationCalls.setText(BUNDLE.getString("View.trtmAggregatedOperationCalls.text(java.lang.String)")); //$NON-NLS-1$ 
+		this.trtmAggregatedOperationCalls = new TreeItem(this.trtmExplorer,
+				SWT.NONE);
+		this.trtmAggregatedOperationCalls
+				.setText(BUNDLE
+						.getString("View.trtmAggregatedOperationCalls.text(java.lang.String)")); //$NON-NLS-1$ 
 
 		this.trtmAggregatedOperationCalls.setExpanded(true);
 
-		this.trtmMonitoringLogStatistics = new TreeItem(this.trtmExplorer, SWT.NONE);
-		this.trtmMonitoringLogStatistics.setText(BUNDLE.getString("View.trtmMonitoringLogStatistics.text(java.lang.String)")); //$NON-NLS-1$
+		// TODO czi
+		this.trtmDatabaseOperationCalls = new TreeItem(this.trtmExplorer,
+				SWT.NONE);
+		this.trtmDatabaseOperationCalls
+				.setText(BUNDLE
+						.getString("View.trtmDatabaseOperationCalls.text(java.lang.String)")); //$NON-NLS-1$
+		this.trtmAggregatedDatabaseOperationCalls = new TreeItem(this.trtmExplorer,
+				SWT.NONE);
+		this.trtmAggregatedDatabaseOperationCalls
+				.setText(BUNDLE
+						.getString("View.trtmAggregatedDatabaseOperationCalls.text(java.lang.String)")); //$NON-NLS-1$ 
+		
+
+		this.trtmMonitoringLogStatistics = new TreeItem(this.trtmExplorer,
+				SWT.NONE);
+		this.trtmMonitoringLogStatistics
+				.setText(BUNDLE
+						.getString("View.trtmMonitoringLogStatistics.text(java.lang.String)")); //$NON-NLS-1$
 		this.trtmExplorer.setExpanded(true);
 
 		this.subViewLayout = new StackLayout();
@@ -251,7 +297,8 @@ public final class View {
 		mntmFile.setMenu(menu_1);
 
 		this.mntmOpenMonitoringLog = new MenuItem(menu_1, SWT.NONE);
-		this.mntmOpenMonitoringLog.setText(BUNDLE.getString("View.mntmOpenMonitoringLog.text")); //$NON-NLS-1$ 
+		this.mntmOpenMonitoringLog.setText(BUNDLE
+				.getString("View.mntmOpenMonitoringLog.text")); //$NON-NLS-1$ 
 
 		new MenuItem(menu_1, SWT.SEPARATOR);
 
