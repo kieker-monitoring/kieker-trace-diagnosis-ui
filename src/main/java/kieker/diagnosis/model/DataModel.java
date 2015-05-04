@@ -103,10 +103,10 @@ public final class DataModel extends Observable {
 		// Store the results from the analysis
 		this.databaseOperationCalls = databaseOperationAnalysis.getDatabaseOperationCalls();
 	
-		System.out.println("loaded operationCalls: " + operationCalls.size());
-		System.out.println("loaded databasOperationCalls: " + databaseOperationCalls.size());
+		System.out.println("\nloaded operationCalls: " + this.operationCalls.size());
+		System.out.println("loaded databasOperationCalls: " + this.databaseOperationCalls.size());
 		
-		for (DatabaseOperationCall record : databaseOperationCalls) {
+		for (DatabaseOperationCall record : this.databaseOperationCalls) {
 			System.out.println(record.toString());
 		}
 		

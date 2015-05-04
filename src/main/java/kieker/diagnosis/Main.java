@@ -44,7 +44,5 @@ public final class Main {
 			final Controller controller = context.getBean(Controller.class);
 			controller.showView();
 		}
-
 	}
-
 }

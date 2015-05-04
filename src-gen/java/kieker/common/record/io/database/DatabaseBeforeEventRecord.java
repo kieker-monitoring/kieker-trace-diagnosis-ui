@@ -28,7 +28,7 @@ import kieker.common.record.io.database.DatabaseEventRecord;
 /**
  * @author Christian Zirkelbach
  * 
- * @since 1.10
+ * @since 1.11
  */
 public class DatabaseBeforeEventRecord extends DatabaseEventRecord  {
 	/** Descriptive definition of the serialization size of the record. */

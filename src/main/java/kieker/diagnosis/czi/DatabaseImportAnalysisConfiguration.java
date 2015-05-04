@@ -50,9 +50,11 @@ public class DatabaseImportAnalysisConfiguration extends AnalysisConfiguration {
 		// Connect the stages
 		AnalysisConfiguration.connectIntraThreads(reader.getOutputPort(),
 				typeFilter.getInputPort());
+
 		AnalysisConfiguration.connectIntraThreads(
 				typeFilter.getOutputPortForType(IMonitoringRecord.class),
 				transformator.getInputPort());
+
 		AnalysisConfiguration.connectIntraThreads(
 				transformator.getOutputPort(),
 				this.callCollector.getInputPort());

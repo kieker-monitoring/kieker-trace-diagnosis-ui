@@ -6,16 +6,22 @@ import kieker.common.record.io.database.DatabaseBeforeEventRecord;
 import kieker.diagnosis.domain.DatabaseOperationCall;
 import kieker.diagnosis.model.importer.stages.AbstractStage;
 
+/**
+ * Transform the DatabaseEventRecords into DatabaseOperationCalls
+ * 
+ * @author Christian Zirkelbach
+ *
+ */
 public class DatabaseRecordTransformator extends
 		AbstractStage<IMonitoringRecord, DatabaseOperationCall> {
 
 	@Override
 	protected void execute(IMonitoringRecord input) {
 
-		System.out.println("executing DatabaseRecordReconstructor");
-		System.out.println(input.toString());
+		// System.out.println("executing DatabaseRecordReconstructor");
+		// System.out.println(input.toString());
 		System.out.println(input.getClass().getName());
-		
+
 		if (input instanceof DatabaseBeforeEventRecord) {
 			System.out.println("matched DatabaseBeforeEventRecord");
 			this.handleDatabaseBeforeEventRecord((DatabaseBeforeEventRecord) input);
