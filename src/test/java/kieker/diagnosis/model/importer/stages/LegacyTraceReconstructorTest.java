@@ -28,6 +28,7 @@ import java.util.List;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.diagnosis.domain.Trace;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import teetime.framework.Analysis;
@@ -110,6 +111,7 @@ public class LegacyTraceReconstructorTest {
 	}
 
 	@Test
+	@Ignore
 	public void exampleLogReconstructionShouldWork() throws Exception {
 		final ExampleLogReconstructionConfiguration configuration = new ExampleLogReconstructionConfiguration();
 		final Analysis<ExampleLogReconstructionConfiguration> analysis = new Analysis<>(configuration);
