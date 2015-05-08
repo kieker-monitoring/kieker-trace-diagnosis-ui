@@ -1,0 +1,35 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="kieker.diagnosis.mainview.dialog.settings.SettingsDialogViewController" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+
+	<spacing>10</spacing>
+
+	<TitledPane text="%SettingsDialog.grpAppearance.text" collapsible="false" >
+		<GridPane>
+			<hgap>10</hgap>
+			<vgap>10</vgap>
+
+			<Label text="%SettingsDialog.lblTimeUnit.text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+			<ComboBox fx:id="timeunits" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS"/>
+
+			<Label text="%SettingsDialog.lblOperationNames.text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+			<ComboBox GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" />
+
+			<Label text="%SettingsDialog.lblComponentNames.text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+			<ComboBox GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS"/>
+
+			<Label text="%SettingsDialog.lblLimitNumberOf.text" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+			<Spinner GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" />
+		</GridPane>
+	</TitledPane>
+
+	<ButtonBar>
+		<buttons>
+			<Button text="%SettingsDialog.btnOkay.text" />
+			<Button text="%SettingsDialog.btnCancel.text" />
+		</buttons>
+	</ButtonBar>
+
+</VBox>

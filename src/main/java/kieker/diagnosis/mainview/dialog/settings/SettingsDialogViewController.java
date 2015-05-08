@@ -14,32 +14,53 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.mainview.dialog;
+package kieker.diagnosis.mainview.dialog.settings;
 
+import java.util.concurrent.TimeUnit;
+
+import javafx.collections.FXCollections;
+import javafx.collections.transformation.SortedList;
+import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+import kieker.diagnosis.common.Mapper;
+import kieker.diagnosis.model.PropertiesModel;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class SettingsDialog {
+public final class SettingsDialogViewController {
 
-	// private void initializeMapper() {
-	// this.timeUnitMapper = new Mapper<>();
-	//
-	// this.timeUnitMapper.map(TimeUnit.NANOSECONDS).to(0);
-	// this.timeUnitMapper.map(TimeUnit.MICROSECONDS).to(1);
-	// this.timeUnitMapper.map(TimeUnit.MILLISECONDS).to(2);
-	// this.timeUnitMapper.map(TimeUnit.SECONDS).to(3);
-	// this.timeUnitMapper.map(TimeUnit.MINUTES).to(4);
-	// this.timeUnitMapper.map(TimeUnit.HOURS).to(5);
-	// this.timeUnitMapper.map(TimeUnit.DAYS).to(6);
-	// }
+	private final PropertiesModel propertiesModel = PropertiesModel.getInstance();
+	private Mapper<TimeUnit, Integer> timeUnitMapper;
 
-	// private void loadSettings() {
-	// this.comboBoxTimeUnit.select(this.timeUnitMapper.resolve(this.model.getTimeUnit()));
-	// this.comboBoxOperationNames.select(this.model.getOperationNames() == OperationNames.SHORT ? 0 : 1);
-	// this.comboBoxComponentNames.select(this.model.getComponentNames() == ComponentNames.SHORT ? 0 : 1);
-	// this.spinner.setSelection(this.model.getMaxTracesToShow());
-	// }
+	@FXML private ComboBox<TimeUnit> timeunits;
+
+	public void initialize() {
+		this.initializeMapper();
+
+		this.timeunits.setItems(new SortedList<>(FXCollections.observableArrayList(this.timeUnitMapper.keys())));
+
+		this.loadSettings();
+	}
+
+	private void initializeMapper() {
+		this.timeUnitMapper = new Mapper<>();
+
+		this.timeUnitMapper.map(TimeUnit.NANOSECONDS).to(0);
+		this.timeUnitMapper.map(TimeUnit.MICROSECONDS).to(1);
+		this.timeUnitMapper.map(TimeUnit.MILLISECONDS).to(2);
+		this.timeUnitMapper.map(TimeUnit.SECONDS).to(3);
+		this.timeUnitMapper.map(TimeUnit.MINUTES).to(4);
+		this.timeUnitMapper.map(TimeUnit.HOURS).to(5);
+		this.timeUnitMapper.map(TimeUnit.DAYS).to(6);
+	}
+
+	private void loadSettings() {
+		this.timeunits.getSelectionModel().select(this.propertiesModel.getTimeUnit());
+		// this.comboBoxOperationNames.select(this.model.getOperationNames() == OperationNames.SHORT ? 0 : 1);
+		// this.comboBoxComponentNames.select(this.model.getComponentNames() == ComponentNames.SHORT ? 0 : 1);
+		// this.spinner.setSelection(this.model.getMaxTracesToShow());
+	}
 	//
 	// private void saveSettings() {
 	// this.model.startModification();
@@ -54,15 +75,15 @@ public final class SettingsDialog {
 
 	// private void createContents() {
 	// this.shlSettings = new Shell(this.getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
-	//		this.shlSettings.setText(BUNDLE.getString("SettingsDialog.shlSettings.text")); //$NON-NLS-1$ 
+	//		this.shlSettings.setText(BUNDLE.getString("SettingsDialog.shlSettings.text")); //$NON-NLS-1$
 	// this.shlSettings.setLayout(new GridLayout(1, false));
 	//
 	// final Group grpAppearance = new Group(this.shlSettings, SWT.NONE);
-	//		grpAppearance.setText(BUNDLE.getString("SettingsDialog.grpAppearance.text")); //$NON-NLS-1$ 
+	//		grpAppearance.setText(BUNDLE.getString("SettingsDialog.grpAppearance.text")); //$NON-NLS-1$
 	// grpAppearance.setLayout(new GridLayout(2, false));
 	//
 	// final Label lblTimeUnit = new Label(grpAppearance, SWT.NONE);
-	//		lblTimeUnit.setText(BUNDLE.getString("SettingsDialog.lblTimeUnit.text") + ":"); //$NON-NLS-1$ 
+	//		lblTimeUnit.setText(BUNDLE.getString("SettingsDialog.lblTimeUnit.text") + ":"); //$NON-NLS-1$
 	//
 	// final String nanoseconds = BUNDLE.getString("SettingsDialog.nanoseconds");
 	// final String microseconds = BUNDLE.getString("SettingsDialog.microseconds");
@@ -78,7 +99,7 @@ public final class SettingsDialog {
 	// this.comboBoxTimeUnit.select(0);
 	//
 	// final Label lblOperationNames = new Label(grpAppearance, SWT.NONE);
-	//		lblOperationNames.setText(BUNDLE.getString("SettingsDialog.lblOperationNames.text") + ":"); //$NON-NLS-1$ 
+	//		lblOperationNames.setText(BUNDLE.getString("SettingsDialog.lblOperationNames.text") + ":"); //$NON-NLS-1$
 	//
 	// this.comboBoxOperationNames = new Combo(grpAppearance, SWT.READ_ONLY);
 	// this.comboBoxOperationNames.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -86,7 +107,7 @@ public final class SettingsDialog {
 	// this.comboBoxOperationNames.select(0);
 	//
 	// final Label lblComponentNames = new Label(grpAppearance, SWT.NONE);
-	//		lblComponentNames.setText(BUNDLE.getString("SettingsDialog.lblComponentNames.text") + ":"); //$NON-NLS-1$ 
+	//		lblComponentNames.setText(BUNDLE.getString("SettingsDialog.lblComponentNames.text") + ":"); //$NON-NLS-1$
 	//
 	// this.comboBoxComponentNames = new Combo(grpAppearance, SWT.READ_ONLY);
 	// this.comboBoxComponentNames.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -121,7 +142,7 @@ public final class SettingsDialog {
 	// SettingsDialog.this.shlSettings.close();
 	// }
 	// });
-	//		btnOkay.setText(BUNDLE.getString("SettingsDialog.btnOkay.text")); //$NON-NLS-1$ 
+	//		btnOkay.setText(BUNDLE.getString("SettingsDialog.btnOkay.text")); //$NON-NLS-1$
 	//
 	// final Button btnCancel = new Button(composite, SWT.NONE);
 	// btnCancel.addSelectionListener(new SelectionAdapter() {
@@ -131,6 +152,6 @@ public final class SettingsDialog {
 	// SettingsDialog.this.shlSettings.close();
 	// }
 	// });
-	//		btnCancel.setText(BUNDLE.getString("SettingsDialog.btnCancel.text")); //$NON-NLS-1$ 
+	//		btnCancel.setText(BUNDLE.getString("SettingsDialog.btnCancel.text")); //$NON-NLS-1$
 	// }
 }

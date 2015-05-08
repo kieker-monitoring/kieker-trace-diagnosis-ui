@@ -1,0 +1,17 @@
+#regexpfilter {
+	-fx-background-color: white;
+	-fx-border-color: lightgray;
+}
+
+.text-field {
+	-fx-background-color: transparent;
+	-fx-background-insets: 0px;
+}
+
+#detailpanel, #statusbar {
+	-fx-border-color: lightgray;
+}
+
+.failed {
+	-fx-text-fill: red;
+}

@@ -53,6 +53,10 @@ public final class Mapper<I, O> {
 		return this.internalMap.entrySet().parallelStream().filter(entry -> value.equals(entry.getValue())).map(Map.Entry::getKey).findFirst().orElse(null);
 	}
 
+	public Collection<I> keys() {
+		return this.internalMap.keySet();
+	}
+
 	public Collection<O> values() {
 		return this.internalMap.values();
 	}

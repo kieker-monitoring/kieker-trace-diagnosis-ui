@@ -6,3 +6,4 @@
 /build
 /teetime.log
 /*.log
+/.nb-gradle/private/
