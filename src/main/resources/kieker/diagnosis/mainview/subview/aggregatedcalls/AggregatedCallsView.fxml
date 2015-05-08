@@ -16,11 +16,14 @@
 			<ToggleGroup fx:id="togglegroup" />
 		</fx:define>
 
-		<RadioButton text="%AggregatedCallsView.btnShowAll.text" selected="true" toggleGroup="$togglegroup" onAction="#showAllMethods" />
-		<RadioButton text="%AggregatedCallsView.btnShowJustFailed.text" toggleGroup="$togglegroup" onAction="#showJustFailedMethods" />
+		<RadioButton text="%AggregatedCallsView.btnShowAll.text"
+			selected="true" toggleGroup="$togglegroup" onAction="#showAllMethods" />
+		<RadioButton text="%AggregatedCallsView.btnShowJustFailed.text"
+			toggleGroup="$togglegroup" onAction="#showJustFailedMethods" />
 	</HBox>
-	
-	<TextField promptText="%AggregatedCallsView.text.message" fx:id="regexpfilter" GridPane.rowIndex="1" />
+
+	<TextField promptText="%AggregatedCallsView.text.message"
+		fx:id="regexpfilter" GridPane.rowIndex="1" />
 
 	<TableView fx:id="table" GridPane.hgrow="ALWAYS"
 		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true">
@@ -130,39 +133,46 @@
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="3" GridPane.columnIndex="2" />
 
-		<TextField text="%AggregatedCallsView.tblclmnMinimalDuration.text"
+		<TextField text="%AggregatedCallsView.lblFailed.text"
 			editable="false" GridPane.rowIndex="4" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="4" GridPane.columnIndex="2" />
 
-		<TextField text="%AggregatedCallsView.tblclmnMeanDuration.text"
+		<TextField text="%AggregatedCallsView.tblclmnNumberOfCalls.text"
 			editable="false" GridPane.rowIndex="5" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="5" GridPane.columnIndex="2" />
 
-		<TextField text="%AggregatedCallsView.tblclmnMedianDuration.text"
+		<TextField text="%AggregatedCallsView.tblclmnMinimalDuration.text"
 			editable="false" GridPane.rowIndex="6" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="6" GridPane.columnIndex="2" />
 
-		<TextField text="%AggregatedCallsView.tblclmnMaximalDuration.text"
+		<TextField text="%AggregatedCallsView.tblclmnMeanDuration.text"
 			editable="false" GridPane.rowIndex="7" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="7" GridPane.columnIndex="2" />
 
-		<TextField text="%AggregatedCallsView.tblclmnTotalDuration.text"
+		<TextField text="%AggregatedCallsView.tblclmnMedianDuration.text"
 			editable="false" GridPane.rowIndex="8" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="8" GridPane.columnIndex="2" />
 
-		<TextField
-			text="%AggregatedCallsView.tblclmnNumberOfCalls.text"
+		<TextField text="%AggregatedCallsView.tblclmnMaximalDuration.text"
 			editable="false" GridPane.rowIndex="9" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="9" GridPane.columnIndex="2" />
+
+		<TextField text="%AggregatedCallsView.tblclmnTotalDuration.text"
+			editable="false" GridPane.rowIndex="10" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="10" GridPane.columnIndex="2" />
+
+
 	</GridPane>
 
-	<HBox fx:id="statusbar" GridPane.rowIndex="4">
-		<TextField text="%AggregatedCallsView.lblCounter.text" editable="false" />
+	<HBox fx:id="statusbar" GridPane.rowIndex="4" GridPane.hgrow="ALWAYS">
+		<TextField text="%AggregatedCallsView.lblCounter.text"
+			editable="false" HBox.hgrow="ALWAYS"/>
 	</HBox>
 </GridPane>
