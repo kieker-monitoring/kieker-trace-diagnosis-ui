@@ -49,6 +49,9 @@
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnCalls.text">
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory property="calls" />
+				</cellValueFactory>
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnTraceDepth.text">
@@ -63,11 +66,40 @@
 				</cellValueFactory>
 			</TreeTableColumn>
 			
-			<TreeTableColumn text="%AggregatedTracesView.trclmnMinimalDuration.text" />
-			<TreeTableColumn text="%AggregatedTracesView.trclmnAverageDuration.text" />
-			<TreeTableColumn text="%AggregatedTracesView.trclmnMeanDuration.text" />
-			<TreeTableColumn text="%AggregatedTracesView.trclmnMaximalDuration.text" />
-			<TreeTableColumn text="%AggregatedTracesView.trclmnTotalDuration.text" />
+			<TreeTableColumn text="%AggregatedTracesView.trclmnMinimalDuration.text" >
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory
+						property="minDuration" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%AggregatedTracesView.trclmnAverageDuration.text" >
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory
+						property="meanDuration" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%AggregatedTracesView.trclmnMeanDuration.text" >
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory
+						property="medianDuration" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%AggregatedTracesView.trclmnMaximalDuration.text" >
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory
+						property="maxDuration" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%AggregatedTracesView.trclmnTotalDuration.text" >
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory
+						property="totalDuration" />
+				</cellValueFactory>
+			</TreeTableColumn>
 		</columns>
 	
 	

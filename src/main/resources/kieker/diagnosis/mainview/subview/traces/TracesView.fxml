@@ -65,10 +65,33 @@
 				</cellValueFactory>
 			</TreeTableColumn>
 
-			<TreeTableColumn text="%TracesView.trclmnDuration.text" />
-			<TreeTableColumn text="%TracesView.trclmnPercent.text" />
-			<TreeTableColumn text="%TracesView.trclmnTraceId.text" />
-			<TreeTableColumn text="%TracesView.trclmnTimestamp.text" />
+			<TreeTableColumn text="%TracesView.trclmnDuration.text" >
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory
+						property="duration" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%TracesView.trclmnPercent.text" >
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory
+						property="percent" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%TracesView.trclmnTraceId.text" >
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory
+						property="traceID" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%TracesView.trclmnTimestamp.text" >
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory
+						property="timestamp" />
+				</cellValueFactory>
+			</TreeTableColumn>
 		</columns>
 	</TreeTableView>
 
