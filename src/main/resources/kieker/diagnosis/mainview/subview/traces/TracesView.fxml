@@ -67,7 +67,7 @@
 
 			<TreeTableColumn text="%TracesView.trclmnDuration.text" >
 				<cellValueFactory>
-					<TreeItemPropertyValueFactory
+					<kieker.diagnosis.mainview.subview.util.DurationTreeCellValueFactory
 						property="duration" />
 				</cellValueFactory>
 			</TreeTableColumn>
