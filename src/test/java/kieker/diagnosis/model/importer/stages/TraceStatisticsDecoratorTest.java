@@ -51,6 +51,7 @@ public final class TraceStatisticsDecoratorTest {
 		final TraceStatisticsDecorator decorator = new TraceStatisticsDecorator();
 
 		decorator.onStarting();
+		decorator.onInitializing();
 		decorator.execute(trace);
 
 		assertThat((double) rootCall.getPercent(), is(closeTo(100.0, 1e-3)));
@@ -74,6 +75,7 @@ public final class TraceStatisticsDecoratorTest {
 		final TraceStatisticsDecorator decorator = new TraceStatisticsDecorator();
 
 		decorator.onStarting();
+		decorator.onInitializing();
 		decorator.execute(trace);
 
 		assertThat(rootCall.getStackDepth(), is(2));
@@ -88,6 +90,7 @@ public final class TraceStatisticsDecoratorTest {
 		final TraceStatisticsDecorator decorator = new TraceStatisticsDecorator();
 
 		decorator.onStarting();
+		decorator.onInitializing();
 		decorator.execute(trace);
 
 		assertThat(rootCall.getStackDepth(), is(0));
@@ -113,6 +116,7 @@ public final class TraceStatisticsDecoratorTest {
 		final TraceStatisticsDecorator decorator = new TraceStatisticsDecorator();
 
 		decorator.onStarting();
+		decorator.onInitializing();
 		decorator.execute(trace);
 
 		assertThat(rootCall.getStackSize(), is(5));
@@ -127,6 +131,7 @@ public final class TraceStatisticsDecoratorTest {
 		final TraceStatisticsDecorator decorator = new TraceStatisticsDecorator();
 
 		decorator.onStarting();
+		decorator.onInitializing();
 		decorator.execute(trace);
 
 		assertThat(rootCall.getStackSize(), is(1));
