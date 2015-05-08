@@ -50,6 +50,7 @@ public final class AggregatedTraceStatisticsDecoratorTest {
 		final AggregatedTraceStatisticsDecorator decorator = new AggregatedTraceStatisticsDecorator();
 
 		decorator.onStarting();
+		decorator.onInitializing();
 		decorator.execute(trace);
 
 		assertThat(trace.getRootOperationCall().getMinDuration(), is(7L));
