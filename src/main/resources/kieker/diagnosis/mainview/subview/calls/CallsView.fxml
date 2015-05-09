@@ -84,7 +84,8 @@
 
 	</TableView>
 
-	<GridPane fx:id="detailpanel" GridPane.rowIndex="3">
+        <TitledPane GridPane.rowIndex="3" text="%properties">
+	<GridPane fx:id="detailpanel" >
 		<TextField text="%CallsView.tblclmnExecutionContainer.text"
 			editable="false" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
@@ -121,6 +122,7 @@
 			GridPane.rowIndex="7" GridPane.columnIndex="2" fx:id="failed" />
 			
 	</GridPane>
+        </TitledPane>
 
 	<HBox fx:id="statusbar" GridPane.rowIndex="4">
 		<TextField text="%CallsView.lbCounter.text" editable="false" fx:id="counter" />

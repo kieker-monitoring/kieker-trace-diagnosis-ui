@@ -12,7 +12,7 @@
 			<MenuItem text="%View.mntmExit.text" onAction="#close"/>
 		</Menu>
 		<Menu text="%View.mntmHelp.text">
-			<MenuItem text="%View.mntmAbout.text"/>
+			<MenuItem text="%View.mntmAbout.text" onAction="#showAbout"/>
 		</Menu>
 	</MenuBar>
 

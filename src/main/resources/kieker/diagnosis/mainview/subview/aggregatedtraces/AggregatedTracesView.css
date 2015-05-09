@@ -8,10 +8,6 @@
 	-fx-background-insets: 0px;
 }
 
-#detailpanel, #statusbar {
-	-fx-border-color: lightgray;
-}
-
 .failed {
 	-fx-text-fill: red;
 }

@@ -101,10 +101,10 @@
 				</cellValueFactory>
 			</TreeTableColumn>
 		</columns>
-	
-	
 	</TreeTableView>
-	<GridPane fx:id="detailpanel" GridPane.rowIndex="3">
+	
+	 <TitledPane GridPane.rowIndex="3" text="%properties">
+	<GridPane fx:id="detailpanel" >
 		<TextField text="%AggregatedTracesView.lblExecutionContainer.text"
 			editable="false" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
@@ -166,7 +166,7 @@
 			GridPane.rowIndex="12" GridPane.columnIndex="2" fx:id="failed" />
 			
 	</GridPane>
-
+</TitledPane>
 	<HBox fx:id="statusbar" GridPane.rowIndex="4">
 		<TextField text="%AggregatedTracesView.lblCounter.text" editable="false" fx:id="counter" />
 	</HBox>

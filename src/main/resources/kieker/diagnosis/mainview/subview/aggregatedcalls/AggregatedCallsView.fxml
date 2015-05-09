@@ -117,7 +117,8 @@
 		</columns>
 	</TableView>
 
-	<GridPane fx:id="detailpanel" GridPane.rowIndex="3">
+	 <TitledPane GridPane.rowIndex="3" text="%properties">
+	<GridPane fx:id="detailpanel" >
 		<TextField text="%AggregatedCallsView.tblclmnExecutionContainer.text"
 			editable="false" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
@@ -170,7 +171,7 @@
 
 
 	</GridPane>
-
+</TitledPane>
 	<HBox fx:id="statusbar" GridPane.rowIndex="4" GridPane.hgrow="ALWAYS">
 		<TextField text="%AggregatedCallsView.lblCounter.text"
 			editable="false" HBox.hgrow="ALWAYS"/>

@@ -38,6 +38,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import kieker.diagnosis.domain.OperationCall;
+import kieker.diagnosis.mainview.dialog.about.AboutDialogViewController;
 import kieker.diagnosis.mainview.dialog.settings.SettingsDialogViewController;
 import kieker.diagnosis.mainview.subview.aggregatedcalls.AggregatedCallsViewController;
 import kieker.diagnosis.mainview.subview.aggregatedtraces.AggregatedTracesViewController;
@@ -122,6 +123,10 @@ public final class Controller {
 
 	public void showSettings() throws IOException {
 		this.loadDialogPane(SettingsDialogViewController.class, "Settings");
+	}
+
+	public void showAbout() throws IOException {
+		this.loadDialogPane(AboutDialogViewController.class, "About");
 	}
 
 	public void close() {

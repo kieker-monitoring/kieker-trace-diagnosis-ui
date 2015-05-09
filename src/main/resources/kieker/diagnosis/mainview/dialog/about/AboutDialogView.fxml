@@ -1,0 +1,15 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="kieker.diagnosis.mainview.dialog.about.AboutDialogViewController" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+
+	<spacing>10</spacing>
+
+	<ButtonBar>
+		<buttons>
+			<Button text="%AboutDialog.btnOkay.text" />
+		</buttons>
+	</ButtonBar>
+
+</VBox>
