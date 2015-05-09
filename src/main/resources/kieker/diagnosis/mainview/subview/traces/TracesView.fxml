@@ -66,6 +66,9 @@
 			</TreeTableColumn>
 
 			<TreeTableColumn text="%TracesView.trclmnDuration.text" >
+			<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.DurationTreeCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<kieker.diagnosis.mainview.subview.util.DurationTreeCellValueFactory
 						property="duration" />
@@ -150,9 +153,8 @@
 
 	</GridPane>
 </TitledPane>
-	<HBox fx:id="statusbar" GridPane.rowIndex="4">
-		<TextField text="%TracesView.lblCounter.text" editable="false"
-			fx:id="counter" />
+	<HBox fx:id="statusbar" GridPane.rowIndex="4"  GridPane.hgrow="ALWAYS">
+		<TextField text="%TracesView.lblCounter.text" editable="false" fx:id="counter" HBox.hgrow="ALWAYS"/>
 	</HBox>
 
 </GridPane>

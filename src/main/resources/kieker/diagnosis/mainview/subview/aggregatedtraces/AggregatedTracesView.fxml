@@ -67,6 +67,9 @@
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnMinimalDuration.text" >
+			<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.DurationTreeCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<kieker.diagnosis.mainview.subview.util.DurationTreeCellValueFactory
 						property="minDuration" />
@@ -74,6 +77,9 @@
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnAverageDuration.text" >
+			<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.DurationTreeCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<kieker.diagnosis.mainview.subview.util.DurationTreeCellValueFactory
 						property="meanDuration" />
@@ -81,6 +87,9 @@
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnMeanDuration.text" >
+			<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.DurationTreeCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<kieker.diagnosis.mainview.subview.util.DurationTreeCellValueFactory
 						property="medianDuration" />
@@ -88,6 +97,9 @@
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnMaximalDuration.text" >
+			<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.DurationTreeCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<kieker.diagnosis.mainview.subview.util.DurationTreeCellValueFactory
 						property="maxDuration" />
@@ -95,6 +107,9 @@
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnTotalDuration.text" >
+			<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.DurationTreeCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<kieker.diagnosis.mainview.subview.util.DurationTreeCellValueFactory
 						property="totalDuration" />

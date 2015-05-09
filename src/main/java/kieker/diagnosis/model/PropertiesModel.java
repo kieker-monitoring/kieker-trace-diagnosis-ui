@@ -22,6 +22,9 @@ import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
+
 /**
  * @author Nils Christian Ehmke
  */
@@ -41,7 +44,7 @@ public final class PropertiesModel extends Observable {
 	private TimeUnit timeUnit;
 	private ComponentNames componentNames;
 	private OperationNames operationNames;
-	private int maxTracesToShow;
+	private final SimpleObjectProperty<Integer> maxTracesToShow = new SimpleObjectProperty<Integer>();
 
 	public PropertiesModel() {
 		this.loadSettings();
@@ -54,7 +57,7 @@ public final class PropertiesModel extends Observable {
 		this.timeUnit = TimeUnit.valueOf(preferences.get(PropertiesModel.KEY_TIMEUNIT, TimeUnit.NANOSECONDS.name()));
 		this.componentNames = ComponentNames.valueOf(preferences.get(PropertiesModel.KEY_COMPONENTS, ComponentNames.LONG.name()));
 		this.operationNames = OperationNames.valueOf(preferences.get(PropertiesModel.KEY_OPERATIONS, OperationNames.SHORT.name()));
-		this.maxTracesToShow = Integer.parseInt(preferences.get(PropertiesModel.KEY_MAX_TRACES, "1000000"));
+		this.maxTracesToShow.setValue(Integer.parseInt(preferences.get(PropertiesModel.KEY_MAX_TRACES, "1000000")));
 	}
 
 	private void saveSettings() {
@@ -64,7 +67,7 @@ public final class PropertiesModel extends Observable {
 		preferences.put(PropertiesModel.KEY_TIMEUNIT, this.timeUnit.name());
 		preferences.put(PropertiesModel.KEY_COMPONENTS, this.componentNames.name());
 		preferences.put(PropertiesModel.KEY_OPERATIONS, this.operationNames.name());
-		preferences.put(PropertiesModel.KEY_MAX_TRACES, Integer.toString(this.maxTracesToShow));
+		preferences.put(PropertiesModel.KEY_MAX_TRACES, this.maxTracesToShow.getValue().toString());
 
 		try {
 			preferences.flush();
@@ -113,14 +116,12 @@ public final class PropertiesModel extends Observable {
 		this.notifyObserversAndSaveSettings();
 	}
 
-	public int getMaxTracesToShow() {
+	public ObservableValue<Integer> getMaxTracesToShow() {
 		return this.maxTracesToShow;
 	}
 
 	public void setMaxTracesToShow(final int maxTracesToShow) {
-		this.maxTracesToShow = maxTracesToShow;
-
-		this.notifyObserversAndSaveSettings();
+		this.maxTracesToShow.set(maxTracesToShow);
 	}
 
 	public void startModification() {

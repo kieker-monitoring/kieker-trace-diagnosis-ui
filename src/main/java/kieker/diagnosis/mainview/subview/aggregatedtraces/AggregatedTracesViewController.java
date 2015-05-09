@@ -17,9 +17,13 @@
 package kieker.diagnosis.mainview.subview.aggregatedtraces;
 
 import java.util.List;
+import java.util.ResourceBundle;
 
+import javafx.beans.binding.Bindings;
 import javafx.collections.ListChangeListener.Change;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
 import kieker.diagnosis.domain.AggregatedOperationCall;
@@ -35,10 +39,18 @@ public final class AggregatedTracesViewController {
 	private final DataModel dataModel = DataModel.getInstance();
 
 	@FXML private TreeTableView<AggregatedOperationCall> treetable;
+	@FXML private TextField counter;
+
+	@FXML private ResourceBundle resources;
 
 	public void initialize() {
 		this.reloadTreetable();
+
+		final ObservableList<AggregatedTrace> traces = this.dataModel.getAggregatedTraces();
+
 		this.dataModel.getAggregatedTraces().addListener((final Change<? extends AggregatedTrace> c) -> this.reloadTreetable());
+
+		this.counter.textProperty().bind(Bindings.createStringBinding(() -> traces.size() + " " + this.resources.getString("AggregatedTracesView.lblCounter.text"), traces));
 	}
 
 	private void reloadTreetable() {

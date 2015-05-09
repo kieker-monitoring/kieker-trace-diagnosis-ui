@@ -125,6 +125,6 @@
         </TitledPane>
 
 	<HBox fx:id="statusbar" GridPane.rowIndex="4">
-		<TextField text="%CallsView.lbCounter.text" editable="false" fx:id="counter" />
+		<TextField text="%CallsView.lbCounter.text" editable="false" fx:id="counter" HBox.hgrow="ALWAYS"/>
 	</HBox>
 </GridPane>
