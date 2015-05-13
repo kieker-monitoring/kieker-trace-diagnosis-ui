@@ -28,13 +28,10 @@ import java.util.List;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.diagnosis.domain.Trace;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import teetime.framework.Analysis;
 import teetime.framework.AnalysisConfiguration;
-import teetime.framework.pipe.IPipeFactory;
-import teetime.framework.pipe.SingleElementPipeFactory;
 import teetime.stage.CollectorSink;
 import teetime.stage.InitialElementProducer;
 import teetime.stage.InstanceOfFilter;
@@ -111,7 +108,7 @@ public class LegacyTraceReconstructorTest {
 	}
 
 	@Test
-	@Ignore
+//	@Ignore
 	public void exampleLogReconstructionShouldWork() throws Exception {
 		final ExampleLogReconstructionConfiguration configuration = new ExampleLogReconstructionConfiguration();
 		final Analysis<ExampleLogReconstructionConfiguration> analysis = new Analysis<>(configuration);
@@ -131,11 +128,10 @@ public class LegacyTraceReconstructorTest {
 			final LegacyTraceReconstructor reconstructor = new LegacyTraceReconstructor();
 			final CollectorSink<Trace> collector = new CollectorSink<>(this.traceCollectorList);
 
-			final IPipeFactory pipeFactory = new SingleElementPipeFactory();
-			pipeFactory.create(producer.getOutputPort(), reader.getInputPort());
-			pipeFactory.create(reader.getOutputPort(), typeFilter.getInputPort());
-			pipeFactory.create(typeFilter.getMatchedOutputPort(), reconstructor.getInputPort());
-			pipeFactory.create(reconstructor.getOutputPort(), collector.getInputPort());
+			connectIntraThreads(producer.getOutputPort(), reader.getInputPort());
+			connectIntraThreads(reader.getOutputPort(), typeFilter.getInputPort());
+			connectIntraThreads(typeFilter.getMatchedOutputPort(), reconstructor.getInputPort());
+			connectIntraThreads(reconstructor.getOutputPort(), collector.getInputPort());
 
 			this.addThreadableStage(producer);
 		}
