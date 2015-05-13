@@ -12,13 +12,13 @@
 			<vgap>10</vgap>
 
 			<Label text="%SettingsDialog.lblTimeUnit.text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-			<ComboBox fx:id="timeunits" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS"/>
+			<ComboBox fx:id="timeunits" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
 
 			<Label text="%SettingsDialog.lblOperationNames.text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-			<ComboBox GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" />
+			<ComboBox GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity" />
 
 			<Label text="%SettingsDialog.lblComponentNames.text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-			<ComboBox GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS"/>
+			<ComboBox GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
 
 			<Label text="%SettingsDialog.lblLimitNumberOf.text" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 			<Spinner GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" />
@@ -26,6 +26,9 @@
 	</TitledPane>
 
 	<ButtonBar>
+		<VBox.margin>
+			<javafx.geometry.Insets right="10" />
+		</VBox.margin>
 		<buttons>
 			<Button text="%SettingsDialog.btnOkay.text" />
 			<Button text="%SettingsDialog.btnCancel.text" />

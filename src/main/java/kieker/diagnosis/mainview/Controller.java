@@ -173,6 +173,7 @@ public final class Controller {
 
 		final Stage dialogStage = new Stage();
 		dialogStage.setTitle(title);
+		dialogStage.setResizable(false);
 		dialogStage.initModality(Modality.WINDOW_MODAL);
 		dialogStage.initOwner((this.view.getScene().getWindow()));
 		dialogStage.setScene(scene);

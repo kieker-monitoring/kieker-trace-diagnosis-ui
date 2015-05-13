@@ -145,7 +145,7 @@
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="5" GridPane.columnIndex="2" fx:id="failed" />
 			
-		<TextField text="AggregatedTracesView.lblTraceDepth.text" editable="false"
+		<TextField text="%AggregatedTracesView.lblTraceDepth.text" editable="false"
 			GridPane.rowIndex="6" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="6" GridPane.columnIndex="2" fx:id="failed" />
