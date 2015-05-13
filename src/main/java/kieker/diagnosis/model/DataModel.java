@@ -24,9 +24,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
-
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.io.database.DatabaseEventRecord;
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.diagnosis.czi.DatabaseImportAnalysisConfiguration;
 import kieker.diagnosis.domain.AbstractOperationCall;
@@ -104,18 +101,17 @@ public final class DataModel extends Observable {
 		this.databaseOperationCalls = databaseOperationAnalysis.getDatabaseOperationCalls();
 	
 		System.out.println("\nloaded operationCalls: " + this.operationCalls.size());
-		System.out.println("loaded databasOperationCalls: " + this.databaseOperationCalls.size());
+		System.out.println("loaded databaseOperationCalls: " + this.databaseOperationCalls.size());
 		
+		System.out.println("\nLoaded databaseOperationCalls:");
 		for (DatabaseOperationCall record : this.databaseOperationCalls) {
-			System.out.println(record.toString());
+			System.out.println(record.getComponent());
 		}
 		
-		
-		System.exit(0);
+//		System.exit(0);
 		
 		//
-		
-		
+			
 		this.beginTimestamp = analysisConfiguration.getBeginTimestamp();
 		this.endTimestamp = analysisConfiguration.getEndTimestamp();
 
@@ -193,6 +189,10 @@ public final class DataModel extends Observable {
 
 	public List<AggregatedOperationCall> getAggregatedFailedOperationCalls(final String regExpr) {
 		return this.filterCallsIfNecessary(this.aggregatedFailedOperationCalls, regExpr);
+	}
+	
+	public List<DatabaseOperationCall> getDatabaseOperationCalls(final String regExpr) {
+		return this.filterCallsIfNecessary(this.databaseOperationCalls, regExpr);
 	}
 
 	private <T extends AbstractTrace<?>> List<T> filterTracesIfNecessary(final List<T> traces, final String regExpr) {

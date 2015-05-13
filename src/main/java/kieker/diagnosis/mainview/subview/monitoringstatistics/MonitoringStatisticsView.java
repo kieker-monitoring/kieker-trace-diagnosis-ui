@@ -42,6 +42,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author Nils Christian Ehmke
+ * @author Christian Zirkelbach
  */
 @Component
 public final class MonitoringStatisticsView implements ISubView, Observer {
@@ -61,6 +62,10 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 	private Label lblMonitoringLogSizeDisplay;
 	private Label lblAnalysisTimeDisplay;
 	private Label lblNumberOfCallsDisplay;
+	
+	// TODO czi
+	private Label lblNumberOfDatabaseCallsDisplay;
+	
 	private Label lblNumberOfFailedDisplay;
 	private Label lblNumberOfAggregatedCallsDisplay;
 	private Label lblNumberOfAggregatedFailedCallsDisplay;
@@ -104,6 +109,8 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 		this.lblBeginOfMonitoringDisplay.setText(formatter.format(new Date(TimeUnit.MILLISECONDS.convert(this.dataModel.getBeginTimestamp(), this.dataModel.getTimeUnit()))));
 		this.lblEndOfMonitoringDisplay.setText(formatter.format(new Date(TimeUnit.MILLISECONDS.convert(this.dataModel.getEndTimestamp(), this.dataModel.getTimeUnit()))));
 		this.lblNumberOfCallsDisplay.setText(Integer.toString(this.dataModel.getOperationCalls(null).size()));
+		this.lblNumberOfDatabaseCallsDisplay.setText(Integer.toString(this.dataModel.getDatabaseOperationCalls(null).size()));
+		
 		this.lblNumberOfFailedDisplay.setText(Integer.toString(this.dataModel.getFailedOperationCalls(null).size()));
 		this.lblNumberOfAggregatedCallsDisplay.setText(Integer.toString(this.dataModel.getAggregatedOperationCalls(null).size()));
 		this.lblNumberOfAggregatedFailedCallsDisplay.setText(Integer.toString(this.dataModel.getAggregatedFailedOperationCalls(null).size()));
@@ -209,7 +216,7 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 
 		this.lblNumberOfFailedDisplay = new Label(this.composite, SWT.NONE);
 		this.lblNumberOfFailedDisplay.setText(N_A);
-
+		
 		final Label lblNumberOfAggregatedCalls = new Label(this.composite, SWT.NONE);
 		lblNumberOfAggregatedCalls.setText(BUNDLE.getString("MonitoringStatisticsView.lblNumberOfAggregated.text") + ":"); //$NON-NLS-1$
 
@@ -221,7 +228,7 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 
 		this.lblNumberOfAggregatedFailedCallsDisplay = new Label(this.composite, SWT.NONE);
 		this.lblNumberOfAggregatedFailedCallsDisplay.setText(N_A);
-
+		
 		final Label lblNumberOfTraces = new Label(this.composite, SWT.NONE);
 		lblNumberOfTraces.setText(BUNDLE.getString("MonitoringStatisticsView.lblNumberOfReconstructed.text") + ":"); //$NON-NLS-1$
 
@@ -266,6 +273,16 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 
 		this.lblNonreconstructableTracesDisplay = new Label(this.composite, SWT.NONE);
 		this.lblNonreconstructableTracesDisplay.setText(N_A);
+		
+		final Label lblLine5 = new Label(this.composite, SWT.SEPARATOR | SWT.HORIZONTAL);
+		lblLine5.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
+		
+		final Label lblNumberOfDatabaseCalls = new Label(this.composite, SWT.NONE);
+		lblNumberOfDatabaseCalls.setText(BUNDLE.getString("MonitoringStatisticsView.lblNumberOfDatabaseCalls.text") + ":"); //$NON-NLS-1$
+
+		this.lblNumberOfDatabaseCallsDisplay = new Label(this.composite, SWT.NONE);
+		this.lblNumberOfDatabaseCallsDisplay.setText(N_A);
+		
 	}
 
 	@Override

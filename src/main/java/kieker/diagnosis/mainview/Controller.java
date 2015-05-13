@@ -29,6 +29,7 @@ import kieker.diagnosis.mainview.subview.ISubView;
 import kieker.diagnosis.mainview.subview.aggregatedcalls.AggregatedCallsViewController;
 import kieker.diagnosis.mainview.subview.aggregatedtraces.AggregatedTracesViewController;
 import kieker.diagnosis.mainview.subview.calls.CallsViewController;
+import kieker.diagnosis.mainview.subview.databasecalls.DatabaseCallsViewController;
 import kieker.diagnosis.mainview.subview.monitoringstatistics.MonitoringStatisticsViewController;
 import kieker.diagnosis.mainview.subview.traces.TracesViewController;
 import kieker.diagnosis.model.DataModel;
@@ -44,6 +45,7 @@ import org.springframework.stereotype.Component;
  * The main controller of this application. It is responsible for controlling the application's main window.
  * 
  * @author Nils Christian Ehmke
+ * @author Christian Zirkelbach
  */
 @Component
 public final class Controller implements SelectionListener {
@@ -63,8 +65,8 @@ public final class Controller implements SelectionListener {
 	@Autowired private AggregatedCallsViewController aggregatedCallsViewController;
 	
 	// TODO czi
-	@Autowired private CallsViewController databaseCallsViewController;
-	@Autowired private AggregatedCallsViewController aggregatedDatabaseCallsViewController;
+	@Autowired private DatabaseCallsViewController databaseCallsViewController;
+//	@Autowired private DatabaseAggregatedCallsViewController aggregatedDatabaseCallsViewController;
 
 	@Autowired private MonitoringStatisticsViewController monitoringStatisticsViewController;
 
@@ -83,8 +85,8 @@ public final class Controller implements SelectionListener {
 		this.subViewMapper.map(SubView.OPERATION_CALLS_SUB_VIEW).to(this.callsViewController.getView());
 		
 		// TODO czi
-		this.subViewMapper.map(SubView.OPERATION_CALLS_SUB_VIEW).to(this.databaseCallsViewController.getView());
-		this.subViewMapper.map(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW).to(this.aggregatedDatabaseCallsViewController.getView());
+		this.subViewMapper.map(SubView.DATABASE_OPERATION_CALLS_SUB_VIEW).to(this.databaseCallsViewController.getView());
+//		this.subViewMapper.map(SubView.AGGREGATED_DATABASE_OPERATION_CALLS_SUB_VIEW).to(this.aggregatedDatabaseCallsViewController.getView());
 		
 		this.subViewMapper.map(SubView.MONITORING_STATISTICS_VIEW).to(this.monitoringStatisticsViewController.getView());
 	}
@@ -152,7 +154,7 @@ public final class Controller implements SelectionListener {
 			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW));
 		}
 		if (e.item == this.view.getTrtmDatabaseOperationCalls()) {
-			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.OPERATION_CALLS_SUB_VIEW));
+			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.DATABASE_OPERATION_CALLS_SUB_VIEW));
 		}
 		
 		if (e.item == this.view.getTrtmMonitoringLogStatistics()) {
@@ -189,7 +191,7 @@ public final class Controller implements SelectionListener {
 	 * @author Nils Christian Ehmke
 	 */
 	public enum SubView {
-		TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, AGGREGATED_OPERATION_CALLS_SUB_VIEW, OPERATION_CALLS_SUB_VIEW, MONITORING_STATISTICS_VIEW,
+		TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, AGGREGATED_OPERATION_CALLS_SUB_VIEW, OPERATION_CALLS_SUB_VIEW, DATABASE_OPERATION_CALLS_SUB_VIEW, AGGREGATED_DATABASE_OPERATION_CALLS_SUB_VIEW, MONITORING_STATISTICS_VIEW,
 	}
 
 }

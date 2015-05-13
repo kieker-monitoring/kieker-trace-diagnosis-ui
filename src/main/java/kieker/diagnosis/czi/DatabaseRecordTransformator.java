@@ -20,7 +20,7 @@ public class DatabaseRecordTransformator extends
 
 		// System.out.println("executing DatabaseRecordReconstructor");
 		// System.out.println(input.toString());
-		System.out.println(input.getClass().getName());
+		// System.out.println(input.getClass().getName());
 
 		if (input instanceof DatabaseBeforeEventRecord) {
 			System.out.println("matched DatabaseBeforeEventRecord");
@@ -33,7 +33,7 @@ public class DatabaseRecordTransformator extends
 
 	private void handleDatabaseBeforeEventRecord(
 			final DatabaseBeforeEventRecord record) {
-		final DatabaseOperationCall newCall = new DatabaseOperationCall(null,
+		final DatabaseOperationCall newCall = new DatabaseOperationCall("",
 				record.getClassSignature(), record.getOperationSignature(),
 				record.getCallArgs(), record.getReturnValue(), 0,
 				record.getLoggingTimestamp());
@@ -42,7 +42,7 @@ public class DatabaseRecordTransformator extends
 
 	private void handleDatabaseAfterEventRecord(
 			final DatabaseAfterEventRecord record) {
-		final DatabaseOperationCall newCall = new DatabaseOperationCall(null,
+		final DatabaseOperationCall newCall = new DatabaseOperationCall("",
 				record.getClassSignature(), record.getOperationSignature(),
 				record.getCallArgs(), record.getReturnValue(), 0,
 				record.getLoggingTimestamp());
