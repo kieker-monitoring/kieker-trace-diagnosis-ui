@@ -12,16 +12,22 @@
 			<vgap>10</vgap>
 
 			<Label text="%SettingsDialog.lblTimeUnit.text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-			<ComboBox fx:id="timeunits" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
+			<ComboBox fx:id="timeunits" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
+				<converter><kieker.diagnosis.mainview.dialog.settings.TimeUnitStringConverter/></converter>
+			</ComboBox>
 
 			<Label text="%SettingsDialog.lblOperationNames.text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-			<ComboBox GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity" />
-
+			<ComboBox fx:id="operationNames" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity" >
+				<converter><kieker.diagnosis.mainview.dialog.settings.OperationNamesStringConverter/></converter>
+			</ComboBox>
+			
 			<Label text="%SettingsDialog.lblComponentNames.text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-			<ComboBox GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
-
+			<ComboBox fx:id="componentNames" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
+				<converter><kieker.diagnosis.mainview.dialog.settings.ComponentNamesStringConverter/></converter>
+			</ComboBox>
+ 
 			<Label text="%SettingsDialog.lblLimitNumberOf.text" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-			<Spinner GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" />
+			<Spinner fx:id="limit" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
 		</GridPane>
 	</TitledPane>
 
