@@ -37,8 +37,8 @@ dependencies {
 	linuxX64Runtime 'org.eclipse.swt:org.eclipse.swt.gtk.linux.x86_64:4.4'
 
 	compile 'org.springframework:spring-context:4.1.5.RELEASE'
-	compile 'net.sourceforge.teetime:teetime:1.2-SNAPSHOT'
-	compile 'net.sourceforge.teetime-stages:teetime-stages:1.0-SNAPSHOT'
+	compile 'net.sourceforge.teetime:teetime:1.1.2'
+	compile 'net.sourceforge.teetime-stages:teetime-stages:1.1.2'
 	compile 'net.kieker-monitoring:kieker:1.11'
 	compile 'org.eclipse:jface:3.2.1-M20060908-1000'
 
