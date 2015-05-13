@@ -21,7 +21,9 @@ import java.util.concurrent.TimeUnit;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
+import javafx.stage.Stage;
 import kieker.diagnosis.common.Mapper;
 import kieker.diagnosis.model.PropertiesModel;
 
@@ -34,6 +36,7 @@ public final class SettingsDialogViewController {
 	private Mapper<TimeUnit, Integer> timeUnitMapper;
 
 	@FXML private ComboBox<TimeUnit> timeunits;
+	@FXML private Node view;
 
 	public void initialize() {
 		this.initializeMapper();
@@ -55,23 +58,33 @@ public final class SettingsDialogViewController {
 		this.timeUnitMapper.map(TimeUnit.DAYS).to(6);
 	}
 
+	public void saveAndCloseDialog() {
+		this.saveSettings();
+		this.closeDialog();
+	}
+
+	public void closeDialog() {
+		((Stage) this.view.getScene().getWindow()).close();
+	}
+
 	private void loadSettings() {
 		this.timeunits.getSelectionModel().select(this.propertiesModel.getTimeUnit());
 		// this.comboBoxOperationNames.select(this.model.getOperationNames() == OperationNames.SHORT ? 0 : 1);
 		// this.comboBoxComponentNames.select(this.model.getComponentNames() == ComponentNames.SHORT ? 0 : 1);
 		// this.spinner.setSelection(this.model.getMaxTracesToShow());
 	}
+
 	//
-	// private void saveSettings() {
-	// this.model.startModification();
-	//
-	// this.model.setTimeUnit(this.timeUnitMapper.invertedResolve(this.comboBoxTimeUnit.getSelectionIndex()));
-	// this.model.setOperationNames(this.comboBoxOperationNames.getSelectionIndex() == 0 ? OperationNames.SHORT : OperationNames.LONG);
-	// this.model.setComponentNames(this.comboBoxComponentNames.getSelectionIndex() == 0 ? ComponentNames.SHORT : ComponentNames.LONG);
-	// this.model.setMaxTracesToShow(this.spinner.getSelection());
-	//
-	// this.model.commitModification();
-	// }
+	private void saveSettings() {
+		// this.model.startModification();
+		//
+		// this.model.setTimeUnit(this.timeUnitMapper.invertedResolve(this.comboBoxTimeUnit.getSelectionIndex()));
+		// this.model.setOperationNames(this.comboBoxOperationNames.getSelectionIndex() == 0 ? OperationNames.SHORT : OperationNames.LONG);
+		// this.model.setComponentNames(this.comboBoxComponentNames.getSelectionIndex() == 0 ? ComponentNames.SHORT : ComponentNames.LONG);
+		// this.model.setMaxTracesToShow(this.spinner.getSelection());
+		//
+		// this.model.commitModification();
+	}
 
 	// private void createContents() {
 	// this.shlSettings = new Shell(this.getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);

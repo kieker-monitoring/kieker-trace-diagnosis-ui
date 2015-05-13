@@ -2,7 +2,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.cell.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="kieker.diagnosis.mainview.dialog.settings.SettingsDialogViewController" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:id="view" fx:controller="kieker.diagnosis.mainview.dialog.settings.SettingsDialogViewController" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
 
 	<spacing>10</spacing>
 
@@ -30,8 +30,8 @@
 			<javafx.geometry.Insets right="10" />
 		</VBox.margin>
 		<buttons>
-			<Button text="%SettingsDialog.btnOkay.text" />
-			<Button text="%SettingsDialog.btnCancel.text" />
+			<Button text="%SettingsDialog.btnOkay.text" onAction="#saveAndCloseDialog" />
+			<Button text="%SettingsDialog.btnCancel.text" onAction="#closeDialog" />
 		</buttons>
 	</ButtonBar>
 
