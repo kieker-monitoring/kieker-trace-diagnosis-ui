@@ -18,12 +18,7 @@ package kieker.diagnosis.model;
 
 import java.util.Observable;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
-import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
-
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableValue;
 
 /**
  * @author Nils Christian Ehmke
@@ -34,17 +29,11 @@ public final class PropertiesModel extends Observable {
 	private static final String KEY_OPERATIONS = "operations";
 	private static final String KEY_COMPONENTS = "components";
 	private static final String KEY_GRAPHVIZ_PATH = "graphvizpath";
-	private static final String KEY_MAX_TRACES = "maxTraces";
-
-	private static final Logger LOGGER = Logger.getGlobal();
-
-	private boolean commit = true;
 
 	private String graphvizPath;
 	private TimeUnit timeUnit;
 	private ComponentNames componentNames;
 	private OperationNames operationNames;
-	private final SimpleObjectProperty<Integer> maxTracesToShow = new SimpleObjectProperty<Integer>();
 
 	public PropertiesModel() {
 		this.loadSettings();
@@ -57,23 +46,6 @@ public final class PropertiesModel extends Observable {
 		this.timeUnit = TimeUnit.valueOf(preferences.get(PropertiesModel.KEY_TIMEUNIT, TimeUnit.NANOSECONDS.name()));
 		this.componentNames = ComponentNames.valueOf(preferences.get(PropertiesModel.KEY_COMPONENTS, ComponentNames.LONG.name()));
 		this.operationNames = OperationNames.valueOf(preferences.get(PropertiesModel.KEY_OPERATIONS, OperationNames.SHORT.name()));
-		this.maxTracesToShow.setValue(Integer.parseInt(preferences.get(PropertiesModel.KEY_MAX_TRACES, "1000000")));
-	}
-
-	private void saveSettings() {
-		final Preferences preferences = Preferences.userNodeForPackage(PropertiesModel.class);
-
-		preferences.put(PropertiesModel.KEY_GRAPHVIZ_PATH, this.graphvizPath);
-		preferences.put(PropertiesModel.KEY_TIMEUNIT, this.timeUnit.name());
-		preferences.put(PropertiesModel.KEY_COMPONENTS, this.componentNames.name());
-		preferences.put(PropertiesModel.KEY_OPERATIONS, this.operationNames.name());
-		preferences.put(PropertiesModel.KEY_MAX_TRACES, this.maxTracesToShow.getValue().toString());
-
-		try {
-			preferences.flush();
-		} catch (final BackingStoreException e) {
-			PropertiesModel.LOGGER.warning(e.getLocalizedMessage());
-		}
 	}
 
 	public String getGraphvizPath() {
@@ -82,8 +54,6 @@ public final class PropertiesModel extends Observable {
 
 	public void setGraphvizPath(final String graphvizPath) {
 		this.graphvizPath = graphvizPath;
-
-		this.notifyObserversAndSaveSettings();
 	}
 
 	public TimeUnit getTimeUnit() {
@@ -92,8 +62,6 @@ public final class PropertiesModel extends Observable {
 
 	public void setTimeUnit(final TimeUnit timeUnit) {
 		this.timeUnit = timeUnit;
-
-		this.notifyObserversAndSaveSettings();
 	}
 
 	public ComponentNames getComponentNames() {
@@ -102,8 +70,6 @@ public final class PropertiesModel extends Observable {
 
 	public void setComponentNames(final ComponentNames componentNames) {
 		this.componentNames = componentNames;
-
-		this.notifyObserversAndSaveSettings();
 	}
 
 	public OperationNames getOperationNames() {
@@ -112,34 +78,6 @@ public final class PropertiesModel extends Observable {
 
 	public void setOperationNames(final OperationNames operationNames) {
 		this.operationNames = operationNames;
-
-		this.notifyObserversAndSaveSettings();
-	}
-
-	public ObservableValue<Integer> getMaxTracesToShow() {
-		return this.maxTracesToShow;
-	}
-
-	public void setMaxTracesToShow(final int maxTracesToShow) {
-		this.maxTracesToShow.set(maxTracesToShow);
-	}
-
-	public void startModification() {
-		this.commit = false;
-	}
-
-	public void commitModification() {
-		this.commit = true;
-
-		this.notifyObserversAndSaveSettings();
-	}
-
-	private void notifyObserversAndSaveSettings() {
-		if (this.commit) {
-			this.setChanged();
-			this.notifyObservers();
-			this.saveSettings();
-		}
 	}
 
 	/**

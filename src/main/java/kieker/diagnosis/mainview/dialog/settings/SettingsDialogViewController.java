@@ -22,8 +22,6 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.stage.Stage;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.model.PropertiesModel.ComponentNames;
@@ -41,7 +39,6 @@ public final class SettingsDialogViewController {
 	@FXML private ComboBox<OperationNames> operationNames;
 	@FXML private ComboBox<ComponentNames> componentNames;
 	@FXML private ComboBox<TimeUnit> timeunits;
-	@FXML private Spinner<Integer> limit;
 
 	@FXML private Node view;
 
@@ -66,15 +63,12 @@ public final class SettingsDialogViewController {
 		this.operationNames.getSelectionModel().select(this.propertiesModel.getOperationNames());
 		this.componentNames.getSelectionModel().select(this.propertiesModel.getComponentNames());
 		this.timeunits.getSelectionModel().select(this.propertiesModel.getTimeUnit());
-		this.limit.setValueFactory(new IntegerSpinnerValueFactory(1, 1000000));
-		this.limit.getValueFactory().setValue(this.propertiesModel.getMaxTracesToShow().getValue());
 	}
 
 	private void saveSettings() {
 		this.propertiesModel.setOperationNames(this.operationNames.getSelectionModel().getSelectedItem());
 		this.propertiesModel.setComponentNames(this.componentNames.getSelectionModel().getSelectedItem());
 		this.propertiesModel.setTimeUnit(this.timeunits.getSelectionModel().getSelectedItem());
-		this.propertiesModel.setMaxTracesToShow(this.limit.getValue());
 	}
 
 }

@@ -23,27 +23,9 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.TimeUnit;
 
-import kieker.diagnosis.model.PropertiesModel;
-
 import org.junit.Test;
 
 public final class PropertiesModelTest {
-
-	@Test
-	public void transactionalSettingShouldWork() {
-		final BooleanObserver observer = new BooleanObserver();
-		final PropertiesModel model = new PropertiesModel();
-		model.addObserver(observer);
-
-		model.startModification();
-
-		model.setTimeUnit(TimeUnit.NANOSECONDS);
-		assertThat(observer.isFlag(), is(false));
-
-		model.commitModification();
-
-		assertThat(observer.isFlag(), is(true));
-	}
 
 	@Test
 	public void usualSettingShouldNotifyObservers() {

@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -31,7 +30,6 @@ import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.mainview.subview.util.LazyOperationCallTreeItem;
 import kieker.diagnosis.model.DataModel;
-import kieker.diagnosis.model.PropertiesModel;
 
 /**
  * The sub-controller responsible for the sub-view presenting the available traces.
@@ -40,7 +38,6 @@ import kieker.diagnosis.model.PropertiesModel;
  */
 public final class TracesViewController {
 
-	private final PropertiesModel propertiesModel = PropertiesModel.getInstance();
 	private final DataModel dataModel = DataModel.getInstance();
 
 	@FXML private TreeTableView<OperationCall> treetable;
@@ -52,12 +49,10 @@ public final class TracesViewController {
 		this.reloadTreetable();
 
 		final ObservableList<Trace> traces = this.dataModel.getTraces();
-		final ObservableValue<Integer> maxTracesToShow = this.propertiesModel.getMaxTracesToShow();
 
 		traces.addListener((final Change<? extends Trace> c) -> this.reloadTreetable());
 
-		this.counter.textProperty().bind(Bindings.createStringBinding(() -> traces.size() + " " + String.format(this.resources.getString("TracesView.lblCounter.text"),
-				maxTracesToShow.getValue()), traces, maxTracesToShow));
+		this.counter.textProperty().bind(Bindings.createStringBinding(() -> traces.size() + " " + this.resources.getString("TracesView.lblCounter.text"), traces));
 	}
 
 	private void reloadTreetable() {

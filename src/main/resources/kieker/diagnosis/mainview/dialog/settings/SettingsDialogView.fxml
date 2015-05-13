@@ -26,8 +26,6 @@
 				<converter><kieker.diagnosis.mainview.dialog.settings.ComponentNamesStringConverter/></converter>
 			</ComboBox>
  
-			<Label text="%SettingsDialog.lblLimitNumberOf.text" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-			<Spinner fx:id="limit" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
 		</GridPane>
 	</TitledPane>
 
