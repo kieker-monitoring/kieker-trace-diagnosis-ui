@@ -17,10 +17,13 @@
 package kieker.diagnosis.mainview.subview.aggregatedcalls;
 
 import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -36,8 +39,6 @@ import kieker.diagnosis.model.DataModel;
  */
 public final class AggregatedCallsViewController {
 
-	private final DataModel dataModel = DataModel.getInstance();
-
 	private FilteredList<AggregatedOperationCall> fstFilteredData;
 	private FilteredList<AggregatedOperationCall> sndFilteredData;
 
@@ -46,43 +47,47 @@ public final class AggregatedCallsViewController {
 	@FXML private TableView<AggregatedOperationCall> table;
 	@FXML private TextField regexpfilter;
 
+	@FXML private TextField minimalDuration;
+	@FXML private TextField maximalDuration;
+	@FXML private TextField medianDuration;
+	@FXML private TextField totalDuration;
+	@FXML private TextField meanDuration;
 	@FXML private TextField container;
 	@FXML private TextField component;
 	@FXML private TextField operation;
 	@FXML private TextField failed;
 	@FXML private TextField calls;
-	@FXML private TextField minimalDuration;
-	@FXML private TextField meanDuration;
-	@FXML private TextField medianDuration;
-	@FXML private TextField maximalDuration;
-	@FXML private TextField totalDuration;
+
+	@FXML private TextField counter;
+
+	@FXML private ResourceBundle resources;
 
 	public void initialize() {
-		this.fstFilteredData = new FilteredList<>(this.dataModel.getAggregatedOperationCalls());
+		final DataModel dataModel = DataModel.getInstance();
+
+		this.fstFilteredData = new FilteredList<>(dataModel.getAggregatedOperationCalls());
 		this.sndFilteredData = new FilteredList<AggregatedOperationCall>(this.fstFilteredData);
 
 		final SortedList<AggregatedOperationCall> sortedData = new SortedList<>(this.sndFilteredData);
-
 		sortedData.comparatorProperty().bind(this.table.comparatorProperty());
-
 		this.table.setItems(sortedData);
 
-		this.container.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> call.getContainer()).orElse("N/A"), this.selection));
-		this.component.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> call.getComponent()).orElse("N/A"), this.selection));
-		this.operation.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> call.getOperation()).orElse("N/A"), this.selection));
-		this.failed.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> call.getFailedCause()).orElse("N/A"), this.selection));
-		this.calls.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> Integer.toString(call.getCalls())).orElse("N/A"), this.selection));
+		this.minimalDuration.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getMinDuration));
+		this.maximalDuration.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getMaxDuration));
+		this.medianDuration.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getMedianDuration));
+		this.totalDuration.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getTotalDuration));
+		this.meanDuration.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getMeanDuration));
+		this.container.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getContainer));
+		this.component.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getComponent));
+		this.operation.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getOperation));
+		this.failed.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getFailedCause));
+		this.calls.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getCalls));
 
-		this.minimalDuration.textProperty().bind(
-				Bindings.createStringBinding(() -> this.selection.get().map(call -> Long.toString(call.getMinDuration())).orElse("N/A"), this.selection));
-		this.meanDuration.textProperty().bind(
-				Bindings.createStringBinding(() -> this.selection.get().map(call -> Long.toString(call.getMeanDuration())).orElse("N/A"), this.selection));
-		this.medianDuration.textProperty().bind(
-				Bindings.createStringBinding(() -> this.selection.get().map(call -> Long.toString(call.getMedianDuration())).orElse("N/A"), this.selection));
-		this.maximalDuration.textProperty().bind(
-				Bindings.createStringBinding(() -> this.selection.get().map(call -> Long.toString(call.getMaxDuration())).orElse("N/A"), this.selection));
-		this.totalDuration.textProperty().bind(
-				Bindings.createStringBinding(() -> this.selection.get().map(call -> Long.toString(call.getTotalDuration())).orElse("N/A"), this.selection));
+		this.counter.textProperty().bind(Bindings.createStringBinding(() -> sortedData.size() + " " + this.resources.getString("AggregatedCallsView.lblCounter.text"), sortedData));
+	}
+
+	private StringBinding createStringBindingForSelection(final Function<AggregatedOperationCall, Object> mapper) {
+		return Bindings.createStringBinding(() -> this.selection.get().map(mapper).map(Object::toString).orElse("N/A"), this.selection);
 	}
 
 	public void selectCall(final MouseEvent event) {

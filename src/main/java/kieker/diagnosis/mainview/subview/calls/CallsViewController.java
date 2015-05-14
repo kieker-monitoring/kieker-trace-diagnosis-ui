@@ -18,10 +18,12 @@ package kieker.diagnosis.mainview.subview.calls;
 
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -37,12 +39,10 @@ import kieker.diagnosis.model.DataModel;
  */
 public final class CallsViewController {
 
-	private final DataModel dataModel = DataModel.getInstance();
+	private final SimpleObjectProperty<Optional<OperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
 
 	private FilteredList<OperationCall> fstFilteredData;
 	private FilteredList<OperationCall> sndFilteredData;
-
-	private final SimpleObjectProperty<Optional<OperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
 
 	@FXML private TableView<OperationCall> table;
 	@FXML private TextField regexpfilter;
@@ -50,29 +50,38 @@ public final class CallsViewController {
 	@FXML private TextField container;
 	@FXML private TextField component;
 	@FXML private TextField operation;
+	@FXML private TextField timestamp;
 	@FXML private TextField duration;
+	@FXML private TextField traceID;
 	@FXML private TextField failed;
+
 	@FXML private TextField counter;
 
 	@FXML private ResourceBundle resources;
 
 	public void initialize() {
-		this.fstFilteredData = new FilteredList<>(this.dataModel.getOperationCalls());
+		final DataModel dataModel = DataModel.getInstance();
+
+		this.fstFilteredData = new FilteredList<>(dataModel.getOperationCalls());
 		this.sndFilteredData = new FilteredList<OperationCall>(this.fstFilteredData);
 
 		final SortedList<OperationCall> sortedData = new SortedList<>(this.sndFilteredData);
-
 		sortedData.comparatorProperty().bind(this.table.comparatorProperty());
-
 		this.table.setItems(sortedData);
 
-		this.container.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> call.getContainer()).orElse("N/A"), this.selection));
-		this.component.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> call.getComponent()).orElse("N/A"), this.selection));
-		this.operation.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> call.getOperation()).orElse("N/A"), this.selection));
-		this.duration.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> Long.toString(call.getDuration())).orElse("N/A"), this.selection));
-		this.failed.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> call.getFailedCause()).orElse("N/A"), this.selection));
+		this.container.textProperty().bind(this.createStringBindingForSelection(OperationCall::getContainer));
+		this.component.textProperty().bind(this.createStringBindingForSelection(OperationCall::getComponent));
+		this.operation.textProperty().bind(this.createStringBindingForSelection(OperationCall::getOperation));
+		this.timestamp.textProperty().bind(this.createStringBindingForSelection(OperationCall::getTimestamp));
+		this.duration.textProperty().bind(this.createStringBindingForSelection(OperationCall::getDuration));
+		this.traceID.textProperty().bind(this.createStringBindingForSelection(OperationCall::getTraceID));
+		this.failed.textProperty().bind(this.createStringBindingForSelection(OperationCall::getFailedCause));
 
 		this.counter.textProperty().bind(Bindings.createStringBinding(() -> sortedData.size() + " " + this.resources.getString("CallsView.lbCounter.text"), sortedData));
+	}
+
+	private StringBinding createStringBindingForSelection(final Function<OperationCall, Object> mapper) {
+		return Bindings.createStringBinding(() -> this.selection.get().map(mapper).map(Object::toString).orElse("N/A"), this.selection);
 	}
 
 	public void selectCall(final MouseEvent event) {
@@ -84,7 +93,7 @@ public final class CallsViewController {
 	}
 
 	public void showJustFailedMethods() {
-		this.fstFilteredData.setPredicate(call -> call.isFailed());
+		this.fstFilteredData.setPredicate(OperationCall::isFailed);
 	}
 
 	public void useRegExp() {

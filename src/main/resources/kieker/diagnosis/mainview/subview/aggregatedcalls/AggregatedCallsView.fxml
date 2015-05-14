@@ -173,7 +173,7 @@
 	</GridPane>
 </TitledPane>
 	<HBox fx:id="statusbar" GridPane.rowIndex="4" GridPane.hgrow="ALWAYS">
-		<TextField text="%AggregatedCallsView.lblCounter.text"
+		<TextField text="%AggregatedCallsView.lblCounter.text" fx:id="counter"
 			editable="false" HBox.hgrow="ALWAYS"/>
 	</HBox>
 </GridPane>
