@@ -19,8 +19,10 @@ package kieker.diagnosis.mainview.subview.traces;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Function;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
@@ -46,18 +48,19 @@ public final class TracesViewController {
 	private final SimpleObjectProperty<Optional<OperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
 
 	@FXML private TreeTableView<OperationCall> treetable;
-	@FXML private TextField counter;
 
+	@FXML private TextField traceDepth;
+	@FXML private TextField traceSize;
+	@FXML private TextField timestamp;
 	@FXML private TextField container;
 	@FXML private TextField component;
 	@FXML private TextField operation;
-	@FXML private TextField failed;
-	@FXML private TextField traceDepth;
-	@FXML private TextField traceSize;
 	@FXML private TextField duration;
 	@FXML private TextField percent;
 	@FXML private TextField traceID;
-	@FXML private TextField timestamp;
+	@FXML private TextField failed;
+
+	@FXML private TextField counter;
 
 	@FXML private ResourceBundle resources;
 
@@ -68,20 +71,22 @@ public final class TracesViewController {
 
 		traces.addListener((final Change<? extends Trace> c) -> this.reloadTreetable());
 
-		this.counter.textProperty().bind(Bindings.createStringBinding(() -> traces.size() + " " + this.resources.getString("TracesView.lblCounter.text"), traces));
+		this.traceDepth.textProperty().bind(this.createStringBindingForSelection(OperationCall::getStackDepth));
+		this.traceSize.textProperty().bind(this.createStringBindingForSelection(OperationCall::getStackSize));
+		this.timestamp.textProperty().bind(this.createStringBindingForSelection(OperationCall::getTimestamp));
+		this.container.textProperty().bind(this.createStringBindingForSelection(OperationCall::getContainer));
+		this.component.textProperty().bind(this.createStringBindingForSelection(OperationCall::getComponent));
+		this.operation.textProperty().bind(this.createStringBindingForSelection(OperationCall::getOperation));
+		this.duration.textProperty().bind(this.createStringBindingForSelection(OperationCall::getDuration));
+		this.percent.textProperty().bind(this.createStringBindingForSelection(OperationCall::getPercent));
+		this.traceID.textProperty().bind(this.createStringBindingForSelection(OperationCall::getTraceID));
+		this.failed.textProperty().bind(this.createStringBindingForSelection(OperationCall::getFailedCause));
 
-		this.container.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> call.getContainer()).orElse("N/A"), this.selection));
-		this.component.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> call.getComponent()).orElse("N/A"), this.selection));
-		this.operation.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> call.getOperation()).orElse("N/A"), this.selection));
-		this.failed.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> call.getFailedCause()).orElse("N/A"), this.selection));
-		this.traceDepth.textProperty().bind(
-				Bindings.createStringBinding(() -> this.selection.get().map(call -> Integer.toString(call.getStackDepth())).orElse("N/A"), this.selection));
-		this.traceSize.textProperty().bind(
-				Bindings.createStringBinding(() -> this.selection.get().map(call -> Integer.toString(call.getStackSize())).orElse("N/A"), this.selection));
-		this.duration.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> Long.toString(call.getDuration())).orElse("N/A"), this.selection));
-		this.percent.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> Float.toString(call.getPercent())).orElse("N/A"), this.selection));
-		this.traceID.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> Long.toString(call.getTraceID())).orElse("N/A"), this.selection));
-		this.timestamp.textProperty().bind(Bindings.createStringBinding(() -> this.selection.get().map(call -> Long.toString(call.getTimestamp())).orElse("N/A"), this.selection));
+		this.counter.textProperty().bind(Bindings.createStringBinding(() -> traces.size() + " " + this.resources.getString("TracesView.lblCounter.text"), traces));
+	}
+
+	private StringBinding createStringBindingForSelection(final Function<OperationCall, Object> mapper) {
+		return Bindings.createStringBinding(() -> this.selection.get().map(mapper).map(Object::toString).orElse("N/A"), this.selection);
 	}
 
 	public void selectCall(final MouseEvent event) {
