@@ -25,6 +25,8 @@ import java.util.prefs.Preferences;
  */
 public final class PropertiesModel extends Observable {
 
+	private static final PropertiesModel INSTANCE = new PropertiesModel();
+
 	private static final String KEY_TIMEUNIT = "timeunit";
 	private static final String KEY_OPERATIONS = "operations";
 	private static final String KEY_COMPONENTS = "components";
@@ -80,6 +82,10 @@ public final class PropertiesModel extends Observable {
 		this.operationNames = operationNames;
 	}
 
+	public static PropertiesModel getInstance() {
+		return PropertiesModel.INSTANCE;
+	}
+
 	/**
 	 * @author Nils Christian Ehmke
 	 */
@@ -92,11 +98,6 @@ public final class PropertiesModel extends Observable {
 	 */
 	public enum OperationNames {
 		SHORT, LONG
-	}
-
-	public static PropertiesModel getInstance() {
-		// To be removed
-		return new PropertiesModel();
 	}
 
 }
