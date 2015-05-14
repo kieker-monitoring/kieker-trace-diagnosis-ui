@@ -26,7 +26,7 @@
 		fx:id="regexpfilter" GridPane.rowIndex="1" />
 
 	<TableView fx:id="table" GridPane.hgrow="ALWAYS"
-		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true">
+		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true" onMouseClicked="#selectCall">
 		<columns>
 			<TableColumn text="%AggregatedCallsView.tblclmnExecutionContainer.text">
 				<cellFactory>
@@ -122,52 +122,52 @@
 		<TextField text="%AggregatedCallsView.tblclmnExecutionContainer.text"
 			editable="false" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="1" GridPane.columnIndex="2" />
+			GridPane.rowIndex="1" GridPane.columnIndex="2" fx:id="container" GridPane.hgrow="ALWAYS" />
 
 		<TextField text="%AggregatedCallsView.tblclmnComponent.text"
 			editable="false" GridPane.rowIndex="2" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="2" GridPane.columnIndex="2" />
+			GridPane.rowIndex="2" GridPane.columnIndex="2" fx:id="component" />
 
 		<TextField text="%AggregatedCallsView.tblclmnOperation.text"
 			editable="false" GridPane.rowIndex="3" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="3" GridPane.columnIndex="2" />
+			GridPane.rowIndex="3" GridPane.columnIndex="2" fx:id="operation" />
 
 		<TextField text="%AggregatedCallsView.lblFailed.text"
 			editable="false" GridPane.rowIndex="4" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="4" GridPane.columnIndex="2" />
+			GridPane.rowIndex="4" GridPane.columnIndex="2" fx:id="failed" />
 
 		<TextField text="%AggregatedCallsView.tblclmnNumberOfCalls.text"
 			editable="false" GridPane.rowIndex="5" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="5" GridPane.columnIndex="2" />
+			GridPane.rowIndex="5" GridPane.columnIndex="2" fx:id="calls" />
 
 		<TextField text="%AggregatedCallsView.tblclmnMinimalDuration.text"
 			editable="false" GridPane.rowIndex="6" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="6" GridPane.columnIndex="2" />
+			GridPane.rowIndex="6" GridPane.columnIndex="2" fx:id="minimalDuration" />
 
 		<TextField text="%AggregatedCallsView.tblclmnMeanDuration.text"
 			editable="false" GridPane.rowIndex="7" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="7" GridPane.columnIndex="2" />
+			GridPane.rowIndex="7" GridPane.columnIndex="2" fx:id="meanDuration" />
 
 		<TextField text="%AggregatedCallsView.tblclmnMedianDuration.text"
 			editable="false" GridPane.rowIndex="8" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="8" GridPane.columnIndex="2" />
+			GridPane.rowIndex="8" GridPane.columnIndex="2" fx:id="medianDuration"/>
 
 		<TextField text="%AggregatedCallsView.tblclmnMaximalDuration.text"
 			editable="false" GridPane.rowIndex="9" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="9" GridPane.columnIndex="2" />
+			GridPane.rowIndex="9" GridPane.columnIndex="2" fx:id="maximalDuration" />
 
 		<TextField text="%AggregatedCallsView.tblclmnTotalDuration.text"
 			editable="false" GridPane.rowIndex="10" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="10" GridPane.columnIndex="2" />
+			GridPane.rowIndex="10" GridPane.columnIndex="2" fx:id="totalDuration"/>
 
 
 	</GridPane>

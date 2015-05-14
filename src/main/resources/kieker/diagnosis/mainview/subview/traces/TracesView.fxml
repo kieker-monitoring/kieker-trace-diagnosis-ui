@@ -28,7 +28,7 @@
 		GridPane.rowIndex="1" />
 
 	<TreeTableView fx:id="treetable" GridPane.hgrow="ALWAYS"
-		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true">
+		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true" onMouseClicked="#selectCall">
 		<columns>
 			<TreeTableColumn text="%TracesView.trclmnExecutionContainer.text">
 				<cellValueFactory>
@@ -104,7 +104,7 @@
 			editable="false" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="1" GridPane.columnIndex="2" fx:id="container"
-			GridPane.hgrow="ALWAYS" />
+			GridPane.hgrow="ALWAYS"/>
 
 		<TextField text="%TracesView.lblComponent.text" editable="false"
 			GridPane.rowIndex="2" GridPane.columnIndex="1" />
@@ -124,12 +124,12 @@
 		<TextField text="%TracesView.trclmnTraceDepth.text"
 			editable="false" GridPane.rowIndex="5" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="5" GridPane.columnIndex="2" fx:id="failed" />
+			GridPane.rowIndex="5" GridPane.columnIndex="2" fx:id="traceDepth" />
 
 		<TextField text="%TracesView.trclmnTraceSize.text" editable="false"
 			GridPane.rowIndex="6" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="6" GridPane.columnIndex="2" fx:id="failed" />
+			GridPane.rowIndex="6" GridPane.columnIndex="2" fx:id="traceSize" />
 
 		<TextField text="%TracesView.lblDuration.text" editable="false"
 			GridPane.rowIndex="7" GridPane.columnIndex="1" />
@@ -139,17 +139,17 @@
 		<TextField text="%TracesView.trclmnPercent.text" editable="false"
 			GridPane.rowIndex="8" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="8" GridPane.columnIndex="2" fx:id="duration" />
+			GridPane.rowIndex="8" GridPane.columnIndex="2" fx:id="percent" />
 
 		<TextField text="%TracesView.trclmnTraceId.text" editable="false"
 			GridPane.rowIndex="9" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="9" GridPane.columnIndex="2" fx:id="failed" />
+			GridPane.rowIndex="9" GridPane.columnIndex="2" fx:id="traceID" />
 
 		<TextField text="%TracesView.trclmnTimestamp.text" editable="false"
 			GridPane.rowIndex="10" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="10" GridPane.columnIndex="2" fx:id="failed" />
+			GridPane.rowIndex="10" GridPane.columnIndex="2" fx:id="timestamp" />
 
 	</GridPane>
 </TitledPane>

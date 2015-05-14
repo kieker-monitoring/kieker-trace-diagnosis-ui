@@ -27,7 +27,7 @@
 		GridPane.rowIndex="1" />
 
 	<TreeTableView fx:id="treetable" GridPane.hgrow="ALWAYS"
-		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true">
+		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true"  onMouseClicked="#selectCall">
 
 	<columns>
 			<TreeTableColumn text="%AggregatedTracesView.trclmnExecutionContainer.text">
@@ -143,42 +143,42 @@
 		<TextField text="%AggregatedTracesView.lblNumberOfCalls.text" editable="false"
 			GridPane.rowIndex="5" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="5" GridPane.columnIndex="2" fx:id="failed" />
+			GridPane.rowIndex="5" GridPane.columnIndex="2" fx:id="calls" />
 			
 		<TextField text="%AggregatedTracesView.lblTraceDepth.text" editable="false"
 			GridPane.rowIndex="6" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="6" GridPane.columnIndex="2" fx:id="failed" />
+			GridPane.rowIndex="6" GridPane.columnIndex="2" fx:id="traceDepth" />
 			
 		<TextField text="%AggregatedTracesView.trclmnTraceSize.text" editable="false"
 			GridPane.rowIndex="7" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="7" GridPane.columnIndex="2" fx:id="failed" />
+			GridPane.rowIndex="7" GridPane.columnIndex="2" fx:id="traceSize" />
 			
 		<TextField text="%AggregatedTracesView.lblMinimalDuration.text" editable="false"
 			GridPane.rowIndex="8" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="8" GridPane.columnIndex="2" fx:id="duration" />
+			GridPane.rowIndex="8" GridPane.columnIndex="2" fx:id="minDuration" />
 			
 		<TextField text="%AggregatedTracesView.lblAverageDuration.text" editable="false"
 			GridPane.rowIndex="9" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="9" GridPane.columnIndex="2" fx:id="failed" />
+			GridPane.rowIndex="9" GridPane.columnIndex="2" fx:id="avgDuration" />
 			
 		<TextField text="%AggregatedTracesView.lblMeanDuration.text" editable="false"
 			GridPane.rowIndex="10" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="10" GridPane.columnIndex="2" fx:id="failed" />
+			GridPane.rowIndex="10" GridPane.columnIndex="2" fx:id="medianDuration" />
 			
 		<TextField text="%AggregatedTracesView.lblMaximalDuration.text" editable="false"
 			GridPane.rowIndex="11" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="11" GridPane.columnIndex="2" fx:id="failed" />
+			GridPane.rowIndex="11" GridPane.columnIndex="2" fx:id="maxDuration" />
 			
 		<TextField text="%AggregatedTracesView.lblTotalDuration.text" editable="false"
 			GridPane.rowIndex="12" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="12" GridPane.columnIndex="2" fx:id="failed" />
+			GridPane.rowIndex="12" GridPane.columnIndex="2" fx:id="totalDuration" />
 			
 	</GridPane>
 </TitledPane>
