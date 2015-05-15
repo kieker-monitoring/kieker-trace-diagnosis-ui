@@ -90,7 +90,10 @@ public final class TracesViewController {
 	}
 
 	public void selectCall(final MouseEvent event) {
-		this.selection.set(Optional.of(this.treetable.getSelectionModel().getSelectedItem().getValue()));
+		final TreeItem<OperationCall> selectedItem = this.treetable.getSelectionModel().getSelectedItem();
+		if (selectedItem != null) {
+			this.selection.set(Optional.ofNullable(selectedItem.getValue()));
+		}
 	}
 
 	private void reloadTreetable() {

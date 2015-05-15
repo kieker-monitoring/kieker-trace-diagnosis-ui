@@ -90,7 +90,10 @@ public final class AggregatedTracesViewController {
 	}
 
 	public void selectCall(final MouseEvent event) {
-		this.selection.set(Optional.of(this.treetable.getSelectionModel().getSelectedItem().getValue()));
+		final TreeItem<AggregatedOperationCall> selectedItem = this.treetable.getSelectionModel().getSelectedItem();
+		if (selectedItem != null) {
+			this.selection.set(Optional.ofNullable(selectedItem.getValue()));
+		}
 	}
 
 	private void reloadTreetable() {

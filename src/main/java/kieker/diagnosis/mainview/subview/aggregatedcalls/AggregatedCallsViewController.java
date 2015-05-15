@@ -91,7 +91,7 @@ public final class AggregatedCallsViewController {
 	}
 
 	public void selectCall(final MouseEvent event) {
-		this.selection.set(Optional.of(this.table.getSelectionModel().getSelectedItem()));
+		this.selection.set(Optional.ofNullable(this.table.getSelectionModel().getSelectedItem()));
 	}
 
 	public void showAllMethods() {
