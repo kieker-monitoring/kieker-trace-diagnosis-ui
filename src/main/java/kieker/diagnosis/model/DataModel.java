@@ -18,12 +18,14 @@ package kieker.diagnosis.model;
 
 import java.io.File;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
+
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.diagnosis.czi.DatabaseImportAnalysisConfiguration;
 import kieker.diagnosis.domain.AbstractOperationCall;
@@ -52,17 +54,23 @@ public final class DataModel extends Observable {
 	private List<Trace> failureContainingTraces = Collections.emptyList();
 	private List<Trace> failedTraces = Collections.emptyList();
 	private List<AggregatedTrace> aggregatedTraces = Collections.emptyList();
-	private List<AggregatedTrace> failedAggregatedTraces = Collections.emptyList();
-	private List<AggregatedTrace> failureAggregatedContainingTraces = Collections.emptyList();
+	private List<AggregatedTrace> failedAggregatedTraces = Collections
+			.emptyList();
+	private List<AggregatedTrace> failureAggregatedContainingTraces = Collections
+			.emptyList();
 	private List<OperationCall> operationCalls = Collections.emptyList();
 	private List<OperationCall> failedOperationCalls = Collections.emptyList();
-	private List<AggregatedOperationCall> aggregatedOperationCalls = Collections.emptyList();
-	private List<AggregatedOperationCall> aggregatedFailedOperationCalls = Collections.emptyList();
-	
+	private List<AggregatedOperationCall> aggregatedOperationCalls = Collections
+			.emptyList();
+	private List<AggregatedOperationCall> aggregatedFailedOperationCalls = Collections
+			.emptyList();
+
 	// TODO czi
-	private  List<DatabaseOperationCall> databaseOperationCalls = Collections.emptyList();
-//	private  List<DatabaseOperationCall> aggregatedDatabaseOperationCalls = Collections.emptyList();
-	
+	private List<DatabaseOperationCall> databaseOperationCalls = Collections
+			.emptyList();
+	// private List<DatabaseOperationCall> aggregatedDatabaseOperationCalls =
+	// Collections.emptyList();
+
 	private File importDirectory;
 	private TimeUnit timeUnit;
 	private long analysisDurationInMS;
@@ -75,47 +83,74 @@ public final class DataModel extends Observable {
 
 		// Load and analyze the monitoring logs from the given directory
 		this.importDirectory = new File(directory);
-		final ImportAnalysisConfiguration analysisConfiguration = new ImportAnalysisConfiguration(this.importDirectory);
-		final Analysis<ImportAnalysisConfiguration> analysis = new Analysis<>(analysisConfiguration);
+		final ImportAnalysisConfiguration analysisConfiguration = new ImportAnalysisConfiguration(
+				this.importDirectory);
+		final Analysis<ImportAnalysisConfiguration> analysis = new Analysis<>(
+				analysisConfiguration);
 		analysis.executeBlocking();
-		
+
 		// Store the results from the analysis
 		this.traces = analysisConfiguration.getTracesList();
 		this.failedTraces = analysisConfiguration.getFailedTracesList();
-		this.failureContainingTraces = analysisConfiguration.getFailureContainingTracesList();
+		this.failureContainingTraces = analysisConfiguration
+				.getFailureContainingTracesList();
 		this.aggregatedTraces = analysisConfiguration.getAggregatedTraces();
-		this.failedAggregatedTraces = analysisConfiguration.getFailedAggregatedTracesList();
-		this.failureAggregatedContainingTraces = analysisConfiguration.getFailureContainingAggregatedTracesList();
+		this.failedAggregatedTraces = analysisConfiguration
+				.getFailedAggregatedTracesList();
+		this.failureAggregatedContainingTraces = analysisConfiguration
+				.getFailureContainingAggregatedTracesList();
 		this.operationCalls = analysisConfiguration.getOperationCalls();
-		this.failedOperationCalls = analysisConfiguration.getFailedOperationCalls();
-		this.aggregatedOperationCalls = analysisConfiguration.getAggregatedOperationCalls();
-		this.aggregatedFailedOperationCalls = analysisConfiguration.getAggregatedFailedOperationCalls();
+		this.failedOperationCalls = analysisConfiguration
+				.getFailedOperationCalls();
+		this.aggregatedOperationCalls = analysisConfiguration
+				.getAggregatedOperationCalls();
+		this.aggregatedFailedOperationCalls = analysisConfiguration
+				.getAggregatedFailedOperationCalls();
 		this.incompleteTraces = analysisConfiguration.countIncompleteTraces();
 
+		// ///////////////////////////////////////////
 		// TODO czi
-		final DatabaseImportAnalysisConfiguration databaseOperationAnalysis = new DatabaseImportAnalysisConfiguration(this.importDirectory);
-		final Analysis<DatabaseImportAnalysisConfiguration> databaseAnalysis = new Analysis<>(databaseOperationAnalysis);
+		final DatabaseImportAnalysisConfiguration databaseOperationAnalysis = new DatabaseImportAnalysisConfiguration(
+				this.importDirectory);
+		final Analysis<DatabaseImportAnalysisConfiguration> databaseAnalysis = new Analysis<>(
+				databaseOperationAnalysis);
 		databaseAnalysis.executeBlocking();
-		
-		// Store the results from the analysis
-		this.databaseOperationCalls = databaseOperationAnalysis.getDatabaseOperationCalls();
-	
-		System.out.println("\nloaded operationCalls: " + this.operationCalls.size());
-		System.out.println("loaded databaseOperationCalls: " + this.databaseOperationCalls.size());
-		
-		System.out.println("\nLoaded databaseOperationCalls:");
-		for (DatabaseOperationCall record : this.databaseOperationCalls) {
-			System.out.println(record.getComponent());
+
+		// Store the results from the analysis & merge before and after events
+		List<DatabaseOperationCall> oldCalls = databaseOperationAnalysis
+				.getDatabaseOperationCalls();
+		List<DatabaseOperationCall> newCalls = new LinkedList<DatabaseOperationCall>();
+		for (int i = 0; i < (oldCalls.size() - 1); i += 2) {
+
+			final long duration = oldCalls.get(i + 1).getTimestamp()
+					- oldCalls.get(i).getTimestamp();
+
+			final DatabaseOperationCall newMergedCall = new DatabaseOperationCall(
+					"", oldCalls.get(i + 1).getComponent(), oldCalls.get(i + 1)
+							.getOperation(), oldCalls.get(i + 1)
+							.getStringClassArgs(), oldCalls.get(i + 1)
+							.getFormattedReturnValue(), oldCalls.get(i + 1)
+							.getTraceID(), oldCalls.get(i).getTimestamp(),
+					duration);
+
+			newCalls.add(newMergedCall);
 		}
+
+		// Merges PreparedStatements (prepareStatement, setter and executors) into one call including children
 		
-//		System.exit(0);
+		this.databaseOperationCalls = newCalls;
+//		System.out.println("oldCalls.size(): " + oldCalls.size());
+//		System.out.println("newCalls.size(): " + newCalls.size());
 		
-		//
-			
+		// TODO further processing (Prepared Statements & Aggregation needed)
+
+		// ///////////////////////////////////////////
+
 		this.beginTimestamp = analysisConfiguration.getBeginTimestamp();
 		this.endTimestamp = analysisConfiguration.getEndTimestamp();
 
-		final List<KiekerMetadataRecord> metadataRecords = analysisConfiguration.getMetadataRecords();
+		final List<KiekerMetadataRecord> metadataRecords = analysisConfiguration
+				.getMetadataRecords();
 		if (!metadataRecords.isEmpty()) {
 			final KiekerMetadataRecord metadataRecord = metadataRecords.get(0);
 			this.timeUnit = TimeUnit.valueOf(metadataRecord.getTimeUnit());
@@ -160,7 +195,8 @@ public final class DataModel extends Observable {
 	}
 
 	public List<Trace> getFailureContainingTraces(final String regExpr) {
-		return this.filterTracesIfNecessary(this.failureContainingTraces, regExpr);
+		return this.filterTracesIfNecessary(this.failureContainingTraces,
+				regExpr);
 	}
 
 	public List<AggregatedTrace> getAggregatedTraces(final String regExpr) {
@@ -168,47 +204,63 @@ public final class DataModel extends Observable {
 	}
 
 	public List<AggregatedTrace> getFailedAggregatedTraces(final String regExpr) {
-		return this.filterTracesIfNecessary(this.failedAggregatedTraces, regExpr);
+		return this.filterTracesIfNecessary(this.failedAggregatedTraces,
+				regExpr);
 	}
 
-	public List<AggregatedTrace> getFailureContainingAggregatedTraces(final String regExpr) {
-		return this.filterTracesIfNecessary(this.failureAggregatedContainingTraces, regExpr);
+	public List<AggregatedTrace> getFailureContainingAggregatedTraces(
+			final String regExpr) {
+		return this.filterTracesIfNecessary(
+				this.failureAggregatedContainingTraces, regExpr);
 	}
 
 	public List<OperationCall> getOperationCalls(final String regExpr) {
 		return this.filterCallsIfNecessary(this.operationCalls, regExpr);
 	}
-	
+
 	public List<OperationCall> getFailedOperationCalls(final String regExpr) {
 		return this.filterCallsIfNecessary(this.failedOperationCalls, regExpr);
 	}
 
-	public List<AggregatedOperationCall> getAggregatedOperationCalls(final String regExpr) {
-		return this.filterCallsIfNecessary(this.aggregatedOperationCalls, regExpr);
+	public List<AggregatedOperationCall> getAggregatedOperationCalls(
+			final String regExpr) {
+		return this.filterCallsIfNecessary(this.aggregatedOperationCalls,
+				regExpr);
 	}
 
-	public List<AggregatedOperationCall> getAggregatedFailedOperationCalls(final String regExpr) {
-		return this.filterCallsIfNecessary(this.aggregatedFailedOperationCalls, regExpr);
-	}
-	
-	public List<DatabaseOperationCall> getDatabaseOperationCalls(final String regExpr) {
-		return this.filterCallsIfNecessary(this.databaseOperationCalls, regExpr);
+	public List<AggregatedOperationCall> getAggregatedFailedOperationCalls(
+			final String regExpr) {
+		return this.filterCallsIfNecessary(this.aggregatedFailedOperationCalls,
+				regExpr);
 	}
 
-	private <T extends AbstractTrace<?>> List<T> filterTracesIfNecessary(final List<T> traces, final String regExpr) {
+	public List<DatabaseOperationCall> getDatabaseOperationCalls(
+			final String regExpr) {
+		return this
+				.filterCallsIfNecessary(this.databaseOperationCalls, regExpr);
+	}
+
+	private <T extends AbstractTrace<?>> List<T> filterTracesIfNecessary(
+			final List<T> traces, final String regExpr) {
 		if ((regExpr == null) || regExpr.isEmpty() || !this.isRegex(regExpr)) {
 			return traces;
 		}
 
-		return traces.parallelStream().filter(trace -> trace.getRootOperationCall().getOperation().matches(regExpr)).collect(Collectors.toList());
+		return traces
+				.parallelStream()
+				.filter(trace -> trace.getRootOperationCall().getOperation()
+						.matches(regExpr)).collect(Collectors.toList());
 	}
 
-	private <T extends AbstractOperationCall<?>> List<T> filterCallsIfNecessary(final List<T> calls, final String regExpr) {
+	private <T extends AbstractOperationCall<?>> List<T> filterCallsIfNecessary(
+			final List<T> calls, final String regExpr) {
 		if ((regExpr == null) || regExpr.isEmpty() || !this.isRegex(regExpr)) {
 			return calls;
 		}
 
-		return calls.parallelStream().filter(call -> call.getOperation().matches(regExpr)).collect(Collectors.toList());
+		return calls.parallelStream()
+				.filter(call -> call.getOperation().matches(regExpr))
+				.collect(Collectors.toList());
 	}
 
 	private boolean isRegex(final String str) {

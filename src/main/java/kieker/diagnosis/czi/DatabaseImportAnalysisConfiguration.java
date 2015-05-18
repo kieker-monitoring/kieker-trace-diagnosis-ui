@@ -35,7 +35,7 @@ import teetime.stage.MultipleInstanceOfFilter;
  */
 public class DatabaseImportAnalysisConfiguration extends AnalysisConfiguration {
 
-	private final List<DatabaseOperationCall> databaseOperationCalls = new LinkedList<DatabaseOperationCall>();
+	private List<DatabaseOperationCall> databaseOperationCalls = new LinkedList<DatabaseOperationCall>();
 	private final CollectorSink<DatabaseOperationCall> callCollector;
 
 	public DatabaseImportAnalysisConfiguration(final File importDirectory) {
@@ -58,7 +58,7 @@ public class DatabaseImportAnalysisConfiguration extends AnalysisConfiguration {
 		AnalysisConfiguration.connectIntraThreads(
 				transformator.getOutputPort(),
 				this.callCollector.getInputPort());
-
+		
 		// Make sure that the producer is executed by the analysis
 		super.addThreadableStage(reader);
 	}

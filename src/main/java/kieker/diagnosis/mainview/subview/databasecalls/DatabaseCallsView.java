@@ -21,7 +21,10 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
+
 import javax.annotation.PostConstruct;
+
+import kieker.diagnosis.czi.Utils;
 import kieker.diagnosis.domain.DatabaseOperationCall;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.mainview.subview.ISubView;
@@ -31,9 +34,11 @@ import kieker.diagnosis.mainview.subview.util.NameConverter;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.model.PropertiesModel.OperationNames;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -158,7 +163,7 @@ public final class DatabaseCallsView implements ISubView, Observer {
 		
 		final TableColumn tblclmnStatement = new TableColumn(this.table,
 				SWT.NONE);
-		tblclmnStatement.setWidth(200);
+		tblclmnStatement.setWidth(400);
 		tblclmnStatement.setText(DatabaseCallsView.BUNDLE
 				.getString("DatabaseCallsView.tblclmnStatement.text")); //$NON-NLS-1$
 		
@@ -167,7 +172,7 @@ public final class DatabaseCallsView implements ISubView, Observer {
 		tblclmnReturnValue.setWidth(100);
 		tblclmnReturnValue.setText(DatabaseCallsView.BUNDLE
 				.getString("DatabaseCallsView.tblclmnReturnValue.text")); //$NON-NLS-1$
-
+		
 		final TableColumn tblclmnDuration = new TableColumn(this.table,
 				SWT.NONE);
 		tblclmnDuration.setWidth(100);
@@ -176,9 +181,8 @@ public final class DatabaseCallsView implements ISubView, Observer {
 
 		final TableColumn tblclmnTraceID = new TableColumn(this.table, SWT.NONE);
 		tblclmnTraceID.setWidth(100);
-		tblclmnTraceID.setText(DatabaseCallsView.BUNDLE
-				.getString("DatabaseCallsView.tblclmnTraceID.text")); //$NON-NLS-1$
-
+		tblclmnTraceID.setText(DatabaseCallsView.BUNDLE.getString("DatabaseCallsView.tblclmnTraceID.text")); //$NON-NLS-1$
+		
 		final TableColumn tblclmnTimestamp = new TableColumn(this.table,
 				SWT.NONE);
 		tblclmnTimestamp.setWidth(150);
@@ -215,12 +219,12 @@ public final class DatabaseCallsView implements ISubView, Observer {
 		lblStatement.setText(DatabaseCallsView.BUNDLE
 				.getString("DatabaseCallsView.lblStatement.text") + ":"); //$NON-NLS-1$
 
-		this.lblStatementDisplay = new Text(this.detailComposite, SWT.READ_ONLY
+		this.lblStatementDisplay = new Text(this.detailComposite, SWT.MULTI | SWT.WRAP | SWT.READ_ONLY
 				| SWT.NONE);
 		this.lblStatementDisplay.setBackground(SWTResourceManager
 				.getColor(SWT.COLOR_WHITE));
 		this.lblStatementDisplay.setText(DatabaseCallsView.N_A);
-		
+
 		final Label lblReturnValue = new Label(this.detailComposite, SWT.NONE);
 		lblReturnValue
 				.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -278,12 +282,11 @@ public final class DatabaseCallsView implements ISubView, Observer {
 		.addSelectionListener(new CallTableColumnSortListener<DatabaseOperationCall>(
 				DatabaseOperationCall::getFormattedReturnValue));
 		
+		tblclmnTraceID.addSelectionListener(new CallTableColumnSortListener<DatabaseOperationCall>(DatabaseOperationCall::getTraceID));
+		
 		tblclmnDuration
 				.addSelectionListener(new CallTableColumnSortListener<DatabaseOperationCall>(
 						DatabaseOperationCall::getDuration));
-		tblclmnTraceID
-				.addSelectionListener(new CallTableColumnSortListener<DatabaseOperationCall>(
-						DatabaseOperationCall::getTraceID));
 		tblclmnTimestamp
 				.addSelectionListener(new CallTableColumnSortListener<DatabaseOperationCall>(
 						DatabaseOperationCall::getTimestamp));
@@ -337,6 +340,9 @@ public final class DatabaseCallsView implements ISubView, Observer {
 		}
 	}
 
+	/*
+	 * Detailed Panel (bottom of the window)
+	 */
 	private void updateDetailComposite() {
 		final DatabaseOperationCall call = this.model
 				.getDatabaseOperationCall();
@@ -350,7 +356,15 @@ public final class DatabaseCallsView implements ISubView, Observer {
 
 			this.lblMinimalDurationDisplay.setText(durationString);
 			this.lblOperationDisplay.setText(call.getOperation());
-			this.lblStatementDisplay.setText(call.getStringClassArgs());
+			
+			// customizes the SQL-Statement for visualization purposes
+			final String statementText = call.getStringClassArgs().toUpperCase();			
+			final String newStatementText = Utils.formatSQLStatement(statementText);		
+			
+			// TODO colors KEYWORDS (SELECT, FROM, WHERE) ?
+			this.lblStatementDisplay.setText(newStatementText);
+			
+			this.lblReturnValueDisplay.setText(call.getFormattedReturnValue());
 
 			if (call.isFailed()) {
 				this.lblFailedDisplay.setText("Yes (" + call.getFailedCause()
@@ -452,8 +466,7 @@ public final class DatabaseCallsView implements ISubView, Observer {
 			final String duration = targetTimeUnit.convert(call.getDuration(),
 					sourceTimeUnit) + " " + shortTimeUnit;
 
-			item.setText(new String[] {operationString, statement, returnValue, duration,
-					Long.toString(call.getTraceID()),
+			item.setText(new String[] {operationString, statement, returnValue, duration, Long.toString(call.getTraceID()), 
 					Long.toString(call.getTimestamp()) });
 
 			if (call.isFailed()) {

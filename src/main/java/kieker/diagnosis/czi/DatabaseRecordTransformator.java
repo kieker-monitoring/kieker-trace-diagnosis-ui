@@ -1,5 +1,7 @@
 package kieker.diagnosis.czi;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.database.DatabaseAfterEventRecord;
 import kieker.common.record.io.database.DatabaseBeforeEventRecord;
@@ -7,7 +9,7 @@ import kieker.diagnosis.domain.DatabaseOperationCall;
 import kieker.diagnosis.model.importer.stages.AbstractStage;
 
 /**
- * Transform the DatabaseEventRecords into DatabaseOperationCalls
+ * Transforms DatabaseEventRecords into DatabaseOperationCalls
  * 
  * @author Christian Zirkelbach
  *
@@ -15,18 +17,15 @@ import kieker.diagnosis.model.importer.stages.AbstractStage;
 public class DatabaseRecordTransformator extends
 		AbstractStage<IMonitoringRecord, DatabaseOperationCall> {
 
+	private static AtomicInteger recordID = new AtomicInteger(0);
+	
+	// TODO check whether one of the records is missing, error handling
+
 	@Override
-	protected void execute(IMonitoringRecord input) {
-
-		// System.out.println("executing DatabaseRecordReconstructor");
-		// System.out.println(input.toString());
-		// System.out.println(input.getClass().getName());
-
+	protected void execute(IMonitoringRecord input) {	
 		if (input instanceof DatabaseBeforeEventRecord) {
-			System.out.println("matched DatabaseBeforeEventRecord");
 			this.handleDatabaseBeforeEventRecord((DatabaseBeforeEventRecord) input);
 		} else if (input instanceof DatabaseAfterEventRecord) {
-			System.out.println("matched DatabaseAfterEventRecord");
 			this.handleDatabaseAfterEventRecord((DatabaseAfterEventRecord) input);
 		}
 	}
@@ -35,8 +34,8 @@ public class DatabaseRecordTransformator extends
 			final DatabaseBeforeEventRecord record) {
 		final DatabaseOperationCall newCall = new DatabaseOperationCall("",
 				record.getClassSignature(), record.getOperationSignature(),
-				record.getCallArgs(), record.getReturnValue(), 0,
-				record.getLoggingTimestamp());
+				record.getCallArgs(), record.getReturnValue(), recordID.get(),
+				record.getLoggingTimestamp(), 0);
 		super.send(newCall);
 	}
 
@@ -44,8 +43,8 @@ public class DatabaseRecordTransformator extends
 			final DatabaseAfterEventRecord record) {
 		final DatabaseOperationCall newCall = new DatabaseOperationCall("",
 				record.getClassSignature(), record.getOperationSignature(),
-				record.getCallArgs(), record.getReturnValue(), 0,
-				record.getLoggingTimestamp());
+				record.getCallArgs(), record.getReturnValue(),
+				recordID.getAndIncrement(), record.getLoggingTimestamp(), 0);
 		super.send(newCall);
 	}
 }

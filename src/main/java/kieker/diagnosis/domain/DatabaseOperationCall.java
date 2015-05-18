@@ -39,13 +39,14 @@ public final class DatabaseOperationCall extends AbstractOperationCall<DatabaseO
 	public DatabaseOperationCall(final String container, final String component,
 			final String operation, final String callArguments,
 			final String returnValue, final long traceID,
-			final long timestamp) {
+			final long timestamp, final long duration) {
 		super(container, component, operation, null);
 
 		this.callArguments = callArguments;
 		this.returnValue = returnValue;
 		this.traceID = traceID;
 		this.timestamp = timestamp;
+		this.duration = duration;
 	}
 
 	@Override
