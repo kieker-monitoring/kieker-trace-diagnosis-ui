@@ -116,32 +116,111 @@ public final class DataModel extends Observable {
 				databaseOperationAnalysis);
 		databaseAnalysis.executeBlocking();
 
-		// Store the results from the analysis & merge before and after events
-		List<DatabaseOperationCall> oldCalls = databaseOperationAnalysis
+		// Stores the results from the analysis & merge before and after events
+		// into one database call
+		// TODO transfer into own stage
+		List<DatabaseOperationCall> originalCalls = databaseOperationAnalysis
 				.getDatabaseOperationCalls();
-		List<DatabaseOperationCall> newCalls = new LinkedList<DatabaseOperationCall>();
-		for (int i = 0; i < (oldCalls.size() - 1); i += 2) {
+		List<DatabaseOperationCall> mergedCalls = new LinkedList<DatabaseOperationCall>();
 
-			final long duration = oldCalls.get(i + 1).getTimestamp()
-					- oldCalls.get(i).getTimestamp();
+		for (int i = 0; i < (originalCalls.size() - 1); i += 2) {
+
+			final long duration = originalCalls.get(i + 1).getTimestamp()
+					- originalCalls.get(i).getTimestamp();
 
 			final DatabaseOperationCall newMergedCall = new DatabaseOperationCall(
-					"", oldCalls.get(i + 1).getComponent(), oldCalls.get(i + 1)
-							.getOperation(), oldCalls.get(i + 1)
-							.getStringClassArgs(), oldCalls.get(i + 1)
-							.getFormattedReturnValue(), oldCalls.get(i + 1)
-							.getTraceID(), oldCalls.get(i).getTimestamp(),
-					duration);
+					"", originalCalls.get(i + 1).getComponent(), originalCalls
+							.get(i + 1).getOperation(), originalCalls
+							.get(i + 1).getStringClassArgs(), originalCalls
+							.get(i + 1).getFormattedReturnValue(),
+					originalCalls.get(i + 1).getTraceID(), originalCalls.get(i)
+							.getTimestamp(), duration);
 
-			newCalls.add(newMergedCall);
+			mergedCalls.add(newMergedCall);
 		}
 
-		// Merges PreparedStatements (prepareStatement, setter and executors) into one call including children
-		
-		this.databaseOperationCalls = newCalls;
-//		System.out.println("oldCalls.size(): " + oldCalls.size());
-//		System.out.println("newCalls.size(): " + newCalls.size());
-		
+		// Merges PreparedStatements (prepareStatement, setter and executors)
+		// into one call including children
+		// TODO transfer into own stage
+		List<DatabaseOperationCall> mergedPrepCalls = new LinkedList<DatabaseOperationCall>();
+
+		for (int i = 0; i < (mergedCalls.size()); i += 1) {
+
+			int numOfPrepCalls = mergedPrepCalls.size();
+
+			if (mergedCalls
+					.get(i)
+					.getOperation()
+					.equals("PreparedStatement java.sql.Connection.prepareStatement(String)")) {
+
+				DatabaseOperationCall call = mergedCalls.get(i);
+
+				DatabaseOperationCall newPreparedStatementCall = new DatabaseOperationCall(
+						"", call.getComponent(), call.getOperation(),
+						call.getStringClassArgs(),
+						call.getFormattedReturnValue(), call.getTraceID(),
+						call.getTimestamp(), 0);
+
+				mergedPrepCalls.add(newPreparedStatementCall);
+
+//				System.out.println("Prepared Statement created!");
+
+			}
+
+			else if (mergedCalls.get(i).getOperation()
+					.contains("java.sql.PreparedStatement.set")) {
+
+				if (numOfPrepCalls > 0) {
+					DatabaseOperationCall parentPreparedCall = mergedPrepCalls
+							.get(mergedPrepCalls.size() - 1);
+
+					DatabaseOperationCall child = mergedCalls.get(i);
+					parentPreparedCall.addChild(child);
+				}
+
+//				System.out.println("Prepared Statement setter used!");
+			}
+
+			else if (mergedCalls.get(i).getOperation()
+					.contains("java.sql.PreparedStatement.execute")) {
+
+				if (numOfPrepCalls > 0) {
+					DatabaseOperationCall parentPreparedCall = mergedPrepCalls
+							.get(mergedPrepCalls.size() - 1);
+
+					DatabaseOperationCall child = mergedCalls.get(i);
+					parentPreparedCall.addChild(child);
+					long duration = child.getTimestamp() - parentPreparedCall.getTimestamp();
+					parentPreparedCall.setDuration(duration);
+				}
+
+//				System.out.println("Prepared Statement executed!");
+			} else {
+//				System.out.println("Other operation!");
+			}
+		}
+
+		System.out.println("PreparedStatments (merged): "
+				+ mergedPrepCalls.size());
+
+		for (int i = 0; i < (mergedPrepCalls.size()); i += 1) {
+			DatabaseOperationCall call = mergedPrepCalls.get(i);
+
+			System.out.println("Operation: " + call.getOperation());
+			System.out.println("Statement: " + call.getStringClassArgs());
+			System.out.println("Duration (in ns): " + call.getDuration());
+			System.out.println("Children:");
+			
+			for (DatabaseOperationCall childCall : call.getChildren()) {
+				System.out.println("	Operation: " + childCall.getOperation());
+				System.out.println("	Statement: " + childCall.getStringClassArgs());
+			}			
+		}
+
+		this.databaseOperationCalls = mergedCalls;
+		// System.out.println("oldCalls.size(): " + oldCalls.size());
+		// System.out.println("newCalls.size(): " + newCalls.size());
+
 		// TODO further processing (Prepared Statements & Aggregation needed)
 
 		// ///////////////////////////////////////////
