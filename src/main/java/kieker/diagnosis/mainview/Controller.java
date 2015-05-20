@@ -29,7 +29,7 @@ import kieker.diagnosis.mainview.subview.ISubView;
 import kieker.diagnosis.mainview.subview.aggregatedcalls.AggregatedCallsViewController;
 import kieker.diagnosis.mainview.subview.aggregatedtraces.AggregatedTracesViewController;
 import kieker.diagnosis.mainview.subview.calls.CallsViewController;
-import kieker.diagnosis.mainview.subview.databasecalls.DatabaseCallsViewController;
+import kieker.diagnosis.mainview.subview.database.DatabaseCallsViewController;
 import kieker.diagnosis.mainview.subview.monitoringstatistics.MonitoringStatisticsViewController;
 import kieker.diagnosis.mainview.subview.traces.TracesViewController;
 import kieker.diagnosis.model.DataModel;

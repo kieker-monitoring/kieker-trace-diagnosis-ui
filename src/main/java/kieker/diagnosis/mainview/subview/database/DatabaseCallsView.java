@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.mainview.subview.databasecalls;
+package kieker.diagnosis.mainview.subview.database;
 
 import java.util.List;
 import java.util.Observable;
@@ -28,7 +28,7 @@ import kieker.diagnosis.czi.Utils;
 import kieker.diagnosis.domain.DatabaseOperationCall;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.mainview.subview.ISubView;
-import kieker.diagnosis.mainview.subview.databasecalls.DatabaseCallsViewModel.Filter;
+import kieker.diagnosis.mainview.subview.database.DatabaseCallsViewModel.Filter;
 import kieker.diagnosis.mainview.subview.util.CallTableColumnSortListener;
 import kieker.diagnosis.mainview.subview.util.NameConverter;
 import kieker.diagnosis.model.DataModel;
@@ -38,7 +38,6 @@ import kieker.diagnosis.model.PropertiesModel.OperationNames;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -65,7 +64,7 @@ import org.springframework.stereotype.Component;
 public final class DatabaseCallsView implements ISubView, Observer {
 
 	private static final ResourceBundle BUNDLE = ResourceBundle
-			.getBundle("kieker.diagnosis.mainview.subview.databasecalls.databasecallsview"); //$NON-NLS-1$
+			.getBundle("kieker.diagnosis.mainview.subview.database.databasecallsview"); //$NON-NLS-1$
 
 	private static final String N_A = "N/A";
 

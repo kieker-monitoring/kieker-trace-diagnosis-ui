@@ -1,0 +1,774 @@
+$0;592199450609250;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199450609250;null;null
+$1;592199458627705;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199458627705;null;null
+$0;592199460454237;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199460454237;null;drop index productCat 
+$0;592199462977383;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199462977383;null;null
+$1;592199463466169;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199463466169;null;null
+$0;592199463687469;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199463687469;null;drop index productName 
+$0;592199464161502;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199464161502;null;null
+$1;592199464305186;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199464305186;null;null
+$0;592199464609234;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199464609234;null;drop index itemProd 
+$0;592199464975823;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199464975823;null;null
+$1;592199465200652;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199465200652;null;null
+$0;592199465506303;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199465506303;null;drop table lineitem 
+$0;592199465996051;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199465996051;null;null
+$1;592199466150320;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199466150320;null;null
+$0;592199466351094;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199466351094;null;drop table orderstatus 
+$0;592199467088762;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199467088762;null;null
+$1;592199467234372;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199467234372;null;null
+$0;592199467447654;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199467447654;null;drop table orders 
+$0;592199467981341;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199467981341;null;null
+$1;592199468127592;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199468127592;null;null
+$0;592199468332535;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199468332535;null;drop table bannerdata 
+$0;592199468746592;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199468746592;null;null
+$1;592199468959874;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199468959874;null;null
+$0;592199469157762;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199469157762;null;drop table profile 
+$0;592199469657773;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199469657773;null;null
+$1;592199469790874;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199469790874;null;null
+$0;592199470004156;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199470004156;null;drop table signon 
+$0;592199470469849;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199470469849;null;null
+$1;592199470671586;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199470671586;null;null
+$0;592199470844136;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199470844136;null;drop table inventory 
+$0;592199471999068;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199471999068;null;null
+$1;592199472217482;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199472217482;null;null
+$0;592199472559055;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199472559055;null;drop table item 
+$0;592199473061631;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199473061631;null;null
+$1;592199473202430;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199473202430;null;null
+$0;592199473602374;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199473602374;null;drop table product 
+$0;592199474576738;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199474576738;null;null
+$1;592199475182268;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199475182268;null;null
+$0;592199475510691;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199475510691;null;drop table account 
+$0;592199476148293;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199476148293;null;null
+$1;592199476387875;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199476387875;null;null
+$0;592199476614627;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199476614627;null;drop table category 
+$0;592199477156012;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199477156012;null;null
+$1;592199477431194;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199477431194;null;null
+$0;592199477903623;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199477903623;null;drop table supplier 
+$0;592199478431537;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199478431537;null;null
+$1;592199478595748;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199478595748;null;null
+$0;592199478814804;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199478814804;null;drop table sequence 
+$0;592199479260612;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199479260612;null;null
+$1;592199479373507;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199479373507;null;null
+$0;592199479712835;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199479712835;null;create table supplier ( suppid int not null, name varchar(80) null, status varchar(2) not null, addr1 varchar(80) null, addr2 varchar(80) null, city varchar(80) null, state varchar(80) null, zip varchar(5) null, phone varchar(80) null, constraint pk_supplier primary key (suppid) ) 
+$1;592199487346420;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199487346420;false;create table supplier ( suppid int not null, name varchar(80) null, status varchar(2) not null, addr1 varchar(80) null, addr2 varchar(80) null, city varchar(80) null, state varchar(80) null, zip varchar(5) null, phone varchar(80) null, constraint pk_supplier primary key (suppid) ) 
+$0;592199488414436;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199488414436;null;null
+$1;592199488918937;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199488918937;null;null
+$0;592199490311527;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199490311527;null;create table signon ( username varchar(25) not null, password varchar(25) not null, constraint pk_signon primary key (username) ) 
+$1;592199497972053;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199497972053;false;create table signon ( username varchar(25) not null, password varchar(25) not null, constraint pk_signon primary key (username) ) 
+$0;592199500300519;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199500300519;null;null
+$1;592199500549082;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199500549082;null;null
+$0;592199500673844;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199500673844;null;create table account ( userid varchar(80) not null, email varchar(80) not null, firstname varchar(80) not null, lastname varchar(80) not null, status varchar(2) null, addr1 varchar(80) not null, addr2 varchar(40) null, city varchar(80) not null, state varchar(80) not null, zip varchar(20) not null, country varchar(20) not null, phone varchar(80) not null, constraint pk_account primary key (userid) ) 
+$1;592199501764631;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199501764631;false;create table account ( userid varchar(80) not null, email varchar(80) not null, firstname varchar(80) not null, lastname varchar(80) not null, status varchar(2) null, addr1 varchar(80) not null, addr2 varchar(40) null, city varchar(80) not null, state varchar(80) not null, zip varchar(20) not null, country varchar(20) not null, phone varchar(80) not null, constraint pk_account primary key (userid) ) 
+$0;592199502139238;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199502139238;null;null
+$1;592199502255341;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199502255341;null;null
+$0;592199502727128;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199502727128;null;create table profile ( userid varchar(80) not null, langpref varchar(80) not null, favcategory varchar(30), mylistopt int, banneropt int, constraint pk_profile primary key (userid) ) 
+$1;592199503476984;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199503476984;false;create table profile ( userid varchar(80) not null, langpref varchar(80) not null, favcategory varchar(30), mylistopt int, banneropt int, constraint pk_profile primary key (userid) ) 
+$0;592199504078023;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199504078023;null;null
+$1;592199504290023;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199504290023;null;null
+$0;592199504419596;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199504419596;null;create table bannerdata ( favcategory varchar(80) not null, bannername varchar(255) null, constraint pk_bannerdata primary key (favcategory) ) 
+$1;592199505415448;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199505415448;false;create table bannerdata ( favcategory varchar(80) not null, bannername varchar(255) null, constraint pk_bannerdata primary key (favcategory) ) 
+$0;592199505992112;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199505992112;null;null
+$1;592199506320535;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199506320535;null;null
+$0;592199506600208;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199506600208;null;create table orders ( orderid int not null, userid varchar(80) not null, orderdate date not null, shipaddr1 varchar(80) not null, shipaddr2 varchar(80) null, shipcity varchar(80) not null, shipstate varchar(80) not null, shipzip varchar(20) not null, shipcountry varchar(20) not null, billaddr1 varchar(80) not null, billaddr2 varchar(80) null, billcity varchar(80) not null, billstate varchar(80) not null, billzip varchar(20) not null, billcountry varchar(20) not null, courier varchar(80) not null, totalprice decimal(10,2) not null, billtofirstname varchar(80) not null, billtolastname varchar(80) not null, shiptofirstname varchar(80) not null, shiptolastname varchar(80) not null, creditcard varchar(80) not null, exprdate varchar(7) not null, cardtype varchar(80) not null, locale varchar(80) not null, constraint pk_orders primary key (orderid) ) 
+$1;592199508587743;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199508587743;false;create table orders ( orderid int not null, userid varchar(80) not null, orderdate date not null, shipaddr1 varchar(80) not null, shipaddr2 varchar(80) null, shipcity varchar(80) not null, shipstate varchar(80) not null, shipzip varchar(20) not null, shipcountry varchar(20) not null, billaddr1 varchar(80) not null, billaddr2 varchar(80) null, billcity varchar(80) not null, billstate varchar(80) not null, billzip varchar(20) not null, billcountry varchar(20) not null, courier varchar(80) not null, totalprice decimal(10,2) not null, billtofirstname varchar(80) not null, billtolastname varchar(80) not null, shiptofirstname varchar(80) not null, shiptolastname varchar(80) not null, creditcard varchar(80) not null, exprdate varchar(7) not null, cardtype varchar(80) not null, locale varchar(80) not null, constraint pk_orders primary key (orderid) ) 
+$0;592199509352032;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199509352032;null;null
+$1;592199509499565;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199509499565;null;null
+$0;592199509600273;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199509600273;null;create table orderstatus ( orderid int not null, linenum int not null, timestamp date not null, status varchar(2) not null, constraint pk_orderstatus primary key (orderid, linenum) ) 
+$1;592199509997010;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199509997010;false;create table orderstatus ( orderid int not null, linenum int not null, timestamp date not null, status varchar(2) not null, constraint pk_orderstatus primary key (orderid, linenum) ) 
+$0;592199510183673;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199510183673;null;null
+$1;592199510271231;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199510271231;null;null
+$0;592199510354299;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199510354299;null;create table lineitem ( orderid int not null, linenum int not null, itemid varchar(10) not null, quantity int not null, unitprice decimal(10,2) not null, constraint pk_lineitem primary key (orderid, linenum) ) 
+$1;592199510664440;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199510664440;false;create table lineitem ( orderid int not null, linenum int not null, itemid varchar(10) not null, quantity int not null, unitprice decimal(10,2) not null, constraint pk_lineitem primary key (orderid, linenum) ) 
+$0;592199510972016;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199510972016;null;null
+$1;592199511054442;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199511054442;null;null
+$0;592199511133661;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199511133661;null;create table category ( catid varchar(10) not null, name varchar(80) null, descn varchar(255) null, constraint pk_category primary key (catid) ) 
+$1;592199511407240;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199511407240;false;create table category ( catid varchar(10) not null, name varchar(80) null, descn varchar(255) null, constraint pk_category primary key (catid) ) 
+$0;592199511893460;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199511893460;null;null
+$1;592199512001223;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199512001223;null;null
+$0;592199514547142;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199514547142;null;create table product ( productid varchar(10) not null, category varchar(10) not null, name varchar(80) null, descn varchar(255) null, constraint pk_product primary key (productid), constraint fk_product_1 foreign key (category) references category (catid) ) 
+$1;592199529583390;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199529583390;false;create table product ( productid varchar(10) not null, category varchar(10) not null, name varchar(80) null, descn varchar(255) null, constraint pk_product primary key (productid), constraint fk_product_1 foreign key (category) references category (catid) ) 
+$0;592199533127406;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199533127406;null;null
+$1;592199533352555;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199533352555;null;null
+$0;592199533593741;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199533593741;null;create index productCat on product (category) 
+$1;592199533981818;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199533981818;false;create index productCat on product (category) 
+$0;592199534493375;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199534493375;null;null
+$1;592199534614609;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199534614609;null;null
+$0;592199534808648;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199534808648;null;create index productName on product (name) 
+$1;592199535192877;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199535192877;false;create index productName on product (name) 
+$0;592199535563957;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199535563957;null;null
+$1;592199535780446;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199535780446;null;null
+$0;592199535942413;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199535942413;null;create table item ( itemid varchar(10) not null, productid varchar(10) not null, listprice decimal(10,2) null, unitcost decimal(10,2) null, supplier int null, status varchar(2) null, attr1 varchar(80) null, attr2 varchar(80) null, attr3 varchar(80) null, attr4 varchar(80) null, attr5 varchar(80) null, constraint pk_item primary key (itemid), constraint fk_item_1 foreign key (productid) references product (productid), constraint fk_item_2 foreign key (supplier) references supplier (suppid) ) 
+$1;592199537020050;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199537020050;false;create table item ( itemid varchar(10) not null, productid varchar(10) not null, listprice decimal(10,2) null, unitcost decimal(10,2) null, supplier int null, status varchar(2) null, attr1 varchar(80) null, attr2 varchar(80) null, attr3 varchar(80) null, attr4 varchar(80) null, attr5 varchar(80) null, constraint pk_item primary key (itemid), constraint fk_item_1 foreign key (productid) references product (productid), constraint fk_item_2 foreign key (supplier) references supplier (suppid) ) 
+$0;592199537338851;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199537338851;null;null
+$1;592199537551813;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199537551813;null;null
+$0;592199537642899;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199537642899;null;create index itemProd on item (productid) 
+$1;592199538846902;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199538846902;false;create index itemProd on item (productid) 
+$0;592199539052808;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199539052808;null;null
+$1;592199539147742;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199539147742;null;null
+$0;592199539551215;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199539551215;null;create table inventory ( itemid varchar(10) not null, qty int not null, constraint pk_inventory primary key (itemid) ) 
+$1;592199539833133;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199539833133;false;create table inventory ( itemid varchar(10) not null, qty int not null, constraint pk_inventory primary key (itemid) ) 
+$0;592199539952442;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199539952442;null;null
+$1;592199540025889;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199540025889;null;null
+$0;592199540101900;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199540101900;null;CREATE TABLE sequence ( name varchar(30) not null, nextid int not null, constraint pk_sequence primary key (name) ) 
+$1;592199540432248;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199540432248;false;CREATE TABLE sequence ( name varchar(30) not null, nextid int not null, constraint pk_sequence primary key (name) ) 
+$0;592199541726695;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199541726695;null;null
+$1;592199541831252;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199541831252;null;null
+$0;592199541919772;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199541919772;null;INSERT INTO sequence VALUES('ordernum', 1000) 
+$1;592199554590671;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199554590671;false;INSERT INTO sequence VALUES('ordernum', 1000) 
+$0;592199554871305;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199554871305;null;null
+$1;592199554961108;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199554961108;null;null
+$0;592199555053798;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199555053798;null;INSERT INTO signon VALUES('j2ee','j2ee') 
+$1;592199555263552;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199555263552;false;INSERT INTO signon VALUES('j2ee','j2ee') 
+$0;592199555374523;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199555374523;null;null
+$1;592199555451177;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199555451177;null;null
+$0;592199555566959;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199555566959;null;INSERT INTO signon VALUES('ACID','ACID') 
+$1;592199555970431;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199555970431;false;INSERT INTO signon VALUES('ACID','ACID') 
+$0;592199556103853;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199556103853;null;null
+$1;592199556178903;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199556178903;null;null
+$0;592199556268064;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199556268064;null;INSERT INTO account VALUES('j2ee','yourname@yourdomain.com','ABC', 'XYX', 'OK', '901 San Antonio Road', 'MS UCUP02-206', 'Palo Alto', 'CA', '94303', 'USA', '555-555-5555') 
+$1;592199556569546;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199556569546;false;INSERT INTO account VALUES('j2ee','yourname@yourdomain.com','ABC', 'XYX', 'OK', '901 San Antonio Road', 'MS UCUP02-206', 'Palo Alto', 'CA', '94303', 'USA', '555-555-5555') 
+$0;592199556842163;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199556842163;null;null
+$1;592199556933249;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199556933249;null;null
+$0;592199557039409;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199557039409;null;INSERT INTO account VALUES('ACID','acid@yourdomain.com','ABC', 'XYX', 'OK', '901 San Antonio Road', 'MS UCUP02-206', 'Palo Alto', 'CA', '94303', 'USA', '555-555-5555') 
+$1;592199557268407;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199557268407;false;INSERT INTO account VALUES('ACID','acid@yourdomain.com','ABC', 'XYX', 'OK', '901 San Antonio Road', 'MS UCUP02-206', 'Palo Alto', 'CA', '94303', 'USA', '555-555-5555') 
+$0;592199557753023;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199557753023;null;null
+$1;592199557968551;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199557968551;null;null
+$0;592199559114182;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199559114182;null;INSERT INTO profile VALUES('j2ee','english','DOGS',1,1) 
+$1;592199559757557;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199559757557;false;INSERT INTO profile VALUES('j2ee','english','DOGS',1,1) 
+$0;592199559894827;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199559894827;null;null
+$1;592199559971481;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199559971481;null;null
+$0;592199560113241;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199560113241;null;INSERT INTO profile VALUES('ACID','english','CATS',1,1) 
+$1;592199560523770;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199560523770;false;INSERT INTO profile VALUES('ACID','english','CATS',1,1) 
+$0;592199560712036;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199560712036;null;null
+$1;592199560797349;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199560797349;null;null
+$0;592199560954504;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199560954504;null;INSERT INTO bannerdata VALUES ('FISH','<image src="../images/banner_fish.gif">') 
+$1;592199561343544;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199561343544;false;INSERT INTO bannerdata VALUES ('FISH','<image src="../images/banner_fish.gif">') 
+$0;592199561492681;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199561492681;null;null
+$1;592199561562920;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199561562920;null;null
+$0;592199561634442;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199561634442;null;INSERT INTO bannerdata VALUES ('CATS','<image src="../images/banner_cats.gif">') 
+$1;592199561906096;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199561906096;false;INSERT INTO bannerdata VALUES ('CATS','<image src="../images/banner_cats.gif">') 
+$0;592199562062290;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199562062290;null;null
+$1;592199562136377;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199562136377;null;null
+$0;592199562205654;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199562205654;null;INSERT INTO bannerdata VALUES ('DOGS','<image src="../images/banner_dogs.gif">') 
+$1;592199562394882;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199562394882;false;INSERT INTO bannerdata VALUES ('DOGS','<image src="../images/banner_dogs.gif">') 
+$0;592199562486289;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199562486289;null;null
+$1;592199562550754;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199562550754;null;null
+$0;592199562617144;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199562617144;null;INSERT INTO bannerdata VALUES ('REPTILES','<image src="../images/banner_reptiles.gif">') 
+$1;592199562783922;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199562783922;false;INSERT INTO bannerdata VALUES ('REPTILES','<image src="../images/banner_reptiles.gif">') 
+$0;592199563032805;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199563032805;null;null
+$1;592199563113627;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199563113627;null;null
+$0;592199563268538;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199563268538;null;INSERT INTO bannerdata VALUES ('BIRDS','<image src="../images/banner_birds.gif">') 
+$1;592199563427618;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199563427618;false;INSERT INTO bannerdata VALUES ('BIRDS','<image src="../images/banner_birds.gif">') 
+$0;592199563543720;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199563543720;null;null
+$1;592199563616846;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199563616846;null;null
+$0;592199563702159;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199563702159;null;INSERT INTO category VALUES ('FISH','Fish','<image src="../images/fish_icon.gif"><font size="5" color="blue"> Fish</font>') 
+$1;592199564048221;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199564048221;false;INSERT INTO category VALUES ('FISH','Fish','<image src="../images/fish_icon.gif"><font size="5" color="blue"> Fish</font>') 
+$0;592199564342006;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199564342006;null;null
+$1;592199564458750;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199564458750;null;null
+$0;592199564532517;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199564532517;null;INSERT INTO category VALUES ('DOGS','Dogs','<image src="../images/dogs_icon.gif"><font size="5" color="blue"> Dogs</font>') 
+$1;592199564731687;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199564731687;false;INSERT INTO category VALUES ('DOGS','Dogs','<image src="../images/dogs_icon.gif"><font size="5" color="blue"> Dogs</font>') 
+$0;592199564963572;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199564963572;null;null
+$1;592199565049205;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199565049205;null;null
+$0;592199565122331;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199565122331;null;INSERT INTO category VALUES ('REPTILES','Reptiles','<image src="../images/reptiles_icon.gif"><font size="5" color="blue"> Reptiles</font>') 
+$1;592199565298088;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199565298088;false;INSERT INTO category VALUES ('REPTILES','Reptiles','<image src="../images/reptiles_icon.gif"><font size="5" color="blue"> Reptiles</font>') 
+$0;592199565408097;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199565408097;null;null
+$1;592199565471921;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199565471921;null;null
+$0;592199565535746;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199565535746;null;INSERT INTO category VALUES ('CATS','Cats','<image src="../images/cats_icon.gif"><font size="5" color="blue"> Cats</font>') 
+$1;592199565677506;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199565677506;false;INSERT INTO category VALUES ('CATS','Cats','<image src="../images/cats_icon.gif"><font size="5" color="blue"> Cats</font>') 
+$0;592199565759933;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199565759933;null;null
+$1;592199565820871;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199565820871;null;null
+$0;592199565884054;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199565884054;null;INSERT INTO category VALUES ('BIRDS','Birds','<image src="../images/birds_icon.gif"><font size="5" color="blue"> Birds</font>') 
+$1;592199566054679;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199566054679;false;INSERT INTO category VALUES ('BIRDS','Birds','<image src="../images/birds_icon.gif"><font size="5" color="blue"> Birds</font>') 
+$0;592199566147690;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199566147690;null;null
+$1;592199566204458;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199566204458;null;null
+$0;592199566893056;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199566893056;null;INSERT INTO product VALUES ('FI-SW-01','FISH','Angelfish','<image src="../images/fish1.gif">Salt Water fish from Australia') 
+$1;592199567203839;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199567203839;false;INSERT INTO product VALUES ('FI-SW-01','FISH','Angelfish','<image src="../images/fish1.gif">Salt Water fish from Australia') 
+$0;592199567316413;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199567316413;null;null
+$1;592199567380879;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199567380879;null;null
+$0;592199567452721;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199567452721;null;INSERT INTO product VALUES ('FI-SW-02','FISH','Tiger Shark','<image src="../images/fish4.gif">Salt Water fish from Australia') 
+$1;592199567638101;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199567638101;false;INSERT INTO product VALUES ('FI-SW-02','FISH','Tiger Shark','<image src="../images/fish4.gif">Salt Water fish from Australia') 
+$0;592199567737205;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199567737205;null;null
+$1;592199567811292;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199567811292;null;null
+$0;592199567877041;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199567877041;null;INSERT INTO product VALUES ('FI-FW-01','FISH', 'Koi','<image src="../images/fish3.gif">Fresh Water fish from Japan') 
+$1;592199568029065;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199568029065;false;INSERT INTO product VALUES ('FI-FW-01','FISH', 'Koi','<image src="../images/fish3.gif">Fresh Water fish from Japan') 
+$0;592199568123037;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199568123037;null;null
+$1;592199568191352;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199568191352;null;null
+$0;592199568258704;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199568258704;null;INSERT INTO product VALUES ('FI-FW-02','FISH', 'Goldfish','<image src="../images/fish2.gif">Fresh Water fish from China') 
+$1;592199568421633;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199568421633;false;INSERT INTO product VALUES ('FI-FW-02','FISH', 'Goldfish','<image src="../images/fish2.gif">Fresh Water fish from China') 
+$0;592199568514964;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199568514964;null;null
+$1;592199568598032;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199568598032;null;null
+$0;592199568661536;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199568661536;null;INSERT INTO product VALUES ('K9-BD-01','DOGS','Bulldog','<image src="../images/dog2.gif">Friendly dog from England') 
+$1;592199568810352;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199568810352;false;INSERT INTO product VALUES ('K9-BD-01','DOGS','Bulldog','<image src="../images/dog2.gif">Friendly dog from England') 
+$0;592199568897589;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199568897589;null;null
+$1;592199568957244;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199568957244;null;null
+$0;592199576486273;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199576486273;null;INSERT INTO product VALUES ('K9-PO-02','DOGS','Poodle','<image src="../images/dog6.gif">Cute dog from France') 
+$1;592199576965116;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199576965116;false;INSERT INTO product VALUES ('K9-PO-02','DOGS','Poodle','<image src="../images/dog6.gif">Cute dog from France') 
+$0;592199577123875;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199577123875;null;null
+$1;592199577200208;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199577200208;null;null
+$0;592199577257618;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199577257618;null;INSERT INTO product VALUES ('K9-DL-01','DOGS', 'Dalmation','<image src="../images/dog5.gif">Great dog for a Fire Station') 
+$1;592199577424395;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199577424395;false;INSERT INTO product VALUES ('K9-DL-01','DOGS', 'Dalmation','<image src="../images/dog5.gif">Great dog for a Fire Station') 
+$0;592199577520613;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199577520613;null;null
+$1;592199577585399;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199577585399;null;null
+$0;592199577650827;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199577650827;null;INSERT INTO product VALUES ('K9-RT-01','DOGS', 'Golden Retriever','<image src="../images/dog1.gif">Great family dog') 
+$1;592199577803813;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199577803813;false;INSERT INTO product VALUES ('K9-RT-01','DOGS', 'Golden Retriever','<image src="../images/dog1.gif">Great family dog') 
+$0;592199577907087;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199577907087;null;null
+$1;592199577972515;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199577972515;null;null
+$0;592199578040188;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199578040188;null;INSERT INTO product VALUES ('K9-RT-02','DOGS', 'Labrador Retriever','<image src="../images/dog5.gif">Great hunting dog') 
+$1;592199578205361;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199578205361;false;INSERT INTO product VALUES ('K9-RT-02','DOGS', 'Labrador Retriever','<image src="../images/dog5.gif">Great hunting dog') 
+$0;592199578311521;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199578311521;null;null
+$1;592199578375346;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199578375346;null;null
+$0;592199578443981;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199578443981;null;INSERT INTO product VALUES ('K9-CW-01','DOGS', 'Chihuahua','<image src="../images/dog4.gif">Great companion dog') 
+$1;592199578610758;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199578610758;false;INSERT INTO product VALUES ('K9-CW-01','DOGS', 'Chihuahua','<image src="../images/dog4.gif">Great companion dog') 
+$0;592199578717560;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199578717560;null;null
+$1;592199578796779;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199578796779;null;null
+$0;592199578862528;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199578862528;null;INSERT INTO product VALUES ('RP-SN-01','REPTILES','Rattlesnake','<image src="../images/snake1.gif">Doubles as a watch dog') 
+$1;592199586394764;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199586394764;false;INSERT INTO product VALUES ('RP-SN-01','REPTILES','Rattlesnake','<image src="../images/snake1.gif">Doubles as a watch dog') 
+$0;592199586626328;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199586626328;null;null
+$1;592199586704905;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199586704905;null;null
+$0;592199586772899;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199586772899;null;INSERT INTO product VALUES ('RP-LI-02','REPTILES','Iguana','<image src="../images/lizard1.gif">Friendly green friend') 
+$1;592199586979125;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199586979125;false;INSERT INTO product VALUES ('RP-LI-02','REPTILES','Iguana','<image src="../images/lizard1.gif">Friendly green friend') 
+$0;592199587069249;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199587069249;null;null
+$1;592199587125376;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199587125376;null;null
+$0;592199587184710;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199587184710;null;INSERT INTO product VALUES ('FL-DSH-01','CATS','Manx','<image src="../images/cat2.gif">Great for reducing mouse populations') 
+$1;592199587334169;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199587334169;false;INSERT INTO product VALUES ('FL-DSH-01','CATS','Manx','<image src="../images/cat2.gif">Great for reducing mouse populations') 
+$0;592199587499342;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199587499342;null;null
+$1;592199587559638;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199587559638;null;null
+$0;592199587657780;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199587657780;null;INSERT INTO product VALUES ('FL-DLH-02','CATS','Persian','<image src="../images/cat1.gif">Friendly house cat, doubles as a princess') 
+$1;592199587857272;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199587857272;false;INSERT INTO product VALUES ('FL-DLH-02','CATS','Persian','<image src="../images/cat1.gif">Friendly house cat, doubles as a princess') 
+$0;592199587969846;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199587969846;null;null
+$1;592199588038161;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199588038161;null;null
+$0;592199588110003;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199588110003;null;INSERT INTO product VALUES ('AV-CB-01','BIRDS','Amazon Parrot','<image src="../images/bird2.gif">Great companion for up to 75 years') 
+$1;592199588390638;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199588390638;false;INSERT INTO product VALUES ('AV-CB-01','BIRDS','Amazon Parrot','<image src="../images/bird2.gif">Great companion for up to 75 years') 
+$0;592199588504495;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199588504495;null;null
+$1;592199588568961;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199588568961;null;null
+$0;592199588631823;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199588631823;null;INSERT INTO product VALUES ('AV-SB-02','BIRDS','Finch','<image src="../images/bird1.gif">Great stress reliever') 
+$1;592199588855690;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199588855690;false;INSERT INTO product VALUES ('AV-SB-02','BIRDS','Finch','<image src="../images/bird1.gif">Great stress reliever') 
+$0;592199593784277;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199593784277;null;null
+$1;592199593912888;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199593912888;null;null
+$0;592199594020010;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199594020010;null;INSERT INTO supplier VALUES (1,'XYZ Pets','AC','600 Avon Way','','Los Angeles','CA','94024','212-947-0797') 
+$1;592199594252215;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199594252215;false;INSERT INTO supplier VALUES (1,'XYZ Pets','AC','600 Avon Way','','Los Angeles','CA','94024','212-947-0797') 
+$0;592199594356772;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199594356772;null;null
+$1;592199594430539;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199594430539;null;null
+$0;592199594497891;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199594497891;null;INSERT INTO supplier VALUES (2,'ABC Pets','AC','700 Abalone Way','','San Francisco ','CA','94024','415-947-0797') 
+$1;592199594716626;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199594716626;false;INSERT INTO supplier VALUES (2,'ABC Pets','AC','700 Abalone Way','','San Francisco ','CA','94024','415-947-0797') 
+$0;592199595033182;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199595033182;null;null
+$1;592199595313496;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199595313496;null;null
+$0;592199595447880;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199595447880;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-1','FI-SW-01',16.50,10.00,1,'P','Large') 
+$1;592199595757701;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199595757701;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-1','FI-SW-01',16.50,10.00,1,'P','Large') 
+$0;592199596302934;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199596302934;null;null
+$1;592199596375097;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199596375097;null;null
+$0;592199596439883;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199596439883;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-2','FI-SW-01',16.50,10.00,1,'P','Small') 
+$1;592199597398852;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199597398852;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-2','FI-SW-01',16.50,10.00,1,'P','Small') 
+$0;592199597552159;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199597552159;null;null
+$1;592199597629133;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199597629133;null;null
+$0;592199597693599;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199597693599;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-3','FI-SW-02',18.50,12.00,1,'P','Toothless') 
+$1;592199597891166;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199597891166;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-3','FI-SW-02',18.50,12.00,1,'P','Toothless') 
+$0;592199597990591;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199597990591;null;null
+$1;592199600775129;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199600775129;null;null
+$0;592199600934209;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199600934209;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-4','FI-FW-01',18.50,12.00,1,'P','Spotted') 
+$1;592199601209712;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199601209712;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-4','FI-FW-01',18.50,12.00,1,'P','Spotted') 
+$0;592199601326776;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199601326776;null;null
+$1;592199601389318;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199601389318;null;null
+$0;592199601450256;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199601450256;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-5','FI-FW-01',18.50,12.00,1,'P','Spotless') 
+$1;592199601648143;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199601648143;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-5','FI-FW-01',18.50,12.00,1,'P','Spotless') 
+$0;592199601743719;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199601743719;null;null
+$1;592199601804016;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199601804016;null;null
+$0;592199601863029;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199601863029;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-6','K9-BD-01',18.50,12.00,1,'P','Male Adult') 
+$1;592199602088820;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199602088820;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-6','K9-BD-01',18.50,12.00,1,'P','Male Adult') 
+$0;592199602189207;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199602189207;null;null
+$1;592199602296971;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199602296971;null;null
+$0;592199602388057;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199602388057;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-7','K9-BD-01',18.50,12.00,1,'P','Female Puppy') 
+$1;592199602649769;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199602649769;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-7','K9-BD-01',18.50,12.00,1,'P','Female Puppy') 
+$0;592199603252091;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199603252091;null;null
+$1;592199603332914;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199603332914;null;null
+$0;592199603396097;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199603396097;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-8','K9-PO-02',18.50,12.00,1,'P','Male Puppy') 
+$1;592199603641131;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199603641131;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-8','K9-PO-02',18.50,12.00,1,'P','Male Puppy') 
+$0;592199603741518;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199603741518;null;null
+$1;592199607042103;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199607042103;null;null
+$0;592199607277516;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199607277516;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-9','K9-DL-01',18.50,12.00,1,'P','Spotless Male Puppy') 
+$1;592199607628389;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199607628389;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-9','K9-DL-01',18.50,12.00,1,'P','Spotless Male Puppy') 
+$0;592199607774640;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199607774640;null;null
+$1;592199607843275;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199607843275;null;null
+$0;592199607911269;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199607911269;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-10','K9-DL-01',18.50,12.00,1,'P','Spotted Adult Female') 
+$1;592199608138984;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199608138984;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-10','K9-DL-01',18.50,12.00,1,'P','Spotted Adult Female') 
+$0;592199608257652;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199608257652;null;null
+$1;592199608347776;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199608347776;null;null
+$0;592199608417694;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199608417694;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-11','RP-SN-01',18.50,12.00,1,'P','Venomless') 
+$1;592199608699612;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199608699612;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-11','RP-SN-01',18.50,12.00,1,'P','Venomless') 
+$0;592199608827581;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199608827581;null;null
+$1;592199608900707;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199608900707;null;null
+$0;592199608975757;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199608975757;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-12','RP-SN-01',18.50,12.00,1,'P','Rattleless') 
+$1;592199609225281;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199609225281;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-12','RP-SN-01',18.50,12.00,1,'P','Rattleless') 
+$0;592199609416113;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199609416113;null;null
+$1;592199609510406;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199609510406;null;null
+$0;592199609579682;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199609579682;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-13','RP-LI-02',18.50,12.00,1,'P','Green Adult') 
+$1;592199609786230;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199609786230;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-13','RP-LI-02',18.50,12.00,1,'P','Green Adult') 
+$0;592199609879561;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199609879561;null;null
+$1;592199613955339;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199613955339;null;null
+$0;592199614162528;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199614162528;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-14','FL-DSH-01',58.50,12.00,1,'P','Tailless') 
+$1;592199614463368;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199614463368;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-14','FL-DSH-01',58.50,12.00,1,'P','Tailless') 
+$0;592199614574660;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199614574660;null;null
+$1;592199614639447;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199614639447;null;null
+$0;592199614735985;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199614735985;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-15','FL-DSH-01',23.50,12.00,1,'P','With tail') 
+$1;592199614945098;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199614945098;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-15','FL-DSH-01',23.50,12.00,1,'P','With tail') 
+$0;592199615030731;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199615030731;null;null
+$1;592199615081727;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199615081727;null;null
+$0;592199615134646;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199615134646;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-16','FL-DLH-02',93.50,12.00,1,'P','Adult Female') 
+$1;592199615390906;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199615390906;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-16','FL-DLH-02',93.50,12.00,1,'P','Adult Female') 
+$0;592199615568588;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199615568588;null;null
+$1;592199615622791;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199615622791;null;null
+$0;592199615676672;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199615676672;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-17','FL-DLH-02',93.50,12.00,1,'P','Adult Male') 
+$1;592199615911443;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199615911443;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-17','FL-DLH-02',93.50,12.00,1,'P','Adult Male') 
+$0;592199616018886;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199616018886;null;null
+$1;592199616307219;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199616307219;null;null
+$0;592199616379382;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199616379382;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-18','AV-CB-01',193.50,92.00,1,'P','Adult Male') 
+$1;592199616736028;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199616736028;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-18','AV-CB-01',193.50,92.00,1,'P','Adult Male') 
+$0;592199616844754;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199616844754;null;null
+$1;592199627679179;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199627679179;null;null
+$0;592199627883481;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199627883481;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-19','AV-SB-02',15.50, 2.00,1,'P','Adult Male') 
+$1;592199628261617;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199628261617;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-19','AV-SB-02',15.50, 2.00,1,'P','Adult Male') 
+$0;592199628373229;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199628373229;null;null
+$1;592199628431922;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199628431922;null;null
+$0;592199628490294;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199628490294;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-20','FI-FW-02',5.50, 2.00,1,'P','Adult Male') 
+$1;592199628675673;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199628675673;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-20','FI-FW-02',5.50, 2.00,1,'P','Adult Male') 
+$0;592199628763231;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199628763231;null;null
+$1;592199628812623;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199628812623;null;null
+$0;592199628864260;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199628864260;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-21','FI-FW-02',5.29, 1.00,1,'P','Adult Female') 
+$1;592199629114105;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199629114105;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-21','FI-FW-02',5.29, 1.00,1,'P','Adult Female') 
+$0;592199629223151;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199629223151;null;null
+$1;592199629282485;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199629282485;null;null
+$0;592199629444131;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199629444131;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-22','K9-RT-02',135.50, 100.00,1,'P','Adult Male') 
+$1;592199629689807;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199629689807;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-22','K9-RT-02',135.50, 100.00,1,'P','Adult Male') 
+$0;592199629786987;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199629786987;null;null
+$1;592199629846321;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199629846321;null;null
+$0;592199629907579;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199629907579;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-23','K9-RT-02',145.49, 100.00,1,'P','Adult Female') 
+$1;592199630130483;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199630130483;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-23','K9-RT-02',145.49, 100.00,1,'P','Adult Female') 
+$0;592199630260698;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199630260698;null;null
+$1;592199633520230;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199633520230;null;null
+$0;592199633662632;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199633662632;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-24','K9-RT-02',255.50, 92.00,1,'P','Adult Male') 
+$1;592199633944871;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199633944871;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-24','K9-RT-02',255.50, 92.00,1,'P','Adult Male') 
+$0;592199634039485;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199634039485;null;null
+$1;592199634092404;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199634092404;null;null
+$0;592199634160077;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199634160077;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-25','K9-RT-02',325.29, 90.00,1,'P','Adult Female') 
+$1;592199634371115;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199634371115;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-25','K9-RT-02',325.29, 90.00,1,'P','Adult Female') 
+$0;592199634471181;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199634471181;null;null
+$1;592199634531477;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199634531477;null;null
+$0;592199634591774;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199634591774;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-26','K9-CW-01',125.50, 92.00,1,'P','Adult Male') 
+$1;592199634899029;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199634899029;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-26','K9-CW-01',125.50, 92.00,1,'P','Adult Male') 
+$0;592199634989473;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199634989473;null;null
+$1;592199635055864;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199635055864;null;null
+$0;592199635122574;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199635122574;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-27','K9-CW-01',155.29, 90.00,1,'P','Adult Female') 
+$1;592199635320462;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199635320462;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-27','K9-CW-01',155.29, 90.00,1,'P','Adult Female') 
+$0;592199635403851;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199635403851;null;null
+$1;592199635457732;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199635457732;null;null
+$0;592199635516746;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199635516746;null;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-28','K9-RT-01',155.29, 90.00,1,'P','Adult Female') 
+$1;592199635683844;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199635683844;false;INSERT INTO item (itemid, productid, listprice, unitcost, supplier, status, attr1) VALUES('EST-28','K9-RT-01',155.29, 90.00,1,'P','Adult Female') 
+$0;592199635760818;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199635760818;null;null
+$1;592199640221788;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199640221788;null;null
+$0;592199640443730;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199640443730;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-1',10000) 
+$1;592199640771511;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199640771511;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-1',10000) 
+$0;592199640923535;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199640923535;null;null
+$1;592199641001792;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199641001792;null;null
+$0;592199641071389;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199641071389;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-2',10000) 
+$1;592199641254844;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199641254844;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-2',10000) 
+$0;592199641347534;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199641347534;null;null
+$1;592199641422584;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199641422584;null;null
+$0;592199641481276;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199641481276;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-3',10000) 
+$1;592199641620792;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199641620792;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-3',10000) 
+$0;592199641988343;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199641988343;null;null
+$1;592199642048960;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199642048960;null;null
+$0;592199642126896;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199642126896;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-4',10000) 
+$1;592199642596759;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199642596759;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-4',10000) 
+$0;592199643285998;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199643285998;null;null
+$1;592199643425514;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199643425514;null;null
+$0;592199643542899;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199643542899;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-5',10000) 
+$1;592199643794348;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199643794348;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-5',10000) 
+$0;592199643946372;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199643946372;null;null
+$1;592199644029440;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199644029440;null;null
+$0;592199644106734;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199644106734;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-6',10000) 
+$1;592199644327073;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199644327073;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-6',10000) 
+$0;592199644432271;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199644432271;null;null
+$1;592199644498982;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199644498982;null;null
+$0;592199651222028;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199651222028;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-7',10000) 
+$1;592199651714982;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199651714982;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-7',10000) 
+$0;592199651844235;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199651844235;null;null
+$1;592199651909342;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199651909342;null;null
+$0;592199651975732;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199651975732;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-8',10000) 
+$1;592199652107230;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199652107230;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-8',10000) 
+$0;592199652186128;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199652186128;null;null
+$1;592199652238406;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199652238406;null;null
+$0;592199652294533;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199652294533;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-9',10000) 
+$1;592199652447519;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199652447519;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-9',10000) 
+$0;592199652563622;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199652563622;null;null
+$1;592199652620390;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199652620390;null;null
+$0;592199652678762;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199652678762;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-10',10000) 
+$1;592199652830145;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199652830145;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-10',10000) 
+$0;592199652916099;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199652916099;null;null
+$1;592199652978320;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199652978320;null;null
+$0;592199653048238;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199653048238;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-11',10000) 
+$1;592199653222713;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199653222713;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-11',10000) 
+$0;592199653310912;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199653310912;null;null
+$1;592199653372812;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199653372812;null;null
+$0;592199653430863;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199653430863;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-12',10000) 
+$1;592199653560757;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199653560757;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-12',10000) 
+$0;592199653640938;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199653640938;null;null
+$1;592199653711177;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199653711177;null;null
+$0;592199653765380;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199653765380;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-13',10000) 
+$1;592199660535252;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199660535252;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-13',10000) 
+$0;592199660815566;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199660815566;null;null
+$1;592199660915311;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199660915311;null;null
+$0;592199660985550;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199660985550;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-14',10000) 
+$1;592199661230264;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199661230264;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-14',10000) 
+$0;592199661318784;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199661318784;null;null
+$1;592199661374911;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199661374911;null;null
+$0;592199661430076;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199661430076;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-15',10000) 
+$1;592199661556441;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199661556441;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-15',10000) 
+$0;592199661638226;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199661638226;null;null
+$1;592199661689222;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199661689222;null;null
+$0;592199661742783;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199661742783;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-16',10000) 
+$1;592199661941953;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199661941953;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-16',10000) 
+$0;592199662043303;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199662043303;null;null
+$1;592199662107768;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199662107768;null;null
+$0;592199662163895;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199662163895;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-17',10000) 
+$1;592199662307580;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199662307580;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-17',10000) 
+$0;592199662390648;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199662390648;null;null
+$1;592199662452869;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199662452869;null;null
+$0;592199662569613;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199662569613;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-18',10000) 
+$1;592199662710091;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199662710091;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-18',10000) 
+$0;592199662786103;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199662786103;null;null
+$1;592199662837098;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199662837098;null;null
+$0;592199662898357;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199662898357;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-19',10000) 
+$1;592199663025043;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199663025043;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-19',10000) 
+$0;592199667644451;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199667644451;null;null
+$1;592199667763119;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199667763119;null;null
+$0;592199667864469;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199667864469;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-20',10000) 
+$1;592199668085769;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199668085769;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-20',10000) 
+$0;592199668177817;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199668177817;null;null
+$1;592199668232982;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199668232982;null;null
+$0;592199668288468;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199668288468;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-21',10000) 
+$1;592199668484431;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199668484431;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-21',10000) 
+$0;592199668564612;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199668564612;null;null
+$1;592199668615608;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199668615608;null;null
+$0;592199668666924;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199668666924;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-22',10000) 
+$1;592199668777574;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199668777574;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-22',10000) 
+$0;592199668844606;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199668844606;null;null
+$1;592199668916769;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199668916769;null;null
+$0;592199668975462;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199668975462;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-23',10000) 
+$1;592199669088036;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199669088036;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-23',10000) 
+$0;592199669190989;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199669190989;null;null
+$1;592199669260266;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199669260266;null;null
+$0;592199669329222;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199669329222;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-24',10000) 
+$1;592199669471944;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199669471944;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-24',10000) 
+$0;592199669550522;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199669550522;null;null
+$1;592199669606328;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199669606328;null;null
+$0;592199669668228;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199669668228;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-25',10000) 
+$1;592199669817686;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199669817686;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-25',10000) 
+$0;592199669970993;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199669970993;null;null
+$1;592199677301172;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199677301172;null;null
+$0;592199677616766;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199677616766;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-26',10000) 
+$1;592199677925625;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199677925625;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-26',10000) 
+$0;592199678048783;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199678048783;null;null
+$1;592199678112607;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199678112607;null;null
+$0;592199678170017;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199678170017;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-27',10000) 
+$1;592199678305043;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199678305043;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-27',10000) 
+$0;592199679280689;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199679280689;null;null
+$1;592199679509367;Statement java.sql.Connection.createStatement();java.sql.Connection.createStatement();null;null;0;0;592199679509367;null;null
+$0;592199679583133;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199679583133;null;INSERT INTO inventory (itemid, qty ) VALUES ('EST-28',10000) 
+$1;592199679767871;boolean java.sql.Statement.execute(String);java.sql.Statement.execute(String);null;null;0;0;592199679767871;false;INSERT INTO inventory (itemid, qty ) VALUES ('EST-28',10000) 
+$0;592203870484346;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592203870484346;null;SELECT PRODUCTID, NAME, DESCN as description, CATEGORY as categoryId FROM PRODUCT WHERE CATEGORY = ? 
+$1;592203907680475;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592203907680475;null;SELECT PRODUCTID, NAME, DESCN as description, CATEGORY as categoryId FROM PRODUCT WHERE CATEGORY = ? 
+$0;592203907967524;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592203907967524;null;1,FISH
+$1;592203908113454;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592203908113454;null;1,FISH
+$0;592203908282156;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592203908282156;null;null
+$1;592203909427466;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592203909427466;true;null
+$0;592203923131101;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592203923131101;null;SELECT CATID AS categoryId, NAME, DESCN AS description FROM CATEGORY WHERE CATID = ? 
+$1;592203923496728;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592203923496728;null;SELECT CATID AS categoryId, NAME, DESCN AS description FROM CATEGORY WHERE CATID = ? 
+$0;592203923603850;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592203923603850;null;1,FISH
+$1;592203923700067;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592203923700067;null;1,FISH
+$0;592203923789229;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592203923789229;null;null
+$1;592203923893465;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592203923893465;true;null
+$0;592205461938554;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592205461938554;null;SELECT ITEMID, LISTPRICE, UNITCOST, SUPPLIER AS supplierId, I.PRODUCTID AS "product.productId", NAME AS "product.name", DESCN AS "product.description", CATEGORY AS "product.categoryId", STATUS, ATTR1 AS attribute1, ATTR2 AS attribute2, ATTR3 AS attribute3, ATTR4 AS attribute4, ATTR5 AS attribute5 FROM ITEM I, PRODUCT P WHERE P.PRODUCTID = I.PRODUCTID AND I.PRODUCTID = ? 
+$1;592205462724331;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592205462724331;null;SELECT ITEMID, LISTPRICE, UNITCOST, SUPPLIER AS supplierId, I.PRODUCTID AS "product.productId", NAME AS "product.name", DESCN AS "product.description", CATEGORY AS "product.categoryId", STATUS, ATTR1 AS attribute1, ATTR2 AS attribute2, ATTR3 AS attribute3, ATTR4 AS attribute4, ATTR5 AS attribute5 FROM ITEM I, PRODUCT P WHERE P.PRODUCTID = I.PRODUCTID AND I.PRODUCTID = ? 
+$0;592205463007532;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592205463007532;null;1,FI-FW-01
+$1;592205463107919;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592205463107919;null;1,FI-FW-01
+$0;592205463187138;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592205463187138;null;null
+$1;592205463342369;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592205463342369;true;null
+$0;592205464478378;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592205464478378;null;SELECT PRODUCTID, NAME, DESCN as description, CATEGORY as categoryId FROM PRODUCT WHERE PRODUCTID = ? 
+$1;592205464768635;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592205464768635;null;SELECT PRODUCTID, NAME, DESCN as description, CATEGORY as categoryId FROM PRODUCT WHERE PRODUCTID = ? 
+$0;592205464866777;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592205464866777;null;1,FI-FW-01
+$1;592205464943430;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592205464943430;null;1,FI-FW-01
+$0;592205465019442;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592205465019442;null;null
+$1;592205465131696;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592205465131696;true;null
+$0;592206549156941;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592206549156941;null;SELECT QTY AS value FROM INVENTORY WHERE ITEMID = ? 
+$1;592206549544056;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592206549544056;null;SELECT QTY AS value FROM INVENTORY WHERE ITEMID = ? 
+$0;592206549640915;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592206549640915;null;1,EST-5
+$1;592206549951378;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592206549951378;null;1,EST-5
+$0;592206550034125;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592206550034125;null;null
+$1;592206550142851;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592206550142851;true;null
+$0;592206550315401;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592206550315401;null;select ITEMID, LISTPRICE, UNITCOST, SUPPLIER AS supplierId, I.PRODUCTID AS "product.productId", NAME AS "product.name", DESCN AS "product.description", CATEGORY AS "product.categoryId", STATUS, ATTR1 AS attribute1, ATTR2 AS attribute2, ATTR3 AS attribute3, ATTR4 AS attribute4, ATTR5 AS attribute5, QTY AS quantity from ITEM I, INVENTORY V, PRODUCT P where P.PRODUCTID = I.PRODUCTID and I.ITEMID = V.ITEMID and I.ITEMID = ? 
+$1;592206550675896;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592206550675896;null;select ITEMID, LISTPRICE, UNITCOST, SUPPLIER AS supplierId, I.PRODUCTID AS "product.productId", NAME AS "product.name", DESCN AS "product.description", CATEGORY AS "product.categoryId", STATUS, ATTR1 AS attribute1, ATTR2 AS attribute2, ATTR3 AS attribute3, ATTR4 AS attribute4, ATTR5 AS attribute5, QTY AS quantity from ITEM I, INVENTORY V, PRODUCT P where P.PRODUCTID = I.PRODUCTID and I.ITEMID = V.ITEMID and I.ITEMID = ? 
+$0;592206550767303;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592206550767303;null;1,EST-5
+$1;592206550825034;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592206550825034;null;1,EST-5
+$0;592206550882764;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592206550882764;null;null
+$1;592206550997584;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592206550997584;true;null
+$0;592208769788436;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592208769788436;null;SELECT QTY AS value FROM INVENTORY WHERE ITEMID = ? 
+$1;592208770381137;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592208770381137;null;SELECT QTY AS value FROM INVENTORY WHERE ITEMID = ? 
+$0;592208770461318;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592208770461318;null;1,EST-5
+$1;592208770540537;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592208770540537;null;1,EST-5
+$0;592208770598268;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592208770598268;null;null
+$1;592208770697693;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592208770697693;true;null
+$0;592208771272433;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592208771272433;null;SELECT QTY AS value FROM INVENTORY WHERE ITEMID = ? 
+$1;592208771461019;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592208771461019;null;SELECT QTY AS value FROM INVENTORY WHERE ITEMID = ? 
+$0;592208771537673;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592208771537673;null;1,EST-5
+$1;592208771595403;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592208771595403;null;1,EST-5
+$0;592208771649606;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592208771649606;null;null
+$1;592208771718241;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592208771718241;true;null
+$0;592208771815421;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592208771815421;null;select ITEMID, LISTPRICE, UNITCOST, SUPPLIER AS supplierId, I.PRODUCTID AS "product.productId", NAME AS "product.name", DESCN AS "product.description", CATEGORY AS "product.categoryId", STATUS, ATTR1 AS attribute1, ATTR2 AS attribute2, ATTR3 AS attribute3, ATTR4 AS attribute4, ATTR5 AS attribute5, QTY AS quantity from ITEM I, INVENTORY V, PRODUCT P where P.PRODUCTID = I.PRODUCTID and I.ITEMID = V.ITEMID and I.ITEMID = ? 
+$1;592208772222742;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592208772222742;null;select ITEMID, LISTPRICE, UNITCOST, SUPPLIER AS supplierId, I.PRODUCTID AS "product.productId", NAME AS "product.name", DESCN AS "product.description", CATEGORY AS "product.categoryId", STATUS, ATTR1 AS attribute1, ATTR2 AS attribute2, ATTR3 AS attribute3, ATTR4 AS attribute4, ATTR5 AS attribute5, QTY AS quantity from ITEM I, INVENTORY V, PRODUCT P where P.PRODUCTID = I.PRODUCTID and I.ITEMID = V.ITEMID and I.ITEMID = ? 
+$0;592208772503056;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592208772503056;null;1,EST-5
+$1;592208772590614;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592208772590614;null;1,EST-5
+$0;592208772658929;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592208772658929;null;null
+$1;592208772835648;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592208772835648;true;null
+$0;592209669329863;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592209669329863;null;SELECT PRODUCTID, NAME, DESCN as description, CATEGORY as categoryId FROM PRODUCT WHERE CATEGORY = ? 
+$1;592209669766691;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592209669766691;null;SELECT PRODUCTID, NAME, DESCN as description, CATEGORY as categoryId FROM PRODUCT WHERE CATEGORY = ? 
+$0;592209669938279;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592209669938279;null;1,CATS
+$1;592209670303265;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592209670303265;null;1,CATS
+$0;592209670417122;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592209670417122;null;null
+$1;592209670513340;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592209670513340;true;null
+$0;592209670940225;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592209670940225;null;SELECT CATID AS categoryId, NAME, DESCN AS description FROM CATEGORY WHERE CATID = ? 
+$1;592209671215408;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592209671215408;null;SELECT CATID AS categoryId, NAME, DESCN AS description FROM CATEGORY WHERE CATID = ? 
+$0;592209671320926;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592209671320926;null;1,CATS
+$1;592209671378978;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592209671378978;null;1,CATS
+$0;592209671444085;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592209671444085;null;null
+$1;592209671509834;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592209671509834;true;null
+$0;592210661253997;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592210661253997;null;SELECT ITEMID, LISTPRICE, UNITCOST, SUPPLIER AS supplierId, I.PRODUCTID AS "product.productId", NAME AS "product.name", DESCN AS "product.description", CATEGORY AS "product.categoryId", STATUS, ATTR1 AS attribute1, ATTR2 AS attribute2, ATTR3 AS attribute3, ATTR4 AS attribute4, ATTR5 AS attribute5 FROM ITEM I, PRODUCT P WHERE P.PRODUCTID = I.PRODUCTID AND I.PRODUCTID = ? 
+$1;592210661889354;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592210661889354;null;SELECT ITEMID, LISTPRICE, UNITCOST, SUPPLIER AS supplierId, I.PRODUCTID AS "product.productId", NAME AS "product.name", DESCN AS "product.description", CATEGORY AS "product.categoryId", STATUS, ATTR1 AS attribute1, ATTR2 AS attribute2, ATTR3 AS attribute3, ATTR4 AS attribute4, ATTR5 AS attribute5 FROM ITEM I, PRODUCT P WHERE P.PRODUCTID = I.PRODUCTID AND I.PRODUCTID = ? 
+$0;592210662087883;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592210662087883;null;1,FL-DLH-02
+$1;592210662204307;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592210662204307;null;1,FL-DLH-02
+$0;592210662296034;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592210662296034;null;null
+$1;592210662525032;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592210662525032;true;null
+$0;592210663625120;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592210663625120;null;SELECT PRODUCTID, NAME, DESCN as description, CATEGORY as categoryId FROM PRODUCT WHERE PRODUCTID = ? 
+$1;592210663986899;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592210663986899;null;SELECT PRODUCTID, NAME, DESCN as description, CATEGORY as categoryId FROM PRODUCT WHERE PRODUCTID = ? 
+$0;592210664100435;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592210664100435;null;1,FL-DLH-02
+$1;592210664170033;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592210664170033;null;1,FL-DLH-02
+$0;592210664314038;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592210664314038;null;null
+$1;592210664428217;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592210664428217;true;null
+$0;592211733463398;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592211733463398;null;SELECT QTY AS value FROM INVENTORY WHERE ITEMID = ? 
+$1;592211733770332;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592211733770332;null;SELECT QTY AS value FROM INVENTORY WHERE ITEMID = ? 
+$0;592211733905357;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592211733905357;null;1,EST-17
+$1;592211733984256;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592211733984256;null;1,EST-17
+$0;592211734036855;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592211734036855;null;null
+$1;592211734112225;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592211734112225;true;null
+$0;592211734391256;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592211734391256;null;SELECT QTY AS value FROM INVENTORY WHERE ITEMID = ? 
+$1;592211734593634;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592211734593634;null;SELECT QTY AS value FROM INVENTORY WHERE ITEMID = ? 
+$0;592211734725452;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592211734725452;null;1,EST-17
+$1;592211734780617;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592211734780617;null;1,EST-17
+$0;592211734856629;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592211734856629;null;null
+$1;592211734946432;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592211734946432;true;null
+$0;592211735048743;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592211735048743;null;select ITEMID, LISTPRICE, UNITCOST, SUPPLIER AS supplierId, I.PRODUCTID AS "product.productId", NAME AS "product.name", DESCN AS "product.description", CATEGORY AS "product.categoryId", STATUS, ATTR1 AS attribute1, ATTR2 AS attribute2, ATTR3 AS attribute3, ATTR4 AS attribute4, ATTR5 AS attribute5, QTY AS quantity from ITEM I, INVENTORY V, PRODUCT P where P.PRODUCTID = I.PRODUCTID and I.ITEMID = V.ITEMID and I.ITEMID = ? 
+$1;592211736144021;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592211736144021;null;select ITEMID, LISTPRICE, UNITCOST, SUPPLIER AS supplierId, I.PRODUCTID AS "product.productId", NAME AS "product.name", DESCN AS "product.description", CATEGORY AS "product.categoryId", STATUS, ATTR1 AS attribute1, ATTR2 AS attribute2, ATTR3 AS attribute3, ATTR4 AS attribute4, ATTR5 AS attribute5, QTY AS quantity from ITEM I, INVENTORY V, PRODUCT P where P.PRODUCTID = I.PRODUCTID and I.ITEMID = V.ITEMID and I.ITEMID = ? 
+$0;592211736338380;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592211736338380;null;1,EST-17
+$1;592211736432353;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592211736432353;null;1,EST-17
+$0;592211736507723;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592211736507723;null;null
+$1;592211736791886;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592211736791886;true;null
+$0;592212405296202;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592212405296202;null;SELECT PRODUCTID, NAME, DESCN as description, CATEGORY as categoryId FROM PRODUCT WHERE CATEGORY = ? 
+$1;592212405714749;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592212405714749;null;SELECT PRODUCTID, NAME, DESCN as description, CATEGORY as categoryId FROM PRODUCT WHERE CATEGORY = ? 
+$0;592212405793647;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592212405793647;null;1,CATS
+$1;592212405872225;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592212405872225;null;1,CATS
+$0;592212405944068;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592212405944068;null;null
+$1;592212406024570;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592212406024570;true;null
+$0;592212407348524;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592212407348524;null;SELECT CATID AS categoryId, NAME, DESCN AS description FROM CATEGORY WHERE CATID = ? 
+$1;592212407667646;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592212407667646;null;SELECT CATID AS categoryId, NAME, DESCN AS description FROM CATEGORY WHERE CATID = ? 
+$0;592212407762260;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592212407762260;null;1,CATS
+$1;592212407828329;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592212407828329;null;1,CATS
+$0;592212407888305;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592212407888305;null;null
+$1;592212407972976;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592212407972976;true;null
+$0;592213437701656;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592213437701656;null;SELECT ITEMID, LISTPRICE, UNITCOST, SUPPLIER AS supplierId, I.PRODUCTID AS "product.productId", NAME AS "product.name", DESCN AS "product.description", CATEGORY AS "product.categoryId", STATUS, ATTR1 AS attribute1, ATTR2 AS attribute2, ATTR3 AS attribute3, ATTR4 AS attribute4, ATTR5 AS attribute5 FROM ITEM I, PRODUCT P WHERE P.PRODUCTID = I.PRODUCTID AND I.PRODUCTID = ? 
+$1;592213438197497;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592213438197497;null;SELECT ITEMID, LISTPRICE, UNITCOST, SUPPLIER AS supplierId, I.PRODUCTID AS "product.productId", NAME AS "product.name", DESCN AS "product.description", CATEGORY AS "product.categoryId", STATUS, ATTR1 AS attribute1, ATTR2 AS attribute2, ATTR3 AS attribute3, ATTR4 AS attribute4, ATTR5 AS attribute5 FROM ITEM I, PRODUCT P WHERE P.PRODUCTID = I.PRODUCTID AND I.PRODUCTID = ? 
+$0;592213438301412;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592213438301412;null;1,FL-DSH-01
+$1;592213438700715;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592213438700715;null;1,FL-DSH-01
+$0;592213438788273;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592213438788273;null;null
+$1;592213438990972;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592213438990972;true;null
+$0;592213439735375;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592213439735375;null;SELECT PRODUCTID, NAME, DESCN as description, CATEGORY as categoryId FROM PRODUCT WHERE PRODUCTID = ? 
+$1;592213440058667;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592213440058667;null;SELECT PRODUCTID, NAME, DESCN as description, CATEGORY as categoryId FROM PRODUCT WHERE PRODUCTID = ? 
+$0;592213440143659;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592213440143659;null;1,FL-DSH-01
+$1;592213440202993;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592213440202993;null;1,FL-DSH-01
+$0;592213440263610;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592213440263610;null;null
+$1;592213440351489;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592213440351489;true;null
+$0;592214565036056;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592214565036056;null;SELECT QTY AS value FROM INVENTORY WHERE ITEMID = ? 
+$1;592214565389816;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592214565389816;null;SELECT QTY AS value FROM INVENTORY WHERE ITEMID = ? 
+$0;592214565490844;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592214565490844;null;1,EST-15
+$1;592214565558517;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592214565558517;null;1,EST-15
+$0;592214565699957;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592214565699957;null;null
+$1;592214565785912;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592214565785912;true;null
+$0;592214566056604;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592214566056604;null;SELECT QTY AS value FROM INVENTORY WHERE ITEMID = ? 
+$1;592214566239096;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592214566239096;null;SELECT QTY AS value FROM INVENTORY WHERE ITEMID = ? 
+$0;592214566325051;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592214566325051;null;1,EST-15
+$1;592214566378612;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592214566378612;null;1,EST-15
+$0;592214566433135;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592214566433135;null;null
+$1;592214566504657;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592214566504657;true;null
+$0;592214566587084;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592214566587084;null;select ITEMID, LISTPRICE, UNITCOST, SUPPLIER AS supplierId, I.PRODUCTID AS "product.productId", NAME AS "product.name", DESCN AS "product.description", CATEGORY AS "product.categoryId", STATUS, ATTR1 AS attribute1, ATTR2 AS attribute2, ATTR3 AS attribute3, ATTR4 AS attribute4, ATTR5 AS attribute5, QTY AS quantity from ITEM I, INVENTORY V, PRODUCT P where P.PRODUCTID = I.PRODUCTID and I.ITEMID = V.ITEMID and I.ITEMID = ? 
+$1;592214566889207;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592214566889207;null;select ITEMID, LISTPRICE, UNITCOST, SUPPLIER AS supplierId, I.PRODUCTID AS "product.productId", NAME AS "product.name", DESCN AS "product.description", CATEGORY AS "product.categoryId", STATUS, ATTR1 AS attribute1, ATTR2 AS attribute2, ATTR3 AS attribute3, ATTR4 AS attribute4, ATTR5 AS attribute5, QTY AS quantity from ITEM I, INVENTORY V, PRODUCT P where P.PRODUCTID = I.PRODUCTID and I.ITEMID = V.ITEMID and I.ITEMID = ? 
+$0;592214566988311;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592214566988311;null;1,EST-15
+$1;592214567056946;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592214567056946;null;1,EST-15
+$0;592214567119808;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592214567119808;null;null
+$1;592214567247136;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592214567247136;true;null
+$0;592216455412754;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592216455412754;null;SELECT SIGNON.USERNAME, ACCOUNT.EMAIL, ACCOUNT.FIRSTNAME, ACCOUNT.LASTNAME, ACCOUNT.STATUS, ACCOUNT.ADDR1 AS address1, ACCOUNT.ADDR2 AS address2, ACCOUNT.CITY, ACCOUNT.STATE, ACCOUNT.ZIP, ACCOUNT.COUNTRY, ACCOUNT.PHONE, PROFILE.LANGPREF AS languagePreference, PROFILE.FAVCATEGORY AS favouriteCategoryId, PROFILE.MYLISTOPT AS listOption, PROFILE.BANNEROPT AS bannerOption, BANNERDATA.BANNERNAME FROM ACCOUNT, PROFILE, SIGNON, BANNERDATA WHERE ACCOUNT.USERID = ? AND SIGNON.PASSWORD = ? AND SIGNON.USERNAME = ACCOUNT.USERID AND PROFILE.USERID = ACCOUNT.USERID AND PROFILE.FAVCATEGORY = BANNERDATA.FAVCATEGORY 
+$1;592216456022774;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592216456022774;null;SELECT SIGNON.USERNAME, ACCOUNT.EMAIL, ACCOUNT.FIRSTNAME, ACCOUNT.LASTNAME, ACCOUNT.STATUS, ACCOUNT.ADDR1 AS address1, ACCOUNT.ADDR2 AS address2, ACCOUNT.CITY, ACCOUNT.STATE, ACCOUNT.ZIP, ACCOUNT.COUNTRY, ACCOUNT.PHONE, PROFILE.LANGPREF AS languagePreference, PROFILE.FAVCATEGORY AS favouriteCategoryId, PROFILE.MYLISTOPT AS listOption, PROFILE.BANNEROPT AS bannerOption, BANNERDATA.BANNERNAME FROM ACCOUNT, PROFILE, SIGNON, BANNERDATA WHERE ACCOUNT.USERID = ? AND SIGNON.PASSWORD = ? AND SIGNON.USERNAME = ACCOUNT.USERID AND PROFILE.USERID = ACCOUNT.USERID AND PROFILE.FAVCATEGORY = BANNERDATA.FAVCATEGORY 
+$0;592216456148819;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592216456148819;null;1,j2ee
+$1;592216456212964;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592216456212964;null;1,j2ee
+$0;592216456284486;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592216456284486;null;2,j2ee
+$1;592216456564479;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592216456564479;null;2,j2ee
+$0;592216456627020;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592216456627020;null;null
+$1;592216456729011;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592216456729011;true;null
+$0;592216457217155;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592216457217155;null;SELECT PRODUCTID, NAME, DESCN as description, CATEGORY as categoryId FROM PRODUCT WHERE CATEGORY = ? 
+$1;592216457460906;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592216457460906;null;SELECT PRODUCTID, NAME, DESCN as description, CATEGORY as categoryId FROM PRODUCT WHERE CATEGORY = ? 
+$0;592216457573802;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592216457573802;null;1,DOGS
+$1;592216457663605;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592216457663605;null;1,DOGS
+$0;592216457722618;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592216457722618;null;null
+$1;592216457830061;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592216457830061;true;null
+$0;592227957544295;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227957544295;null;SELECT name, nextid FROM SEQUENCE WHERE NAME = ? 
+$1;592227957938466;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227957938466;null;SELECT name, nextid FROM SEQUENCE WHERE NAME = ? 
+$0;592227958043023;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227958043023;null;1,ordernum
+$1;592227958125449;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227958125449;null;1,ordernum
+$0;592227958217498;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592227958217498;null;null
+$1;592227958298962;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592227958298962;true;null
+$0;592227958645666;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227958645666;null;UPDATE SEQUENCE SET NEXTID = ? WHERE NAME = ? 
+$1;592227959016104;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227959016104;null;UPDATE SEQUENCE SET NEXTID = ? WHERE NAME = ? 
+$0;592227959177429;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227959177429;null;1,1001
+$1;592227959275571;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227959275571;null;1,1001
+$0;592227959344206;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227959344206;null;2,ordernum
+$1;592227959406427;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227959406427;null;2,ordernum
+$0;592227959522208;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592227959522208;null;null
+$1;592227959795146;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592227959795146;false;null
+$0;592227960597280;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227960597280;null;UPDATE INVENTORY SET QTY = QTY - ? WHERE ITEMID = ? 
+$1;592227961182925;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227961182925;null;UPDATE INVENTORY SET QTY = QTY - ? WHERE ITEMID = ? 
+$0;592227961298065;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227961298065;null;1,5
+$1;592227961356758;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227961356758;null;1,5
+$0;592227961415771;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227961415771;null;2,EST-5
+$1;592227961608848;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227961608848;null;2,EST-5
+$0;592227961676521;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592227961676521;null;null
+$1;592227961873447;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592227961873447;false;null
+$0;592227961996926;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227961996926;null;UPDATE INVENTORY SET QTY = QTY - ? WHERE ITEMID = ? 
+$1;592227962167552;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227962167552;null;UPDATE INVENTORY SET QTY = QTY - ? WHERE ITEMID = ? 
+$0;592227962239073;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227962239073;null;1,1
+$1;592227962291352;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227962291352;null;1,1
+$0;592227962342988;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227962342988;null;2,EST-17
+$1;592227962461978;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227962461978;null;2,EST-17
+$0;592227962559478;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592227962559478;null;null
+$1;592227962688089;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592227962688089;false;null
+$0;592227962806757;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227962806757;null;UPDATE INVENTORY SET QTY = QTY - ? WHERE ITEMID = ? 
+$1;592227962973855;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227962973855;null;UPDATE INVENTORY SET QTY = QTY - ? WHERE ITEMID = ? 
+$0;592227963051471;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227963051471;null;1,1
+$1;592227963153461;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227963153461;null;1,1
+$0;592227963212475;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227963212475;null;2,EST-15
+$1;592227963274696;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227963274696;null;2,EST-15
+$0;592227963334030;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592227963334030;null;null
+$1;592227963451095;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592227963451095;false;null
+$0;592227963684262;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227963684262;null;INSERT INTO ORDERS (ORDERID, USERID, ORDERDATE, SHIPADDR1, SHIPADDR2, SHIPCITY, SHIPSTATE, SHIPZIP, SHIPCOUNTRY, BILLADDR1, BILLADDR2, BILLCITY, BILLSTATE, BILLZIP, BILLCOUNTRY, COURIER, TOTALPRICE, BILLTOFIRSTNAME, BILLTOLASTNAME, SHIPTOFIRSTNAME, SHIPTOLASTNAME, CREDITCARD, EXPRDATE, CARDTYPE, LOCALE) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) 
+$1;592227963990234;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227963990234;null;INSERT INTO ORDERS (ORDERID, USERID, ORDERDATE, SHIPADDR1, SHIPADDR2, SHIPCITY, SHIPSTATE, SHIPZIP, SHIPCOUNTRY, BILLADDR1, BILLADDR2, BILLCITY, BILLSTATE, BILLZIP, BILLCOUNTRY, COURIER, TOTALPRICE, BILLTOFIRSTNAME, BILLTOLASTNAME, SHIPTOFIRSTNAME, SHIPTOLASTNAME, CREDITCARD, EXPRDATE, CARDTYPE, LOCALE) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) 
+$0;592227964103450;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227964103450;null;1,1000
+$1;592227964167595;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227964167595;null;1,1000
+$0;592227964223402;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227964223402;null;2,j2ee
+$1;592227964275359;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227964275359;null;2,j2ee
+$0;592227964441816;void java.sql.PreparedStatement.setTimestamp(int, Timestamp);java.sql.PreparedStatement.setTimestamp(int,;null;null;0;0;592227964441816;null;3,2015-05-20 14:57:07.101
+$1;592227971168389;void java.sql.PreparedStatement.setTimestamp(int, Timestamp);java.sql.PreparedStatement.setTimestamp(int,;null;null;0;0;592227971168389;null;3,2015-05-20 14:57:07.101
+$0;592227971430422;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227971430422;null;4,901 San Antonio Road
+$1;592227971690210;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227971690210;null;4,901 San Antonio Road
+$0;592227971754675;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227971754675;null;5,MS UCUP02-206
+$1;592227971810161;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227971810161;null;5,MS UCUP02-206
+$0;592227971868854;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227971868854;null;6,Palo Alto
+$1;592227971924018;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227971924018;null;6,Palo Alto
+$0;592227971980466;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227971980466;null;7,CA
+$1;592227972035310;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227972035310;null;7,CA
+$0;592227972087909;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227972087909;null;8,94303
+$1;592227972141791;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227972141791;null;8,94303
+$0;592227972197276;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227972197276;null;9,USA
+$1;592227972278099;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227972278099;null;9,USA
+$0;592227972330377;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227972330377;null;10,901 San Antonio Road
+$1;592227972387146;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227972387146;null;10,901 San Antonio Road
+$0;592227972458988;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227972458988;null;11,MS UCUP02-206
+$1;592227972551357;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227972551357;null;11,MS UCUP02-206
+$0;592227972619993;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227972619993;null;12,Palo Alto
+$1;592227972831030;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227972831030;null;12,Palo Alto
+$0;592227972926927;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227972926927;null;13,CA
+$1;592227973013523;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227973013523;null;13,CA
+$0;592227973070291;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227973070291;null;14,94303
+$1;592227973204354;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227973204354;null;14,94303
+$0;592227973262085;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227973262085;null;15,USA
+$1;592227973310514;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227973310514;null;15,USA
+$0;592227973359585;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227973359585;null;16,UPS
+$1;592227973487234;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227973487234;null;16,UPS
+$0;592227973633164;void java.sql.PreparedStatement.setBigDecimal(int, BigDecimal);java.sql.PreparedStatement.setBigDecimal(int,;null;null;0;0;592227973633164;null;17,209.50
+$1;592227973759851;void java.sql.PreparedStatement.setBigDecimal(int, BigDecimal);java.sql.PreparedStatement.setBigDecimal(int,;null;null;0;0;592227973759851;null;17,209.50
+$0;592227973818223;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227973818223;null;18,ABC
+$1;592227973878198;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227973878198;null;18,ABC
+$0;592227973934646;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227973934646;null;19,XYX
+$1;592227973991735;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227973991735;null;19,XYX
+$0;592227974043051;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227974043051;null;20,ABC
+$1;592227974098857;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227974098857;null;20,ABC
+$0;592227974154664;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227974154664;null;21,XYX
+$1;592227974212394;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227974212394;null;21,XYX
+$0;592227974265635;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227974265635;null;22,999 9999 9999 9999
+$1;592227974322403;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227974322403;null;22,999 9999 9999 9999
+$0;592227974376926;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227974376926;null;23,12/03
+$1;592227974429205;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227974429205;null;23,12/03
+$0;592227974498161;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227974498161;null;24,Visa
+$1;592227974550759;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227974550759;null;24,Visa
+$0;592227974604321;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227974604321;null;25,CA
+$1;592227974658523;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227974658523;null;25,CA
+$0;592227974713688;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592227974713688;null;null
+$1;592227974796114;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592227974796114;false;null
+$0;592227974943648;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227974943648;null;INSERT INTO ORDERSTATUS (ORDERID, LINENUM, TIMESTAMP, STATUS) VALUES (?, ?, ?, ?) 
+$1;592227975123254;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227975123254;null;INSERT INTO ORDERSTATUS (ORDERID, LINENUM, TIMESTAMP, STATUS) VALUES (?, ?, ?, ?) 
+$0;592227975921219;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227975921219;null;1,1000
+$1;592227976036360;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227976036360;null;1,1000
+$0;592227976101788;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227976101788;null;2,1000
+$1;592227976207948;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227976207948;null;2,1000
+$0;592227976286846;void java.sql.PreparedStatement.setTimestamp(int, Timestamp);java.sql.PreparedStatement.setTimestamp(int,;null;null;0;0;592227976286846;null;3,2015-05-20 14:57:07.101
+$1;592227976484092;void java.sql.PreparedStatement.setTimestamp(int, Timestamp);java.sql.PreparedStatement.setTimestamp(int,;null;null;0;0;592227976484092;null;3,2015-05-20 14:57:07.101
+$0;592227976571330;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227976571330;null;4,P
+$1;592227976633871;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227976633871;null;4,P
+$0;592227976695450;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592227976695450;null;null
+$1;592227976772745;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592227976772745;false;null
+$0;592227976925731;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227976925731;null;INSERT INTO LINEITEM (ORDERID, LINENUM, ITEMID, QUANTITY, UNITPRICE) VALUES (?, ?, ?, ?, ?) 
+$1;592227977099244;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227977099244;null;INSERT INTO LINEITEM (ORDERID, LINENUM, ITEMID, QUANTITY, UNITPRICE) VALUES (?, ?, ?, ?, ?) 
+$0;592227977175255;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227977175255;null;1,1000
+$1;592227977229137;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227977229137;null;1,1000
+$0;592227977283981;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227977283981;null;2,1
+$1;592227977334335;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227977334335;null;2,1
+$0;592227977384689;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227977384689;null;3,EST-5
+$1;592227978222745;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227978222745;null;3,EST-5
+$0;592227978324735;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227978324735;null;4,5
+$1;592227978392408;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227978392408;null;4,5
+$0;592227978455591;void java.sql.PreparedStatement.setBigDecimal(int, BigDecimal);java.sql.PreparedStatement.setBigDecimal(int,;null;null;0;0;592227978455591;null;5,18.50
+$1;592227978506266;void java.sql.PreparedStatement.setBigDecimal(int, BigDecimal);java.sql.PreparedStatement.setBigDecimal(int,;null;null;0;0;592227978506266;null;5,18.50
+$0;592227978556940;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592227978556940;null;null
+$1;592227978635198;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592227978635198;false;null
+$0;592227978739754;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227978739754;null;INSERT INTO LINEITEM (ORDERID, LINENUM, ITEMID, QUANTITY, UNITPRICE) VALUES (?, ?, ?, ?, ?) 
+$1;592227985042970;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227985042970;null;INSERT INTO LINEITEM (ORDERID, LINENUM, ITEMID, QUANTITY, UNITPRICE) VALUES (?, ?, ?, ?, ?) 
+$0;592227985215521;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227985215521;null;1,1000
+$1;592227985287363;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227985287363;null;1,1000
+$0;592227985365620;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227985365620;null;2,2
+$1;592227985484609;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227985484609;null;2,2
+$0;592227985590449;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227985590449;null;3,EST-17
+$1;592227985651707;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227985651707;null;3,EST-17
+$0;592227985706551;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227985706551;null;4,1
+$1;592227985786412;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227985786412;null;4,1
+$0;592227985840614;void java.sql.PreparedStatement.setBigDecimal(int, BigDecimal);java.sql.PreparedStatement.setBigDecimal(int,;null;null;0;0;592227985840614;null;5,93.50
+$1;592227985898666;void java.sql.PreparedStatement.setBigDecimal(int, BigDecimal);java.sql.PreparedStatement.setBigDecimal(int,;null;null;0;0;592227985898666;null;5,93.50
+$0;592227985960886;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592227985960886;null;null
+$1;592227986101043;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592227986101043;false;null
+$0;592227986257557;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227986257557;null;INSERT INTO LINEITEM (ORDERID, LINENUM, ITEMID, QUANTITY, UNITPRICE) VALUES (?, ?, ?, ?, ?) 
+$1;592227986485272;PreparedStatement java.sql.Connection.prepareStatement(String);java.sql.Connection.prepareStatement(String);null;null;0;0;592227986485272;null;INSERT INTO LINEITEM (ORDERID, LINENUM, ITEMID, QUANTITY, UNITPRICE) VALUES (?, ?, ?, ?, ?) 
+$0;592227986586622;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227986586622;null;1,1000
+$1;592227986649484;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227986649484;null;1,1000
+$0;592227986715874;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227986715874;null;2,3
+$1;592227986774888;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227986774888;null;2,3
+$0;592227986839353;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227986839353;null;3,EST-15
+$1;592227986897405;void java.sql.PreparedStatement.setString(int, String);java.sql.PreparedStatement.setString(int,;null;null;0;0;592227986897405;null;3,EST-15
+$0;592227986954814;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227986954814;null;4,1
+$1;592227987010300;void java.sql.PreparedStatement.setInt(int, int);java.sql.PreparedStatement.setInt(int,;null;null;0;0;592227987010300;null;4,1
+$0;592227987071238;void java.sql.PreparedStatement.setBigDecimal(int, BigDecimal);java.sql.PreparedStatement.setBigDecimal(int,;null;null;0;0;592227987071238;null;5,23.50
+$1;592227987127685;void java.sql.PreparedStatement.setBigDecimal(int, BigDecimal);java.sql.PreparedStatement.setBigDecimal(int,;null;null;0;0;592227987127685;null;5,23.50
+$0;592227999864974;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592227999864974;null;null
+$1;592228000097821;boolean java.sql.PreparedStatement.execute();java.sql.PreparedStatement.execute();null;null;0;0;592228000097821;false;null

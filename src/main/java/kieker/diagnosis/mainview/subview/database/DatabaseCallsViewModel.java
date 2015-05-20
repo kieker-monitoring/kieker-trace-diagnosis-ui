@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.mainview.subview.databasecalls;
+package kieker.diagnosis.mainview.subview.database;
 
 import kieker.diagnosis.domain.DatabaseOperationCall;
 import org.springframework.beans.factory.annotation.Autowired;

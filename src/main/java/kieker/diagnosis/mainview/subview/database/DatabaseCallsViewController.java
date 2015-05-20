@@ -14,14 +14,14 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.mainview.subview.databasecalls;
+package kieker.diagnosis.mainview.subview.database;
 
 import kieker.diagnosis.domain.DatabaseOperationCall;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.mainview.Controller;
 import kieker.diagnosis.mainview.subview.ISubController;
 import kieker.diagnosis.mainview.subview.ISubView;
-import kieker.diagnosis.mainview.subview.databasecalls.DatabaseCallsViewModel.Filter;
+import kieker.diagnosis.mainview.subview.database.DatabaseCallsViewModel.Filter;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;

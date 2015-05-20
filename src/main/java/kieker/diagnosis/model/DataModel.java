@@ -68,6 +68,8 @@ public final class DataModel extends Observable {
 	// TODO czi
 	private List<DatabaseOperationCall> databaseOperationCalls = Collections
 			.emptyList();
+	private List<DatabaseOperationCall> preparedStatementCalls = Collections
+	.emptyList();
 	// private List<DatabaseOperationCall> aggregatedDatabaseOperationCalls =
 	// Collections.emptyList();
 
@@ -217,6 +219,8 @@ public final class DataModel extends Observable {
 			}			
 		}
 
+		this.preparedStatementCalls = mergedPrepCalls;
+		
 		this.databaseOperationCalls = mergedCalls;
 		// System.out.println("oldCalls.size(): " + oldCalls.size());
 		// System.out.println("newCalls.size(): " + newCalls.size());
