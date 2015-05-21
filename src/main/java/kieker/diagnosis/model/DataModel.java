@@ -68,10 +68,10 @@ public final class DataModel extends Observable {
 	// TODO czi
 	private List<DatabaseOperationCall> databaseOperationCalls = Collections
 			.emptyList();
-	private List<DatabaseOperationCall> preparedStatementCalls = Collections
-	.emptyList();
-	// private List<DatabaseOperationCall> aggregatedDatabaseOperationCalls =
-	// Collections.emptyList();
+	private List<DatabaseOperationCall> databaseStatementCalls = Collections
+			.emptyList();
+	private List<DatabaseOperationCall> databasePreparedStatementCalls = Collections
+			.emptyList();
 
 	private File importDirectory;
 	private TimeUnit timeUnit;
@@ -141,17 +141,17 @@ public final class DataModel extends Observable {
 			mergedCalls.add(newMergedCall);
 		}
 
+		this.databaseOperationCalls = mergedCalls;
+
 		// Merges Statements (createStatement and executors)
 		// into one call including children
 		// TODO transfer into own stage
 		List<DatabaseOperationCall> mergedStatements = new LinkedList<DatabaseOperationCall>();
-		
+
 		for (int i = 0; i < (mergedCalls.size()); i += 1) {
 
 			int numOfCalls = mergedStatements.size();
-			if (mergedCalls
-					.get(i)
-					.getOperation()
+			if (mergedCalls.get(i).getOperation()
 					.contains("Statement java.sql.Connection.createStatement")) {
 
 				DatabaseOperationCall call = mergedCalls.get(i);
@@ -174,14 +174,17 @@ public final class DataModel extends Observable {
 
 					DatabaseOperationCall child = mergedCalls.get(i);
 					parentCall.addChild(child);
-					long duration = child.getTimestamp() - parentCall.getTimestamp();
+					long duration = child.getTimestamp()
+							- parentCall.getTimestamp();
 					parentCall.setDuration(duration);
 				}
 			} else {
-//				System.out.println("Other operation!");
+				// System.out.println("Other operation!");
 			}
 		}
-		
+
+		this.databaseStatementCalls = mergedStatements;
+
 		// Merges PreparedStatements (prepareStatement, setter and executors)
 		// into one call including children
 		// TODO transfer into own stage
@@ -205,7 +208,7 @@ public final class DataModel extends Observable {
 
 				mergedPreparedStatements.add(newPreparedStatementCall);
 
-//				System.out.println("Prepared Statement created!");
+				// System.out.println("Prepared Statement created!");
 
 			}
 
@@ -219,7 +222,7 @@ public final class DataModel extends Observable {
 					parentPreparedCall.addChild(child);
 				}
 
-//				System.out.println("Prepared Statement setter used!");
+				// System.out.println("Prepared Statement setter used!");
 			}
 
 			else if (mergedCalls.get(i).getOperation()
@@ -231,16 +234,19 @@ public final class DataModel extends Observable {
 
 					DatabaseOperationCall child = mergedCalls.get(i);
 					parentPreparedCall.addChild(child);
-					long duration = child.getTimestamp() - parentPreparedCall.getTimestamp();
+					long duration = child.getTimestamp()
+							- parentPreparedCall.getTimestamp();
 					parentPreparedCall.setDuration(duration);
 				}
 
-//				System.out.println("Prepared Statement executed!");
+				// System.out.println("Prepared Statement executed!");
 			} else {
-//				System.out.println("Other operation!");
+				// System.out.println("Other operation!");
 			}
 		}
-		
+
+		this.databasePreparedStatementCalls = mergedPreparedStatements;
+
 		System.out.println("Merged Statements");
 		for (int i = 0; i < (mergedStatements.size()); i += 1) {
 			DatabaseOperationCall call = mergedStatements.get(i);
@@ -249,14 +255,16 @@ public final class DataModel extends Observable {
 			System.out.println("Statement: " + call.getStringClassArgs());
 			System.out.println("Duration (in ns): " + call.getDuration());
 			System.out.println("Children:");
-			
+
 			for (DatabaseOperationCall childCall : call.getChildren()) {
 				System.out.println("	Operation: " + childCall.getOperation());
-				System.out.println("	Statement: " + childCall.getStringClassArgs());
+				System.out.println("	Statement: "
+						+ childCall.getStringClassArgs());
 			}
-			System.out.println("-----------------------------------------------------------");
+			System.out
+					.println("-----------------------------------------------------------");
 		}
-		
+
 		System.out.println("Merged Prepared Statements");
 		for (int i = 0; i < (mergedPreparedStatements.size()); i += 1) {
 			DatabaseOperationCall call = mergedPreparedStatements.get(i);
@@ -265,23 +273,21 @@ public final class DataModel extends Observable {
 			System.out.println("Statement: " + call.getStringClassArgs());
 			System.out.println("Duration (in ns): " + call.getDuration());
 			System.out.println("Children:");
-			
+
 			for (DatabaseOperationCall childCall : call.getChildren()) {
 				System.out.println("	Operation: " + childCall.getOperation());
-				System.out.println("	Statement: " + childCall.getStringClassArgs());
+				System.out.println("	Statement: "
+						+ childCall.getStringClassArgs());
 			}
-			System.out.println("-----------------------------------------------------------");
+			System.out
+					.println("-----------------------------------------------------------");
 		}
 
-		System.out.println("Statments (merged): "
-				+ mergedStatements.size());
-		
+		System.out.println("Statments (merged): " + mergedStatements.size());
+
 		System.out.println("PreparedStatments (merged): "
 				+ mergedPreparedStatements.size());
-		
-		this.preparedStatementCalls = mergedPreparedStatements;
-		
-		this.databaseOperationCalls = mergedCalls;
+
 		// System.out.println("oldCalls.size(): " + oldCalls.size());
 		// System.out.println("newCalls.size(): " + newCalls.size());
 
@@ -381,6 +387,18 @@ public final class DataModel extends Observable {
 			final String regExpr) {
 		return this
 				.filterCallsIfNecessary(this.databaseOperationCalls, regExpr);
+	}
+
+	public List<DatabaseOperationCall> getDatabaseStatementCalls(
+			final String regExpr) {
+		return this
+				.filterCallsIfNecessary(this.databaseStatementCalls, regExpr);
+	}
+
+	public List<DatabaseOperationCall> getDatabasePreparedStatementCalls(
+			final String regExpr) {
+		return this.filterCallsIfNecessary(this.databasePreparedStatementCalls,
+				regExpr);
 	}
 
 	private <T extends AbstractTrace<?>> List<T> filterTracesIfNecessary(

@@ -82,7 +82,8 @@ public final class View {
 
 	// TODO czi
 	private TreeItem trtmDatabaseOperationCalls;
-	private TreeItem trtmAggregatedDatabaseOperationCalls;
+	private TreeItem trtmDatabaseStatementCalls;
+	private TreeItem trtmDatabasePreparedStatementCalls;
 
 	private TreeItem trtmExplorer;
 	private TreeItem trtmTraces;
@@ -133,11 +134,15 @@ public final class View {
 		return this.trtmDatabaseOperationCalls;
 	}
 
-	// TODO czi
-	public TreeItem getTrtmAggregatedDatabaseOperationCalls() {
-		return this.trtmAggregatedDatabaseOperationCalls;
+	public TreeItem getTrtmDatabaseStatementCalls() {
+		return this.trtmDatabaseStatementCalls;
 	}
 
+	public TreeItem getTrtmDatabasePreparedStatementCalls() {
+		return this.trtmDatabasePreparedStatementCalls;
+	}
+
+	//
 	public TreeItem getTrtmMonitoringLogStatistics() {
 		return this.trtmMonitoringLogStatistics;
 	}
@@ -264,12 +269,20 @@ public final class View {
 		this.trtmDatabaseOperationCalls
 				.setText(BUNDLE
 						.getString("View.trtmDatabaseOperationCalls.text(java.lang.String)")); //$NON-NLS-1$
-		this.trtmAggregatedDatabaseOperationCalls = new TreeItem(this.trtmExplorer,
+
+		this.trtmDatabaseStatementCalls = new TreeItem(this.trtmExplorer,
 				SWT.NONE);
-		this.trtmAggregatedDatabaseOperationCalls
+		this.trtmDatabaseStatementCalls
 				.setText(BUNDLE
-						.getString("View.trtmAggregatedDatabaseOperationCalls.text(java.lang.String)")); //$NON-NLS-1$ 
-		
+						.getString("View.trtmDatabaseStatementCalls.text(java.lang.String)")); //$NON-NLS-1$ 
+
+		this.trtmDatabasePreparedStatementCalls = new TreeItem(
+				this.trtmExplorer, SWT.NONE);
+		this.trtmDatabasePreparedStatementCalls
+				.setText(BUNDLE
+						.getString("View.trtmDatabasePreparedStatementCalls.text(java.lang.String)")); //$NON-NLS-1$ 
+
+		//
 
 		this.trtmMonitoringLogStatistics = new TreeItem(this.trtmExplorer,
 				SWT.NONE);
