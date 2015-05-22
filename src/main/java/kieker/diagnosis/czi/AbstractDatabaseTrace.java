@@ -14,23 +14,25 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.domain;
+package kieker.diagnosis.czi;
+
+import kieker.diagnosis.domain.AbstractOperationCall;
 
 /**
  * This is an abstract base for classes representing traces (a tree of operation calls) within this application. Technically this class is just a container for a
  * single {@link AbstractOperationCall} instance representing the root call of a whole call tree. Furthermore, this class implements the methods
  * {@link AbstractTrace#equals(Object)} and {@link AbstractTrace#hashCode()}, allowing to put traces for example into a map to aggregate them.
  * 
- * @author Christian Zirkelbach
+ * @author Nils Christian Ehmke
  * 
  * @param <T>
  *            The type of the root node.
  */
-public abstract class AbstractTrace<T extends AbstractOperationCall<T>> {
+public abstract class AbstractDatabaseTrace<T extends AbstractOperationCall<T>> {
 
 	private final T rootOperationCall;
 
-	public AbstractTrace(final T rootOperationCall) {
+	public AbstractDatabaseTrace(final T rootOperationCall) {
 		this.rootOperationCall = rootOperationCall;
 	}
 
@@ -58,7 +60,7 @@ public abstract class AbstractTrace<T extends AbstractOperationCall<T>> {
 		if (this.getClass() != obj.getClass()) {
 			return false;
 		}
-		final AbstractTrace other = (AbstractTrace) obj;
+		final AbstractDatabaseTrace other = (AbstractDatabaseTrace) obj;
 		if (this.rootOperationCall == null) {
 			if (other.rootOperationCall != null) {
 				return false;
