@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
@@ -46,6 +47,8 @@ public final class TracesViewController {
 	private final DataModel dataModel = DataModel.getInstance();
 
 	private final SimpleObjectProperty<Optional<OperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
+
+	private Predicate<OperationCall> predicate = call -> true;
 
 	@FXML private TreeTableView<OperationCall> treetable;
 
@@ -96,6 +99,21 @@ public final class TracesViewController {
 		}
 	}
 
+	public void showAllTraces() {
+		this.predicate = call -> true;
+		this.reloadTreetable();
+	}
+
+	public void showJustFailedTraces() {
+		this.predicate = OperationCall::isFailed;
+		this.reloadTreetable();
+	}
+
+	public void showJustFailureContainingTraces() {
+		this.predicate = OperationCall::containsFailure;
+		this.reloadTreetable();
+	}
+
 	private void reloadTreetable() {
 		final List<Trace> traces = this.dataModel.getTraces();
 		final TreeItem<OperationCall> root = new TreeItem<>();
@@ -103,7 +121,9 @@ public final class TracesViewController {
 		this.treetable.setShowRoot(false);
 
 		for (final Trace trace : traces) {
-			root.getChildren().add(new LazyOperationCallTreeItem<OperationCall>(trace.getRootOperationCall()));
+			if (this.predicate.test(trace.getRootOperationCall())) {
+				root.getChildren().add(new LazyOperationCallTreeItem<OperationCall>(trace.getRootOperationCall()));
+			}
 		}
 	}
 }

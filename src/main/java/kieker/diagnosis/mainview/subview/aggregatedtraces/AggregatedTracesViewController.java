@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
@@ -62,6 +63,8 @@ public final class AggregatedTracesViewController {
 
 	@FXML private ResourceBundle resources;
 
+	private Predicate<AggregatedOperationCall> predicate = call -> true;
+
 	public void initialize() {
 		this.reloadTreetable();
 
@@ -96,6 +99,21 @@ public final class AggregatedTracesViewController {
 		}
 	}
 
+	public void showAllTraces() {
+		this.predicate = call -> true;
+		this.reloadTreetable();
+	}
+
+	public void showJustFailedTraces() {
+		this.predicate = AggregatedOperationCall::isFailed;
+		this.reloadTreetable();
+	}
+
+	public void showJustFailureContainingTraces() {
+		this.predicate = AggregatedOperationCall::containsFailure;
+		this.reloadTreetable();
+	}
+
 	private void reloadTreetable() {
 		final DataModel dataModel = DataModel.getInstance();
 		final List<AggregatedTrace> traces = dataModel.getAggregatedTraces();
@@ -104,7 +122,9 @@ public final class AggregatedTracesViewController {
 		this.treetable.setShowRoot(false);
 
 		for (final AggregatedTrace trace : traces) {
-			root.getChildren().add(new LazyOperationCallTreeItem<AggregatedOperationCall>(trace.getRootOperationCall()));
+			if (this.predicate.test(trace.getRootOperationCall())) {
+				root.getChildren().add(new LazyOperationCallTreeItem<AggregatedOperationCall>(trace.getRootOperationCall()));
+			}
 		}
 	}
 }

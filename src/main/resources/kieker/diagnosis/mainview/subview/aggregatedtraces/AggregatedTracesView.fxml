@@ -15,12 +15,9 @@
 			<ToggleGroup fx:id="togglegroup" />
 		</fx:define>
 
-		<RadioButton text="%AggregatedTracesView.btnShowAll.text"
-			selected="true" toggleGroup="$togglegroup" />
-		<RadioButton text="%AggregatedTracesView.btnShowJustFailed.text"
-			toggleGroup="$togglegroup" />
-		<RadioButton text="%AggregatedTracesView.btnShowJustFailureContaining.text"
-			toggleGroup="$togglegroup" />
+		<RadioButton text="%AggregatedTracesView.btnShowAll.text" selected="true" toggleGroup="$togglegroup" onAction="#showAllTraces" />
+		<RadioButton text="%AggregatedTracesView.btnShowJustFailed.text" toggleGroup="$togglegroup" onAction="#showJustFailedTraces" />	
+		<RadioButton text="%AggregatedTracesView.btnShowJustFailureContaining.text" toggleGroup="$togglegroup" onAction="#showJustFailureContainingTraces" />		
 	</HBox>
 	
 	<TextField promptText="%AggregatedTracesView.text.message" fx:id="regexpfilter"
