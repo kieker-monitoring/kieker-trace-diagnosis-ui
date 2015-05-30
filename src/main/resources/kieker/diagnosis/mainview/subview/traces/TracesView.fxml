@@ -31,6 +31,9 @@
 		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true" onMouseClicked="#selectCall">
 		<columns>
 			<TreeTableColumn text="%TracesView.trclmnExecutionContainer.text">
+			<cellFactory>
+						<kieker.diagnosis.mainview.subview.util.FailedTreeCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory
 						property="container" />
@@ -38,6 +41,9 @@
 			</TreeTableColumn>
 
 			<TreeTableColumn text="%TracesView.trclmnComponent.text">
+			<cellFactory>
+						<kieker.diagnosis.mainview.subview.util.FailedTreeCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory
 						property="component" />
@@ -45,6 +51,9 @@
 			</TreeTableColumn>
 
 			<TreeTableColumn text="%TracesView.trclmnOperation.text">
+			<cellFactory>
+						<kieker.diagnosis.mainview.subview.util.FailedTreeCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory
 						property="operation" />
@@ -52,6 +61,9 @@
 			</TreeTableColumn>
 
 			<TreeTableColumn text="%TracesView.trclmnTraceDepth.text">
+			<cellFactory>
+						<kieker.diagnosis.mainview.subview.util.FailedTreeCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory
 						property="stackDepth" />
@@ -59,6 +71,9 @@
 			</TreeTableColumn>
 
 			<TreeTableColumn text="%TracesView.trclmnTraceSize.text">
+			<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.FailedTreeCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory
 						property="stackSize" />
@@ -76,6 +91,9 @@
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%TracesView.trclmnPercent.text" >
+			<cellFactory>
+						<kieker.diagnosis.mainview.subview.util.FailedTreeCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory
 						property="percent" />
@@ -83,6 +101,9 @@
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%TracesView.trclmnTraceId.text" >
+			<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.FailedTreeCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory
 						property="traceID" />
@@ -90,6 +111,9 @@
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%TracesView.trclmnTimestamp.text" >
+			<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.FailedTreeCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory
 						property="timestamp" />
