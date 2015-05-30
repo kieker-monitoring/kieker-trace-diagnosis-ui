@@ -21,6 +21,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
@@ -45,6 +47,7 @@ public final class AggregatedTracesViewController {
 	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
 
 	@FXML private TreeTableView<AggregatedOperationCall> treetable;
+	@FXML private TextField regexpfilter;
 
 	@FXML private TextField medianDuration;
 	@FXML private TextField totalDuration;
@@ -63,7 +66,8 @@ public final class AggregatedTracesViewController {
 
 	@FXML private ResourceBundle resources;
 
-	private Predicate<AggregatedOperationCall> predicate = call -> true;
+	private Predicate<AggregatedOperationCall> fstPredicate = call -> true;
+	private Predicate<AggregatedOperationCall> sndPredicate = call -> true;
 
 	public void initialize() {
 		this.reloadTreetable();
@@ -100,21 +104,43 @@ public final class AggregatedTracesViewController {
 	}
 
 	public void showAllTraces() {
-		this.predicate = call -> true;
+		this.fstPredicate = call -> true;
 		this.reloadTreetable();
 	}
 
 	public void showJustFailedTraces() {
-		this.predicate = AggregatedOperationCall::isFailed;
+		this.fstPredicate = AggregatedOperationCall::isFailed;
 		this.reloadTreetable();
 	}
 
 	public void showJustFailureContainingTraces() {
-		this.predicate = AggregatedOperationCall::containsFailure;
+		this.fstPredicate = AggregatedOperationCall::containsFailure;
 		this.reloadTreetable();
 	}
 
+	public void useRegExp() {
+		final String regExpr = this.regexpfilter.getText();
+
+		if ((regExpr == null) || regExpr.isEmpty() || !this.isRegex(regExpr)) {
+			this.sndPredicate = call -> true;
+		} else {
+			this.sndPredicate = call -> call.getOperation().matches(regExpr);
+		}
+
+		this.reloadTreetable();
+	}
+
+	private boolean isRegex(final String str) {
+		try {
+			Pattern.compile(str);
+			return true;
+		} catch (final PatternSyntaxException e) {
+			return false;
+		}
+	}
+
 	private void reloadTreetable() {
+		// TODO: This can be done better with the binding API
 		final DataModel dataModel = DataModel.getInstance();
 		final List<AggregatedTrace> traces = dataModel.getAggregatedTraces();
 		final TreeItem<AggregatedOperationCall> root = new TreeItem<>();
@@ -122,7 +148,7 @@ public final class AggregatedTracesViewController {
 		this.treetable.setShowRoot(false);
 
 		for (final AggregatedTrace trace : traces) {
-			if (this.predicate.test(trace.getRootOperationCall())) {
+			if (this.fstPredicate.test(trace.getRootOperationCall()) && (this.sndPredicate.test(trace.getRootOperationCall()))) {
 				root.getChildren().add(new LazyOperationCallTreeItem<AggregatedOperationCall>(trace.getRootOperationCall()));
 			}
 		}

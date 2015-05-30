@@ -20,7 +20,7 @@
 		<RadioButton text="%AggregatedTracesView.btnShowJustFailureContaining.text" toggleGroup="$togglegroup" onAction="#showJustFailureContainingTraces" />		
 	</HBox>
 	
-	<TextField promptText="%AggregatedTracesView.text.message" fx:id="regexpfilter"
+	<TextField promptText="%AggregatedTracesView.text.message" onAction="#useRegExp" fx:id="regexpfilter"
 		GridPane.rowIndex="1" />
 
 	<TreeTableView fx:id="treetable" GridPane.hgrow="ALWAYS"

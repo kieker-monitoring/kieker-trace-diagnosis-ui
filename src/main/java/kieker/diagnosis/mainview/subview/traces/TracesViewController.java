@@ -21,6 +21,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
@@ -48,9 +50,8 @@ public final class TracesViewController {
 
 	private final SimpleObjectProperty<Optional<OperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
 
-	private Predicate<OperationCall> predicate = call -> true;
-
 	@FXML private TreeTableView<OperationCall> treetable;
+	@FXML private TextField regexpfilter;
 
 	@FXML private TextField traceDepth;
 	@FXML private TextField traceSize;
@@ -66,6 +67,9 @@ public final class TracesViewController {
 	@FXML private TextField counter;
 
 	@FXML private ResourceBundle resources;
+
+	private final Predicate<OperationCall> fstPredicate = call -> true;
+	private Predicate<OperationCall> sndPredicate = call -> true;
 
 	public void initialize() {
 		this.reloadTreetable();
@@ -100,28 +104,46 @@ public final class TracesViewController {
 	}
 
 	public void showAllTraces() {
-		this.predicate = call -> true;
 		this.reloadTreetable();
 	}
 
 	public void showJustFailedTraces() {
-		this.predicate = OperationCall::isFailed;
 		this.reloadTreetable();
 	}
 
 	public void showJustFailureContainingTraces() {
-		this.predicate = OperationCall::containsFailure;
 		this.reloadTreetable();
 	}
 
+	public void useRegExp() {
+		final String regExpr = this.regexpfilter.getText();
+
+		if ((regExpr == null) || regExpr.isEmpty() || !this.isRegex(regExpr)) {
+			this.sndPredicate = call -> true;
+		} else {
+			this.sndPredicate = call -> call.getOperation().matches(regExpr);
+		}
+		this.reloadTreetable();
+	}
+
+	private boolean isRegex(final String str) {
+		try {
+			Pattern.compile(str);
+			return true;
+		} catch (final PatternSyntaxException e) {
+			return false;
+		}
+	}
+
 	private void reloadTreetable() {
+		// TODO: This can be done better with the binding API
 		final List<Trace> traces = this.dataModel.getTraces();
 		final TreeItem<OperationCall> root = new TreeItem<>();
 		this.treetable.setRoot(root);
 		this.treetable.setShowRoot(false);
 
 		for (final Trace trace : traces) {
-			if (this.predicate.test(trace.getRootOperationCall())) {
+			if (this.fstPredicate.test(trace.getRootOperationCall()) && (this.sndPredicate.test(trace.getRootOperationCall()))) {
 				root.getChildren().add(new LazyOperationCallTreeItem<OperationCall>(trace.getRootOperationCall()));
 			}
 		}
