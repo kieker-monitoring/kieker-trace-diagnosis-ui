@@ -18,6 +18,8 @@ package kieker.diagnosis.model;
 
 import java.util.Observable;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 /**
@@ -25,6 +27,7 @@ import java.util.prefs.Preferences;
  */
 public final class PropertiesModel extends Observable {
 
+	private static final Logger LOGGER = Logger.getLogger(PropertiesModel.class.getCanonicalName());
 	private static final PropertiesModel INSTANCE = new PropertiesModel();
 
 	private static final String KEY_TIMEUNIT = "timeunit";
@@ -50,12 +53,29 @@ public final class PropertiesModel extends Observable {
 		this.operationNames = OperationNames.valueOf(preferences.get(PropertiesModel.KEY_OPERATIONS, OperationNames.SHORT.name()));
 	}
 
+	private void saveSettings() {
+		final Preferences preferences = Preferences.userNodeForPackage(PropertiesModel.class);
+
+		preferences.put(PropertiesModel.KEY_GRAPHVIZ_PATH, this.graphvizPath);
+		preferences.put(PropertiesModel.KEY_TIMEUNIT, this.timeUnit.name());
+		preferences.put(PropertiesModel.KEY_COMPONENTS, this.componentNames.name());
+		preferences.put(PropertiesModel.KEY_OPERATIONS, this.operationNames.name());
+
+		try {
+			preferences.flush();
+		} catch (final BackingStoreException e) {
+			PropertiesModel.LOGGER.warning(e.getLocalizedMessage());
+		}
+	}
+
 	public String getGraphvizPath() {
 		return this.graphvizPath;
 	}
 
 	public void setGraphvizPath(final String graphvizPath) {
 		this.graphvizPath = graphvizPath;
+
+		this.saveSettings();
 	}
 
 	public TimeUnit getTimeUnit() {
@@ -64,6 +84,7 @@ public final class PropertiesModel extends Observable {
 
 	public void setTimeUnit(final TimeUnit timeUnit) {
 		this.timeUnit = timeUnit;
+		this.saveSettings();
 	}
 
 	public ComponentNames getComponentNames() {
@@ -72,6 +93,7 @@ public final class PropertiesModel extends Observable {
 
 	public void setComponentNames(final ComponentNames componentNames) {
 		this.componentNames = componentNames;
+		this.saveSettings();
 	}
 
 	public OperationNames getOperationNames() {
@@ -80,6 +102,7 @@ public final class PropertiesModel extends Observable {
 
 	public void setOperationNames(final OperationNames operationNames) {
 		this.operationNames = operationNames;
+		this.saveSettings();
 	}
 
 	public static PropertiesModel getInstance() {

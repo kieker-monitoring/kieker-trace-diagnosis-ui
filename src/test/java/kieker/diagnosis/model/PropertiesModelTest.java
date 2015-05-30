@@ -19,23 +19,11 @@ package kieker.diagnosis.model;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-import java.util.Observable;
-import java.util.Observer;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
 public final class PropertiesModelTest {
-
-	@Test
-	public void usualSettingShouldNotifyObservers() {
-		final BooleanObserver observer = new BooleanObserver();
-		final PropertiesModel model = new PropertiesModel();
-		model.addObserver(observer);
-
-		model.setTimeUnit(TimeUnit.NANOSECONDS);
-		assertThat(observer.isFlag(), is(true));
-	}
 
 	@Test
 	public void settingShouldBePersisted() {
@@ -45,21 +33,6 @@ public final class PropertiesModelTest {
 
 		final PropertiesModel sndModel = new PropertiesModel();
 		assertThat(sndModel.getTimeUnit(), is(TimeUnit.MICROSECONDS));
-	}
-
-	private static class BooleanObserver implements Observer {
-
-		private boolean flag = false;
-
-		@Override
-		public void update(final Observable o, final Object arg) {
-			this.flag = true;
-		}
-
-		public boolean isFlag() {
-			return this.flag;
-		}
-
 	}
 
 }
