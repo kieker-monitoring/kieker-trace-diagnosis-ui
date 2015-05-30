@@ -24,7 +24,7 @@
 		GridPane.rowIndex="1" />
 
 	<TableView fx:id="table" GridPane.hgrow="ALWAYS"
-		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true" onMouseClicked="#selectCall" >
+		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true">
 
 		<columns>
 			<TableColumn text="%CallsView.tblclmnExecutionContainer.text">
