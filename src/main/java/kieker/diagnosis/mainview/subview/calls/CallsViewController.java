@@ -25,12 +25,12 @@ import java.util.regex.PatternSyntaxException;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.model.DataModel;
 
@@ -77,10 +77,6 @@ public final class CallsViewController {
 		this.traceID.textProperty().bind(this.createStringBindingForSelection(OperationCall::getTraceID));
 		this.failed.textProperty().bind(this.createStringBindingForSelection(OperationCall::getFailedCause));
 
-		this.table.getSelectionModel().getSelectedItems().addListener((ListChangeListener<OperationCall>) c -> {
-			//
-			});
-
 		this.counter.textProperty().bind(Bindings.createStringBinding(() -> sortedData.size() + " " + this.resources.getString("CallsView.lbCounter.text"), sortedData));
 	}
 
@@ -88,7 +84,7 @@ public final class CallsViewController {
 		return Bindings.createStringBinding(() -> this.selection.get().map(mapper).map(Object::toString).orElse("N/A"), this.selection);
 	}
 
-	public void selectCall() {
+	public void selectCall(final MouseEvent event) {
 		this.selection.set(Optional.ofNullable(this.table.getSelectionModel().getSelectedItem()));
 	}
 
