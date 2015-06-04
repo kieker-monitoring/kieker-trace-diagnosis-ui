@@ -25,6 +25,7 @@ import java.util.List;
  * allowing to easily check whether two traces are equal and should be in the same equivalence class.
  * 
  * @author Nils Christian Ehmke
+ * @author Christian Zirkelbach
  * 
  * @param <T>
  *            The precise type of the children. This should usually be the implementing class itself.
@@ -60,6 +61,10 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 
 	public final List<T> getChildren() {
 		return this.children;
+	}
+	
+	public void setChildren(final List<T> children) {
+		this.setChildren(children);
 	}
 
 	public final String getContainer() {

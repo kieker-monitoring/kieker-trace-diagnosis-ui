@@ -16,6 +16,7 @@
 
 package kieker.diagnosis.domain;
 
+
 /**
  * This class represents a concrete aggregated database call within this application. It
  * adds some properties that are only required for this type of calls, like the
@@ -51,7 +52,7 @@ public final class AggregatedDatabaseOperationCall extends AbstractOperationCall
 		this.meanDuration = meanDuration;
 		this.calls = calls;
 	}
-
+	
 	@Override
 	public void addChild(final AggregatedDatabaseOperationCall child) {
 		super.addChild(child);
@@ -112,5 +113,13 @@ public final class AggregatedDatabaseOperationCall extends AbstractOperationCall
 
 	public void setStringClassArgs(String stringClassArgs) {
 		this.callArguments = stringClassArgs;
+	}
+	
+	public AggregatedDatabaseOperationCall getParent() {
+		return parent;
+	}
+
+	public void setParent(AggregatedDatabaseOperationCall parent) {
+		this.parent = parent;
 	}
 }
