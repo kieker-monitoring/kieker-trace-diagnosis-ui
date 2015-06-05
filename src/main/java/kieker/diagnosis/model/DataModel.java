@@ -17,6 +17,7 @@
 package kieker.diagnosis.model;
 
 import java.io.File;
+import java.sql.PreparedStatement;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,6 +37,7 @@ import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.DatabaseOperationCall;
 import kieker.diagnosis.domain.OperationCall;
+import kieker.diagnosis.domain.PreparedStatementCall;
 import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.model.importer.ImportAnalysisConfiguration;
 
@@ -76,7 +78,7 @@ public final class DataModel extends Observable {
 			.emptyList();
 	private List<DatabaseOperationCall> databasePreparedStatementCalls = Collections
 			.emptyList();
-	private List<DatabaseOperationCall> refinedDatabasePreparedStatementCalls = Collections
+	private List<PreparedStatementCall> refinedDatabasePreparedStatementCalls = Collections
 			.emptyList();
 
 	private File importDirectory;
@@ -149,7 +151,7 @@ public final class DataModel extends Observable {
 
 		this.databaseOperationCalls = mergedCalls;
 
-		System.out.println("DatabaseOperationCalls (merged): "
+		System.out.println("DatabaseOperationCalls merged (before and after events): "
 				+ databaseOperationCalls.size());
 
 		// Merges Statements (createStatement and executors)
@@ -192,6 +194,8 @@ public final class DataModel extends Observable {
 
 		this.databaseStatementCalls = mergedStatements;
 
+		System.out.println("Statements merged (createStatement and executors): " + mergedStatements.size());
+		
 		// refines merged statement with focus on the statement -> calculate
 		// overall response time and keep just the child
 		List<DatabaseOperationCall> refinedDatabaseStatementCalls = new LinkedList<DatabaseOperationCall>();
@@ -211,7 +215,7 @@ public final class DataModel extends Observable {
 			}
 		}
 
-		System.out.println("DatabaseStatementCalls (refined): "
+		System.out.println("DatabaseStatementCalls refined (cropped createStatement): "
 				+ refinedDatabaseStatementCalls.size());
 
 		// // TODO
@@ -312,7 +316,7 @@ public final class DataModel extends Observable {
 
 		this.aggregatedDatabaseStatementCalls = aggregatedDatabaseStatementCalls;
 
-		System.out.println("DatabaseStatementCalls (aggregated): "
+		System.out.println("DatabaseStatementCalls aggregated: "
 				+ aggregatedDatabaseStatementCalls.size());
 
 		// // // TODO
@@ -391,73 +395,127 @@ public final class DataModel extends Observable {
 		}
 
 		this.databasePreparedStatementCalls = mergedPreparedStatementCalls;
-		
-		// Refine PreparedStatemens based on it's statement
-		// TODO transfer into own stage
-		List<DatabaseOperationCall> refinedDatabasePreparedStatementCalls = new LinkedList<DatabaseOperationCall>();
 
-		handled = false;
-		for (DatabaseOperationCall mergedPrepRootCall : mergedPreparedStatementCalls) {
+		System.out.println("PreparedStatements merged: "
+				+ mergedPreparedStatementCalls.size());
+		
+		// Refine PreparedStatemens based on their statement
+		// TODO transfer into own stage
+		List<PreparedStatementCall> refinedPreparedStatementCalls = new LinkedList<PreparedStatementCall>();
+
+		// convert into PreparedStatementCalls
+		for (DatabaseOperationCall mergedPrepCall : mergedPreparedStatementCalls) {
+			PreparedStatementCall newCall = new PreparedStatementCall(mergedPrepCall.getContainer(), mergedPrepCall.getComponent(), 
+					mergedPrepCall.getOperation(), mergedPrepCall.getFormattedReturnValue(), 
+					mergedPrepCall.getTraceID(), mergedPrepCall.getTimestamp(), mergedPrepCall.getDuration());
+			
+			// merge into root of call hierarchy
+			// customizes the SQL-Statement for visualization purposes
+			String abstractStatement = mergedPrepCall.getStringClassArgs().toUpperCase();
+								
+			// insert Values into PreparedStatement to display concrete Statement
+			String concreteStatement = Utils.insertParametersIntoPreparedStatment(mergedPrepCall);
+			
+			// duration including the repsonse time of the children
+			long totalDuration = mergedPrepCall.getDuration();
+			List<DatabaseOperationCall> children = mergedPrepCall.getChildren();
+			for (DatabaseOperationCall child : children) {
+				totalDuration += child.getDuration();
+			}
+			
+			newCall.setDuration(totalDuration);
+			newCall.setAbstractStatement(abstractStatement);
+			newCall.setConcreteStatement(concreteStatement);
+			
+			refinedPreparedStatementCalls.add(newCall);
+		}
+		
+		this.refinedDatabasePreparedStatementCalls = refinedPreparedStatementCalls;
+		
+		System.out.println("PreparedStatements (refined): "
+				+ refinedPreparedStatementCalls.size());
+		
+		// Testing
+//		 System.out.println("Refined Prepared Statements");
+//		 for (int i = 0; i < (refinedPreparedStatementCalls.size()); i += 1) {
+//	     PreparedStatementCall call = refinedPreparedStatementCalls.get(i);
+//		
+//		 System.out.println("Operation: " + call.getOperation());
+//		 System.out.println("Abstract Statement: " + call.getAbstractStatement());
+//		 System.out.println("Concrete Statement: " + call.getConcreteStatement());
+//		 System.out.println("Duration (in ns): " + call.getDuration());
+//		 System.out.println("Children:");
+//		 System.out.println("-----------------------------------------------------------");
+//		 }
+		
+		// Group based on the abstract statement includes creating a new root node
+		List<PreparedStatementCall> groupedRefinedPreparedStatementCalls = new LinkedList<PreparedStatementCall>();
+		
+		for (PreparedStatementCall refinedPrepCall : refinedPreparedStatementCalls) {
 			handled = false;
 
 			// initial case - empty list
-			if (refinedDatabasePreparedStatementCalls.isEmpty()) {
-				refinedDatabasePreparedStatementCalls.add(mergedPrepRootCall);
+			if (refinedPreparedStatementCalls.isEmpty()) {
+				PreparedStatementCall newAbstractCall = new PreparedStatementCall(refinedPrepCall.getContainer(), refinedPrepCall.getComponent(), 
+						refinedPrepCall.getOperation(), "", 0, 0, 0, refinedPrepCall.getAbstractStatement(), "");
+				PreparedStatementCall newConcreteCall = new PreparedStatementCall(refinedPrepCall.getContainer(), refinedPrepCall.getComponent(), 
+						refinedPrepCall.getOperation(), refinedPrepCall.getFormattedReturnValue(), refinedPrepCall.getTraceID(), refinedPrepCall.getTimestamp(), refinedPrepCall.getDuration(), refinedPrepCall.getAbstractStatement(), refinedPrepCall.getConcreteStatement());
+				newAbstractCall.addChild(newConcreteCall);
+				groupedRefinedPreparedStatementCalls.add(newAbstractCall);
 				handled = true;
 
 			} else {
-				for (int i = 0; i < (refinedDatabasePreparedStatementCalls.size()); i++) {
-					DatabaseOperationCall existingCall = refinedDatabasePreparedStatementCalls
+				for (int i = 0; i < (groupedRefinedPreparedStatementCalls.size()); i++) {
+					PreparedStatementCall existingCall = groupedRefinedPreparedStatementCalls
 							.get(i);
 					
 					// operation and statement arguments match
-					if ((existingCall.getOperation().equals(mergedPrepRootCall
-							.getOperation()))
-							&& (existingCall.getStringClassArgs()
-									.equals(mergedPrepRootCall.getStringClassArgs()))) {
-						
-						existingCall.addChild(mergedPrepRootCall);
+					if (existingCall.getAbstractStatement().equals(refinedPrepCall
+							.getAbstractStatement())) {
+						PreparedStatementCall newConcreteCall = new PreparedStatementCall(refinedPrepCall.getContainer(), refinedPrepCall.getComponent(), 
+								refinedPrepCall.getOperation(), refinedPrepCall.getFormattedReturnValue(), refinedPrepCall.getTraceID(), refinedPrepCall.getTimestamp(), refinedPrepCall.getDuration(), refinedPrepCall.getAbstractStatement(), refinedPrepCall.getConcreteStatement());
+						existingCall.addChild(newConcreteCall);
 						handled = true;
 					}
 				}
 				if (!handled) {
-					refinedDatabasePreparedStatementCalls.add(mergedPrepRootCall);
+					PreparedStatementCall newAbstractCall = new PreparedStatementCall(refinedPrepCall.getContainer(), refinedPrepCall.getComponent(), 
+							refinedPrepCall.getOperation(), "", 0, 0, 0, refinedPrepCall.getAbstractStatement(), "");
+					PreparedStatementCall newConcreteCall = new PreparedStatementCall(refinedPrepCall.getContainer(), refinedPrepCall.getComponent(), 
+							refinedPrepCall.getOperation(), refinedPrepCall.getFormattedReturnValue(), refinedPrepCall.getTraceID(), refinedPrepCall.getTimestamp(), refinedPrepCall.getDuration(), refinedPrepCall.getAbstractStatement(), refinedPrepCall.getConcreteStatement());
+					newAbstractCall.addChild(newConcreteCall);
+					groupedRefinedPreparedStatementCalls.add(newAbstractCall);
 					handled = true;
 				}
 			}
 		}
-
-		// handle children - inject parameters into statement and summarize duration
-		for (DatabaseOperationCall call : refinedDatabasePreparedStatementCalls) {
-			
-			List<DatabaseOperationCall> children = call.getChildren();
-			int numOfChildren = children.size();
-			DatabaseOperationCall parentCall = call.getParent();
-			
-			if (numOfChildren > 0) {
-				for (DatabaseOperationCall childCall : children) {
-					if (!parentCall.getOperation().endsWith(childCall.getOperation())) {
-						// FIXME
-					}
-				}
-				
-				
-//				String preparedStatementText = Utils.insertParametersIntoPreparedStatment(parentCall);
-//				preparedStatementText = Utils.formatSQLStatement(preparedStatementText);
-//				parentCall.setStringClassArgs("PARENT!");
-			}
-		}
 		
+		this.refinedDatabasePreparedStatementCalls = groupedRefinedPreparedStatementCalls;
+		
+		System.out.println("PreparedStatements (refined and grouped): "
+				+ groupedRefinedPreparedStatementCalls.size());
+		
+		
+		 //Simple output for testing purposes
+//		 System.out.println("Merged Statements");
+//		 for (int i = 0; i < (groupedRefinedPreparedStatementCalls.size()); i += 1) {
+//		 PreparedStatementCall call = groupedRefinedPreparedStatementCalls.get(i);
 //		
-//		preparedStatementText = Utils.formatSQLStatement(preparedStatementText);
-		
-		this.refinedDatabasePreparedStatementCalls = refinedDatabasePreparedStatementCalls;
-		
-		System.out.println("PreparedStatements (refined): "
-				+ refinedDatabasePreparedStatementCalls.size());
-		
-		this.databasePreparedStatementCalls = refinedDatabasePreparedStatementCalls;
-		
+//		 System.out.println("Operation: " + call.getOperation());
+//		 System.out.println("Abstract Statement: " + call.getAbstractStatement());
+//		 System.out.println("Concrete Statement: " + call.getConcreteStatement());
+//		 System.out.println("Duration (in ns): " + call.getDuration());
+//		 System.out.println("Children:");
+//		
+//		 for (PreparedStatementCall childCall : call.getChildren()) {
+//		 System.out.println("	Operation: " + childCall.getOperation());
+//		 System.out.println("Abstract Statement: " + childCall.getAbstractStatement());
+//		 System.out.println("Concrete Statement: " + childCall.getConcreteStatement());
+//		 }
+//		 System.out
+//		 .println("-----------------------------------------------------------");
+//		 }
+		 
 		// Simple output for testing purposes
 		// System.out.println("Merged Statements");
 		// for (int i = 0; i < (mergedStatements.size()); i += 1) {
@@ -494,11 +552,6 @@ public final class DataModel extends Observable {
 		// System.out
 		// .println("-----------------------------------------------------------");
 		// }
-
-		System.out.println("Statements (merged): " + mergedStatements.size());
-
-		System.out.println("PreparedStatements (merged): "
-				+ mergedPreparedStatementCalls.size());
 
 		// ///////////////////////////////////////////
 
@@ -614,7 +667,7 @@ public final class DataModel extends Observable {
 				regExpr);
 	}
 
-	public List<DatabaseOperationCall> getRefinedDatabasePreparedStatementCalls(
+	public List<PreparedStatementCall> getRefinedDatabasePreparedStatementCalls(
 			final String regExpr) {
 		return this.filterCallsIfNecessary(
 				this.refinedDatabasePreparedStatementCalls, regExpr);

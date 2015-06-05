@@ -25,17 +25,18 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 
 import kieker.diagnosis.czi.Utils;
-import kieker.diagnosis.domain.DatabaseOperationCall;
+import kieker.diagnosis.domain.PreparedStatementCall;
 import kieker.diagnosis.mainview.subview.ISubView;
 import kieker.diagnosis.mainview.subview.database.preparedstatements.DatabasePreparedStatementCallsViewModel.Filter;
 import kieker.diagnosis.mainview.subview.util.NameConverter;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
-import kieker.diagnosis.model.PropertiesModel.OperationNames;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -58,7 +59,8 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
-public final class DatabasePreparedStatementCallsView implements ISubView, Observer {
+public final class DatabasePreparedStatementCallsView implements ISubView,
+		Observer {
 
 	private static final ResourceBundle BUNDLE = ResourceBundle
 			.getBundle("kieker.diagnosis.mainview.subview.database.preparedstatements.databasepreparedstatementcallsview"); //$NON-NLS-1$
@@ -75,7 +77,7 @@ public final class DatabasePreparedStatementCallsView implements ISubView, Obser
 	@Autowired
 	private DatabasePreparedStatementCallsViewController controller;
 
-	private List<DatabaseOperationCall> cachedDataModelContent;
+	private List<PreparedStatementCall> cachedDataModelContent;
 
 	private Composite composite;
 	private Composite detailComposite;
@@ -85,8 +87,8 @@ public final class DatabasePreparedStatementCallsView implements ISubView, Obser
 	private Text lblFailedDisplay;
 	private Text lblMinimalDurationDisplay;
 	private Text lblOperationDisplay;
-	private Text lblStatementDisplay;
-	private Text lblPreparedStatementDisplay;
+	private Text lblAbstractStatementDisplay;
+	private Text lblConcreteStatementDisplay;
 	private Text lblReturnValueDisplay;
 	private Label lblFailed;
 	private Button btnShowAll;
@@ -130,12 +132,14 @@ public final class DatabasePreparedStatementCallsView implements ISubView, Obser
 		filterComposite.setLayout(gl_filterComposite);
 
 		this.btnShowAll = new Button(filterComposite, SWT.RADIO);
-		this.btnShowAll.setText(DatabasePreparedStatementCallsView.BUNDLE
-				.getString("DatabasePreparedStatementCallsView.btnShowAll.text")); //$NON-NLS-1$
+		this.btnShowAll
+				.setText(DatabasePreparedStatementCallsView.BUNDLE
+						.getString("DatabasePreparedStatementCallsView.btnShowAll.text")); //$NON-NLS-1$
 		this.btnShowAll.setSelection(true);
 		this.btnShowJustFailed = new Button(filterComposite, SWT.RADIO);
-		this.btnShowJustFailed.setText(DatabasePreparedStatementCallsView.BUNDLE
-				.getString("DatabasePreparedStatementCallsView.btnShowJustFailed.text")); //$NON-NLS-1$
+		this.btnShowJustFailed
+				.setText(DatabasePreparedStatementCallsView.BUNDLE
+						.getString("DatabasePreparedStatementCallsView.btnShowJustFailed.text")); //$NON-NLS-1$
 
 		this.filterText = new Text(filterComposite, SWT.BORDER);
 		this.filterText.setMessage(DatabasePreparedStatementCallsView.BUNDLE
@@ -152,39 +156,36 @@ public final class DatabasePreparedStatementCallsView implements ISubView, Obser
 		this.tree.setHeaderVisible(true);
 		this.tree.setLinesVisible(true);
 
-		final TreeColumn tblclmnOperation = new TreeColumn(this.tree,
-				SWT.NONE);
-		tblclmnOperation.setWidth(100);
-		tblclmnOperation.setText(DatabasePreparedStatementCallsView.BUNDLE
-				.getString("DatabasePreparedStatementCallsView.tblclmnOperation.text")); //$NON-NLS-1$
-		
-		final TreeColumn tblclmnStatement = new TreeColumn(this.tree,
-				SWT.NONE);
-		tblclmnStatement.setWidth(400);
-		tblclmnStatement.setText(DatabasePreparedStatementCallsView.BUNDLE
-				.getString("DatabasePreparedStatementCallsView.tblclmnStatement.text")); //$NON-NLS-1$
-		
+		final TreeColumn tblclmnStatement = new TreeColumn(this.tree, SWT.NONE);
+		tblclmnStatement.setWidth(800);
+		tblclmnStatement
+				.setText(DatabasePreparedStatementCallsView.BUNDLE
+						.getString("DatabasePreparedStatementCallsView.tblclmnStatement.text")); //$NON-NLS-1$
+
 		final TreeColumn tblclmnReturnValue = new TreeColumn(this.tree,
 				SWT.NONE);
 		tblclmnReturnValue.setWidth(100);
-		tblclmnReturnValue.setText(DatabasePreparedStatementCallsView.BUNDLE
-				.getString("DatabasePreparedStatementCallsView.tblclmnReturnValue.text")); //$NON-NLS-1$
-		
-		final TreeColumn tblclmnDuration = new TreeColumn(this.tree,
-				SWT.NONE);
+		tblclmnReturnValue
+				.setText(DatabasePreparedStatementCallsView.BUNDLE
+						.getString("DatabasePreparedStatementCallsView.tblclmnReturnValue.text")); //$NON-NLS-1$
+
+		final TreeColumn tblclmnDuration = new TreeColumn(this.tree, SWT.NONE);
 		tblclmnDuration.setWidth(100);
-		tblclmnDuration.setText(DatabasePreparedStatementCallsView.BUNDLE
-				.getString("DatabasePreparedStatementCallsView.tblclmnDuration.text")); //$NON-NLS-1$
+		tblclmnDuration
+				.setText(DatabasePreparedStatementCallsView.BUNDLE
+						.getString("DatabasePreparedStatementCallsView.tblclmnDuration.text")); //$NON-NLS-1$
 
 		final TreeColumn tblclmnTraceID = new TreeColumn(this.tree, SWT.NONE);
 		tblclmnTraceID.setWidth(100);
-		tblclmnTraceID.setText(DatabasePreparedStatementCallsView.BUNDLE.getString("DatabasePreparedStatementCallsView.tblclmnTraceID.text")); //$NON-NLS-1$
-		
-		final TreeColumn tblclmnTimestamp = new TreeColumn(this.tree,
-				SWT.NONE);
+		tblclmnTraceID
+				.setText(DatabasePreparedStatementCallsView.BUNDLE
+						.getString("DatabasePreparedStatementCallsView.tblclmnTraceID.text")); //$NON-NLS-1$
+
+		final TreeColumn tblclmnTimestamp = new TreeColumn(this.tree, SWT.NONE);
 		tblclmnTimestamp.setWidth(150);
-		tblclmnTimestamp.setText(DatabasePreparedStatementCallsView.BUNDLE
-				.getString("DatabasePreparedStatementCallsView.tblclmnTimestamp.text")); //$NON-NLS-1$
+		tblclmnTimestamp
+				.setText(DatabasePreparedStatementCallsView.BUNDLE
+						.getString("DatabasePreparedStatementCallsView.tblclmnTimestamp.text")); //$NON-NLS-1$
 
 		this.ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL
 				| SWT.BORDER);
@@ -201,67 +202,80 @@ public final class DatabasePreparedStatementCallsView implements ISubView, Obser
 		final Label lblOperation = new Label(this.detailComposite, SWT.NONE);
 		lblOperation
 				.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblOperation.setText(DatabasePreparedStatementCallsView.BUNDLE
-				.getString("DatabasePreparedStatementCallsView.lblOperation.text") + ":"); //$NON-NLS-1$
+		lblOperation
+				.setText(DatabasePreparedStatementCallsView.BUNDLE
+						.getString("DatabasePreparedStatementCallsView.lblOperation.text") + ":"); //$NON-NLS-1$
 
 		this.lblOperationDisplay = new Text(this.detailComposite, SWT.READ_ONLY
 				| SWT.NONE);
 		this.lblOperationDisplay.setBackground(SWTResourceManager
 				.getColor(SWT.COLOR_WHITE));
-		this.lblOperationDisplay.setText(DatabasePreparedStatementCallsView.N_A);
-		
-		final Label lblStatement = new Label(this.detailComposite, SWT.NONE);
-		lblStatement
-				.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblStatement.setText(DatabasePreparedStatementCallsView.BUNDLE
-				.getString("DatabasePreparedStatementCallsView.lblStatement.text") + ":"); //$NON-NLS-1$
+		this.lblOperationDisplay
+				.setText(DatabasePreparedStatementCallsView.N_A);
 
-		this.lblStatementDisplay = new Text(this.detailComposite, SWT.MULTI | SWT.WRAP | SWT.READ_ONLY
-				| SWT.NONE);
-		this.lblStatementDisplay.setBackground(SWTResourceManager
+		final Label lblAbstractStatement = new Label(this.detailComposite,
+				SWT.NONE);
+		lblAbstractStatement.setBackground(SWTResourceManager
 				.getColor(SWT.COLOR_WHITE));
-		this.lblStatementDisplay.setText(DatabasePreparedStatementCallsView.N_A);
-		
-		final Label lblPreparedStatement = new Label(this.detailComposite, SWT.NONE);
-		lblPreparedStatement
-				.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblPreparedStatement.setText(DatabasePreparedStatementCallsView.BUNDLE
-				.getString("DatabasePreparedStatementCallsView.lblPreparedStatement.text") + ":"); //$NON-NLS-1$
+		lblAbstractStatement
+				.setText(DatabasePreparedStatementCallsView.BUNDLE
+						.getString("DatabasePreparedStatementCallsView.lblAbstractStatement.text") + ":"); //$NON-NLS-1$
 
-		this.lblPreparedStatementDisplay = new Text(this.detailComposite, SWT.MULTI | SWT.WRAP | SWT.READ_ONLY
-				| SWT.NONE);
-		this.lblPreparedStatementDisplay.setBackground(SWTResourceManager
+		this.lblAbstractStatementDisplay = new Text(this.detailComposite,
+				SWT.MULTI | SWT.WRAP | SWT.READ_ONLY | SWT.NONE);
+		this.lblAbstractStatementDisplay.setBackground(SWTResourceManager
 				.getColor(SWT.COLOR_WHITE));
-		this.lblPreparedStatementDisplay.setText(DatabasePreparedStatementCallsView.N_A);
+		this.lblAbstractStatementDisplay
+				.setText(DatabasePreparedStatementCallsView.N_A);
+
+		final Label lblConcreteStatement = new Label(this.detailComposite,
+				SWT.NONE);
+		lblConcreteStatement.setBackground(SWTResourceManager
+				.getColor(SWT.COLOR_WHITE));
+		lblConcreteStatement
+				.setText(DatabasePreparedStatementCallsView.BUNDLE
+						.getString("DatabasePreparedStatementCallsView.lblConcreteStatement.text") + ":"); //$NON-NLS-1$
+
+		this.lblConcreteStatementDisplay = new Text(this.detailComposite,
+				SWT.MULTI | SWT.WRAP | SWT.READ_ONLY | SWT.NONE);
+		this.lblConcreteStatementDisplay.setBackground(SWTResourceManager
+				.getColor(SWT.COLOR_WHITE));
+		this.lblConcreteStatementDisplay
+				.setText(DatabasePreparedStatementCallsView.N_A);
 
 		final Label lblReturnValue = new Label(this.detailComposite, SWT.NONE);
+		lblReturnValue.setBackground(SWTResourceManager
+				.getColor(SWT.COLOR_WHITE));
 		lblReturnValue
-				.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblReturnValue.setText(DatabasePreparedStatementCallsView.BUNDLE
-				.getString("DatabasePreparedStatementCallsView.lblReturnValue.text") + ":"); //$NON-NLS-1$
+				.setText(DatabasePreparedStatementCallsView.BUNDLE
+						.getString("DatabasePreparedStatementCallsView.lblReturnValue.text") + ":"); //$NON-NLS-1$
 
-		this.lblReturnValueDisplay = new Text(this.detailComposite, SWT.READ_ONLY
-				| SWT.NONE);
+		this.lblReturnValueDisplay = new Text(this.detailComposite,
+				SWT.READ_ONLY | SWT.NONE);
 		this.lblReturnValueDisplay.setBackground(SWTResourceManager
 				.getColor(SWT.COLOR_WHITE));
-		this.lblReturnValueDisplay.setText(DatabasePreparedStatementCallsView.N_A);
+		this.lblReturnValueDisplay
+				.setText(DatabasePreparedStatementCallsView.N_A);
 
 		final Label lblDuration = new Label(this.detailComposite, SWT.NONE);
 		lblDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblDuration.setText(DatabasePreparedStatementCallsView.BUNDLE
-				.getString("DatabasePreparedStatementCallsView.lblDuration.text") + ":"); //$NON-NLS-1$
+		lblDuration
+				.setText(DatabasePreparedStatementCallsView.BUNDLE
+						.getString("DatabasePreparedStatementCallsView.lblDuration.text") + ":"); //$NON-NLS-1$
 
 		this.lblMinimalDurationDisplay = new Text(this.detailComposite,
 				SWT.READ_ONLY);
 		this.lblMinimalDurationDisplay.setBackground(SWTResourceManager
 				.getColor(SWT.COLOR_WHITE));
-		this.lblMinimalDurationDisplay.setText(DatabasePreparedStatementCallsView.N_A);
+		this.lblMinimalDurationDisplay
+				.setText(DatabasePreparedStatementCallsView.N_A);
 
 		this.lblFailed = new Label(this.detailComposite, SWT.NONE);
 		this.lblFailed.setBackground(SWTResourceManager
 				.getColor(SWT.COLOR_WHITE));
-		this.lblFailed.setText(DatabasePreparedStatementCallsView.BUNDLE
-				.getString("DatabasePreparedStatementCallsView.lblFailed.text")); //$NON-NLS-1$
+		this.lblFailed
+				.setText(DatabasePreparedStatementCallsView.BUNDLE
+						.getString("DatabasePreparedStatementCallsView.lblFailed.text")); //$NON-NLS-1$
 
 		this.lblFailedDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
 		this.lblFailedDisplay.setBackground(SWTResourceManager
@@ -280,26 +294,32 @@ public final class DatabasePreparedStatementCallsView implements ISubView, Obser
 		this.tree.addSelectionListener(this.controller);
 
 		// TODO Listener
-//		tblclmnOperation
-//				.addSelectionListener(new CallTreeColumnSortListener<DatabaseOperationCall>(
-//						DatabaseOperationCall::getOperation));
-//		
-//		tblclmnStatement
-//		.addSelectionListener(new CallTreeColumnSortListener<DatabaseOperationCall>(
-//				DatabaseOperationCall::getStringClassArgs));
-//		
-//		tblclmnReturnValue
-//		.addSelectionListener(new CallTreeColumnSortListener<DatabaseOperationCall>(
-//				DatabaseOperationCall::getFormattedReturnValue));
-//		
-//		tblclmnTraceID.addSelectionListener(new CallTreeColumnSortListener<DatabaseOperationCall>(DatabaseOperationCall::getTraceID));
-//		
-//		tblclmnDuration
-//				.addSelectionListener(new CallTreeColumnSortListener<DatabaseOperationCall>(
-//						DatabaseOperationCall::getDuration));
-//		tblclmnTimestamp
-//				.addSelectionListener(new CallTreeColumnSortListener<DatabaseOperationCall>(
-//						DatabaseOperationCall::getTimestamp));
+		// tblclmnOperation
+		// .addSelectionListener(new
+		// CallTreeColumnSortListener<DatabaseOperationCall>(
+		// DatabaseOperationCall::getOperation));
+		//
+		// tblclmnStatement
+		// .addSelectionListener(new
+		// CallTreeColumnSortListener<DatabaseOperationCall>(
+		// DatabaseOperationCall::getStringClassArgs));
+		//
+		// tblclmnReturnValue
+		// .addSelectionListener(new
+		// CallTreeColumnSortListener<DatabaseOperationCall>(
+		// DatabaseOperationCall::getFormattedReturnValue));
+		//
+		// tblclmnTraceID.addSelectionListener(new
+		// CallTreeColumnSortListener<DatabaseOperationCall>(DatabaseOperationCall::getTraceID));
+		//
+		// tblclmnDuration
+		// .addSelectionListener(new
+		// CallTreeColumnSortListener<DatabaseOperationCall>(
+		// DatabaseOperationCall::getDuration));
+		// tblclmnTimestamp
+		// .addSelectionListener(new
+		// CallTreeColumnSortListener<DatabaseOperationCall>(
+		// DatabaseOperationCall::getTimestamp));
 
 		this.filterText.addTraverseListener(this.controller);
 
@@ -340,22 +360,24 @@ public final class DatabasePreparedStatementCallsView implements ISubView, Obser
 	private void updateCachedDataModelContent() {
 		if (this.model.getFilter() == Filter.NONE) {
 			this.cachedDataModelContent = this.dataModel
-					.getDatabasePreparedStatementCalls(this.model.getRegExpr());
+					.getRefinedDatabasePreparedStatementCalls(this.model
+							.getRegExpr());
 		} else {
 			// TODO Failed Operations
 			// this.cachedDataModelContent =
 			// this.dataModel.getFailedOperationCalls(this.model.getRegExpr());
 			this.cachedDataModelContent = this.dataModel
-					.getDatabasePreparedStatementCalls(this.model.getRegExpr());
+					.getRefinedDatabasePreparedStatementCalls(this.model
+							.getRegExpr());
 		}
 	}
 
 	/*
 	 * Detailed Panel (bottom of the window)
 	 */
-	private void updateDetailComposite() {		
-		final DatabaseOperationCall call = this.model
-				.getDatabaseOperationCall();
+	private void updateDetailComposite() {
+		final PreparedStatementCall call = this.model
+				.getPreparedStatementCall();
 
 		if (call != null) {
 			final String shortTimeUnit = NameConverter
@@ -366,24 +388,22 @@ public final class DatabasePreparedStatementCallsView implements ISubView, Obser
 
 			this.lblMinimalDurationDisplay.setText(durationString);
 			this.lblOperationDisplay.setText(call.getOperation());
-			
+
+			// abstract and concrete statements
 			// customizes the SQL-Statement for visualization purposes
-			String statementText = call.getStringClassArgs().toUpperCase();			
-			statementText = Utils.formatSQLStatement(statementText);		
-			
-			// TODO colored KEYWORDS (SELECT, FROM, WHERE) ?
-			this.lblStatementDisplay.setText(statementText);
-			
-			// insert Values into PreparedStatement to display concrete Statement
-			String preparedStatementText = Utils.insertParametersIntoPreparedStatment(call);
-			preparedStatementText = Utils.formatSQLStatement(preparedStatementText);
-			this.lblPreparedStatementDisplay.setText(preparedStatementText);
-			
+			String abstractStatement = call.getAbstractStatement();
+			abstractStatement = Utils.formatSQLStatement(abstractStatement);
+			String concreteStatement = call.getConcreteStatement();
+			concreteStatement = Utils.formatSQLStatement(concreteStatement);
+
+			this.lblAbstractStatementDisplay.setText(abstractStatement);
+			this.lblConcreteStatementDisplay.setText(concreteStatement);
+
 			this.lblReturnValueDisplay.setText(call.getFormattedReturnValue());
 
 			if (call.isFailed()) {
 				this.lblFailedDisplay.setText("Yes (" + call.getFailedCause()
-						+ ")"); 
+						+ ")");
 				this.lblFailedDisplay.setForeground(Display.getCurrent()
 						.getSystemColor(SWT.COLOR_RED));
 				this.lblFailed.setForeground(Display.getCurrent()
@@ -403,10 +423,11 @@ public final class DatabasePreparedStatementCallsView implements ISubView, Obser
 	}
 
 	private void updateStatusBar() {
-		this.lbCounter.setText(this.cachedDataModelContent.size()
-				+ " "
-				+ DatabasePreparedStatementCallsView.BUNDLE
-						.getString("DatabasePreparedStatementCallsView.lbCounter.text"));
+		this.lbCounter
+				.setText(this.cachedDataModelContent.size()
+						+ " "
+						+ DatabasePreparedStatementCallsView.BUNDLE
+								.getString("DatabasePreparedStatementCallsView.lbCounter.text"));
 		this.statusBar.getParent().layout();
 	}
 
@@ -463,24 +484,20 @@ public final class DatabasePreparedStatementCallsView implements ISubView, Obser
 			final TreeItem parent = item.getParentItem();
 
 			// Decide whether the current item is a root or not
-			DatabaseOperationCall call;
-			
+			PreparedStatementCall call;
+
 			if (parent == null) {
-				call = ((List<DatabaseOperationCall>) tree.getData()).get(tableIndex);
+				call = ((List<PreparedStatementCall>) tree.getData())
+						.get(tableIndex);
 			} else {
-				call = ((DatabaseOperationCall) parent.getData()).getChildren().get(tableIndex);
-			}
-			
-			// Get the data to display
-			String operationString = call.getOperation();
-			if (DatabasePreparedStatementCallsView.this.propertiesModel
-					.getOperationNames() == OperationNames.SHORT) {
-				operationString = NameConverter
-						.toShortOperationName(operationString);
+				call = ((PreparedStatementCall) parent.getData()).getChildren()
+						.get(tableIndex);
 			}
 
+			String statement = new String();
 			String returnValue = call.getFormattedReturnValue();
-			String statement = call.getStringClassArgs();
+			String abstractStatement = call.getAbstractStatement();
+			String concreteStatement = call.getConcreteStatement();
 
 			final TimeUnit sourceTimeUnit = DatabasePreparedStatementCallsView.this.dataModel
 					.getTimeUnit();
@@ -491,10 +508,17 @@ public final class DatabasePreparedStatementCallsView implements ISubView, Obser
 
 			final String duration = targetTimeUnit.convert(call.getDuration(),
 					sourceTimeUnit) + " " + shortTimeUnit;
-
-			item.setText(new String[] { operationString, statement,
-					returnValue, duration, Long.toString(call.getTraceID()),
-					Long.toString(call.getTimestamp()) });
+		    
+			if (parent == null) {
+				statement = abstractStatement;
+				item.setForeground(tree.getDisplay().getSystemColor(SWT.COLOR_DARK_BLUE));
+				item.setText(new String[] { statement });
+			} else {
+				statement = concreteStatement;
+				item.setText(new String[] { statement, returnValue,
+						duration, Long.toString(call.getTraceID()),
+						Long.toString(call.getTimestamp()) });
+			}
 
 			if (call.isFailed()) {
 				final Color colorRed = Display.getCurrent().getSystemColor(

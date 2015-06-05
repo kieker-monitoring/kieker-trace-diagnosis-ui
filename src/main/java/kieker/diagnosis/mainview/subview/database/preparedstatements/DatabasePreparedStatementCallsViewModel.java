@@ -16,7 +16,8 @@
 
 package kieker.diagnosis.mainview.subview.database.preparedstatements;
 
-import kieker.diagnosis.domain.DatabaseOperationCall;
+import kieker.diagnosis.domain.PreparedStatementCall;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +30,7 @@ public final class DatabasePreparedStatementCallsViewModel {
 	@Autowired private DatabasePreparedStatementCallsView view;
 
 	private Filter filter = Filter.NONE;
-	private DatabaseOperationCall databaseOperationCall;
+	private PreparedStatementCall preparedStatementCall;
 
 	private String regExpr;
 
@@ -43,12 +44,12 @@ public final class DatabasePreparedStatementCallsViewModel {
 		this.view.notifyAboutChangedFilter();
 	}
 
-	public DatabaseOperationCall getDatabaseOperationCall() {
-		return this.databaseOperationCall;
+	public PreparedStatementCall getPreparedStatementCall() {
+		return this.preparedStatementCall;
 	}
 
-	public void setDatabaseOperationCall(final DatabaseOperationCall databaseOperationCall) {
-		this.databaseOperationCall = databaseOperationCall;
+	public void setPreparedStatementCall(final PreparedStatementCall preparedStatementCall) {
+		this.preparedStatementCall = preparedStatementCall;
 
 		this.view.notifyAboutChangedOperationCall();
 	}

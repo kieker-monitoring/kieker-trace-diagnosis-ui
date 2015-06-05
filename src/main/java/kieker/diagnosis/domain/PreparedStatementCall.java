@@ -17,45 +17,60 @@
 package kieker.diagnosis.domain;
 
 /**
- * This class represents a concrete database call within this application. It
- * adds some properties that are only required for this type of calls, like the
- * trace ID and the duration. It extends the call tree mechanism (inherited from
+ * This class represents a concrete prepared statement database call within this
+ * application. It adds some properties that are only required for this type of
+ * calls.It extends the call tree mechanism (inherited from
  * {@link AbstractOperationCall}) by a parent, allowing to navigate in both
  * directions within the tree.
  * 
  * @author Christian Zirkelbach
  */
-public class DatabaseOperationCall extends AbstractOperationCall<DatabaseOperationCall> {
+public final class PreparedStatementCall extends
+		AbstractOperationCall<PreparedStatementCall> {
 
 	private final long traceID;
 
-	private DatabaseOperationCall parent;
+	private PreparedStatementCall parent;
 	private float percent;
 	private long duration;
 	private long timestamp;
-	private String callArguments;
+	private String abstractStatement;
+	private String concreteStatement;
 	private String returnValue;
 
-	public DatabaseOperationCall(final String container, final String component,
-			final String operation, final String callArguments,
-			final String returnValue, final long traceID,
-			final long timestamp, final long duration) {
+	public PreparedStatementCall(final String container,
+			final String component, final String operation,
+			final String returnValue, final long traceID, final long timestamp,
+			final long duration) {
 		super(container, component, operation, null);
 
-		this.callArguments = callArguments;
 		this.returnValue = returnValue;
 		this.traceID = traceID;
 		this.timestamp = timestamp;
 		this.duration = duration;
 	}
 
-	@Override
-	public void addChild(final DatabaseOperationCall child) {
+	public PreparedStatementCall(final String container,
+			final String component, final String operation,
+			final String returnValue, final long traceID, final long timestamp,
+			final long duration, final String abstractStatement,
+			final String concreteStatement) {
+		super(container, component, operation, null);
+
+		this.returnValue = returnValue;
+		this.traceID = traceID;
+		this.timestamp = timestamp;
+		this.duration = duration;
+		this.abstractStatement = abstractStatement;
+		this.concreteStatement = concreteStatement;
+	}
+
+	public void addChild(final PreparedStatementCall child) {
 		super.addChild(child);
 		child.parent = this;
 	}
 
-	public DatabaseOperationCall getParent() {
+	public PreparedStatementCall getParent() {
 		return this.parent;
 	}
 
@@ -87,14 +102,6 @@ public class DatabaseOperationCall extends AbstractOperationCall<DatabaseOperati
 		this.timestamp = timestamp;
 	}
 
-	public String getStringClassArgs() {
-		return callArguments;
-	}
-
-	public void setStringClassArgs(String stringClassArgs) {
-		this.callArguments = stringClassArgs;
-	}
-
 	public String getFormattedReturnValue() {
 		return returnValue;
 	}
@@ -103,4 +110,19 @@ public class DatabaseOperationCall extends AbstractOperationCall<DatabaseOperati
 		this.returnValue = formattedReturnValue;
 	}
 
+	public String getAbstractStatement() {
+		return abstractStatement;
+	}
+
+	public void setAbstractStatement(String abstractStatement) {
+		this.abstractStatement = abstractStatement;
+	}
+
+	public String getConcreteStatement() {
+		return concreteStatement;
+	}
+
+	public void setConcreteStatement(String concreteStatement) {
+		this.concreteStatement = concreteStatement;
+	}
 }

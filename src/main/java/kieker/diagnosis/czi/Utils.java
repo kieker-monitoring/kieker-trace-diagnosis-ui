@@ -6,7 +6,7 @@ import java.util.List;
 import kieker.diagnosis.domain.DatabaseOperationCall;
 
 /**
- * Helper methods for formatting text
+ * Helper methods for formatting statements and other text
  * 
  * @author Christian Zirkelbach
  *
@@ -27,6 +27,7 @@ public class Utils {
 		String formattedString = sb.toString();
 		formattedString = formattedString.replaceAll("FROM", "\r\nFROM");
 		formattedString = formattedString.replaceAll("WHERE", "\r\nWHERE");
+		formattedString = formattedString.replaceAll("VALUES", "\r\nVALUES");
 
 		return formattedString;
 	}

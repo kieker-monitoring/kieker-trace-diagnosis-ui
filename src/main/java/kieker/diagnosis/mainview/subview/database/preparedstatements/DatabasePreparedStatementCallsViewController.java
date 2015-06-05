@@ -16,7 +16,7 @@
 
 package kieker.diagnosis.mainview.subview.database.preparedstatements;
 
-import kieker.diagnosis.domain.DatabaseOperationCall;
+import kieker.diagnosis.domain.PreparedStatementCall;
 import kieker.diagnosis.mainview.Controller;
 import kieker.diagnosis.mainview.subview.ISubController;
 import kieker.diagnosis.mainview.subview.ISubView;
@@ -59,8 +59,8 @@ public final class DatabasePreparedStatementCallsViewController implements
 			this.model.setFilter(Filter.JUST_FAILED);
 		}
 		if ((e.item != null)
-				&& (e.item.getData() instanceof DatabaseOperationCall)) {
-			this.model.setDatabaseOperationCall((DatabaseOperationCall) e.item
+				&& (e.item.getData() instanceof PreparedStatementCall)) {
+			this.model.setPreparedStatementCall((PreparedStatementCall) e.item
 					.getData());
 		}
 	}
