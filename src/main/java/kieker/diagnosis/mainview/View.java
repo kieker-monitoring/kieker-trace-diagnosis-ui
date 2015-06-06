@@ -81,7 +81,7 @@ public final class View {
 	private TreeItem trtmOperationCalls;
 
 	// TODO czi
-	private TreeItem trtmDatabaseOperationCalls;
+	private TreeItem trtmSQLStatements;
 	private TreeItem trtmDatabaseStatementCalls;
 	private TreeItem trtmAggregatedDatabaseStatementCalls;
 	private TreeItem trtmDatabasePreparedStatementCalls;
@@ -131,10 +131,10 @@ public final class View {
 	}
 
 	// TODO czi
-	public TreeItem getTrtmDatabaseOperationCalls() {
-		return this.trtmDatabaseOperationCalls;
+	public TreeItem getTrtmSQLStatements() {
+		return this.trtmSQLStatements;
 	}
-
+	
 	public TreeItem getTrtmDatabaseStatementCalls() {
 		return this.trtmDatabaseStatementCalls;
 	}
@@ -270,28 +270,24 @@ public final class View {
 		this.trtmAggregatedOperationCalls.setExpanded(true);
 
 		// TODO czi
-		this.trtmDatabaseOperationCalls = new TreeItem(this.trtmExplorer,
-				SWT.NONE);
-		this.trtmDatabaseOperationCalls
-				.setText(BUNDLE
-						.getString("View.trtmDatabaseOperationCalls.text(java.lang.String)")); //$NON-NLS-1$
-
-		this.trtmDatabaseStatementCalls = new TreeItem(this.trtmExplorer,
+		this.trtmSQLStatements = new TreeItem(this.trtmExplorer, SWT.NONE);
+		this.trtmSQLStatements.setText(BUNDLE
+				.getString("View.trtmSQLStatements.text(java.lang.String)")); //$NON-NLS-1$
+		
+		this.trtmDatabaseStatementCalls = new TreeItem(this.trtmSQLStatements,
 				SWT.NONE);
 		this.trtmDatabaseStatementCalls
 				.setText(BUNDLE
 						.getString("View.trtmDatabaseStatementCalls.text(java.lang.String)")); //$NON-NLS-1$ 
 
-		this.trtmAggregatedDatabaseStatementCalls = new TreeItem(this.trtmExplorer,
+		this.trtmAggregatedDatabaseStatementCalls = new TreeItem(this.trtmSQLStatements,
 				SWT.NONE);
 		this.trtmAggregatedDatabaseStatementCalls
 				.setText(BUNDLE
 						.getString("View.trtmAggregatedDatabaseStatementCalls.text(java.lang.String)")); //$NON-NLS-1$ 
 		
-		
-		
 		this.trtmDatabasePreparedStatementCalls = new TreeItem(
-				this.trtmExplorer, SWT.NONE);
+				this.trtmSQLStatements, SWT.NONE);
 		this.trtmDatabasePreparedStatementCalls
 				.setText(BUNDLE
 						.getString("View.trtmDatabasePreparedStatementCalls.text(java.lang.String)")); //$NON-NLS-1$ 
@@ -304,6 +300,8 @@ public final class View {
 				.setText(BUNDLE
 						.getString("View.trtmMonitoringLogStatistics.text(java.lang.String)")); //$NON-NLS-1$
 		this.trtmExplorer.setExpanded(true);
+		
+		this.trtmSQLStatements.setExpanded(true);
 
 		this.subViewLayout = new StackLayout();
 		this.subViewComposite = new Composite(sashForm, SWT.NONE);

@@ -218,6 +218,8 @@ public final class DataModel extends Observable {
 		System.out.println("DatabaseStatementCalls refined (cropped createStatement): "
 				+ refinedDatabaseStatementCalls.size());
 
+		this.databaseStatementCalls = refinedDatabaseStatementCalls;
+		
 		// // TODO
 		// // DEBUGGING OUTPUT
 		// System.out.println("Refined DatabaseOperationCalls:");

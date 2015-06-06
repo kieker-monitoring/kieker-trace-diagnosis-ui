@@ -125,4 +125,47 @@ public final class PreparedStatementCall extends
 	public void setConcreteStatement(String concreteStatement) {
 		this.concreteStatement = concreteStatement;
 	}
+
+	public long getTotalDuration() {
+		long totalDuration = 0;
+		if (this.parent == null)
+			for (PreparedStatementCall child : this.getChildren()) {
+				totalDuration += child.getDuration();
+			}
+		return totalDuration;
+
+	}
+
+	public long getAverageDuration() {
+		long totalDuration = this.getTotalDuration();
+		final int numberOfChildren = this.getChildren().size();
+		if ((this.parent == null) && (numberOfChildren > 0)) {
+			totalDuration /= numberOfChildren;
+		}
+		return totalDuration;
+	}
+
+	public long getMinDuration() {
+		long minDuration = this.getTotalDuration();
+		if (this.parent == null)
+			for (PreparedStatementCall child : this.getChildren()) {
+				long childDuration = child.getDuration();
+				if (childDuration < minDuration) {
+					minDuration = childDuration;
+				}
+			}
+		return minDuration;
+	}
+
+	public long getMaxDuration() {
+		long maxDuration = 0;
+		if (this.parent == null)
+			for (PreparedStatementCall child : this.getChildren()) {
+				long childDuration = child.getDuration();
+				if (childDuration > maxDuration) {
+					maxDuration = childDuration;
+				}
+			}
+		return maxDuration;
+	}
 }

@@ -28,6 +28,7 @@ import kieker.diagnosis.czi.Utils;
 import kieker.diagnosis.domain.DatabaseOperationCall;
 import kieker.diagnosis.mainview.subview.ISubView;
 import kieker.diagnosis.mainview.subview.database.statements.DatabaseStatementCallsViewModel.Filter;
+import kieker.diagnosis.mainview.subview.util.CallTableColumnSortListener;
 import kieker.diagnosis.mainview.subview.util.NameConverter;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
@@ -45,13 +46,14 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeColumn;
-import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 /**
  * @author Christian Zirkelbach
  */
@@ -77,7 +79,7 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 	private List<DatabaseOperationCall> cachedDataModelContent;
 
 	private Composite composite;
-	private Tree tree;
+	private Table table;
 	private Composite detailComposite;
 	private Composite statusBar;
 	private Label lbCounter;
@@ -146,37 +148,41 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
 				1));
 
-		this.tree = new Tree(sashForm, SWT.BORDER | SWT.FULL_SELECTION
+		this.table = new Table(sashForm, SWT.BORDER | SWT.FULL_SELECTION
 				| SWT.VIRTUAL);
-		this.tree.setHeaderVisible(true);
+		this.table.setHeaderVisible(true);
 
-		final TreeColumn trclmnOperation = new TreeColumn(this.tree, SWT.NONE);
+		final TableColumn trclmnOperation = new TableColumn(this.table,
+				SWT.NONE);
 		trclmnOperation.setWidth(100);
 		trclmnOperation.setText(DatabaseStatementCallsView.BUNDLE
 				.getString("DatabaseStatementCallsView.trclmnOperation.text")); //$NON-NLS-1$
 
-		final TreeColumn trclmnStatement = new TreeColumn(this.tree, SWT.NONE);
+		final TableColumn trclmnStatement = new TableColumn(this.table,
+				SWT.NONE);
 		trclmnStatement.setWidth(400);
 		trclmnStatement.setText(DatabaseStatementCallsView.BUNDLE
 				.getString("DatabaseStatementCallsView.trclmnStatement.text")); //$NON-NLS-1$
 
-		final TreeColumn trclmnReturnValue = new TreeColumn(this.tree, SWT.NONE);
+		final TableColumn trclmnReturnValue = new TableColumn(this.table,
+				SWT.NONE);
 		trclmnReturnValue.setWidth(100);
 		trclmnReturnValue
 				.setText(DatabaseStatementCallsView.BUNDLE
 						.getString("DatabaseStatementCallsView.trclmnReturnValue.text")); //$NON-NLS-1$
 
-		final TreeColumn trclmnDuration = new TreeColumn(this.tree, SWT.NONE);
+		final TableColumn trclmnDuration = new TableColumn(this.table, SWT.NONE);
 		trclmnDuration.setWidth(100);
 		trclmnDuration.setText(DatabaseStatementCallsView.BUNDLE
 				.getString("DatabaseStatementCallsView.trclmnDuration.text")); //$NON-NLS-1$
 
-		final TreeColumn trclmnTraceID = new TreeColumn(this.tree, SWT.NONE);
+		final TableColumn trclmnTraceID = new TableColumn(this.table, SWT.NONE);
 		trclmnTraceID.setWidth(100);
 		trclmnTraceID.setText(DatabaseStatementCallsView.BUNDLE
 				.getString("DatabaseStatementCallsView.trclmnTraceID.text")); //$NON-NLS-1$
 
-		final TreeColumn trclmnTimestamp = new TreeColumn(this.tree, SWT.NONE);
+		final TableColumn trclmnTimestamp = new TableColumn(this.table,
+				SWT.NONE);
 		trclmnTimestamp.setWidth(150);
 		trclmnTimestamp.setText(DatabaseStatementCallsView.BUNDLE
 				.getString("DatabaseStatementCallsView.trclmnTimestamp.text")); //$NON-NLS-1$
@@ -263,41 +269,32 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 		this.lbCounter
 				.setText("0 " + DatabaseStatementCallsView.BUNDLE.getString("DatabaseStatementCallsView.lbCounter.text")); //$NON-NLS-1$
 
-		this.tree.addListener(SWT.SetData, new DataProvider());
-		this.tree.addSelectionListener(this.controller);
+		this.table.addListener(SWT.SetData, new DataProvider());
+		this.table.addSelectionListener(this.controller);
 
-		// TODO Listener
-		
-		// trclmnOperation.addSelectionListener(new
-		// TraceTreeColumnSortListener<DatabaseOperationCall>(
-		// call -> call.getRootOperationCall().getOperation()));
+		trclmnOperation
+				.addSelectionListener(new CallTableColumnSortListener<DatabaseOperationCall>(
+						call -> call.getOperation()));
 
-		// trclmn.addSelectionListener(new
-		// CallTableColumnSortListener<DatabaseOperationCall>(DatabaseOperationCall::getOperation));
+		trclmnStatement
+				.addSelectionListener(new CallTableColumnSortListener<DatabaseOperationCall>(
+						call -> call.getStringClassArgs()));
 
-		// trclmnStatement
-		// .addSelectionListener(new
-		// CallTableColumnSortListener<DatabaseOperationCall>(
-		// DatabaseOperationCall::getStringClassArgs));
-		//
-		// trclmnReturnValue
-		// .addSelectionListener(new
-		// CallTableColumnSortListener<DatabaseOperationCall>(
-		// DatabaseOperationCall::getFormattedReturnValue));
-		//
-		// trclmnTraceID
-		// .addSelectionListener(new
-		// CallTableColumnSortListener<DatabaseOperationCall>(
-		// DatabaseOperationCall::getTraceID));
-		//
-		// trclmnDuration
-		// .addSelectionListener(new
-		// CallTableColumnSortListener<DatabaseOperationCall>(
-		// DatabaseOperationCall::getDuration));
-		// trclmnTimestamp
-		// .addSelectionListener(new
-		// CallTableColumnSortListener<DatabaseOperationCall>(
-		// DatabaseOperationCall::getTimestamp));
+		trclmnReturnValue
+				.addSelectionListener(new CallTableColumnSortListener<DatabaseOperationCall>(
+						call -> call.getFormattedReturnValue()));
+
+		trclmnTraceID
+				.addSelectionListener(new CallTableColumnSortListener<DatabaseOperationCall>(
+						call -> call.getTraceID()));
+
+		trclmnDuration
+				.addSelectionListener(new CallTableColumnSortListener<DatabaseOperationCall>(
+						call -> call.getDuration()));
+
+		trclmnTimestamp
+				.addSelectionListener(new CallTableColumnSortListener<DatabaseOperationCall>(
+						call -> call.getTimestamp()));
 
 		this.filterText.addTraverseListener(this.controller);
 
@@ -309,11 +306,11 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 	public void update(final Observable observable, final Object obj) {
 		if (observable == this.dataModel) {
 			this.updateCachedDataModelContent();
-			this.updateTree();
+			this.updateTable();
 			this.updateStatusBar();
 		}
 		if (observable == this.propertiesModel) {
-			this.clearTree();
+			this.clearTable();
 		}
 	}
 
@@ -323,14 +320,14 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 
 	public void notifyAboutChangedRegExpr() {
 		this.updateCachedDataModelContent();
-		this.updateTree();
+		this.updateTable();
 		this.updateStatusBar();
 		this.updateDetailComposite();
 	}
 
 	public void notifyAboutChangedFilter() {
 		this.updateCachedDataModelContent();
-		this.updateTree();
+		this.updateTable();
 		this.updateStatusBar();
 		this.updateDetailComposite();
 	}
@@ -406,20 +403,14 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 		this.statusBar.getParent().layout();
 	}
 
-	private void updateTree() {
-		this.tree.setData(this.cachedDataModelContent);
-		this.tree.setItemCount(Math.min(this.cachedDataModelContent.size(),
-				this.propertiesModel.getMaxTracesToShow()));
-
-		this.clearTree();
+	private void updateTable() {
+		this.table.setData(this.cachedDataModelContent);
+		this.table.setItemCount(this.cachedDataModelContent.size());
+		this.clearTable();
 	}
 
-	private void clearTree() {
-		this.tree.clearAll(true);
-
-		for (final TreeColumn column : this.tree.getColumns()) {
-			column.pack();
-		}
+	private void clearTable() {
+		this.table.clearAll();
 	}
 
 	@Override
@@ -439,10 +430,6 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 		return this.btnShowJustFailed;
 	}
 
-	public Tree getTree() {
-		return this.tree;
-	}
-
 	/**
 	 * @author Nils Christian Ehmke
 	 * @author Christian Zirkelbach
@@ -453,20 +440,15 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 		@SuppressWarnings("unchecked")
 		public void handleEvent(final Event event) {
 			// Get the necessary information from the event
-			final Tree tree = (Tree) event.widget;
-			final TreeItem item = (TreeItem) event.item;
+			final Table table = (Table) event.widget;
+			final TableItem item = (TableItem) event.item;
 			final int tableIndex = event.index;
-			final TreeItem parent = item.getParentItem();
 
-			// Decide whether the current item is a root or not
-			DatabaseOperationCall call;
-			
-			if (parent == null) {
-				call = ((List<DatabaseOperationCall>) tree.getData()).get(tableIndex);
-			} else {
-				call = ((DatabaseOperationCall) parent.getData()).getChildren().get(tableIndex);
-			}
-			
+			// Get the data for the current row
+			final List<DatabaseOperationCall> calls = (List<DatabaseOperationCall>) table
+					.getData();
+			final DatabaseOperationCall call = calls.get(tableIndex);
+
 			// Get the data to display
 			String operationString = call.getOperation();
 			if (DatabaseStatementCallsView.this.propertiesModel
@@ -497,8 +479,8 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 						SWT.COLOR_RED);
 				item.setForeground(colorRed);
 			}
+
 			item.setData(call);
-			item.setItemCount(call.getChildren().size());
 		}
 	}
 }

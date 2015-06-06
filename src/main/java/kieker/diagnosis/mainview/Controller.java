@@ -29,7 +29,6 @@ import kieker.diagnosis.mainview.subview.ISubView;
 import kieker.diagnosis.mainview.subview.aggregatedcalls.AggregatedCallsViewController;
 import kieker.diagnosis.mainview.subview.aggregatedtraces.AggregatedTracesViewController;
 import kieker.diagnosis.mainview.subview.calls.CallsViewController;
-import kieker.diagnosis.mainview.subview.database.DatabaseCallsViewController;
 import kieker.diagnosis.mainview.subview.database.preparedstatements.DatabasePreparedStatementCallsViewController;
 import kieker.diagnosis.mainview.subview.database.statements.DatabaseStatementCallsViewController;
 import kieker.diagnosis.mainview.subview.database.statements.aggregated.AggregatedDatabaseStatementCallsViewController;
@@ -45,7 +44,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * The main controller of this application. It is responsible for controlling the application's main window.
+ * The main controller of this application. It is responsible for controlling
+ * the application's main window.
  * 
  * @author Nils Christian Ehmke
  * @author Christian Zirkelbach
@@ -57,45 +57,63 @@ public final class Controller implements SelectionListener {
 
 	private static final Logger LOGGER = Logger.getGlobal();
 
-	@Autowired private DataModel dataModel;
+	@Autowired
+	private DataModel dataModel;
 
-	@Autowired private AggregatedTracesViewController aggregatedTracesViewController;
+	@Autowired
+	private AggregatedTracesViewController aggregatedTracesViewController;
 
-	@Autowired private CallsViewController callsViewController;
-	
-	@Autowired private TracesViewController tracesViewController;
-	
-	@Autowired private AggregatedCallsViewController aggregatedCallsViewController;
-	
+	@Autowired
+	private CallsViewController callsViewController;
+
+	@Autowired
+	private TracesViewController tracesViewController;
+
+	@Autowired
+	private AggregatedCallsViewController aggregatedCallsViewController;
+
 	// TODO czi
-	@Autowired private DatabaseCallsViewController databaseCallsViewController;
-	@Autowired private DatabaseStatementCallsViewController databaseStatementCallsViewController;
-	@Autowired private AggregatedDatabaseStatementCallsViewController aggregatedDatabaseStatementCallsViewController;
-	@Autowired private DatabasePreparedStatementCallsViewController databasePreparedStatementCallsViewController;
+	@Autowired
+	private DatabaseStatementCallsViewController databaseStatementCallsViewController;
+	@Autowired
+	private AggregatedDatabaseStatementCallsViewController aggregatedDatabaseStatementCallsViewController;
+	@Autowired
+	private DatabasePreparedStatementCallsViewController databasePreparedStatementCallsViewController;
 
-	@Autowired private MonitoringStatisticsViewController monitoringStatisticsViewController;
+	@Autowired
+	private MonitoringStatisticsViewController monitoringStatisticsViewController;
 
-	@Autowired private View view;
+	@Autowired
+	private View view;
 
-	@Autowired private Model model;
+	@Autowired
+	private Model model;
 
 	private Mapper<SubView, ISubView> subViewMapper;
 
 	@PostConstruct
 	public void initialize() {
 		this.subViewMapper = new Mapper<>();
-		this.subViewMapper.map(SubView.AGGREGATED_TRACES_SUB_VIEW).to(this.aggregatedTracesViewController.getView());
-		this.subViewMapper.map(SubView.TRACES_SUB_VIEW).to(this.tracesViewController.getView());
-		this.subViewMapper.map(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW).to(this.aggregatedCallsViewController.getView());
-		this.subViewMapper.map(SubView.OPERATION_CALLS_SUB_VIEW).to(this.callsViewController.getView());
-		
-		// TODO czi
-		this.subViewMapper.map(SubView.DATABASE_OPERATION_CALLS_SUB_VIEW).to(this.databaseCallsViewController.getView());
-		this.subViewMapper.map(SubView.DATABASE_STATEMENT_CALLS_SUB_VIEW).to(this.databaseStatementCallsViewController.getView());
-		this.subViewMapper.map(SubView.AGGREGATED_DATABASE_STATEMENT_CALLS_SUB_VIEW).to(this.aggregatedDatabaseStatementCallsViewController.getView());
-		this.subViewMapper.map(SubView.DATABASE_PREPARAED_STATEMENT_CALLS_SUB_VIEW).to(this.databasePreparedStatementCallsViewController.getView());
-		
-		this.subViewMapper.map(SubView.MONITORING_STATISTICS_VIEW).to(this.monitoringStatisticsViewController.getView());
+		this.subViewMapper.map(SubView.AGGREGATED_TRACES_SUB_VIEW).to(
+				this.aggregatedTracesViewController.getView());
+		this.subViewMapper.map(SubView.TRACES_SUB_VIEW).to(
+				this.tracesViewController.getView());
+		this.subViewMapper.map(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW).to(
+				this.aggregatedCallsViewController.getView());
+		this.subViewMapper.map(SubView.OPERATION_CALLS_SUB_VIEW).to(
+				this.callsViewController.getView());
+
+		this.subViewMapper.map(SubView.DATABASE_STATEMENT_CALLS_SUB_VIEW).to(
+				this.databaseStatementCallsViewController.getView());
+		this.subViewMapper.map(
+				SubView.AGGREGATED_DATABASE_STATEMENT_CALLS_SUB_VIEW).to(
+				this.aggregatedDatabaseStatementCallsViewController.getView());
+		this.subViewMapper.map(
+				SubView.DATABASE_PREPARAED_STATEMENT_CALLS_SUB_VIEW).to(
+				this.databasePreparedStatementCallsViewController.getView());
+
+		this.subViewMapper.map(SubView.MONITORING_STATISTICS_VIEW).to(
+				this.monitoringStatisticsViewController.getView());
 	}
 
 	public void showView() {
@@ -110,7 +128,8 @@ public final class Controller implements SelectionListener {
 
 	public void jumpToCorrespondingTrace(final OperationCall call) {
 		this.view.getTree().select(this.view.getTrtmTraces());
-		this.model.setActiveSubView(this.subViewMapper.resolve(SubView.TRACES_SUB_VIEW));
+		this.model.setActiveSubView(this.subViewMapper
+				.resolve(SubView.TRACES_SUB_VIEW));
 		this.tracesViewController.jumpToCorrespondingTrace(call);
 	}
 
@@ -139,59 +158,81 @@ public final class Controller implements SelectionListener {
 		}
 	}
 
-	private void handlePotentialTreeSelection(final SelectionEvent e) { // NOPMD (this method violates some metrics. This is acceptable, as it is readable)
+	private void handlePotentialTreeSelection(final SelectionEvent e) { // NOPMD
+																		// (this
+																		// method
+																		// violates
+																		// some
+																		// metrics.
+																		// This
+																		// is
+																		// acceptable,
+																		// as it
+																		// is
+																		// readable)
 		if (e.item == this.view.getTrtmExplorer()) {
-			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.NONE));
+			this.model.setActiveSubView(this.subViewMapper
+					.resolve(SubView.NONE));
 		}
 		if (e.item == this.view.getTrtmTraces()) {
-			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.TRACES_SUB_VIEW));
+			this.model.setActiveSubView(this.subViewMapper
+					.resolve(SubView.TRACES_SUB_VIEW));
 		}
 		if (e.item == this.view.getTrtmAggregatedTraces()) {
-			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.AGGREGATED_TRACES_SUB_VIEW));
+			this.model.setActiveSubView(this.subViewMapper
+					.resolve(SubView.AGGREGATED_TRACES_SUB_VIEW));
 		}
 		if (e.item == this.view.getTrtmAggregatedOperationCalls()) {
-			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW));
+			this.model.setActiveSubView(this.subViewMapper
+					.resolve(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW));
 		}
 		if (e.item == this.view.getTrtmOperationCalls()) {
-			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.OPERATION_CALLS_SUB_VIEW));
+			this.model.setActiveSubView(this.subViewMapper
+					.resolve(SubView.OPERATION_CALLS_SUB_VIEW));
 		}
-		
-		// TODO czi
-		if (e.item == this.view.getTrtmDatabaseOperationCalls()) {
-			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.DATABASE_OPERATION_CALLS_SUB_VIEW));
+
+		if (e.item == this.view.getTrtmSQLStatements()) {
+			this.model.setActiveSubView(this.subViewMapper
+					.resolve(SubView.NONE));
 		}
 		if (e.item == this.view.getTrtmDatabaseStatementCalls()) {
-			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.DATABASE_STATEMENT_CALLS_SUB_VIEW));
+			this.model.setActiveSubView(this.subViewMapper
+					.resolve(SubView.DATABASE_STATEMENT_CALLS_SUB_VIEW));
 		}
 		if (e.item == this.view.getTrtmAggregatedDatabaseStatementCalls()) {
-			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.AGGREGATED_DATABASE_STATEMENT_CALLS_SUB_VIEW));
+			this.model
+					.setActiveSubView(this.subViewMapper
+							.resolve(SubView.AGGREGATED_DATABASE_STATEMENT_CALLS_SUB_VIEW));
 		}
 		if (e.item == this.view.getTrtmDatabasePreparedStatementCalls()) {
-			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.DATABASE_PREPARAED_STATEMENT_CALLS_SUB_VIEW));
+			this.model
+					.setActiveSubView(this.subViewMapper
+							.resolve(SubView.DATABASE_PREPARAED_STATEMENT_CALLS_SUB_VIEW));
 		}
-		
-		//
-		
 		if (e.item == this.view.getTrtmMonitoringLogStatistics()) {
-			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.MONITORING_STATISTICS_VIEW));
+			this.model.setActiveSubView(this.subViewMapper
+					.resolve(SubView.MONITORING_STATISTICS_VIEW));
 		}
 	}
 
 	private void openMonitoringLog() {
-		final Preferences preferences = Preferences.userNodeForPackage(Controller.class);
+		final Preferences preferences = Preferences
+				.userNodeForPackage(Controller.class);
 		final String filterPath = preferences.get(KEY_LAST_IMPORT_PATH, ".");
 
 		this.view.getDirectoryDialog().setFilterPath(filterPath);
 		final String selectedDirectory = this.view.getDirectoryDialog().open();
 
 		if (null != selectedDirectory) {
-			this.model.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_WAIT));
+			this.model.setCursor(Display.getCurrent().getSystemCursor(
+					SWT.CURSOR_WAIT));
 
 			this.view.getProgressMonitorDialog().open();
 			this.dataModel.loadMonitoringLogFromFS(selectedDirectory);
 			this.view.getProgressMonitorDialog().close();
 
-			this.model.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_ARROW));
+			this.model.setCursor(Display.getCurrent().getSystemCursor(
+					SWT.CURSOR_ARROW));
 
 			preferences.put(KEY_LAST_IMPORT_PATH, selectedDirectory);
 			try {
@@ -206,7 +247,7 @@ public final class Controller implements SelectionListener {
 	 * @author Nils Christian Ehmke
 	 */
 	public enum SubView {
-		TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, AGGREGATED_OPERATION_CALLS_SUB_VIEW, OPERATION_CALLS_SUB_VIEW, DATABASE_OPERATION_CALLS_SUB_VIEW, DATABASE_STATEMENT_CALLS_SUB_VIEW, AGGREGATED_DATABASE_STATEMENT_CALLS_SUB_VIEW, DATABASE_PREPARAED_STATEMENT_CALLS_SUB_VIEW, MONITORING_STATISTICS_VIEW,
+		TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, AGGREGATED_OPERATION_CALLS_SUB_VIEW, OPERATION_CALLS_SUB_VIEW, DATABASE_STATEMENT_CALLS_SUB_VIEW, AGGREGATED_DATABASE_STATEMENT_CALLS_SUB_VIEW, DATABASE_PREPARAED_STATEMENT_CALLS_SUB_VIEW, MONITORING_STATISTICS_VIEW,
 	}
 
 }

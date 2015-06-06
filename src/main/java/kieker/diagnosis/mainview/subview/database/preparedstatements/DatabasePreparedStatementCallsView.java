@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
+import kieker.diagnosis.czi.PreparedStatementCallTreeColumnSortListener;
 import kieker.diagnosis.czi.Utils;
 import kieker.diagnosis.domain.PreparedStatementCall;
 import kieker.diagnosis.mainview.subview.ISubView;
@@ -35,8 +36,6 @@ import kieker.diagnosis.model.PropertiesModel;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.custom.StyleRange;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -46,9 +45,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,38 +153,47 @@ public final class DatabasePreparedStatementCallsView implements ISubView,
 		this.tree = new Tree(sashForm, SWT.BORDER | SWT.FULL_SELECTION
 				| SWT.VIRTUAL);
 		this.tree.setHeaderVisible(true);
-		this.tree.setLinesVisible(true);
+		this.tree.setLinesVisible(false);
 
 		final TreeColumn tblclmnStatement = new TreeColumn(this.tree, SWT.NONE);
-		tblclmnStatement.setWidth(800);
+		tblclmnStatement.setWidth(400);
 		tblclmnStatement
 				.setText(DatabasePreparedStatementCallsView.BUNDLE
 						.getString("DatabasePreparedStatementCallsView.tblclmnStatement.text")); //$NON-NLS-1$
 
-		final TreeColumn tblclmnReturnValue = new TreeColumn(this.tree,
+		final TreeColumn tblclmnNumberOfCalls = new TreeColumn(this.tree,
 				SWT.NONE);
-		tblclmnReturnValue.setWidth(100);
-		tblclmnReturnValue
+		tblclmnNumberOfCalls.setWidth(50);
+		tblclmnNumberOfCalls
 				.setText(DatabasePreparedStatementCallsView.BUNDLE
-						.getString("DatabasePreparedStatementCallsView.tblclmnReturnValue.text")); //$NON-NLS-1$
+						.getString("DatabasePreparedStatementCallsView.tblclmnNumberOfCalls.text")); //$NON-NLS-1$
 
 		final TreeColumn tblclmnDuration = new TreeColumn(this.tree, SWT.NONE);
-		tblclmnDuration.setWidth(100);
+		tblclmnDuration.setWidth(150);
 		tblclmnDuration
 				.setText(DatabasePreparedStatementCallsView.BUNDLE
 						.getString("DatabasePreparedStatementCallsView.tblclmnDuration.text")); //$NON-NLS-1$
 
-		final TreeColumn tblclmnTraceID = new TreeColumn(this.tree, SWT.NONE);
-		tblclmnTraceID.setWidth(100);
-		tblclmnTraceID
+		final TreeColumn tblclmnAvgDuration = new TreeColumn(this.tree,
+				SWT.NONE);
+		tblclmnAvgDuration.setWidth(150);
+		tblclmnAvgDuration
 				.setText(DatabasePreparedStatementCallsView.BUNDLE
-						.getString("DatabasePreparedStatementCallsView.tblclmnTraceID.text")); //$NON-NLS-1$
+						.getString("DatabasePreparedStatementCallsView.tblclmnAvgDuration.text")); //$NON-NLS-1$
 
-		final TreeColumn tblclmnTimestamp = new TreeColumn(this.tree, SWT.NONE);
-		tblclmnTimestamp.setWidth(150);
-		tblclmnTimestamp
+		final TreeColumn tblclmnMinDuration = new TreeColumn(this.tree,
+				SWT.NONE);
+		tblclmnMinDuration.setWidth(150);
+		tblclmnMinDuration
 				.setText(DatabasePreparedStatementCallsView.BUNDLE
-						.getString("DatabasePreparedStatementCallsView.tblclmnTimestamp.text")); //$NON-NLS-1$
+						.getString("DatabasePreparedStatementCallsView.tblclmnMinDuration.text")); //$NON-NLS-1$
+
+		final TreeColumn tblclmnMaxDuration = new TreeColumn(this.tree,
+				SWT.NONE);
+		tblclmnMaxDuration.setWidth(150);
+		tblclmnMaxDuration
+				.setText(DatabasePreparedStatementCallsView.BUNDLE
+						.getString("DatabasePreparedStatementCallsView.tblclmnMaxDuration.text")); //$NON-NLS-1$
 
 		this.ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL
 				| SWT.BORDER);
@@ -293,33 +301,29 @@ public final class DatabasePreparedStatementCallsView implements ISubView,
 		this.tree.addListener(SWT.SetData, new DataProvider());
 		this.tree.addSelectionListener(this.controller);
 
-		// TODO Listener
-		// tblclmnOperation
-		// .addSelectionListener(new
-		// CallTreeColumnSortListener<DatabaseOperationCall>(
-		// DatabaseOperationCall::getOperation));
-		//
-		// tblclmnStatement
-		// .addSelectionListener(new
-		// CallTreeColumnSortListener<DatabaseOperationCall>(
-		// DatabaseOperationCall::getStringClassArgs));
-		//
-		// tblclmnReturnValue
-		// .addSelectionListener(new
-		// CallTreeColumnSortListener<DatabaseOperationCall>(
-		// DatabaseOperationCall::getFormattedReturnValue));
-		//
-		// tblclmnTraceID.addSelectionListener(new
-		// CallTreeColumnSortListener<DatabaseOperationCall>(DatabaseOperationCall::getTraceID));
-		//
-		// tblclmnDuration
-		// .addSelectionListener(new
-		// CallTreeColumnSortListener<DatabaseOperationCall>(
-		// DatabaseOperationCall::getDuration));
-		// tblclmnTimestamp
-		// .addSelectionListener(new
-		// CallTreeColumnSortListener<DatabaseOperationCall>(
-		// DatabaseOperationCall::getTimestamp));
+		tblclmnStatement
+				.addSelectionListener(new PreparedStatementCallTreeColumnSortListener(
+						call -> call.getAbstractStatement()));
+
+		tblclmnNumberOfCalls
+				.addSelectionListener(new PreparedStatementCallTreeColumnSortListener(
+						call -> call.getChildren().size()));
+
+		tblclmnDuration
+				.addSelectionListener(new PreparedStatementCallTreeColumnSortListener(
+						call -> call.getTotalDuration()));
+
+		tblclmnAvgDuration
+				.addSelectionListener(new PreparedStatementCallTreeColumnSortListener(
+						call -> call.getAverageDuration()));
+
+		tblclmnMinDuration
+				.addSelectionListener(new PreparedStatementCallTreeColumnSortListener(
+						call -> call.getMinDuration()));
+
+		tblclmnMaxDuration
+				.addSelectionListener(new PreparedStatementCallTreeColumnSortListener(
+						call -> call.getMaxDuration()));
 
 		this.filterText.addTraverseListener(this.controller);
 
@@ -398,7 +402,7 @@ public final class DatabasePreparedStatementCallsView implements ISubView,
 
 			this.lblAbstractStatementDisplay.setText(abstractStatement);
 			this.lblConcreteStatementDisplay.setText(concreteStatement);
-
+			
 			this.lblReturnValueDisplay.setText(call.getFormattedReturnValue());
 
 			if (call.isFailed()) {
@@ -469,7 +473,6 @@ public final class DatabasePreparedStatementCallsView implements ISubView,
 	}
 
 	/**
-	 * @author Nils Christian Ehmke
 	 * @author Christian Zirkelbach
 	 */
 	private class DataProvider implements Listener {
@@ -494,10 +497,11 @@ public final class DatabasePreparedStatementCallsView implements ISubView,
 						.get(tableIndex);
 			}
 
-			String statement = new String();
-			String returnValue = call.getFormattedReturnValue();
-			String abstractStatement = call.getAbstractStatement();
-			String concreteStatement = call.getConcreteStatement();
+			final String abstractStatement = call.getAbstractStatement();
+			final String concreteStatement = call.getConcreteStatement();
+
+			final int numOfChildren = call.getChildren().size();
+			final String numberOfCalls = String.valueOf(numOfChildren);
 
 			final TimeUnit sourceTimeUnit = DatabasePreparedStatementCallsView.this.dataModel
 					.getTimeUnit();
@@ -506,18 +510,32 @@ public final class DatabasePreparedStatementCallsView implements ISubView,
 			final String shortTimeUnit = NameConverter
 					.toShortTimeUnit(targetTimeUnit);
 
+			final String totalDuration = targetTimeUnit.convert(
+					call.getTotalDuration(), sourceTimeUnit)
+					+ " " + shortTimeUnit;
+
+			final String avgDuration = targetTimeUnit.convert(
+					call.getAverageDuration(), sourceTimeUnit)
+					+ " " + shortTimeUnit;
+
+			final String minDuration = targetTimeUnit.convert(
+					call.getMinDuration(), sourceTimeUnit)
+					+ " " + shortTimeUnit;
+
+			final String maxDuration = targetTimeUnit.convert(
+					call.getMaxDuration(), sourceTimeUnit)
+					+ " " + shortTimeUnit;
+
 			final String duration = targetTimeUnit.convert(call.getDuration(),
 					sourceTimeUnit) + " " + shortTimeUnit;
-		    
+
 			if (parent == null) {
-				statement = abstractStatement;
-				item.setForeground(tree.getDisplay().getSystemColor(SWT.COLOR_DARK_BLUE));
-				item.setText(new String[] { statement });
+				item.setForeground(tree.getDisplay().getSystemColor(
+						SWT.COLOR_DARK_BLUE));
+				item.setText(new String[] { abstractStatement, numberOfCalls,
+						totalDuration, avgDuration, minDuration, maxDuration });
 			} else {
-				statement = concreteStatement;
-				item.setText(new String[] { statement, returnValue,
-						duration, Long.toString(call.getTraceID()),
-						Long.toString(call.getTimestamp()) });
+				item.setText(new String[] { concreteStatement, "", duration });
 			}
 
 			if (call.isFailed()) {

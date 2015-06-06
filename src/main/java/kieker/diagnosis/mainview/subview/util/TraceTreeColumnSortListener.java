@@ -69,5 +69,4 @@ public final class TraceTreeColumnSortListener<T extends AbstractTrace<?>> exten
 		tree.setSortDirection(this.direction);
 		tree.clearAll(true);
 	}
-
 }
