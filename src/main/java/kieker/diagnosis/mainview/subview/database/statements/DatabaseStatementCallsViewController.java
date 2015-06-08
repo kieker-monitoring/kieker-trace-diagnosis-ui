@@ -33,13 +33,17 @@ import org.springframework.stereotype.Component;
  * @author Christian Zirkelbach
  */
 @Component
-public final class DatabaseStatementCallsViewController implements ISubController, SelectionListener, TraverseListener {
+public final class DatabaseStatementCallsViewController implements
+		ISubController, SelectionListener, TraverseListener {
 
-	@Autowired private Controller masterController;
+	@Autowired
+	private Controller masterController;
 
-	@Autowired private DatabaseStatementCallsViewModel model;
+	@Autowired
+	private DatabaseStatementCallsViewModel model;
 
-	@Autowired private DatabaseStatementCallsView view;
+	@Autowired
+	private DatabaseStatementCallsView view;
 
 	@Override
 	public ISubView getView() {
@@ -48,22 +52,20 @@ public final class DatabaseStatementCallsViewController implements ISubControlle
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
-		if (e.widget == this.view.getBtnShowAll()) {
-			this.model.setFilter(Filter.NONE);
-		}
-		if (e.widget == this.view.getBtnShowJustFailed()) {
-			this.model.setFilter(Filter.JUST_FAILED);
-		}
-		if ((e.item != null) && (e.item.getData() instanceof DatabaseOperationCall)) {
-			this.model.setDatabaseOperationCall((DatabaseOperationCall) e.item.getData());
+		this.model.setFilter(Filter.NONE);
+		if ((e.item != null)
+				&& (e.item.getData() instanceof DatabaseOperationCall)) {
+			this.model.setDatabaseOperationCall((DatabaseOperationCall) e.item
+					.getData());
 		}
 	}
 
 	@Override
 	public void widgetDefaultSelected(final SelectionEvent e) {
-//		if (e.widget == this.view.getTable()) {
-//			this.masterController.jumpToCorrespondingTrace((OperationCall) e.item.getData());
-//		}
+		// if (e.widget == this.view.getTable()) {
+		// this.masterController.jumpToCorrespondingTrace((OperationCall)
+		// e.item.getData());
+		// }
 	}
 
 	@Override

@@ -1,19 +1,3 @@
-/***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.diagnosis.domain;
 
 
@@ -30,26 +14,24 @@ public final class AggregatedDatabaseOperationCall extends AbstractOperationCall
 
 	private AggregatedDatabaseOperationCall parent;
 	private long totalDuration;
-	private long medianDuration;
 	private long minDuration;
 	private long maxDuration;
-	private long meanDuration;
+	private long avgDuration;
 	private int calls;
 	
 	private String callArguments;
 
 	public AggregatedDatabaseOperationCall(final String container, final String component,
 			final String operation, final String callArguments,
-			final long totalDuration, final long medianDuration, final long minDuration, final long maxDuration, final long meanDuration,
+			final long totalDuration, final long minDuration, final long maxDuration, final long avgDuration,
 			final int calls) {
 		super(container, component, operation, null);
 
 		this.callArguments = callArguments;
 		this.totalDuration = totalDuration;
-		this.medianDuration = medianDuration;
 		this.minDuration = minDuration;
 		this.maxDuration = maxDuration;
-		this.meanDuration = meanDuration;
+		this.avgDuration = avgDuration;
 		this.calls = calls;
 	}
 	
@@ -65,14 +47,6 @@ public final class AggregatedDatabaseOperationCall extends AbstractOperationCall
 
 	public void setTotalDuration(final long totalDuration) {
 		this.totalDuration = totalDuration;
-	}
-
-	public long getMedianDuration() {
-		return this.medianDuration;
-	}
-
-	public void setMedianDuration(final long meanDuration) {
-		this.medianDuration = meanDuration;
 	}
 
 	public long getMinDuration() {
@@ -91,12 +65,12 @@ public final class AggregatedDatabaseOperationCall extends AbstractOperationCall
 		this.maxDuration = maxDuration;
 	}
 
-	public long getMeanDuration() {
-		return this.meanDuration;
+	public long getAvgDuration() {
+		return this.avgDuration;
 	}
 
-	public void setMeanDuration(final long avgDuration) {
-		this.meanDuration = avgDuration;
+	public void setAvgDuration(final long avgDuration) {
+		this.avgDuration = avgDuration;
 	}
 
 	public int getCalls() {

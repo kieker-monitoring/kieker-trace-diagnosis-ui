@@ -1,19 +1,3 @@
-/***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.diagnosis.mainview.subview.database.statements;
 
 import java.util.List;
@@ -27,22 +11,17 @@ import javax.annotation.PostConstruct;
 import kieker.diagnosis.czi.Utils;
 import kieker.diagnosis.domain.DatabaseOperationCall;
 import kieker.diagnosis.mainview.subview.ISubView;
-import kieker.diagnosis.mainview.subview.database.statements.DatabaseStatementCallsViewModel.Filter;
 import kieker.diagnosis.mainview.subview.util.CallTableColumnSortListener;
 import kieker.diagnosis.mainview.subview.util.NameConverter;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
-import kieker.diagnosis.model.PropertiesModel.OperationNames;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -83,14 +62,10 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 	private Composite detailComposite;
 	private Composite statusBar;
 	private Label lbCounter;
-	private Text lblFailedDisplay;
 	private Text lblMinimalDurationDisplay;
 	private Text lblOperationDisplay;
 	private Text lblStatementDisplay;
 	private Text lblReturnValueDisplay;
-	private Label lblFailed;
-	private Button btnShowAll;
-	private Button btnShowJustFailed;
 	private ScrolledComposite ivSc;
 	private Text filterText;
 
@@ -129,15 +104,6 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 		gl_composite.horizontalSpacing = 0;
 		filterComposite.setLayout(gl_filterComposite);
 
-		this.btnShowAll = new Button(filterComposite, SWT.RADIO);
-		this.btnShowAll.setText(DatabaseStatementCallsView.BUNDLE
-				.getString("DatabaseStatementCallsView.btnShowAll.text")); //$NON-NLS-1$
-		this.btnShowAll.setSelection(true);
-		this.btnShowJustFailed = new Button(filterComposite, SWT.RADIO);
-		this.btnShowJustFailed
-				.setText(DatabaseStatementCallsView.BUNDLE
-						.getString("DatabaseStatementCallsView.btnShowJustFailed.text")); //$NON-NLS-1$
-
 		this.filterText = new Text(filterComposite, SWT.BORDER);
 		this.filterText.setMessage(DatabaseStatementCallsView.BUNDLE
 				.getString("DatabaseStatementCallsView.text.message")); //$NON-NLS-1$
@@ -151,12 +117,6 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 		this.table = new Table(sashForm, SWT.BORDER | SWT.FULL_SELECTION
 				| SWT.VIRTUAL);
 		this.table.setHeaderVisible(true);
-
-		final TableColumn trclmnOperation = new TableColumn(this.table,
-				SWT.NONE);
-		trclmnOperation.setWidth(100);
-		trclmnOperation.setText(DatabaseStatementCallsView.BUNDLE
-				.getString("DatabaseStatementCallsView.trclmnOperation.text")); //$NON-NLS-1$
 
 		final TableColumn trclmnStatement = new TableColumn(this.table,
 				SWT.NONE);
@@ -250,16 +210,6 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 				.getColor(SWT.COLOR_WHITE));
 		this.lblMinimalDurationDisplay.setText(DatabaseStatementCallsView.N_A);
 
-		this.lblFailed = new Label(this.detailComposite, SWT.NONE);
-		this.lblFailed.setBackground(SWTResourceManager
-				.getColor(SWT.COLOR_WHITE));
-		this.lblFailed.setText(DatabaseStatementCallsView.BUNDLE
-				.getString("DatabaseStatementCallsView.lblFailed.text")); //$NON-NLS-1$
-
-		this.lblFailedDisplay = new Text(this.detailComposite, SWT.READ_ONLY);
-		this.lblFailedDisplay.setBackground(SWTResourceManager
-				.getColor(SWT.COLOR_WHITE));
-		this.lblFailedDisplay.setText(DatabaseStatementCallsView.N_A);
 		sashForm.setWeights(new int[] { 2, 1 });
 
 		this.statusBar = new Composite(this.composite, SWT.NONE);
@@ -271,10 +221,6 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 
 		this.table.addListener(SWT.SetData, new DataProvider());
 		this.table.addSelectionListener(this.controller);
-
-		trclmnOperation
-				.addSelectionListener(new CallTableColumnSortListener<DatabaseOperationCall>(
-						call -> call.getOperation()));
 
 		trclmnStatement
 				.addSelectionListener(new CallTableColumnSortListener<DatabaseOperationCall>(
@@ -297,9 +243,6 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 						call -> call.getTimestamp()));
 
 		this.filterText.addTraverseListener(this.controller);
-
-		this.btnShowAll.addSelectionListener(this.controller);
-		this.btnShowJustFailed.addSelectionListener(this.controller);
 	}
 
 	@Override
@@ -333,16 +276,8 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 	}
 
 	private void updateCachedDataModelContent() {
-		if (this.model.getFilter() == Filter.NONE) {
-			this.cachedDataModelContent = this.dataModel
-					.getDatabaseStatementCalls(this.model.getRegExpr());
-		} else {
-			// TODO Failed Operations
-			// this.cachedDataModelContent =
-			// this.dataModel.getFailedOperationCalls(this.model.getRegExpr());
-			this.cachedDataModelContent = this.dataModel
-					.getDatabaseStatementCalls(this.model.getRegExpr());
-		}
+		this.cachedDataModelContent = this.dataModel
+				.getDatabaseStatementCalls(this.model.getRegExpr());
 	}
 
 	/*
@@ -363,30 +298,14 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 			this.lblOperationDisplay.setText(call.getOperation());
 
 			// customizes the SQL-Statement for visualization purposes
-			final String statementText = call.getStringClassArgs()
-					.toUpperCase();
-			final String newStatementText = Utils
-					.formatSQLStatement(statementText);
+			final String statementText = call.getStringClassArgs();
+			final String formattedStatementText = Utils
+					.formatSQLStatementForDetailComposite(statementText);
 
 			// TODO colors KEYWORDS (SELECT, FROM, WHERE) ?
-			this.lblStatementDisplay.setText(newStatementText);
+			this.lblStatementDisplay.setText(formattedStatementText);
 
 			this.lblReturnValueDisplay.setText(call.getFormattedReturnValue());
-
-			if (call.isFailed()) {
-				this.lblFailedDisplay.setText("Yes (" + call.getFailedCause()
-						+ ")");
-				this.lblFailedDisplay.setForeground(Display.getCurrent()
-						.getSystemColor(SWT.COLOR_RED));
-				this.lblFailed.setForeground(Display.getCurrent()
-						.getSystemColor(SWT.COLOR_RED));
-			} else {
-				this.lblFailedDisplay.setText("No");
-				this.lblFailedDisplay.setForeground(Display.getCurrent()
-						.getSystemColor(SWT.COLOR_BLACK));
-				this.lblFailed.setForeground(Display.getCurrent()
-						.getSystemColor(SWT.COLOR_BLACK));
-			}
 		}
 
 		this.detailComposite.layout();
@@ -422,16 +341,7 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 		return this.filterText;
 	}
 
-	public Button getBtnShowAll() {
-		return this.btnShowAll;
-	}
-
-	public Button getBtnShowJustFailed() {
-		return this.btnShowJustFailed;
-	}
-
 	/**
-	 * @author Nils Christian Ehmke
 	 * @author Christian Zirkelbach
 	 */
 	private class DataProvider implements Listener {
@@ -449,16 +359,12 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 					.getData();
 			final DatabaseOperationCall call = calls.get(tableIndex);
 
-			// Get the data to display
-			String operationString = call.getOperation();
-			if (DatabaseStatementCallsView.this.propertiesModel
-					.getOperationNames() == OperationNames.SHORT) {
-				operationString = NameConverter
-						.toShortOperationName(operationString);
-			}
+			final String returnValue = call.getFormattedReturnValue();
 
-			String returnValue = call.getFormattedReturnValue();
-			String statement = call.getStringClassArgs();
+			// customizes the SQL-Statement for visualization purposes
+			final String statementText = call.getStringClassArgs();
+			final String formattedStatementText = Utils
+					.formatSQLStatementForTable(statementText);
 
 			final TimeUnit sourceTimeUnit = DatabaseStatementCallsView.this.dataModel
 					.getTimeUnit();
@@ -470,15 +376,9 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 			final String duration = targetTimeUnit.convert(call.getDuration(),
 					sourceTimeUnit) + " " + shortTimeUnit;
 
-			item.setText(new String[] { operationString, statement,
-					returnValue, duration, Long.toString(call.getTraceID()),
+			item.setText(new String[] { formattedStatementText, returnValue,
+					duration, Long.toString(call.getTraceID()),
 					Long.toString(call.getTimestamp()) });
-
-			if (call.isFailed()) {
-				final Color colorRed = Display.getCurrent().getSystemColor(
-						SWT.COLOR_RED);
-				item.setForeground(colorRed);
-			}
 
 			item.setData(call);
 		}

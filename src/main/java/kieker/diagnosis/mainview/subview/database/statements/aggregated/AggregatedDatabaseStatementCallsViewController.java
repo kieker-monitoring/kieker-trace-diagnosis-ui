@@ -33,13 +33,17 @@ import org.springframework.stereotype.Component;
  * @author Christian Zirkelbach
  */
 @Component
-public final class AggregatedDatabaseStatementCallsViewController implements ISubController, SelectionListener, TraverseListener {
+public final class AggregatedDatabaseStatementCallsViewController implements
+		ISubController, SelectionListener, TraverseListener {
 
-	@Autowired private Controller masterController;
+	@Autowired
+	private Controller masterController;
 
-	@Autowired private AggregatedDatabaseStatementCallsViewModel model;
+	@Autowired
+	private AggregatedDatabaseStatementCallsViewModel model;
 
-	@Autowired private AggregatedDatabaseStatementCallsView view;
+	@Autowired
+	private AggregatedDatabaseStatementCallsView view;
 
 	@Override
 	public ISubView getView() {
@@ -48,14 +52,12 @@ public final class AggregatedDatabaseStatementCallsViewController implements ISu
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
-		if (e.widget == this.view.getBtn1()) {
-			this.model.setFilter(Filter.NONE);
-		}
-		if (e.widget == this.view.getBtn2()) {
-			this.model.setFilter(Filter.JUST_FAILED);
-		}
-		if ((e.item != null) && (e.item.getData() instanceof AggregatedDatabaseOperationCall)) {
-			this.model.setDatabaseOperationCall((AggregatedDatabaseOperationCall) e.item.getData());
+		this.model.setFilter(Filter.NONE);
+		if ((e.item != null)
+				&& (e.item.getData() instanceof AggregatedDatabaseOperationCall)) {
+			this.model
+					.setDatabaseOperationCall((AggregatedDatabaseOperationCall) e.item
+							.getData());
 		}
 	}
 

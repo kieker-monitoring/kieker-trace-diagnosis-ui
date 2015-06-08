@@ -63,8 +63,10 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 	private Label lblAnalysisTimeDisplay;
 	private Label lblNumberOfCallsDisplay;
 	
-	// TODO czi
 	private Label lblNumberOfDatabaseCallsDisplay;
+	private Label lblNumberOfStatementsDisplay;
+	private Label lblNumberOfAggregratedStatementsDisplay;
+	private Label lblNumberOfPreparedStatementsDisplay;
 	
 	private Label lblNumberOfFailedDisplay;
 	private Label lblNumberOfAggregatedCallsDisplay;
@@ -108,8 +110,12 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 
 		this.lblBeginOfMonitoringDisplay.setText(formatter.format(new Date(TimeUnit.MILLISECONDS.convert(this.dataModel.getBeginTimestamp(), this.dataModel.getTimeUnit()))));
 		this.lblEndOfMonitoringDisplay.setText(formatter.format(new Date(TimeUnit.MILLISECONDS.convert(this.dataModel.getEndTimestamp(), this.dataModel.getTimeUnit()))));
+		
 		this.lblNumberOfCallsDisplay.setText(Integer.toString(this.dataModel.getOperationCalls(null).size()));
 		this.lblNumberOfDatabaseCallsDisplay.setText(Integer.toString(this.dataModel.getDatabaseOperationCalls(null).size()));
+		this.lblNumberOfStatementsDisplay.setText(Integer.toString(this.dataModel.getDatabaseStatementCalls(null).size()));
+		this.lblNumberOfAggregratedStatementsDisplay.setText(Integer.toString(this.dataModel.getAggregatedDatabaseStatementCalls(null).size()));
+		this.lblNumberOfPreparedStatementsDisplay.setText(Integer.toString(this.dataModel.getDatabasePreparedStatementCalls(null).size()));
 		
 		this.lblNumberOfFailedDisplay.setText(Integer.toString(this.dataModel.getFailedOperationCalls(null).size()));
 		this.lblNumberOfAggregatedCallsDisplay.setText(Integer.toString(this.dataModel.getAggregatedOperationCalls(null).size()));
@@ -282,6 +288,25 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 
 		this.lblNumberOfDatabaseCallsDisplay = new Label(this.composite, SWT.NONE);
 		this.lblNumberOfDatabaseCallsDisplay.setText(N_A);
+		
+		final Label lblNumberOfStatements = new Label(this.composite, SWT.NONE);
+		lblNumberOfStatements.setText(BUNDLE.getString("MonitoringStatisticsView.lblNumberOfStatements.text") + ":"); //$NON-NLS-1$
+
+		this.lblNumberOfStatementsDisplay = new Label(this.composite, SWT.NONE);
+		this.lblNumberOfStatementsDisplay.setText(N_A);
+		
+		final Label lblNumberOfAggregratedStatements = new Label(this.composite, SWT.NONE);
+		lblNumberOfAggregratedStatements.setText(BUNDLE.getString("MonitoringStatisticsView.lblNumberOfAggregratedStatements.text") + ":"); //$NON-NLS-1$
+
+		this.lblNumberOfAggregratedStatementsDisplay = new Label(this.composite, SWT.NONE);
+		this.lblNumberOfAggregratedStatementsDisplay.setText(N_A);
+		
+		final Label lblNumberOfPreparedStatements = new Label(this.composite, SWT.NONE);
+		lblNumberOfPreparedStatements.setText(BUNDLE.getString("MonitoringStatisticsView.lblNumberOfPreparedStatements.text") + ":"); //$NON-NLS-1$
+
+		this.lblNumberOfPreparedStatementsDisplay = new Label(this.composite, SWT.NONE);
+		this.lblNumberOfPreparedStatementsDisplay.setText(N_A);
+
 		
 	}
 

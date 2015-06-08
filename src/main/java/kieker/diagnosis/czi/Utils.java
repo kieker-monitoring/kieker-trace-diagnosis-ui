@@ -12,7 +12,7 @@ import kieker.diagnosis.domain.DatabaseOperationCall;
  *
  */
 public class Utils {
-	public static String formatSQLStatement(String s) {
+	public static String formatSQLStatementForDetailComposite(String s) {
 		StringBuilder sb = new StringBuilder(s);
 		int i = 0;
 		int wrapAtPosition = 80;
@@ -23,11 +23,49 @@ public class Utils {
 			sb.replace(i, i + 1, "\n");
 		}
 
-		// wrap after FROM and WHERE
 		String formattedString = sb.toString();
+		// .toUpperCase
+		formattedString = formattedString.replaceAll("insert into",
+				"INSERT INTO");
+		formattedString = formattedString.replaceAll("create table",
+				"CREATE TABLE");
+		formattedString = formattedString
+				.replaceAll("drop table", "DROP TABLE");
+		formattedString = formattedString.replaceAll("create index",
+				"CREATE INDEX");
+		formattedString = formattedString
+				.replaceAll("drop index", "DROP INDEX");
+
+		// wrap after FROM, WHERE, and VALUES, case-sensitive
 		formattedString = formattedString.replaceAll("FROM", "\r\nFROM");
+		formattedString = formattedString.replaceAll("from", "\r\nFROM");
 		formattedString = formattedString.replaceAll("WHERE", "\r\nWHERE");
+		formattedString = formattedString.replaceAll("where", "\r\nWHERE");
 		formattedString = formattedString.replaceAll("VALUES", "\r\nVALUES");
+		formattedString = formattedString.replaceAll("values", "\r\nVALUES");
+
+		return formattedString;
+	}
+
+	public static String formatSQLStatementForTable(String s) {
+		StringBuilder sb = new StringBuilder(s);
+		String formattedString = sb.toString();
+
+		// .toUpperCase
+		formattedString = formattedString.replaceAll("insert into",
+				"INSERT INTO");
+		formattedString = formattedString.replaceAll("create table",
+				"CREATE TABLE");
+		formattedString = formattedString
+				.replaceAll("drop table", "DROP TABLE");
+		formattedString = formattedString.replaceAll("create index",
+				"CREATE INDEX");
+		formattedString = formattedString
+				.replaceAll("drop index", "DROP INDEX");
+
+		formattedString = formattedString.replaceAll("from", "FROM");
+		formattedString = formattedString.replaceAll("where", "WHERE");
+		formattedString = formattedString.replaceAll("values", "VALUES");
 
 		return formattedString;
 	}

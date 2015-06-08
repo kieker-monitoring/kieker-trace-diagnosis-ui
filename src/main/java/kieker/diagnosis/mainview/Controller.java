@@ -72,7 +72,6 @@ public final class Controller implements SelectionListener {
 	@Autowired
 	private AggregatedCallsViewController aggregatedCallsViewController;
 
-	// TODO czi
 	@Autowired
 	private DatabaseStatementCallsViewController databaseStatementCallsViewController;
 	@Autowired

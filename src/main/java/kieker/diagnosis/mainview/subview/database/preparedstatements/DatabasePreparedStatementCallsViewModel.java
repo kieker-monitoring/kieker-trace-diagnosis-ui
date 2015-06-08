@@ -40,7 +40,6 @@ public final class DatabasePreparedStatementCallsViewModel {
 
 	public void setFilter(final Filter filter) {
 		this.filter = filter;
-
 		this.view.notifyAboutChangedFilter();
 	}
 
@@ -50,7 +49,6 @@ public final class DatabasePreparedStatementCallsViewModel {
 
 	public void setPreparedStatementCall(final PreparedStatementCall preparedStatementCall) {
 		this.preparedStatementCall = preparedStatementCall;
-
 		this.view.notifyAboutChangedOperationCall();
 	}
 
@@ -65,7 +63,7 @@ public final class DatabasePreparedStatementCallsViewModel {
 	}
 
 	public static enum Filter {
-		NONE, JUST_FAILED
+		NONE
 	}
 
 }

@@ -17,7 +17,6 @@
 package kieker.diagnosis.mainview.subview.database.preparedstatements;
 
 import kieker.diagnosis.domain.PreparedStatementCall;
-import kieker.diagnosis.mainview.Controller;
 import kieker.diagnosis.mainview.subview.ISubController;
 import kieker.diagnosis.mainview.subview.ISubView;
 import kieker.diagnosis.mainview.subview.database.preparedstatements.DatabasePreparedStatementCallsViewModel.Filter;
@@ -37,9 +36,6 @@ public final class DatabasePreparedStatementCallsViewController implements
 		ISubController, SelectionListener, TraverseListener {
 
 	@Autowired
-	private Controller masterController;
-
-	@Autowired
 	private DatabasePreparedStatementCallsViewModel model;
 
 	@Autowired
@@ -52,12 +48,7 @@ public final class DatabasePreparedStatementCallsViewController implements
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
-		if (e.widget == this.view.getBtnShowAll()) {
-			this.model.setFilter(Filter.NONE);
-		}
-		if (e.widget == this.view.getBtnShowJustFailed()) {
-			this.model.setFilter(Filter.JUST_FAILED);
-		}
+		this.model.setFilter(Filter.NONE);
 		if ((e.item != null)
 				&& (e.item.getData() instanceof PreparedStatementCall)) {
 			this.model.setPreparedStatementCall((PreparedStatementCall) e.item
@@ -67,16 +58,13 @@ public final class DatabasePreparedStatementCallsViewController implements
 
 	@Override
 	public void widgetDefaultSelected(final SelectionEvent e) {
-		// if (e.widget == this.view.getTable()) {
-		// this.masterController.jumpToCorrespondingTrace((OperationCall)
-		// e.item.getData());
-		// }
+		// Just implemented for the interface
 	}
 
 	@Override
 	public void keyTraversed(final TraverseEvent e) {
-		if (e.widget == this.view.getFilterText()) {
-			this.model.setRegExpr(this.view.getFilterText().getText());
+		if (e.widget == this.view.getTextFilter()) {
+			this.model.setRegExpr(this.view.getTextFilter().getText());
 		}
 	}
 }
