@@ -311,7 +311,7 @@ public final class DatabasePreparedStatementCallsView implements ISubView,
 
 	private void updateCachedDataModelContent() {
 		this.cachedDataModelContent = this.dataModel
-				.getRefinedDatabasePreparedStatementCalls(this.model
+				.getDatabasePreparedStatementCalls(this.model
 						.getRegExpr());
 	}
 

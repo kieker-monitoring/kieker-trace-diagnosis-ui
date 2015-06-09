@@ -1,4 +1,4 @@
-package kieker.diagnosis.czi;
+package kieker.diagnosis.czi.stages;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -18,11 +18,10 @@ public class DatabaseRecordTransformator extends
 		AbstractStage<IMonitoringRecord, DatabaseOperationCall> {
 
 	private static AtomicInteger recordID = new AtomicInteger(0);
-	
-	// TODO check whether one of the records is missing, error handling
 
+	// TODO check whether one of the records is missing, error handling
 	@Override
-	protected void execute(IMonitoringRecord input) {	
+	protected void execute(IMonitoringRecord input) {
 		if (input instanceof DatabaseBeforeEventRecord) {
 			this.handleDatabaseBeforeEventRecord((DatabaseBeforeEventRecord) input);
 		} else if (input instanceof DatabaseAfterEventRecord) {

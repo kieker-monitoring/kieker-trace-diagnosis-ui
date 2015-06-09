@@ -63,7 +63,6 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 	private Label lblAnalysisTimeDisplay;
 	private Label lblNumberOfCallsDisplay;
 	
-	private Label lblNumberOfDatabaseCallsDisplay;
 	private Label lblNumberOfStatementsDisplay;
 	private Label lblNumberOfAggregratedStatementsDisplay;
 	private Label lblNumberOfPreparedStatementsDisplay;
@@ -112,7 +111,6 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 		this.lblEndOfMonitoringDisplay.setText(formatter.format(new Date(TimeUnit.MILLISECONDS.convert(this.dataModel.getEndTimestamp(), this.dataModel.getTimeUnit()))));
 		
 		this.lblNumberOfCallsDisplay.setText(Integer.toString(this.dataModel.getOperationCalls(null).size()));
-		this.lblNumberOfDatabaseCallsDisplay.setText(Integer.toString(this.dataModel.getDatabaseOperationCalls(null).size()));
 		this.lblNumberOfStatementsDisplay.setText(Integer.toString(this.dataModel.getDatabaseStatementCalls(null).size()));
 		this.lblNumberOfAggregratedStatementsDisplay.setText(Integer.toString(this.dataModel.getAggregatedDatabaseStatementCalls(null).size()));
 		this.lblNumberOfPreparedStatementsDisplay.setText(Integer.toString(this.dataModel.getDatabasePreparedStatementCalls(null).size()));
@@ -282,12 +280,6 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 		
 		final Label lblLine5 = new Label(this.composite, SWT.SEPARATOR | SWT.HORIZONTAL);
 		lblLine5.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
-		
-		final Label lblNumberOfDatabaseCalls = new Label(this.composite, SWT.NONE);
-		lblNumberOfDatabaseCalls.setText(BUNDLE.getString("MonitoringStatisticsView.lblNumberOfDatabaseCalls.text") + ":"); //$NON-NLS-1$
-
-		this.lblNumberOfDatabaseCallsDisplay = new Label(this.composite, SWT.NONE);
-		this.lblNumberOfDatabaseCallsDisplay.setText(N_A);
 		
 		final Label lblNumberOfStatements = new Label(this.composite, SWT.NONE);
 		lblNumberOfStatements.setText(BUNDLE.getString("MonitoringStatisticsView.lblNumberOfStatements.text") + ":"); //$NON-NLS-1$
