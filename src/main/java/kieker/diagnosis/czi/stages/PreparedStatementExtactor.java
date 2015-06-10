@@ -22,7 +22,6 @@ public class PreparedStatementExtactor extends
 		List<DatabaseOperationCall> mergedPreparedStatementCalls = mergedPreparedStatements(mergedCalls);
 		List<PreparedStatementCall> refinedPreparedStatementCalls = refinePreparedStatements(mergedPreparedStatementCalls);
 		List<PreparedStatementCall> groupedRefinedPreparedStatementCalls = groupRefinedPreparedStatements(refinedPreparedStatementCalls);
-		System.out.println("groupedRefinedPreparedStatementCalls.size(): " + groupedRefinedPreparedStatementCalls.size());
 		super.send(groupedRefinedPreparedStatementCalls);
 	}
 

@@ -98,7 +98,9 @@ public final class DatabasePreparedStatementCallsView implements ISubView,
 	 * @wbp.parser.entryPoint
 	 */
 	@Override
-	public void createComposite(final Composite parent) { // NOPMD (This method violates some metrics)
+	public void createComposite(final Composite parent) { // NOPMD (This method
+															// violates some
+															// metrics)
 		if (this.composite != null) {
 			this.composite.dispose();
 		}
@@ -111,9 +113,11 @@ public final class DatabasePreparedStatementCallsView implements ISubView,
 		gl_composite.horizontalSpacing = 0;
 		this.composite.setLayout(gl_composite);
 
-		final Composite filterComposite = new Composite(this.composite, SWT.NONE);
-		filterComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
-		final GridLayout gl_filterComposite = new GridLayout(3, false);
+		final Composite filterComposite = new Composite(this.composite,
+				SWT.NONE);
+		filterComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true,
+				false, 1, 1));
+		final GridLayout gl_filterComposite = new GridLayout(1, false);
 		gl_composite.verticalSpacing = 0;
 		gl_composite.marginHeight = 0;
 		gl_composite.marginWidth = 0;
@@ -121,17 +125,22 @@ public final class DatabasePreparedStatementCallsView implements ISubView,
 		filterComposite.setLayout(gl_filterComposite);
 
 		this.textFilter = new Text(filterComposite, SWT.BORDER);
-		this.textFilter.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 3, 1));
+		this.textFilter.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+				false, 3, 1));
 		this.textFilter.setBounds(0, 0, 76, 21);
-		this.textFilter.setMessage(DatabasePreparedStatementCallsView.BUNDLE.getString("DatabasePreparedStatementCallsView.textFilter.message"));
+		this.textFilter
+				.setMessage(DatabasePreparedStatementCallsView.BUNDLE
+						.getString("DatabasePreparedStatementCallsView.textFilter.message"));
 
 		final SashForm sashForm = new SashForm(this.composite, SWT.VERTICAL);
-		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
+				1));
 
-		this.tree = new Tree(sashForm, SWT.BORDER | SWT.FULL_SELECTION | SWT.VIRTUAL);
+		this.tree = new Tree(sashForm, SWT.BORDER | SWT.FULL_SELECTION
+				| SWT.VIRTUAL);
 		this.tree.setHeaderVisible(true);
 
-		final TreeColumn tblclmnStatement =  new TreeColumn(this.tree, SWT.NONE);
+		final TreeColumn tblclmnStatement = new TreeColumn(this.tree, SWT.NONE);
 		tblclmnStatement.setWidth(400);
 		tblclmnStatement
 				.setText(DatabasePreparedStatementCallsView.BUNDLE
@@ -152,29 +161,31 @@ public final class DatabasePreparedStatementCallsView implements ISubView,
 
 		final TreeColumn tblclmnAvgDuration = new TreeColumn(this.tree,
 				SWT.RIGHT);
-		tblclmnAvgDuration.setWidth(150);
+		tblclmnAvgDuration.setWidth(100);
 		tblclmnAvgDuration
 				.setText(DatabasePreparedStatementCallsView.BUNDLE
 						.getString("DatabasePreparedStatementCallsView.tblclmnAvgDuration.text")); //$NON-NLS-1$
 
 		final TreeColumn tblclmnMinDuration = new TreeColumn(this.tree,
 				SWT.RIGHT);
-		tblclmnMinDuration.setWidth(150);
+		tblclmnMinDuration.setWidth(100);
 		tblclmnMinDuration
 				.setText(DatabasePreparedStatementCallsView.BUNDLE
 						.getString("DatabasePreparedStatementCallsView.tblclmnMinDuration.text")); //$NON-NLS-1$
 
 		final TreeColumn tblclmnMaxDuration = new TreeColumn(this.tree,
 				SWT.RIGHT);
-		tblclmnMaxDuration.setWidth(150);
+		tblclmnMaxDuration.setWidth(100);
 		tblclmnMaxDuration
 				.setText(DatabasePreparedStatementCallsView.BUNDLE
 						.getString("DatabasePreparedStatementCallsView.tblclmnMaxDuration.text")); //$NON-NLS-1$
 
-		this.ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		this.ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL
+				| SWT.BORDER);
 
 		this.detailComposite = new Composite(this.ivSc, SWT.NONE);
-		this.detailComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		this.detailComposite.setBackground(SWTResourceManager
+				.getColor(SWT.COLOR_WHITE));
 		this.detailComposite.setLayout(new GridLayout(2, false));
 
 		this.ivSc.setContent(this.detailComposite);
@@ -288,20 +299,10 @@ public final class DatabasePreparedStatementCallsView implements ISubView,
 		tblclmnMaxDuration
 				.addSelectionListener(new PreparedStatementCallTreeColumnSortListener(
 						call -> call.getMaxDuration()));
-
-		this.updateStatusBar();
-	}
-
-	public Tree getTree() {
-		return this.tree;
 	}
 
 	public Text getTextFilter() {
 		return this.textFilter;
-	}
-
-	public void setTextFilter(final Text textFilter) {
-		this.textFilter = textFilter;
 	}
 
 	@Override
@@ -310,9 +311,14 @@ public final class DatabasePreparedStatementCallsView implements ISubView,
 	}
 
 	private void updateCachedDataModelContent() {
-		this.cachedDataModelContent = this.dataModel
-				.getDatabasePreparedStatementCalls(this.model
-						.getRegExpr());
+		switch (this.model.getFilter()) {
+		case NONE:
+			this.cachedDataModelContent = this.dataModel
+					.getDatabasePreparedStatementCalls(this.model.getRegExpr());
+			break;
+		default:
+			break;
+		}
 	}
 
 	@Override
@@ -361,14 +367,12 @@ public final class DatabasePreparedStatementCallsView implements ISubView,
 		this.tree.setData(this.cachedDataModelContent);
 		this.tree.setItemCount(Math.min(this.cachedDataModelContent.size(),
 				this.propertiesModel.getMaxTracesToShow()));
+
 		this.clearTree();
 	}
 
 	private void clearTree() {
 		this.tree.clearAll(true);
-		for (final TreeColumn column : this.tree.getColumns()) {
-			column.pack();
-		}
 	}
 
 	/*

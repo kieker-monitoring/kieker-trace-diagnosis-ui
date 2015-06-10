@@ -108,7 +108,7 @@ public final class Controller implements SelectionListener {
 				SubView.AGGREGATED_DATABASE_STATEMENT_CALLS_SUB_VIEW).to(
 				this.aggregatedDatabaseStatementCallsViewController.getView());
 		this.subViewMapper.map(
-				SubView.DATABASE_PREPARAED_STATEMENT_CALLS_SUB_VIEW).to(
+				SubView.DATABASE_PREPARED_STATEMENT_CALLS_SUB_VIEW).to(
 				this.databasePreparedStatementCallsViewController.getView());
 
 		this.subViewMapper.map(SubView.MONITORING_STATISTICS_VIEW).to(
@@ -189,7 +189,6 @@ public final class Controller implements SelectionListener {
 			this.model.setActiveSubView(this.subViewMapper
 					.resolve(SubView.OPERATION_CALLS_SUB_VIEW));
 		}
-
 		if (e.item == this.view.getTrtmSQLStatements()) {
 			this.model.setActiveSubView(this.subViewMapper
 					.resolve(SubView.NONE));
@@ -206,7 +205,7 @@ public final class Controller implements SelectionListener {
 		if (e.item == this.view.getTrtmDatabasePreparedStatementCalls()) {
 			this.model
 					.setActiveSubView(this.subViewMapper
-							.resolve(SubView.DATABASE_PREPARAED_STATEMENT_CALLS_SUB_VIEW));
+							.resolve(SubView.DATABASE_PREPARED_STATEMENT_CALLS_SUB_VIEW));
 		}
 		if (e.item == this.view.getTrtmMonitoringLogStatistics()) {
 			this.model.setActiveSubView(this.subViewMapper
@@ -246,7 +245,7 @@ public final class Controller implements SelectionListener {
 	 * @author Nils Christian Ehmke
 	 */
 	public enum SubView {
-		TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, AGGREGATED_OPERATION_CALLS_SUB_VIEW, OPERATION_CALLS_SUB_VIEW, DATABASE_STATEMENT_CALLS_SUB_VIEW, AGGREGATED_DATABASE_STATEMENT_CALLS_SUB_VIEW, DATABASE_PREPARAED_STATEMENT_CALLS_SUB_VIEW, MONITORING_STATISTICS_VIEW,
+		TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, AGGREGATED_OPERATION_CALLS_SUB_VIEW, OPERATION_CALLS_SUB_VIEW, DATABASE_STATEMENT_CALLS_SUB_VIEW, AGGREGATED_DATABASE_STATEMENT_CALLS_SUB_VIEW, DATABASE_PREPARED_STATEMENT_CALLS_SUB_VIEW, MONITORING_STATISTICS_VIEW,
 	}
 
 }

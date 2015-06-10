@@ -18,7 +18,6 @@ package kieker.diagnosis.model;
 
 import java.io.File;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 import java.util.concurrent.TimeUnit;
@@ -131,8 +130,8 @@ public final class DataModel extends Observable {
 				.getPreparedStatements();
 		// ///////////////////////////////////////////
 
-		// normals operation calls or database calls
-		// TODO merged records need separate handling
+//		 TODO merged records (business operations AND database operations)
+//		 need separate handling
 		if (!this.operationCalls.isEmpty()) {
 			this.beginTimestamp = analysisConfiguration.getBeginTimestamp();
 			this.endTimestamp = analysisConfiguration.getEndTimestamp();
