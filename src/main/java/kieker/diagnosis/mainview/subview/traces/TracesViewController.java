@@ -68,7 +68,7 @@ public final class TracesViewController {
 
 	@FXML private ResourceBundle resources;
 
-	private final Predicate<OperationCall> fstPredicate = call -> true;
+	private Predicate<OperationCall> fstPredicate = call -> true;
 	private Predicate<OperationCall> sndPredicate = call -> true;
 
 	public void initialize() {
@@ -104,14 +104,17 @@ public final class TracesViewController {
 	}
 
 	public void showAllTraces() {
+		this.fstPredicate = call -> true;
 		this.reloadTreetable();
 	}
 
 	public void showJustFailedTraces() {
+		this.fstPredicate = OperationCall::isFailed;
 		this.reloadTreetable();
 	}
 
 	public void showJustFailureContainingTraces() {
+		this.fstPredicate = OperationCall::containsFailure;
 		this.reloadTreetable();
 	}
 
@@ -139,13 +142,11 @@ public final class TracesViewController {
 		// TODO: This can be done better with the binding API
 		final List<Trace> traces = this.dataModel.getTraces();
 		final TreeItem<OperationCall> root = new TreeItem<>();
+		ObservableList<TreeItem<OperationCall>> rootChildren = root.getChildren();
 		this.treetable.setRoot(root);
 		this.treetable.setShowRoot(false);
 
-		for (final Trace trace : traces) {
-			if (this.fstPredicate.test(trace.getRootOperationCall()) && (this.sndPredicate.test(trace.getRootOperationCall()))) {
-				root.getChildren().add(new LazyOperationCallTreeItem<OperationCall>(trace.getRootOperationCall()));
-			}
-		}
+		traces.stream().map(trace -> trace.getRootOperationCall()).filter(this.fstPredicate).filter(this.sndPredicate)
+		.forEach(call -> rootChildren.add(new LazyOperationCallTreeItem<OperationCall>(call)));
 	}
 }
