@@ -17,10 +17,7 @@
 package kieker.diagnosis.mainview.subview.monitoringstatistics;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
@@ -33,6 +30,7 @@ import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.model.DataModel;
+import kieker.tools.util.LoggingTimestampConverter;
 
 /**
  * @author Nils Christian Ehmke
@@ -103,8 +101,7 @@ public final class MonitoringStatisticsViewController {
 	}
 
 	private String assembleTimeString(final Long timestamp) {
-		final DateFormat formatter = new SimpleDateFormat();
-		return (timestamp == null) ? "N/A" : formatter.format(new Date(timestamp));
+		return (timestamp == null) ? "N/A" : LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(timestamp);
 	}
 
 	private String assembleDurationString(final Long duration) {
