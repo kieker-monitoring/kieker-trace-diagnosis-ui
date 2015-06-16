@@ -386,7 +386,7 @@ public final class DatabasePreparedStatementCallsView implements ISubView,
 			final String shortTimeUnit = NameConverter
 					.toShortTimeUnit(this.propertiesModel.getTimeUnit());
 			final long duration = this.propertiesModel.getTimeUnit().convert(
-					call.getDuration(), this.dataModel.getTimeUnit());
+					call.getTotalDuration(), this.dataModel.getTimeUnit());
 			final String durationString = duration + " " + shortTimeUnit;
 
 			this.lblMinimalDurationDisplay.setText(durationString);

@@ -141,12 +141,6 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 		trclmnTraceID.setText(DatabaseStatementCallsView.BUNDLE
 				.getString("DatabaseStatementCallsView.trclmnTraceID.text")); //$NON-NLS-1$
 
-		final TableColumn trclmnTimestamp = new TableColumn(this.table,
-				SWT.NONE);
-		trclmnTimestamp.setWidth(150);
-		trclmnTimestamp.setText(DatabaseStatementCallsView.BUNDLE
-				.getString("DatabaseStatementCallsView.trclmnTimestamp.text")); //$NON-NLS-1$
-
 		this.ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL
 				| SWT.BORDER);
 
@@ -237,10 +231,6 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 		trclmnDuration
 				.addSelectionListener(new CallTableColumnSortListener<DatabaseOperationCall>(
 						call -> call.getDuration()));
-
-		trclmnTimestamp
-				.addSelectionListener(new CallTableColumnSortListener<DatabaseOperationCall>(
-						call -> call.getTimestamp()));
 
 		this.filterText.addTraverseListener(this.controller);
 	}
@@ -377,8 +367,7 @@ public final class DatabaseStatementCallsView implements ISubView, Observer {
 					sourceTimeUnit) + " " + shortTimeUnit;
 
 			item.setText(new String[] { formattedStatementText, returnValue,
-					duration, Long.toString(call.getTraceID()),
-					Long.toString(call.getTimestamp()) });
+					duration, Long.toString(call.getTraceID())});
 
 			item.setData(call);
 		}

@@ -1,16 +1,16 @@
 package kieker.diagnosis.domain;
 
-
 /**
- * This class represents a concrete aggregated database call within this application. It
- * adds some properties that are only required for this type of calls, like the
- * trace ID and the duration. It extends the call tree mechanism (inherited from
- * {@link AbstractOperationCall}) by a parent, allowing to navigate in both
- * directions within the tree.
+ * This class represents a concrete aggregated database call within this
+ * application. It adds some properties that are only required for this type of
+ * calls, like the trace ID and the duration. It extends the call tree mechanism
+ * (inherited from {@link AbstractOperationCall}) by a parent, allowing to
+ * navigate in both directions within the tree.
  * 
  * @author Christian Zirkelbach
  */
-public final class AggregatedDatabaseOperationCall extends AbstractOperationCall<AggregatedDatabaseOperationCall> {
+public final class AggregatedDatabaseOperationCall extends
+		AbstractOperationCall<AggregatedDatabaseOperationCall> {
 
 	private AggregatedDatabaseOperationCall parent;
 	private long totalDuration;
@@ -18,13 +18,14 @@ public final class AggregatedDatabaseOperationCall extends AbstractOperationCall
 	private long maxDuration;
 	private long avgDuration;
 	private int calls;
-	
+
 	private String callArguments;
 
-	public AggregatedDatabaseOperationCall(final String container, final String component,
-			final String operation, final String callArguments,
-			final long totalDuration, final long minDuration, final long maxDuration, final long avgDuration,
-			final int calls) {
+	public AggregatedDatabaseOperationCall(final String container,
+			final String component, final String operation,
+			final String callArguments, final long totalDuration,
+			final long minDuration, final long maxDuration,
+			final long avgDuration, final int calls) {
 		super(container, component, operation, null);
 
 		this.callArguments = callArguments;
@@ -34,13 +35,13 @@ public final class AggregatedDatabaseOperationCall extends AbstractOperationCall
 		this.avgDuration = avgDuration;
 		this.calls = calls;
 	}
-	
+
 	@Override
 	public void addChild(final AggregatedDatabaseOperationCall child) {
 		super.addChild(child);
 		child.parent = this;
 	}
-	
+
 	public long getTotalDuration() {
 		return this.totalDuration;
 	}
@@ -66,7 +67,12 @@ public final class AggregatedDatabaseOperationCall extends AbstractOperationCall
 	}
 
 	public long getAvgDuration() {
-		return this.avgDuration;
+		long totalDuration = this.getTotalDuration();
+		final int numberOfCalls = this.calls;
+		if ((this.parent == null) && (numberOfCalls > 0)) {
+			totalDuration /= numberOfCalls;
+		}
+		return totalDuration;
 	}
 
 	public void setAvgDuration(final long avgDuration) {
@@ -88,7 +94,7 @@ public final class AggregatedDatabaseOperationCall extends AbstractOperationCall
 	public void setStringClassArgs(String stringClassArgs) {
 		this.callArguments = stringClassArgs;
 	}
-	
+
 	public AggregatedDatabaseOperationCall getParent() {
 		return parent;
 	}

@@ -87,10 +87,6 @@ public class StatementAggregator
 						final int calls = existingCall.getCalls() + 1;
 						existingCall.setCalls(calls);
 
-						final long averageDuration = existingCallTotalDuration
-								/ calls;
-						existingCall.setAvgDuration(averageDuration);
-
 						handled = true;
 					}
 				}

@@ -64,10 +64,11 @@ public final class AggregatedDatabaseStatementCallsView implements ISubView,
 	private Text lblOperationDisplay;
 	private Text lblStatementDisplay;
 	private Text lblNumberOfCallsDisplay;
-	private Text lblMinimalDurationDisplay;
-	private Text lblAverageDurationDisplay;
-	private Text lblMaximalDurationDisplay;
 	private Text lblTotalDurationDisplay;
+	private Text lblAverageDurationDisplay;
+	private Text lblMinimalDurationDisplay;
+	private Text lblMaximalDurationDisplay;
+	
 	private Composite statusBar;
 	private Label lblCounter;
 	private Table table;
@@ -139,6 +140,13 @@ public final class AggregatedDatabaseStatementCallsView implements ISubView,
 				.setText(AggregatedDatabaseStatementCallsView.BUNDLE
 						.getString("AggregatedDatabaseStatementCallsView.tblclmnNumberOfCalls.text")); //$NON-NLS-1$
 
+		final TableColumn tblclmnTotalDuration = new TableColumn(this.table,
+				SWT.NONE);
+		tblclmnTotalDuration.setWidth(100);
+		tblclmnTotalDuration
+				.setText(AggregatedDatabaseStatementCallsView.BUNDLE
+						.getString("AggregatedDatabaseStatementCallsView.tblclmnTotalDuration.text")); //$NON-NLS-1$
+		
 		final TableColumn tblclmnAvgDuration = new TableColumn(this.table,
 				SWT.NONE);
 		tblclmnAvgDuration.setWidth(100);
@@ -159,13 +167,6 @@ public final class AggregatedDatabaseStatementCallsView implements ISubView,
 		tblclmnMaximalDuration
 				.setText(AggregatedDatabaseStatementCallsView.BUNDLE
 						.getString("AggregatedDatabaseStatementCallsView.tblclmnMaximalDuration.text")); //$NON-NLS-1$
-
-		final TableColumn tblclmnTotalDuration = new TableColumn(this.table,
-				SWT.NONE);
-		tblclmnTotalDuration.setWidth(100);
-		tblclmnTotalDuration
-				.setText(AggregatedDatabaseStatementCallsView.BUNDLE
-						.getString("AggregatedDatabaseStatementCallsView.tblclmnTotalDuration.text")); //$NON-NLS-1$
 
 		this.ivSc = new ScrolledComposite(sashForm, SWT.H_SCROLL | SWT.V_SCROLL
 				| SWT.BORDER);
@@ -468,7 +469,7 @@ public final class AggregatedDatabaseStatementCallsView implements ISubView,
 
 			item.setText(new String[] { formattedStatementText,
 					Long.toString(call.getCalls()), totalDuration, avgDuration,
-					minDuration, maxDuration });
+					minDuration, maxDuration});
 
 			item.setData(call);
 		}

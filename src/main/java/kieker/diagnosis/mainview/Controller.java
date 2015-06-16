@@ -101,7 +101,6 @@ public final class Controller implements SelectionListener {
 				this.aggregatedCallsViewController.getView());
 		this.subViewMapper.map(SubView.OPERATION_CALLS_SUB_VIEW).to(
 				this.callsViewController.getView());
-
 		this.subViewMapper.map(SubView.DATABASE_STATEMENT_CALLS_SUB_VIEW).to(
 				this.databaseStatementCallsViewController.getView());
 		this.subViewMapper.map(
@@ -110,7 +109,6 @@ public final class Controller implements SelectionListener {
 		this.subViewMapper.map(
 				SubView.DATABASE_PREPARED_STATEMENT_CALLS_SUB_VIEW).to(
 				this.databasePreparedStatementCallsViewController.getView());
-
 		this.subViewMapper.map(SubView.MONITORING_STATISTICS_VIEW).to(
 				this.monitoringStatisticsViewController.getView());
 	}
@@ -157,6 +155,13 @@ public final class Controller implements SelectionListener {
 		}
 	}
 
+	/**
+	 * Handles the selected TreeItems and sets the related Subviews If a
+	 * specific view has no calls in the DataModel, the subview will not be
+	 * shown
+	 * 
+	 * @param e
+	 */
 	private void handlePotentialTreeSelection(final SelectionEvent e) { // NOPMD
 																		// (this
 																		// method
@@ -173,23 +178,48 @@ public final class Controller implements SelectionListener {
 			this.model.setActiveSubView(this.subViewMapper
 					.resolve(SubView.NONE));
 		}
-		if (e.item == this.view.getTrtmTraces()) {
+		if (e.item == this.view.getTrtmBusinessOperations()) {
 			this.model.setActiveSubView(this.subViewMapper
-					.resolve(SubView.TRACES_SUB_VIEW));
+					.resolve(SubView.NONE));
+		}
+		if (e.item == this.view.getTrtmTraces()) {
+			if (dataModel.getTraces(null).size() > 0) {
+				this.model.setActiveSubView(this.subViewMapper
+						.resolve(SubView.TRACES_SUB_VIEW));
+			} else {
+				this.model.setActiveSubView(this.subViewMapper
+						.resolve(SubView.NONE));
+			}
 		}
 		if (e.item == this.view.getTrtmAggregatedTraces()) {
-			this.model.setActiveSubView(this.subViewMapper
-					.resolve(SubView.AGGREGATED_TRACES_SUB_VIEW));
+			if (dataModel.getAggregatedTraces(null).size() > 0) {
+				this.model.setActiveSubView(this.subViewMapper
+						.resolve(SubView.AGGREGATED_TRACES_SUB_VIEW));
+			} else {
+				this.model.setActiveSubView(this.subViewMapper
+						.resolve(SubView.NONE));
+			}
 		}
 		if (e.item == this.view.getTrtmAggregatedOperationCalls()) {
-			this.model.setActiveSubView(this.subViewMapper
-					.resolve(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW));
+			if (dataModel.getAggregatedOperationCalls(null).size() > 0) {
+				this.model.setActiveSubView(this.subViewMapper
+						.resolve(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW));
+			} else {
+				this.model.setActiveSubView(this.subViewMapper
+						.resolve(SubView.NONE));
+			}
 		}
 		if (e.item == this.view.getTrtmOperationCalls()) {
-			this.model.setActiveSubView(this.subViewMapper
-					.resolve(SubView.OPERATION_CALLS_SUB_VIEW));
+			if (dataModel.getOperationCalls(null).size() > 0) {
+				this.model.setActiveSubView(this.subViewMapper
+						.resolve(SubView.OPERATION_CALLS_SUB_VIEW));
+			} else {
+				this.model.setActiveSubView(this.subViewMapper
+						.resolve(SubView.NONE));
+			}
+
 		}
-		if (e.item == this.view.getTrtmSQLStatements()) {
+		if (e.item == this.view.getTrtmDatabaseOperations()) {
 			this.model.setActiveSubView(this.subViewMapper
 					.resolve(SubView.NONE));
 		}
