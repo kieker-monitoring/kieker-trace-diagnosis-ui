@@ -303,7 +303,9 @@ public final class View {
 						.getString("View.trtmMonitoringLogStatistics.text(java.lang.String)")); //$NON-NLS-1$
 		
 		this.trtmExplorer.setExpanded(true);
+		
 		this.trtmBusinessOperations.setExpanded(true);
+		
 		this.trtmDatabaseOperations.setExpanded(true);
 
 		this.subViewLayout = new StackLayout();

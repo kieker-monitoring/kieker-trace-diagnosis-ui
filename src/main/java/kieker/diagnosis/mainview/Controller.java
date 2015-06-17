@@ -33,6 +33,7 @@ import kieker.diagnosis.mainview.subview.database.preparedstatements.DatabasePre
 import kieker.diagnosis.mainview.subview.database.statements.DatabaseStatementCallsViewController;
 import kieker.diagnosis.mainview.subview.database.statements.aggregated.AggregatedDatabaseStatementCallsViewController;
 import kieker.diagnosis.mainview.subview.monitoringstatistics.MonitoringStatisticsViewController;
+import kieker.diagnosis.mainview.subview.nodata.NoDataViewController;
 import kieker.diagnosis.mainview.subview.traces.TracesViewController;
 import kieker.diagnosis.model.DataModel;
 
@@ -83,6 +84,9 @@ public final class Controller implements SelectionListener {
 	private MonitoringStatisticsViewController monitoringStatisticsViewController;
 
 	@Autowired
+	private NoDataViewController noDataViewController;
+
+	@Autowired
 	private View view;
 
 	@Autowired
@@ -111,6 +115,8 @@ public final class Controller implements SelectionListener {
 				this.databasePreparedStatementCallsViewController.getView());
 		this.subViewMapper.map(SubView.MONITORING_STATISTICS_VIEW).to(
 				this.monitoringStatisticsViewController.getView());
+		this.subViewMapper.map(SubView.NO_DATA_VIEW).to(
+				this.noDataViewController.getView());
 	}
 
 	public void showView() {
@@ -157,7 +163,7 @@ public final class Controller implements SelectionListener {
 
 	/**
 	 * Handles the selected TreeItems and sets the related Subviews If a
-	 * specific view has no calls in the DataModel, the subview will not be
+	 * specific view has no calls in the DataModel, the subview "noData" will be
 	 * shown
 	 * 
 	 * @param e
@@ -174,6 +180,21 @@ public final class Controller implements SelectionListener {
 																		// as it
 																		// is
 																		// readable)
+
+		final int numOfTraces = dataModel.getTraces(null).size();
+		final int numOfAggregatedTraces = dataModel.getAggregatedTraces(null)
+				.size();
+		final int numOfAggregatedOperationCalls = dataModel
+				.getAggregatedOperationCalls(null).size();
+		final int numOfOperationCalls = dataModel.getOperationCalls(null)
+				.size();
+		final int numOfDatabaseStatementCalls = dataModel
+				.getDatabaseStatementCalls(null).size();
+		final int numOfAggregatedDatabaseStatementCalls = dataModel
+				.getAggregatedDatabaseStatementCalls(null).size();
+		final int numOfDatabasePreparedStatementCalls = dataModel
+				.getDatabasePreparedStatementCalls(null).size();
+
 		if (e.item == this.view.getTrtmExplorer()) {
 			this.model.setActiveSubView(this.subViewMapper
 					.resolve(SubView.NONE));
@@ -183,59 +204,73 @@ public final class Controller implements SelectionListener {
 					.resolve(SubView.NONE));
 		}
 		if (e.item == this.view.getTrtmTraces()) {
-			if (dataModel.getTraces(null).size() > 0) {
+			if (numOfTraces > 0) {
 				this.model.setActiveSubView(this.subViewMapper
 						.resolve(SubView.TRACES_SUB_VIEW));
 			} else {
 				this.model.setActiveSubView(this.subViewMapper
-						.resolve(SubView.NONE));
+						.resolve(SubView.NO_DATA_VIEW));
 			}
 		}
 		if (e.item == this.view.getTrtmAggregatedTraces()) {
-			if (dataModel.getAggregatedTraces(null).size() > 0) {
+			if (numOfAggregatedTraces > 0) {
 				this.model.setActiveSubView(this.subViewMapper
 						.resolve(SubView.AGGREGATED_TRACES_SUB_VIEW));
 			} else {
 				this.model.setActiveSubView(this.subViewMapper
-						.resolve(SubView.NONE));
+						.resolve(SubView.NO_DATA_VIEW));
 			}
 		}
 		if (e.item == this.view.getTrtmAggregatedOperationCalls()) {
-			if (dataModel.getAggregatedOperationCalls(null).size() > 0) {
+			if (numOfAggregatedOperationCalls > 0) {
 				this.model.setActiveSubView(this.subViewMapper
 						.resolve(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW));
 			} else {
 				this.model.setActiveSubView(this.subViewMapper
-						.resolve(SubView.NONE));
+						.resolve(SubView.NO_DATA_VIEW));
 			}
 		}
 		if (e.item == this.view.getTrtmOperationCalls()) {
-			if (dataModel.getOperationCalls(null).size() > 0) {
+			if (numOfOperationCalls > 0) {
 				this.model.setActiveSubView(this.subViewMapper
 						.resolve(SubView.OPERATION_CALLS_SUB_VIEW));
 			} else {
 				this.model.setActiveSubView(this.subViewMapper
-						.resolve(SubView.NONE));
+						.resolve(SubView.NO_DATA_VIEW));
 			}
-
 		}
 		if (e.item == this.view.getTrtmDatabaseOperations()) {
 			this.model.setActiveSubView(this.subViewMapper
 					.resolve(SubView.NONE));
 		}
 		if (e.item == this.view.getTrtmDatabaseStatementCalls()) {
-			this.model.setActiveSubView(this.subViewMapper
-					.resolve(SubView.DATABASE_STATEMENT_CALLS_SUB_VIEW));
+			if (numOfDatabaseStatementCalls > 0) {
+				this.model.setActiveSubView(this.subViewMapper
+						.resolve(SubView.DATABASE_STATEMENT_CALLS_SUB_VIEW));
+			} else {
+				this.model.setActiveSubView(this.subViewMapper
+						.resolve(SubView.NO_DATA_VIEW));
+			}
 		}
 		if (e.item == this.view.getTrtmAggregatedDatabaseStatementCalls()) {
-			this.model
-					.setActiveSubView(this.subViewMapper
-							.resolve(SubView.AGGREGATED_DATABASE_STATEMENT_CALLS_SUB_VIEW));
+			if (numOfAggregatedDatabaseStatementCalls > 0) {
+				this.model
+						.setActiveSubView(this.subViewMapper
+								.resolve(SubView.AGGREGATED_DATABASE_STATEMENT_CALLS_SUB_VIEW));
+			} else {
+				this.model.setActiveSubView(this.subViewMapper
+						.resolve(SubView.NO_DATA_VIEW));
+			}
 		}
 		if (e.item == this.view.getTrtmDatabasePreparedStatementCalls()) {
-			this.model
-					.setActiveSubView(this.subViewMapper
-							.resolve(SubView.DATABASE_PREPARED_STATEMENT_CALLS_SUB_VIEW));
+			if (numOfDatabasePreparedStatementCalls > 0) {
+				this.model
+						.setActiveSubView(this.subViewMapper
+								.resolve(SubView.DATABASE_PREPARED_STATEMENT_CALLS_SUB_VIEW));
+			} else {
+				this.model.setActiveSubView(this.subViewMapper
+						.resolve(SubView.NO_DATA_VIEW));
+			}
 		}
 		if (e.item == this.view.getTrtmMonitoringLogStatistics()) {
 			this.model.setActiveSubView(this.subViewMapper
@@ -271,11 +306,8 @@ public final class Controller implements SelectionListener {
 		}
 	}
 
-	/**
-	 * @author Nils Christian Ehmke
-	 */
 	public enum SubView {
-		TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, AGGREGATED_OPERATION_CALLS_SUB_VIEW, OPERATION_CALLS_SUB_VIEW, DATABASE_STATEMENT_CALLS_SUB_VIEW, AGGREGATED_DATABASE_STATEMENT_CALLS_SUB_VIEW, DATABASE_PREPARED_STATEMENT_CALLS_SUB_VIEW, MONITORING_STATISTICS_VIEW,
+		TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, AGGREGATED_OPERATION_CALLS_SUB_VIEW, OPERATION_CALLS_SUB_VIEW, DATABASE_STATEMENT_CALLS_SUB_VIEW, AGGREGATED_DATABASE_STATEMENT_CALLS_SUB_VIEW, DATABASE_PREPARED_STATEMENT_CALLS_SUB_VIEW, MONITORING_STATISTICS_VIEW, NO_DATA_VIEW
 	}
 
 }

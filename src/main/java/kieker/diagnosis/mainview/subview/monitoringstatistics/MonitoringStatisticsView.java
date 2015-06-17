@@ -101,15 +101,15 @@ public final class MonitoringStatisticsView implements ISubView, Observer {
 
 			this.lblMonitoringLogDisplay.setText(importDirectory.getAbsolutePath());
 			this.lblMonitoringLogSizeDisplay.setText(importDirectorySizeString);
+			
+			final DateFormat formatter = new SimpleDateFormat();
+
+			this.lblBeginOfMonitoringDisplay.setText(formatter.format(new Date(TimeUnit.MILLISECONDS.convert(this.dataModel.getBeginTimestamp(), this.dataModel.getTimeUnit()))));
+			this.lblEndOfMonitoringDisplay.setText(formatter.format(new Date(TimeUnit.MILLISECONDS.convert(this.dataModel.getEndTimestamp(), this.dataModel.getTimeUnit()))));
 		}
 
 		this.lblAnalysisTimeDisplay.setText(analysisDuration);
 
-		final DateFormat formatter = new SimpleDateFormat();
-
-		this.lblBeginOfMonitoringDisplay.setText(formatter.format(new Date(TimeUnit.MILLISECONDS.convert(this.dataModel.getBeginTimestamp(), this.dataModel.getTimeUnit()))));
-		this.lblEndOfMonitoringDisplay.setText(formatter.format(new Date(TimeUnit.MILLISECONDS.convert(this.dataModel.getEndTimestamp(), this.dataModel.getTimeUnit()))));
-		
 		this.lblNumberOfCallsDisplay.setText(Integer.toString(this.dataModel.getOperationCalls(null).size()));
 		this.lblNumberOfStatementsDisplay.setText(Integer.toString(this.dataModel.getDatabaseStatementCalls(null).size()));
 		this.lblNumberOfAggregratedStatementsDisplay.setText(Integer.toString(this.dataModel.getAggregatedDatabaseStatementCalls(null).size()));

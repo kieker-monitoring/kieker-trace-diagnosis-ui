@@ -130,8 +130,8 @@ public final class DataModel extends Observable {
 				.getPreparedStatements();
 		// ///////////////////////////////////////////
 
-//		 TODO merged records (business operations AND database operations)
-//		 need separate handling
+		// TODO merged records (business operations AND database operations)
+		// need separate handling
 		if (!this.operationCalls.isEmpty()) {
 			this.beginTimestamp = analysisConfiguration.getBeginTimestamp();
 			this.endTimestamp = analysisConfiguration.getEndTimestamp();
