@@ -25,6 +25,7 @@ import java.util.regex.PatternSyntaxException;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
@@ -68,6 +69,8 @@ public final class AggregatedCallsViewController {
 
 		this.fstFilteredData = new FilteredList<>(dataModel.getAggregatedOperationCalls());
 		this.sndFilteredData = new FilteredList<AggregatedOperationCall>(this.fstFilteredData);
+
+		this.sndFilteredData.addListener((ListChangeListener<AggregatedOperationCall>) change -> this.selection.set(Optional.empty()));
 
 		final SortedList<AggregatedOperationCall> sortedData = new SortedList<>(this.sndFilteredData);
 		sortedData.comparatorProperty().bind(this.table.comparatorProperty());

@@ -151,6 +151,9 @@ public final class TracesViewController {
 
 	private void reloadTreetable() {
 		// TODO: This can be done better with the binding API
+
+		this.selection.set(Optional.empty());
+
 		final List<Trace> traces = this.dataModel.getTraces();
 		final TreeItem<OperationCall> root = new TreeItem<>();
 		ObservableList<TreeItem<OperationCall>> rootChildren = root.getChildren();

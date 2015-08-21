@@ -25,6 +25,7 @@ import java.util.regex.PatternSyntaxException;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
@@ -65,6 +66,8 @@ public final class CallsViewController {
 
 		this.fstFilteredData = new FilteredList<>(dataModel.getOperationCalls());
 		this.sndFilteredData = new FilteredList<OperationCall>(this.fstFilteredData);
+
+		this.sndFilteredData.addListener((ListChangeListener<OperationCall>) change -> this.selection.set(Optional.empty()));
 
 		final SortedList<OperationCall> sortedData = new SortedList<>(this.sndFilteredData);
 		sortedData.comparatorProperty().bind(this.table.comparatorProperty());
