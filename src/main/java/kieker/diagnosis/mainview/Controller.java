@@ -37,6 +37,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import kieker.diagnosis.mainview.dialog.about.AboutDialogViewController;
 import kieker.diagnosis.mainview.dialog.settings.SettingsDialogViewController;
 import kieker.diagnosis.mainview.subview.aggregatedcalls.AggregatedCallsViewController;
@@ -125,7 +126,10 @@ public final class Controller {
 	}
 
 	public void close() {
-		((Stage) this.view.getScene().getWindow()).close();
+		final Window window = this.view.getScene().getWindow();
+		if (window instanceof Stage) {
+			((Stage) window).close();
+		}
 	}
 
 	private void toggleDisabledButton(final Button disabledButton) {
@@ -138,7 +142,7 @@ public final class Controller {
 		final String baseName = controllerClass.getCanonicalName().replace("Controller", "");
 		final String viewFXMLName = baseName.replace(".", "/") + ".fxml";
 		final String cssName = baseName.replace(".", "/") + ".css";
-		final String bundleBaseName = baseName.toLowerCase();
+		final String bundleBaseName = baseName.toLowerCase(Locale.ROOT);
 
 		final URL viewResource = Controller.class.getClassLoader().getResource(viewFXMLName);
 		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
@@ -156,7 +160,7 @@ public final class Controller {
 		final String baseName = controllerClass.getCanonicalName().replace("Controller", "");
 		final String viewFXMLName = baseName.replace(".", "/") + ".fxml";
 		final String cssName = baseName.replace(".", "/") + ".css";
-		final String bundleBaseName = baseName.toLowerCase();
+		final String bundleBaseName = baseName.toLowerCase(Locale.ROOT);
 
 		final URL viewResource = Controller.class.getClassLoader().getResource(viewFXMLName);
 		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());

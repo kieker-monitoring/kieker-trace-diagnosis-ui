@@ -1,6 +1,7 @@
 package kieker.diagnosis.mainview.subview.util;
 
 import java.lang.reflect.Method;
+import java.util.Locale;
 
 import javafx.beans.NamedArg;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -20,7 +21,7 @@ public class ComponentTreeCellValueFactory implements Callback<CellDataFeatures<
 	private final String property;
 
 	public ComponentTreeCellValueFactory(@NamedArg(value = "property") final String property) {
-		this.property = property.substring(0, 1).toUpperCase() + property.substring(1);
+		this.property = property.substring(0, 1).toUpperCase(Locale.ROOT) + property.substring(1);
 	}
 
 	@Override

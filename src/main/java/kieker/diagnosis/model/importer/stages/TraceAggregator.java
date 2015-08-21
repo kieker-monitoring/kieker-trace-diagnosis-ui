@@ -65,6 +65,9 @@ public final class TraceAggregator extends AbstractStage<Trace, AggregatedTrace>
 
 		@Override
 		public boolean equals(final Object obj) {
+			if (!(obj instanceof TraceWrapper)) {
+				return false;
+			}
 			return this.trace.isEqualTo(((TraceWrapper) obj).trace);
 		}
 

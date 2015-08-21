@@ -33,7 +33,7 @@ public class TimeUnitStringConverter extends StringConverter<TimeUnit> {
 	static {
 		final Class<SettingsDialogViewController> controllerClass = SettingsDialogViewController.class;
 		final String baseName = controllerClass.getCanonicalName().replace("Controller", "");
-		final String bundleBaseName = baseName.toLowerCase();
+		final String bundleBaseName = baseName.toLowerCase(Locale.ROOT);
 		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
 
 		final String nanoseconds = resourceBundle.getString("SettingsDialog.nanoseconds");

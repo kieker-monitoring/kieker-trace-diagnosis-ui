@@ -23,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.model.PropertiesModel.ComponentNames;
 import kieker.diagnosis.model.PropertiesModel.OperationNames;
@@ -56,7 +57,10 @@ public final class SettingsDialogViewController {
 	}
 
 	public void closeDialog() {
-		((Stage) this.view.getScene().getWindow()).close();
+		final Window window = this.view.getScene().getWindow();
+		if (window instanceof Stage) {
+			((Stage) window).close();
+		}
 	}
 
 	private void loadSettings() {

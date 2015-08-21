@@ -19,6 +19,7 @@ package kieker.diagnosis.mainview.dialog.about;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 /**
  * @author Nils Christian Ehmke
@@ -28,7 +29,10 @@ public final class AboutDialogViewController {
 	@FXML private Node view;
 
 	public void closeDialog() {
-		((Stage) this.view.getScene().getWindow()).close();
+		final Window window = this.view.getScene().getWindow();
+		if (window instanceof Stage) {
+			((Stage) window).close();
+		}
 	}
 
 }
