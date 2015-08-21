@@ -1,0 +1,13 @@
+#regexpfilter {
+	-fx-background-color: white;
+	-fx-border-color: lightgray;
+}
+
+.text-field {
+	-fx-background-color: transparent;
+	-fx-background-insets: 0px;
+}
+
+.failed {
+	-fx-text-fill: red;
+}

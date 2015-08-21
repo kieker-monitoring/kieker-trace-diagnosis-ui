@@ -16,16 +16,29 @@
 
 package kieker.diagnosis.mainview;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-import javax.annotation.PostConstruct;
-
-import kieker.diagnosis.common.Mapper;
-import kieker.diagnosis.domain.OperationCall;
-import kieker.diagnosis.mainview.dialog.SettingsDialog;
-import kieker.diagnosis.mainview.subview.ISubView;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.Pane;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import kieker.diagnosis.mainview.dialog.about.AboutDialogViewController;
+import kieker.diagnosis.mainview.dialog.settings.SettingsDialogViewController;
 import kieker.diagnosis.mainview.subview.aggregatedcalls.AggregatedCallsViewController;
 import kieker.diagnosis.mainview.subview.aggregatedtraces.AggregatedTracesViewController;
 import kieker.diagnosis.mainview.subview.calls.CallsViewController;
@@ -33,133 +46,68 @@ import kieker.diagnosis.mainview.subview.monitoringstatistics.MonitoringStatisti
 import kieker.diagnosis.mainview.subview.traces.TracesViewController;
 import kieker.diagnosis.model.DataModel;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.widgets.Display;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 /**
  * The main controller of this application. It is responsible for controlling the application's main window.
- * 
+ *
  * @author Nils Christian Ehmke
  */
-@Component
-public final class Controller implements SelectionListener {
+public final class Controller {
 
 	private static final String KEY_LAST_IMPORT_PATH = "lastimportpath";
 
-	private static final Logger LOGGER = Logger.getGlobal();
+	private static final Logger LOGGER = Logger.getAnonymousLogger();
 
-	@Autowired private DataModel dataModel;
+	private final DataModel dataModel = DataModel.getInstance();
 
-	@Autowired private AggregatedTracesViewController aggregatedTracesViewController;
+	@FXML private Node view;
+	@FXML private Pane content;
 
-	@Autowired private CallsViewController callsViewController;
+	@FXML private Button traces;
+	@FXML private Button aggregatedtraces;
+	@FXML private Button calls;
+	@FXML private Button aggregatedcalls;
+	@FXML private Button statistics;
 
-	@Autowired private TracesViewController tracesViewController;
+	private Optional<Button> disabledButton = Optional.empty();
 
-	@Autowired private AggregatedCallsViewController aggregatedCallsViewController;
-
-	@Autowired private MonitoringStatisticsViewController monitoringStatisticsViewController;
-
-	@Autowired private View view;
-
-	@Autowired private Model model;
-
-	private Mapper<SubView, ISubView> subViewMapper;
-
-	@PostConstruct
-	public void initialize() {
-		this.subViewMapper = new Mapper<>();
-		this.subViewMapper.map(SubView.AGGREGATED_TRACES_SUB_VIEW).to(this.aggregatedTracesViewController.getView());
-		this.subViewMapper.map(SubView.TRACES_SUB_VIEW).to(this.tracesViewController.getView());
-		this.subViewMapper.map(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW).to(this.aggregatedCallsViewController.getView());
-		this.subViewMapper.map(SubView.OPERATION_CALLS_SUB_VIEW).to(this.callsViewController.getView());
-		this.subViewMapper.map(SubView.MONITORING_STATISTICS_VIEW).to(this.monitoringStatisticsViewController.getView());
-
+	public void showTraces() throws IOException {
+		this.toggleDisabledButton(this.traces);
+		this.loadPane(TracesViewController.class);
 	}
 
-	public void showView() {
-		this.view.show();
+	public void showAggregatedTraces() throws IOException {
+		this.toggleDisabledButton(this.aggregatedtraces);
+		this.loadPane(AggregatedTracesViewController.class);
 	}
 
-	@Override
-	public void widgetSelected(final SelectionEvent e) {
-		this.handlePotentialTreeSelection(e);
-		this.handlePotentialMenuSelection(e);
+	public void showCalls() throws IOException {
+		this.toggleDisabledButton(this.calls);
+		this.loadPane(CallsViewController.class);
 	}
 
-	public void jumpToCorrespondingTrace(final OperationCall call) {
-		this.view.getTree().select(this.view.getTrtmTraces());
-		this.model.setActiveSubView(this.subViewMapper.resolve(SubView.TRACES_SUB_VIEW));
-		this.tracesViewController.jumpToCorrespondingTrace(call);
+	public void showAggregatedCalls() throws IOException {
+		this.toggleDisabledButton(this.aggregatedcalls);
+		this.loadPane(AggregatedCallsViewController.class);
 	}
 
-	@Override
-	public void widgetDefaultSelected(final SelectionEvent e) {
-		// Nothing to do here. This method is just required by the interface.
+	public void showStatistics() throws IOException {
+		this.toggleDisabledButton(this.statistics);
+		this.loadPane(MonitoringStatisticsViewController.class);
 	}
 
-	public Mapper<SubView, ISubView> getSubViews() {
-		return this.subViewMapper;
-	}
-
-	private void handlePotentialMenuSelection(final SelectionEvent e) {
-		if (e.widget == this.view.getMntmOpenMonitoringLog()) {
-			this.openMonitoringLog();
-		}
-		if (e.widget == this.view.getMntmSettings()) {
-			final SettingsDialog settingsDialog = this.view.getSettingsDialog();
-			settingsDialog.open();
-		}
-		if (e.widget == this.view.getMntmExit()) {
-			this.view.close();
-		}
-		if (e.widget == this.view.getMntmAbout()) {
-			this.view.getAboutDialog().open();
-		}
-	}
-
-	private void handlePotentialTreeSelection(final SelectionEvent e) { // NOPMD (this method violates some metrics. This is acceptable, as it is readable)
-		if (e.item == this.view.getTrtmExplorer()) {
-			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.NONE));
-		}
-		if (e.item == this.view.getTrtmTraces()) {
-			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.TRACES_SUB_VIEW));
-		}
-		if (e.item == this.view.getTrtmAggregatedTraces()) {
-			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.AGGREGATED_TRACES_SUB_VIEW));
-		}
-		if (e.item == this.view.getTrtmAggregatedOperationCalls()) {
-			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.AGGREGATED_OPERATION_CALLS_SUB_VIEW));
-		}
-		if (e.item == this.view.getTrtmOperationCalls()) {
-			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.OPERATION_CALLS_SUB_VIEW));
-		}
-		if (e.item == this.view.getTrtmMonitoringLogStatistics()) {
-			this.model.setActiveSubView(this.subViewMapper.resolve(SubView.MONITORING_STATISTICS_VIEW));
-		}
-	}
-
-	private void openMonitoringLog() {
+	public void showImportDialog() {
 		final Preferences preferences = Preferences.userNodeForPackage(Controller.class);
-		final String filterPath = preferences.get(KEY_LAST_IMPORT_PATH, ".");
+		final File initialDirectory = new File(preferences.get(Controller.KEY_LAST_IMPORT_PATH, "."));
 
-		this.view.getDirectoryDialog().setFilterPath(filterPath);
-		final String selectedDirectory = this.view.getDirectoryDialog().open();
-
+		final DirectoryChooser directoryChooser = new DirectoryChooser();
+		directoryChooser.setInitialDirectory(initialDirectory);
+		final File selectedDirectory = directoryChooser.showDialog((this.view.getScene().getWindow()));
 		if (null != selectedDirectory) {
-			this.model.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_WAIT));
-
-			this.view.getProgressMonitorDialog().open();
+			this.view.setCursor(Cursor.WAIT);
 			this.dataModel.loadMonitoringLogFromFS(selectedDirectory);
-			this.view.getProgressMonitorDialog().close();
+			this.view.setCursor(Cursor.DEFAULT);
 
-			this.model.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_ARROW));
-
-			preferences.put(KEY_LAST_IMPORT_PATH, selectedDirectory);
+			preferences.put(Controller.KEY_LAST_IMPORT_PATH, selectedDirectory.getAbsolutePath());
 			try {
 				preferences.flush();
 			} catch (final BackingStoreException ex) {
@@ -168,11 +116,65 @@ public final class Controller implements SelectionListener {
 		}
 	}
 
-	/**
-	 * @author Nils Christian Ehmke
-	 */
-	public enum SubView {
-		TRACES_SUB_VIEW, AGGREGATED_TRACES_SUB_VIEW, NONE, AGGREGATED_OPERATION_CALLS_SUB_VIEW, OPERATION_CALLS_SUB_VIEW, MONITORING_STATISTICS_VIEW,
+	public void showSettings() throws IOException {
+		this.loadDialogPane(SettingsDialogViewController.class);
+	}
+
+	public void showAbout() throws IOException {
+		this.loadDialogPane(AboutDialogViewController.class);
+	}
+
+	public void close() {
+		((Stage) this.view.getScene().getWindow()).close();
+	}
+
+	private void toggleDisabledButton(final Button disabledButton) {
+		this.disabledButton.ifPresent(b -> b.setDisable(false));
+		this.disabledButton = Optional.of(disabledButton);
+		disabledButton.setDisable(true);
+	}
+
+	private void loadPane(final Class<?> controllerClass) throws IOException {
+		final String baseName = controllerClass.getCanonicalName().replace("Controller", "");
+		final String viewFXMLName = baseName.replace(".", "/") + ".fxml";
+		final String cssName = baseName.replace(".", "/") + ".css";
+		final String bundleBaseName = baseName.toLowerCase();
+
+		final URL viewResource = Controller.class.getClassLoader().getResource(viewFXMLName);
+		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
+		final Node node = (Node) FXMLLoader.load(viewResource, resourceBundle);
+		final URL cssResource = Controller.class.getClassLoader().getResource(cssName);
+
+		this.content.getChildren().clear();
+		this.content.getStylesheets().clear();
+
+		this.content.getStylesheets().add(cssResource.toExternalForm());
+		this.content.getChildren().setAll(node);
+	}
+
+	private void loadDialogPane(final Class<?> controllerClass) throws IOException {
+		final String baseName = controllerClass.getCanonicalName().replace("Controller", "");
+		final String viewFXMLName = baseName.replace(".", "/") + ".fxml";
+		final String cssName = baseName.replace(".", "/") + ".css";
+		final String bundleBaseName = baseName.toLowerCase();
+
+		final URL viewResource = Controller.class.getClassLoader().getResource(viewFXMLName);
+		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
+		final Parent node = (Parent) FXMLLoader.load(viewResource, resourceBundle);
+		final URL cssResource = Controller.class.getClassLoader().getResource(cssName);
+
+		final String title = resourceBundle.getString("title");
+
+		final Scene scene = new Scene(node);
+		scene.getStylesheets().add(cssResource.toExternalForm());
+
+		final Stage dialogStage = new Stage();
+		dialogStage.setTitle(title);
+		dialogStage.setResizable(false);
+		dialogStage.initModality(Modality.WINDOW_MODAL);
+		dialogStage.initOwner((this.view.getScene().getWindow()));
+		dialogStage.setScene(scene);
+		dialogStage.showAndWait();
 	}
 
 }

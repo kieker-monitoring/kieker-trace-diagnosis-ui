@@ -1,0 +1,130 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.*?>
+
+<GridPane xmlns:fx="http://javafx.com/fxml"
+	fx:controller="kieker.diagnosis.mainview.subview.calls.CallsViewController"
+	AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0"
+	AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+
+	<vgap>10</vgap>
+
+	<HBox GridPane.rowIndex="0">
+		<spacing>10</spacing>
+
+		<fx:define>
+			<ToggleGroup fx:id="togglegroup" />
+		</fx:define>
+
+		<RadioButton text="%CallsView.btnShowAll.text" selected="true" toggleGroup="$togglegroup" onAction="#showAllMethods" />
+		<RadioButton text="%CallsView.btnShowJustFailed.text" toggleGroup="$togglegroup" onAction="#showJustFailedMethods" />
+	</HBox>
+
+	<TextField promptText="%CallsView.text.message" onAction="#useRegExp" fx:id="regexpfilter"
+		GridPane.rowIndex="1" />
+
+	<TableView fx:id="table" GridPane.hgrow="ALWAYS"
+		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true" onMouseClicked="#selectCall">
+
+		<columns>
+			<TableColumn text="%CallsView.tblclmnExecutionContainer.text">
+				<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.FailedTableCellFactory />
+				</cellFactory>
+				<cellValueFactory>
+					<PropertyValueFactory property="container" />
+				</cellValueFactory>
+			</TableColumn>
+
+			<TableColumn text="%CallsView.tblclmnComponent.text">
+				<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.FailedTableCellFactory />
+				</cellFactory>
+				<cellValueFactory>
+					<kieker.diagnosis.mainview.subview.util.ComponentCellValueFactory property="component" />
+				</cellValueFactory>
+			</TableColumn>
+
+			<TableColumn text="%CallsView.tblclmnOperation.text">
+				<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.FailedTableCellFactory />
+				</cellFactory>
+				<cellValueFactory>
+					<kieker.diagnosis.mainview.subview.util.OperationCellValueFactory property="operation" />
+				</cellValueFactory>
+			</TableColumn>
+
+			<TableColumn text="%CallsView.tblclmnDuration.text">
+				<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.DurationTableCellFactory />
+				</cellFactory>
+				<cellValueFactory>
+					<kieker.diagnosis.mainview.subview.util.DurationCellValueFactory property="duration" />
+				</cellValueFactory>
+			</TableColumn>
+
+			<TableColumn text="%CallsView.tblclmnTraceID.text">
+				<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.FailedTableCellFactory />
+				</cellFactory>
+				<cellValueFactory>
+					<PropertyValueFactory property="traceID" />
+				</cellValueFactory>
+			</TableColumn>
+
+			<TableColumn text="%CallsView.tblclmnTimestamp.text">
+				<cellFactory>
+					<kieker.diagnosis.mainview.subview.util.FailedTableCellFactory />
+				</cellFactory>
+				<cellValueFactory>
+					<PropertyValueFactory property="timestamp" />
+				</cellValueFactory>
+			</TableColumn>
+		</columns>
+
+	</TableView>
+
+        <TitledPane GridPane.rowIndex="3" text="%properties">
+	<GridPane fx:id="detailpanel" >
+		<TextField text="%CallsView.tblclmnExecutionContainer.text"
+			editable="false" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="1" GridPane.columnIndex="2" fx:id="container" GridPane.hgrow="ALWAYS" />
+
+		<TextField text="%CallsView.tblclmnComponent.text" editable="false"
+			GridPane.rowIndex="2" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="2" GridPane.columnIndex="2" fx:id="component" />
+
+		<TextField text="%CallsView.lblOperation.text" editable="false"
+			GridPane.rowIndex="3" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="3" GridPane.columnIndex="2" fx:id="operation" />
+
+		<TextField text="%CallsView.lblFailed.text" editable="false"
+			GridPane.rowIndex="4" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="4" GridPane.columnIndex="2" fx:id="failed" />
+
+		<TextField text="%CallsView.lblDuration.text" editable="false"
+			GridPane.rowIndex="5" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="5" GridPane.columnIndex="2" fx:id="duration" />
+
+		<TextField text="%CallsView.tblclmnTraceID.text" editable="false"
+			GridPane.rowIndex="6" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="6" GridPane.columnIndex="2" fx:id="traceID" />
+
+		<TextField text="%CallsView.tblclmnTimestamp.text" editable="false"
+			GridPane.rowIndex="7" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="7" GridPane.columnIndex="2" fx:id="timestamp" />
+			
+	</GridPane>
+        </TitledPane>
+
+	<HBox fx:id="statusbar" GridPane.rowIndex="4">
+		<TextField text="%CallsView.lbCounter.text" editable="false" fx:id="counter" HBox.hgrow="ALWAYS"/>
+	</HBox>
+</GridPane>

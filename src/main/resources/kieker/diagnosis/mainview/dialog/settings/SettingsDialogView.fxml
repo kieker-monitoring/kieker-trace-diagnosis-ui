@@ -1,0 +1,42 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:id="view" fx:controller="kieker.diagnosis.mainview.dialog.settings.SettingsDialogViewController" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+
+	<spacing>10</spacing>
+
+	<TitledPane text="%SettingsDialog.grpAppearance.text" collapsible="false" >
+		<GridPane>
+			<hgap>10</hgap>
+			<vgap>10</vgap>
+
+			<Label text="%SettingsDialog.lblTimeUnit.text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+			<ComboBox fx:id="timeunits" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
+				<converter><kieker.diagnosis.mainview.dialog.settings.TimeUnitStringConverter/></converter>
+			</ComboBox>
+
+			<Label text="%SettingsDialog.lblOperationNames.text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+			<ComboBox fx:id="operationNames" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity" >
+				<converter><kieker.diagnosis.mainview.dialog.settings.OperationNamesStringConverter/></converter>
+			</ComboBox>
+			
+			<Label text="%SettingsDialog.lblComponentNames.text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+			<ComboBox fx:id="componentNames" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
+				<converter><kieker.diagnosis.mainview.dialog.settings.ComponentNamesStringConverter/></converter>
+			</ComboBox>
+ 
+		</GridPane>
+	</TitledPane>
+
+	<ButtonBar>
+		<VBox.margin>
+			<javafx.geometry.Insets right="10" />
+		</VBox.margin>
+		<buttons>
+			<Button text="%SettingsDialog.btnOkay.text" onAction="#saveAndCloseDialog" />
+			<Button text="%SettingsDialog.btnCancel.text" onAction="#closeDialog" />
+		</buttons>
+	</ButtonBar>
+
+</VBox>

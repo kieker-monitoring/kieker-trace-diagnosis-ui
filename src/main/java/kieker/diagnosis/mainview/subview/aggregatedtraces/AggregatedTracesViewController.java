@@ -16,58 +16,151 @@
 
 package kieker.diagnosis.mainview.subview.aggregatedtraces;
 
-import kieker.diagnosis.domain.AggregatedOperationCall;
-import kieker.diagnosis.mainview.subview.ISubController;
-import kieker.diagnosis.mainview.subview.ISubView;
-import kieker.diagnosis.mainview.subview.aggregatedtraces.AggregatedTracesViewModel.Filter;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ListChangeListener.Change;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableView;
+import javafx.scene.input.MouseEvent;
+import kieker.diagnosis.domain.AggregatedOperationCall;
+import kieker.diagnosis.domain.AggregatedTrace;
+import kieker.diagnosis.mainview.subview.util.LazyOperationCallTreeItem;
+import kieker.diagnosis.mainview.subview.util.NameConverter;
+import kieker.diagnosis.model.DataModel;
 
 /**
  * @author Nils Christian Ehmke
  */
-@Component
-public final class AggregatedTracesViewController implements ISubController, SelectionListener, TraverseListener {
+public final class AggregatedTracesViewController {
 
-	@Autowired private AggregatedTracesView view;
+	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
 
-	@Autowired private AggregatedTracesViewModel model;
+	@FXML private TreeTableView<AggregatedOperationCall> treetable;
+	@FXML private TextField regexpfilter;
 
-	@Override
-	public ISubView getView() {
-		return this.view;
+	@FXML private TextField medianDuration;
+	@FXML private TextField totalDuration;
+	@FXML private TextField minDuration;
+	@FXML private TextField avgDuration;
+	@FXML private TextField maxDuration;
+	@FXML private TextField traceDepth;
+	@FXML private TextField traceSize;
+	@FXML private TextField container;
+	@FXML private TextField component;
+	@FXML private TextField operation;
+	@FXML private TextField failed;
+	@FXML private TextField calls;
+
+	@FXML private TextField counter;
+
+	@FXML private ResourceBundle resources;
+
+	private Predicate<AggregatedOperationCall> fstPredicate = call -> true;
+	private Predicate<AggregatedOperationCall> sndPredicate = call -> true;
+
+	public void initialize() {
+		this.reloadTreetable();
+
+		final DataModel dataModel = DataModel.getInstance();
+		final ObservableList<AggregatedTrace> traces = dataModel.getAggregatedTraces();
+		dataModel.getAggregatedTraces().addListener((final Change<? extends AggregatedTrace> c) -> this.reloadTreetable());
+
+		this.medianDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMedianDuration));
+		this.totalDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getTotalDuration));
+		this.minDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMinDuration));
+		this.avgDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMeanDuration));
+		this.maxDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMaxDuration));
+		this.traceDepth.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getStackDepth));
+		this.traceSize.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getStackSize));
+		this.container.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getContainer));
+		this.component.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getComponent));
+		this.operation.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getOperation));
+		this.failed.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getFailedCause));
+		this.calls.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getCalls));
+
+		this.counter.textProperty().bind(Bindings.createStringBinding(() -> traces.size() + " " + this.resources.getString("AggregatedTracesView.lblCounter.text"), traces));
 	}
 
-	@Override
-	public void widgetSelected(final SelectionEvent e) {
-		if (e.widget == this.view.getBtn1()) {
-			this.model.setFilter(Filter.NONE);
-		}
-		if (e.widget == this.view.getBtn2()) {
-			this.model.setFilter(Filter.JUST_FAILED);
-		}
-		if (e.widget == this.view.getBtn3()) {
-			this.model.setFilter(Filter.JUST_FAILURE_CONTAINING);
-		}
-		if ((e.item != null) && (e.item.getData() instanceof AggregatedOperationCall)) {
-			this.model.setOperationCall((AggregatedOperationCall) e.item.getData());
+	private StringBinding createStringBindingForSelection(final Function<AggregatedOperationCall, Object> mapper) {
+		return Bindings.createStringBinding(() -> this.selection.get().map(mapper).map(Object::toString).orElse("N/A"), this.selection);
+	}
+
+	private StringBinding createDurationStringBindingForSelection(final Function<AggregatedOperationCall, Object> mapper) {
+		return Bindings.createStringBinding(
+				() -> this.selection.get().map(mapper).map(x -> x.toString() + " " + NameConverter.toShortTimeUnit(DataModel.getInstance().getTimeUnit())).orElse("N/A"),
+				this.selection);
+	}
+
+	public void selectCall(final MouseEvent event) {
+		final TreeItem<AggregatedOperationCall> selectedItem = this.treetable.getSelectionModel().getSelectedItem();
+		if (selectedItem != null) {
+			this.selection.set(Optional.ofNullable(selectedItem.getValue()));
 		}
 	}
 
-	@Override
-	public void widgetDefaultSelected(final SelectionEvent e) {
-		// Just implemented for the interface
+	public void showAllTraces() {
+		this.fstPredicate = call -> true;
+		this.reloadTreetable();
 	}
 
-	@Override
-	public void keyTraversed(final TraverseEvent e) {
-		if (e.widget == this.view.getFilterText()) {
-			this.model.setRegExpr(this.view.getFilterText().getText());
+	public void showJustFailedTraces() {
+		this.fstPredicate = AggregatedOperationCall::isFailed;
+		this.reloadTreetable();
+	}
+
+	public void showJustFailureContainingTraces() {
+		this.fstPredicate = AggregatedOperationCall::containsFailure;
+		this.reloadTreetable();
+	}
+
+	public void useRegExp() {
+		final String regExpr = this.regexpfilter.getText();
+
+		if ((regExpr == null) || regExpr.isEmpty() || !this.isRegex(regExpr)) {
+			this.sndPredicate = call -> true;
+		} else {
+			this.sndPredicate = call -> call.getOperation().matches(regExpr);
+		}
+
+		this.reloadTreetable();
+	}
+
+	private boolean isRegex(final String str) {
+		try {
+			Pattern.compile(str);
+			return true;
+		} catch (final PatternSyntaxException e) {
+			return false;
+		}
+	}
+
+	private void reloadTreetable() {
+		// TODO: This can be done better with the binding API
+
+		this.selection.set(Optional.empty());
+
+		final DataModel dataModel = DataModel.getInstance();
+		final List<AggregatedTrace> traces = dataModel.getAggregatedTraces();
+		final TreeItem<AggregatedOperationCall> root = new TreeItem<>();
+		this.treetable.setRoot(root);
+		this.treetable.setShowRoot(false);
+
+		for (final AggregatedTrace trace : traces) {
+			if (this.fstPredicate.test(trace.getRootOperationCall()) && (this.sndPredicate.test(trace.getRootOperationCall()))) {
+				root.getChildren().add(new LazyOperationCallTreeItem<AggregatedOperationCall>(trace.getRootOperationCall()));
+			}
 		}
 	}
 }

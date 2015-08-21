@@ -17,8 +17,8 @@
 package kieker.diagnosis.domain;
 
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -39,7 +39,7 @@ public final class OperationCallTest extends AbstractOperationCallTest<Operation
 		final OperationCall fstCall = new OperationCall("container", "component", "operation", 42, 0);
 		final OperationCall sndCall = new OperationCall("container", "component", "operation", 43, 0);
 
-		assertThat(fstCall, is(equalTo(sndCall)));
+		assertTrue(fstCall.isEqualTo(sndCall));
 	}
 
 	@Test
@@ -50,7 +50,7 @@ public final class OperationCallTest extends AbstractOperationCallTest<Operation
 		fstCall.setDuration(100);
 		sndCall.setDuration(200);
 
-		assertThat(fstCall, is(equalTo(sndCall)));
+		assertTrue(fstCall.isEqualTo(sndCall));
 	}
 
 	@Override

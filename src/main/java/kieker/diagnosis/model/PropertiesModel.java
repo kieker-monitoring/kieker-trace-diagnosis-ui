@@ -22,29 +22,23 @@ import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-import org.springframework.stereotype.Component;
-
 /**
  * @author Nils Christian Ehmke
  */
-@Component
 public final class PropertiesModel extends Observable {
+
+	private static final Logger LOGGER = Logger.getLogger(PropertiesModel.class.getCanonicalName());
+	private static final PropertiesModel INSTANCE = new PropertiesModel();
 
 	private static final String KEY_TIMEUNIT = "timeunit";
 	private static final String KEY_OPERATIONS = "operations";
 	private static final String KEY_COMPONENTS = "components";
 	private static final String KEY_GRAPHVIZ_PATH = "graphvizpath";
-	private static final String KEY_MAX_TRACES = "maxTraces";
-
-	private static final Logger LOGGER = Logger.getGlobal();
-
-	private boolean commit = true;
 
 	private String graphvizPath;
 	private TimeUnit timeUnit;
 	private ComponentNames componentNames;
 	private OperationNames operationNames;
-	private int maxTracesToShow;
 
 	public PropertiesModel() {
 		this.loadSettings();
@@ -57,7 +51,6 @@ public final class PropertiesModel extends Observable {
 		this.timeUnit = TimeUnit.valueOf(preferences.get(PropertiesModel.KEY_TIMEUNIT, TimeUnit.NANOSECONDS.name()));
 		this.componentNames = ComponentNames.valueOf(preferences.get(PropertiesModel.KEY_COMPONENTS, ComponentNames.LONG.name()));
 		this.operationNames = OperationNames.valueOf(preferences.get(PropertiesModel.KEY_OPERATIONS, OperationNames.SHORT.name()));
-		this.maxTracesToShow = Integer.parseInt(preferences.get(KEY_MAX_TRACES, "1000000"));
 	}
 
 	private void saveSettings() {
@@ -67,7 +60,6 @@ public final class PropertiesModel extends Observable {
 		preferences.put(PropertiesModel.KEY_TIMEUNIT, this.timeUnit.name());
 		preferences.put(PropertiesModel.KEY_COMPONENTS, this.componentNames.name());
 		preferences.put(PropertiesModel.KEY_OPERATIONS, this.operationNames.name());
-		preferences.put(KEY_MAX_TRACES, Integer.toString(this.maxTracesToShow));
 
 		try {
 			preferences.flush();
@@ -83,7 +75,7 @@ public final class PropertiesModel extends Observable {
 	public void setGraphvizPath(final String graphvizPath) {
 		this.graphvizPath = graphvizPath;
 
-		this.notifyObserversAndSaveSettings();
+		this.saveSettings();
 	}
 
 	public TimeUnit getTimeUnit() {
@@ -92,8 +84,7 @@ public final class PropertiesModel extends Observable {
 
 	public void setTimeUnit(final TimeUnit timeUnit) {
 		this.timeUnit = timeUnit;
-
-		this.notifyObserversAndSaveSettings();
+		this.saveSettings();
 	}
 
 	public ComponentNames getComponentNames() {
@@ -102,8 +93,7 @@ public final class PropertiesModel extends Observable {
 
 	public void setComponentNames(final ComponentNames componentNames) {
 		this.componentNames = componentNames;
-
-		this.notifyObserversAndSaveSettings();
+		this.saveSettings();
 	}
 
 	public OperationNames getOperationNames() {
@@ -112,36 +102,11 @@ public final class PropertiesModel extends Observable {
 
 	public void setOperationNames(final OperationNames operationNames) {
 		this.operationNames = operationNames;
-
-		this.notifyObserversAndSaveSettings();
+		this.saveSettings();
 	}
 
-	public int getMaxTracesToShow() {
-		return this.maxTracesToShow;
-	}
-
-	public void setMaxTracesToShow(final int maxTracesToShow) {
-		this.maxTracesToShow = maxTracesToShow;
-
-		this.notifyObserversAndSaveSettings();
-	}
-
-	public void startModification() {
-		this.commit = false;
-	}
-
-	public void commitModification() {
-		this.commit = true;
-
-		this.notifyObserversAndSaveSettings();
-	}
-
-	private void notifyObserversAndSaveSettings() {
-		if (this.commit) {
-			this.setChanged();
-			this.notifyObservers();
-			this.saveSettings();
-		}
+	public static PropertiesModel getInstance() {
+		return PropertiesModel.INSTANCE;
 	}
 
 	/**

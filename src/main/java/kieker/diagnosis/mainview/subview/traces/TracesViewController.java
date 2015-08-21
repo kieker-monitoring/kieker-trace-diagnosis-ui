@@ -16,68 +16,151 @@
 
 package kieker.diagnosis.mainview.subview.traces;
 
-import kieker.diagnosis.domain.OperationCall;
-import kieker.diagnosis.mainview.subview.ISubController;
-import kieker.diagnosis.mainview.subview.ISubView;
-import kieker.diagnosis.mainview.subview.traces.TracesViewModel.Filter;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ListChangeListener.Change;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableView;
+import javafx.scene.input.MouseEvent;
+import kieker.diagnosis.domain.OperationCall;
+import kieker.diagnosis.domain.Trace;
+import kieker.diagnosis.mainview.subview.util.LazyOperationCallTreeItem;
+import kieker.diagnosis.mainview.subview.util.NameConverter;
+import kieker.diagnosis.model.DataModel;
 
 /**
  * The sub-controller responsible for the sub-view presenting the available traces.
- * 
+ *
  * @author Nils Christian Ehmke
  */
-@Component
-public final class TracesViewController implements ISubController, SelectionListener, TraverseListener {
+public final class TracesViewController {
 
-	@Autowired
-	private TracesView view;
+	private final DataModel dataModel = DataModel.getInstance();
 
-	@Autowired
-	private TracesViewModel model;
+	private final SimpleObjectProperty<Optional<OperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
 
-	@Override
-	public ISubView getView() {
-		return this.view;
+	@FXML private TreeTableView<OperationCall> treetable;
+	@FXML private TextField regexpfilter;
+
+	@FXML private TextField traceDepth;
+	@FXML private TextField traceSize;
+	@FXML private TextField timestamp;
+	@FXML private TextField container;
+	@FXML private TextField component;
+	@FXML private TextField operation;
+	@FXML private TextField duration;
+	@FXML private TextField percent;
+	@FXML private TextField traceID;
+	@FXML private TextField failed;
+
+	@FXML private TextField counter;
+
+	@FXML private ResourceBundle resources;
+
+	private Predicate<OperationCall> fstPredicate = call -> true;
+	private Predicate<OperationCall> sndPredicate = call -> true;
+
+	public void initialize() {
+		this.reloadTreetable();
+
+		final ObservableList<Trace> traces = this.dataModel.getTraces();
+
+		traces.addListener((final Change<? extends Trace> c) -> this.reloadTreetable());
+
+		this.traceDepth.textProperty().bind(this.createStringBindingForSelection(OperationCall::getStackDepth));
+		this.traceSize.textProperty().bind(this.createStringBindingForSelection(OperationCall::getStackSize));
+		this.timestamp.textProperty().bind(this.createStringBindingForSelection(OperationCall::getTimestamp));
+		this.container.textProperty().bind(this.createStringBindingForSelection(OperationCall::getContainer));
+		this.component.textProperty().bind(this.createStringBindingForSelection(OperationCall::getComponent));
+		this.operation.textProperty().bind(this.createStringBindingForSelection(OperationCall::getOperation));
+		this.duration.textProperty().bind(this.createDurationStringBindingForSelection(OperationCall::getDuration));
+		this.percent.textProperty().bind(this.createPercentStringBindingForSelection(OperationCall::getPercent));
+		this.traceID.textProperty().bind(this.createStringBindingForSelection(OperationCall::getTraceID));
+		this.failed.textProperty().bind(this.createStringBindingForSelection(OperationCall::getFailedCause));
+
+		this.counter.textProperty().bind(Bindings.createStringBinding(() -> traces.size() + " " + this.resources.getString("TracesView.lblCounter.text"), traces));
 	}
 
-	@Override
-	public void widgetSelected(final SelectionEvent e) {
-		if (e.widget == this.view.getBtn1()) {
-			this.model.setFilter(Filter.NONE);
-		}
-		if (e.widget == this.view.getBtn2()) {
-			this.model.setFilter(Filter.JUST_FAILED);
-		}
-		if (e.widget == this.view.getBtn3()) {
-			this.model.setFilter(Filter.JUST_FAILURE_CONTAINING);
-		}
-		if ((e.item != null) && (e.item.getData() instanceof OperationCall)) {
-			this.model.setOperationCall((OperationCall) e.item.getData());
+	private StringBinding createStringBindingForSelection(final Function<OperationCall, Object> mapper) {
+		return Bindings.createStringBinding(() -> this.selection.get().map(mapper).map(Object::toString).orElse("N/A"), this.selection);
+	}
+
+	private StringBinding createPercentStringBindingForSelection(final Function<OperationCall, Object> mapper) {
+		return Bindings.createStringBinding(() -> this.selection.get().map(mapper).map(x -> x.toString() + " %").orElse("N/A"), this.selection);
+	}
+
+	private StringBinding createDurationStringBindingForSelection(final Function<OperationCall, Object> mapper) {
+		return Bindings.createStringBinding(
+				() -> this.selection.get().map(mapper).map(x -> x.toString() + " " + NameConverter.toShortTimeUnit(DataModel.getInstance().getTimeUnit())).orElse("N/A"),
+				this.selection);
+	}
+
+	public void selectCall(final MouseEvent event) {
+		final TreeItem<OperationCall> selectedItem = this.treetable.getSelectionModel().getSelectedItem();
+		if (selectedItem != null) {
+			this.selection.set(Optional.ofNullable(selectedItem.getValue()));
 		}
 	}
 
-	@Override
-	public void widgetDefaultSelected(final SelectionEvent e) {
-		// Just implemented for the interface
+	public void showAllTraces() {
+		this.fstPredicate = call -> true;
+		this.reloadTreetable();
 	}
 
-	public void jumpToCorrespondingTrace(final OperationCall call) {
-		this.model.setFilter(Filter.NONE);
-		this.view.jumpToCorrespondingTrace(call);
+	public void showJustFailedTraces() {
+		this.fstPredicate = OperationCall::isFailed;
+		this.reloadTreetable();
 	}
 
-	@Override
-	public void keyTraversed(final TraverseEvent e) {
-		if (e.widget == this.view.getTextFilter()) {
-			this.model.setRegExpr(this.view.getTextFilter().getText());
+	public void showJustFailureContainingTraces() {
+		this.fstPredicate = OperationCall::containsFailure;
+		this.reloadTreetable();
+	}
+
+	public void useRegExp() {
+		final String regExpr = this.regexpfilter.getText();
+
+		if ((regExpr == null) || regExpr.isEmpty() || !this.isRegex(regExpr)) {
+			this.sndPredicate = call -> true;
+		} else {
+			this.sndPredicate = call -> call.getOperation().matches(regExpr);
+		}
+		this.reloadTreetable();
+	}
+
+	private boolean isRegex(final String str) {
+		try {
+			Pattern.compile(str);
+			return true;
+		} catch (final PatternSyntaxException e) {
+			return false;
 		}
 	}
 
+	private void reloadTreetable() {
+		// TODO: This can be done better with the binding API
+
+		this.selection.set(Optional.empty());
+
+		final List<Trace> traces = this.dataModel.getTraces();
+		final TreeItem<OperationCall> root = new TreeItem<>();
+		ObservableList<TreeItem<OperationCall>> rootChildren = root.getChildren();
+		this.treetable.setRoot(root);
+		this.treetable.setShowRoot(false);
+
+		traces.stream().map(trace -> trace.getRootOperationCall()).filter(this.fstPredicate).filter(this.sndPredicate)
+		.forEach(call -> rootChildren.add(new LazyOperationCallTreeItem<OperationCall>(call)));
+	}
 }

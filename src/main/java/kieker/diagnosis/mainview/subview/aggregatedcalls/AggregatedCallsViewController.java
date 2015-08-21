@@ -16,55 +16,119 @@
 
 package kieker.diagnosis.mainview.subview.aggregatedcalls;
 
-import kieker.diagnosis.domain.AggregatedOperationCall;
-import kieker.diagnosis.mainview.subview.ISubController;
-import kieker.diagnosis.mainview.subview.ISubView;
-import kieker.diagnosis.mainview.subview.aggregatedcalls.AggregatedCallsViewModel.Filter;
+import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.function.Function;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ListChangeListener;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import javafx.fxml.FXML;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import kieker.diagnosis.domain.AggregatedOperationCall;
+import kieker.diagnosis.mainview.subview.util.NameConverter;
+import kieker.diagnosis.model.DataModel;
 
 /**
  * @author Nils Christian Ehmke
  */
-@Component
-public final class AggregatedCallsViewController implements ISubController, SelectionListener, TraverseListener {
+public final class AggregatedCallsViewController {
 
-	@Autowired private AggregatedCallsView view;
+	private FilteredList<AggregatedOperationCall> fstFilteredData;
+	private FilteredList<AggregatedOperationCall> sndFilteredData;
 
-	@Autowired private AggregatedCallsViewModel model;
+	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
 
-	@Override
-	public ISubView getView() {
-		return this.view;
+	@FXML private TableView<AggregatedOperationCall> table;
+	@FXML private TextField regexpfilter;
+
+	@FXML private TextField minimalDuration;
+	@FXML private TextField maximalDuration;
+	@FXML private TextField medianDuration;
+	@FXML private TextField totalDuration;
+	@FXML private TextField meanDuration;
+	@FXML private TextField container;
+	@FXML private TextField component;
+	@FXML private TextField operation;
+	@FXML private TextField failed;
+	@FXML private TextField calls;
+
+	@FXML private TextField counter;
+
+	@FXML private ResourceBundle resources;
+
+	public void initialize() {
+		final DataModel dataModel = DataModel.getInstance();
+
+		this.fstFilteredData = new FilteredList<>(dataModel.getAggregatedOperationCalls());
+		this.sndFilteredData = new FilteredList<AggregatedOperationCall>(this.fstFilteredData);
+
+		this.sndFilteredData.addListener((ListChangeListener<AggregatedOperationCall>) change -> this.selection.set(Optional.empty()));
+
+		final SortedList<AggregatedOperationCall> sortedData = new SortedList<>(this.sndFilteredData);
+		sortedData.comparatorProperty().bind(this.table.comparatorProperty());
+		this.table.setItems(sortedData);
+
+		this.minimalDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMinDuration));
+		this.maximalDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMaxDuration));
+		this.medianDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMedianDuration));
+		this.totalDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getTotalDuration));
+		this.meanDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMeanDuration));
+		this.container.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getContainer));
+		this.component.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getComponent));
+		this.operation.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getOperation));
+		this.failed.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getFailedCause));
+		this.calls.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getCalls));
+
+		this.counter.textProperty().bind(Bindings.createStringBinding(() -> sortedData.size() + " " + this.resources.getString("AggregatedCallsView.lblCounter.text"), sortedData));
 	}
 
-	@Override
-	public void widgetSelected(final SelectionEvent e) {
-		if (e.widget == this.view.getBtn1()) {
-			this.model.setFilter(Filter.NONE);
-		}
-		if (e.widget == this.view.getBtn2()) {
-			this.model.setFilter(Filter.JUST_FAILED);
-		}
-		if ((e.item != null) && (e.item.getData() instanceof AggregatedOperationCall)) {
-			this.model.setOperationCall((AggregatedOperationCall) e.item.getData());
+	private StringBinding createStringBindingForSelection(final Function<AggregatedOperationCall, Object> mapper) {
+		return Bindings.createStringBinding(() -> this.selection.get().map(mapper).map(Object::toString).orElse("N/A"), this.selection);
+	}
+
+	private StringBinding createDurationStringBindingForSelection(final Function<AggregatedOperationCall, Object> mapper) {
+		return Bindings.createStringBinding(
+				() -> this.selection.get().map(mapper).map(x -> x.toString() + " " + NameConverter.toShortTimeUnit(DataModel.getInstance().getTimeUnit())).orElse("N/A"),
+				this.selection);
+	}
+
+	public void selectCall(final MouseEvent event) {
+		this.selection.set(Optional.ofNullable(this.table.getSelectionModel().getSelectedItem()));
+	}
+
+	public void showAllMethods() {
+		this.fstFilteredData.setPredicate(null);
+	}
+
+	public void showJustFailedMethods() {
+		this.fstFilteredData.setPredicate(call -> call.isFailed());
+	}
+
+	public void useRegExp() {
+		final String regExpr = this.regexpfilter.getText();
+
+		if ((regExpr == null) || regExpr.isEmpty() || !this.isRegex(regExpr)) {
+			this.sndFilteredData.setPredicate(null);
+		} else {
+			this.sndFilteredData.setPredicate(call -> call.getOperation().matches(regExpr));
 		}
 	}
 
-	@Override
-	public void widgetDefaultSelected(final SelectionEvent e) {
-		// Just implemented for the interface
-	}
-
-	@Override
-	public void keyTraversed(final TraverseEvent e) {
-		if (e.widget == this.view.getFilterText()) {
-			this.model.setRegExpr(this.view.getFilterText().getText());
+	private boolean isRegex(final String str) {
+		try {
+			Pattern.compile(str);
+			return true;
+		} catch (final PatternSyntaxException e) {
+			return false;
 		}
 	}
+
 }

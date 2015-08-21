@@ -16,60 +16,113 @@
 
 package kieker.diagnosis.mainview.subview.calls;
 
-import kieker.diagnosis.domain.OperationCall;
-import kieker.diagnosis.mainview.Controller;
-import kieker.diagnosis.mainview.subview.ISubController;
-import kieker.diagnosis.mainview.subview.ISubView;
-import kieker.diagnosis.mainview.subview.calls.CallsViewModel.Filter;
+import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.function.Function;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ListChangeListener;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import javafx.fxml.FXML;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import kieker.diagnosis.domain.OperationCall;
+import kieker.diagnosis.mainview.subview.util.NameConverter;
+import kieker.diagnosis.model.DataModel;
 
 /**
  * @author Nils Christian Ehmke
  */
-@Component
-public final class CallsViewController implements ISubController, SelectionListener, TraverseListener {
+public final class CallsViewController {
 
-	@Autowired private Controller masterController;
+	private final SimpleObjectProperty<Optional<OperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
 
-	@Autowired private CallsViewModel model;
+	private FilteredList<OperationCall> fstFilteredData;
+	private FilteredList<OperationCall> sndFilteredData;
 
-	@Autowired private CallsView view;
+	@FXML private TableView<OperationCall> table;
+	@FXML private TextField regexpfilter;
 
-	@Override
-	public ISubView getView() {
-		return this.view;
+	@FXML private TextField container;
+	@FXML private TextField component;
+	@FXML private TextField operation;
+	@FXML private TextField timestamp;
+	@FXML private TextField duration;
+	@FXML private TextField traceID;
+	@FXML private TextField failed;
+
+	@FXML private TextField counter;
+
+	@FXML private ResourceBundle resources;
+
+	public void initialize() {
+		final DataModel dataModel = DataModel.getInstance();
+
+		this.fstFilteredData = new FilteredList<>(dataModel.getOperationCalls());
+		this.sndFilteredData = new FilteredList<OperationCall>(this.fstFilteredData);
+
+		this.sndFilteredData.addListener((ListChangeListener<OperationCall>) change -> this.selection.set(Optional.empty()));
+
+		final SortedList<OperationCall> sortedData = new SortedList<>(this.sndFilteredData);
+		sortedData.comparatorProperty().bind(this.table.comparatorProperty());
+		this.table.setItems(sortedData);
+
+		this.container.textProperty().bind(this.createStringBindingForSelection(OperationCall::getContainer));
+		this.component.textProperty().bind(this.createStringBindingForSelection(OperationCall::getComponent));
+		this.operation.textProperty().bind(this.createStringBindingForSelection(OperationCall::getOperation));
+		this.timestamp.textProperty().bind(this.createStringBindingForSelection(OperationCall::getTimestamp));
+		this.duration.textProperty().bind(this.createDurationStringBindingForSelection(OperationCall::getDuration));
+		this.traceID.textProperty().bind(this.createStringBindingForSelection(OperationCall::getTraceID));
+		this.failed.textProperty().bind(this.createStringBindingForSelection(OperationCall::getFailedCause));
+
+		this.counter.textProperty().bind(Bindings.createStringBinding(() -> sortedData.size() + " " + this.resources.getString("CallsView.lbCounter.text"), sortedData));
 	}
 
-	@Override
-	public void widgetSelected(final SelectionEvent e) {
-		if (e.widget == this.view.getBtnShowAll()) {
-			this.model.setFilter(Filter.NONE);
-		}
-		if (e.widget == this.view.getBtnShowJustFailed()) {
-			this.model.setFilter(Filter.JUST_FAILED);
-		}
-		if ((e.item != null) && (e.item.getData() instanceof OperationCall)) {
-			this.model.setOperationCall((OperationCall) e.item.getData());
+	private StringBinding createStringBindingForSelection(final Function<OperationCall, Object> mapper) {
+		return Bindings.createStringBinding(() -> this.selection.get().map(mapper).map(Object::toString).orElse("N/A"), this.selection);
+	}
+
+	private StringBinding createDurationStringBindingForSelection(final Function<OperationCall, Object> mapper) {
+		return Bindings.createStringBinding(
+				() -> this.selection.get().map(mapper).map(x -> x.toString() + " " + NameConverter.toShortTimeUnit(DataModel.getInstance().getTimeUnit())).orElse("N/A"),
+				this.selection);
+	}
+
+	public void selectCall(final MouseEvent event) {
+		this.selection.set(Optional.ofNullable(this.table.getSelectionModel().getSelectedItem()));
+	}
+
+	public void showAllMethods() {
+		this.fstFilteredData.setPredicate(null);
+	}
+
+	public void showJustFailedMethods() {
+		this.fstFilteredData.setPredicate(OperationCall::isFailed);
+	}
+
+	public void useRegExp() {
+		final String regExpr = this.regexpfilter.getText();
+
+		if ((regExpr == null) || regExpr.isEmpty() || !this.isRegex(regExpr)) {
+			this.sndFilteredData.setPredicate(null);
+		} else {
+			this.sndFilteredData.setPredicate(call -> call.getOperation().matches(regExpr));
 		}
 	}
 
-	@Override
-	public void widgetDefaultSelected(final SelectionEvent e) {
-		if (e.widget == this.view.getTable()) {
-			this.masterController.jumpToCorrespondingTrace((OperationCall) e.item.getData());
+	private boolean isRegex(final String str) {
+		try {
+			Pattern.compile(str);
+			return true;
+		} catch (final PatternSyntaxException e) {
+			return false;
 		}
 	}
 
-	@Override
-	public void keyTraversed(final TraverseEvent e) {
-		if (e.widget == this.view.getFilterText()) {
-			this.model.setRegExpr(this.view.getFilterText().getText());
-		}
-	}
 }

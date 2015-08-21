@@ -68,11 +68,14 @@ public final class TraceStatisticsDecorator extends AbstractStage<Trace, Trace> 
 	}
 
 	private static void addPercentValues(final OperationCall call, final long rootDuration) {
-		call.setPercent((100.0f * call.getDuration()) / rootDuration);
+		if (call.getParent() == null) {
+			call.setPercent(100.0f);
+		} else {
+			call.setPercent((100.0f * call.getDuration()) / rootDuration);
+		}
 
 		for (final OperationCall child : call.getChildren()) {
 			addPercentValues(child, call.getDuration());
 		}
 	}
-
 }
