@@ -42,8 +42,7 @@
 						<kieker.diagnosis.mainview.subview.util.FailedTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<TreeItemPropertyValueFactory
-						property="component" />
+					<kieker.diagnosis.mainview.subview.util.ComponentTreeCellValueFactory property="component" />
 				</cellValueFactory>
 			</TreeTableColumn>
 
@@ -52,8 +51,7 @@
 						<kieker.diagnosis.mainview.subview.util.FailedTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<TreeItemPropertyValueFactory
-						property="operation" />
+					<kieker.diagnosis.mainview.subview.util.OperationTreeCellValueFactory property="operation" />
 				</cellValueFactory>
 			</TreeTableColumn>
 

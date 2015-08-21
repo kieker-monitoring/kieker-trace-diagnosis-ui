@@ -41,7 +41,7 @@
 					<kieker.diagnosis.mainview.subview.util.FailedTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<PropertyValueFactory property="component" />
+					<kieker.diagnosis.mainview.subview.util.ComponentCellValueFactory property="component" />
 				</cellValueFactory>
 			</TableColumn>
 
@@ -50,7 +50,7 @@
 					<kieker.diagnosis.mainview.subview.util.FailedTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<PropertyValueFactory property="operation" />
+					<kieker.diagnosis.mainview.subview.util.OperationCellValueFactory property="operation" />
 				</cellValueFactory>
 			</TableColumn>
 
