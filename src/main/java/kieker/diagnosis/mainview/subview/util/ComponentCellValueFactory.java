@@ -1,5 +1,6 @@
 package kieker.diagnosis.mainview.subview.util;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Locale;
 
@@ -37,7 +38,7 @@ public class ComponentCellValueFactory implements Callback<CellDataFeatures<?, S
 			}
 
 			return new ReadOnlyObjectWrapper<String>(componentName);
-		} catch (final Exception ex) {
+		} catch (final NullPointerException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 			ex.printStackTrace();
 			return null;
 		}

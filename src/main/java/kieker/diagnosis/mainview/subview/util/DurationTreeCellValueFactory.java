@@ -16,7 +16,9 @@
 
 package kieker.diagnosis.mainview.subview.util;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import javafx.beans.NamedArg;
@@ -39,7 +41,7 @@ public class DurationTreeCellValueFactory implements Callback<CellDataFeatures<?
 	private final String property;
 
 	public DurationTreeCellValueFactory(@NamedArg(value = "property") final String property) {
-		this.property = property.substring(0, 1).toUpperCase() + property.substring(1);
+		this.property = property.substring(0, 1).toUpperCase(Locale.ROOT) + property.substring(1);
 	}
 
 	@Override
@@ -54,7 +56,7 @@ public class DurationTreeCellValueFactory implements Callback<CellDataFeatures<?
 
 			final long newDuration = dstTimeUnit.convert(duration, srcTimeUnit);
 			return new ReadOnlyObjectWrapper<Long>(newDuration);
-		} catch (final Exception ex) {
+		} catch (final NullPointerException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 			ex.printStackTrace();
 			return null;
 		}

@@ -16,6 +16,7 @@
 
 package kieker.diagnosis.mainview.subview.util;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -53,7 +54,7 @@ public class DurationCellValueFactory implements Callback<CellDataFeatures<?, St
 
 			final long newDuration = dstTimeUnit.convert(duration, srcTimeUnit);
 			return new ReadOnlyObjectWrapper<Long>(newDuration);
-		} catch (final Exception ex) {
+		} catch (final NullPointerException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 			ex.printStackTrace();
 			return null;
 		}
