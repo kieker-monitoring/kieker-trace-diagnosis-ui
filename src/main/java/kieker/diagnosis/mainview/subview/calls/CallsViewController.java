@@ -32,6 +32,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import kieker.diagnosis.domain.OperationCall;
+import kieker.diagnosis.mainview.subview.util.NameConverter;
 import kieker.diagnosis.model.DataModel;
 
 /**
@@ -73,7 +74,7 @@ public final class CallsViewController {
 		this.component.textProperty().bind(this.createStringBindingForSelection(OperationCall::getComponent));
 		this.operation.textProperty().bind(this.createStringBindingForSelection(OperationCall::getOperation));
 		this.timestamp.textProperty().bind(this.createStringBindingForSelection(OperationCall::getTimestamp));
-		this.duration.textProperty().bind(this.createStringBindingForSelection(OperationCall::getDuration));
+		this.duration.textProperty().bind(this.createDurationStringBindingForSelection(OperationCall::getDuration));
 		this.traceID.textProperty().bind(this.createStringBindingForSelection(OperationCall::getTraceID));
 		this.failed.textProperty().bind(this.createStringBindingForSelection(OperationCall::getFailedCause));
 
@@ -82,6 +83,12 @@ public final class CallsViewController {
 
 	private StringBinding createStringBindingForSelection(final Function<OperationCall, Object> mapper) {
 		return Bindings.createStringBinding(() -> this.selection.get().map(mapper).map(Object::toString).orElse("N/A"), this.selection);
+	}
+
+	private StringBinding createDurationStringBindingForSelection(final Function<OperationCall, Object> mapper) {
+		return Bindings.createStringBinding(
+				() -> this.selection.get().map(mapper).map(x -> x.toString() + " " + NameConverter.toShortTimeUnit(DataModel.getInstance().getTimeUnit())).orElse("N/A"),
+				this.selection);
 	}
 
 	public void selectCall(final MouseEvent event) {

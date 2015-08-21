@@ -89,7 +89,7 @@
 			
 			<TreeTableColumn text="%TracesView.trclmnPercent.text" >
 			<cellFactory>
-						<kieker.diagnosis.mainview.subview.util.FailedTreeCellFactory />
+						<kieker.diagnosis.mainview.subview.util.PercentTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory

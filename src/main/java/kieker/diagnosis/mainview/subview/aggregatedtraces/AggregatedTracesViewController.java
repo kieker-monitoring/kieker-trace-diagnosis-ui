@@ -37,6 +37,7 @@ import javafx.scene.input.MouseEvent;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.mainview.subview.util.LazyOperationCallTreeItem;
+import kieker.diagnosis.mainview.subview.util.NameConverter;
 import kieker.diagnosis.model.DataModel;
 
 /**
@@ -76,11 +77,11 @@ public final class AggregatedTracesViewController {
 		final ObservableList<AggregatedTrace> traces = dataModel.getAggregatedTraces();
 		dataModel.getAggregatedTraces().addListener((final Change<? extends AggregatedTrace> c) -> this.reloadTreetable());
 
-		this.medianDuration.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getMedianDuration));
-		this.totalDuration.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getTotalDuration));
-		this.minDuration.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getMinDuration));
-		this.avgDuration.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getMeanDuration));
-		this.maxDuration.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getMaxDuration));
+		this.medianDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMedianDuration));
+		this.totalDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getTotalDuration));
+		this.minDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMinDuration));
+		this.avgDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMeanDuration));
+		this.maxDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMaxDuration));
 		this.traceDepth.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getStackDepth));
 		this.traceSize.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getStackSize));
 		this.container.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getContainer));
@@ -94,6 +95,12 @@ public final class AggregatedTracesViewController {
 
 	private StringBinding createStringBindingForSelection(final Function<AggregatedOperationCall, Object> mapper) {
 		return Bindings.createStringBinding(() -> this.selection.get().map(mapper).map(Object::toString).orElse("N/A"), this.selection);
+	}
+
+	private StringBinding createDurationStringBindingForSelection(final Function<AggregatedOperationCall, Object> mapper) {
+		return Bindings.createStringBinding(
+				() -> this.selection.get().map(mapper).map(x -> x.toString() + " " + NameConverter.toShortTimeUnit(DataModel.getInstance().getTimeUnit())).orElse("N/A"),
+				this.selection);
 	}
 
 	public void selectCall(final MouseEvent event) {

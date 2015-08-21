@@ -32,6 +32,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import kieker.diagnosis.domain.AggregatedOperationCall;
+import kieker.diagnosis.mainview.subview.util.NameConverter;
 import kieker.diagnosis.model.DataModel;
 
 /**
@@ -72,11 +73,11 @@ public final class AggregatedCallsViewController {
 		sortedData.comparatorProperty().bind(this.table.comparatorProperty());
 		this.table.setItems(sortedData);
 
-		this.minimalDuration.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getMinDuration));
-		this.maximalDuration.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getMaxDuration));
-		this.medianDuration.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getMedianDuration));
-		this.totalDuration.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getTotalDuration));
-		this.meanDuration.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getMeanDuration));
+		this.minimalDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMinDuration));
+		this.maximalDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMaxDuration));
+		this.medianDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMedianDuration));
+		this.totalDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getTotalDuration));
+		this.meanDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMeanDuration));
 		this.container.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getContainer));
 		this.component.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getComponent));
 		this.operation.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getOperation));
@@ -88,6 +89,12 @@ public final class AggregatedCallsViewController {
 
 	private StringBinding createStringBindingForSelection(final Function<AggregatedOperationCall, Object> mapper) {
 		return Bindings.createStringBinding(() -> this.selection.get().map(mapper).map(Object::toString).orElse("N/A"), this.selection);
+	}
+
+	private StringBinding createDurationStringBindingForSelection(final Function<AggregatedOperationCall, Object> mapper) {
+		return Bindings.createStringBinding(
+				() -> this.selection.get().map(mapper).map(x -> x.toString() + " " + NameConverter.toShortTimeUnit(DataModel.getInstance().getTimeUnit())).orElse("N/A"),
+				this.selection);
 	}
 
 	public void selectCall(final MouseEvent event) {

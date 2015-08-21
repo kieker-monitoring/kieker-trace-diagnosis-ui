@@ -37,6 +37,7 @@ import javafx.scene.input.MouseEvent;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.mainview.subview.util.LazyOperationCallTreeItem;
+import kieker.diagnosis.mainview.subview.util.NameConverter;
 import kieker.diagnosis.model.DataModel;
 
 /**
@@ -84,8 +85,8 @@ public final class TracesViewController {
 		this.container.textProperty().bind(this.createStringBindingForSelection(OperationCall::getContainer));
 		this.component.textProperty().bind(this.createStringBindingForSelection(OperationCall::getComponent));
 		this.operation.textProperty().bind(this.createStringBindingForSelection(OperationCall::getOperation));
-		this.duration.textProperty().bind(this.createStringBindingForSelection(OperationCall::getDuration));
-		this.percent.textProperty().bind(this.createStringBindingForSelection(OperationCall::getPercent));
+		this.duration.textProperty().bind(this.createDurationStringBindingForSelection(OperationCall::getDuration));
+		this.percent.textProperty().bind(this.createPercentStringBindingForSelection(OperationCall::getPercent));
 		this.traceID.textProperty().bind(this.createStringBindingForSelection(OperationCall::getTraceID));
 		this.failed.textProperty().bind(this.createStringBindingForSelection(OperationCall::getFailedCause));
 
@@ -94,6 +95,16 @@ public final class TracesViewController {
 
 	private StringBinding createStringBindingForSelection(final Function<OperationCall, Object> mapper) {
 		return Bindings.createStringBinding(() -> this.selection.get().map(mapper).map(Object::toString).orElse("N/A"), this.selection);
+	}
+
+	private StringBinding createPercentStringBindingForSelection(final Function<OperationCall, Object> mapper) {
+		return Bindings.createStringBinding(() -> this.selection.get().map(mapper).map(x -> x.toString() + " %").orElse("N/A"), this.selection);
+	}
+
+	private StringBinding createDurationStringBindingForSelection(final Function<OperationCall, Object> mapper) {
+		return Bindings.createStringBinding(
+				() -> this.selection.get().map(mapper).map(x -> x.toString() + " " + NameConverter.toShortTimeUnit(DataModel.getInstance().getTimeUnit())).orElse("N/A"),
+				this.selection);
 	}
 
 	public void selectCall(final MouseEvent event) {
