@@ -37,7 +37,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.mainview.dialog.about.AboutDialogViewController;
 import kieker.diagnosis.mainview.dialog.settings.SettingsDialogViewController;
 import kieker.diagnosis.mainview.subview.aggregatedcalls.AggregatedCallsViewController;
@@ -105,11 +104,7 @@ public final class Controller {
 		final File selectedDirectory = directoryChooser.showDialog((this.view.getScene().getWindow()));
 		if (null != selectedDirectory) {
 			this.view.setCursor(Cursor.WAIT);
-
-			// this.view.getProgressMonitorDialog().open();
 			this.dataModel.loadMonitoringLogFromFS(selectedDirectory);
-			// this.view.getProgressMonitorDialog().close();
-
 			this.view.setCursor(Cursor.DEFAULT);
 
 			preferences.put(Controller.KEY_LAST_IMPORT_PATH, selectedDirectory.getAbsolutePath());
@@ -122,11 +117,11 @@ public final class Controller {
 	}
 
 	public void showSettings() throws IOException {
-		this.loadDialogPane(SettingsDialogViewController.class, "Settings");
+		this.loadDialogPane(SettingsDialogViewController.class);
 	}
 
 	public void showAbout() throws IOException {
-		this.loadDialogPane(AboutDialogViewController.class, "About");
+		this.loadDialogPane(AboutDialogViewController.class);
 	}
 
 	public void close() {
@@ -157,7 +152,7 @@ public final class Controller {
 		this.content.getChildren().setAll(node);
 	}
 
-	private void loadDialogPane(final Class<?> controllerClass, final String title) throws IOException {
+	private void loadDialogPane(final Class<?> controllerClass) throws IOException {
 		final String baseName = controllerClass.getCanonicalName().replace("Controller", "");
 		final String viewFXMLName = baseName.replace(".", "/") + ".fxml";
 		final String cssName = baseName.replace(".", "/") + ".css";
@@ -167,6 +162,8 @@ public final class Controller {
 		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
 		final Parent node = (Parent) FXMLLoader.load(viewResource, resourceBundle);
 		final URL cssResource = Controller.class.getClassLoader().getResource(cssName);
+
+		final String title = resourceBundle.getString("title");
 
 		final Scene scene = new Scene(node);
 		scene.getStylesheets().add(cssResource.toExternalForm());
@@ -178,12 +175,6 @@ public final class Controller {
 		dialogStage.initOwner((this.view.getScene().getWindow()));
 		dialogStage.setScene(scene);
 		dialogStage.showAndWait();
-	}
-
-	public void jumpToCorrespondingTrace(final OperationCall call) {
-		// this.view.getTree().select(this.view.getTrtmTraces());
-		// this.model.setActiveSubView(this.subViewMapper.resolve(SubView.TRACES_SUB_VIEW));
-		// this.tracesViewController.jumpToCorrespondingTrace(call);
 	}
 
 }
