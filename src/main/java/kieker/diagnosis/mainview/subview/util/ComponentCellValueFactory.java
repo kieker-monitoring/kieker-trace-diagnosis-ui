@@ -27,9 +27,6 @@ public class ComponentCellValueFactory implements Callback<CellDataFeatures<?, S
 	@Override
 	public ObservableValue<String> call(final CellDataFeatures<?, String> call) {
 		try {
-			this.dataModel.getTimeUnit();
-			this.propertiesModel.getTimeUnit();
-
 			final Method getter = call.getValue().getClass().getMethod("get" + this.property, new Class<?>[0]);
 			String componentName = (String) getter.invoke(call.getValue(), new Object[0]);
 

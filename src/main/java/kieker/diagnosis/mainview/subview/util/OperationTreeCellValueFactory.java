@@ -28,9 +28,6 @@ public class OperationTreeCellValueFactory implements Callback<CellDataFeatures<
 	@Override
 	public ObservableValue<String> call(final CellDataFeatures<?, String> call) {
 		try {
-			this.dataModel.getTimeUnit();
-			this.propertiesModel.getTimeUnit();
-
 			final TreeItem<?> item = (call.getValue());
 			final Method getter = item.getValue().getClass().getMethod("get" + this.property, new Class<?>[0]);
 			String componentName = (String) getter.invoke(item.getValue(), new Object[0]);
