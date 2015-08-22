@@ -70,29 +70,35 @@ public final class Controller {
 	@FXML private Button statistics;
 
 	private Optional<Button> disabledButton = Optional.empty();
+	private Optional<Class<?>> activeController = Optional.empty();
 
 	public void showTraces() throws IOException {
 		this.toggleDisabledButton(this.traces);
+		this.activeController = Optional.of(TracesViewController.class);
 		this.loadPane(TracesViewController.class);
 	}
 
 	public void showAggregatedTraces() throws IOException {
 		this.toggleDisabledButton(this.aggregatedtraces);
+		this.activeController = Optional.of(AggregatedTracesViewController.class);
 		this.loadPane(AggregatedTracesViewController.class);
 	}
 
 	public void showCalls() throws IOException {
 		this.toggleDisabledButton(this.calls);
+		this.activeController = Optional.of(CallsViewController.class);
 		this.loadPane(CallsViewController.class);
 	}
 
 	public void showAggregatedCalls() throws IOException {
 		this.toggleDisabledButton(this.aggregatedcalls);
+		this.activeController = Optional.of(AggregatedCallsViewController.class);
 		this.loadPane(AggregatedCallsViewController.class);
 	}
 
 	public void showStatistics() throws IOException {
 		this.toggleDisabledButton(this.statistics);
+		this.activeController = Optional.of(MonitoringStatisticsViewController.class);
 		this.loadPane(MonitoringStatisticsViewController.class);
 	}
 
@@ -119,6 +125,10 @@ public final class Controller {
 
 	public void showSettings() throws IOException {
 		this.loadDialogPane(SettingsDialogViewController.class);
+
+		if (this.activeController.isPresent()) {
+			this.loadPane(this.activeController.get());
+		}
 	}
 
 	public void showAbout() throws IOException {

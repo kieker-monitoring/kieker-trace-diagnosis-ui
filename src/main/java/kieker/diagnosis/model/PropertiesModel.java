@@ -16,7 +16,6 @@
 
 package kieker.diagnosis.model;
 
-import java.util.Observable;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
@@ -25,7 +24,7 @@ import java.util.prefs.Preferences;
 /**
  * @author Nils Christian Ehmke
  */
-public final class PropertiesModel extends Observable {
+public final class PropertiesModel {
 
 	private static final Logger LOGGER = Logger.getLogger(PropertiesModel.class.getCanonicalName());
 	private static final PropertiesModel INSTANCE = new PropertiesModel();
