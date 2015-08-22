@@ -10,14 +10,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
 import javafx.util.Callback;
-import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.model.PropertiesModel.OperationNames;
 
 public class OperationTreeCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<String>> {
-
-	private final DataModel dataModel = DataModel.getInstance();
-	private final PropertiesModel propertiesModel = PropertiesModel.getInstance();
 
 	private final String property;
 
@@ -32,7 +28,7 @@ public class OperationTreeCellValueFactory implements Callback<CellDataFeatures<
 			final Method getter = item.getValue().getClass().getMethod("get" + this.property, new Class<?>[0]);
 			String componentName = (String) getter.invoke(item.getValue(), new Object[0]);
 
-			if (this.propertiesModel.getOperationNames() == OperationNames.SHORT) {
+			if (PropertiesModel.getInstance().getOperationNames() == OperationNames.SHORT) {
 				componentName = NameConverter.toShortComponentName(componentName);
 			}
 
