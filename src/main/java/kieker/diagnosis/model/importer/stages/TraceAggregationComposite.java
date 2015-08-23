@@ -30,6 +30,7 @@ import teetime.stage.CollectorSink;
  *
  * @author Nils Christian Ehmke
  */
+@SuppressWarnings("deprecation")
 public final class TraceAggregationComposite extends AbstractCompositeStage {
 
 	private final TraceAggregator aggregator;

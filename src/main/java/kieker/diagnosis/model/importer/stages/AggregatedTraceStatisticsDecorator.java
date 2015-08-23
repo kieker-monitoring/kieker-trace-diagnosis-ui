@@ -17,18 +17,18 @@
 package kieker.diagnosis.model.importer.stages;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
+import kieker.diagnosis.model.importer.stages.util.Statistics;
+import kieker.diagnosis.model.importer.stages.util.StatisticsCalculator;
 
 /**
- * This class is a {@code TeeTime} stage adding statistics (via the corresponding setters) to instances of {@link AggregatedTrace}. The traces are forwarded to the
- * output port.
- * 
+ * This class is a {@code TeeTime} stage adding statistics (via the corresponding setters) to instances of {@link AggregatedTrace}. The traces are forwarded to the output port.
+ *
  * @author Nils Christian Ehmke
  */
 public final class AggregatedTraceStatisticsDecorator extends AbstractStage<AggregatedTrace, AggregatedTrace> {
@@ -100,7 +100,7 @@ public final class AggregatedTraceStatisticsDecorator extends AbstractStage<Aggr
 
 			final List<Long> durationsOfCurrentEdge = this.durationsPerEdge.get(this.edgeIndex);
 
-			final Statistics statistics = this.calculateStatistics(durationsOfCurrentEdge);
+			final Statistics statistics = StatisticsCalculator.calculateStatistics(durationsOfCurrentEdge);
 			rootOperationCall.setMinDuration(statistics.getMinDuration());
 			rootOperationCall.setMaxDuration(statistics.getMaxDuration());
 			rootOperationCall.setMeanDuration(statistics.getMeanDuration());
@@ -111,64 +111,6 @@ public final class AggregatedTraceStatisticsDecorator extends AbstractStage<Aggr
 				this.addDurationStatistics(child);
 			}
 		}
-
-		private Statistics calculateStatistics(final List<Long> durations) {
-			Collections.sort(durations);
-
-			long totalDuration = 0;
-			for (final Long duration : durations) {
-				totalDuration += duration;
-			}
-
-			final long minDuration = durations.get(0);
-			final long maxDuration = durations.get(durations.size() - 1);
-			final long meanDuration = totalDuration / durations.size();
-			final long medianDuration = durations.get(durations.size() / 2);
-
-			return new Statistics(totalDuration, meanDuration, medianDuration, minDuration, maxDuration);
-		}
-
-		/**
-		 * @author Nils Christian Ehmke
-		 */
-		private static class Statistics {
-
-			private final long totalDuration;
-			private final long meanDuration;
-			private final long medianDuration;
-			private final long minDuration;
-			private final long maxDuration;
-
-			public Statistics(final long totalDuration, final long meanDuration, final long medianDuration, final long minDuration, final long maxDuration) {
-				this.totalDuration = totalDuration;
-				this.meanDuration = meanDuration;
-				this.medianDuration = medianDuration;
-				this.minDuration = minDuration;
-				this.maxDuration = maxDuration;
-			}
-
-			public long getTotalDuration() {
-				return this.totalDuration;
-			}
-
-			public long getMeanDuration() {
-				return this.meanDuration;
-			}
-
-			public long getMedianDuration() {
-				return this.medianDuration;
-			}
-
-			public long getMinDuration() {
-				return this.minDuration;
-			}
-
-			public long getMaxDuration() {
-				return this.maxDuration;
-			}
-
-		}
-
 	}
 
 }
