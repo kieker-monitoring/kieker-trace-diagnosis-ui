@@ -26,6 +26,11 @@
 
 	<TreeTableView fx:id="treetable" GridPane.hgrow="ALWAYS"
 		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true" onMouseClicked="#selectCall">
+		
+		<placeholder>
+			<Label text="%emptyTableText"/>
+		</placeholder>
+		
 		<columns>
 			<TreeTableColumn text="%TracesView.trclmnExecutionContainer.text">
 			<cellFactory>

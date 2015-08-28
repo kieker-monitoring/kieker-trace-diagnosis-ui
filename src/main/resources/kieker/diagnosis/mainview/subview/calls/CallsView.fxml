@@ -25,7 +25,11 @@
 
 	<TableView fx:id="table" GridPane.hgrow="ALWAYS"
 		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true" onMouseClicked="#selectCall">
-
+		
+		<placeholder>
+			<Label text="%emptyTableText"/>
+		</placeholder>
+		
 		<columns>
 			<TableColumn text="%CallsView.tblclmnExecutionContainer.text">
 				<cellFactory>
