@@ -64,11 +64,13 @@ final class TraceReconstructor extends AbstractStage<IFlowRecord, Trace> {
 		final long traceID = input.getTraceId();
 		final TraceBuffer traceBuffer = this.traceBuffers.get(traceID);
 
-		traceBuffer.handleEvent(input);
-		if (traceBuffer.isTraceComplete()) {
-			final Trace trace = traceBuffer.reconstructTrace();
-			this.traceBuffers.remove(traceID);
-			super.send(trace);
+		if (traceBuffer != null) {
+			traceBuffer.handleEvent(input);
+			if (traceBuffer.isTraceComplete()) {
+				final Trace trace = traceBuffer.reconstructTrace();
+				this.traceBuffers.remove(traceID);
+				super.send(trace);
+			}
 		}
 	}
 
