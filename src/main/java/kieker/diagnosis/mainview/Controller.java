@@ -107,7 +107,9 @@ public final class Controller {
 		final File initialDirectory = new File(preferences.get(Controller.KEY_LAST_IMPORT_PATH, "."));
 
 		final DirectoryChooser directoryChooser = new DirectoryChooser();
-		directoryChooser.setInitialDirectory(initialDirectory);
+		if (initialDirectory.exists()) {
+			directoryChooser.setInitialDirectory(initialDirectory);
+		}
 		final File selectedDirectory = directoryChooser.showDialog((this.view.getScene().getWindow()));
 		if (null != selectedDirectory) {
 			this.view.setCursor(Cursor.WAIT);
