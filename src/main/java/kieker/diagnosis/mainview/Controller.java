@@ -33,6 +33,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
@@ -185,6 +186,7 @@ public final class Controller {
 		scene.getStylesheets().add(cssResource.toExternalForm());
 
 		final Stage dialogStage = new Stage();
+		dialogStage.getIcons().add(new Image("kieker-logo.png"));
 		dialogStage.setTitle(title);
 		dialogStage.setResizable(false);
 		dialogStage.initModality(Modality.WINDOW_MODAL);
