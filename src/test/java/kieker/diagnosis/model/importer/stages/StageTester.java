@@ -19,8 +19,8 @@ package kieker.diagnosis.model.importer.stages;
 import java.util.ArrayList;
 import java.util.List;
 
-import teetime.framework.Analysis;
-import teetime.framework.AnalysisConfiguration;
+import teetime.framework.Configuration;
+import teetime.framework.Execution;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
 import teetime.stage.CollectorSink;
@@ -57,26 +57,24 @@ public final class StageTester {
 		}
 
 		public <O> List<O> andReceivingFrom(final OutputPort<O> outputPort) {
-			final Configuration<I, O> configuration = new Configuration<I, O>(this.input, this.inputPort, outputPort);
-			final Analysis<Configuration<I, O>> analysis = new Analysis<>(configuration);
+			final TestConfiguration<I, O> configuration = new TestConfiguration<I, O>(this.input, this.inputPort, outputPort);
+			final Execution<TestConfiguration<I, O>> analysis = new Execution<>(configuration);
 			analysis.executeBlocking();
 
 			return configuration.getOutput();
 		}
 	}
 
-	private static class Configuration<I, O> extends AnalysisConfiguration {
+	private static class TestConfiguration<I, O> extends Configuration {
 
 		private final List<O> collectorList = new ArrayList<>();
 
-		public Configuration(final Iterable<I> input, final InputPort<I> inputPort, final OutputPort<O> outputPort) {
+		public TestConfiguration(final Iterable<I> input, final InputPort<I> inputPort, final OutputPort<O> outputPort) {
 			final InitialElementProducer<I> producer = new InitialElementProducer<>(input);
 			final CollectorSink<O> collector = new CollectorSink<>(this.collectorList);
 
-			AnalysisConfiguration.connectIntraThreads(producer.getOutputPort(), inputPort);
-			AnalysisConfiguration.connectIntraThreads(outputPort, collector.getInputPort());
-
-			this.addThreadableStage(producer);
+			super.connectPorts(producer.getOutputPort(), inputPort);
+			super.connectPorts(outputPort, collector.getInputPort());
 		}
 
 		public List<O> getOutput() {

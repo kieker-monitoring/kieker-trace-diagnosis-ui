@@ -31,18 +31,18 @@ import kieker.diagnosis.model.importer.stages.OperationCallHandlerComposite;
 import kieker.diagnosis.model.importer.stages.ReadingComposite;
 import kieker.diagnosis.model.importer.stages.TraceAggregationComposite;
 import kieker.diagnosis.model.importer.stages.TraceReconstructionComposite;
-import teetime.framework.AnalysisConfiguration;
+import teetime.framework.Configuration;
 import teetime.stage.CollectorSink;
 import teetime.stage.MultipleInstanceOfFilter;
-import teetime.stage.basic.distributor.CopyByReferenceStrategy;
 import teetime.stage.basic.distributor.Distributor;
+import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
 
 /**
  * A {@code TeeTime} configuration for the import and analysis of monitoring logs.
  *
  * @author Nils Christian Ehmke
  */
-public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
+public final class ImportAnalysisConfiguration extends Configuration {
 
 	private final List<Trace> traces = new ArrayList<>(1000);
 	private final List<OperationCall> operationCalls = new ArrayList<>(1000);
@@ -66,16 +66,13 @@ public final class ImportAnalysisConfiguration extends AnalysisConfiguration {
 		this.reconstruction = new TraceReconstructionComposite(this.traces);
 
 		// Connect the stages
-		AnalysisConfiguration.connectIntraThreads(reader.getOutputPort(), typeFilter.getInputPort());
-		AnalysisConfiguration.connectIntraThreads(typeFilter.getOutputPortForType(IMonitoringRecord.class), this.beginEndOfMonitoringDetector.getInputPort());
-		AnalysisConfiguration.connectIntraThreads(this.beginEndOfMonitoringDetector.getOutputPort(), this.reconstruction.getInputPort());
-		AnalysisConfiguration.connectIntraThreads(this.reconstruction.getOutputPort(), distributor.getInputPort());
-		AnalysisConfiguration.connectIntraThreads(distributor.getNewOutputPort(), operationCallHandler.getInputPort());
-		AnalysisConfiguration.connectIntraThreads(distributor.getNewOutputPort(), aggregation.getInputPort());
-		AnalysisConfiguration.connectIntraThreads(typeFilter.getOutputPortForType(KiekerMetadataRecord.class), metadataCollector.getInputPort());
-
-		// Make sure that the producer is executed by the analysis
-		super.addThreadableStage(reader);
+		super.connectPorts(reader.getOutputPort(), typeFilter.getInputPort());
+		super.connectPorts(typeFilter.getOutputPortForType(IMonitoringRecord.class), this.beginEndOfMonitoringDetector.getInputPort());
+		super.connectPorts(this.beginEndOfMonitoringDetector.getOutputPort(), this.reconstruction.getInputPort());
+		super.connectPorts(this.reconstruction.getOutputPort(), distributor.getInputPort());
+		super.connectPorts(distributor.getNewOutputPort(), operationCallHandler.getInputPort());
+		super.connectPorts(distributor.getNewOutputPort(), aggregation.getInputPort());
+		super.connectPorts(typeFilter.getOutputPortForType(KiekerMetadataRecord.class), metadataCollector.getInputPort());
 	}
 
 	public long getBeginTimestamp() {

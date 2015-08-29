@@ -30,7 +30,7 @@ import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.model.importer.ImportAnalysisConfiguration;
-import teetime.framework.Analysis;
+import teetime.framework.Execution;
 
 /**
  * A container for data used within this application.
@@ -54,7 +54,8 @@ public final class DataModel {
 	private final ObjectProperty<Long> beginTimestamp = new SimpleObjectProperty<>();
 	private final ObjectProperty<Long> endTimestamp = new SimpleObjectProperty<>();
 
-	private DataModel() {}
+	private DataModel() {
+	}
 
 	public void loadMonitoringLogFromFS(final File importDirectory) {
 		this.importDirectory.set(importDirectory);
@@ -62,7 +63,7 @@ public final class DataModel {
 
 		// Load and analyze the monitoring logs from the given directory
 		final ImportAnalysisConfiguration analysisConfiguration = new ImportAnalysisConfiguration(importDirectory);
-		final Analysis<ImportAnalysisConfiguration> analysis = new Analysis<>(analysisConfiguration);
+		final Execution<ImportAnalysisConfiguration> analysis = new Execution<>(analysisConfiguration);
 		analysis.executeBlocking();
 
 		// Store the results from the analysis

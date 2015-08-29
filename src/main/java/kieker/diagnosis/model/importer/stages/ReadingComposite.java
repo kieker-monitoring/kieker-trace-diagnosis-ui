@@ -21,7 +21,6 @@ import java.io.File;
 import kieker.common.record.IMonitoringRecord;
 import teetime.framework.AbstractCompositeStage;
 import teetime.framework.OutputPort;
-import teetime.framework.Stage;
 import teetime.stage.InitialElementProducer;
 import teetime.stage.className.ClassNameRegistryRepository;
 import teetime.stage.io.filesystem.Dir2RecordsFilter;
@@ -45,11 +44,6 @@ public final class ReadingComposite extends AbstractCompositeStage {
 
 	public OutputPort<IMonitoringRecord> getOutputPort() {
 		return this.reader.getOutputPort();
-	}
-
-	@Override
-	protected Stage getFirstStage() {
-		return this.producer;
 	}
 
 }

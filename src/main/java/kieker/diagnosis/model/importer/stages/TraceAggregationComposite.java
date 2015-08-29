@@ -22,7 +22,6 @@ import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.Trace;
 import teetime.framework.AbstractCompositeStage;
 import teetime.framework.InputPort;
-import teetime.framework.Stage;
 import teetime.stage.CollectorSink;
 
 /**
@@ -47,11 +46,6 @@ public final class TraceAggregationComposite extends AbstractCompositeStage {
 
 	public InputPort<Trace> getInputPort() {
 		return this.aggregator.getInputPort();
-	}
-
-	@Override
-	protected Stage getFirstStage() {
-		return this.aggregator;
 	}
 
 }

@@ -30,8 +30,8 @@ import kieker.diagnosis.domain.Trace;
 
 import org.junit.Test;
 
-import teetime.framework.Analysis;
-import teetime.framework.AnalysisConfiguration;
+import teetime.framework.Configuration;
+import teetime.framework.Execution;
 import teetime.stage.CollectorSink;
 import teetime.stage.InitialElementProducer;
 import teetime.stage.InstanceOfFilter;
@@ -108,16 +108,15 @@ public class LegacyTraceReconstructorTest {
 	}
 
 	@Test
-//	@Ignore
 	public void exampleLogReconstructionShouldWork() throws Exception {
 		final ExampleLogReconstructionConfiguration configuration = new ExampleLogReconstructionConfiguration();
-		final Analysis<ExampleLogReconstructionConfiguration> analysis = new Analysis<>(configuration);
+		final Execution<ExampleLogReconstructionConfiguration> analysis = new Execution<>(configuration);
 		analysis.executeBlocking();
 
 		assertThat(configuration.getOutput(), hasSize(1635));
 	}
 
-	private static class ExampleLogReconstructionConfiguration extends AnalysisConfiguration {
+	private static class ExampleLogReconstructionConfiguration extends Configuration {
 
 		private final List<Trace> traceCollectorList = new ArrayList<>();
 
@@ -128,12 +127,10 @@ public class LegacyTraceReconstructorTest {
 			final LegacyTraceReconstructor reconstructor = new LegacyTraceReconstructor();
 			final CollectorSink<Trace> collector = new CollectorSink<>(this.traceCollectorList);
 
-			connectIntraThreads(producer.getOutputPort(), reader.getInputPort());
-			connectIntraThreads(reader.getOutputPort(), typeFilter.getInputPort());
-			connectIntraThreads(typeFilter.getMatchedOutputPort(), reconstructor.getInputPort());
-			connectIntraThreads(reconstructor.getOutputPort(), collector.getInputPort());
-
-			this.addThreadableStage(producer);
+			super.connectPorts(producer.getOutputPort(), reader.getInputPort());
+			super.connectPorts(reader.getOutputPort(), typeFilter.getInputPort());
+			super.connectPorts(typeFilter.getMatchedOutputPort(), reconstructor.getInputPort());
+			super.connectPorts(reconstructor.getOutputPort(), collector.getInputPort());
 		}
 
 		public List<Trace> getOutput() {

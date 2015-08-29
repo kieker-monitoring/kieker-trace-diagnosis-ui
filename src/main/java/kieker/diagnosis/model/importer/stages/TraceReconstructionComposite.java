@@ -25,11 +25,10 @@ import kieker.diagnosis.domain.Trace;
 import teetime.framework.AbstractCompositeStage;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
-import teetime.framework.Stage;
 import teetime.stage.CollectorSink;
 import teetime.stage.MultipleInstanceOfFilter;
-import teetime.stage.basic.distributor.CopyByReferenceStrategy;
 import teetime.stage.basic.distributor.Distributor;
+import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
 import teetime.stage.basic.merger.Merger;
 
 /**
@@ -77,11 +76,6 @@ public final class TraceReconstructionComposite extends AbstractCompositeStage {
 
 	public OutputPort<Trace> getOutputPort() {
 		return this.outputPort;
-	}
-
-	@Override
-	protected Stage getFirstStage() {
-		return this.typeFilter;
 	}
 
 }

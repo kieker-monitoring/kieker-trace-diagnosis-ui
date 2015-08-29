@@ -23,10 +23,9 @@ import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 import teetime.framework.AbstractCompositeStage;
 import teetime.framework.InputPort;
-import teetime.framework.Stage;
 import teetime.stage.CollectorSink;
-import teetime.stage.basic.distributor.CopyByReferenceStrategy;
 import teetime.stage.basic.distributor.Distributor;
+import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
 
 /**
  * @author Nils Christian Ehmke
@@ -55,11 +54,6 @@ public final class OperationCallHandlerComposite extends AbstractCompositeStage 
 
 	public InputPort<Trace> getInputPort() {
 		return this.inputPort;
-	}
-
-	@Override
-	protected Stage getFirstStage() {
-		return this.operationCallExtractor;
 	}
 
 }

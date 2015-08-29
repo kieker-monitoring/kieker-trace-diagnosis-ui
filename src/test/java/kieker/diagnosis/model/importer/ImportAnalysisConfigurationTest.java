@@ -25,14 +25,14 @@ import java.io.File;
 
 import org.junit.Test;
 
-import teetime.framework.Analysis;
+import teetime.framework.Execution;
 
 public final class ImportAnalysisConfigurationTest {
 
 	@Test
 	public void exampleLogImportShouldWork() {
 		final ImportAnalysisConfiguration configuration = new ImportAnalysisConfiguration(new File("example/event monitoring log"));
-		final Analysis<ImportAnalysisConfiguration> analysis = new Analysis<>(configuration);
+		final Execution<ImportAnalysisConfiguration> analysis = new Execution<>(configuration);
 		analysis.executeBlocking();
 
 		assertThat(configuration.getMetadataRecords(), hasSize(1));
@@ -47,7 +47,7 @@ public final class ImportAnalysisConfigurationTest {
 	@Test
 	public void exampleLegacyLogImportShouldWork() {
 		final ImportAnalysisConfiguration configuration = new ImportAnalysisConfiguration(new File("example/execution monitoring log"));
-		final Analysis<ImportAnalysisConfiguration> analysis = new Analysis<>(configuration);
+		final Execution<ImportAnalysisConfiguration> analysis = new Execution<>(configuration);
 		analysis.executeBlocking();
 
 		assertThat(configuration.getMetadataRecords(), hasSize(1));
@@ -62,7 +62,7 @@ public final class ImportAnalysisConfigurationTest {
 	@Test
 	public void nonExistingLogShouldNotLeadToCrash() {
 		final ImportAnalysisConfiguration configuration = new ImportAnalysisConfiguration(new File("nonExistingLog"));
-		final Analysis<ImportAnalysisConfiguration> analysis = new Analysis<>(configuration);
+		final Execution<ImportAnalysisConfiguration> analysis = new Execution<>(configuration);
 		analysis.executeBlocking();
 
 		assertThat(configuration.getMetadataRecords(), is(empty()));
