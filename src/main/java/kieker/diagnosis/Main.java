@@ -52,7 +52,7 @@ public final class Main extends Application {
 		stage.setScene(root);
 
 		stage.getIcons().add(new Image("kieker-logo.png"));
-		stage.setTitle("Kieker Trace Diagnosis - 1.0-SNAPSHOT");
+		stage.setTitle("Kieker Trace Diagnosis - 1.1-SNAPSHOT");
 		stage.setMaximized(true);
 		stage.show();
 	}
