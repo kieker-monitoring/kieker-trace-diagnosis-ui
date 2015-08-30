@@ -18,11 +18,12 @@ package kieker.diagnosis.model.importer.stages;
 
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
+import teetime.stage.basic.AbstractTransformation;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class OperationCallExtractor extends AbstractStage<Trace, OperationCall> {
+public final class OperationCallExtractor extends AbstractTransformation<Trace, OperationCall> {
 
 	@Override
 	protected void execute(final Trace element) {
@@ -30,7 +31,7 @@ public final class OperationCallExtractor extends AbstractStage<Trace, Operation
 	}
 
 	private void sendAllCalls(final OperationCall call) {
-		super.send(call);
+		super.getOutputPort().send(call);
 
 		call.getChildren().forEach(child -> this.sendAllCalls(child));
 	}

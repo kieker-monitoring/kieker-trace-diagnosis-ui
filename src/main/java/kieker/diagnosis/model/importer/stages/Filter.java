@@ -18,6 +18,8 @@ package kieker.diagnosis.model.importer.stages;
 
 import java.util.function.Predicate;
 
+import teetime.stage.basic.AbstractTransformation;
+
 /**
  * This stage filters incoming objects and forwards only those which meet the given predicate.
  *
@@ -26,7 +28,7 @@ import java.util.function.Predicate;
  * @param <T>
  *            The precise type of the incoming and outgoing object.
  */
-public final class Filter<T> extends AbstractStage<T, T> {
+public final class Filter<T> extends AbstractTransformation<T, T> {
 
 	private final Predicate<T> predicate;
 
@@ -37,7 +39,7 @@ public final class Filter<T> extends AbstractStage<T, T> {
 	@Override
 	protected void execute(final T element) {
 		if (this.predicate.test(element)) {
-			super.send(element);
+			super.getOutputPort().send(element);
 		}
 	}
 

@@ -29,14 +29,15 @@ import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
+import teetime.stage.basic.AbstractTransformation;
 
 /**
- * Reconstruct traces based on the incoming instances of {@code IFlowRecord}. Currently only {@link TraceMetadata}, {@link BeforeOperationEvent} and
- * {@link AfterOperationEvent} instances are supported.
- * 
+ * Reconstruct traces based on the incoming instances of {@code IFlowRecord}. Currently only {@link TraceMetadata}, {@link BeforeOperationEvent} and {@link AfterOperationEvent}
+ * instances are supported.
+ *
  * @author Nils Christian Ehmke
  */
-final class TraceReconstructor extends AbstractStage<IFlowRecord, Trace> {
+final class TraceReconstructor extends AbstractTransformation<IFlowRecord, Trace> {
 
 	private final Map<Long, TraceBuffer> traceBuffers = new HashMap<>();
 
@@ -68,7 +69,7 @@ final class TraceReconstructor extends AbstractStage<IFlowRecord, Trace> {
 		if (traceBuffer.isTraceComplete()) {
 			final Trace trace = traceBuffer.reconstructTrace();
 			this.traceBuffers.remove(traceID);
-			super.send(trace);
+			super.getOutputPort().send(trace);
 		}
 	}
 

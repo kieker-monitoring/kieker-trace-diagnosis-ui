@@ -27,13 +27,14 @@ import java.util.Map;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
+import teetime.stage.basic.AbstractTransformation;
 
 /**
  * Reconstruct traces based on the incoming instances of {@code OperationExecutionRecord}.
- * 
+ *
  * @author Nils Christian Ehmke
  */
-final class LegacyTraceReconstructor extends AbstractStage<OperationExecutionRecord, Trace> {
+final class LegacyTraceReconstructor extends AbstractTransformation<OperationExecutionRecord, Trace> {
 
 	private final Map<Long, TraceBuffer> traceBuffers = new HashMap<>();
 
@@ -57,7 +58,7 @@ final class LegacyTraceReconstructor extends AbstractStage<OperationExecutionRec
 		if (traceBuffer.isTraceComplete()) {
 			final Trace trace = traceBuffer.reconstructTrace();
 			this.traceBuffers.remove(traceID);
-			super.send(trace);
+			super.getOutputPort().send(trace);
 		}
 	}
 

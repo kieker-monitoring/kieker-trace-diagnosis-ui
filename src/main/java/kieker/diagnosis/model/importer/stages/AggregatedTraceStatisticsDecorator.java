@@ -24,14 +24,14 @@ import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
+import teetime.stage.basic.AbstractTransformation;
 
 /**
- * This class is a {@code TeeTime} stage adding statistics (via the corresponding setters) to instances of {@link AggregatedTrace}. The traces are forwarded to the
- * output port.
- * 
+ * This class is a {@code TeeTime} stage adding statistics (via the corresponding setters) to instances of {@link AggregatedTrace}. The traces are forwarded to the output port.
+ *
  * @author Nils Christian Ehmke
  */
-public final class AggregatedTraceStatisticsDecorator extends AbstractStage<AggregatedTrace, AggregatedTrace> {
+public final class AggregatedTraceStatisticsDecorator extends AbstractTransformation<AggregatedTrace, AggregatedTrace> {
 
 	@Override
 	public void execute(final AggregatedTrace trace) {
@@ -41,7 +41,7 @@ public final class AggregatedTraceStatisticsDecorator extends AbstractStage<Aggr
 		// The references are no longer needed
 		trace.getTraces().clear();
 
-		super.send(trace);
+		super.getOutputPort().send(trace);
 	}
 
 	private static void addNumberOfCalls(final AggregatedOperationCall call, final int calls) {

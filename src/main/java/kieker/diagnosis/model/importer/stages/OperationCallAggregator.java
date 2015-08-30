@@ -24,11 +24,12 @@ import java.util.Map;
 
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.OperationCall;
+import teetime.stage.basic.AbstractTransformation;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class OperationCallAggregator extends AbstractStage<OperationCall, AggregatedOperationCall> {
+public final class OperationCallAggregator extends AbstractTransformation<OperationCall, AggregatedOperationCall> {
 
 	private final Map<String, List<OperationCall>> aggregationMap = new HashMap<>();
 
@@ -49,9 +50,10 @@ public final class OperationCallAggregator extends AbstractStage<OperationCall, 
 		for (final List<OperationCall> aggregationList : this.aggregationMap.values()) {
 			// TODO the statistics calculation is the same as in AggregatedTraceStatisticsDecorator
 			final Statistics statistics = this.calculateStatistics(this.extractDurations(aggregationList));
-			super.send(new AggregatedOperationCall(aggregationList.get(0).getContainer(), aggregationList.get(0).getComponent(), aggregationList.get(0).getOperation(),
-					aggregationList.get(0).getFailedCause(), statistics.getTotalDuration(), statistics.getMedianDuration(), statistics.getMinDuration(),
-					statistics.getMaxDuration(), statistics.getMeanDuration(), aggregationList.size()));
+			super.getOutputPort().send(
+					new AggregatedOperationCall(aggregationList.get(0).getContainer(), aggregationList.get(0).getComponent(), aggregationList.get(0).getOperation(),
+							aggregationList.get(0).getFailedCause(), statistics.getTotalDuration(), statistics.getMedianDuration(), statistics.getMinDuration(), statistics
+									.getMaxDuration(), statistics.getMeanDuration(), aggregationList.size()));
 		}
 
 		super.onTerminating();

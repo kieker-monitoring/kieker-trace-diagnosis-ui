@@ -18,13 +18,14 @@ package kieker.diagnosis.model.importer.stages;
 
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
+import teetime.stage.basic.AbstractTransformation;
 
 /**
  * This class is a {@code TeeTime} stage adding statistics (via the corresponding setters) to instances of {@link Trace}. The traces are forwarded to the output port.
  *
  * @author Nils Christian Ehmke
  */
-public final class TraceStatisticsDecorator extends AbstractStage<Trace, Trace> {
+public final class TraceStatisticsDecorator extends AbstractTransformation<Trace, Trace> {
 
 	@Override
 	public void execute(final Trace trace) {
@@ -32,7 +33,7 @@ public final class TraceStatisticsDecorator extends AbstractStage<Trace, Trace> 
 		addTraceSize(trace.getRootOperationCall());
 		addPercentValues(trace.getRootOperationCall(), trace.getRootOperationCall().getDuration());
 
-		super.send(trace);
+		super.getOutputPort().send(trace);
 	}
 
 	private static int addTraceDepth(final OperationCall call) {

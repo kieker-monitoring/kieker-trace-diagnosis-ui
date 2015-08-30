@@ -23,13 +23,14 @@ import java.util.Map;
 
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.Trace;
+import teetime.stage.basic.AbstractTransformation;
 
 /**
  * This stage aggregates incoming traces into trace equivalence classes.
  *
  * @author Nils Christian Ehmke
  */
-public final class TraceAggregator extends AbstractStage<Trace, AggregatedTrace> {
+public final class TraceAggregator extends AbstractTransformation<Trace, AggregatedTrace> {
 
 	private final Map<TraceWrapper, List<Trace>> aggregationMap = new HashMap<>();
 
@@ -45,7 +46,7 @@ public final class TraceAggregator extends AbstractStage<Trace, AggregatedTrace>
 
 	@Override
 	public void onTerminating() throws Exception { // NOPMD (the throws clause is forced by the framework)
-		this.aggregationMap.values().forEach(list -> super.send(new AggregatedTrace(list)));
+		this.aggregationMap.values().forEach(list -> super.getOutputPort().send(new AggregatedTrace(list)));
 
 		super.onTerminating();
 	}

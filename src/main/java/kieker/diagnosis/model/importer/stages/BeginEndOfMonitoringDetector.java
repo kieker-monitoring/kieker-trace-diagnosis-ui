@@ -17,11 +17,12 @@
 package kieker.diagnosis.model.importer.stages;
 
 import kieker.common.record.IMonitoringRecord;
+import teetime.stage.basic.AbstractTransformation;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class BeginEndOfMonitoringDetector extends AbstractStage<IMonitoringRecord, IMonitoringRecord> {
+public final class BeginEndOfMonitoringDetector extends AbstractTransformation<IMonitoringRecord, IMonitoringRecord> {
 
 	private long beginTimestamp = Long.MAX_VALUE;
 	private long endTimestamp = 0;
@@ -37,7 +38,7 @@ public final class BeginEndOfMonitoringDetector extends AbstractStage<IMonitorin
 			this.endTimestamp = loggingTimestamp;
 		}
 
-		super.send(record);
+		super.getOutputPort().send(record);
 	}
 
 	public long getBeginTimestamp() {
