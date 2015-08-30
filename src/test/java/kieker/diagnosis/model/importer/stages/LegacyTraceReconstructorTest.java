@@ -16,10 +16,10 @@
 
 package kieker.diagnosis.model.importer.stages;
 
-import static kieker.diagnosis.model.importer.stages.StageTester.testStageBySending;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertThat;
+import static teetime.framework.test.StageTester.test;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,7 +46,8 @@ public class LegacyTraceReconstructorTest {
 		records.add(new OperationExecutionRecord("operation", OperationExecutionRecord.NO_SESSION_ID, 42, 15L, 20L, "localhost", 0, 0));
 
 		final LegacyTraceReconstructor reconstructor = new LegacyTraceReconstructor();
-		final List<Trace> result = testStageBySending(records).to(reconstructor.getInputPort()).andReceivingFrom(reconstructor.getOutputPort());
+		final List<Trace> result = new ArrayList<>();
+		test(reconstructor).and().send(records).to(reconstructor.getInputPort()).and().receive(result).from(reconstructor.getOutputPort()).start();
 
 		assertThat(result, hasSize(1));
 		assertThat(result.get(0).getRootOperationCall().getOperation(), is("operation"));
@@ -60,7 +61,8 @@ public class LegacyTraceReconstructorTest {
 		records.add(new OperationExecutionRecord("bookstoreTracing.Catalog.getBook(boolean)", "1", 42, 15L, 20L, "SRV1", 0, 0));
 
 		final LegacyTraceReconstructor reconstructor = new LegacyTraceReconstructor();
-		final List<Trace> result = testStageBySending(records).to(reconstructor.getInputPort()).andReceivingFrom(reconstructor.getOutputPort());
+		final List<Trace> result = new ArrayList<>();
+		test(reconstructor).and().send(records).to(reconstructor.getInputPort()).and().receive(result).from(reconstructor.getOutputPort()).start();
 
 		assertThat(result, hasSize(1));
 		assertThat(result.get(0).getRootOperationCall().getContainer(), is("SRV1"));
@@ -77,7 +79,8 @@ public class LegacyTraceReconstructorTest {
 		records.add(new OperationExecutionRecord("A", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 0, 0));
 
 		final LegacyTraceReconstructor reconstructor = new LegacyTraceReconstructor();
-		final List<Trace> result = testStageBySending(records).to(reconstructor.getInputPort()).andReceivingFrom(reconstructor.getOutputPort());
+		final List<Trace> result = new ArrayList<>();
+		test(reconstructor).and().send(records).to(reconstructor.getInputPort()).and().receive(result).from(reconstructor.getOutputPort()).start();
 
 		assertThat(result, hasSize(1));
 		assertThat(result.get(0).getRootOperationCall().getOperation(), is("A"));
@@ -97,7 +100,8 @@ public class LegacyTraceReconstructorTest {
 		records.add(new OperationExecutionRecord("A", OperationExecutionRecord.NO_SESSION_ID, 42, 10L, 20L, "localhost", 0, 0));
 
 		final LegacyTraceReconstructor reconstructor = new LegacyTraceReconstructor();
-		final List<Trace> result = testStageBySending(records).to(reconstructor.getInputPort()).andReceivingFrom(reconstructor.getOutputPort());
+		final List<Trace> result = new ArrayList<>();
+		test(reconstructor).and().send(records).to(reconstructor.getInputPort()).and().receive(result).from(reconstructor.getOutputPort()).start();
 
 		assertThat(result, hasSize(1));
 		assertThat(result.get(0).getRootOperationCall().getOperation(), is("A"));

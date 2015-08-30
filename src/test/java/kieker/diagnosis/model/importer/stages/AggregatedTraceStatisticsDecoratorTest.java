@@ -18,9 +18,11 @@ package kieker.diagnosis.model.importer.stages;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static teetime.framework.test.StageTester.test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
@@ -48,9 +50,8 @@ public final class AggregatedTraceStatisticsDecoratorTest {
 		final AggregatedTrace trace = new AggregatedTrace(new ArrayList<>(Arrays.asList(trace1, trace2, trace3)));
 
 		final AggregatedTraceStatisticsDecorator decorator = new AggregatedTraceStatisticsDecorator();
-
-		decorator.onStarting();
-		decorator.execute(trace);
+		final List<AggregatedTrace> result = new ArrayList<>();
+		test(decorator).and().send(trace).to(decorator.getInputPort()).and().receive(result).from(decorator.getOutputPort()).start();
 
 		assertThat(trace.getRootOperationCall().getMinDuration(), is(7L));
 		assertThat(trace.getRootOperationCall().getMaxDuration(), is(44L));

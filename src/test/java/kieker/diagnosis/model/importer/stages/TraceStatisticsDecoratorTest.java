@@ -19,6 +19,11 @@ package kieker.diagnosis.model.importer.stages;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.number.IsCloseTo.closeTo;
 import static org.junit.Assert.assertThat;
+import static teetime.framework.test.StageTester.test;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 
@@ -49,9 +54,8 @@ public final class TraceStatisticsDecoratorTest {
 		final Trace trace = new Trace(rootCall, 42);
 
 		final TraceStatisticsDecorator decorator = new TraceStatisticsDecorator();
-
-		decorator.onStarting();
-		decorator.execute(trace);
+		final List<Trace> result = new ArrayList<>();
+		test(decorator).and().send(trace).to(decorator.getInputPort()).and().receive(result).from(decorator.getOutputPort()).start();
 
 		assertThat((double) rootCall.getPercent(), is(closeTo(100.0, 1e-3)));
 		assertThat((double) child1.getPercent(), is(closeTo(70.0, 1e-3)));
@@ -72,9 +76,8 @@ public final class TraceStatisticsDecoratorTest {
 		final Trace trace = new Trace(rootCall, 1);
 
 		final TraceStatisticsDecorator decorator = new TraceStatisticsDecorator();
-
-		decorator.onStarting();
-		decorator.execute(trace);
+		final List<Trace> result = new ArrayList<>();
+		test(decorator).and().send(trace).to(decorator.getInputPort()).and().receive(result).from(decorator.getOutputPort()).start();
 
 		assertThat(rootCall.getStackDepth(), is(2));
 	}
@@ -86,9 +89,8 @@ public final class TraceStatisticsDecoratorTest {
 		final Trace trace = new Trace(rootCall, 1);
 
 		final TraceStatisticsDecorator decorator = new TraceStatisticsDecorator();
-
-		decorator.onStarting();
-		decorator.execute(trace);
+		final List<Trace> result = new ArrayList<>();
+		test(decorator).and().send(trace).to(decorator.getInputPort()).and().receive(result).from(decorator.getOutputPort()).start();
 
 		assertThat(rootCall.getStackDepth(), is(0));
 	}
@@ -111,9 +113,8 @@ public final class TraceStatisticsDecoratorTest {
 		final Trace trace = new Trace(rootCall, 1);
 
 		final TraceStatisticsDecorator decorator = new TraceStatisticsDecorator();
-
-		decorator.onStarting();
-		decorator.execute(trace);
+		final List<Trace> result = new ArrayList<>();
+		test(decorator).and().send(trace).to(decorator.getInputPort()).and().receive(result).from(decorator.getOutputPort()).start();
 
 		assertThat(rootCall.getStackSize(), is(5));
 	}
@@ -125,9 +126,8 @@ public final class TraceStatisticsDecoratorTest {
 		final Trace trace = new Trace(rootCall, 1);
 
 		final TraceStatisticsDecorator decorator = new TraceStatisticsDecorator();
-
-		decorator.onStarting();
-		decorator.execute(trace);
+		final List<Trace> result = new ArrayList<>();
+		test(decorator).and().send(trace).to(decorator.getInputPort()).and().receive(result).from(decorator.getOutputPort()).start();
 
 		assertThat(rootCall.getStackSize(), is(1));
 	}
