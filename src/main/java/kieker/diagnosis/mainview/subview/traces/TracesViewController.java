@@ -21,8 +21,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
@@ -52,7 +50,10 @@ public final class TracesViewController {
 	private final SimpleObjectProperty<Optional<OperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
 
 	@FXML private TreeTableView<OperationCall> treetable;
-	@FXML private TextField regexpfilter;
+	@FXML private TextField filterContainer;
+	@FXML private TextField filterComponent;
+	@FXML private TextField filterOperation;
+	@FXML private TextField filterTraceID;
 
 	@FXML private TextField traceDepth;
 	@FXML private TextField traceSize;
@@ -71,6 +72,9 @@ public final class TracesViewController {
 
 	private Predicate<OperationCall> fstPredicate = call -> true;
 	private Predicate<OperationCall> sndPredicate = call -> true;
+	private Predicate<OperationCall> thdPredicate = call -> true;
+	private Predicate<OperationCall> fthPredicate = call -> true;
+	private Predicate<OperationCall> fifPredicate = call -> true;
 
 	public void initialize() {
 		this.reloadTreetable();
@@ -129,24 +133,52 @@ public final class TracesViewController {
 		this.reloadTreetable();
 	}
 
-	public void useRegExp() {
-		final String regExpr = this.regexpfilter.getText();
+	public void useContainerFilter() {
+		final String text = this.filterContainer.getText();
 
-		if ((regExpr == null) || regExpr.isEmpty() || !this.isRegex(regExpr)) {
+		if ((text == null) || text.isEmpty()) {
 			this.sndPredicate = call -> true;
 		} else {
-			this.sndPredicate = call -> call.getOperation().matches(regExpr);
+			this.sndPredicate = call -> call.getContainer().toLowerCase().contains(text.toLowerCase());
 		}
+
 		this.reloadTreetable();
 	}
 
-	private boolean isRegex(final String str) {
-		try {
-			Pattern.compile(str);
-			return true;
-		} catch (final PatternSyntaxException e) {
-			return false;
+	public void useComponentFilter() {
+		final String text = this.filterComponent.getText();
+
+		if ((text == null) || text.isEmpty()) {
+			this.thdPredicate = call -> true;
+		} else {
+			this.thdPredicate = call -> call.getComponent().toLowerCase().contains(text.toLowerCase());
 		}
+
+		this.reloadTreetable();
+	}
+
+	public void useOperationFilter() {
+		final String text = this.filterOperation.getText();
+
+		if ((text == null) || text.isEmpty()) {
+			this.fthPredicate = call -> true;
+		} else {
+			this.fthPredicate = call -> call.getOperation().toLowerCase().contains(text.toLowerCase());
+		}
+
+		this.reloadTreetable();
+	}
+
+	public void useTraceIDFilter() {
+		final String text = this.filterTraceID.getText();
+
+		if ((text == null) || text.isEmpty()) {
+			this.fifPredicate = call -> true;
+		} else {
+			this.fifPredicate = call -> Long.toString(call.getTraceID()).contains(text);
+		}
+
+		this.reloadTreetable();
 	}
 
 	private void reloadTreetable() {
@@ -160,7 +192,7 @@ public final class TracesViewController {
 		this.treetable.setRoot(root);
 		this.treetable.setShowRoot(false);
 
-		traces.stream().map(trace -> trace.getRootOperationCall()).filter(this.fstPredicate).filter(this.sndPredicate)
-		.forEach(call -> rootChildren.add(new LazyOperationCallTreeItem<OperationCall>(call)));
+		traces.stream().map(trace -> trace.getRootOperationCall()).filter(this.fstPredicate).filter(this.sndPredicate).filter(this.thdPredicate).filter(this.fthPredicate)
+				.filter(this.fifPredicate).forEach(call -> rootChildren.add(new LazyOperationCallTreeItem<OperationCall>(call)));
 	}
 }

@@ -1,4 +1,4 @@
-#regexpfilter {
+#filterContainer, #filterComponent, #filterOperation, #filterTraceID {
 	-fx-background-color: white;
 	-fx-border-color: lightgray;
 }

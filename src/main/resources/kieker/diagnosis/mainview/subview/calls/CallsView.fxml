@@ -20,9 +20,15 @@
 		<RadioButton text="%CallsView.btnShowJustFailed.text" toggleGroup="$togglegroup" onAction="#showJustFailedMethods" />
 	</HBox>
 
-	<TextField promptText="%CallsView.text.message" onAction="#useRegExp" fx:id="regexpfilter"
-		GridPane.rowIndex="1" />
-
+	<GridPane GridPane.rowIndex="1">
+		<hgap>5</hgap>
+		
+		<TextField promptText="%CallsView.text.message" onAction="#useContainerFilter" fx:id="filterContainer" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS"/>
+		<TextField promptText="%CallsView.text.message1" onAction="#useComponentFilter" fx:id="filterComponent" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+		<TextField promptText="%CallsView.text.message2" onAction="#useOperationFilter" fx:id="filterOperation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
+		<TextField promptText="%CallsView.text.message3" onAction="#useTraceIDFilter" fx:id="filterTraceID" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
+	</GridPane>
+	
 	<TableView fx:id="table" GridPane.hgrow="ALWAYS"
 		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true" onMouseClicked="#selectCall">
 

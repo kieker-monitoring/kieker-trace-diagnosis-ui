@@ -21,9 +21,15 @@
 		<RadioButton text="%TracesView.showJustFailureContaining.text" toggleGroup="$togglegroup" onAction="#showJustFailureContainingTraces" />		
 	</HBox>
 
-	<TextField promptText="%TracesView.textFilter.message" onAction="#useRegExp" fx:id="regexpfilter"
-		GridPane.rowIndex="1" />
-
+	<GridPane GridPane.rowIndex="1">
+		<hgap>5</hgap>
+		
+		<TextField promptText="%TracesView.text.message" onAction="#useContainerFilter" fx:id="filterContainer" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS"/>
+		<TextField promptText="%TracesView.text.message1" onAction="#useComponentFilter" fx:id="filterComponent" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+		<TextField promptText="%TracesView.text.message2" onAction="#useOperationFilter" fx:id="filterOperation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
+		<TextField promptText="%TracesView.text.message3" onAction="#useTraceIDFilter" fx:id="filterTraceID" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
+	</GridPane>
+	
 	<TreeTableView fx:id="treetable" GridPane.hgrow="ALWAYS"
 		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true" onMouseClicked="#selectCall">
 		<columns>
