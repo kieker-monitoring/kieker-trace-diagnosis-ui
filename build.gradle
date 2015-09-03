@@ -1,6 +1,7 @@
 apply plugin: 'application'
 apply plugin: 'eclipse'
 
+jar.baseName = 'kieker-trace-diagnosis'
 mainClassName = 'kieker.diagnosis.Main'
 version = '1.0'
 
