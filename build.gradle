@@ -23,16 +23,6 @@ dependencies {
 	testCompile 'junit:junit:4.12'
 }
 
-apply plugin: 'pmd'
-pmd { 
-	ignoreFailures = true
-
-	ruleSets = []
-	ruleSetFiles = files('config/pmd/ruleset.xml')
-	
-	toolVersion = '5.3.3'
-}
-
 apply plugin: 'checkstyle'
 checkstyle {
 	ignoreFailures = true
