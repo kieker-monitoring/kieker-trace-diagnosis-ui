@@ -25,9 +25,9 @@
 	<GridPane GridPane.rowIndex="1">
 		<hgap>5</hgap>
 		
-		<TextField promptText="%AggregatedCallsView.text.message" onAction="#useContainerFilter" fx:id="filterContainer" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS"/>
-		<TextField promptText="%AggregatedCallsView.text.message1" onAction="#useComponentFilter" fx:id="filterComponent" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
-		<TextField promptText="%AggregatedCallsView.text.message2" onAction="#useOperationFilter" fx:id="filterOperation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
+		<TextField promptText="%filterContainer" onAction="#useContainerFilter" fx:id="filterContainer" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS"/>
+		<TextField promptText="%filterComponent" onAction="#useComponentFilter" fx:id="filterComponent" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+		<TextField promptText="%filterOperation" onAction="#useOperationFilter" fx:id="filterOperation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
 	</GridPane>
 	
 	<TableView fx:id="table" GridPane.hgrow="ALWAYS"
