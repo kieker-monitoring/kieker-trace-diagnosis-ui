@@ -23,12 +23,6 @@ dependencies {
 	testCompile 'junit:junit:4.12'
 }
 
-apply plugin: 'checkstyle'
-checkstyle {
-	ignoreFailures = true
-	showViolations = false
-}
-
 apply plugin: 'findbugs'
 findbugs { 
 	ignoreFailures = true 
