@@ -20,8 +20,13 @@
 		<RadioButton text="%AggregatedTracesView.btnShowJustFailureContaining.text" toggleGroup="$togglegroup" onAction="#showJustFailureContainingTraces" />		
 	</HBox>
 	
-	<TextField promptText="%AggregatedTracesView.text.message" onAction="#useRegExp" fx:id="regexpfilter"
-		GridPane.rowIndex="1" />
+	<GridPane GridPane.rowIndex="1">
+		<hgap>5</hgap>
+		
+		<TextField promptText="%filterContainer" onAction="#useContainerFilter" fx:id="filterContainer" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS"/>
+		<TextField promptText="%filterComponent" onAction="#useComponentFilter" fx:id="filterComponent" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+		<TextField promptText="%filterOperation" onAction="#useOperationFilter" fx:id="filterOperation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
+	</GridPane>
 
 	<TreeTableView fx:id="treetable" GridPane.hgrow="ALWAYS"
 		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true"  onMouseClicked="#selectCall">

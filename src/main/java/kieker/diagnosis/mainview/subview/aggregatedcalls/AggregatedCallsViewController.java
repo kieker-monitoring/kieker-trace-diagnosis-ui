@@ -19,8 +19,6 @@ package kieker.diagnosis.mainview.subview.aggregatedcalls;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Function;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
@@ -43,11 +41,15 @@ public final class AggregatedCallsViewController {
 
 	private FilteredList<AggregatedOperationCall> fstFilteredData;
 	private FilteredList<AggregatedOperationCall> sndFilteredData;
+	private FilteredList<AggregatedOperationCall> thdFilteredData;
+	private FilteredList<AggregatedOperationCall> fthFilteredData;
 
 	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
 
 	@FXML private TableView<AggregatedOperationCall> table;
-	@FXML private TextField regexpfilter;
+	@FXML private TextField filterContainer;
+	@FXML private TextField filterComponent;
+	@FXML private TextField filterOperation;
 
 	@FXML private TextField minimalDuration;
 	@FXML private TextField maximalDuration;
@@ -68,11 +70,13 @@ public final class AggregatedCallsViewController {
 		final DataModel dataModel = DataModel.getInstance();
 
 		this.fstFilteredData = new FilteredList<>(dataModel.getAggregatedOperationCalls());
-		this.sndFilteredData = new FilteredList<AggregatedOperationCall>(this.fstFilteredData);
+		this.sndFilteredData = new FilteredList<>(this.fstFilteredData);
+		this.thdFilteredData = new FilteredList<>(this.sndFilteredData);
+		this.fthFilteredData = new FilteredList<>(this.thdFilteredData);
 
-		this.sndFilteredData.addListener((ListChangeListener<AggregatedOperationCall>) change -> this.selection.set(Optional.empty()));
+		this.fthFilteredData.addListener((ListChangeListener<AggregatedOperationCall>) change -> this.selection.set(Optional.empty()));
 
-		final SortedList<AggregatedOperationCall> sortedData = new SortedList<>(this.sndFilteredData);
+		final SortedList<AggregatedOperationCall> sortedData = new SortedList<>(this.fthFilteredData);
 		sortedData.comparatorProperty().bind(this.table.comparatorProperty());
 		this.table.setItems(sortedData);
 
@@ -112,22 +116,33 @@ public final class AggregatedCallsViewController {
 		this.fstFilteredData.setPredicate(call -> call.isFailed());
 	}
 
-	public void useRegExp() {
-		final String regExpr = this.regexpfilter.getText();
+	public void useContainerFilter() {
+		final String text = this.filterContainer.getText();
 
-		if ((regExpr == null) || regExpr.isEmpty() || !this.isRegex(regExpr)) {
+		if ((text == null) || text.isEmpty()) {
 			this.sndFilteredData.setPredicate(null);
 		} else {
-			this.sndFilteredData.setPredicate(call -> call.getOperation().matches(regExpr));
+			this.sndFilteredData.setPredicate(call -> call.getContainer().toLowerCase().contains(text.toLowerCase()));
 		}
 	}
 
-	private boolean isRegex(final String str) {
-		try {
-			Pattern.compile(str);
-			return true;
-		} catch (final PatternSyntaxException e) {
-			return false;
+	public void useComponentFilter() {
+		final String text = this.filterComponent.getText();
+
+		if ((text == null) || text.isEmpty()) {
+			this.thdFilteredData.setPredicate(null);
+		} else {
+			this.thdFilteredData.setPredicate(call -> call.getComponent().toLowerCase().contains(text.toLowerCase()));
+		}
+	}
+
+	public void useOperationFilter() {
+		final String text = this.filterOperation.getText();
+
+		if ((text == null) || text.isEmpty()) {
+			this.fthFilteredData.setPredicate(null);
+		} else {
+			this.fthFilteredData.setPredicate(call -> call.getOperation().toLowerCase().contains(text.toLowerCase()));
 		}
 	}
 
