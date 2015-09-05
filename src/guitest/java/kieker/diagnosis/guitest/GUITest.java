@@ -16,9 +16,11 @@
 
 package kieker.diagnosis.guitest;
 
+import static org.junit.Assert.assertTrue;
 import javafx.stage.Stage;
 import kieker.diagnosis.Main;
 import kieker.diagnosis.guitest.mainview.MainView;
+import kieker.diagnosis.guitest.mainview.dialog.AboutDialog;
 
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -34,7 +36,6 @@ public final class GUITest extends ApplicationTest {
 	@Test
 	public void allButtonsShouldBeAvailable() {
 		final MainView mainView = new MainView(this);
-
 		mainView.getAggregatedTracesButton().click();
 		mainView.getAggregatedCallsButton().click();
 		mainView.getStatisticsButton().click();
@@ -42,4 +43,15 @@ public final class GUITest extends ApplicationTest {
 		mainView.getCallsButton().click();
 	}
 
+	@Test
+	public void aboutDialogShouldWork() {
+		final MainView mainView = new MainView(this);
+		mainView.getHelpButton().click();
+		mainView.getAboutButton().click();
+
+		final AboutDialog aboutDialog = new AboutDialog(this);
+		assertTrue(aboutDialog.getDescriptionLabel().getText().contains("Kieker Trace Diagnosis"));
+		assertTrue(aboutDialog.getDescriptionLabel().getText().contains("Copyright 2015 Kieker Project (http://kieker-monitoring.net)"));
+		aboutDialog.getOkayButton().click();
+	}
 }
