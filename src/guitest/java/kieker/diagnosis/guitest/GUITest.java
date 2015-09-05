@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 import kieker.diagnosis.Main;
 import kieker.diagnosis.guitest.mainview.MainView;
 import kieker.diagnosis.guitest.mainview.dialog.AboutDialog;
+import kieker.diagnosis.guitest.mainview.dialog.SettingsDialog;
 
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -53,5 +54,15 @@ public final class GUITest extends ApplicationTest {
 		assertTrue(aboutDialog.getDescriptionLabel().getText().contains("Kieker Trace Diagnosis"));
 		assertTrue(aboutDialog.getDescriptionLabel().getText().contains("Copyright 2015 Kieker Project (http://kieker-monitoring.net)"));
 		aboutDialog.getOkayButton().click();
+	}
+
+	@Test
+	public void settingsDialogShouldWork() {
+		final MainView mainView = new MainView(this);
+		mainView.getFileButton().click();
+		mainView.getSettingsButton().click();
+
+		final SettingsDialog settingsDialog = new SettingsDialog(this);
+		settingsDialog.getOkayButton().click();
 	}
 }

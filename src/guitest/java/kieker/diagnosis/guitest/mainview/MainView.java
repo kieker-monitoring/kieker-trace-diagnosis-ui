@@ -60,6 +60,10 @@ public final class MainView {
 		return new Button(this.applicationTest, "#file");
 	}
 
+	public Button getSettingsButton() {
+		return new Button(this.applicationTest, "#settings");
+	}
+
 	public Button getOpenMonitoringLogButton() {
 		return new Button(this.applicationTest, "#openMonitoringLog");
 	}

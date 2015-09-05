@@ -4,10 +4,10 @@
 <VBox fx:id="view" xmlns:fx="http://javafx.com/fxml" fx:controller="kieker.diagnosis.mainview.Controller">
 
 	<MenuBar>
-		<Menu text="%View.mntmFile.text">
+		<Menu text="%View.mntmFile.text" id="file">
 			<MenuItem text="%View.mntmOpenMonitoringLog.text" onAction="#showImportDialog"/>
 			<SeparatorMenuItem />
-			<MenuItem text="%View.mntmSettings.text" onAction="#showSettings" />
+			<MenuItem text="%View.mntmSettings.text" onAction="#showSettings" id="settings" />
 			<SeparatorMenuItem />
 			<MenuItem text="%View.mntmExit.text" onAction="#close"/>
 		</Menu>
