@@ -5,7 +5,7 @@
 
 	<MenuBar>
 		<Menu text="%View.mntmFile.text" id="file">
-			<MenuItem text="%View.mntmOpenMonitoringLog.text" onAction="#showImportDialog"/>
+			<MenuItem text="%View.mntmOpenMonitoringLog.text" onAction="#showImportDialog" id="openMonitoringLog"/>
 			<SeparatorMenuItem />
 			<MenuItem text="%View.mntmSettings.text" onAction="#showSettings" id="settings" />
 			<SeparatorMenuItem />

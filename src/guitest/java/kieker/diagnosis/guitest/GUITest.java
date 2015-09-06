@@ -17,11 +17,17 @@
 package kieker.diagnosis.guitest;
 
 import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+
 import javafx.stage.Stage;
 import kieker.diagnosis.Main;
 import kieker.diagnosis.guitest.mainview.MainView;
 import kieker.diagnosis.guitest.mainview.dialog.AboutDialog;
 import kieker.diagnosis.guitest.mainview.dialog.SettingsDialog;
+import kieker.diagnosis.guitest.mainview.subview.CallsView;
+import kieker.diagnosis.guitest.mainview.subview.TracesView;
+import kieker.diagnosis.model.DataModel;
 
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -65,4 +71,39 @@ public final class GUITest extends ApplicationTest {
 		final SettingsDialog settingsDialog = new SettingsDialog(this);
 		settingsDialog.getOkayButton().click();
 	}
+
+	@Test
+	public void importOfFirstExampleMonitoringLogShouldWork() {
+		// Unfortunately TestFX cannot handle the native file dialog of JavaFX. Therefore we have to use direct access as a workaround.
+		DataModel.getInstance().loadMonitoringLogFromFS(new File("example/execution monitoring log"));
+
+		final MainView mainView = new MainView(this);
+		mainView.getCallsButton().click();
+
+		final CallsView callsView = new CallsView(this);
+		assertTrue(callsView.getCounterTextField().getText().contains("6540"));
+
+		mainView.getTracesButton().click();
+
+		final TracesView tracesView = new TracesView(this);
+		assertTrue(tracesView.getCounterTextField().getText().contains("1635"));
+	}
+
+	@Test
+	public void importOfSecondExampleMonitoringLogShouldWork() {
+		// Unfortunately TestFX cannot handle the native file dialog of JavaFX. Therefore we have to use direct access as a workaround.
+		DataModel.getInstance().loadMonitoringLogFromFS(new File("example/event monitoring log"));
+
+		final MainView mainView = new MainView(this);
+		mainView.getCallsButton().click();
+
+		final CallsView callsView = new CallsView(this);
+		assertTrue(callsView.getCounterTextField().getText().contains("396"));
+
+		mainView.getTracesButton().click();
+
+		final TracesView tracesView = new TracesView(this);
+		assertTrue(tracesView.getCounterTextField().getText().contains("100"));
+	}
+
 }
