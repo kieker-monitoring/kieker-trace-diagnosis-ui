@@ -6,7 +6,7 @@
 
 	<spacing>10</spacing>
 
-	<Label text="%description">
+	<Label text="%description" id="description">
 		<VBox.margin>
 			<javafx.geometry.Insets left="10" right="10" top="10" />
 		</VBox.margin>
@@ -19,7 +19,7 @@
 			<javafx.geometry.Insets right="10" />
 		</VBox.margin>
 		<buttons>
-			<Button text="%AboutDialog.btnOkay.text" onAction="#closeDialog" />
+			<Button text="%AboutDialog.btnOkay.text" onAction="#closeDialog" id="okay" />
 		</buttons>
 	</ButtonBar>
 

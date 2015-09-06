@@ -4,15 +4,15 @@
 <VBox fx:id="view" xmlns:fx="http://javafx.com/fxml" fx:controller="kieker.diagnosis.mainview.Controller">
 
 	<MenuBar>
-		<Menu text="%View.mntmFile.text">
-			<MenuItem text="%View.mntmOpenMonitoringLog.text" onAction="#showImportDialog"/>
+		<Menu text="%View.mntmFile.text" id="file">
+			<MenuItem text="%View.mntmOpenMonitoringLog.text" onAction="#showImportDialog" id="openMonitoringLog"/>
 			<SeparatorMenuItem />
-			<MenuItem text="%View.mntmSettings.text" onAction="#showSettings" />
+			<MenuItem text="%View.mntmSettings.text" onAction="#showSettings" id="settings" />
 			<SeparatorMenuItem />
 			<MenuItem text="%View.mntmExit.text" onAction="#close"/>
 		</Menu>
-		<Menu text="%View.mntmHelp.text">
-			<MenuItem text="%View.mntmAbout.text" onAction="#showAbout"/>
+		<Menu text="%View.mntmHelp.text" id="help">
+			<MenuItem text="%View.mntmAbout.text" onAction="#showAbout" id="about"/>
 		</Menu>
 	</MenuBar>
 
