@@ -26,6 +26,7 @@ import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
+import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.model.importer.stages.BeginEndOfMonitoringDetector;
 import kieker.diagnosis.model.importer.stages.OperationCallHandlerComposite;
 import kieker.diagnosis.model.importer.stages.ReadingComposite;
@@ -63,7 +64,7 @@ public final class ImportAnalysisConfiguration extends Configuration {
 		final OperationCallHandlerComposite operationCallHandler = new OperationCallHandlerComposite(this.operationCalls, this.aggregatedOperationCalls);
 
 		this.beginEndOfMonitoringDetector = new BeginEndOfMonitoringDetector();
-		this.reconstruction = new TraceReconstructionComposite(this.traces);
+		this.reconstruction = new TraceReconstructionComposite(this.traces, PropertiesModel.getInstance().isAdditionalLogChecks());
 
 		// Connect the stages
 		super.connectPorts(reader.getOutputPort(), typeFilter.getInputPort());
@@ -85,6 +86,10 @@ public final class ImportAnalysisConfiguration extends Configuration {
 
 	public int countIncompleteTraces() {
 		return this.reconstruction.countIncompleteTraces();
+	}
+
+	public int countDanglingEvents() {
+		return this.reconstruction.countDanglingRecords();
 	}
 
 	public List<Trace> getTracesList() {

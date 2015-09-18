@@ -45,14 +45,14 @@ public final class TraceReconstructionComposite extends AbstractCompositeStage {
 	private final LegacyTraceReconstructor legacyReconstructor;
 	private final TraceReconstructor reconstructor;
 
-	public TraceReconstructionComposite(final List<Trace> traces) {
+	public TraceReconstructionComposite(final List<Trace> traces, final boolean activateAdditionalLogChecks) {
 		final Distributor<Trace> distributor = new Distributor<>(new CopyByReferenceStrategy());
 		final Merger<Trace> merger = new Merger<>();
 
 		this.typeFilter = new MultipleInstanceOfFilter<>();
 		this.tracesCollector = new CollectorSink<>(traces);
 		this.statisticsDecorator = new TraceStatisticsDecorator();
-		this.reconstructor = new TraceReconstructor();
+		this.reconstructor = new TraceReconstructor(activateAdditionalLogChecks);
 		this.legacyReconstructor = new LegacyTraceReconstructor();
 
 		this.outputPort = this.statisticsDecorator.getOutputPort();
@@ -68,6 +68,10 @@ public final class TraceReconstructionComposite extends AbstractCompositeStage {
 
 	public int countIncompleteTraces() {
 		return this.reconstructor.countIncompleteTraces() + this.legacyReconstructor.countIncompleteTraces();
+	}
+
+	public int countDanglingRecords() {
+		return this.reconstructor.countDanglingRecords() + this.legacyReconstructor.countDanglingRecords();
 	}
 
 	public InputPort<IMonitoringRecord> getInputPort() {

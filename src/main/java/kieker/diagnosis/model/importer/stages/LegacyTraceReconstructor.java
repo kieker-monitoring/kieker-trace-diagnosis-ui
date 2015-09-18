@@ -42,6 +42,10 @@ final class LegacyTraceReconstructor extends AbstractTransformation<OperationExe
 		return this.traceBuffers.size();
 	}
 
+	public int countDanglingRecords() {
+		return 0;
+	}
+
 	@Override
 	protected void execute(final OperationExecutionRecord input) {
 		this.handleOperationExecutionRecord(input);

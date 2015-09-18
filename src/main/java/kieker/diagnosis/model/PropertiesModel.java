@@ -34,11 +34,13 @@ public final class PropertiesModel extends Observable {
 	private static final String KEY_OPERATIONS = "operations";
 	private static final String KEY_COMPONENTS = "components";
 	private static final String KEY_GRAPHVIZ_PATH = "graphvizpath";
+	private static final String KEY_ADDITIONAL_LOG_CHECKS = "additionalLogChecks";
 
 	private String graphvizPath;
 	private TimeUnit timeUnit;
 	private ComponentNames componentNames;
 	private OperationNames operationNames;
+	private boolean additionalLogChecks;
 
 	public PropertiesModel() {
 		this.loadSettings();
@@ -51,6 +53,7 @@ public final class PropertiesModel extends Observable {
 		this.timeUnit = TimeUnit.valueOf(preferences.get(PropertiesModel.KEY_TIMEUNIT, TimeUnit.NANOSECONDS.name()));
 		this.componentNames = ComponentNames.valueOf(preferences.get(PropertiesModel.KEY_COMPONENTS, ComponentNames.LONG.name()));
 		this.operationNames = OperationNames.valueOf(preferences.get(PropertiesModel.KEY_OPERATIONS, OperationNames.SHORT.name()));
+		this.additionalLogChecks = Boolean.valueOf(preferences.get(PropertiesModel.KEY_ADDITIONAL_LOG_CHECKS, Boolean.FALSE.toString()));
 	}
 
 	private void saveSettings() {
@@ -60,6 +63,7 @@ public final class PropertiesModel extends Observable {
 		preferences.put(PropertiesModel.KEY_TIMEUNIT, this.timeUnit.name());
 		preferences.put(PropertiesModel.KEY_COMPONENTS, this.componentNames.name());
 		preferences.put(PropertiesModel.KEY_OPERATIONS, this.operationNames.name());
+		preferences.put(PropertiesModel.KEY_ADDITIONAL_LOG_CHECKS, Boolean.toString(this.additionalLogChecks));
 
 		try {
 			preferences.flush();
@@ -74,7 +78,6 @@ public final class PropertiesModel extends Observable {
 
 	public void setGraphvizPath(final String graphvizPath) {
 		this.graphvizPath = graphvizPath;
-
 		this.saveSettings();
 	}
 
@@ -107,6 +110,15 @@ public final class PropertiesModel extends Observable {
 
 	public static PropertiesModel getInstance() {
 		return PropertiesModel.INSTANCE;
+	}
+
+	public boolean isAdditionalLogChecks() {
+		return this.additionalLogChecks;
+	}
+
+	public void setAdditionalLogChecks(final boolean additionalLogChecks) {
+		this.additionalLogChecks = additionalLogChecks;
+		this.saveSettings();
 	}
 
 	/**

@@ -40,6 +40,7 @@ public final class SettingsDialogViewController {
 	@FXML private ComboBox<OperationNames> operationNames;
 	@FXML private ComboBox<ComponentNames> componentNames;
 	@FXML private ComboBox<TimeUnit> timeunits;
+	@FXML private ComboBox<Boolean> additionalLogChecks;
 
 	@FXML private Node view;
 
@@ -47,6 +48,7 @@ public final class SettingsDialogViewController {
 		this.timeunits.setItems(FXCollections.observableArrayList(SettingsDialogViewController.TIME_UNITS));
 		this.componentNames.setItems(FXCollections.observableArrayList(ComponentNames.values()));
 		this.operationNames.setItems(FXCollections.observableArrayList(OperationNames.values()));
+		this.additionalLogChecks.setItems(FXCollections.observableArrayList(Boolean.TRUE, Boolean.FALSE));
 
 		this.loadSettings();
 	}
@@ -67,12 +69,14 @@ public final class SettingsDialogViewController {
 		this.operationNames.getSelectionModel().select(this.propertiesModel.getOperationNames());
 		this.componentNames.getSelectionModel().select(this.propertiesModel.getComponentNames());
 		this.timeunits.getSelectionModel().select(this.propertiesModel.getTimeUnit());
+		this.additionalLogChecks.getSelectionModel().select(this.propertiesModel.isAdditionalLogChecks());
 	}
 
 	private void saveSettings() {
 		this.propertiesModel.setOperationNames(this.operationNames.getSelectionModel().getSelectedItem());
 		this.propertiesModel.setComponentNames(this.componentNames.getSelectionModel().getSelectedItem());
 		this.propertiesModel.setTimeUnit(this.timeunits.getSelectionModel().getSelectedItem());
+		this.propertiesModel.setAdditionalLogChecks(this.additionalLogChecks.getSelectionModel().getSelectedItem());
 	}
 
 }

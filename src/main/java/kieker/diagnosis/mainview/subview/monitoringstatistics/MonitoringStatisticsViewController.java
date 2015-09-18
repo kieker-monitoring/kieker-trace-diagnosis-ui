@@ -58,6 +58,7 @@ public final class MonitoringStatisticsViewController {
 	@FXML private TextField numberofaggfailedtraces;
 	@FXML private TextField numberofaggfailuretraces;
 	@FXML private TextField incompletetraces;
+	@FXML private TextField danglingrecords;
 
 	public void initialize() {
 		final ObjectProperty<File> importDirectory = this.dataModel.getImportDirectory();
@@ -98,6 +99,9 @@ public final class MonitoringStatisticsViewController {
 
 		final ObjectProperty<Integer> countIncompleteTraces = this.dataModel.countIncompleteTraces();
 		this.incompletetraces.textProperty().bind(Bindings.createStringBinding(() -> Integer.toString(countIncompleteTraces.get()), countIncompleteTraces));
+
+		final ObjectProperty<Integer> countDanglingRecords = this.dataModel.countDanglingRecords();
+		this.danglingrecords.textProperty().bind(Bindings.createStringBinding(() -> Integer.toString(countDanglingRecords.get()), countDanglingRecords));
 	}
 
 	private String assembleTimeString(final Long timestamp) {

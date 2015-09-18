@@ -16,9 +16,11 @@
 
 package kieker.diagnosis.model.importer.stages;
 
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import kieker.common.record.flow.IFlowRecord;
@@ -40,9 +42,20 @@ import teetime.stage.basic.AbstractTransformation;
 final class TraceReconstructor extends AbstractTransformation<IFlowRecord, Trace> {
 
 	private final Map<Long, TraceBuffer> traceBuffers = new HashMap<>();
+	private final List<TraceBuffer> faultyTraceBuffers = new ArrayList<>();
+	private final boolean activateAdditionalLogChecks;
+	private int danglingRecords;
+
+	public TraceReconstructor(final boolean activateAdditionalLogChecks) {
+		this.activateAdditionalLogChecks = activateAdditionalLogChecks;
+	}
 
 	public int countIncompleteTraces() {
-		return this.traceBuffers.size();
+		return this.traceBuffers.size() + this.faultyTraceBuffers.size();
+	}
+
+	public int countDanglingRecords() {
+		return this.danglingRecords - this.faultyTraceBuffers.size();
 	}
 
 	@Override
@@ -65,18 +78,22 @@ final class TraceReconstructor extends AbstractTransformation<IFlowRecord, Trace
 		final long traceID = input.getTraceId();
 		final TraceBuffer traceBuffer = this.traceBuffers.get(traceID);
 
-		traceBuffer.handleEvent(input);
-		if (traceBuffer.isTraceComplete()) {
-			final Trace trace = traceBuffer.reconstructTrace();
-			this.traceBuffers.remove(traceID);
-			super.getOutputPort().send(trace);
+		if (traceBuffer != null) {
+			traceBuffer.handleEvent(input);
+			if (traceBuffer.isTraceComplete()) {
+				final Trace trace = traceBuffer.reconstructTrace();
+				this.traceBuffers.remove(traceID);
+				super.getOutputPort().send(trace);
+			}
+		} else {
+			this.danglingRecords++;
 		}
 	}
 
 	/**
 	 * @author Nils Christian Ehmke
 	 */
-	private static final class TraceBuffer {
+	private final class TraceBuffer {
 
 		private final String hostname;
 		private final Deque<BeforeOperationEvent> stack = new LinkedList<>();
@@ -93,7 +110,7 @@ final class TraceReconstructor extends AbstractTransformation<IFlowRecord, Trace
 			if (record instanceof BeforeOperationEvent) {
 				this.handleBeforeOperationEventRecord((BeforeOperationEvent) record);
 			} else if (record instanceof AfterOperationEvent) {
-				this.handleAferOperationEventRecord((AfterOperationEvent) record);
+				this.handleAfterOperationEventRecord((AfterOperationEvent) record);
 			}
 		}
 
@@ -109,7 +126,7 @@ final class TraceReconstructor extends AbstractTransformation<IFlowRecord, Trace
 			this.header = newCall;
 		}
 
-		private void handleAferOperationEventRecord(final AfterOperationEvent record) {
+		private void handleAfterOperationEventRecord(final AfterOperationEvent record) {
 			final BeforeOperationEvent beforeEvent = this.stack.pop();
 
 			this.header.setDuration(record.getTimestamp() - beforeEvent.getTimestamp());
@@ -119,6 +136,13 @@ final class TraceReconstructor extends AbstractTransformation<IFlowRecord, Trace
 			}
 
 			this.header = this.header.getParent();
+
+			if (TraceReconstructor.this.activateAdditionalLogChecks) {
+				if (!beforeEvent.getOperationSignature().equals(record.getOperationSignature())) {
+					TraceReconstructor.this.faultyTraceBuffers.add(this);
+					TraceReconstructor.this.traceBuffers.remove(this.traceID);
+				}
+			}
 		}
 
 		public Trace reconstructTrace() {

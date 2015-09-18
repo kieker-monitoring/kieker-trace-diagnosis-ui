@@ -60,5 +60,8 @@
 
 	<Label text="%MonitoringStatisticsView.lblNonreconstructableTraces.text" GridPane.rowIndex="21" GridPane.columnIndex="1" />
 	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="incompletetraces" GridPane.rowIndex="21" GridPane.columnIndex="2" />
-
+	
+	<Label text="%MonitoringStatisticsView.lbldanglingRecords.text" GridPane.rowIndex="22" GridPane.columnIndex="1" />
+	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="danglingrecords" GridPane.rowIndex="22" GridPane.columnIndex="2" />
+	
 </GridPane>
