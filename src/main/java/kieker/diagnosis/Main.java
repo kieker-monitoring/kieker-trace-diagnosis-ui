@@ -16,16 +16,9 @@
 
 package kieker.diagnosis;
 
-import java.net.URL;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import kieker.diagnosis.mainview.Controller;
 
 /**
  * Contains the main method of this application.
@@ -46,15 +39,7 @@ public final class Main extends Application {
 
 	@Override
 	public void start(final Stage stage) throws Exception {
-		final URL resource = Main.class.getClassLoader().getResource("kieker/diagnosis/mainview/View.fxml");
-		final Pane pane = (Pane) FXMLLoader.load(resource, ResourceBundle.getBundle("kieker.diagnosis.mainview.view", Locale.getDefault()));
-		final Scene root = new Scene(pane);
-		stage.setScene(root);
-
-		stage.getIcons().add(new Image("kieker-logo.png"));
-		stage.setTitle("Kieker Trace Diagnosis - 1.1-SNAPSHOT");
-		stage.setMaximized(true);
-		stage.show();
+		Controller.loadMainPane(stage);
 	}
 
 }

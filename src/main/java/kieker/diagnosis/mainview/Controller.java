@@ -33,6 +33,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
@@ -139,6 +140,43 @@ public final class Controller {
 	}
 
 	private void loadPane(final Class<?> controllerClass) throws IOException {
+		final PaneData paneData = loadPaneData(controllerClass);
+
+		this.content.getChildren().clear();
+		this.content.getStylesheets().clear();
+
+		this.content.getStylesheets().add(paneData.getStylesheetURL());
+		this.content.getChildren().setAll(paneData.getNode());
+	}
+
+	private void loadDialogPane(final Class<?> controllerClass) throws IOException {
+		final PaneData paneData = loadPaneData(controllerClass);
+
+		final Scene scene = new Scene((Parent) paneData.getNode());
+		scene.getStylesheets().add(paneData.stylesheetURL);
+
+		final Stage dialogStage = new Stage();
+		dialogStage.setTitle(paneData.getTitle());
+		dialogStage.setResizable(false);
+		dialogStage.initModality(Modality.WINDOW_MODAL);
+		dialogStage.initOwner((this.view.getScene().getWindow()));
+		dialogStage.setScene(scene);
+		dialogStage.showAndWait();
+	}
+
+	public static void loadMainPane(final Stage stage) throws IOException {
+		final URL resource = Controller.class.getClassLoader().getResource("kieker/diagnosis/mainview/View.fxml");
+		final Pane pane = (Pane) FXMLLoader.load(resource, ResourceBundle.getBundle("kieker.diagnosis.mainview.view", Locale.getDefault()));
+		final Scene root = new Scene(pane);
+		stage.setScene(root);
+
+		stage.getIcons().add(new Image("kieker-logo.png"));
+		stage.setTitle("Kieker Trace Diagnosis - 1.1-SNAPSHOT");
+		stage.setMaximized(true);
+		stage.show();
+	}
+
+	private static PaneData loadPaneData(final Class<?> controllerClass) throws IOException {
 		final String baseName = controllerClass.getCanonicalName().replace("Controller", "");
 		final String viewFXMLName = baseName.replace(".", "/") + ".fxml";
 		final String cssName = baseName.replace(".", "/") + ".css";
@@ -148,37 +186,36 @@ public final class Controller {
 		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
 		final Node node = (Node) FXMLLoader.load(viewResource, resourceBundle);
 		final URL cssResource = Controller.class.getClassLoader().getResource(cssName);
+		final String title = (resourceBundle.containsKey("title") ? resourceBundle.getString("title") : "");
 
-		this.content.getChildren().clear();
-		this.content.getStylesheets().clear();
-
-		this.content.getStylesheets().add(cssResource.toExternalForm());
-		this.content.getChildren().setAll(node);
+		final PaneData paneData = new PaneData(node, title, cssResource.toExternalForm());
+		return paneData;
 	}
 
-	private void loadDialogPane(final Class<?> controllerClass) throws IOException {
-		final String baseName = controllerClass.getCanonicalName().replace("Controller", "");
-		final String viewFXMLName = baseName.replace(".", "/") + ".fxml";
-		final String cssName = baseName.replace(".", "/") + ".css";
-		final String bundleBaseName = baseName.toLowerCase(Locale.ROOT);
+	private static class PaneData {
 
-		final URL viewResource = Controller.class.getClassLoader().getResource(viewFXMLName);
-		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
-		final Parent node = (Parent) FXMLLoader.load(viewResource, resourceBundle);
-		final URL cssResource = Controller.class.getClassLoader().getResource(cssName);
+		private final Node node;
+		private final String title;
+		private final String stylesheetURL;
 
-		final String title = resourceBundle.getString("title");
+		public PaneData(final Node node, final String title, final String stylesheetURL) {
+			this.node = node;
+			this.title = title;
+			this.stylesheetURL = stylesheetURL;
+		}
 
-		final Scene scene = new Scene(node);
-		scene.getStylesheets().add(cssResource.toExternalForm());
+		public Node getNode() {
+			return this.node;
+		}
 
-		final Stage dialogStage = new Stage();
-		dialogStage.setTitle(title);
-		dialogStage.setResizable(false);
-		dialogStage.initModality(Modality.WINDOW_MODAL);
-		dialogStage.initOwner((this.view.getScene().getWindow()));
-		dialogStage.setScene(scene);
-		dialogStage.showAndWait();
+		public String getTitle() {
+			return this.title;
+		}
+
+		public String getStylesheetURL() {
+			return this.stylesheetURL;
+		}
+
 	}
 
 }
