@@ -20,16 +20,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This is an abstract base for classes representing operation calls (also called executions) within this application. As it can has multiple children, an instance
- * of this class can represent a whole call tree. This class implements the both methods {@link OperationCall#equals(Object)} and {@link OperationCall#hashCode()},
- * allowing to easily check whether two traces are equal and should be in the same equivalence class.
+ * This is an abstract base for classes representing operation calls (also called executions) within this application. As it can has multiple children, an instance of this class
+ * can represent a whole call tree. This class implements the both methods {@link OperationCall#equals(Object)} and {@link OperationCall#hashCode()}, allowing to easily check
+ * whether two traces are equal and should be in the same equivalence class.
  *
  * @author Nils Christian Ehmke
  *
  * @param <T>
  *            The precise type of the children. This should usually be the implementing class itself.
  */
-public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> { // NOPMD (Cyclomatic Complexity).
+public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> {
 
 	private final List<T> children = new ArrayList<>();
 
@@ -110,7 +110,7 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 			return true;
 		}
 		for (final T child : this.children) {
-			if (child.isFailed()) {
+			if (child.containsFailure()) {
 				return true;
 			}
 		}
@@ -118,7 +118,7 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 		return false;
 	}
 
-	public final int calculateHashCode() { // NOPMD (this method violates some metrics)
+	public final int calculateHashCode() {
 		final int prime = 31;
 		int result = 1;
 

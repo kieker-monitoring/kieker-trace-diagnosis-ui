@@ -27,7 +27,11 @@ import org.junit.Test;
 
 public abstract class AbstractOperationCallTest<T extends AbstractOperationCall<T>> {
 
-	protected abstract T createOperationCall(final String container, final String component, final String operation);
+	protected abstract T createOperationCall(final String container, final String component, final String operation, final String failedCause);
+
+	private final T createOperationCall(final String container, final String component, final String operation) {
+		return this.createOperationCall(container, component, operation, null);
+	}
 
 	@Test
 	public void equalsWithNullShouldNotLeadToException() {
@@ -99,4 +103,15 @@ public abstract class AbstractOperationCallTest<T extends AbstractOperationCall<
 		assertFalse(fstCall.isEqualTo(sndCall));
 	}
 
+	@Test
+	public void containsFailureForDeeplyNestedOperationCallsShouldWork() {
+		final T fstCall = this.createOperationCall("container", "component", "operation");
+		final T sndCall = this.createOperationCall("container", "component", "operation");
+		final T thdCall = this.createOperationCall("container", "component", "operation", "someException");
+
+		fstCall.addChild(sndCall);
+		sndCall.addChild(thdCall);
+
+		assertTrue(fstCall.containsFailure());
+	}
 }

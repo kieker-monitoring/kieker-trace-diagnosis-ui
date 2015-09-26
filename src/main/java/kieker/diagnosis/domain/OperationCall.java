@@ -17,10 +17,9 @@
 package kieker.diagnosis.domain;
 
 /**
- * This class represents a concrete operation call within this application. It adds some properties that are only required for concrete operation calls, like the
- * trace ID and the
+ * This class represents a concrete operation call within this application. It adds some properties that are only required for concrete operation calls, like the trace ID and the
  * duration. It extends the call tree mechanism (inherited from {@link AbstractOperationCall}) by a parent, allowing to navigate in both directions within the tree.
- * 
+ *
  * @author Nils Christian Ehmke
  */
 public final class OperationCall extends AbstractOperationCall<OperationCall> {
@@ -33,7 +32,11 @@ public final class OperationCall extends AbstractOperationCall<OperationCall> {
 	private long timestamp;
 
 	public OperationCall(final String container, final String component, final String operation, final long traceID, final long timestamp) {
-		super(container, component, operation, null);
+		this(container, component, operation, null, traceID, timestamp);
+	}
+
+	public OperationCall(final String container, final String component, final String operation, final String failedCause, final long traceID, final long timestamp) {
+		super(container, component, operation, failedCause);
 
 		this.traceID = traceID;
 		this.timestamp = timestamp;
