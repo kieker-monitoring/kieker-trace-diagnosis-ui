@@ -54,8 +54,8 @@ public final class OperationCallTest extends AbstractOperationCallTest<Operation
 	}
 
 	@Override
-	protected OperationCall createOperationCall(final String container, final String component, final String operation) {
-		return new OperationCall(container, component, operation, -1, 0);
+	protected OperationCall createOperationCall(final String container, final String component, final String operation, final String failedCause) {
+		return new OperationCall(container, component, operation, failedCause, -1, 0);
 	}
 
 }

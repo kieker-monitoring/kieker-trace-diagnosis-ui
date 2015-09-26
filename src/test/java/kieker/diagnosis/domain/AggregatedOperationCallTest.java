@@ -65,8 +65,8 @@ public final class AggregatedOperationCallTest extends AbstractOperationCallTest
 	}
 
 	@Override
-	protected AggregatedOperationCall createOperationCall(final String container, final String component, final String operation) {
-		return new AggregatedOperationCall(new OperationCall(container, component, operation, -1, 0));
+	protected AggregatedOperationCall createOperationCall(final String container, final String component, final String operation, final String failedCause) {
+		return new AggregatedOperationCall(new OperationCall(container, component, operation, failedCause, -1, 0));
 	}
 
 }
