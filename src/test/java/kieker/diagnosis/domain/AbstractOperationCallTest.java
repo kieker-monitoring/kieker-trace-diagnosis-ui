@@ -27,7 +27,8 @@ import org.junit.Test;
 
 public abstract class AbstractOperationCallTest<T extends AbstractOperationCall<T>> {
 
-	protected abstract T createOperationCall(final String container, final String component, final String operation, final String failedCause);
+	protected abstract T createOperationCall(final String container, final String component, final String operation,
+			final String failedCause);
 
 	private final T createOperationCall(final String container, final String component, final String operation) {
 		return this.createOperationCall(container, component, operation, null);
@@ -104,6 +105,13 @@ public abstract class AbstractOperationCallTest<T extends AbstractOperationCall<
 	}
 
 	@Test
+	public void containsFailureFoSimpleOperationCallsShouldWork() {
+		final T fstCall = this.createOperationCall("container", "component", "operation", "someException");
+
+		assertTrue(fstCall.containsFailure());
+	}
+
+	@Test
 	public void containsFailureForDeeplyNestedOperationCallsShouldWork() {
 		final T fstCall = this.createOperationCall("container", "component", "operation");
 		final T sndCall = this.createOperationCall("container", "component", "operation");
@@ -114,4 +122,17 @@ public abstract class AbstractOperationCallTest<T extends AbstractOperationCall<
 
 		assertTrue(fstCall.containsFailure());
 	}
+	
+	@Test
+	public void containsFailureForNoFailureShouldWork() {
+		final T fstCall = this.createOperationCall("container", "component", "operation");
+		final T sndCall = this.createOperationCall("container", "component", "operation");
+		final T thdCall = this.createOperationCall("container", "component", "operation");
+
+		fstCall.addChild(sndCall);
+		sndCall.addChild(thdCall);
+
+		assertFalse(fstCall.containsFailure());
+	}
+	
 }

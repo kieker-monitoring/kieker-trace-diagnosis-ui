@@ -27,12 +27,6 @@ import kieker.diagnosis.mainview.Controller;
  */
 public final class Main extends Application {
 
-	/**
-	 * The main method of this application. It initializes the JavaFX context and uses the main controller to start everything.
-	 *
-	 * @param args
-	 *            The command line arguments. They have currently no effect.
-	 */
 	public static void main(final String[] args) {
 		Application.launch(args);
 	}

@@ -16,7 +16,6 @@
 
 package kieker.diagnosis.common;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,9 +27,9 @@ import java.util.Map;
  * @param <O>
  *            The type of the values.
  */
-public final class Mapper<I, O> {
+public final class Mapper<I, O> extends HashMap<I, O> {
 
-	private final Map<I, O> internalMap = new HashMap<>();
+	private static final long serialVersionUID = 1L;
 	private O defaultValue;
 
 	public To map(final I key) {
@@ -42,23 +41,15 @@ public final class Mapper<I, O> {
 	}
 
 	public O resolve(final I key) {
-		if (this.internalMap.containsKey(key)) {
-			return this.internalMap.get(key);
+		if (super.containsKey(key)) {
+			return super.get(key);
 		} else {
 			return this.defaultValue;
 		}
 	}
 
 	public I invertedResolve(final O value) {
-		return this.internalMap.entrySet().parallelStream().filter(entry -> value.equals(entry.getValue())).map(Map.Entry::getKey).findFirst().orElse(null);
-	}
-
-	public Collection<I> keys() {
-		return this.internalMap.keySet();
-	}
-
-	public Collection<O> values() {
-		return this.internalMap.values();
+		return super.entrySet().parallelStream().filter(entry -> value.equals(entry.getValue())).map(Map.Entry::getKey).findFirst().orElse(null);
 	}
 
 	/**
@@ -69,19 +60,19 @@ public final class Mapper<I, O> {
 		private final I key;
 		private final boolean keyAvailable;
 
-		To(final I key) {
+		protected To(final I key) {
 			this.key = key;
 			this.keyAvailable = true;
 		}
 
-		public To() {
-			this.key = null; // NOPMD (null assignment)
+		protected To() {
+			this.key = null;
 			this.keyAvailable = false;
 		}
 
-		public void to(final O value) { // NOPMD (the method name may be short, but this is acceptable in this case)
+		public void to(final O value) {
 			if (this.keyAvailable) {
-				Mapper.this.internalMap.put(this.key, value);
+				Mapper.super.put(this.key, value);
 			} else {
 				Mapper.this.defaultValue = value;
 			}

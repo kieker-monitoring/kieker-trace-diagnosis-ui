@@ -49,9 +49,7 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 		this.container = container.intern();
 		this.component = component.intern();
 		this.operation = operation.intern();
-		if (failedCause != null) {
-			this.failedCause = failedCause.intern();
-		}
+		this.failedCause = (failedCause != null) ? failedCause.intern() : failedCause;
 	}
 
 	public void addChild(final T child) {
@@ -99,23 +97,11 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 	}
 
 	public final void setFailedCause(final String failedCause) {
-		this.failedCause = failedCause;
-		if (this.failedCause != null) {
-			this.failedCause = this.failedCause.intern();
-		}
+		this.failedCause = (failedCause != null) ? failedCause.intern() : failedCause;
 	}
 
 	public final boolean containsFailure() {
-		if (this.isFailed()) {
-			return true;
-		}
-		for (final T child : this.children) {
-			if (child.containsFailure()) {
-				return true;
-			}
-		}
-
-		return false;
+		return this.isFailed() || this.children.parallelStream().anyMatch(T::containsFailure);
 	}
 
 	public final int calculateHashCode() {
