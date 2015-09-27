@@ -20,10 +20,8 @@ import java.util.concurrent.TimeUnit;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
-import javafx.stage.Stage;
-import javafx.stage.Window;
+import kieker.diagnosis.mainview.dialog.AbstractDialogController;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.model.PropertiesModel.ComponentNames;
 import kieker.diagnosis.model.PropertiesModel.OperationNames;
@@ -31,7 +29,7 @@ import kieker.diagnosis.model.PropertiesModel.OperationNames;
 /**
  * @author Nils Christian Ehmke
  */
-public final class SettingsDialogViewController {
+public final class SettingsDialogViewController extends AbstractDialogController {
 
 	private static final TimeUnit[] TIME_UNITS = { TimeUnit.NANOSECONDS, TimeUnit.MICROSECONDS, TimeUnit.MILLISECONDS, TimeUnit.SECONDS, TimeUnit.MINUTES, TimeUnit.HOURS };
 
@@ -41,8 +39,6 @@ public final class SettingsDialogViewController {
 	@FXML private ComboBox<ComponentNames> componentNames;
 	@FXML private ComboBox<TimeUnit> timeunits;
 	@FXML private ComboBox<Boolean> additionalLogChecks;
-
-	@FXML private Node view;
 
 	public void initialize() {
 		this.timeunits.setItems(FXCollections.observableArrayList(SettingsDialogViewController.TIME_UNITS));
@@ -56,13 +52,6 @@ public final class SettingsDialogViewController {
 	public void saveAndCloseDialog() {
 		this.saveSettings();
 		this.closeDialog();
-	}
-
-	public void closeDialog() {
-		final Window window = this.view.getScene().getWindow();
-		if (window instanceof Stage) {
-			((Stage) window).close();
-		}
 	}
 
 	private void loadSettings() {

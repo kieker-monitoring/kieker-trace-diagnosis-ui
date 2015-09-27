@@ -16,23 +16,10 @@
 
 package kieker.diagnosis.mainview.dialog.about;
 
-import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.stage.Stage;
-import javafx.stage.Window;
+import kieker.diagnosis.mainview.dialog.AbstractDialogController;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class AboutDialogViewController {
-
-	@FXML private Node view;
-
-	public void closeDialog() {
-		final Window window = this.view.getScene().getWindow();
-		if (window instanceof Stage) {
-			((Stage) window).close();
-		}
-	}
-
+public final class AboutDialogViewController extends AbstractDialogController {
 }
