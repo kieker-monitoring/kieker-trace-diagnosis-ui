@@ -165,8 +165,8 @@ public final class Controller {
 	}
 
 	public static void loadMainPane(final Stage stage) throws IOException {
-		final URL resource = Controller.class.getClassLoader().getResource("kieker/diagnosis/mainview/View.fxml");
-		final Pane pane = (Pane) FXMLLoader.load(resource, ResourceBundle.getBundle("kieker.diagnosis.mainview.view", Locale.getDefault()));
+		final URL resource = Controller.class.getClassLoader().getResource("views/kieker/diagnosis/mainview/View.fxml");
+		final Pane pane = (Pane) FXMLLoader.load(resource, ResourceBundle.getBundle("locale.kieker.diagnosis.mainview.view", Locale.getDefault()));
 		final Scene root = new Scene(pane);
 		stage.setScene(root);
 
@@ -178,9 +178,9 @@ public final class Controller {
 
 	private static PaneData loadPaneData(final Class<?> controllerClass) throws IOException {
 		final String baseName = controllerClass.getCanonicalName().replace("Controller", "");
-		final String viewFXMLName = baseName.replace(".", "/") + ".fxml";
-		final String cssName = baseName.replace(".", "/") + ".css";
-		final String bundleBaseName = baseName.toLowerCase(Locale.ROOT);
+		final String viewFXMLName = "views/" + baseName.replace(".", "/") + ".fxml";
+		final String cssName = "views/" + baseName.replace(".", "/") + ".css";
+		final String bundleBaseName = "locale." + baseName.toLowerCase(Locale.ROOT);
 
 		final URL viewResource = Controller.class.getClassLoader().getResource(viewFXMLName);
 		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());

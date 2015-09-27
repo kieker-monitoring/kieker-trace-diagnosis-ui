@@ -13,7 +13,7 @@ public final class BooleanStringConverter extends StringConverter<Boolean> {
 	static {
 		final Class<SettingsDialogViewController> controllerClass = SettingsDialogViewController.class;
 		final String baseName = controllerClass.getCanonicalName().replace("Controller", "");
-		final String bundleBaseName = baseName.toLowerCase(Locale.ROOT);
+		final String bundleBaseName = "locale." + baseName.toLowerCase(Locale.ROOT);
 		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
 
 		final String yes = resourceBundle.getString("SettingsDialog.yes");
