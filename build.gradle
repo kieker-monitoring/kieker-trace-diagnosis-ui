@@ -45,6 +45,7 @@ configurations {
 task testGUI(type: Test) {
 	testClassesDir = project.sourceSets.guitest.output.classesDir
 	classpath = project.sourceSets.guitest.runtimeClasspath
+	reports.html.destination = file("$buildDir/reports/testsGUI")
 	jvmArgs = ['-Dglass.platform=Monocle', '-Dmonocle.platform=Headless', '-Dprism.order=sw', '-Dprism.text=t2k', '-Dtestfx.robot=glass'] 
 }
 	
