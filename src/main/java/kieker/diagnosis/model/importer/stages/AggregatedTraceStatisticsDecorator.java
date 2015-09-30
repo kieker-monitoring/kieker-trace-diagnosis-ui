@@ -17,9 +17,10 @@
 package kieker.diagnosis.model.importer.stages;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+import kieker.diagnosis.common.Statistics;
+import kieker.diagnosis.common.StatisticsUtility;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
@@ -100,7 +101,7 @@ public final class AggregatedTraceStatisticsDecorator extends AbstractTransforma
 
 			final List<Long> durationsOfCurrentEdge = this.durationsPerEdge.get(this.edgeIndex);
 
-			final Statistics statistics = this.calculateStatistics(durationsOfCurrentEdge);
+			final Statistics statistics = StatisticsUtility.calculateStatistics(durationsOfCurrentEdge);
 			rootOperationCall.setMinDuration(statistics.getMinDuration());
 			rootOperationCall.setMaxDuration(statistics.getMaxDuration());
 			rootOperationCall.setMeanDuration(statistics.getMeanDuration());
@@ -110,63 +111,6 @@ public final class AggregatedTraceStatisticsDecorator extends AbstractTransforma
 			for (final AggregatedOperationCall child : rootOperationCall.getChildren()) {
 				this.addDurationStatistics(child);
 			}
-		}
-
-		private Statistics calculateStatistics(final List<Long> durations) {
-			Collections.sort(durations);
-
-			long totalDuration = 0;
-			for (final Long duration : durations) {
-				totalDuration += duration;
-			}
-
-			final long minDuration = durations.get(0);
-			final long maxDuration = durations.get(durations.size() - 1);
-			final long meanDuration = totalDuration / durations.size();
-			final long medianDuration = durations.get(durations.size() / 2);
-
-			return new Statistics(totalDuration, meanDuration, medianDuration, minDuration, maxDuration);
-		}
-
-		/**
-		 * @author Nils Christian Ehmke
-		 */
-		private static class Statistics {
-
-			private final long totalDuration;
-			private final long meanDuration;
-			private final long medianDuration;
-			private final long minDuration;
-			private final long maxDuration;
-
-			public Statistics(final long totalDuration, final long meanDuration, final long medianDuration, final long minDuration, final long maxDuration) {
-				this.totalDuration = totalDuration;
-				this.meanDuration = meanDuration;
-				this.medianDuration = medianDuration;
-				this.minDuration = minDuration;
-				this.maxDuration = maxDuration;
-			}
-
-			public long getTotalDuration() {
-				return this.totalDuration;
-			}
-
-			public long getMeanDuration() {
-				return this.meanDuration;
-			}
-
-			public long getMedianDuration() {
-				return this.medianDuration;
-			}
-
-			public long getMinDuration() {
-				return this.minDuration;
-			}
-
-			public long getMaxDuration() {
-				return this.maxDuration;
-			}
-
 		}
 
 	}
