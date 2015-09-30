@@ -36,7 +36,6 @@ public final class OperationCallAggregator extends AbstractTransformation<Operat
 
 	@Override
 	protected void execute(final OperationCall call) {
-		// TODO we should use a better approach here than this "key"
 		final String key = call.getContainer() + "," + call.getComponent() + "," + call.getOperation() + ", " + call.getFailedCause();
 
 		if (!this.aggregationMap.containsKey(key)) {

@@ -182,8 +182,6 @@ public final class TracesViewController {
 	}
 
 	private void reloadTreetable() {
-		// TODO: This can be done better with the binding API
-
 		this.selection.set(Optional.empty());
 
 		final List<Trace> traces = this.dataModel.getTraces();

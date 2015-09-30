@@ -164,8 +164,6 @@ public final class AggregatedTracesViewController {
 	}
 
 	private void reloadTreetable() {
-		// TODO: This can be done better with the binding API
-
 		this.selection.set(Optional.empty());
 
 		final DataModel dataModel = DataModel.getInstance();
