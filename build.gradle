@@ -15,8 +15,8 @@ repositories {
 }
 
 dependencies {
-	compile 'net.sourceforge.teetime:teetime:2.1-SNAPSHOT'
-	compile 'net.sourceforge.teetime-stages:teetime-stages:2.1-SNAPSHOT'
+	compile 'net.sourceforge.teetime:teetime:2.0'
+	compile 'net.sourceforge.teetime-stages:teetime-stages:2.0'
 	compile 'net.kieker-monitoring:kieker:1.11'
 
 	testCompile 'org.testfx:testfx-core:4.0.1-alpha'
