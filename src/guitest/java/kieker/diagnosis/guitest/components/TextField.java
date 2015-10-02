@@ -17,6 +17,7 @@
 package kieker.diagnosis.guitest.components;
 
 import javafx.scene.Node;
+import javafx.scene.input.KeyCode;
 
 import org.testfx.framework.junit.ApplicationTest;
 
@@ -37,6 +38,10 @@ public final class TextField {
 
 	public void setText(final String text) {
 		this.applicationTest.clickOn(this.id).write(text);
+	}
+
+	public void pushEnter() {
+		this.applicationTest.clickOn(this.id).push(KeyCode.ENTER);
 	}
 
 }

@@ -80,7 +80,6 @@ public final class TracesViewController {
 		this.reloadTreetable();
 
 		final ObservableList<Trace> traces = this.dataModel.getTraces();
-
 		traces.addListener((final Change<? extends Trace> c) -> this.reloadTreetable());
 
 		this.traceDepth.textProperty().bind(this.createStringBindingForSelection(OperationCall::getStackDepth));
@@ -93,8 +92,6 @@ public final class TracesViewController {
 		this.percent.textProperty().bind(this.createPercentStringBindingForSelection(OperationCall::getPercent));
 		this.traceID.textProperty().bind(this.createStringBindingForSelection(OperationCall::getTraceID));
 		this.failed.textProperty().bind(this.createStringBindingForSelection(OperationCall::getFailedCause));
-
-		this.counter.textProperty().bind(Bindings.createStringBinding(() -> traces.size() + " " + this.resources.getString("TracesView.lblCounter.text"), traces));
 	}
 
 	private StringBinding createStringBindingForSelection(final Function<OperationCall, Object> mapper) {
@@ -186,11 +183,13 @@ public final class TracesViewController {
 
 		final List<Trace> traces = this.dataModel.getTraces();
 		final TreeItem<OperationCall> root = new TreeItem<>();
-		ObservableList<TreeItem<OperationCall>> rootChildren = root.getChildren();
+		final ObservableList<TreeItem<OperationCall>> rootChildren = root.getChildren();
 		this.treetable.setRoot(root);
 		this.treetable.setShowRoot(false);
 
 		traces.stream().map(trace -> trace.getRootOperationCall()).filter(this.fstPredicate).filter(this.sndPredicate).filter(this.thdPredicate).filter(this.fthPredicate)
 				.filter(this.fifPredicate).forEach(call -> rootChildren.add(new LazyOperationCallTreeItem<OperationCall>(call)));
+		
+		this.counter.textProperty().set(rootChildren.size() + " " + this.resources.getString("TracesView.lblCounter.text"));
 	}
 }

@@ -81,12 +81,12 @@ public final class GUITest extends ApplicationTest {
 		mainView.getCallsButton().click();
 
 		final CallsView callsView = new CallsView(this);
-		assertTrue(callsView.getCounterTextField().getText().contains("6540"));
+		assertTrue(callsView.getCounterTextField().getText().startsWith("6540 "));
 
 		mainView.getTracesButton().click();
 
 		final TracesView tracesView = new TracesView(this);
-		assertTrue(tracesView.getCounterTextField().getText().contains("1635"));
+		assertTrue(tracesView.getCounterTextField().getText().startsWith("1635 "));
 	}
 
 	@Test
@@ -98,12 +98,54 @@ public final class GUITest extends ApplicationTest {
 		mainView.getCallsButton().click();
 
 		final CallsView callsView = new CallsView(this);
-		assertTrue(callsView.getCounterTextField().getText().contains("396"));
+		assertTrue(callsView.getCounterTextField().getText().startsWith("396 "));
 
 		mainView.getTracesButton().click();
 
 		final TracesView tracesView = new TracesView(this);
-		assertTrue(tracesView.getCounterTextField().getText().contains("100"));
+		assertTrue(tracesView.getCounterTextField().getText().startsWith("100 "));
 	}
+	
+	@Test
+	public void testFilterForCallView() throws InterruptedException {
+		// Unfortunately TestFX cannot handle the native file dialog of JavaFX. Therefore we have to use direct access as a workaround.
+		DataModel.getInstance().loadMonitoringLogFromFS(new File("example/event monitoring log"));
 
+		final MainView mainView = new MainView(this);
+		mainView.getCallsButton().click();
+		 
+		final CallsView callsView = new CallsView(this);
+		callsView.getFilterContainerTextField().setText("SE-Nils-Ehmke");
+		callsView.getFilterContainerTextField().pushEnter();
+		callsView.getFilterComponentTextField().setText("kieker.examples.bookstore.Bookstore");
+		callsView.getFilterComponentTextField().pushEnter();
+		callsView.getFilterOperationTextField().setText("public void kieker.examples.bookstore.Bookstore.searchBook()");
+		callsView.getFilterOperationTextField().pushEnter();
+		callsView.getFilterTraceIDTextField().setText("4658150164341456896");
+		callsView.getFilterTraceIDTextField().pushEnter();
+		
+		assertTrue(callsView.getCounterTextField().getText().startsWith("1 "));
+	}
+	
+	@Test
+	public void testFilterForTracesView() throws InterruptedException {
+		// Unfortunately TestFX cannot handle the native file dialog of JavaFX. Therefore we have to use direct access as a workaround.
+		DataModel.getInstance().loadMonitoringLogFromFS(new File("example/event monitoring log"));
+
+		final MainView mainView = new MainView(this);
+		mainView.getTracesButton().click();
+		 
+		final TracesView tracesView = new TracesView(this);
+		tracesView.getFilterContainerTextField().setText("SE-Nils-Ehmke");
+		tracesView.getFilterContainerTextField().pushEnter();
+		tracesView.getFilterComponentTextField().setText("kieker.examples.bookstore.Bookstore");
+		tracesView.getFilterComponentTextField().pushEnter();
+		tracesView.getFilterOperationTextField().setText("public void kieker.examples.bookstore.Bookstore.searchBook()");
+		tracesView.getFilterOperationTextField().pushEnter();
+		tracesView.getFilterTraceIDTextField().setText("4658150164341456896");
+		tracesView.getFilterTraceIDTextField().pushEnter();
+		
+		assertTrue(tracesView.getCounterTextField().getText().startsWith("1 "));
+	}
+	
 }

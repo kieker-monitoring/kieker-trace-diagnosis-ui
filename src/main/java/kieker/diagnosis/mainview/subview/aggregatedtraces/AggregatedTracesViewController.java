@@ -76,7 +76,6 @@ public final class AggregatedTracesViewController {
 		this.reloadTreetable();
 
 		final DataModel dataModel = DataModel.getInstance();
-		final ObservableList<AggregatedTrace> traces = dataModel.getAggregatedTraces();
 		dataModel.getAggregatedTraces().addListener((final Change<? extends AggregatedTrace> c) -> this.reloadTreetable());
 
 		this.medianDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMedianDuration));
@@ -91,8 +90,6 @@ public final class AggregatedTracesViewController {
 		this.operation.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getOperation));
 		this.failed.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getFailedCause));
 		this.calls.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getCalls));
-
-		this.counter.textProperty().bind(Bindings.createStringBinding(() -> traces.size() + " " + this.resources.getString("AggregatedTracesView.lblCounter.text"), traces));
 	}
 
 	private StringBinding createStringBindingForSelection(final Function<AggregatedOperationCall, Object> mapper) {
@@ -169,14 +166,17 @@ public final class AggregatedTracesViewController {
 		final DataModel dataModel = DataModel.getInstance();
 		final List<AggregatedTrace> traces = dataModel.getAggregatedTraces();
 		final TreeItem<AggregatedOperationCall> root = new TreeItem<>();
+		final ObservableList<TreeItem<AggregatedOperationCall>> rootChildren = root.getChildren();
 		this.treetable.setRoot(root);
 		this.treetable.setShowRoot(false);
 
 		for (final AggregatedTrace trace : traces) {
 			if (this.fstPredicate.test(trace.getRootOperationCall()) && this.sndPredicate.test(trace.getRootOperationCall())
 					&& this.thdPredicate.test(trace.getRootOperationCall()) && this.fthPredicate.test(trace.getRootOperationCall())) {
-				root.getChildren().add(new LazyOperationCallTreeItem<AggregatedOperationCall>(trace.getRootOperationCall()));
+				rootChildren.add(new LazyOperationCallTreeItem<AggregatedOperationCall>(trace.getRootOperationCall()));
 			}
 		}
+		
+		this.counter.textProperty().set(rootChildren.size() + " " + this.resources.getString("AggregatedTracesView.lblCounter.text"));
 	}
 }

@@ -31,5 +31,21 @@ public final class TracesView {
 	public TextField getCounterTextField() {
 		return new TextField(this.applicationTest, "#counter");
 	}
+	
+	public TextField getFilterContainerTextField() {
+		return new TextField(this.applicationTest, "#filterContainer");
+	}
 
+	public TextField getFilterComponentTextField() {
+		return new TextField(this.applicationTest, "#filterComponent");
+	}
+
+	public TextField getFilterOperationTextField() {
+		return new TextField(this.applicationTest, "#filterOperation");
+	}
+
+	public TextField getFilterTraceIDTextField() {
+		return new TextField(this.applicationTest, "#filterTraceID");
+	}
+	
 }
