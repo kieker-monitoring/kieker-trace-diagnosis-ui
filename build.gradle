@@ -16,7 +16,7 @@ repositories {
 dependencies {
 	compile 'net.sourceforge.teetime:teetime:1.1.2'
 	compile 'net.sourceforge.teetime-stages:teetime-stages:1.1.2'
-	compile 'net.kieker-monitoring:kieker:1.11'
+	compile 'net.kieker-monitoring:kieker:1.12'
 
 	testCompile 'org.hamcrest:hamcrest-core:1.3'
 	testCompile 'org.hamcrest:hamcrest-library:1.3'
