@@ -1,4 +1,8 @@
 1.1:
+	04 Oct 2015
+	Feature (Issue #10)
+	Added log4j2 as logging framework. The log messages of the tool (and the underlying TeeTime framework) are now written into files.
+	
 	03 Oct 2015
 	Bugfix (Issue #9)
 	The counter of the (aggregated) traces where, unlike the counter of the (aggregated) calls, not bound to the visible traces.
