@@ -1,0 +1,16 @@
+1.1:
+	03 Oct 2015
+	Bugfix (Issue #9)
+	The counter of the (aggregated) traces where, unlike the counter of the (aggregated) calls, not bound to the visible traces.
+	
+	06 Sep 2015
+	Feature (Issue #5)
+	Added GUI tests to the nightly build in order to improve the quality.
+	
+	05 Sep 2015
+	Feature (Issue #3)
+	Improved the filter and search possibilities within the tool.
+	
+1.0:
+	04 Oct 2015
+	First public release

@@ -114,6 +114,7 @@ def commonDistSrcConfiguration = {
 	into ('licenses') { from 'licenses' }
 	
 	from ('.') {
+		include 'CHANGELOG'
 		include 'LICENSE'
 		include 'README'
 		include 'build.gradle'
