@@ -22,9 +22,11 @@ import java.net.URL;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -57,7 +59,7 @@ public final class Controller {
 
 	private static final String KEY_LAST_IMPORT_PATH = "lastimportpath";
 
-	private static final Logger LOGGER = Logger.getAnonymousLogger();
+	private static final Logger LOGGER = LogManager.getLogger(Controller.class);
 
 	private final DataModel dataModel = DataModel.getInstance();
 
@@ -121,7 +123,7 @@ public final class Controller {
 			try {
 				preferences.flush();
 			} catch (final BackingStoreException ex) {
-				Controller.LOGGER.warning(ex.getLocalizedMessage());
+				Controller.LOGGER.error(ex);
 			}
 		}
 	}
@@ -152,7 +154,7 @@ public final class Controller {
 	}
 
 	private void loadPane(final Class<?> controllerClass) throws IOException {
-		final PaneData paneData = loadPaneData(controllerClass);
+		final PaneData paneData = Controller.loadPaneData(controllerClass);
 
 		this.content.getChildren().clear();
 		this.content.getStylesheets().clear();
@@ -162,7 +164,7 @@ public final class Controller {
 	}
 
 	private void loadDialogPane(final Class<?> controllerClass) throws IOException {
-		final PaneData paneData = loadPaneData(controllerClass);
+		final PaneData paneData = Controller.loadPaneData(controllerClass);
 
 		final Scene scene = new Scene((Parent) paneData.getNode());
 		scene.getStylesheets().add(paneData.stylesheetURL);

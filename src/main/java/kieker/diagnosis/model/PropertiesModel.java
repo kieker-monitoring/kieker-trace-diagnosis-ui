@@ -17,16 +17,18 @@
 package kieker.diagnosis.model;
 
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Nils Christian Ehmke
  */
 public final class PropertiesModel {
 
-	private static final Logger LOGGER = Logger.getLogger(PropertiesModel.class.getCanonicalName());
+	private static final Logger LOGGER = LogManager.getLogger(PropertiesModel.class);
 	private static final PropertiesModel INSTANCE = new PropertiesModel();
 
 	private static final String KEY_TIMEUNIT = "timeunit";
@@ -67,7 +69,7 @@ public final class PropertiesModel {
 		try {
 			preferences.flush();
 		} catch (final BackingStoreException e) {
-			PropertiesModel.LOGGER.warning(e.getLocalizedMessage());
+			PropertiesModel.LOGGER.error(e);
 		}
 	}
 
