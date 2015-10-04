@@ -27,6 +27,7 @@ import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.model.PropertiesModel;
+import kieker.diagnosis.model.importer.stages.AllowedRecordsFilter;
 import kieker.diagnosis.model.importer.stages.BeginEndOfMonitoringDetector;
 import kieker.diagnosis.model.importer.stages.OperationCallHandlerComposite;
 import kieker.diagnosis.model.importer.stages.ReadingComposite;
@@ -53,9 +54,10 @@ public final class ImportAnalysisConfiguration extends Configuration {
 	private final List<KiekerMetadataRecord> metadataRecords = new ArrayList<>(1000);
 	private final TraceReconstructionComposite reconstruction;
 	private final BeginEndOfMonitoringDetector beginEndOfMonitoringDetector;
+	private final AllowedRecordsFilter allowedRecordsFilter;
 
 	public ImportAnalysisConfiguration(final File importDirectory) {
-		// Create the stages
+		// Create the stages 
 		final ReadingComposite reader = new ReadingComposite(importDirectory);
 		final MultipleInstanceOfFilter<IMonitoringRecord> typeFilter = new MultipleInstanceOfFilter<>();
 		final Distributor<Trace> distributor = new Distributor<>(new CopyByReferenceStrategy());
@@ -63,11 +65,13 @@ public final class ImportAnalysisConfiguration extends Configuration {
 		final CollectorSink<KiekerMetadataRecord> metadataCollector = new CollectorSink<>(this.metadataRecords);
 		final OperationCallHandlerComposite operationCallHandler = new OperationCallHandlerComposite(this.operationCalls, this.aggregatedOperationCalls);
 
+		this.allowedRecordsFilter = new AllowedRecordsFilter();
 		this.beginEndOfMonitoringDetector = new BeginEndOfMonitoringDetector();
 		this.reconstruction = new TraceReconstructionComposite(this.traces, PropertiesModel.getInstance().isAdditionalLogChecks());
 
 		// Connect the stages
-		super.connectPorts(reader.getOutputPort(), typeFilter.getInputPort());
+		super.connectPorts(reader.getOutputPort(), allowedRecordsFilter.getInputPort());
+		super.connectPorts(allowedRecordsFilter.getOutputPort(), typeFilter.getInputPort());
 		super.connectPorts(typeFilter.getOutputPortForType(IMonitoringRecord.class), this.beginEndOfMonitoringDetector.getInputPort());
 		super.connectPorts(this.beginEndOfMonitoringDetector.getOutputPort(), this.reconstruction.getInputPort());
 		super.connectPorts(this.reconstruction.getOutputPort(), distributor.getInputPort());
@@ -90,6 +94,10 @@ public final class ImportAnalysisConfiguration extends Configuration {
 
 	public int countDanglingEvents() {
 		return this.reconstruction.countDanglingRecords();
+	}
+	
+	public int countIgnoredRecords() {
+		return this.allowedRecordsFilter.getIgnoredRecords();
 	}
 
 	public List<Trace> getTracesList() {

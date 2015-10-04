@@ -53,6 +53,7 @@ public final class DataModel {
 	private final ObjectProperty<Integer> incompleteTraces = new SimpleObjectProperty<>(0);
 	private final ObjectProperty<Integer> faultyTraces = new SimpleObjectProperty<>(0);
 	private final ObjectProperty<Integer> danglingRecords = new SimpleObjectProperty<>(0);
+	private final ObjectProperty<Integer> ignoredRecords = new SimpleObjectProperty<>(0);
 	private final ObjectProperty<Long> beginTimestamp = new SimpleObjectProperty<>();
 	private final ObjectProperty<Long> endTimestamp = new SimpleObjectProperty<>();
 
@@ -76,6 +77,7 @@ public final class DataModel {
 
 		this.incompleteTraces.set(analysisConfiguration.countIncompleteTraces());
 		this.danglingRecords.set(analysisConfiguration.countDanglingEvents());
+		this.ignoredRecords.set(analysisConfiguration.countIgnoredRecords());
 		this.beginTimestamp.set(analysisConfiguration.getBeginTimestamp());
 		this.endTimestamp.set(analysisConfiguration.getEndTimestamp());
 
@@ -112,6 +114,10 @@ public final class DataModel {
 		return this.faultyTraces;
 	}
 
+	public ObjectProperty<Integer> countIgnoredRecords() {
+		return this.ignoredRecords;
+	}
+	
 	public ObjectProperty<File> getImportDirectory() {
 		return this.importDirectory;
 	}
