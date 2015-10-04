@@ -4,6 +4,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Locale;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javafx.beans.NamedArg;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -14,7 +17,9 @@ import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.model.PropertiesModel.ComponentNames;
 
 public class ComponentTreeCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<String>> {
-
+	
+	private static final Logger LOGGER = LogManager.getLogger(ComponentTreeCellValueFactory.class);
+	
 	private final String property;
 
 	public ComponentTreeCellValueFactory(@NamedArg(value = "property") final String property) {
@@ -34,7 +39,7 @@ public class ComponentTreeCellValueFactory implements Callback<CellDataFeatures<
 
 			return new ReadOnlyObjectWrapper<String>(componentName);
 		} catch (final NullPointerException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-			ex.printStackTrace();
+			LOGGER.warn(ex);
 			return null;
 		}
 	}

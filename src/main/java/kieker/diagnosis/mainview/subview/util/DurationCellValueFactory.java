@@ -21,6 +21,9 @@ import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javafx.beans.NamedArg;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -34,6 +37,8 @@ import kieker.diagnosis.model.PropertiesModel;
  */
 public class DurationCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<Long>> {
 
+	private static final Logger LOGGER = LogManager.getLogger(DurationCellValueFactory.class);
+	
 	private final DataModel dataModel = DataModel.getInstance();
 	private final PropertiesModel propertiesModel = PropertiesModel.getInstance();
 
@@ -55,7 +60,7 @@ public class DurationCellValueFactory implements Callback<CellDataFeatures<?, St
 			final long newDuration = dstTimeUnit.convert(duration, srcTimeUnit);
 			return new ReadOnlyObjectWrapper<Long>(newDuration);
 		} catch (final NullPointerException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-			ex.printStackTrace();
+			LOGGER.warn(ex);
 			return null;
 		}
 	}
