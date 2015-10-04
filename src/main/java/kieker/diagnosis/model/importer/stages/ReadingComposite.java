@@ -30,7 +30,6 @@ import teetime.stage.io.filesystem.Dir2RecordsFilter;
  *
  * @author Nils Christian Ehmke
  */
-@SuppressWarnings("deprecation")
 public final class ReadingComposite extends AbstractCompositeStage {
 
 	private final InitialElementProducer<File> producer;
