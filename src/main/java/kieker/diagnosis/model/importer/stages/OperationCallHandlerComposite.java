@@ -30,6 +30,7 @@ import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
 /**
  * @author Nils Christian Ehmke
  */
+@SuppressWarnings("deprecation")
 public final class OperationCallHandlerComposite extends AbstractCompositeStage {
 
 	private final InputPort<Trace> inputPort;

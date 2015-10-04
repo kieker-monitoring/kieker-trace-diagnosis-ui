@@ -36,6 +36,7 @@ import teetime.stage.basic.merger.Merger;
  *
  * @author Nils Christian Ehmke
  */
+@SuppressWarnings("deprecation")
 public final class TraceReconstructionComposite extends AbstractCompositeStage {
 
 	private final MultipleInstanceOfFilter<IMonitoringRecord> typeFilter;

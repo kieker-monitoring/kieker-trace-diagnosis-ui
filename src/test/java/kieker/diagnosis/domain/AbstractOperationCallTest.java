@@ -27,8 +27,7 @@ import org.junit.Test;
 
 public abstract class AbstractOperationCallTest<T extends AbstractOperationCall<T>> {
 
-	protected abstract T createOperationCall(final String container, final String component, final String operation,
-			final String failedCause);
+	protected abstract T createOperationCall(final String container, final String component, final String operation, final String failedCause);
 
 	private final T createOperationCall(final String container, final String component, final String operation) {
 		return this.createOperationCall(container, component, operation, null);

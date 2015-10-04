@@ -1,5 +1,5 @@
 This project uses Gradle as build tool.
 
-Eclipse project files can be generated using the command 'gradle eclipse'. Depending on your development JRE the used SWT library has to be adapted in the Gradle script.
+Eclipse project files can be generated using the command 'gradle eclipse'.
 
 The archives containing the JVM application with OS specific libs and scripts for all platforms can be generated using the command 'gradle distAllBin'.

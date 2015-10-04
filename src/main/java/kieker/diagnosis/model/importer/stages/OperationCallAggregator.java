@@ -25,6 +25,8 @@ import kieker.diagnosis.common.Statistics;
 import kieker.diagnosis.common.StatisticsUtility;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.OperationCall;
+import kieker.diagnosis.model.importer.stages.util.Statistics;
+import kieker.diagnosis.model.importer.stages.util.StatisticsCalculator;
 import teetime.stage.basic.AbstractTransformation;
 
 /**

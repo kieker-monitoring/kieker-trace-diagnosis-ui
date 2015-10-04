@@ -26,6 +26,8 @@ import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 import teetime.stage.basic.AbstractTransformation;
+import kieker.diagnosis.model.importer.stages.util.Statistics;
+import kieker.diagnosis.model.importer.stages.util.StatisticsCalculator;
 
 /**
  * This class is a {@code TeeTime} stage adding statistics (via the corresponding setters) to instances of {@link AggregatedTrace}. The traces are forwarded to the output port.
