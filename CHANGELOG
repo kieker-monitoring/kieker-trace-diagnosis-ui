@@ -1,5 +1,9 @@
 1.1:
 	05 Oct 2015
+	Bugfix (Issue #13)
+	Redirected some log messages from the console into logging files.
+
+	05 Oct 2015
 	Bugfix (Issue #12)
 	For some record types, the short operation names were not displayed correctly in the GUI.
 

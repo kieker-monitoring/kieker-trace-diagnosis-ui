@@ -10,20 +10,9 @@
 				<TimeBasedTriggeringPolicy interval="1" modulate="true" />
 			</Policies>
 		</RollingFile>
-		<RollingFile name="TeeTimeFile" fileName="logs/TeeTime.log" filePattern="logs/TeeTime-%d{yyyy-MM-dd}.log">
-			<PatternLayout>
-				<Pattern>%d %p %C [%t] %m%n</Pattern>
-			</PatternLayout>
-			<Policies>
-				<TimeBasedTriggeringPolicy interval="1" modulate="true" />
-			</Policies>
-		</RollingFile>
 	</Appenders>
 
 	<Loggers>
-		<Logger name="teetime" level="warn" additivity="false">
-			<AppenderRef ref="TeeTimeFile" />
-		</Logger>
 		<Root level="warn">
 			<AppenderRef ref="KiekerTraceDiagnosisFile" />
 		</Root>
