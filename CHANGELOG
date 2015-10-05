@@ -1,4 +1,8 @@
 1.1:
+	05 Oct 2015
+	Bugfix (Issue #12)
+	For some record types, the short operation names were not displayed correctly in the GUI.
+
 	04 Oct 2015
 	Bugfix (Issue #11)
 	Under certain circumstances specific record types could lead to a crash in the analysis. Not supported records are now completely filtered out. The number of ignored records can be seen in the monitoring statistics. 
