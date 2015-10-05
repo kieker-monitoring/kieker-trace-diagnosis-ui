@@ -29,13 +29,13 @@ public class OperationCellValueFactory implements Callback<CellDataFeatures<?, S
 	public ObservableValue<String> call(final CellDataFeatures<?, String> call) {
 		try {
 			final Method getter = call.getValue().getClass().getMethod("get" + this.property, new Class<?>[0]);
-			String componentName = (String) getter.invoke(call.getValue(), new Object[0]);
+			String operationName = (String) getter.invoke(call.getValue(), new Object[0]);
 
 			if (PropertiesModel.getInstance().getOperationNames() == OperationNames.SHORT) {
-				componentName = NameConverter.toShortComponentName(componentName);
+				operationName = NameConverter.toShortOperationName(operationName);
 			}
 
-			return new ReadOnlyObjectWrapper<String>(componentName);
+			return new ReadOnlyObjectWrapper<String>(operationName);
 		} catch (final NullPointerException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 			LOGGER.warn(ex);
 			return null;
