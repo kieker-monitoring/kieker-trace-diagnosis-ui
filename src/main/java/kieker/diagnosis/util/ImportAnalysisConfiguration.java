@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.model.importer;
+package kieker.diagnosis.util;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,12 +27,12 @@ import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.model.PropertiesModel;
-import kieker.diagnosis.model.importer.stages.AllowedRecordsFilter;
-import kieker.diagnosis.model.importer.stages.BeginEndOfMonitoringDetector;
-import kieker.diagnosis.model.importer.stages.OperationCallHandlerComposite;
-import kieker.diagnosis.model.importer.stages.ReadingComposite;
-import kieker.diagnosis.model.importer.stages.TraceAggregationComposite;
-import kieker.diagnosis.model.importer.stages.TraceReconstructionComposite;
+import kieker.diagnosis.util.stages.AllowedRecordsFilter;
+import kieker.diagnosis.util.stages.BeginEndOfMonitoringDetector;
+import kieker.diagnosis.util.stages.OperationCallHandlerComposite;
+import kieker.diagnosis.util.stages.ReadingComposite;
+import kieker.diagnosis.util.stages.TraceAggregationComposite;
+import kieker.diagnosis.util.stages.TraceReconstructionComposite;
 import teetime.framework.Configuration;
 import teetime.stage.CollectorSink;
 import teetime.stage.MultipleInstanceOfFilter;

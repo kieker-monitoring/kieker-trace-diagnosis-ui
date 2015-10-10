@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.model.importer;
+package kieker.diagnosis.util;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
@@ -25,6 +25,7 @@ import java.io.File;
 
 import org.junit.Test;
 
+import kieker.diagnosis.util.ImportAnalysisConfiguration;
 import teetime.framework.Execution;
 
 public final class ImportAnalysisConfigurationTest {

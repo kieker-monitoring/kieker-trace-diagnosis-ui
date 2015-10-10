@@ -14,26 +14,39 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.model.importer.stages;
+package kieker.diagnosis.util.stages;
 
-import kieker.diagnosis.domain.OperationCall;
-import kieker.diagnosis.domain.Trace;
+import kieker.common.record.IMonitoringRecord;
 import teetime.stage.basic.AbstractTransformation;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class OperationCallExtractor extends AbstractTransformation<Trace, OperationCall> {
+public final class BeginEndOfMonitoringDetector extends AbstractTransformation<IMonitoringRecord, IMonitoringRecord> {
+
+	private long beginTimestamp = Long.MAX_VALUE;
+	private long endTimestamp = 0;
 
 	@Override
-	protected void execute(final Trace element) {
-		this.sendAllCalls(element.getRootOperationCall());
+	protected void execute(final IMonitoringRecord record) {
+		final long loggingTimestamp = record.getLoggingTimestamp();
+
+		if (loggingTimestamp < this.beginTimestamp) {
+			this.beginTimestamp = loggingTimestamp;
+		}
+		if (loggingTimestamp > this.endTimestamp) {
+			this.endTimestamp = loggingTimestamp;
+		}
+
+		super.getOutputPort().send(record);
 	}
 
-	private void sendAllCalls(final OperationCall call) {
-		super.getOutputPort().send(call);
+	public long getBeginTimestamp() {
+		return this.beginTimestamp;
+	}
 
-		call.getChildren().forEach(child -> this.sendAllCalls(child));
+	public long getEndTimestamp() {
+		return this.endTimestamp;
 	}
 
 }

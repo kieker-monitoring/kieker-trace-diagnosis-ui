@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.model.importer.stages;
+package kieker.diagnosis.util.stages;
 
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;

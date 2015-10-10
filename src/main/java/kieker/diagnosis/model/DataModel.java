@@ -29,7 +29,7 @@ import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
-import kieker.diagnosis.model.importer.ImportAnalysisConfiguration;
+import kieker.diagnosis.util.ImportAnalysisConfiguration;
 import teetime.framework.Execution;
 
 /**
