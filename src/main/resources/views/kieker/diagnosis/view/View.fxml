@@ -1,0 +1,58 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="view" xmlns:fx="http://javafx.com/fxml" fx:controller="kieker.diagnosis.controller.Controller">
+
+	<MenuBar>
+		<Menu text="%View.mntmFile.text" id="file">
+			<MenuItem text="%View.mntmOpenMonitoringLog.text" onAction="#showImportDialog" id="openMonitoringLog"/>
+			<SeparatorMenuItem />
+			<MenuItem text="%View.mntmSettings.text" onAction="#showSettings" id="settings" />
+			<SeparatorMenuItem />
+			<MenuItem text="%View.mntmExit.text" onAction="#close"/>
+		</Menu>
+		<Menu text="%View.mntmHelp.text" id="help">
+			<MenuItem text="%View.mntmAbout.text" onAction="#showAbout" id="about"/>
+		</Menu>
+	</MenuBar>
+
+	<HBox VBox.vgrow="ALWAYS">
+		<FlowPane orientation="VERTICAL" columnHalignment="CENTER"
+			vgap="10">
+
+			<Button text="%View.trtmTraces.text(java.lang.String)" fx:id="traces" wrapText="true" prefWidth="180" onAction="#showTraces">
+				<FlowPane.margin>
+					<javafx.geometry.Insets left="10" top="10" />
+				</FlowPane.margin>
+			</Button>
+			<Button text="%View.trtmAggregatedTraces.text(java.lang.String)" fx:id="aggregatedtraces" prefWidth="180" onAction="#showAggregatedTraces">
+				<FlowPane.margin>
+					<javafx.geometry.Insets left="10" top="10" />
+				</FlowPane.margin>
+			</Button>
+			<Button text="%View.trtmOperationCalls.text(java.lang.String)" fx:id="calls" prefWidth="180" onAction="#showCalls">
+				<FlowPane.margin>
+					<javafx.geometry.Insets left="10" top="10" />
+				</FlowPane.margin>
+			</Button>
+			<Button text="%View.trtmAggregatedOperationCalls.text(java.lang.String)" fx:id="aggregatedcalls" prefWidth="180" onAction="#showAggregatedCalls">
+				<FlowPane.margin>
+					<javafx.geometry.Insets left="10" top="10" />
+				</FlowPane.margin>
+			</Button>
+			<Button text="%View.trtmMonitoringLogStatistics.text(java.lang.String)" fx:id="statistics" prefWidth="180" onAction="#showStatistics">
+				<FlowPane.margin>
+					<javafx.geometry.Insets left="10" top="10" />
+				</FlowPane.margin>
+			</Button>
+		</FlowPane>
+
+		<AnchorPane fx:id="content" HBox.hgrow="ALWAYS">
+			<HBox.margin>
+				<javafx.geometry.Insets left="10" top="10" bottom="10" right="10" />
+			</HBox.margin>
+		</AnchorPane>
+		
+	</HBox>
+
+</VBox>

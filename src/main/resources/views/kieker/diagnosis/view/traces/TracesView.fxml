@@ -1,0 +1,190 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.*?>
+
+<GridPane fx:id="view" xmlns:fx="http://javafx.com/fxml"
+	fx:controller="kieker.diagnosis.controller.traces.TracesViewController"
+	AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0"
+	AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+
+	<vgap>10</vgap>
+
+	<HBox GridPane.rowIndex="0">
+		<spacing>10</spacing>
+
+		<fx:define>
+			<ToggleGroup fx:id="togglegroup" />
+		</fx:define>
+
+		<RadioButton text="%TracesView.btnShowAll.text" selected="true" toggleGroup="$togglegroup" onAction="#showAllTraces" />
+		<RadioButton text="%TracesView.btnShowJustFailed.text" toggleGroup="$togglegroup" onAction="#showJustFailedTraces" />	
+		<RadioButton text="%TracesView.showJustFailureContaining.text" toggleGroup="$togglegroup" onAction="#showJustFailureContainingTraces" />		
+	</HBox>
+
+	<GridPane GridPane.rowIndex="1">
+		<hgap>5</hgap>
+		
+		<TextField promptText="%filterContainer" onAction="#useContainerFilter" fx:id="filterContainer" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS"/>
+		<TextField promptText="%filterComponent" onAction="#useComponentFilter" fx:id="filterComponent" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+		<TextField promptText="%filterOperation" onAction="#useOperationFilter" fx:id="filterOperation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
+		<TextField promptText="%filterTraceID" onAction="#useTraceIDFilter" fx:id="filterTraceID" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
+	</GridPane>
+	
+	<TreeTableView fx:id="treetable" GridPane.hgrow="ALWAYS"
+		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true" onMouseClicked="#selectCall">
+		
+		<placeholder>
+			<Label text="%emptyTableText"/>
+		</placeholder>
+		
+		<columns>
+			<TreeTableColumn text="%TracesView.trclmnExecutionContainer.text">
+			<cellFactory>
+						<kieker.diagnosis.components.FailedTreeCellFactory />
+				</cellFactory>
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory
+						property="container" />
+				</cellValueFactory>
+			</TreeTableColumn>
+
+			<TreeTableColumn text="%TracesView.trclmnComponent.text">
+			<cellFactory>
+						<kieker.diagnosis.components.FailedTreeCellFactory />
+				</cellFactory>
+				<cellValueFactory>
+					<kieker.diagnosis.components.ComponentTreeCellValueFactory property="component" />
+				</cellValueFactory>
+			</TreeTableColumn>
+
+			<TreeTableColumn text="%TracesView.trclmnOperation.text">
+			<cellFactory>
+						<kieker.diagnosis.components.FailedTreeCellFactory />
+				</cellFactory>
+				<cellValueFactory>
+					<kieker.diagnosis.components.OperationTreeCellValueFactory property="operation" />
+				</cellValueFactory>
+			</TreeTableColumn>
+
+			<TreeTableColumn text="%TracesView.trclmnTraceDepth.text">
+			<cellFactory>
+						<kieker.diagnosis.components.FailedTreeCellFactory />
+				</cellFactory>
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory
+						property="stackDepth" />
+				</cellValueFactory>
+			</TreeTableColumn>
+
+			<TreeTableColumn text="%TracesView.trclmnTraceSize.text">
+			<cellFactory>
+					<kieker.diagnosis.components.FailedTreeCellFactory />
+				</cellFactory>
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory
+						property="stackSize" />
+				</cellValueFactory>
+			</TreeTableColumn>
+
+			<TreeTableColumn text="%TracesView.trclmnDuration.text" >
+			<cellFactory>
+					<kieker.diagnosis.components.DurationTreeCellFactory />
+				</cellFactory>
+				<cellValueFactory>
+					<kieker.diagnosis.components.DurationTreeCellValueFactory
+						property="duration" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%TracesView.trclmnPercent.text" >
+			<cellFactory>
+						<kieker.diagnosis.components.PercentTreeCellFactory />
+				</cellFactory>
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory
+						property="percent" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%TracesView.trclmnTraceId.text" >
+			<cellFactory>
+					<kieker.diagnosis.components.FailedTreeCellFactory />
+				</cellFactory>
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory
+						property="traceID" />
+				</cellValueFactory>
+			</TreeTableColumn>
+			
+			<TreeTableColumn text="%TracesView.trclmnTimestamp.text" >
+			<cellFactory>
+					<kieker.diagnosis.components.FailedTreeCellFactory />
+				</cellFactory>
+				<cellValueFactory>
+					<TreeItemPropertyValueFactory
+						property="timestamp" />
+				</cellValueFactory>
+			</TreeTableColumn>
+		</columns>
+	</TreeTableView>
+
+	 <TitledPane GridPane.rowIndex="3" text="%properties">
+	<GridPane fx:id="detailpanel" >
+		<TextField text="%TracesView.lblExecutionContainer.text"
+			editable="false" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="1" GridPane.columnIndex="2" fx:id="container"
+			GridPane.hgrow="ALWAYS"/>
+
+		<TextField text="%TracesView.lblComponent.text" editable="false"
+			GridPane.rowIndex="2" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="2" GridPane.columnIndex="2" fx:id="component" />
+
+		<TextField text="%TracesView.lblOperation.text" editable="false"
+			GridPane.rowIndex="3" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="3" GridPane.columnIndex="2" fx:id="operation" />
+
+		<TextField text="%TracesView.lblFailed.text" editable="false"
+			GridPane.rowIndex="4" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="4" GridPane.columnIndex="2" fx:id="failed" />
+
+		<TextField text="%TracesView.trclmnTraceDepth.text"
+			editable="false" GridPane.rowIndex="5" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="5" GridPane.columnIndex="2" fx:id="traceDepth" />
+
+		<TextField text="%TracesView.trclmnTraceSize.text" editable="false"
+			GridPane.rowIndex="6" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="6" GridPane.columnIndex="2" fx:id="traceSize" />
+
+		<TextField text="%TracesView.lblDuration.text" editable="false"
+			GridPane.rowIndex="7" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="7" GridPane.columnIndex="2" fx:id="duration" />
+
+		<TextField text="%TracesView.trclmnPercent.text" editable="false"
+			GridPane.rowIndex="8" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="8" GridPane.columnIndex="2" fx:id="percent" />
+
+		<TextField text="%TracesView.trclmnTraceId.text" editable="false"
+			GridPane.rowIndex="9" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="9" GridPane.columnIndex="2" fx:id="traceID" />
+
+		<TextField text="%TracesView.trclmnTimestamp.text" editable="false"
+			GridPane.rowIndex="10" GridPane.columnIndex="1" />
+		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
+			GridPane.rowIndex="10" GridPane.columnIndex="2" fx:id="timestamp" />
+
+	</GridPane>
+</TitledPane>
+	<HBox fx:id="statusbar" GridPane.rowIndex="4"  GridPane.hgrow="ALWAYS">
+		<TextField text="%TracesView.lblCounter.text" editable="false" fx:id="counter" HBox.hgrow="ALWAYS"/>
+	</HBox>
+
+</GridPane>

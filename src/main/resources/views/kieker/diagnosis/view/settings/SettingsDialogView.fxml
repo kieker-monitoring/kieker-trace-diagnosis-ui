@@ -1,0 +1,68 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:id="view" fx:controller="kieker.diagnosis.controller.settings.SettingsDialogViewController" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+
+	<spacing>10</spacing>
+
+	<TitledPane text="%SettingsDialog.grpAppearance.text" collapsible="false" >
+		<GridPane>
+			<hgap>10</hgap>
+			<vgap>10</vgap>
+
+			<Label text="%SettingsDialog.lblTimeUnit.text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+			<ComboBox fx:id="timeunits" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
+				<converter><kieker.diagnosis.components.TimeUnitStringConverter/></converter>
+			</ComboBox>
+
+			<Label text="%SettingsDialog.lblOperationNames.text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+			<ComboBox fx:id="operationNames" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity" >
+				<converter><kieker.diagnosis.components.OperationNamesStringConverter/></converter>
+			</ComboBox>
+			
+			<Label text="%SettingsDialog.lblComponentNames.text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+			<ComboBox fx:id="componentNames" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
+				<converter><kieker.diagnosis.components.ComponentNamesStringConverter/></converter>
+			</ComboBox>
+ 
+		</GridPane>
+	</TitledPane>
+	
+	<TitledPane text="%searchAndFilter" collapsible="false" >
+		<GridPane>
+			<hgap>10</hgap>
+			<vgap>10</vgap>
+		
+			<Label text="%activateRegularExpressions" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+			<ComboBox fx:id="activateRegularExpressions" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
+				<converter><kieker.diagnosis.components.BooleanStringConverter/></converter>
+			</ComboBox>
+			
+		</GridPane>
+	</TitledPane>
+	
+	<TitledPane text="%analysis" collapsible="false" >
+		<GridPane>
+			<hgap>10</hgap>
+			<vgap>10</vgap>
+
+			<Label text="%additionalLogChecks" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+			<ComboBox fx:id="additionalLogChecks" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
+				<converter><kieker.diagnosis.components.BooleanStringConverter/></converter>
+			</ComboBox>
+ 
+		</GridPane>
+	</TitledPane>
+	
+	<ButtonBar>
+		<VBox.margin>
+			<javafx.geometry.Insets right="10" />
+		</VBox.margin>
+		<buttons>
+			<Button text="%SettingsDialog.btnOkay.text" onAction="#saveAndCloseDialog" id="okay" />
+			<Button text="%SettingsDialog.btnCancel.text" onAction="#closeDialog" id="cancel" />
+		</buttons>
+	</ButtonBar>
+
+</VBox>
