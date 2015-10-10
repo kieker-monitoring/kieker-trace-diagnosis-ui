@@ -21,6 +21,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * This is an annotation which can be used to mark methods for error handling. The error handling is performed by {@link ErrorHandlingAspect} and added during compile time. It is
+ * recommended to use this annotation only on methods of controllers and only on those without return type.
+ *
+ * @see ErrorHandlingAspect
+ *
+ * @author Nils Christian Ehmke
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD })
 public @interface ErrorHandling {

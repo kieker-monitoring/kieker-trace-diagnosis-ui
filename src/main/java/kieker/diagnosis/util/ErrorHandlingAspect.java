@@ -32,14 +32,24 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+/**
+ * This is an aspect adding error handling where it is requested. The advice is added around methods marked with {@link ErrorHandling} during the compiling. All exceptions (instances of
+ * {@link Exception} and its subclasses) are logged via the logger instance of the called object. A JavaFX alert dialog is shown on the screen and informs the user about the error. The
+ * annotated method returns {@code null} afterwards.
+ *
+ * @see ErrorHandling
+ *
+ * @author Nils Christian Ehmke
+ */
 @Aspect
-public class ErrorHandlingAspect {
+public final class ErrorHandlingAspect {
 
 	private final ResourceBundle resourceBundle = ResourceBundle.getBundle("locale.kieker.diagnosis.util.errorhandling", Locale.getDefault());
+	private final String title = this.resourceBundle.getString("error");
+	private final String header = this.resourceBundle.getString("errorHeader");
 
 	@Pointcut("execution(@kieker.diagnosis.util.ErrorHandling * *(..))")
 	public void errorHandlingRequested() {
-		// Aspect Declaration (MUST be empty)
 	}
 
 	@Around("errorHandlingRequested() && this(thisObject)")
@@ -47,22 +57,29 @@ public class ErrorHandlingAspect {
 		try {
 			return thisJoinPoint.proceed();
 		} catch (final Exception ex) {
-			final Logger logger = LogManager.getLogger(thisObject.getClass());
-			logger.error(ex.getMessage(), ex);
-
-			final Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText(ex.getLocalizedMessage());
-			alert.setTitle(resourceBundle.getString("error"));
-			alert.setHeaderText(resourceBundle.getString("errorHeader"));
-			final Window window = alert.getDialogPane().getScene().getWindow();
-			if (window instanceof Stage) {
-				final Stage stage = (Stage) window;
-				stage.getIcons().add(new Image("kieker-logo.png"));
-			}
-			alert.showAndWait();
+			this.logError(thisObject, ex);
+			this.showAlertDialog(ex);
 
 			return null;
 		}
+	}
+
+	private void logError(final Object thisObject, final Exception ex) {
+		final Logger logger = LogManager.getLogger(thisObject.getClass());
+		logger.error(ex.getMessage(), ex);
+	}
+
+	private void showAlertDialog(final Exception ex) {
+		final Alert alert = new Alert(AlertType.ERROR);
+		alert.setContentText(ex.getLocalizedMessage());
+		alert.setTitle(this.title);
+		alert.setHeaderText(this.header);
+		final Window window = alert.getDialogPane().getScene().getWindow();
+		if (window instanceof Stage) {
+			final Stage stage = (Stage) window;
+			stage.getIcons().add(new Image("kieker-logo.png"));
+		}
+		alert.showAndWait();
 	}
 
 }
