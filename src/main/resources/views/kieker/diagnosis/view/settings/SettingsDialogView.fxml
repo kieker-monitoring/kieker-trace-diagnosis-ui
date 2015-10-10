@@ -1,6 +1,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.cell.*?>
+<?import javafx.scene.control.CheckBox?>
 
 <VBox xmlns:fx="http://javafx.com/fxml" fx:id="view" fx:controller="kieker.diagnosis.controller.settings.SettingsDialogViewController" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
 
@@ -31,27 +32,19 @@
 	
 	<TitledPane text="%searchAndFilter" collapsible="false" >
 		<GridPane>
-			<hgap>10</hgap>
+			<hgap>5</hgap>
 			<vgap>10</vgap>
 		
-			<Label text="%activateRegularExpressions" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-			<ComboBox fx:id="activateRegularExpressions" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
-				<converter><kieker.diagnosis.components.BooleanStringConverter/></converter>
-			</ComboBox>
-			
+			<CheckBox fx:id="activateRegularExpressions" text="%activateRegularExpressions" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
 		</GridPane>
 	</TitledPane>
 	
 	<TitledPane text="%analysis" collapsible="false" >
 		<GridPane>
-			<hgap>10</hgap>
+			<hgap>5</hgap>
 			<vgap>10</vgap>
 
-			<Label text="%additionalLogChecks" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-			<ComboBox fx:id="additionalLogChecks" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
-				<converter><kieker.diagnosis.components.BooleanStringConverter/></converter>
-			</ComboBox>
- 
+			<CheckBox fx:id="additionalLogChecks" text="%additionalLogChecks" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
 		</GridPane>
 	</TitledPane>
 	
