@@ -1,4 +1,8 @@
 1.1:
+	10 Oct 2015
+	Feature (Issue #4)
+	A switch within the settings allows regular expressions (Java standard) in the filter masks.
+
 	05 Oct 2015
 	Bugfix (Issue #13)
 	Redirected some log messages from the console into logging files.
