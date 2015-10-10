@@ -35,6 +35,7 @@ import javafx.scene.input.MouseEvent;
 import kieker.diagnosis.common.FilterUtility;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
+import kieker.diagnosis.mainview.subview.util.ErrorHandling;
 import kieker.diagnosis.mainview.subview.util.LazyOperationCallTreeItem;
 import kieker.diagnosis.mainview.subview.util.NameConverter;
 import kieker.diagnosis.model.DataModel;
@@ -73,6 +74,7 @@ public final class AggregatedTracesViewController {
 	private Predicate<AggregatedOperationCall> thdPredicate = call -> true;
 	private Predicate<AggregatedOperationCall> fthPredicate = call -> true;
 
+	@ErrorHandling
 	public void initialize() {
 		this.reloadTreetable();
 
@@ -103,6 +105,7 @@ public final class AggregatedTracesViewController {
 				this.selection);
 	}
 
+	@ErrorHandling
 	public void selectCall(final MouseEvent event) {
 		final TreeItem<AggregatedOperationCall> selectedItem = this.treetable.getSelectionModel().getSelectedItem();
 		if (selectedItem != null) {
@@ -110,33 +113,39 @@ public final class AggregatedTracesViewController {
 		}
 	}
 
+	@ErrorHandling
 	public void showAllTraces() {
 		this.fstPredicate = call -> true;
 		this.reloadTreetable();
 	}
-
+	
+	@ErrorHandling
 	public void showJustFailedTraces() {
 		this.fstPredicate = AggregatedOperationCall::isFailed;
 		this.reloadTreetable();
 	}
 
+	@ErrorHandling
 	public void showJustFailureContainingTraces() {
 		this.fstPredicate = AggregatedOperationCall::containsFailure;
 		this.reloadTreetable();
 	}
 
+	@ErrorHandling
 	public void useContainerFilter() {
 		final Predicate<AggregatedOperationCall> predicate = FilterUtility.useFilter(this.filterContainer, AggregatedOperationCall::getContainer);
 		this.sndPredicate = predicate;
 		this.reloadTreetable();
 	}
 
+	@ErrorHandling
 	public void useComponentFilter() {
 		final Predicate<AggregatedOperationCall> predicate = FilterUtility.useFilter(this.filterComponent, AggregatedOperationCall::getComponent);
 		this.thdPredicate = predicate;
 		this.reloadTreetable();
 	}
 
+	@ErrorHandling
 	public void useOperationFilter() {
 		final Predicate<AggregatedOperationCall> predicate = FilterUtility.useFilter(this.filterOperation, AggregatedOperationCall::getOperation);
 		this.fthPredicate = predicate;

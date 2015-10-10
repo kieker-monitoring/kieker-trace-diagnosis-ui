@@ -33,6 +33,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import kieker.diagnosis.common.FilterUtility;
 import kieker.diagnosis.domain.OperationCall;
+import kieker.diagnosis.mainview.subview.util.ErrorHandling;
 import kieker.diagnosis.mainview.subview.util.NameConverter;
 import kieker.diagnosis.model.DataModel;
 
@@ -67,6 +68,7 @@ public final class CallsViewController {
 
 	@FXML private ResourceBundle resources;
 
+	@ErrorHandling
 	public void initialize() {
 		final DataModel dataModel = DataModel.getInstance();
 
@@ -103,36 +105,43 @@ public final class CallsViewController {
 				this.selection);
 	}
 
+	@ErrorHandling
 	public void selectCall(final MouseEvent event) {
 		this.selection.set(Optional.ofNullable(this.table.getSelectionModel().getSelectedItem()));
 	}
 
+	@ErrorHandling
 	public void showAllMethods() {
 		this.fstFilteredData.setPredicate(null);
 	}
 
+	@ErrorHandling
 	public void showJustFailedMethods() {
 		this.fstFilteredData.setPredicate(OperationCall::isFailed);
 	}
 
+	@ErrorHandling
 	public void useContainerFilter() {
 		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterContainer, OperationCall::getContainer);
-		this.sndFilteredData.setPredicate(predicate); 
+		this.sndFilteredData.setPredicate(predicate);
 	}
 
-	public void useComponentFilter() {		
+	@ErrorHandling
+	public void useComponentFilter() {
 		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterComponent, OperationCall::getComponent);
-		this.thdFilteredData.setPredicate(predicate); 
+		this.thdFilteredData.setPredicate(predicate);
 	}
 
+	@ErrorHandling
 	public void useOperationFilter() {
 		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterOperation, OperationCall::getOperation);
-		this.fthFilteredData.setPredicate(predicate); 
+		this.fthFilteredData.setPredicate(predicate);
 	}
 
+	@ErrorHandling
 	public void useTraceIDFilter() {
 		final Function<OperationCall, String> function = (call -> Long.toString(call.getTraceID()));
 		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterTraceID, function);
-		this.fifFilteredData.setPredicate(predicate); 
+		this.fifFilteredData.setPredicate(predicate);
 	}
 }

@@ -48,6 +48,7 @@ import kieker.diagnosis.mainview.subview.aggregatedtraces.AggregatedTracesViewCo
 import kieker.diagnosis.mainview.subview.calls.CallsViewController;
 import kieker.diagnosis.mainview.subview.monitoringstatistics.MonitoringStatisticsViewController;
 import kieker.diagnosis.mainview.subview.traces.TracesViewController;
+import kieker.diagnosis.mainview.subview.util.ErrorHandling;
 import kieker.diagnosis.model.DataModel;
 
 /**
@@ -75,36 +76,42 @@ public final class Controller {
 	private Optional<Button> disabledButton = Optional.empty();
 	private Optional<Class<?>> activeController = Optional.empty();
 
-	public void showTraces() {
+	@ErrorHandling
+	public void showTraces() throws IOException {
 		this.toggleDisabledButton(this.traces);
 		this.activeController = Optional.of(TracesViewController.class);
 		this.loadPane(TracesViewController.class);
 	}
-
-	public void showAggregatedTraces() {
+ 
+	@ErrorHandling
+	public void showAggregatedTraces() throws IOException {
 		this.toggleDisabledButton(this.aggregatedtraces);
 		this.activeController = Optional.of(AggregatedTracesViewController.class);
 		this.loadPane(AggregatedTracesViewController.class);
 	}
 
-	public void showCalls() {
+	@ErrorHandling
+	public void showCalls() throws IOException {
 		this.toggleDisabledButton(this.calls);
 		this.activeController = Optional.of(CallsViewController.class);
 		this.loadPane(CallsViewController.class);
 	}
 
-	public void showAggregatedCalls() {
+	@ErrorHandling
+	public void showAggregatedCalls() throws IOException {
 		this.toggleDisabledButton(this.aggregatedcalls);
 		this.activeController = Optional.of(AggregatedCallsViewController.class);
 		this.loadPane(AggregatedCallsViewController.class);
 	}
 
-	public void showStatistics() {
+	@ErrorHandling
+	public void showStatistics() throws IOException {
 		this.toggleDisabledButton(this.statistics);
 		this.activeController = Optional.of(MonitoringStatisticsViewController.class);
 		this.loadPane(MonitoringStatisticsViewController.class);
 	}
 
+	@ErrorHandling
 	public void showImportDialog() {
 		final Preferences preferences = Preferences.userNodeForPackage(Controller.class);
 		final File initialDirectory = new File(preferences.get(Controller.KEY_LAST_IMPORT_PATH, "."));
@@ -128,7 +135,8 @@ public final class Controller {
 		}
 	}
 
-	public void showSettings() {
+	@ErrorHandling
+	public void showSettings() throws IOException {
 		this.loadDialogPane(SettingsDialogViewController.class);
 
 		if (this.activeController.isPresent()) {
@@ -136,10 +144,12 @@ public final class Controller {
 		}
 	}
 
-	public void showAbout() {
+	@ErrorHandling
+	public void showAbout() throws IOException {
 		this.loadDialogPane(AboutDialogViewController.class);
 	}
 
+	@ErrorHandling
 	public void close() {
 		final Window window = this.view.getScene().getWindow();
 		if (window instanceof Stage) {
@@ -153,34 +163,32 @@ public final class Controller {
 		disabledButton.setDisable(true);
 	}
 
-	private void loadPane(final Class<?> controllerClass) {
-		final Optional<PaneData> paneData = Controller.loadPaneData(controllerClass);
+	private void loadPane(final Class<?> controllerClass) throws IOException {
+		final PaneData paneData = Controller.loadPaneData(controllerClass);
 
 		this.content.getChildren().clear();
 		this.content.getStylesheets().clear();
 
-		if (paneData.isPresent()) {
-			this.content.getStylesheets().add(paneData.get().getStylesheetURL());
-			this.content.getChildren().setAll(paneData.get().getNode());
-		}
+		this.content.getStylesheets().add(paneData.getStylesheetURL());
+		this.content.getChildren().setAll(paneData.getNode());
+
 	}
 
-	private void loadDialogPane(final Class<?> controllerClass) {
-		final Optional<PaneData> paneData = Controller.loadPaneData(controllerClass);
+	private void loadDialogPane(final Class<?> controllerClass) throws IOException {
+		final PaneData paneData = Controller.loadPaneData(controllerClass);
 
-		if (paneData.isPresent()) {
-			final Scene scene = new Scene((Parent) paneData.get().getNode());
-			scene.getStylesheets().add(paneData.get().stylesheetURL);
+		final Scene scene = new Scene((Parent) paneData.getNode());
+		scene.getStylesheets().add(paneData.stylesheetURL);
 
-			final Stage dialogStage = new Stage();
-			dialogStage.getIcons().add(new Image("kieker-logo.png"));
-			dialogStage.setTitle(paneData.get().getTitle());
-			dialogStage.setResizable(false);
-			dialogStage.initModality(Modality.WINDOW_MODAL);
-			dialogStage.initOwner((this.view.getScene().getWindow()));
-			dialogStage.setScene(scene);
-			dialogStage.showAndWait();
-		}
+		final Stage dialogStage = new Stage();
+		dialogStage.getIcons().add(new Image("kieker-logo.png"));
+		dialogStage.setTitle(paneData.getTitle());
+		dialogStage.setResizable(false);
+		dialogStage.initModality(Modality.WINDOW_MODAL);
+		dialogStage.initOwner((this.view.getScene().getWindow()));
+		dialogStage.setScene(scene);
+		dialogStage.showAndWait();
+
 	}
 
 	public static void loadMainPane(final Stage stage) {
@@ -200,25 +208,20 @@ public final class Controller {
 		}
 	}
 
-	private static Optional<PaneData> loadPaneData(final Class<?> controllerClass) {
-		try {
-			final String baseName = controllerClass.getCanonicalName().replace("Controller", "");
-			final String viewFXMLName = "views/" + baseName.replace(".", "/") + ".fxml";
-			final String cssName = "views/" + baseName.replace(".", "/") + ".css";
-			final String bundleBaseName = "locale." + baseName.toLowerCase(Locale.ROOT);
+	private static PaneData loadPaneData(final Class<?> controllerClass) throws IOException {
+		final String baseName = controllerClass.getCanonicalName().replace("Controller", "");
+		final String viewFXMLName = "views/" + baseName.replace(".", "/") + ".fxml";
+		final String cssName = "views/" + baseName.replace(".", "/") + ".css";
+		final String bundleBaseName = "locale." + baseName.toLowerCase(Locale.ROOT);
 
-			final URL viewResource = Controller.class.getClassLoader().getResource(viewFXMLName);
-			final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
-			final Node node = (Node) FXMLLoader.load(viewResource, resourceBundle);
-			final URL cssResource = Controller.class.getClassLoader().getResource(cssName);
-			final String title = (resourceBundle.containsKey("title") ? resourceBundle.getString("title") : "");
+		final URL viewResource = Controller.class.getClassLoader().getResource(viewFXMLName);
+		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
+		final Node node = (Node) FXMLLoader.load(viewResource, resourceBundle);
+		final URL cssResource = Controller.class.getClassLoader().getResource(cssName);
+		final String title = (resourceBundle.containsKey("title") ? resourceBundle.getString("title") : "");
 
-			final PaneData paneData = new PaneData(node, title, cssResource.toExternalForm());
-			return Optional.of(paneData);
-		} catch (IOException ex) {
-			LOGGER.error(ex);
-			return Optional.empty();
-		}
+		final PaneData paneData = new PaneData(node, title, cssResource.toExternalForm());
+		return paneData;
 	}
 
 	private static class PaneData {

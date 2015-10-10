@@ -29,6 +29,7 @@ import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
+import kieker.diagnosis.mainview.subview.util.ErrorHandling;
 import kieker.diagnosis.model.DataModel;
 import kieker.tools.util.LoggingTimestampConverter;
 
@@ -61,6 +62,7 @@ public final class MonitoringStatisticsViewController {
 	@FXML private TextField danglingrecords;
 	@FXML private TextField ignoredRecords;
 
+	@ErrorHandling
 	public void initialize() {
 		final ObjectProperty<File> importDirectory = this.dataModel.getImportDirectory();
 		this.monitoringlog.textProperty().bind(Bindings.createStringBinding(() -> this.assemblePathString(importDirectory.get()), importDirectory));
@@ -103,7 +105,7 @@ public final class MonitoringStatisticsViewController {
 
 		final ObjectProperty<Integer> countDanglingRecords = this.dataModel.countDanglingRecords();
 		this.danglingrecords.textProperty().bind(Bindings.createStringBinding(() -> Integer.toString(countDanglingRecords.get()), countDanglingRecords));
-		
+
 		final ObjectProperty<Integer> countIgnoredRecords = this.dataModel.countIgnoredRecords();
 		this.ignoredRecords.textProperty().bind(Bindings.createStringBinding(() -> Integer.toString(countIgnoredRecords.get()), countIgnoredRecords));
 	}

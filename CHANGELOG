@@ -1,5 +1,9 @@
 1.1:
 	10 Oct 2015
+	Feature/Bugfix (Issue #14)
+	Improved the error handling of the front end. Error are now usually shown in dialogs and not printed to the console.
+
+	10 Oct 2015
 	Feature (Issue #4)
 	A switch within the settings allows regular expressions (Java standard) in the filter masks.
 

@@ -2,6 +2,7 @@ package kieker.diagnosis.common;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 import javafx.scene.control.TextField;
 import kieker.diagnosis.model.PropertiesModel;
@@ -18,11 +19,16 @@ public final class FilterUtility {
 		} else {
 			final boolean regularExpressionsActive = PropertiesModel.getInstance().isActivateRegularExpressions();
 			if (regularExpressionsActive) {
+				checkRegularExpression(text);
 				return (x -> function.apply(x).matches(text));
 			} else {
 				return (x -> function.apply(x).toLowerCase().contains(text.toLowerCase()));
 			}
 		}
+	}
+
+	private static void checkRegularExpression(String text) {
+		Pattern.compile(text);
 	}
 	
 }

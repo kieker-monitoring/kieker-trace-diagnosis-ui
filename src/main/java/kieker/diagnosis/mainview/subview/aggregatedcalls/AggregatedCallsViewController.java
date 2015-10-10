@@ -33,6 +33,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import kieker.diagnosis.common.FilterUtility;
 import kieker.diagnosis.domain.AggregatedOperationCall;
+import kieker.diagnosis.mainview.subview.util.ErrorHandling;
 import kieker.diagnosis.mainview.subview.util.NameConverter;
 import kieker.diagnosis.model.DataModel;
 
@@ -68,6 +69,7 @@ public final class AggregatedCallsViewController {
 
 	@FXML private ResourceBundle resources;
 
+	@ErrorHandling
 	public void initialize() {
 		final DataModel dataModel = DataModel.getInstance();
 
@@ -106,33 +108,37 @@ public final class AggregatedCallsViewController {
 				this.selection);
 	}
 
+	@ErrorHandling
 	public void selectCall(final MouseEvent event) {
 		this.selection.set(Optional.ofNullable(this.table.getSelectionModel().getSelectedItem()));
 	}
 
+	@ErrorHandling
 	public void showAllMethods() {
 		this.fstFilteredData.setPredicate(null);
 	}
 
+	@ErrorHandling
 	public void showJustFailedMethods() {
 		this.fstFilteredData.setPredicate(call -> call.isFailed());
 	}
 
+	@ErrorHandling
 	public void useContainerFilter() {
 		final Predicate<AggregatedOperationCall> predicate = FilterUtility.useFilter(this.filterContainer, AggregatedOperationCall::getContainer);
 		this.sndFilteredData.setPredicate(predicate);
 	}
 
+	@ErrorHandling
 	public void useComponentFilter() {
 		final Predicate<AggregatedOperationCall> predicate = FilterUtility.useFilter(this.filterComponent, AggregatedOperationCall::getComponent);
 		this.thdFilteredData.setPredicate(predicate);
 	}
 
+	@ErrorHandling
 	public void useOperationFilter() {
 		final Predicate<AggregatedOperationCall> predicate = FilterUtility.useFilter(this.filterOperation, AggregatedOperationCall::getOperation);
 		this.fthFilteredData.setPredicate(predicate);
 	}
-
-	
 
 }

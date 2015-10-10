@@ -35,6 +35,7 @@ import javafx.scene.input.MouseEvent;
 import kieker.diagnosis.common.FilterUtility;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
+import kieker.diagnosis.mainview.subview.util.ErrorHandling;
 import kieker.diagnosis.mainview.subview.util.LazyOperationCallTreeItem;
 import kieker.diagnosis.mainview.subview.util.NameConverter;
 import kieker.diagnosis.model.DataModel;
@@ -77,6 +78,7 @@ public final class TracesViewController {
 	private Predicate<OperationCall> fthPredicate = call -> true;
 	private Predicate<OperationCall> fifPredicate = call -> true;
 
+	@ErrorHandling
 	public void initialize() {
 		this.reloadTreetable();
 
@@ -109,6 +111,7 @@ public final class TracesViewController {
 				this.selection);
 	}
 
+	@ErrorHandling
 	public void selectCall(final MouseEvent event) {
 		final TreeItem<OperationCall> selectedItem = this.treetable.getSelectionModel().getSelectedItem();
 		if (selectedItem != null) {
@@ -116,39 +119,46 @@ public final class TracesViewController {
 		}
 	}
 
+	@ErrorHandling
 	public void showAllTraces() {
 		this.fstPredicate = call -> true;
 		this.reloadTreetable();
 	}
 
+	@ErrorHandling
 	public void showJustFailedTraces() {
 		this.fstPredicate = OperationCall::isFailed;
 		this.reloadTreetable();
 	}
 
+	@ErrorHandling
 	public void showJustFailureContainingTraces() {
 		this.fstPredicate = OperationCall::containsFailure;
 		this.reloadTreetable();
 	}
 
+	@ErrorHandling
 	public void useContainerFilter() {
 		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterContainer, OperationCall::getContainer);
 		this.sndPredicate = predicate;
 		this.reloadTreetable();
 	}
 
+	@ErrorHandling
 	public void useComponentFilter() {
 		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterComponent, OperationCall::getComponent);
 		this.thdPredicate = predicate;
 		this.reloadTreetable();
 	}
 
+	@ErrorHandling
 	public void useOperationFilter() {
 		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterOperation, OperationCall::getOperation);
 		this.fthPredicate = predicate;
 		this.reloadTreetable();
 	}
 
+	@ErrorHandling
 	public void useTraceIDFilter() {
 		final Function<OperationCall, String> function = (call -> Long.toString(call.getTraceID()));
 		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterTraceID, function);
@@ -167,7 +177,7 @@ public final class TracesViewController {
 
 		traces.stream().map(trace -> trace.getRootOperationCall()).filter(this.fstPredicate).filter(this.sndPredicate).filter(this.thdPredicate).filter(this.fthPredicate)
 				.filter(this.fifPredicate).forEach(call -> rootChildren.add(new LazyOperationCallTreeItem<OperationCall>(call)));
-		
+
 		this.counter.textProperty().set(rootChildren.size() + " " + this.resources.getString("TracesView.lblCounter.text"));
 	}
 }
