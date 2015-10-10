@@ -18,7 +18,7 @@ package kieker.diagnosis;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import kieker.diagnosis.controller.Controller;
+import kieker.diagnosis.controller.MainController;
 
 /**
  * Contains the main method of this application.
@@ -33,7 +33,7 @@ public final class Main extends Application {
 
 	@Override
 	public void start(final Stage stage) throws Exception {
-		Controller.loadMainPane(stage);
+		MainController.loadMainPane(stage);
 	}
 
 }

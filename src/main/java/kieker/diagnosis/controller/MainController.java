@@ -56,11 +56,11 @@ import kieker.diagnosis.util.ErrorHandling;
  *
  * @author Nils Christian Ehmke
  */
-public final class Controller {
+public final class MainController {
 
 	private static final String KEY_LAST_IMPORT_PATH = "lastimportpath";
 
-	private static final Logger LOGGER = LogManager.getLogger(Controller.class);
+	private static final Logger LOGGER = LogManager.getLogger(MainController.class);
 
 	private final DataModel dataModel = DataModel.getInstance();
 
@@ -113,8 +113,8 @@ public final class Controller {
 
 	@ErrorHandling
 	public void showImportDialog() {
-		final Preferences preferences = Preferences.userNodeForPackage(Controller.class);
-		final File initialDirectory = new File(preferences.get(Controller.KEY_LAST_IMPORT_PATH, "."));
+		final Preferences preferences = Preferences.userNodeForPackage(MainController.class);
+		final File initialDirectory = new File(preferences.get(MainController.KEY_LAST_IMPORT_PATH, "."));
 
 		final DirectoryChooser directoryChooser = new DirectoryChooser();
 		if (initialDirectory.exists()) {
@@ -126,11 +126,11 @@ public final class Controller {
 			this.dataModel.loadMonitoringLogFromFS(selectedDirectory);
 			this.view.setCursor(Cursor.DEFAULT);
 
-			preferences.put(Controller.KEY_LAST_IMPORT_PATH, selectedDirectory.getAbsolutePath());
+			preferences.put(MainController.KEY_LAST_IMPORT_PATH, selectedDirectory.getAbsolutePath());
 			try {
 				preferences.flush();
 			} catch (final BackingStoreException ex) {
-				Controller.LOGGER.error(ex);
+				MainController.LOGGER.error(ex);
 			}
 		}
 	}
@@ -164,7 +164,7 @@ public final class Controller {
 	}
 
 	private void loadPane(final Class<?> controllerClass) throws IOException {
-		final PaneData paneData = Controller.loadPaneData(controllerClass);
+		final PaneData paneData = MainController.loadPaneData(controllerClass);
 
 		this.content.getChildren().clear();
 		this.content.getStylesheets().clear();
@@ -175,7 +175,7 @@ public final class Controller {
 	}
 
 	private void loadDialogPane(final Class<?> controllerClass) throws IOException {
-		final PaneData paneData = Controller.loadPaneData(controllerClass);
+		final PaneData paneData = MainController.loadPaneData(controllerClass);
 
 		final Scene scene = new Scene((Parent) paneData.getNode());
 		scene.getStylesheets().add(paneData.stylesheetURL);
@@ -193,7 +193,7 @@ public final class Controller {
 
 	public static void loadMainPane(final Stage stage) {
 		try {
-			final URL resource = Controller.class.getClassLoader().getResource("views/kieker/diagnosis/view/View.fxml");
+			final URL resource = MainController.class.getClassLoader().getResource("views/kieker/diagnosis/view/View.fxml");
 			final Pane pane = (Pane) FXMLLoader.load(resource, ResourceBundle.getBundle("locale.kieker.diagnosis.view.view", Locale.getDefault()));
 
 			final Scene root = new Scene(pane);
@@ -214,10 +214,10 @@ public final class Controller {
 		final String cssName = "views/" + baseName.replace(".", "/") + ".css";
 		final String bundleBaseName = "locale." + baseName.toLowerCase(Locale.ROOT);
 
-		final URL viewResource = Controller.class.getClassLoader().getResource(viewFXMLName);
+		final URL viewResource = MainController.class.getClassLoader().getResource(viewFXMLName);
 		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
 		final Node node = (Node) FXMLLoader.load(viewResource, resourceBundle);
-		final URL cssResource = Controller.class.getClassLoader().getResource(cssName);
+		final URL cssResource = MainController.class.getClassLoader().getResource(cssName);
 		final String title = (resourceBundle.containsKey("title") ? resourceBundle.getString("title") : "");
 
 		final PaneData paneData = new PaneData(node, title, cssResource.toExternalForm());
