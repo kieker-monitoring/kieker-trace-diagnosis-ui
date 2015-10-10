@@ -19,6 +19,7 @@ package kieker.diagnosis.mainview.subview.aggregatedcalls;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
@@ -30,6 +31,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import kieker.diagnosis.common.FilterUtility;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.mainview.subview.util.NameConverter;
 import kieker.diagnosis.model.DataModel;
@@ -117,33 +119,20 @@ public final class AggregatedCallsViewController {
 	}
 
 	public void useContainerFilter() {
-		final String text = this.filterContainer.getText();
-
-		if ((text == null) || text.isEmpty()) {
-			this.sndFilteredData.setPredicate(null);
-		} else {
-			this.sndFilteredData.setPredicate(call -> call.getContainer().toLowerCase().contains(text.toLowerCase()));
-		}
+		final Predicate<AggregatedOperationCall> predicate = FilterUtility.useFilter(this.filterContainer, AggregatedOperationCall::getContainer);
+		this.sndFilteredData.setPredicate(predicate);
 	}
 
 	public void useComponentFilter() {
-		final String text = this.filterComponent.getText();
-
-		if ((text == null) || text.isEmpty()) {
-			this.thdFilteredData.setPredicate(null);
-		} else {
-			this.thdFilteredData.setPredicate(call -> call.getComponent().toLowerCase().contains(text.toLowerCase()));
-		}
+		final Predicate<AggregatedOperationCall> predicate = FilterUtility.useFilter(this.filterComponent, AggregatedOperationCall::getComponent);
+		this.thdFilteredData.setPredicate(predicate);
 	}
 
 	public void useOperationFilter() {
-		final String text = this.filterOperation.getText();
-
-		if ((text == null) || text.isEmpty()) {
-			this.fthFilteredData.setPredicate(null);
-		} else {
-			this.fthFilteredData.setPredicate(call -> call.getOperation().toLowerCase().contains(text.toLowerCase()));
-		}
+		final Predicate<AggregatedOperationCall> predicate = FilterUtility.useFilter(this.filterOperation, AggregatedOperationCall::getOperation);
+		this.fthFilteredData.setPredicate(predicate);
 	}
+
+	
 
 }

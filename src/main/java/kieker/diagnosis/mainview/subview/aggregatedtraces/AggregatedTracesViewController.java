@@ -32,6 +32,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.input.MouseEvent;
+import kieker.diagnosis.common.FilterUtility;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.mainview.subview.util.LazyOperationCallTreeItem;
@@ -125,38 +126,20 @@ public final class AggregatedTracesViewController {
 	}
 
 	public void useContainerFilter() {
-		final String text = this.filterContainer.getText();
-
-		if ((text == null) || text.isEmpty()) {
-			this.sndPredicate = call -> true;
-		} else {
-			this.sndPredicate = call -> call.getContainer().toLowerCase().contains(text.toLowerCase());
-		}
-
+		final Predicate<AggregatedOperationCall> predicate = FilterUtility.useFilter(this.filterContainer, AggregatedOperationCall::getContainer);
+		this.sndPredicate = predicate;
 		this.reloadTreetable();
 	}
 
 	public void useComponentFilter() {
-		final String text = this.filterComponent.getText();
-
-		if ((text == null) || text.isEmpty()) {
-			this.thdPredicate = call -> true;
-		} else {
-			this.thdPredicate = call -> call.getComponent().toLowerCase().contains(text.toLowerCase());
-		}
-
+		final Predicate<AggregatedOperationCall> predicate = FilterUtility.useFilter(this.filterComponent, AggregatedOperationCall::getComponent);
+		this.thdPredicate = predicate;
 		this.reloadTreetable();
 	}
 
 	public void useOperationFilter() {
-		final String text = this.filterOperation.getText();
-
-		if ((text == null) || text.isEmpty()) {
-			this.fthPredicate = call -> true;
-		} else {
-			this.fthPredicate = call -> call.getOperation().toLowerCase().contains(text.toLowerCase());
-		}
-
+		final Predicate<AggregatedOperationCall> predicate = FilterUtility.useFilter(this.filterOperation, AggregatedOperationCall::getOperation);
+		this.fthPredicate = predicate;
 		this.reloadTreetable();
 	}
 

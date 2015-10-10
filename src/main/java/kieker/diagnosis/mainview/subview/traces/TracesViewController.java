@@ -32,6 +32,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.input.MouseEvent;
+import kieker.diagnosis.common.FilterUtility;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.mainview.subview.util.LazyOperationCallTreeItem;
@@ -131,50 +132,27 @@ public final class TracesViewController {
 	}
 
 	public void useContainerFilter() {
-		final String text = this.filterContainer.getText();
-
-		if ((text == null) || text.isEmpty()) {
-			this.sndPredicate = call -> true;
-		} else {
-			this.sndPredicate = call -> call.getContainer().toLowerCase().contains(text.toLowerCase());
-		}
-
+		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterContainer, OperationCall::getContainer);
+		this.sndPredicate = predicate;
 		this.reloadTreetable();
 	}
 
 	public void useComponentFilter() {
-		final String text = this.filterComponent.getText();
-
-		if ((text == null) || text.isEmpty()) {
-			this.thdPredicate = call -> true;
-		} else {
-			this.thdPredicate = call -> call.getComponent().toLowerCase().contains(text.toLowerCase());
-		}
-
+		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterComponent, OperationCall::getComponent);
+		this.thdPredicate = predicate;
 		this.reloadTreetable();
 	}
 
 	public void useOperationFilter() {
-		final String text = this.filterOperation.getText();
-
-		if ((text == null) || text.isEmpty()) {
-			this.fthPredicate = call -> true;
-		} else {
-			this.fthPredicate = call -> call.getOperation().toLowerCase().contains(text.toLowerCase());
-		}
-
+		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterOperation, OperationCall::getOperation);
+		this.fthPredicate = predicate;
 		this.reloadTreetable();
 	}
 
 	public void useTraceIDFilter() {
-		final String text = this.filterTraceID.getText();
-
-		if ((text == null) || text.isEmpty()) {
-			this.fifPredicate = call -> true;
-		} else {
-			this.fifPredicate = call -> Long.toString(call.getTraceID()).contains(text);
-		}
-
+		final Function<OperationCall, String> function = (call -> Long.toString(call.getTraceID()));
+		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterTraceID, function);
+		this.fifPredicate = predicate;
 		this.reloadTreetable();
 	}
 

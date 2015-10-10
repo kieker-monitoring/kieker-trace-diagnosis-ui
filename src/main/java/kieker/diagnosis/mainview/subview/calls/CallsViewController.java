@@ -19,6 +19,7 @@ package kieker.diagnosis.mainview.subview.calls;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
@@ -30,6 +31,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import kieker.diagnosis.common.FilterUtility;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.mainview.subview.util.NameConverter;
 import kieker.diagnosis.model.DataModel;
@@ -114,43 +116,23 @@ public final class CallsViewController {
 	}
 
 	public void useContainerFilter() {
-		final String text = this.filterContainer.getText();
-
-		if ((text == null) || text.isEmpty()) {
-			this.sndFilteredData.setPredicate(null);
-		} else {
-			this.sndFilteredData.setPredicate(call -> call.getContainer().toLowerCase().contains(text.toLowerCase()));
-		}
+		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterContainer, OperationCall::getContainer);
+		this.sndFilteredData.setPredicate(predicate); 
 	}
 
-	public void useComponentFilter() {
-		final String text = this.filterComponent.getText();
-
-		if ((text == null) || text.isEmpty()) {
-			this.thdFilteredData.setPredicate(null);
-		} else {
-			this.thdFilteredData.setPredicate(call -> call.getComponent().toLowerCase().contains(text.toLowerCase()));
-		}
+	public void useComponentFilter() {		
+		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterComponent, OperationCall::getComponent);
+		this.thdFilteredData.setPredicate(predicate); 
 	}
 
 	public void useOperationFilter() {
-		final String text = this.filterOperation.getText();
-
-		if ((text == null) || text.isEmpty()) {
-			this.fthFilteredData.setPredicate(null);
-		} else {
-			this.fthFilteredData.setPredicate(call -> call.getOperation().toLowerCase().contains(text.toLowerCase()));
-		}
+		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterOperation, OperationCall::getOperation);
+		this.fthFilteredData.setPredicate(predicate); 
 	}
 
 	public void useTraceIDFilter() {
-		final String text = this.filterTraceID.getText();
-
-		if ((text == null) || text.isEmpty()) {
-			this.fifFilteredData.setPredicate(null);
-		} else {
-			this.fifFilteredData.setPredicate(call -> Long.toString(call.getTraceID()).contains(text));
-		}
+		final Function<OperationCall, String> function = (call -> Long.toString(call.getTraceID()));
+		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterTraceID, function);
+		this.fifFilteredData.setPredicate(predicate); 
 	}
-
 }

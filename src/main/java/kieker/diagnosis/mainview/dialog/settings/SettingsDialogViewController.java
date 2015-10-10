@@ -39,12 +39,14 @@ public final class SettingsDialogViewController extends AbstractDialogController
 	@FXML private ComboBox<ComponentNames> componentNames;
 	@FXML private ComboBox<TimeUnit> timeunits;
 	@FXML private ComboBox<Boolean> additionalLogChecks;
+	@FXML private ComboBox<Boolean> activateRegularExpressions;
 
 	public void initialize() {
 		this.timeunits.setItems(FXCollections.observableArrayList(SettingsDialogViewController.TIME_UNITS));
 		this.componentNames.setItems(FXCollections.observableArrayList(ComponentNames.values()));
 		this.operationNames.setItems(FXCollections.observableArrayList(OperationNames.values()));
 		this.additionalLogChecks.setItems(FXCollections.observableArrayList(Boolean.TRUE, Boolean.FALSE));
+		this.activateRegularExpressions.setItems(FXCollections.observableArrayList(Boolean.TRUE, Boolean.FALSE));
 
 		this.loadSettings();
 	}
@@ -59,13 +61,15 @@ public final class SettingsDialogViewController extends AbstractDialogController
 		this.componentNames.getSelectionModel().select(this.propertiesModel.getComponentNames());
 		this.timeunits.getSelectionModel().select(this.propertiesModel.getTimeUnit());
 		this.additionalLogChecks.getSelectionModel().select(this.propertiesModel.isAdditionalLogChecks());
+		this.activateRegularExpressions.getSelectionModel().select(this.propertiesModel.isActivateRegularExpressions());
 	}
-
+ 
 	private void saveSettings() {
 		this.propertiesModel.setOperationNames(this.operationNames.getSelectionModel().getSelectedItem());
 		this.propertiesModel.setComponentNames(this.componentNames.getSelectionModel().getSelectedItem());
 		this.propertiesModel.setTimeUnit(this.timeunits.getSelectionModel().getSelectedItem());
 		this.propertiesModel.setAdditionalLogChecks(this.additionalLogChecks.getSelectionModel().getSelectedItem());
+		this.propertiesModel.setActivateRegularExpressions(this.activateRegularExpressions.getSelectionModel().getSelectedItem());
 	}
 
 }
