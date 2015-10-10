@@ -1,4 +1,4 @@
-package kieker.diagnosis.common;
+package kieker.diagnosis.util;
 
 import java.util.function.Function;
 import java.util.function.Predicate;

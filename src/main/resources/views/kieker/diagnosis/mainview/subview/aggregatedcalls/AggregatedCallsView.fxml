@@ -40,7 +40,7 @@
 		<columns>
 			<TableColumn text="%AggregatedCallsView.tblclmnExecutionContainer.text">
 				<cellFactory>
-					<kieker.diagnosis.mainview.subview.util.FailedTableCellFactory />
+					<kieker.diagnosis.components.FailedTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
 					<PropertyValueFactory property="container" />
@@ -49,25 +49,25 @@
 
 			<TableColumn text="%AggregatedCallsView.tblclmnComponent.text">
 				<cellFactory>
-					<kieker.diagnosis.mainview.subview.util.FailedTableCellFactory />
+					<kieker.diagnosis.components.FailedTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.mainview.subview.util.ComponentCellValueFactory property="component" />
+					<kieker.diagnosis.components.ComponentCellValueFactory property="component" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%AggregatedCallsView.tblclmnOperation.text">
 				<cellFactory>
-					<kieker.diagnosis.mainview.subview.util.FailedTableCellFactory />
+					<kieker.diagnosis.components.FailedTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.mainview.subview.util.OperationCellValueFactory property="operation" />
+					<kieker.diagnosis.components.OperationCellValueFactory property="operation" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%AggregatedCallsView.tblclmnNumberOfCalls.text">
 				<cellFactory>
-					<kieker.diagnosis.mainview.subview.util.FailedTableCellFactory />
+					<kieker.diagnosis.components.FailedTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
 					<PropertyValueFactory property="calls" />
@@ -76,50 +76,50 @@
 
 			<TableColumn text="%AggregatedCallsView.tblclmnMinimalDuration.text">
 				<cellFactory>
-					<kieker.diagnosis.mainview.subview.util.DurationTableCellFactory />
+					<kieker.diagnosis.components.DurationTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.mainview.subview.util.DurationCellValueFactory
+					<kieker.diagnosis.components.DurationCellValueFactory
 						property="minDuration" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%AggregatedCallsView.tblclmnMeanDuration.text">
 				<cellFactory>
-					<kieker.diagnosis.mainview.subview.util.DurationTableCellFactory />
+					<kieker.diagnosis.components.DurationTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.mainview.subview.util.DurationCellValueFactory
+					<kieker.diagnosis.components.DurationCellValueFactory
 						property="meanDuration" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%AggregatedCallsView.tblclmnMedianDuration.text">
 				<cellFactory>
-					<kieker.diagnosis.mainview.subview.util.DurationTableCellFactory />
+					<kieker.diagnosis.components.DurationTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.mainview.subview.util.DurationCellValueFactory
+					<kieker.diagnosis.components.DurationCellValueFactory
 						property="medianDuration" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%AggregatedCallsView.tblclmnMaximalDuration.text">
 				<cellFactory>
-					<kieker.diagnosis.mainview.subview.util.DurationTableCellFactory />
+					<kieker.diagnosis.components.DurationTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.mainview.subview.util.DurationCellValueFactory
+					<kieker.diagnosis.components.DurationCellValueFactory
 						property="maxDuration" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%AggregatedCallsView.tblclmnTotalDuration.text">
 				<cellFactory>
-					<kieker.diagnosis.mainview.subview.util.DurationTableCellFactory />
+					<kieker.diagnosis.components.DurationTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.mainview.subview.util.DurationCellValueFactory
+					<kieker.diagnosis.components.DurationCellValueFactory
 						property="totalDuration" />
 				</cellValueFactory>
 			</TableColumn>

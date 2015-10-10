@@ -14,27 +14,28 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.mainview.subview.util;
+package kieker.diagnosis.components;
 
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
+import javafx.scene.control.TreeTableCell;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableRow;
 import javafx.util.Callback;
 import kieker.diagnosis.domain.AbstractOperationCall;
 import kieker.diagnosis.model.PropertiesModel;
+import kieker.diagnosis.util.NameConverter;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class DurationTableCellFactory<S, T> implements Callback<TableColumn<S, T>, TableCell<S, T>> {
+public final class DurationTreeCellFactory<S, T> implements Callback<TreeTableColumn<S, T>, TreeTableCell<S, T>> {
 
 	@Override
-	public TableCell<S, T> call(final TableColumn<S, T> p) {
-		final TableCell<S, T> cell = new TableCell<S, T>() {
+	public TreeTableCell<S, T> call(final TreeTableColumn<S, T> p) {
+		final TreeTableCell<S, T> cell = new TreeTableCell<S, T>() {
 			@SuppressWarnings("unchecked")
 			@Override
 			protected void updateItem(final Object item, final boolean empty) {
-				final TableRow<?> currentRow = this.getTableRow();
+				final TreeTableRow<?> currentRow = this.getTreeTableRow();
 				if (currentRow != null) {
 					final Object rowItem = currentRow.getItem();
 

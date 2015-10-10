@@ -14,24 +14,24 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.mainview.dialog.settings;
+package kieker.diagnosis.components;
 
 import javafx.util.StringConverter;
-import kieker.diagnosis.model.PropertiesModel.OperationNames;
+import kieker.diagnosis.model.PropertiesModel.ComponentNames;
 
 /**
  * @author Nils Christian Ehmke
  */
-public class OperationNamesStringConverter extends StringConverter<OperationNames> {
+public class ComponentNamesStringConverter extends StringConverter<ComponentNames> {
 
 	@Override
-	public String toString(final OperationNames object) {
-		return (object == OperationNames.SHORT) ? "getBook(...)" : "public void kieker.examples.bookstore.Catalog.getBook(boolean)";
+	public String toString(final ComponentNames object) {
+		return (object == ComponentNames.SHORT) ? "Catalog" : "kieker.examples.bookstore.Catalog";
 	}
 
 	@Override
-	public OperationNames fromString(final String string) {
-		return ("getBook(...)".equals(string)) ? OperationNames.SHORT : OperationNames.LONG;
+	public ComponentNames fromString(final String string) {
+		return ("Catalog".equals(string)) ? ComponentNames.SHORT : ComponentNames.LONG;
 	}
 
 }

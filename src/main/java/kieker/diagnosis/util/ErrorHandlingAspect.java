@@ -1,4 +1,4 @@
-package kieker.diagnosis.mainview.subview.util;
+package kieker.diagnosis.util;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -19,9 +19,9 @@ import javafx.stage.Window;
 @Aspect
 public class ErrorHandlingAspect {
 
-	private final ResourceBundle resourceBundle = ResourceBundle.getBundle("locale.kieker.diagnosis.mainview.subview.util.errorhandling", Locale.getDefault());
+	private final ResourceBundle resourceBundle = ResourceBundle.getBundle("locale.kieker.diagnosis.util.errorhandling", Locale.getDefault());
 
-	@Pointcut("execution(@kieker.diagnosis.mainview.subview.util.ErrorHandling * *(..))")
+	@Pointcut("execution(@kieker.diagnosis.util.ErrorHandling * *(..))")
 	public void errorHandlingRequested() {
 		// Aspect Declaration (MUST be empty)
 	}

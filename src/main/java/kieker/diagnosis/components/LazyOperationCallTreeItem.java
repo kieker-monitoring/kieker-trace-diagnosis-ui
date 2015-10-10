@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.mainview.subview.util;
+package kieker.diagnosis.components;
 
 import java.util.ArrayList;
 import java.util.List;

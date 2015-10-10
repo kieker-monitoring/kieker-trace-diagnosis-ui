@@ -29,8 +29,8 @@ import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
-import kieker.diagnosis.mainview.subview.util.ErrorHandling;
 import kieker.diagnosis.model.DataModel;
+import kieker.diagnosis.util.ErrorHandling;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**

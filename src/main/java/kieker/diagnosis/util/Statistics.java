@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.common;
+package kieker.diagnosis.util;
 
 /**
  * @author Nils Christian Ehmke

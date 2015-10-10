@@ -31,11 +31,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import kieker.diagnosis.common.FilterUtility;
 import kieker.diagnosis.domain.OperationCall;
-import kieker.diagnosis.mainview.subview.util.ErrorHandling;
-import kieker.diagnosis.mainview.subview.util.NameConverter;
 import kieker.diagnosis.model.DataModel;
+import kieker.diagnosis.util.ErrorHandling;
+import kieker.diagnosis.util.FilterUtility;
+import kieker.diagnosis.util.NameConverter;
 
 /**
  * @author Nils Christian Ehmke

@@ -48,8 +48,8 @@ import kieker.diagnosis.mainview.subview.aggregatedtraces.AggregatedTracesViewCo
 import kieker.diagnosis.mainview.subview.calls.CallsViewController;
 import kieker.diagnosis.mainview.subview.monitoringstatistics.MonitoringStatisticsViewController;
 import kieker.diagnosis.mainview.subview.traces.TracesViewController;
-import kieker.diagnosis.mainview.subview.util.ErrorHandling;
 import kieker.diagnosis.model.DataModel;
+import kieker.diagnosis.util.ErrorHandling;
 
 /**
  * The main controller of this application. It is responsible for controlling the application's main window.

@@ -1,4 +1,4 @@
-package kieker.diagnosis.mainview.subview.util;
+package kieker.diagnosis.components;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,6 +14,7 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.util.Callback;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.model.PropertiesModel.ComponentNames;
+import kieker.diagnosis.util.NameConverter;
  
 public class ComponentCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<String>> {
 	

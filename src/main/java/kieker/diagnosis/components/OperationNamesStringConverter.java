@@ -14,33 +14,24 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.common;
+package kieker.diagnosis.components;
 
-import java.util.Collections;
-import java.util.List;
+import javafx.util.StringConverter;
+import kieker.diagnosis.model.PropertiesModel.OperationNames;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class StatisticsUtility {
+public class OperationNamesStringConverter extends StringConverter<OperationNames> {
 
-	private StatisticsUtility() {
+	@Override
+	public String toString(final OperationNames object) {
+		return (object == OperationNames.SHORT) ? "getBook(...)" : "public void kieker.examples.bookstore.Catalog.getBook(boolean)";
 	}
 
-	public static Statistics calculateStatistics(final List<Long> durations) {
-		Collections.sort(durations);
-
-		long totalDuration = 0;
-		for (final Long duration : durations) {
-			totalDuration += duration;
-		}
-
-		final long minDuration = durations.get(0);
-		final long maxDuration = durations.get(durations.size() - 1);
-		final long meanDuration = totalDuration / durations.size();
-		final long medianDuration = durations.get(durations.size() / 2);
-
-		return new Statistics(totalDuration, meanDuration, medianDuration, minDuration, maxDuration);
+	@Override
+	public OperationNames fromString(final String string) {
+		return ("getBook(...)".equals(string)) ? OperationNames.SHORT : OperationNames.LONG;
 	}
 
 }

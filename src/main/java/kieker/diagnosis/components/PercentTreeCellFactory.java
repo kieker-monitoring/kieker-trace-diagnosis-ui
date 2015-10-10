@@ -14,19 +14,18 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.mainview.subview.util;
+package kieker.diagnosis.components;
 
 import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableRow;
 import javafx.util.Callback;
 import kieker.diagnosis.domain.AbstractOperationCall;
-import kieker.diagnosis.model.PropertiesModel;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class DurationTreeCellFactory<S, T> implements Callback<TreeTableColumn<S, T>, TreeTableCell<S, T>> {
+public final class PercentTreeCellFactory<S, T> implements Callback<TreeTableColumn<S, T>, TreeTableCell<S, T>> {
 
 	@Override
 	public TreeTableCell<S, T> call(final TreeTableColumn<S, T> p) {
@@ -49,7 +48,7 @@ public final class DurationTreeCellFactory<S, T> implements Callback<TreeTableCo
 				super.updateItem((T) item, empty);
 
 				if (item != null) {
-					this.setText(item.toString() + " " + NameConverter.toShortTimeUnit(PropertiesModel.getInstance().getTimeUnit()));
+					this.setText(item.toString() + " %");
 				} else {
 					this.setText("");
 				}

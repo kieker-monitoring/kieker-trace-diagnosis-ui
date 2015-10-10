@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.common;
+package kieker.diagnosis.util;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -32,13 +32,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.input.MouseEvent;
-import kieker.diagnosis.common.FilterUtility;
+import kieker.diagnosis.components.LazyOperationCallTreeItem;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
-import kieker.diagnosis.mainview.subview.util.ErrorHandling;
-import kieker.diagnosis.mainview.subview.util.LazyOperationCallTreeItem;
-import kieker.diagnosis.mainview.subview.util.NameConverter;
 import kieker.diagnosis.model.DataModel;
+import kieker.diagnosis.util.ErrorHandling;
+import kieker.diagnosis.util.FilterUtility;
+import kieker.diagnosis.util.NameConverter;
 
 /**
  * @author Nils Christian Ehmke

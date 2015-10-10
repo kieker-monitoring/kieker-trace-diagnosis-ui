@@ -14,11 +14,9 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.mainview.subview.util;
+package kieker.diagnosis.util;
 
 import java.util.concurrent.TimeUnit;
-
-import kieker.diagnosis.common.Mapper;
 
 /**
  * @author Nils Christian Ehmke

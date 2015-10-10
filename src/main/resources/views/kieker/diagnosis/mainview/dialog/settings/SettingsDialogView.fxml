@@ -13,17 +13,17 @@
 
 			<Label text="%SettingsDialog.lblTimeUnit.text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 			<ComboBox fx:id="timeunits" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
-				<converter><kieker.diagnosis.mainview.dialog.settings.TimeUnitStringConverter/></converter>
+				<converter><kieker.diagnosis.components.TimeUnitStringConverter/></converter>
 			</ComboBox>
 
 			<Label text="%SettingsDialog.lblOperationNames.text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 			<ComboBox fx:id="operationNames" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity" >
-				<converter><kieker.diagnosis.mainview.dialog.settings.OperationNamesStringConverter/></converter>
+				<converter><kieker.diagnosis.components.OperationNamesStringConverter/></converter>
 			</ComboBox>
 			
 			<Label text="%SettingsDialog.lblComponentNames.text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 			<ComboBox fx:id="componentNames" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
-				<converter><kieker.diagnosis.mainview.dialog.settings.ComponentNamesStringConverter/></converter>
+				<converter><kieker.diagnosis.components.ComponentNamesStringConverter/></converter>
 			</ComboBox>
  
 		</GridPane>
@@ -36,7 +36,7 @@
 		
 			<Label text="%activateRegularExpressions" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 			<ComboBox fx:id="activateRegularExpressions" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
-				<converter><kieker.diagnosis.mainview.dialog.settings.BooleanStringConverter/></converter>
+				<converter><kieker.diagnosis.components.BooleanStringConverter/></converter>
 			</ComboBox>
 			
 		</GridPane>
@@ -49,7 +49,7 @@
 
 			<Label text="%additionalLogChecks" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 			<ComboBox fx:id="additionalLogChecks" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
-				<converter><kieker.diagnosis.mainview.dialog.settings.BooleanStringConverter/></converter>
+				<converter><kieker.diagnosis.components.BooleanStringConverter/></converter>
 			</ComboBox>
  
 		</GridPane>

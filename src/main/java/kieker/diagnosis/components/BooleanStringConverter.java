@@ -1,23 +1,21 @@
-package kieker.diagnosis.mainview.dialog.settings;
+package kieker.diagnosis.components;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javafx.util.StringConverter;
-import kieker.diagnosis.common.Mapper;
+import kieker.diagnosis.util.Mapper;
 
 public final class BooleanStringConverter extends StringConverter<Boolean> {
 
 	private static Mapper<Boolean, String> booleanMapper;
 
 	static {
-		final Class<SettingsDialogViewController> controllerClass = SettingsDialogViewController.class;
-		final String baseName = controllerClass.getCanonicalName().replace("Controller", "");
-		final String bundleBaseName = "locale." + baseName.toLowerCase(Locale.ROOT);
+		final String bundleBaseName = "locale.kieker.diagnosis.components.components";
 		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
 
-		final String yes = resourceBundle.getString("SettingsDialog.yes");
-		final String no = resourceBundle.getString("SettingsDialog.no");
+		final String yes = resourceBundle.getString("yes");
+		final String no = resourceBundle.getString("no");
 
 		BooleanStringConverter.booleanMapper = new Mapper<>();
 		BooleanStringConverter.booleanMapper.map(Boolean.TRUE).to(yes);

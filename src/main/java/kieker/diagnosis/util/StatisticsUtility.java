@@ -14,24 +14,33 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.mainview.dialog.settings;
+package kieker.diagnosis.util;
 
-import javafx.util.StringConverter;
-import kieker.diagnosis.model.PropertiesModel.ComponentNames;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Nils Christian Ehmke
  */
-public class ComponentNamesStringConverter extends StringConverter<ComponentNames> {
+public final class StatisticsUtility {
 
-	@Override
-	public String toString(final ComponentNames object) {
-		return (object == ComponentNames.SHORT) ? "Catalog" : "kieker.examples.bookstore.Catalog";
+	private StatisticsUtility() {
 	}
 
-	@Override
-	public ComponentNames fromString(final String string) {
-		return ("Catalog".equals(string)) ? ComponentNames.SHORT : ComponentNames.LONG;
+	public static Statistics calculateStatistics(final List<Long> durations) {
+		Collections.sort(durations);
+
+		long totalDuration = 0;
+		for (final Long duration : durations) {
+			totalDuration += duration;
+		}
+
+		final long minDuration = durations.get(0);
+		final long maxDuration = durations.get(durations.size() - 1);
+		final long meanDuration = totalDuration / durations.size();
+		final long medianDuration = durations.get(durations.size() / 2);
+
+		return new Statistics(totalDuration, meanDuration, medianDuration, minDuration, maxDuration);
 	}
 
 }

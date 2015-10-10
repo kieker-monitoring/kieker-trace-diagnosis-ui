@@ -21,10 +21,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import kieker.diagnosis.common.Statistics;
-import kieker.diagnosis.common.StatisticsUtility;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.OperationCall;
+import kieker.diagnosis.util.Statistics;
+import kieker.diagnosis.util.StatisticsUtility;
 import teetime.stage.basic.AbstractTransformation;
 
 /**

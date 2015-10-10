@@ -1,4 +1,4 @@
-package kieker.diagnosis.mainview.subview.util;
+package kieker.diagnosis.util;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

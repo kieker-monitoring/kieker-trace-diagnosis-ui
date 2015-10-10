@@ -14,14 +14,14 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.mainview.dialog.settings;
+package kieker.diagnosis.components;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
 import javafx.util.StringConverter;
-import kieker.diagnosis.common.Mapper;
+import kieker.diagnosis.util.Mapper;
 
 /**
  * @author Nils Christian Ehmke
@@ -31,17 +31,15 @@ public class TimeUnitStringConverter extends StringConverter<TimeUnit> {
 	private static Mapper<TimeUnit, String> timeUnitMapper;
 
 	static {
-		final Class<SettingsDialogViewController> controllerClass = SettingsDialogViewController.class;
-		final String baseName = controllerClass.getCanonicalName().replace("Controller", "");
-		final String bundleBaseName = "locale." + baseName.toLowerCase(Locale.ROOT);
+		final String bundleBaseName = "locale.kieker.diagnosis.components.components";
 		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
 
-		final String nanoseconds = resourceBundle.getString("SettingsDialog.nanoseconds");
-		final String microseconds = resourceBundle.getString("SettingsDialog.microseconds");
-		final String milliseconds = resourceBundle.getString("SettingsDialog.milliseconds");
-		final String seconds = resourceBundle.getString("SettingsDialog.seconds");
-		final String minutes = resourceBundle.getString("SettingsDialog.minutes");
-		final String hours = resourceBundle.getString("SettingsDialog.hours");
+		final String nanoseconds = resourceBundle.getString("nanoseconds");
+		final String microseconds = resourceBundle.getString("microseconds");
+		final String milliseconds = resourceBundle.getString("milliseconds");
+		final String seconds = resourceBundle.getString("seconds");
+		final String minutes = resourceBundle.getString("minutes");
+		final String hours = resourceBundle.getString("hours");
 
 		TimeUnitStringConverter.timeUnitMapper = new Mapper<>();
 		TimeUnitStringConverter.timeUnitMapper.map(TimeUnit.NANOSECONDS).to(nanoseconds);

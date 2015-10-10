@@ -19,12 +19,12 @@ package kieker.diagnosis.model.importer.stages;
 import java.util.ArrayList;
 import java.util.List;
 
-import kieker.diagnosis.common.Statistics;
-import kieker.diagnosis.common.StatisticsUtility;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
+import kieker.diagnosis.util.Statistics;
+import kieker.diagnosis.util.StatisticsUtility;
 import teetime.stage.basic.AbstractTransformation;
 
 /**

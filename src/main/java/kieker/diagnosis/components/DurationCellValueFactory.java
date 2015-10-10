@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.mainview.subview.util;
+package kieker.diagnosis.components;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -27,8 +27,7 @@ import org.apache.logging.log4j.Logger;
 import javafx.beans.NamedArg;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn.CellDataFeatures;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.util.Callback;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
@@ -36,16 +35,16 @@ import kieker.diagnosis.model.PropertiesModel;
 /**
  * @author Nils Christian Ehmke
  */
-public class DurationTreeCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<Long>> {
+public class DurationCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<Long>> {
 
-	private static final Logger LOGGER = LogManager.getLogger(DurationTreeCellValueFactory.class);
+	private static final Logger LOGGER = LogManager.getLogger(DurationCellValueFactory.class);
 	
 	private final DataModel dataModel = DataModel.getInstance();
 	private final PropertiesModel propertiesModel = PropertiesModel.getInstance();
 
 	private final String property;
 
-	public DurationTreeCellValueFactory(@NamedArg(value = "property") final String property) {
+	public DurationCellValueFactory(@NamedArg(value = "property") final String property) {
 		this.property = property.substring(0, 1).toUpperCase(Locale.ROOT) + property.substring(1);
 	}
 
@@ -55,9 +54,8 @@ public class DurationTreeCellValueFactory implements Callback<CellDataFeatures<?
 			final TimeUnit srcTimeUnit = this.dataModel.getTimeUnit();
 			final TimeUnit dstTimeUnit = this.propertiesModel.getTimeUnit();
 
-			final TreeItem<?> item = (call.getValue());
-			final Method getter = item.getValue().getClass().getMethod("get" + this.property, new Class<?>[0]);
-			final long duration = (long) getter.invoke(item.getValue(), new Object[0]);
+			final Method getter = call.getValue().getClass().getMethod("get" + this.property, new Class<?>[0]);
+			final long duration = (long) getter.invoke(call.getValue(), new Object[0]);
 
 			final long newDuration = dstTimeUnit.convert(duration, srcTimeUnit);
 			return new ReadOnlyObjectWrapper<Long>(newDuration);

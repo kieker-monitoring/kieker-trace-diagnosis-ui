@@ -14,16 +14,16 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.mainview.subview.util;
+package kieker.diagnosis.util;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.concurrent.TimeUnit;
 
-import kieker.diagnosis.mainview.subview.util.NameConverter;
-
 import org.junit.Test;
+
+import kieker.diagnosis.util.NameConverter;
 
 public class NameConverterTest {
 

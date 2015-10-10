@@ -14,13 +14,15 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.common;
+package kieker.diagnosis.util;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
+
+import kieker.diagnosis.util.Mapper;
 
 public class MapperTest {
 
