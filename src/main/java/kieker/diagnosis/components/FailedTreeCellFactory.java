@@ -29,33 +29,40 @@ public final class FailedTreeCellFactory<S, T> implements Callback<TreeTableColu
 
 	@Override
 	public TreeTableCell<S, T> call(final TreeTableColumn<S, T> p) {
-		final TreeTableCell<S, T> cell = new TreeTableCell<S, T>() {
-			@SuppressWarnings("unchecked")
-			@Override
-			protected void updateItem(final Object item, final boolean empty) {
-				final TreeTableRow<?> currentRow = this.getTreeTableRow();
-				if (currentRow != null) {
-					final Object rowItem = currentRow.getItem();
+		return new FailedTreeCell();
+	}
 
-					this.getStyleClass().remove("failed");
-					if ((rowItem != null) && AbstractOperationCall.class.isAssignableFrom(rowItem.getClass())) {
-						if (((AbstractOperationCall<?>) rowItem).isFailed()) {
-							this.getStyleClass().add("failed");
-						}
+	private final class FailedTreeCell extends TreeTableCell<S, T> {
+
+		@Override
+		protected void updateItem(final T item, final boolean empty) {
+			setFailedStyle();
+
+			super.updateItem(item, empty);
+
+			if (empty || item == null) {
+				setText(null);
+				setGraphic(null);
+			} else {
+				setText(item.toString());
+			}
+		}
+
+		private void setFailedStyle() {
+			final TreeTableRow<?> currentRow = this.getTreeTableRow();
+			
+			if (currentRow != null) {
+				final Object rowItem = currentRow.getItem();
+
+				super.getStyleClass().remove("failed");
+				if (rowItem instanceof AbstractOperationCall) {
+					if (((AbstractOperationCall<?>) rowItem).isFailed()) {
+						super.getStyleClass().add("failed");
 					}
 				}
-
-				super.updateItem((T) item, empty);
-
-				if (item != null) {
-					this.setText(item.toString());
-				} else {
-					this.setText("");
-				}
 			}
-		};
-
-		return cell;
+		}
 
 	}
+
 }
