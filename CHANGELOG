@@ -19,6 +19,10 @@
 	Bugfix (Issue #9)
 	The counter of the (aggregated) traces where, unlike the counter of the (aggregated) calls, not bound to the visible traces.
 	
+	18 Sep 2015
+	Feature (Issue #7)
+	A switch within the settings can be used to activate additional checks during the reconstruction. This can filter out specific invalid parts of monitoring logs. However, this check can lead to a minimal decrease in performance of the reconstruction. 
+	
 	06 Sep 2015
 	Feature (Issue #5)
 	Added GUI tests to the nightly build in order to improve the quality.
