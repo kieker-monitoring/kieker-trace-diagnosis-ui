@@ -14,6 +14,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 @Aspect
 public class ErrorHandlingAspect {
@@ -32,13 +33,16 @@ public class ErrorHandlingAspect {
 		} catch (final Exception ex) {
 			final Logger logger = LogManager.getLogger(thisObject.getClass());
 			logger.error(ex.getMessage(), ex);
-			
+
 			final Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText(ex.getLocalizedMessage());
 			alert.setTitle(resourceBundle.getString("error"));
 			alert.setHeaderText(resourceBundle.getString("errorHeader"));
-			final Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("kieker-logo.png"));
+			final Window window = alert.getDialogPane().getScene().getWindow();
+			if (window instanceof Stage) {
+				final Stage stage = (Stage) window;
+				stage.getIcons().add(new Image("kieker-logo.png"));
+			}
 			alert.showAndWait();
 
 			return null;
