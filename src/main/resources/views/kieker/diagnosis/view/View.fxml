@@ -12,6 +12,8 @@
 			<MenuItem text="%View.mntmExit.text" onAction="#close"/>
 		</Menu>
 		<Menu text="%View.mntmHelp.text" id="help">
+			<MenuItem text="%reportBugsAndFeatures" onAction="#showBugReporting"/>
+			<SeparatorMenuItem />
 			<MenuItem text="%View.mntmAbout.text" onAction="#showAbout" id="about"/>
 		</Menu>
 	</MenuBar>

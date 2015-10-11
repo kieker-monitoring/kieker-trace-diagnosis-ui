@@ -1,0 +1,40 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.TextFlow?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:id="view" fx:controller="kieker.diagnosis.controller.bugreporting.BugReportingDialogViewController" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+
+	<spacing>10</spacing>
+
+	<TextFlow>
+		<VBox.margin>
+			<javafx.geometry.Insets left="10" right="10" top="10" />
+		</VBox.margin>
+		
+		<Label text="%description1"/>
+		<Hyperlink text="%here" onAction="#visitGitLab" />
+	</TextFlow>
+	<TextFlow>
+		<VBox.margin>
+			<javafx.geometry.Insets left="10" right="10" top="10" />
+		</VBox.margin>
+	
+		<Label text="%description2"/>
+		<Hyperlink text="%here" onAction="#visitTrac"/>
+    </TextFlow>
+        
+	<Separator/>
+        
+	<ButtonBar>
+		<VBox.margin>
+			<javafx.geometry.Insets right="10" />
+		</VBox.margin>
+		<buttons>
+			<Button text="%ok" onAction="#closeDialog" id="okay" />
+		</buttons>
+	</ButtonBar>
+
+</VBox>

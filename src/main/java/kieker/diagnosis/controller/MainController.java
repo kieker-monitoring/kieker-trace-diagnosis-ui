@@ -50,6 +50,7 @@ import javafx.util.Duration;
 import kieker.diagnosis.controller.about.AboutDialogViewController;
 import kieker.diagnosis.controller.aggregatedcalls.AggregatedCallsViewController;
 import kieker.diagnosis.controller.aggregatedtraces.AggregatedTracesViewController;
+import kieker.diagnosis.controller.bugreporting.BugReportingDialogViewController;
 import kieker.diagnosis.controller.calls.CallsViewController;
 import kieker.diagnosis.controller.monitoringstatistics.MonitoringStatisticsViewController;
 import kieker.diagnosis.controller.settings.SettingsDialogViewController;
@@ -153,6 +154,11 @@ public final class MainController {
 	@ErrorHandling
 	public void showAbout() throws IOException {
 		this.loadDialogPane(AboutDialogViewController.class);
+	}
+
+	@ErrorHandling
+	public void showBugReporting() throws IOException {
+		this.loadDialogPane(BugReportingDialogViewController.class);
 	}
 
 	@ErrorHandling

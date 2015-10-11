@@ -16,6 +16,9 @@
 
 package kieker.diagnosis.model;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -37,13 +40,18 @@ public final class PropertiesModel {
 	private static final String KEY_GRAPHVIZ_PATH = "graphvizpath";
 	private static final String KEY_ADDITIONAL_LOG_CHECKS = "additionalLogChecks";
 	private static final String KEY_REGULAR_EXPRESSIONS = "regularExpressions";
-	
+
+	private static final String KEY_GITLAB_URL = "GitLabURL";
+	private static final String KEY_TRAC_URL = "TracURL";
+
 	private String graphvizPath;
 	private TimeUnit timeUnit;
 	private ComponentNames componentNames;
 	private OperationNames operationNames;
 	private boolean additionalLogChecks;
 	private boolean activateRegularExpressions;
+	private String gitLabURL;
+	private String tracURL;
 
 	public PropertiesModel() {
 		this.loadSettings();
@@ -57,7 +65,17 @@ public final class PropertiesModel {
 		this.componentNames = ComponentNames.valueOf(preferences.get(PropertiesModel.KEY_COMPONENTS, ComponentNames.LONG.name()));
 		this.operationNames = OperationNames.valueOf(preferences.get(PropertiesModel.KEY_OPERATIONS, OperationNames.SHORT.name()));
 		this.additionalLogChecks = Boolean.valueOf(preferences.get(PropertiesModel.KEY_ADDITIONAL_LOG_CHECKS, Boolean.FALSE.toString()));
-		this.activateRegularExpressions  = Boolean.valueOf(preferences.get(PropertiesModel.KEY_REGULAR_EXPRESSIONS, Boolean.FALSE.toString()));
+		this.activateRegularExpressions = Boolean.valueOf(preferences.get(PropertiesModel.KEY_REGULAR_EXPRESSIONS, Boolean.FALSE.toString()));
+
+		final Properties properties = new Properties();
+		final ClassLoader classLoader = PropertiesModel.class.getClassLoader();
+		try (InputStream inputStream = classLoader.getResourceAsStream("config.properties")) {
+			properties.load(inputStream);
+			this.gitLabURL = properties.getProperty(PropertiesModel.KEY_GITLAB_URL);
+			this.tracURL = properties.getProperty(PropertiesModel.KEY_TRAC_URL);
+		} catch (final IOException e) {
+			PropertiesModel.LOGGER.error(e);
+		}
 	}
 
 	private void saveSettings() {
@@ -69,7 +87,7 @@ public final class PropertiesModel {
 		preferences.put(PropertiesModel.KEY_OPERATIONS, this.operationNames.name());
 		preferences.put(PropertiesModel.KEY_ADDITIONAL_LOG_CHECKS, Boolean.toString(this.additionalLogChecks));
 		preferences.put(PropertiesModel.KEY_REGULAR_EXPRESSIONS, Boolean.toString(this.activateRegularExpressions));
-		
+
 		try {
 			preferences.flush();
 		} catch (final BackingStoreException e) {
@@ -127,12 +145,20 @@ public final class PropertiesModel {
 	}
 
 	public boolean isActivateRegularExpressions() {
-		return activateRegularExpressions;
+		return this.activateRegularExpressions;
 	}
 
-	public void setActivateRegularExpressions(boolean activateRegularExpressions) {
+	public void setActivateRegularExpressions(final boolean activateRegularExpressions) {
 		this.activateRegularExpressions = activateRegularExpressions;
 		this.saveSettings();
+	}
+
+	public String getGitLabURL() {
+		return this.gitLabURL;
+	}
+
+	public String getTracURL() {
+		return this.tracURL;
 	}
 
 	/**
