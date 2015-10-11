@@ -1,4 +1,8 @@
 1.1:
+	11 Oct 2015
+	Feature (Issue #15)
+	The help menu provides now a new menu item to browse to the pages which can be used to report bugs and feature wishes.
+
 	10 Oct 2015
 	Feature/Bugfix (Issue #14)
 	Improved the error handling of the front end. Error are now usually shown in dialogs and not printed to the console.
