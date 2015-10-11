@@ -28,6 +28,9 @@ import java.util.prefs.Preferences;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javafx.animation.FadeTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -36,11 +39,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.Window;
+import javafx.util.Duration;
 import kieker.diagnosis.controller.about.AboutDialogViewController;
 import kieker.diagnosis.controller.aggregatedcalls.AggregatedCallsViewController;
 import kieker.diagnosis.controller.aggregatedtraces.AggregatedTracesViewController;
@@ -82,7 +88,7 @@ public final class MainController {
 		this.activeController = Optional.of(TracesViewController.class);
 		this.loadPane(TracesViewController.class);
 	}
- 
+
 	@ErrorHandling
 	public void showAggregatedTraces() throws IOException {
 		this.toggleDisabledButton(this.aggregatedtraces);
@@ -191,7 +197,7 @@ public final class MainController {
 
 	}
 
-	public static void loadMainPane(final Stage stage) {
+	public static void loadMainPane(final Stage stage) throws Exception {
 		try {
 			final URL resource = MainController.class.getClassLoader().getResource("views/kieker/diagnosis/view/View.fxml");
 			final Pane pane = (Pane) FXMLLoader.load(resource, ResourceBundle.getBundle("locale.kieker.diagnosis.view.view", Locale.getDefault()));
@@ -202,10 +208,36 @@ public final class MainController {
 			stage.getIcons().add(new Image("kieker-logo.png"));
 			stage.setTitle("Kieker Trace Diagnosis - 1.1-SNAPSHOT");
 			stage.setMaximized(true);
+
+			MainController.showSplashScreen(root);
+
 			stage.show();
-		} catch (IOException ex) {
-			LOGGER.error(ex);
+		} catch (final IOException ex) {
+			MainController.LOGGER.error(ex);
+			throw ex;
 		}
+	}
+
+	private static void showSplashScreen(final Scene root) {
+		final ImageView imageView = new ImageView("splashscreen.png");
+		final Pane parent = new Pane(imageView);
+		final Scene scene = new Scene(parent);
+
+		final Stage stage = new Stage();
+		stage.setResizable(false);
+		stage.initStyle(StageStyle.UNDECORATED);
+		stage.initModality(Modality.WINDOW_MODAL);
+		stage.initOwner(root.getWindow());
+		stage.setScene(scene);
+
+		final FadeTransition transition = new FadeTransition(Duration.millis(3000), stage.getScene().getRoot());
+		transition.setFromValue(1.0);
+		transition.setToValue(0.0);
+		final EventHandler<ActionEvent> handler = t -> stage.hide();
+		transition.setOnFinished(handler);
+		transition.play();
+
+		stage.showAndWait();
 	}
 
 	private static PaneData loadPaneData(final Class<?> controllerClass) throws IOException {
