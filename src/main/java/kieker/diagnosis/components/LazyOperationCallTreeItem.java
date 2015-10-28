@@ -18,45 +18,48 @@ package kieker.diagnosis.components;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
-import kieker.diagnosis.domain.AbstractOperationCall;
+import kieker.diagnosis.domain.OperationCall;
+import kieker.diagnosis.model.PropertiesModel;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class LazyOperationCallTreeItem<T extends AbstractOperationCall<T>> extends TreeItem<T> {
+public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTreeItem<OperationCall> {
 
-	private boolean childrenInitialized = false;
-
-	public LazyOperationCallTreeItem(final T value) {
+	public LazyOperationCallTreeItem(final OperationCall value) {
 		super(value);
 	}
 
-	@Override
-	public ObservableList<TreeItem<T>> getChildren() {
-		if (!this.childrenInitialized) {
-			this.initializeChildren();
+	protected void initializeChildren() {
+		final List<TreeItem<OperationCall>> result = new ArrayList<>();
+
+		
+		if (PropertiesModel.getInstance().isMethodCallAggregationActive()) {
+			final float threshold = PropertiesModel.getInstance().getMethodCallAggregationThreshold();
+			final List<Float> underThreshold = new ArrayList<>();
+			for (final OperationCall child : super.getValue().getChildren()) {
+				if (child.getPercent() < threshold) {
+					underThreshold.add(child.getPercent());
+				} else {
+					result.add(new LazyOperationCallTreeItem(child));
+				}
+			}
+			if (!underThreshold.isEmpty()) {
+				final double percent = underThreshold.stream().collect(Collectors.summingDouble(Float::doubleValue));
+				final OperationCall call = new OperationCall("", "", underThreshold.size() + " Methodenaufrufe zusammengefasst", super.getValue().getTraceID(), 0);
+				call.setPercent((float) percent);
+				result.add(new LazyOperationCallTreeItem(call));
+			}
+			
+		} else {
+			for (final OperationCall child : super.getValue().getChildren()) {
+				result.add(new LazyOperationCallTreeItem(child));
+			}
 		}
-
-		return super.getChildren();
-	}
-
-	@Override
-	public boolean isLeaf() {
-		return super.getValue().getChildren().isEmpty();
-	}
-
-	private void initializeChildren() {
-		this.childrenInitialized = true;
-
-		final List<TreeItem<T>> result = new ArrayList<>();
-
-		for (final T child : super.getValue().getChildren()) {
-			result.add(new LazyOperationCallTreeItem<T>(child));
-		}
-
+		
 		super.getChildren().setAll(result);
 	}
 }

@@ -30,7 +30,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.input.MouseEvent;
-import kieker.diagnosis.components.LazyOperationCallTreeItem;
+import kieker.diagnosis.components.LazyAggregatedOperationCallTreeItem;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.model.DataModel;
@@ -177,7 +177,7 @@ public final class AggregatedTracesViewController {
 		for (final AggregatedTrace trace : traces) {
 			if (this.fstPredicate.test(trace.getRootOperationCall()) && this.sndPredicate.test(trace.getRootOperationCall())
 					&& this.thdPredicate.test(trace.getRootOperationCall()) && this.fthPredicate.test(trace.getRootOperationCall())) {
-				rootChildren.add(new LazyOperationCallTreeItem<AggregatedOperationCall>(trace.getRootOperationCall()));
+				rootChildren.add(new LazyAggregatedOperationCallTreeItem(trace.getRootOperationCall()));
 			}
 		}
 		

@@ -181,7 +181,7 @@ public final class TracesViewController {
 		this.treetable.setShowRoot(false);
 
 		traces.stream().map(trace -> trace.getRootOperationCall()).filter(this.fstPredicate).filter(this.sndPredicate).filter(this.thdPredicate).filter(this.fthPredicate)
-				.filter(this.fifPredicate).forEach(call -> rootChildren.add(new LazyOperationCallTreeItem<OperationCall>(call)));
+				.filter(this.fifPredicate).forEach(call -> rootChildren.add(new LazyOperationCallTreeItem(call)));
 
 		this.counter.textProperty().set(rootChildren.size() + " " + this.resources.getString("TracesView.lblCounter.text"));
 	}

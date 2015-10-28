@@ -26,6 +26,7 @@ import kieker.diagnosis.controller.AbstractDialogController;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.model.PropertiesModel.ComponentNames;
 import kieker.diagnosis.model.PropertiesModel.OperationNames;
+import kieker.diagnosis.model.PropertiesModel.Threshold;
 
 /**
  * @author Nils Christian Ehmke
@@ -38,6 +39,7 @@ public final class SettingsDialogViewController extends AbstractDialogController
 
 	@FXML private ComboBox<OperationNames> operationNames;
 	@FXML private ComboBox<ComponentNames> componentNames;
+	@FXML private ComboBox<Threshold> thresholds;
 	@FXML private ComboBox<TimeUnit> timeunits;
 	@FXML private CheckBox additionalLogChecks;
 	@FXML private CheckBox activateRegularExpressions;
@@ -46,6 +48,7 @@ public final class SettingsDialogViewController extends AbstractDialogController
 		this.timeunits.setItems(FXCollections.observableArrayList(SettingsDialogViewController.TIME_UNITS));
 		this.componentNames.setItems(FXCollections.observableArrayList(ComponentNames.values()));
 		this.operationNames.setItems(FXCollections.observableArrayList(OperationNames.values()));
+		this.thresholds.setItems(FXCollections.observableArrayList(Threshold.values()));
 		
 		this.loadSettings();
 	}

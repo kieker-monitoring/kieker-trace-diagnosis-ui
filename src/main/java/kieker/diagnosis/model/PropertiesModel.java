@@ -175,4 +175,16 @@ public final class PropertiesModel {
 		SHORT, LONG
 	}
 
+	public enum Threshold {
+		THRESHOLD_0_5, THRESHOLD_1, THRESHOLD_10, THRESHOLD_20, THRESHOLD_30, THRESHOLD_40, THRESHOLD_50
+	}
+
+	public boolean isMethodCallAggregationActive() {
+		return true;
+	}
+
+	public float getMethodCallAggregationThreshold() {
+		return 50.0f;
+	}
+
 }
