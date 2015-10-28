@@ -19,11 +19,10 @@ package kieker.diagnosis.controller.traces;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringBinding;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
@@ -36,6 +35,7 @@ import kieker.diagnosis.components.LazyOperationCallTreeItem;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.model.DataModel;
+import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.util.ErrorHandling;
 import kieker.diagnosis.util.FilterUtility;
 import kieker.diagnosis.util.NameConverter;
@@ -85,30 +85,35 @@ public final class TracesViewController {
 		final ObservableList<Trace> traces = this.dataModel.getTraces();
 		traces.addListener((final Change<? extends Trace> c) -> this.reloadTreetable());
 
-		this.traceDepth.textProperty().bind(this.createStringBindingForSelection(OperationCall::getStackDepth));
-		this.traceSize.textProperty().bind(this.createStringBindingForSelection(OperationCall::getStackSize));
-		this.timestamp.textProperty().bind(this.createStringBindingForSelection(OperationCall::getTimestamp));
-		this.container.textProperty().bind(this.createStringBindingForSelection(OperationCall::getContainer));
-		this.component.textProperty().bind(this.createStringBindingForSelection(OperationCall::getComponent));
-		this.operation.textProperty().bind(this.createStringBindingForSelection(OperationCall::getOperation));
-		this.duration.textProperty().bind(this.createDurationStringBindingForSelection(OperationCall::getDuration));
-		this.percent.textProperty().bind(this.createPercentStringBindingForSelection(OperationCall::getPercent));
-		this.traceID.textProperty().bind(this.createStringBindingForSelection(OperationCall::getTraceID));
-		this.failed.textProperty().bind(this.createStringBindingForSelection(OperationCall::getFailedCause));
+		this.selection.addListener(e -> this.updateDetailPanel());
 	}
 
-	private StringBinding createStringBindingForSelection(final Function<OperationCall, Object> mapper) {
-		return Bindings.createStringBinding(() -> this.selection.get().map(mapper).map(Object::toString).orElse("N/A"), this.selection);
-	}
+	private void updateDetailPanel() {
+		if (this.selection.get().isPresent()) {
+			final OperationCall call = this.selection.get().get();
+			final TimeUnit sourceTimeUnit = DataModel.getInstance().getTimeUnit();
+			final TimeUnit targetTimeUnit = PropertiesModel.getInstance().getTimeUnit();
 
-	private StringBinding createPercentStringBindingForSelection(final Function<OperationCall, Object> mapper) {
-		return Bindings.createStringBinding(() -> this.selection.get().map(mapper).map(x -> x.toString() + " %").orElse("N/A"), this.selection);
-	}
-
-	private StringBinding createDurationStringBindingForSelection(final Function<OperationCall, Object> mapper) {
-		return Bindings.createStringBinding(
-				() -> this.selection.get().map(mapper).map(x -> x.toString() + " " + NameConverter.toShortTimeUnit(DataModel.getInstance().getTimeUnit())).orElse("N/A"),
-				this.selection);
+			this.container.setText(call.getContainer());
+			this.component.setText(call.getComponent());
+			this.operation.setText(call.getOperation());
+			this.timestamp.setText(Long.toString(call.getTimestamp()));
+			this.duration.setText(NameConverter.toDurationString(call.getDuration(), sourceTimeUnit, targetTimeUnit));
+			this.traceID.setText(Long.toString(call.getTraceID()));
+			this.traceDepth.setText(Integer.toString(call.getStackDepth()));
+			this.traceSize.setText(Integer.toString(call.getStackSize()));
+			this.percent.setText(call.getPercent() + " %");
+			this.failed.setText(call.getFailedCause() != null ? call.getFailedCause() : "N/A");
+		} else {
+			this.container.setText("N/A");
+			this.component.setText("N/A");
+			this.operation.setText("N/A");
+			this.timestamp.setText("N/A");
+			this.duration.setText("N/A");
+			this.traceID.setText("N/A");
+			this.percent.setText("N/A");
+			this.failed.setText("N/A");
+		}
 	}
 
 	@ErrorHandling

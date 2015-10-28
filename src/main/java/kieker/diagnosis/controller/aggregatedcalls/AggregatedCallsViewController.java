@@ -18,11 +18,10 @@ package kieker.diagnosis.controller.aggregatedcalls;
 
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.function.Function;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringBinding;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.FilteredList;
@@ -33,6 +32,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.model.DataModel;
+import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.util.ErrorHandling;
 import kieker.diagnosis.util.FilterUtility;
 import kieker.diagnosis.util.NameConverter;
@@ -84,28 +84,39 @@ public final class AggregatedCallsViewController {
 		sortedData.comparatorProperty().bind(this.table.comparatorProperty());
 		this.table.setItems(sortedData);
 
-		this.minimalDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMinDuration));
-		this.maximalDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMaxDuration));
-		this.medianDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMedianDuration));
-		this.totalDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getTotalDuration));
-		this.meanDuration.textProperty().bind(this.createDurationStringBindingForSelection(AggregatedOperationCall::getMeanDuration));
-		this.container.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getContainer));
-		this.component.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getComponent));
-		this.operation.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getOperation));
-		this.failed.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getFailedCause));
-		this.calls.textProperty().bind(this.createStringBindingForSelection(AggregatedOperationCall::getCalls));
+		this.selection.addListener(e -> this.updateDetailPanel());
 
 		this.counter.textProperty().bind(Bindings.createStringBinding(() -> sortedData.size() + " " + this.resources.getString("AggregatedCallsView.lblCounter.text"), sortedData));
 	}
 
-	private StringBinding createStringBindingForSelection(final Function<AggregatedOperationCall, Object> mapper) {
-		return Bindings.createStringBinding(() -> this.selection.get().map(mapper).map(Object::toString).orElse("N/A"), this.selection);
-	}
+	private void updateDetailPanel() {
+		if (this.selection.get().isPresent()) {
+			final AggregatedOperationCall call = this.selection.get().get();
+			final TimeUnit sourceTimeUnit = DataModel.getInstance().getTimeUnit();
+			final TimeUnit targetTimeUnit = PropertiesModel.getInstance().getTimeUnit();
 
-	private StringBinding createDurationStringBindingForSelection(final Function<AggregatedOperationCall, Object> mapper) {
-		return Bindings.createStringBinding(
-				() -> this.selection.get().map(mapper).map(x -> x.toString() + " " + NameConverter.toShortTimeUnit(DataModel.getInstance().getTimeUnit())).orElse("N/A"),
-				this.selection);
+			this.container.setText(call.getContainer());
+			this.component.setText(call.getComponent());
+			this.operation.setText(call.getOperation());
+			this.minimalDuration.setText(NameConverter.toDurationString(call.getMinDuration(), sourceTimeUnit, targetTimeUnit));
+			this.maximalDuration.setText(NameConverter.toDurationString(call.getMaxDuration(), sourceTimeUnit, targetTimeUnit));
+			this.medianDuration.setText(NameConverter.toDurationString(call.getMedianDuration(), sourceTimeUnit, targetTimeUnit));
+			this.totalDuration.setText(NameConverter.toDurationString(call.getTotalDuration(), sourceTimeUnit, targetTimeUnit));
+			this.meanDuration.setText(NameConverter.toDurationString(call.getMeanDuration(), sourceTimeUnit, targetTimeUnit));
+			this.calls.setText(Integer.toString(call.getCalls()));
+			this.failed.setText(call.getFailedCause() != null ? call.getFailedCause() : "N/A");
+		} else {
+			this.container.setText("N/A");
+			this.component.setText("N/A");
+			this.operation.setText("N/A");
+			this.minimalDuration.setText("N/A");
+			this.maximalDuration.setText("N/A");
+			this.medianDuration.setText("N/A");
+			this.totalDuration.setText("N/A");
+			this.meanDuration.setText("N/A");
+			this.calls.setText("N/A");
+			this.failed.setText("N/A");
+		}
 	}
 
 	@ErrorHandling

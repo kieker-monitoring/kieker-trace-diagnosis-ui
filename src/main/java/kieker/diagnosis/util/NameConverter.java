@@ -25,7 +25,8 @@ public final class NameConverter {
 
 	private static Mapper<TimeUnit, String> shortTimeUnitMapper = new Mapper<>();
 
-	private NameConverter() {}
+	private NameConverter() {
+	}
 
 	static {
 		initializeMapper();
@@ -55,6 +56,15 @@ public final class NameConverter {
 		final String result = operationName.replaceAll("\\(.*\\)", "(...)");
 		final int lastPointPos = result.lastIndexOf('.', result.length() - 5);
 		return result.substring(lastPointPos + 1);
+	}
+
+	public static String toDurationString(final long duration, final TimeUnit sourceUnit, final TimeUnit targetUnit) {
+		final String shortSourceUnit = NameConverter.toShortTimeUnit(sourceUnit);
+		final String shortTargetUnit = NameConverter.toShortTimeUnit(targetUnit);
+
+		final long targetDuration = targetUnit.convert(duration, sourceUnit);
+
+		return targetDuration + " " + shortTargetUnit + " (" + duration + " " + shortSourceUnit + ")";
 	}
 
 }
