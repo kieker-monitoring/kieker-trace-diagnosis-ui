@@ -19,6 +19,8 @@ package kieker.diagnosis.components;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import javafx.scene.control.TreeItem;
@@ -29,7 +31,16 @@ import kieker.diagnosis.model.PropertiesModel;
  * @author Nils Christian Ehmke
  */
 public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTreeItem<OperationCall> {
+	
+	private static final String methodCallsAggregated;
+	
+	static {
+		final String bundleBaseName = "locale.kieker.diagnosis.components.components";
+		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
 
+		methodCallsAggregated = resourceBundle.getString("methodCallsAggregated");
+	}
+	
 	public LazyOperationCallTreeItem(final OperationCall value) {
 		super(value);
 	}
@@ -53,7 +64,7 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 				final long duration = underThreshold.stream().map(OperationCall::getDuration).collect(Collectors.summingLong(Long::longValue));
 				final int traceDepth = underThreshold.stream().map(OperationCall::getStackDepth).max(Comparator.naturalOrder()).get();
 				final int traceSize = underThreshold.stream().map(OperationCall::getStackSize).collect(Collectors.summingInt(Integer::intValue));
-				final OperationCall call = new OperationCall("?", "?", underThreshold.size() + " Methodenaufrufe zusammengefasst", super.getValue().getTraceID(), -1);
+				final OperationCall call = new OperationCall("-", "-", underThreshold.size() + " " + methodCallsAggregated, super.getValue().getTraceID(), -1);
 				call.setPercent((float) percent);
 				call.setDuration(duration); 
 				call.setStackDepth(traceDepth);
