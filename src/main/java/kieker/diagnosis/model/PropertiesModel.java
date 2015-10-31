@@ -40,6 +40,8 @@ public final class PropertiesModel {
 	private static final String KEY_GRAPHVIZ_PATH = "graphvizpath";
 	private static final String KEY_ADDITIONAL_LOG_CHECKS = "additionalLogChecks";
 	private static final String KEY_REGULAR_EXPRESSIONS = "regularExpressions";
+	private static final String KEY_METHOD_CALL_AGGREGATION = "methodCallAggregationActive";
+	private static final String KEY_THRESHOLD = "threshold";
 
 	private static final String KEY_GITLAB_URL = "GitLabURL";
 	private static final String KEY_TRAC_URL = "TracURL";
@@ -48,8 +50,10 @@ public final class PropertiesModel {
 	private TimeUnit timeUnit;
 	private ComponentNames componentNames;
 	private OperationNames operationNames;
+	private Threshold threshold;
 	private boolean additionalLogChecks;
 	private boolean activateRegularExpressions;
+	private boolean methodCallAggregationActive;
 	private String gitLabURL;
 	private String tracURL;
 
@@ -66,6 +70,8 @@ public final class PropertiesModel {
 		this.operationNames = OperationNames.valueOf(preferences.get(PropertiesModel.KEY_OPERATIONS, OperationNames.SHORT.name()));
 		this.additionalLogChecks = Boolean.valueOf(preferences.get(PropertiesModel.KEY_ADDITIONAL_LOG_CHECKS, Boolean.FALSE.toString()));
 		this.activateRegularExpressions = Boolean.valueOf(preferences.get(PropertiesModel.KEY_REGULAR_EXPRESSIONS, Boolean.FALSE.toString()));
+		this.methodCallAggregationActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_METHOD_CALL_AGGREGATION, Boolean.FALSE.toString()));
+		this.setThreshold(Threshold.valueOf(preferences.get(PropertiesModel.KEY_THRESHOLD, Threshold.THRESHOLD_1.name())));
 
 		final Properties properties = new Properties();
 		final ClassLoader classLoader = PropertiesModel.class.getClassLoader();
@@ -87,6 +93,8 @@ public final class PropertiesModel {
 		preferences.put(PropertiesModel.KEY_OPERATIONS, this.operationNames.name());
 		preferences.put(PropertiesModel.KEY_ADDITIONAL_LOG_CHECKS, Boolean.toString(this.additionalLogChecks));
 		preferences.put(PropertiesModel.KEY_REGULAR_EXPRESSIONS, Boolean.toString(this.activateRegularExpressions));
+		preferences.put(PropertiesModel.KEY_METHOD_CALL_AGGREGATION, Boolean.toString(this.methodCallAggregationActive));
+		preferences.put(PropertiesModel.KEY_THRESHOLD, this.threshold.name());
 
 		try {
 			preferences.flush();
@@ -161,6 +169,26 @@ public final class PropertiesModel {
 		return this.tracURL;
 	}
 
+	public float getMethodCallAggregationThreshold() {
+		return 50.0f;
+	}
+
+	public boolean isMethodCallAggregationActive() {
+		return methodCallAggregationActive;
+	}
+
+	public void setMethodCallAggregationActive(boolean methodCallAggregationActive) {
+		this.methodCallAggregationActive = methodCallAggregationActive;
+	}
+
+	public Threshold getThreshold() {
+		return threshold;
+	}
+
+	public void setThreshold(Threshold threshold) {
+		this.threshold = threshold;
+	}
+
 	/**
 	 * @author Nils Christian Ehmke
 	 */
@@ -177,14 +205,6 @@ public final class PropertiesModel {
 
 	public enum Threshold {
 		THRESHOLD_0_5, THRESHOLD_1, THRESHOLD_10, THRESHOLD_20, THRESHOLD_30, THRESHOLD_40, THRESHOLD_50
-	}
-
-	public boolean isMethodCallAggregationActive() {
-		return true;
-	}
-
-	public float getMethodCallAggregationThreshold() {
-		return 50.0f;
 	}
 
 }

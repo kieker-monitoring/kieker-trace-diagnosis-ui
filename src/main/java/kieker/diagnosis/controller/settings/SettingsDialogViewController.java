@@ -43,13 +43,16 @@ public final class SettingsDialogViewController extends AbstractDialogController
 	@FXML private ComboBox<TimeUnit> timeunits;
 	@FXML private CheckBox additionalLogChecks;
 	@FXML private CheckBox activateRegularExpressions;
+	@FXML private CheckBox aggregateMethodCalls;
 
 	public void initialize() {
 		this.timeunits.setItems(FXCollections.observableArrayList(SettingsDialogViewController.TIME_UNITS));
 		this.componentNames.setItems(FXCollections.observableArrayList(ComponentNames.values()));
 		this.operationNames.setItems(FXCollections.observableArrayList(OperationNames.values()));
 		this.thresholds.setItems(FXCollections.observableArrayList(Threshold.values()));
-		
+
+		this.thresholds.disableProperty().bind(aggregateMethodCalls.selectedProperty().not());
+
 		this.loadSettings();
 	}
 
@@ -64,14 +67,18 @@ public final class SettingsDialogViewController extends AbstractDialogController
 		this.timeunits.getSelectionModel().select(this.propertiesModel.getTimeUnit());
 		this.additionalLogChecks.setSelected(this.propertiesModel.isAdditionalLogChecks());
 		this.activateRegularExpressions.setSelected(this.propertiesModel.isActivateRegularExpressions());
+		this.aggregateMethodCalls.setSelected(this.propertiesModel.isMethodCallAggregationActive());
+		this.thresholds.getSelectionModel().select(this.propertiesModel.getThreshold());
 	}
- 
+
 	private void saveSettings() {
 		this.propertiesModel.setOperationNames(this.operationNames.getSelectionModel().getSelectedItem());
 		this.propertiesModel.setComponentNames(this.componentNames.getSelectionModel().getSelectedItem());
 		this.propertiesModel.setTimeUnit(this.timeunits.getSelectionModel().getSelectedItem());
 		this.propertiesModel.setAdditionalLogChecks(this.additionalLogChecks.isSelected());
 		this.propertiesModel.setActivateRegularExpressions(this.activateRegularExpressions.isSelected());
+		this.propertiesModel.setMethodCallAggregationActive(this.aggregateMethodCalls.isSelected());
+		this.propertiesModel.setThreshold(this.thresholds.getSelectionModel().getSelectedItem());
 	}
 
 }

@@ -26,7 +26,12 @@
 			<ComboBox fx:id="componentNames" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
 				<converter><kieker.diagnosis.components.ComponentNamesStringConverter/></converter>
 			</ComboBox>
- 
+			
+ 			<CheckBox text="%aggregateMethodCalls" fx:id="aggregateMethodCalls" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
+			<ComboBox fx:id="thresholds" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
+				<converter><kieker.diagnosis.components.ThresholdStringConverter/></converter>
+			</ComboBox>
+			
 		</GridPane>
 	</TitledPane>
 	
@@ -45,10 +50,6 @@
 			<vgap>10</vgap>
 
 			<CheckBox fx:id="additionalLogChecks" text="%additionalLogChecks" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
-			<CheckBox text="%aggregateMethodCalls" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
-			<ComboBox fx:id="thresholds" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
-				<converter><kieker.diagnosis.components.ThresholdStringConverter/></converter>
-			</ComboBox>
 		</GridPane>
 	</TitledPane>
 	
