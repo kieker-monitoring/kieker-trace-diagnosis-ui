@@ -58,6 +58,7 @@ import kieker.diagnosis.controller.settings.SettingsDialogViewController;
 import kieker.diagnosis.controller.traces.TracesViewController;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.model.DataModel;
+import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.util.Context;
 import kieker.diagnosis.util.ContextEntry;
 import kieker.diagnosis.util.ContextKey;
@@ -160,10 +161,14 @@ public final class MainController {
 
 	@ErrorHandling
 	public void showSettings() throws Exception {
+		final long propertiesVersionPre = PropertiesModel.getInstance().getVersion();
 		this.loadDialogPane(SettingsDialogViewController.class);
 
 		if (this.activeController.isPresent()) {
-			this.loadPane(this.activeController.get());
+			final long propertiesVersionPost = PropertiesModel.getInstance().getVersion();
+			if (propertiesVersionPre != propertiesVersionPost) {
+				this.loadPane(this.activeController.get());
+			}
 		}
 	}
 

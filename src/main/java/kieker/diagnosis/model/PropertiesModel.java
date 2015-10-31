@@ -59,6 +59,8 @@ public final class PropertiesModel {
 	private String gitLabURL;
 	private String tracURL;
 
+	private long version = 0L;
+
 	public PropertiesModel() {
 		this.loadSettings();
 	}
@@ -105,6 +107,8 @@ public final class PropertiesModel {
 		} catch (final BackingStoreException e) {
 			PropertiesModel.LOGGER.error(e);
 		}
+
+		version++;
 	}
 
 	public String getGraphvizPath() {
@@ -195,6 +199,10 @@ public final class PropertiesModel {
 
 	public void setCaseSensitive(boolean caseSensitive) {
 		this.caseSensitive = caseSensitive;
+	}
+
+	public long getVersion() {
+		return version;
 	}
 
 	/**

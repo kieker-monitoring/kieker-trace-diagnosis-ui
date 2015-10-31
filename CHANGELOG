@@ -1,5 +1,9 @@
 1.1:
 	31 Oct 2015
+	Bugfix (Issue #20)
+	An active view has always been reloaded after closing the settings dialog, even if no settings had been modified. Now an active view is only reloaded if at least one of the settings has been modified.
+
+	31 Oct 2015
 	Feature (Issue #19)
 	A switch within the settings allows to enable case sensitivity within the filter masks.
 	
