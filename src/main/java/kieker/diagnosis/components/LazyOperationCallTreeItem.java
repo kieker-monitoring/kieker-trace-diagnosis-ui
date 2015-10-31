@@ -17,6 +17,7 @@
 package kieker.diagnosis.components;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,19 +39,25 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 
 		
 		if (PropertiesModel.getInstance().isMethodCallAggregationActive()) {
-			final float threshold = PropertiesModel.getInstance().getMethodCallAggregationThreshold();
-			final List<Float> underThreshold = new ArrayList<>();
+			final float threshold = PropertiesModel.getInstance().getThreshold().percent;
+			final List<OperationCall> underThreshold = new ArrayList<>();
 			for (final OperationCall child : super.getValue().getChildren()) {
 				if (child.getPercent() < threshold) {
-					underThreshold.add(child.getPercent());
+					underThreshold.add(child);
 				} else {
 					result.add(new LazyOperationCallTreeItem(child));
 				}
 			}
 			if (!underThreshold.isEmpty()) {
-				final double percent = underThreshold.stream().collect(Collectors.summingDouble(Float::doubleValue));
-				final OperationCall call = new OperationCall("", "", underThreshold.size() + " Methodenaufrufe zusammengefasst", super.getValue().getTraceID(), 0);
+				final double percent = underThreshold.stream().map(OperationCall::getPercent).collect(Collectors.summingDouble(Float::doubleValue));
+				final long duration = underThreshold.stream().map(OperationCall::getDuration).collect(Collectors.summingLong(Long::longValue));
+				final int traceDepth = underThreshold.stream().map(OperationCall::getStackDepth).max(Comparator.naturalOrder()).get();
+				final int traceSize = underThreshold.stream().map(OperationCall::getStackSize).collect(Collectors.summingInt(Integer::intValue));
+				final OperationCall call = new OperationCall("?", "?", underThreshold.size() + " Methodenaufrufe zusammengefasst", super.getValue().getTraceID(), -1);
 				call.setPercent((float) percent);
+				call.setDuration(duration); 
+				call.setStackDepth(traceDepth);
+				call.setStackSize(traceSize);
 				result.add(new LazyOperationCallTreeItem(call));
 			}
 			

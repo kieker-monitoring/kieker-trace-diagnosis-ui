@@ -169,10 +169,6 @@ public final class PropertiesModel {
 		return this.tracURL;
 	}
 
-	public float getMethodCallAggregationThreshold() {
-		return 50.0f;
-	}
-
 	public boolean isMethodCallAggregationActive() {
 		return methodCallAggregationActive;
 	}
@@ -204,7 +200,15 @@ public final class PropertiesModel {
 	}
 
 	public enum Threshold {
-		THRESHOLD_0_5, THRESHOLD_1, THRESHOLD_10, THRESHOLD_20, THRESHOLD_30, THRESHOLD_40, THRESHOLD_50
+
+		THRESHOLD_0_5(0.5f), THRESHOLD_1(1f), THRESHOLD_10(10f), THRESHOLD_20(20f), THRESHOLD_30(30f), THRESHOLD_40(40f), THRESHOLD_50(50f);
+
+		public final float percent;
+
+		private Threshold(final float percent) {
+			this.percent = percent;
+		}
+
 	}
 
 }
