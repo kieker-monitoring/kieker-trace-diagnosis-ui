@@ -1,4 +1,8 @@
 1.1:
+	31 Oct 2015
+	Feature (Issue #16)
+	A switch within the settings allows to aggregate insignificant methods below a given threshold within traces. 
+	
 	28 Oct 2015
 	Feature (Issue #17)
 	The detail panels in each view show now the durations in the selected time unit in addition to the original time unit from the monitoring logs.
