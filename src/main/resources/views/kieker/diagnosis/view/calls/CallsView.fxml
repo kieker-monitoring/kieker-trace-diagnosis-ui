@@ -3,7 +3,6 @@
 <?import javafx.scene.control.cell.*?>
 
 <GridPane xmlns:fx="http://javafx.com/fxml"
-	fx:controller="kieker.diagnosis.controller.calls.CallsViewController"
 	AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0"
 	AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
 

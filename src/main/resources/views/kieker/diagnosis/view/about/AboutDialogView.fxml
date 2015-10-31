@@ -2,7 +2,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.cell.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:id="view" fx:controller="kieker.diagnosis.controller.about.AboutDialogViewController" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:id="view" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
 
 	<spacing>10</spacing>
 

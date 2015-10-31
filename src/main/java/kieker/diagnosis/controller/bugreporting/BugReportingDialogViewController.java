@@ -23,6 +23,7 @@ import java.net.URISyntaxException;
 
 import kieker.diagnosis.controller.AbstractDialogController;
 import kieker.diagnosis.model.PropertiesModel;
+import kieker.diagnosis.util.Context;
 import kieker.diagnosis.util.ErrorHandling;
 
 /**
@@ -31,7 +32,11 @@ import kieker.diagnosis.util.ErrorHandling;
 public final class BugReportingDialogViewController extends AbstractDialogController {
 
 	private final PropertiesModel propertiesModel = PropertiesModel.getInstance();
-
+	
+	public BugReportingDialogViewController(final Context context) {
+		super(context);
+	}
+	
 	@ErrorHandling
 	public void visitGitLab() throws IOException, URISyntaxException {
 		final String gitLabURL = this.propertiesModel.getGitLabURL();

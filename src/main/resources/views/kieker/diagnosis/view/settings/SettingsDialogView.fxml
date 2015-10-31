@@ -3,7 +3,7 @@
 <?import javafx.scene.control.cell.*?>
 <?import javafx.scene.control.CheckBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:id="view" fx:controller="kieker.diagnosis.controller.settings.SettingsDialogViewController" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:id="view" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
 
 	<spacing>10</spacing>
 

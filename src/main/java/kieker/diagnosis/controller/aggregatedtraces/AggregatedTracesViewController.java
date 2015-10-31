@@ -31,10 +31,12 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.input.MouseEvent;
 import kieker.diagnosis.components.LazyAggregatedOperationCallTreeItem;
+import kieker.diagnosis.controller.AbstractController;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
+import kieker.diagnosis.util.Context;
 import kieker.diagnosis.util.ErrorHandling;
 import kieker.diagnosis.util.FilterUtility;
 import kieker.diagnosis.util.NameConverter;
@@ -42,7 +44,7 @@ import kieker.diagnosis.util.NameConverter;
 /**
  * @author Nils Christian Ehmke
  */
-public final class AggregatedTracesViewController {
+public final class AggregatedTracesViewController extends AbstractController {
 
 	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
 
@@ -72,7 +74,11 @@ public final class AggregatedTracesViewController {
 	private Predicate<AggregatedOperationCall> sndPredicate = call -> true;
 	private Predicate<AggregatedOperationCall> thdPredicate = call -> true;
 	private Predicate<AggregatedOperationCall> fthPredicate = call -> true;
-
+	
+	public AggregatedTracesViewController(final Context context) {
+		super(context);
+	}
+	
 	@ErrorHandling
 	public void initialize() {
 		this.reloadTreetable();

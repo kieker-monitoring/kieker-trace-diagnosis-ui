@@ -1,5 +1,9 @@
 1.1:
 	31 Oct 2015
+	Feature (Issue #18)
+	It is now possible to doubleclick on a method call to jump directly into the corresponding trace.
+
+	31 Oct 2015
 	Feature (Issue #16)
 	A switch within the settings allows to aggregate insignificant methods below a given threshold within traces. 
 	

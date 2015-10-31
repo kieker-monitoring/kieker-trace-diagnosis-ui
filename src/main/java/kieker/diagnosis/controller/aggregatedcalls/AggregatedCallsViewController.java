@@ -30,9 +30,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import kieker.diagnosis.controller.AbstractController;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
+import kieker.diagnosis.util.Context;
 import kieker.diagnosis.util.ErrorHandling;
 import kieker.diagnosis.util.FilterUtility;
 import kieker.diagnosis.util.NameConverter;
@@ -40,7 +42,7 @@ import kieker.diagnosis.util.NameConverter;
 /**
  * @author Nils Christian Ehmke
  */
-public final class AggregatedCallsViewController {
+public final class AggregatedCallsViewController extends AbstractController {
 
 	private FilteredList<AggregatedOperationCall> fstFilteredData;
 	private FilteredList<AggregatedOperationCall> sndFilteredData;
@@ -68,7 +70,11 @@ public final class AggregatedCallsViewController {
 	@FXML private TextField counter;
 
 	@FXML private ResourceBundle resources;
-
+	
+	public AggregatedCallsViewController(final Context context) {
+		super(context);
+	}
+	
 	@ErrorHandling
 	public void initialize() {
 		final DataModel dataModel = DataModel.getInstance();

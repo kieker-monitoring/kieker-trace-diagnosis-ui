@@ -31,9 +31,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import kieker.diagnosis.controller.AbstractController;
+import kieker.diagnosis.controller.MainController;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
+import kieker.diagnosis.util.Context;
 import kieker.diagnosis.util.ErrorHandling;
 import kieker.diagnosis.util.FilterUtility;
 import kieker.diagnosis.util.NameConverter;
@@ -41,7 +44,7 @@ import kieker.diagnosis.util.NameConverter;
 /**
  * @author Nils Christian Ehmke
  */
-public final class CallsViewController {
+public final class CallsViewController extends AbstractController {
 
 	private final SimpleObjectProperty<Optional<OperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
 
@@ -68,7 +71,11 @@ public final class CallsViewController {
 	@FXML private TextField counter;
 
 	@FXML private ResourceBundle resources;
-
+	
+	public CallsViewController(final Context context) {
+		super(context);
+	}
+	
 	@ErrorHandling
 	public void initialize() {
 		final DataModel dataModel = DataModel.getInstance();
@@ -115,8 +122,21 @@ public final class CallsViewController {
 	}
 
 	@ErrorHandling
-	public void selectCall(final MouseEvent event) {
-		this.selection.set(Optional.ofNullable(this.table.getSelectionModel().getSelectedItem()));
+	public void selectCall(final MouseEvent event) throws Exception {
+		final int clicked = event.getClickCount();
+
+		if (clicked == 1) {
+			this.selection.set(Optional.ofNullable(this.table.getSelectionModel().getSelectedItem()));
+		} else if (clicked == 2) {
+			jumpToTrace(); 
+		}
+	}
+
+	private void jumpToTrace() throws Exception {
+		if (this.selection.get().isPresent()) {
+			final OperationCall call = this.selection.get().get();
+			MainController.instance().jumpToTrace(call);
+		}
 	}
 
 	@ErrorHandling
@@ -153,4 +173,5 @@ public final class CallsViewController {
 		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterTraceID, function);
 		this.fifFilteredData.setPredicate(predicate);
 	}
+
 }

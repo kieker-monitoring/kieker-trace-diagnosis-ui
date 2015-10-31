@@ -25,18 +25,20 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import kieker.diagnosis.controller.AbstractController;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.model.DataModel;
+import kieker.diagnosis.util.Context;
 import kieker.diagnosis.util.ErrorHandling;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class MonitoringStatisticsViewController {
+public final class MonitoringStatisticsViewController extends AbstractController {
 
 	private static final String[] UNITS = { "Bytes", "Kilobytes", "Megabytes", "Gigabytes", };
 	private static final float SIZE_OF_BYTE = 1024.0f;
@@ -61,7 +63,11 @@ public final class MonitoringStatisticsViewController {
 	@FXML private TextField incompletetraces;
 	@FXML private TextField danglingrecords;
 	@FXML private TextField ignoredRecords;
-
+	
+	public MonitoringStatisticsViewController(final Context context) {
+		super(context);
+	}
+	
 	@ErrorHandling
 	public void initialize() {
 		final ObjectProperty<File> importDirectory = this.dataModel.getImportDirectory();

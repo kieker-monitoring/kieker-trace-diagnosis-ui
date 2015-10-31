@@ -32,10 +32,13 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.input.MouseEvent;
 import kieker.diagnosis.components.LazyOperationCallTreeItem;
+import kieker.diagnosis.controller.AbstractController;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
+import kieker.diagnosis.util.Context;
+import kieker.diagnosis.util.ContextKey;
 import kieker.diagnosis.util.ErrorHandling;
 import kieker.diagnosis.util.FilterUtility;
 import kieker.diagnosis.util.NameConverter;
@@ -45,7 +48,7 @@ import kieker.diagnosis.util.NameConverter;
  *
  * @author Nils Christian Ehmke
  */
-public final class TracesViewController {
+public final class TracesViewController extends AbstractController {
 
 	private final DataModel dataModel = DataModel.getInstance();
 
@@ -78,6 +81,10 @@ public final class TracesViewController {
 	private Predicate<OperationCall> fthPredicate = call -> true;
 	private Predicate<OperationCall> fifPredicate = call -> true;
 
+	public TracesViewController(final Context context) {
+		super(context);
+	}
+
 	@ErrorHandling
 	public void initialize() {
 		this.reloadTreetable();
@@ -86,6 +93,46 @@ public final class TracesViewController {
 		traces.addListener((final Change<? extends Trace> c) -> this.reloadTreetable());
 
 		this.selection.addListener(e -> this.updateDetailPanel());
+
+		final Object call = super.getContext().get(ContextKey.OPERATION_CALL);
+		if (call instanceof OperationCall) {
+			jumpToCall((OperationCall) call);
+		}
+
+	}
+
+	private void jumpToCall(final OperationCall call) {
+		final TreeItem<OperationCall> root = this.treetable.getRoot();
+
+		final Optional<TreeItem<OperationCall>> traceRoot = findTraceRoot(root, call);
+		if (traceRoot.isPresent()) {
+			final TreeItem<OperationCall> treeItem = findCall(traceRoot.get(), call);
+			if (treeItem != null) {
+				this.treetable.getSelectionModel().select(treeItem);
+				this.selection.set(Optional.ofNullable(treeItem.getValue()));
+			}
+		}
+	}
+
+	private Optional<TreeItem<OperationCall>> findTraceRoot(final TreeItem<OperationCall> root, final OperationCall call) {
+		return root.getChildren().stream().filter(t -> t.getValue().getTraceID() == call.getTraceID()).findFirst();
+	}
+
+	private TreeItem<OperationCall> findCall(final TreeItem<OperationCall> root, final OperationCall call) {
+		 if (root.getValue() == call) {
+			 root.setExpanded(true);
+			 return root;
+		 }
+		 
+		 for (final TreeItem<OperationCall> child : root.getChildren()) {
+			final TreeItem<OperationCall> item = findCall(child, call);
+			if (item != null) {
+				root.setExpanded(true);
+				return item;
+			}
+		}
+		 
+		 return null;
 	}
 
 	private void updateDetailPanel() {

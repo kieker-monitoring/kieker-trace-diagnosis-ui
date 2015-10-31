@@ -1,7 +1,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane fx:id="view" xmlns:fx="http://javafx.com/fxml" fx:controller="kieker.diagnosis.controller.monitoringstatistics.MonitoringStatisticsViewController" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+<GridPane fx:id="view" xmlns:fx="http://javafx.com/fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
 
 	<Label text="%MonitoringStatisticsView.lblMonitoringLog.text" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="monitoringlog" GridPane.rowIndex="1" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" />

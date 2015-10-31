@@ -14,18 +14,20 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.controller.about;
+package kieker.diagnosis.controller;
 
-import kieker.diagnosis.controller.AbstractDialogController;
 import kieker.diagnosis.util.Context;
 
-/**
- * @author Nils Christian Ehmke
- */
-public final class AboutDialogViewController extends AbstractDialogController {
+public abstract class AbstractController {
 
-	public AboutDialogViewController(final Context context) {
-		super(context);
+	private final Context context;
+
+	public AbstractController(final Context context) {
+		this.context = context;
 	}
-	
+
+	protected Context getContext() {
+		return context;
+	}
+
 }
