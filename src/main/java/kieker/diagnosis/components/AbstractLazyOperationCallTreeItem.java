@@ -21,6 +21,9 @@ import javafx.scene.control.TreeItem;
 import kieker.diagnosis.domain.AbstractOperationCall;
 
 /**
+ * This is an abstract base for tree items who initialize their children in a lazy way. This class is necessary because the tree tables of JavaFX do not support lazy loading out of
+ * the box.
+ * 
  * @author Nils Christian Ehmke
  */
 public abstract class AbstractLazyOperationCallTreeItem<T extends AbstractOperationCall<T>> extends TreeItem<T> {
@@ -32,7 +35,7 @@ public abstract class AbstractLazyOperationCallTreeItem<T extends AbstractOperat
 	}
 
 	@Override
-	public ObservableList<TreeItem<T>> getChildren() {
+	public final ObservableList<TreeItem<T>> getChildren() {
 		if (!this.childrenInitialized) {
 			this.childrenInitialized = true;
 			this.initializeChildren();
@@ -42,9 +45,9 @@ public abstract class AbstractLazyOperationCallTreeItem<T extends AbstractOperat
 	}
 
 	@Override
-	public boolean isLeaf() {
+	public final boolean isLeaf() {
 		return super.getValue().getChildren().isEmpty();
-	} 
+	}
 
 	protected abstract void initializeChildren();
 
