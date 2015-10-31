@@ -41,6 +41,7 @@
 			<vgap>10</vgap>
 		
 			<CheckBox fx:id="activateRegularExpressions" text="%activateRegularExpressions" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
+			<CheckBox fx:id="caseSensitive" text="%caseSensitive" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
 		</GridPane>
 	</TitledPane>
 	

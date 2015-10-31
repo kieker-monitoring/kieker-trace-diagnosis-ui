@@ -1,5 +1,9 @@
 1.1:
 	31 Oct 2015
+	Feature (Issue #19)
+	A switch within the settings allows to enable case sensitivity within the filter masks.
+	
+	31 Oct 2015
 	Feature (Issue #18)
 	It is now possible to doubleclick on a method call to jump directly into the corresponding trace.
 

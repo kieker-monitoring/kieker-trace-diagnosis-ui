@@ -45,6 +45,7 @@ public final class SettingsDialogViewController extends AbstractDialogController
 	@FXML private CheckBox additionalLogChecks;
 	@FXML private CheckBox activateRegularExpressions;
 	@FXML private CheckBox aggregateMethodCalls;
+	@FXML private CheckBox caseSensitive;
 
 	public SettingsDialogViewController(final Context context) {
 		super(context);
@@ -74,6 +75,7 @@ public final class SettingsDialogViewController extends AbstractDialogController
 		this.activateRegularExpressions.setSelected(this.propertiesModel.isActivateRegularExpressions());
 		this.aggregateMethodCalls.setSelected(this.propertiesModel.isMethodCallAggregationActive());
 		this.thresholds.getSelectionModel().select(this.propertiesModel.getThreshold());
+		this.caseSensitive.setSelected(this.propertiesModel.isCaseSensitive());
 	}
 
 	private void saveSettings() {
@@ -84,6 +86,7 @@ public final class SettingsDialogViewController extends AbstractDialogController
 		this.propertiesModel.setActivateRegularExpressions(this.activateRegularExpressions.isSelected());
 		this.propertiesModel.setMethodCallAggregationActive(this.aggregateMethodCalls.isSelected());
 		this.propertiesModel.setThreshold(this.thresholds.getSelectionModel().getSelectedItem());
+		this.propertiesModel.setCaseSensitive(this.caseSensitive.isSelected());
 	}
 
 }

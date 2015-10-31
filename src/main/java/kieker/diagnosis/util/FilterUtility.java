@@ -38,7 +38,12 @@ public final class FilterUtility {
 				checkRegularExpression(text);
 				return (x -> function.apply(x).matches(text));
 			} else {
-				return (x -> function.apply(x).toLowerCase().contains(text.toLowerCase()));
+				final boolean caseSensitivityActive = PropertiesModel.getInstance().isCaseSensitive();
+				if (caseSensitivityActive) {
+					return (x -> function.apply(x).contains(text));
+				} else {
+					return (x -> function.apply(x).toLowerCase().contains(text.toLowerCase()));
+				}
 			}
 		}
 	}

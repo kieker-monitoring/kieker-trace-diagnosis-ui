@@ -42,6 +42,7 @@ public final class PropertiesModel {
 	private static final String KEY_REGULAR_EXPRESSIONS = "regularExpressions";
 	private static final String KEY_METHOD_CALL_AGGREGATION = "methodCallAggregationActive";
 	private static final String KEY_THRESHOLD = "threshold";
+	private static final String KEY_CASE_SENSITIVE = "caseSensitive";
 
 	private static final String KEY_GITLAB_URL = "GitLabURL";
 	private static final String KEY_TRAC_URL = "TracURL";
@@ -54,6 +55,7 @@ public final class PropertiesModel {
 	private boolean additionalLogChecks;
 	private boolean activateRegularExpressions;
 	private boolean methodCallAggregationActive;
+	private boolean caseSensitive;
 	private String gitLabURL;
 	private String tracURL;
 
@@ -71,7 +73,8 @@ public final class PropertiesModel {
 		this.additionalLogChecks = Boolean.valueOf(preferences.get(PropertiesModel.KEY_ADDITIONAL_LOG_CHECKS, Boolean.FALSE.toString()));
 		this.activateRegularExpressions = Boolean.valueOf(preferences.get(PropertiesModel.KEY_REGULAR_EXPRESSIONS, Boolean.FALSE.toString()));
 		this.methodCallAggregationActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_METHOD_CALL_AGGREGATION, Boolean.FALSE.toString()));
-		this.setThreshold(Threshold.valueOf(preferences.get(PropertiesModel.KEY_THRESHOLD, Threshold.THRESHOLD_1.name())));
+		this.threshold = Threshold.valueOf(preferences.get(PropertiesModel.KEY_THRESHOLD, Threshold.THRESHOLD_1.name()));
+		this.caseSensitive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_CASE_SENSITIVE, Boolean.FALSE.toString()));
 
 		final Properties properties = new Properties();
 		final ClassLoader classLoader = PropertiesModel.class.getClassLoader();
@@ -95,6 +98,7 @@ public final class PropertiesModel {
 		preferences.put(PropertiesModel.KEY_REGULAR_EXPRESSIONS, Boolean.toString(this.activateRegularExpressions));
 		preferences.put(PropertiesModel.KEY_METHOD_CALL_AGGREGATION, Boolean.toString(this.methodCallAggregationActive));
 		preferences.put(PropertiesModel.KEY_THRESHOLD, this.threshold.name());
+		preferences.put(PropertiesModel.KEY_CASE_SENSITIVE, Boolean.toString(this.caseSensitive));
 
 		try {
 			preferences.flush();
@@ -183,6 +187,14 @@ public final class PropertiesModel {
 
 	public void setThreshold(Threshold threshold) {
 		this.threshold = threshold;
+	}
+
+	public boolean isCaseSensitive() {
+		return caseSensitive;
+	}
+
+	public void setCaseSensitive(boolean caseSensitive) {
+		this.caseSensitive = caseSensitive;
 	}
 
 	/**
