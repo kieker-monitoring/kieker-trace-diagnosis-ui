@@ -18,20 +18,29 @@ package kieker.diagnosis.components;
 
 import javafx.util.StringConverter;
 import kieker.diagnosis.model.PropertiesModel.ComponentNames;
+import kieker.diagnosis.util.Mapper;
 
 /**
  * @author Nils Christian Ehmke
  */
 public class ComponentNamesStringConverter extends StringConverter<ComponentNames> {
+	
+	private static Mapper<ComponentNames, String> componentMapper;
 
+	static {
+		ComponentNamesStringConverter.componentMapper = new Mapper<>();
+		ComponentNamesStringConverter.componentMapper.map(ComponentNames.SHORT).to("Catalog");
+		ComponentNamesStringConverter.componentMapper.map(ComponentNames.LONG).to("kieker.examples.bookstore.Catalog");
+	}
+	
 	@Override
-	public String toString(final ComponentNames object) {
-		return (object == ComponentNames.SHORT) ? "Catalog" : "kieker.examples.bookstore.Catalog";
+	public ComponentNames fromString(final String string) {
+		return ComponentNamesStringConverter.componentMapper.invertedResolve(string);
 	}
 
 	@Override
-	public ComponentNames fromString(final String string) {
-		return ("Catalog".equals(string)) ? ComponentNames.SHORT : ComponentNames.LONG;
+	public String toString(final ComponentNames object) {
+		return ComponentNamesStringConverter.componentMapper.resolve(object);
 	}
 
 }
