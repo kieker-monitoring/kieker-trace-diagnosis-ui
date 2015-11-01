@@ -53,11 +53,11 @@ public final class PropertiesModel {
 	private ComponentNames componentNames;
 	private OperationNames operationNames;
 	private Threshold threshold;
-	private boolean additionalLogChecks;
-	private boolean activateRegularExpressions;
+	private boolean additionalLogChecksActive;
+	private boolean regularExpressionsActive;
 	private boolean methodCallAggregationActive;
-	private boolean caseSensitive;
-	private boolean percentageCalculation;
+	private boolean caseSensitivityActive;
+	private boolean percentageCalculationActive;
 	private String gitLabURL;
 	private String tracURL;
 
@@ -66,7 +66,11 @@ public final class PropertiesModel {
 	public PropertiesModel() {
 		this.loadSettings();
 	}
-
+	
+	public static PropertiesModel getInstance() {
+		return PropertiesModel.INSTANCE;
+	}
+	
 	private void loadSettings() {
 		final Preferences preferences = Preferences.userNodeForPackage(PropertiesModel.class);
 
@@ -74,12 +78,12 @@ public final class PropertiesModel {
 		this.timeUnit = TimeUnit.valueOf(preferences.get(PropertiesModel.KEY_TIMEUNIT, TimeUnit.NANOSECONDS.name()));
 		this.componentNames = ComponentNames.valueOf(preferences.get(PropertiesModel.KEY_COMPONENTS, ComponentNames.LONG.name()));
 		this.operationNames = OperationNames.valueOf(preferences.get(PropertiesModel.KEY_OPERATIONS, OperationNames.SHORT.name()));
-		this.additionalLogChecks = Boolean.valueOf(preferences.get(PropertiesModel.KEY_ADDITIONAL_LOG_CHECKS, Boolean.FALSE.toString()));
-		this.activateRegularExpressions = Boolean.valueOf(preferences.get(PropertiesModel.KEY_REGULAR_EXPRESSIONS, Boolean.FALSE.toString()));
+		this.additionalLogChecksActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_ADDITIONAL_LOG_CHECKS, Boolean.FALSE.toString()));
+		this.regularExpressionsActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_REGULAR_EXPRESSIONS, Boolean.FALSE.toString()));
 		this.methodCallAggregationActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_METHOD_CALL_AGGREGATION, Boolean.FALSE.toString()));
 		this.threshold = Threshold.valueOf(preferences.get(PropertiesModel.KEY_THRESHOLD, Threshold.THRESHOLD_1.name()));
-		this.caseSensitive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_CASE_SENSITIVE, Boolean.FALSE.toString()));
-		this.percentageCalculation= Boolean.valueOf(preferences.get(PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.FALSE.toString()));
+		this.caseSensitivityActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_CASE_SENSITIVE, Boolean.FALSE.toString()));
+		this.percentageCalculationActive= Boolean.valueOf(preferences.get(PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.FALSE.toString()));
 
 		final Properties properties = new Properties();
 		final ClassLoader classLoader = PropertiesModel.class.getClassLoader();
@@ -99,12 +103,12 @@ public final class PropertiesModel {
 		preferences.put(PropertiesModel.KEY_TIMEUNIT, this.timeUnit.name());
 		preferences.put(PropertiesModel.KEY_COMPONENTS, this.componentNames.name());
 		preferences.put(PropertiesModel.KEY_OPERATIONS, this.operationNames.name());
-		preferences.put(PropertiesModel.KEY_ADDITIONAL_LOG_CHECKS, Boolean.toString(this.additionalLogChecks));
-		preferences.put(PropertiesModel.KEY_REGULAR_EXPRESSIONS, Boolean.toString(this.activateRegularExpressions));
+		preferences.put(PropertiesModel.KEY_ADDITIONAL_LOG_CHECKS, Boolean.toString(this.additionalLogChecksActive));
+		preferences.put(PropertiesModel.KEY_REGULAR_EXPRESSIONS, Boolean.toString(this.regularExpressionsActive));
 		preferences.put(PropertiesModel.KEY_METHOD_CALL_AGGREGATION, Boolean.toString(this.methodCallAggregationActive));
 		preferences.put(PropertiesModel.KEY_THRESHOLD, this.threshold.name());
-		preferences.put(PropertiesModel.KEY_CASE_SENSITIVE, Boolean.toString(this.caseSensitive));
-		preferences.put(PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.toString(this.percentageCalculation));
+		preferences.put(PropertiesModel.KEY_CASE_SENSITIVE, Boolean.toString(this.caseSensitivityActive));
+		preferences.put(PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.toString(this.percentageCalculationActive));
 
 		try {
 			preferences.flush();
@@ -151,25 +155,21 @@ public final class PropertiesModel {
 		this.saveSettings();
 	}
 
-	public static PropertiesModel getInstance() {
-		return PropertiesModel.INSTANCE;
+	public boolean isAdditionalLogChecksActive() {
+		return this.additionalLogChecksActive;
 	}
 
-	public boolean isAdditionalLogChecks() {
-		return this.additionalLogChecks;
-	}
-
-	public void setAdditionalLogChecks(final boolean additionalLogChecks) {
-		this.additionalLogChecks = additionalLogChecks;
+	public void setAdditionalLogChecksActive(final boolean active) {
+		this.additionalLogChecksActive = active;
 		this.saveSettings();
 	}
 
-	public boolean isActivateRegularExpressions() {
-		return this.activateRegularExpressions;
+	public boolean isRegularExpressionsActive() {
+		return this.regularExpressionsActive;
 	}
 
-	public void setActivateRegularExpressions(final boolean activateRegularExpressions) {
-		this.activateRegularExpressions = activateRegularExpressions;
+	public void setRegularExpressionsActive(final boolean active) {
+		this.regularExpressionsActive = active;
 		this.saveSettings();
 	}
 
@@ -185,8 +185,8 @@ public final class PropertiesModel {
 		return methodCallAggregationActive;
 	}
 
-	public void setMethodCallAggregationActive(boolean methodCallAggregationActive) {
-		this.methodCallAggregationActive = methodCallAggregationActive;
+	public void setMethodCallAggregationActive(final boolean active) {
+		this.methodCallAggregationActive = active;
 		this.saveSettings();
 	}
 
@@ -194,17 +194,17 @@ public final class PropertiesModel {
 		return threshold;
 	}
 
-	public void setThreshold(Threshold threshold) {
+	public void setThreshold(final Threshold threshold) {
 		this.threshold = threshold;
 		this.saveSettings();
 	}
 
-	public boolean isCaseSensitive() {
-		return caseSensitive;
+	public boolean isCaseSensitivityActive() {
+		return caseSensitivityActive;
 	}
 
-	public void setCaseSensitive(boolean caseSensitive) {
-		this.caseSensitive = caseSensitive;
+	public void setCaseSensitivityActive(final boolean active) {
+		this.caseSensitivityActive = active;
 		this.saveSettings();
 	}
 
@@ -212,12 +212,12 @@ public final class PropertiesModel {
 		return version;
 	}
 
-	public boolean isPercentageCalculation() {
-		return percentageCalculation;
+	public boolean isPercentageCalculationActive() {
+		return percentageCalculationActive;
 	}
 
-	public void setPercentageCalculation(boolean percentageCalculation) {
-		this.percentageCalculation = percentageCalculation;
+	public void setPercentageCalculationActive(final boolean active) {
+		this.percentageCalculationActive = active;
 		this.saveSettings();
 	}
 

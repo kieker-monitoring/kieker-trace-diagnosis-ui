@@ -33,12 +33,12 @@ public final class FilterUtility {
 		if ((text == null) || text.isEmpty()) {
 			return (x -> true);
 		} else {
-			final boolean regularExpressionsActive = PropertiesModel.getInstance().isActivateRegularExpressions();
+			final boolean regularExpressionsActive = PropertiesModel.getInstance().isRegularExpressionsActive();
 			if (regularExpressionsActive) {
 				checkRegularExpression(text);
 				return (x -> function.apply(x).matches(text));
 			} else {
-				final boolean caseSensitivityActive = PropertiesModel.getInstance().isCaseSensitive();
+				final boolean caseSensitivityActive = PropertiesModel.getInstance().isCaseSensitivityActive();
 				if (caseSensitivityActive) {
 					return (x -> function.apply(x).contains(text));
 				} else {

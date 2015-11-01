@@ -73,7 +73,7 @@ public final class TraceStatisticsDecorator extends AbstractTransformation<Trace
 		if (call.getParent() == null) {
 			call.setPercent(100.0f);
 		} else {
-			final boolean percentCalculationsRefersToTopMost = PropertiesModel.getInstance().isPercentageCalculation();
+			final boolean percentCalculationsRefersToTopMost = PropertiesModel.getInstance().isPercentageCalculationActive();
 			if (percentCalculationsRefersToTopMost) {
 				call.setPercent((100.0f * call.getDuration()) / rootDuration);
 			} else {

@@ -67,7 +67,7 @@ public final class ImportAnalysisConfiguration extends Configuration {
 
 		this.allowedRecordsFilter = new AllowedRecordsFilter();
 		this.beginEndOfMonitoringDetector = new BeginEndOfMonitoringDetector();
-		this.reconstruction = new TraceReconstructionComposite(this.traces, PropertiesModel.getInstance().isAdditionalLogChecks());
+		this.reconstruction = new TraceReconstructionComposite(this.traces, PropertiesModel.getInstance().isAdditionalLogChecksActive());
 
 		// Connect the stages
 		super.connectPorts(reader.getOutputPort(), allowedRecordsFilter.getInputPort());

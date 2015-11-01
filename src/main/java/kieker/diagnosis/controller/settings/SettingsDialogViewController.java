@@ -72,24 +72,24 @@ public final class SettingsDialogViewController extends AbstractDialogController
 		this.operationNames.getSelectionModel().select(this.propertiesModel.getOperationNames());
 		this.componentNames.getSelectionModel().select(this.propertiesModel.getComponentNames());
 		this.timeunits.getSelectionModel().select(this.propertiesModel.getTimeUnit());
-		this.additionalLogChecks.setSelected(this.propertiesModel.isAdditionalLogChecks());
-		this.activateRegularExpressions.setSelected(this.propertiesModel.isActivateRegularExpressions());
+		this.additionalLogChecks.setSelected(this.propertiesModel.isAdditionalLogChecksActive());
+		this.activateRegularExpressions.setSelected(this.propertiesModel.isRegularExpressionsActive());
 		this.aggregateMethodCalls.setSelected(this.propertiesModel.isMethodCallAggregationActive());
 		this.thresholds.getSelectionModel().select(this.propertiesModel.getThreshold());
-		this.caseSensitive.setSelected(this.propertiesModel.isCaseSensitive());
-		this.percentageCalculation.setSelected(this.propertiesModel.isPercentageCalculation());
+		this.caseSensitive.setSelected(this.propertiesModel.isCaseSensitivityActive());
+		this.percentageCalculation.setSelected(this.propertiesModel.isPercentageCalculationActive());
 	}
 
 	private void saveSettings() {
 		this.propertiesModel.setOperationNames(this.operationNames.getSelectionModel().getSelectedItem());
 		this.propertiesModel.setComponentNames(this.componentNames.getSelectionModel().getSelectedItem());
 		this.propertiesModel.setTimeUnit(this.timeunits.getSelectionModel().getSelectedItem());
-		this.propertiesModel.setAdditionalLogChecks(this.additionalLogChecks.isSelected());
-		this.propertiesModel.setActivateRegularExpressions(this.activateRegularExpressions.isSelected());
+		this.propertiesModel.setAdditionalLogChecksActive(this.additionalLogChecks.isSelected());
+		this.propertiesModel.setRegularExpressionsActive(this.activateRegularExpressions.isSelected());
 		this.propertiesModel.setMethodCallAggregationActive(this.aggregateMethodCalls.isSelected());
 		this.propertiesModel.setThreshold(this.thresholds.getSelectionModel().getSelectedItem());
-		this.propertiesModel.setCaseSensitive(this.caseSensitive.isSelected());
-		this.propertiesModel.setPercentageCalculation(this.percentageCalculation.isSelected());
+		this.propertiesModel.setCaseSensitivityActive(this.caseSensitive.isSelected());
+		this.propertiesModel.setPercentageCalculationActive(this.percentageCalculation.isSelected());
 	}
 
 }
