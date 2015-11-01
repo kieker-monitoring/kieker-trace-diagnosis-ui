@@ -46,6 +46,7 @@ public final class SettingsDialogViewController extends AbstractDialogController
 	@FXML private CheckBox activateRegularExpressions;
 	@FXML private CheckBox aggregateMethodCalls;
 	@FXML private CheckBox caseSensitive;
+	@FXML private CheckBox percentageCalculation;
 
 	public SettingsDialogViewController(final Context context) {
 		super(context);
@@ -76,6 +77,7 @@ public final class SettingsDialogViewController extends AbstractDialogController
 		this.aggregateMethodCalls.setSelected(this.propertiesModel.isMethodCallAggregationActive());
 		this.thresholds.getSelectionModel().select(this.propertiesModel.getThreshold());
 		this.caseSensitive.setSelected(this.propertiesModel.isCaseSensitive());
+		this.percentageCalculation.setSelected(this.propertiesModel.isPercentageCalculation());
 	}
 
 	private void saveSettings() {
@@ -87,6 +89,7 @@ public final class SettingsDialogViewController extends AbstractDialogController
 		this.propertiesModel.setMethodCallAggregationActive(this.aggregateMethodCalls.isSelected());
 		this.propertiesModel.setThreshold(this.thresholds.getSelectionModel().getSelectedItem());
 		this.propertiesModel.setCaseSensitive(this.caseSensitive.isSelected());
+		this.propertiesModel.setPercentageCalculation(this.percentageCalculation.isSelected());
 	}
 
 }

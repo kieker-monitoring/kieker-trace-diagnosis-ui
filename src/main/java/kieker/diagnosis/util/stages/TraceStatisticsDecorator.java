@@ -18,6 +18,7 @@ package kieker.diagnosis.util.stages;
 
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
+import kieker.diagnosis.model.PropertiesModel;
 import teetime.stage.basic.AbstractTransformation;
 
 /**
@@ -31,7 +32,7 @@ public final class TraceStatisticsDecorator extends AbstractTransformation<Trace
 	public void execute(final Trace trace) {
 		addTraceDepth(trace.getRootOperationCall());
 		addTraceSize(trace.getRootOperationCall());
-		addPercentValues(trace.getRootOperationCall(), trace.getRootOperationCall().getDuration());
+		addPercentValues(trace.getRootOperationCall(), trace.getRootOperationCall().getDuration(), trace.getRootOperationCall().getDuration());
 
 		super.getOutputPort().send(trace);
 	}
@@ -68,15 +69,20 @@ public final class TraceStatisticsDecorator extends AbstractTransformation<Trace
 		return traceSize;
 	}
 
-	private static void addPercentValues(final OperationCall call, final long rootDuration) {
+	private static void addPercentValues(final OperationCall call, final long parentDuration, final long rootDuration) {
 		if (call.getParent() == null) {
 			call.setPercent(100.0f);
 		} else {
-			call.setPercent((100.0f * call.getDuration()) / rootDuration);
+			final boolean percentCalculationsRefersToTopMost = PropertiesModel.getInstance().isPercentageCalculation();
+			if (percentCalculationsRefersToTopMost) {
+				call.setPercent((100.0f * call.getDuration()) / rootDuration);
+			} else {
+				call.setPercent((100.0f * call.getDuration()) / parentDuration);
+			}
 		}
 
 		for (final OperationCall child : call.getChildren()) {
-			addPercentValues(child, call.getDuration());
+			addPercentValues(child, call.getDuration(), rootDuration);
 		}
 	}
 }

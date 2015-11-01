@@ -43,7 +43,8 @@ public final class PropertiesModel {
 	private static final String KEY_METHOD_CALL_AGGREGATION = "methodCallAggregationActive";
 	private static final String KEY_THRESHOLD = "threshold";
 	private static final String KEY_CASE_SENSITIVE = "caseSensitive";
-
+	private static final String KEY_PERCENTAGE_CALCULATION = "percentageCalculation";
+	
 	private static final String KEY_GITLAB_URL = "GitLabURL";
 	private static final String KEY_TRAC_URL = "TracURL";
 
@@ -56,6 +57,7 @@ public final class PropertiesModel {
 	private boolean activateRegularExpressions;
 	private boolean methodCallAggregationActive;
 	private boolean caseSensitive;
+	private boolean percentageCalculation;
 	private String gitLabURL;
 	private String tracURL;
 
@@ -77,6 +79,7 @@ public final class PropertiesModel {
 		this.methodCallAggregationActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_METHOD_CALL_AGGREGATION, Boolean.FALSE.toString()));
 		this.threshold = Threshold.valueOf(preferences.get(PropertiesModel.KEY_THRESHOLD, Threshold.THRESHOLD_1.name()));
 		this.caseSensitive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_CASE_SENSITIVE, Boolean.FALSE.toString()));
+		this.percentageCalculation= Boolean.valueOf(preferences.get(PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.FALSE.toString()));
 
 		final Properties properties = new Properties();
 		final ClassLoader classLoader = PropertiesModel.class.getClassLoader();
@@ -101,6 +104,7 @@ public final class PropertiesModel {
 		preferences.put(PropertiesModel.KEY_METHOD_CALL_AGGREGATION, Boolean.toString(this.methodCallAggregationActive));
 		preferences.put(PropertiesModel.KEY_THRESHOLD, this.threshold.name());
 		preferences.put(PropertiesModel.KEY_CASE_SENSITIVE, Boolean.toString(this.caseSensitive));
+		preferences.put(PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.toString(this.percentageCalculation));
 
 		try {
 			preferences.flush();
@@ -183,6 +187,7 @@ public final class PropertiesModel {
 
 	public void setMethodCallAggregationActive(boolean methodCallAggregationActive) {
 		this.methodCallAggregationActive = methodCallAggregationActive;
+		this.saveSettings();
 	}
 
 	public Threshold getThreshold() {
@@ -191,6 +196,7 @@ public final class PropertiesModel {
 
 	public void setThreshold(Threshold threshold) {
 		this.threshold = threshold;
+		this.saveSettings();
 	}
 
 	public boolean isCaseSensitive() {
@@ -199,10 +205,20 @@ public final class PropertiesModel {
 
 	public void setCaseSensitive(boolean caseSensitive) {
 		this.caseSensitive = caseSensitive;
+		this.saveSettings();
 	}
 
 	public long getVersion() {
 		return version;
+	}
+
+	public boolean isPercentageCalculation() {
+		return percentageCalculation;
+	}
+
+	public void setPercentageCalculation(boolean percentageCalculation) {
+		this.percentageCalculation = percentageCalculation;
+		this.saveSettings();
 	}
 
 	/**
