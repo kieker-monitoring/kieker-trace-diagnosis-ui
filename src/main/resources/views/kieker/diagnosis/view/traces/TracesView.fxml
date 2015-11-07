@@ -129,7 +129,7 @@
 			
 			<TreeTableColumn text="%TracesView.trclmnTimestamp.text" >
 			<cellFactory>
-					<kieker.diagnosis.components.FailedTreeCellFactory />
+					<kieker.diagnosis.components.TimestampTreeTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory
