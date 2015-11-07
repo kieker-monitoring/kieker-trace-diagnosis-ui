@@ -19,7 +19,6 @@ package kieker.diagnosis.controller.calls;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import javafx.beans.binding.Bindings;
@@ -28,6 +27,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -48,13 +48,13 @@ public final class CallsViewController extends AbstractController {
 
 	private final SimpleObjectProperty<Optional<OperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
 
-	private FilteredList<OperationCall> fstFilteredData;
-	private FilteredList<OperationCall> sndFilteredData;
-	private FilteredList<OperationCall> thdFilteredData;
-	private FilteredList<OperationCall> fthFilteredData;
-	private FilteredList<OperationCall> fifFilteredData;
+	private FilteredList<OperationCall> filteredData;
 
 	@FXML private TableView<OperationCall> table;
+
+	@FXML private RadioButton showAllButton;
+	@FXML private RadioButton showJustFailedButton;
+
 	@FXML private TextField filterContainer;
 	@FXML private TextField filterComponent;
 	@FXML private TextField filterOperation;
@@ -71,24 +71,19 @@ public final class CallsViewController extends AbstractController {
 	@FXML private TextField counter;
 
 	@FXML private ResourceBundle resources;
-	
+
 	public CallsViewController(final Context context) {
 		super(context);
 	}
-	
+
 	@ErrorHandling
 	public void initialize() {
 		final DataModel dataModel = DataModel.getInstance();
 
-		this.fstFilteredData = new FilteredList<>(dataModel.getOperationCalls());
-		this.sndFilteredData = new FilteredList<>(this.fstFilteredData);
-		this.thdFilteredData = new FilteredList<>(this.sndFilteredData);
-		this.fthFilteredData = new FilteredList<>(this.thdFilteredData);
-		this.fifFilteredData = new FilteredList<>(this.fthFilteredData);
+		this.filteredData = new FilteredList<>(dataModel.getOperationCalls());
+		this.filteredData.addListener((ListChangeListener<OperationCall>) change -> this.selection.set(Optional.empty()));
 
-		this.fifFilteredData.addListener((ListChangeListener<OperationCall>) change -> this.selection.set(Optional.empty()));
-
-		final SortedList<OperationCall> sortedData = new SortedList<>(this.fifFilteredData);
+		final SortedList<OperationCall> sortedData = new SortedList<>(this.filteredData);
 		sortedData.comparatorProperty().bind(this.table.comparatorProperty());
 		this.table.setItems(sortedData);
 
@@ -128,7 +123,7 @@ public final class CallsViewController extends AbstractController {
 		if (clicked == 1) {
 			this.selection.set(Optional.ofNullable(this.table.getSelectionModel().getSelectedItem()));
 		} else if (clicked == 2) {
-			jumpToTrace(); 
+			jumpToTrace();
 		}
 	}
 
@@ -140,38 +135,15 @@ public final class CallsViewController extends AbstractController {
 	}
 
 	@ErrorHandling
-	public void showAllMethods() {
-		this.fstFilteredData.setPredicate(null);
-	}
+	public void useFilter() {
+		final Predicate<OperationCall> predicate1 = (showAllButton.isSelected()) ? FilterUtility.alwaysTrue() : OperationCall::isFailed;
+		final Predicate<OperationCall> predicate2 = FilterUtility.useFilter(this.filterContainer, OperationCall::getContainer);
+		final Predicate<OperationCall> predicate3 = FilterUtility.useFilter(this.filterComponent, OperationCall::getComponent);
+		final Predicate<OperationCall> predicate4 = FilterUtility.useFilter(this.filterOperation, OperationCall::getOperation);
+		final Predicate<OperationCall> predicate5 = FilterUtility.useFilter(this.filterTraceID, (call -> Long.toString(call.getTraceID())));
 
-	@ErrorHandling
-	public void showJustFailedMethods() {
-		this.fstFilteredData.setPredicate(OperationCall::isFailed);
-	}
-
-	@ErrorHandling
-	public void useContainerFilter() {
-		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterContainer, OperationCall::getContainer);
-		this.sndFilteredData.setPredicate(predicate);
-	}
-
-	@ErrorHandling
-	public void useComponentFilter() {
-		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterComponent, OperationCall::getComponent);
-		this.thdFilteredData.setPredicate(predicate);
-	}
-
-	@ErrorHandling
-	public void useOperationFilter() {
-		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterOperation, OperationCall::getOperation);
-		this.fthFilteredData.setPredicate(predicate);
-	}
-
-	@ErrorHandling
-	public void useTraceIDFilter() {
-		final Function<OperationCall, String> function = (call -> Long.toString(call.getTraceID()));
-		final Predicate<OperationCall> predicate = FilterUtility.useFilter(this.filterTraceID, function);
-		this.fifFilteredData.setPredicate(predicate);
+		final Predicate<OperationCall> predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5);
+		filteredData.setPredicate(predicate);
 	}
 
 }

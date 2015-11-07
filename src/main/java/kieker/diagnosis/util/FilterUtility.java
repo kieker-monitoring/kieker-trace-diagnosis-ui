@@ -47,6 +47,10 @@ public final class FilterUtility {
 			}
 		}
 	}
+	
+	public static <T> Predicate<T> alwaysTrue() {
+		return (x -> true);
+	}
 
 	private static void checkRegularExpression(String text) {
 		Pattern.compile(text);

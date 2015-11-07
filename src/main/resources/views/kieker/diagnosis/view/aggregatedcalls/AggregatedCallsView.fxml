@@ -8,29 +8,33 @@
 
 	<vgap>10</vgap>
 
-	<HBox GridPane.rowIndex="0">
-		<spacing>10</spacing>
-
-		<fx:define>
-			<ToggleGroup fx:id="togglegroup" />
-		</fx:define>
-
-		<RadioButton text="%AggregatedCallsView.btnShowAll.text"
-			selected="true" toggleGroup="$togglegroup" onAction="#showAllMethods" />
-		<RadioButton text="%AggregatedCallsView.btnShowJustFailed.text"
-			toggleGroup="$togglegroup" onAction="#showJustFailedMethods" />
-	</HBox>
-	
-	<GridPane GridPane.rowIndex="1">
-		<hgap>5</hgap>
+	<TitledPane GridPane.rowIndex="0" text="%filter">
+		<VBox>
+			<spacing>10</spacing>
+			
+			<HBox GridPane.rowIndex="0">
+				<spacing>10</spacing>
 		
-		<TextField promptText="%filterContainer" onAction="#useContainerFilter" fx:id="filterContainer" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS"/>
-		<TextField promptText="%filterComponent" onAction="#useComponentFilter" fx:id="filterComponent" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
-		<TextField promptText="%filterOperation" onAction="#useOperationFilter" fx:id="filterOperation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
-	</GridPane>
+				<fx:define>
+					<ToggleGroup fx:id="togglegroup" />
+				</fx:define>
+		
+				<RadioButton text="%AggregatedCallsView.btnShowAll.text" fx:id="showAllButton" selected="true" toggleGroup="$togglegroup" onAction="#useFilter" />
+				<RadioButton text="%AggregatedCallsView.btnShowJustFailed.text" fx:id="showJustFailedButton" toggleGroup="$togglegroup" onAction="#useFilter" />
+			</HBox>
+			
+			<GridPane GridPane.rowIndex="1">
+				<hgap>5</hgap>
+				
+				<TextField promptText="%filterContainer" onAction="#useFilter" fx:id="filterContainer" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterComponent" onAction="#useFilter" fx:id="filterComponent" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterOperation" onAction="#useFilter" fx:id="filterOperation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
+			</GridPane>
+		</VBox>
+	</TitledPane>
 	
 	<TableView fx:id="table" GridPane.hgrow="ALWAYS"
-		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true" onMouseClicked="#selectCall">
+		GridPane.vgrow="ALWAYS" GridPane.rowIndex="1" tableMenuButtonVisible="true" onMouseClicked="#selectCall">
 		
 		<placeholder>
 			<Label text="%emptyTableText"/>
@@ -126,7 +130,7 @@
 		</columns>
 	</TableView>
 
-	 <TitledPane GridPane.rowIndex="3" text="%properties">
+	 <TitledPane GridPane.rowIndex="2" text="%properties">
 	<GridPane fx:id="detailpanel" >
 		<TextField text="%AggregatedCallsView.tblclmnExecutionContainer.text"
 			editable="false" GridPane.rowIndex="1" GridPane.columnIndex="1" />
@@ -181,7 +185,7 @@
 
 	</GridPane>
 </TitledPane>
-	<HBox fx:id="statusbar" GridPane.rowIndex="4" GridPane.hgrow="ALWAYS">
+	<HBox fx:id="statusbar" GridPane.rowIndex="3" GridPane.hgrow="ALWAYS">
 		<TextField text="%AggregatedCallsView.lblCounter.text" fx:id="counter"
 			editable="false" HBox.hgrow="ALWAYS"/>
 	</HBox>

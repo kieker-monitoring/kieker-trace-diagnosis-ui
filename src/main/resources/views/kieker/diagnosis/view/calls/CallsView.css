@@ -1,4 +1,4 @@
-#filterContainer, #filterComponent, #filterOperation, #filterTraceID {
+#filterContainer, #filterComponent, #filterOperation, #filterTraceID, #filterLowerDate, #filterLowerTime, #filterUpperDate, #filterUpperTime {
 	-fx-background-color: white;
 	-fx-border-color: lightgray;
 }

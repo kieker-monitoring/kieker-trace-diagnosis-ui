@@ -8,29 +8,41 @@
 
 	<vgap>10</vgap>
 
-	<HBox GridPane.rowIndex="0">
-		<spacing>10</spacing>
-
-		<fx:define>
-			<ToggleGroup fx:id="togglegroup" />
-		</fx:define>
-
-		<RadioButton text="%TracesView.btnShowAll.text" selected="true" toggleGroup="$togglegroup" onAction="#showAllTraces" />
-		<RadioButton text="%TracesView.btnShowJustFailed.text" toggleGroup="$togglegroup" onAction="#showJustFailedTraces" />	
-		<RadioButton text="%TracesView.showJustFailureContaining.text" toggleGroup="$togglegroup" onAction="#showJustFailureContainingTraces" />		
-	</HBox>
-
-	<GridPane GridPane.rowIndex="1">
-		<hgap>5</hgap>
+	<TitledPane GridPane.rowIndex="0" text="%filter">
+		<VBox>
+			<spacing>10</spacing>
 		
-		<TextField promptText="%filterContainer" onAction="#useContainerFilter" fx:id="filterContainer" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS"/>
-		<TextField promptText="%filterComponent" onAction="#useComponentFilter" fx:id="filterComponent" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
-		<TextField promptText="%filterOperation" onAction="#useOperationFilter" fx:id="filterOperation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
-		<TextField promptText="%filterTraceID" onAction="#useTraceIDFilter" fx:id="filterTraceID" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
-	</GridPane>
+			<HBox>
+				<spacing>10</spacing>
+			
+				<fx:define>
+					<ToggleGroup fx:id="togglegroup" />
+				</fx:define>
+			 
+				<RadioButton text="%TracesView.btnShowAll.text" fx:id="showAllButton" selected="true" toggleGroup="$togglegroup" onAction="#useFilter" />
+				<RadioButton text="%TracesView.btnShowJustFailed.text" fx:id="showJustFailedButton" toggleGroup="$togglegroup" onAction="#useFilter" />	
+				<RadioButton text="%TracesView.showJustFailureContaining.text" fx:id="showJustFailureContainingButton"  toggleGroup="$togglegroup" onAction="#useFilter" />	
+			</HBox>
+		
+			<GridPane>
+				<hgap>5</hgap>
+				<vgap>5</vgap>
+				
+				<TextField promptText="%filterContainer" onAction="#useFilter" fx:id="filterContainer" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterComponent" onAction="#useFilter" fx:id="filterComponent" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterOperation" onAction="#useFilter" fx:id="filterOperation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterTraceID" onAction="#useFilter" fx:id="filterTraceID" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
+				
+				<DatePicker promptText="%filterLowerDate" fx:id="filterLowerDate" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
+				<TextField promptText="%filterLowerTime" fx:id="filterLowerTime" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+				<DatePicker promptText="%filterUpperDate" fx:id="filterUpperDate" GridPane.rowIndex="1" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
+				<TextField promptText="%filterUpperTime" fx:id="filterUpperTime" GridPane.rowIndex="1" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
+			</GridPane>
+		</VBox>
+	</TitledPane>
 	
 	<TreeTableView fx:id="treetable" GridPane.hgrow="ALWAYS"
-		GridPane.vgrow="ALWAYS" GridPane.rowIndex="2" tableMenuButtonVisible="true" onMouseClicked="#selectCall">
+		GridPane.vgrow="ALWAYS" GridPane.rowIndex="1" tableMenuButtonVisible="true" onMouseClicked="#selectCall">
 		
 		<placeholder>
 			<Label text="%emptyTableText"/>
@@ -127,7 +139,7 @@
 		</columns>
 	</TreeTableView>
 
-	 <TitledPane GridPane.rowIndex="3" text="%properties">
+	 <TitledPane GridPane.rowIndex="2" text="%properties">
 	<GridPane fx:id="detailpanel" >
 		<TextField text="%TracesView.lblExecutionContainer.text"
 			editable="false" GridPane.rowIndex="1" GridPane.columnIndex="1" />
@@ -182,7 +194,7 @@
 
 	</GridPane>
 </TitledPane>
-	<HBox fx:id="statusbar" GridPane.rowIndex="4"  GridPane.hgrow="ALWAYS">
+	<HBox fx:id="statusbar" GridPane.rowIndex="3"  GridPane.hgrow="ALWAYS">
 		<TextField text="%TracesView.lblCounter.text" editable="false" fx:id="counter" HBox.hgrow="ALWAYS"/>
 	</HBox>
 

@@ -16,7 +16,15 @@
 
 package kieker.diagnosis.util;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.concurrent.TimeUnit;
+
+import kieker.diagnosis.model.PropertiesModel;
+import kieker.diagnosis.model.PropertiesModel.TimestampTypes;
 
 /**
  * @author Nils Christian Ehmke
@@ -65,6 +73,39 @@ public final class NameConverter {
 		final long targetDuration = targetUnit.convert(duration, sourceUnit);
 
 		return targetDuration + " " + shortTargetUnit + " (" + duration + " " + shortSourceUnit + ")";
+	}
+
+	public static String toTimestampString(final long timestamp, final TimeUnit sourceUnit) {
+		final TimestampTypes timestampType = PropertiesModel.getInstance().getTimestampType();
+		if (timestampType == TimestampTypes.TIMESTAMP) {
+			return Long.toString(timestamp);
+		}
+
+		final DateTimeFormatter formatter;
+
+		switch (timestampType) {
+		case DATE:
+			formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+			break;
+		case DATE_AND_TIME:
+			formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
+			break;
+		case LONG_TIME:
+			formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.LONG);
+			break;
+		case SHORT_TIME:
+			formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
+			break;
+		default:
+			formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+			break;
+
+		}
+
+		final long timestampInMS = TimeUnit.MILLISECONDS.convert(timestamp, sourceUnit);
+		final Instant instant = Instant.ofEpochMilli(timestampInMS);
+		final ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
+		return formatter.format(zonedDateTime);
 	}
 
 }

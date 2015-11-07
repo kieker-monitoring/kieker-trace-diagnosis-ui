@@ -27,6 +27,7 @@ import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.model.PropertiesModel.ComponentNames;
 import kieker.diagnosis.model.PropertiesModel.OperationNames;
 import kieker.diagnosis.model.PropertiesModel.Threshold;
+import kieker.diagnosis.model.PropertiesModel.TimestampTypes;
 import kieker.diagnosis.util.Context;
 
 /**
@@ -42,6 +43,7 @@ public final class SettingsDialogViewController extends AbstractDialogController
 	@FXML private ComboBox<ComponentNames> componentNames;
 	@FXML private ComboBox<Threshold> thresholds;
 	@FXML private ComboBox<TimeUnit> timeunits;
+	@FXML private ComboBox<TimestampTypes> timestamps;
 	@FXML private CheckBox additionalLogChecks;
 	@FXML private CheckBox activateRegularExpressions;
 	@FXML private CheckBox aggregateMethodCalls;
@@ -56,6 +58,7 @@ public final class SettingsDialogViewController extends AbstractDialogController
 		this.timeunits.setItems(FXCollections.observableArrayList(SettingsDialogViewController.TIME_UNITS));
 		this.componentNames.setItems(FXCollections.observableArrayList(ComponentNames.values()));
 		this.operationNames.setItems(FXCollections.observableArrayList(OperationNames.values()));
+		this.timestamps.setItems(FXCollections.observableArrayList(TimestampTypes.values()));
 		this.thresholds.setItems(FXCollections.observableArrayList(Threshold.values()));
 
 		this.thresholds.disableProperty().bind(aggregateMethodCalls.selectedProperty().not());
@@ -78,6 +81,7 @@ public final class SettingsDialogViewController extends AbstractDialogController
 		this.thresholds.getSelectionModel().select(this.propertiesModel.getThreshold());
 		this.caseSensitive.setSelected(this.propertiesModel.isCaseSensitivityActive());
 		this.percentageCalculation.setSelected(this.propertiesModel.isPercentageCalculationActive());
+		this.timestamps.getSelectionModel().select(this.propertiesModel.getTimestampType());
 	}
 
 	private void saveSettings() {
@@ -90,6 +94,7 @@ public final class SettingsDialogViewController extends AbstractDialogController
 		this.propertiesModel.setThreshold(this.thresholds.getSelectionModel().getSelectedItem());
 		this.propertiesModel.setCaseSensitivityActive(this.caseSensitive.isSelected());
 		this.propertiesModel.setPercentageCalculationActive(this.percentageCalculation.isSelected());
+		this.propertiesModel.setTimestampType(this.timestamps.getSelectionModel().getSelectedItem());
 	}
 
 }

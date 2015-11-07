@@ -27,8 +27,13 @@
 				<converter><kieker.diagnosis.components.ComponentNamesStringConverter/></converter>
 			</ComboBox>
 			
- 			<CheckBox text="%aggregateMethodCalls" fx:id="aggregateMethodCalls" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
-			<ComboBox fx:id="thresholds" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
+			<Label text="%timestamps" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+			<ComboBox fx:id="timestamps" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
+				<converter><kieker.diagnosis.components.TimestampStringConverter/></converter>
+			</ComboBox>
+			
+ 			<CheckBox text="%aggregateMethodCalls" fx:id="aggregateMethodCalls" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
+			<ComboBox fx:id="thresholds" GridPane.columnIndex="2" GridPane.rowIndex="5" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
 				<converter><kieker.diagnosis.components.ThresholdStringConverter/></converter>
 			</ComboBox>
 			

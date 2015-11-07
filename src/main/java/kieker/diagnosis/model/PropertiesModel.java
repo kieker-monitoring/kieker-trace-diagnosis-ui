@@ -44,7 +44,8 @@ public final class PropertiesModel {
 	private static final String KEY_THRESHOLD = "threshold";
 	private static final String KEY_CASE_SENSITIVE = "caseSensitive";
 	private static final String KEY_PERCENTAGE_CALCULATION = "percentageCalculation";
-	
+	private static final String KEY_TIMESTAMP_TYPE = "timestampType";
+
 	private static final String KEY_GITLAB_URL = "GitLabURL";
 	private static final String KEY_TRAC_URL = "TracURL";
 
@@ -53,6 +54,7 @@ public final class PropertiesModel {
 	private ComponentNames componentNames;
 	private OperationNames operationNames;
 	private Threshold threshold;
+	private TimestampTypes timestampType;
 	private boolean additionalLogChecksActive;
 	private boolean regularExpressionsActive;
 	private boolean methodCallAggregationActive;
@@ -66,11 +68,11 @@ public final class PropertiesModel {
 	public PropertiesModel() {
 		this.loadSettings();
 	}
-	
+
 	public static PropertiesModel getInstance() {
 		return PropertiesModel.INSTANCE;
 	}
-	
+
 	private void loadSettings() {
 		final Preferences preferences = Preferences.userNodeForPackage(PropertiesModel.class);
 
@@ -83,7 +85,8 @@ public final class PropertiesModel {
 		this.methodCallAggregationActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_METHOD_CALL_AGGREGATION, Boolean.FALSE.toString()));
 		this.threshold = Threshold.valueOf(preferences.get(PropertiesModel.KEY_THRESHOLD, Threshold.THRESHOLD_1.name()));
 		this.caseSensitivityActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_CASE_SENSITIVE, Boolean.FALSE.toString()));
-		this.percentageCalculationActive= Boolean.valueOf(preferences.get(PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.FALSE.toString()));
+		this.percentageCalculationActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.FALSE.toString()));
+		this.timestampType = TimestampTypes.valueOf(preferences.get(PropertiesModel.KEY_TIMESTAMP_TYPE, TimestampTypes.TIMESTAMP.name()));
 
 		final Properties properties = new Properties();
 		final ClassLoader classLoader = PropertiesModel.class.getClassLoader();
@@ -109,6 +112,7 @@ public final class PropertiesModel {
 		preferences.put(PropertiesModel.KEY_THRESHOLD, this.threshold.name());
 		preferences.put(PropertiesModel.KEY_CASE_SENSITIVE, Boolean.toString(this.caseSensitivityActive));
 		preferences.put(PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.toString(this.percentageCalculationActive));
+		preferences.put(PropertiesModel.KEY_TIMESTAMP_TYPE, this.timestampType.name());
 
 		try {
 			preferences.flush();
@@ -221,6 +225,15 @@ public final class PropertiesModel {
 		this.saveSettings();
 	}
 
+	public TimestampTypes getTimestampType() {
+		return timestampType;
+	}
+
+	public void setTimestampType(TimestampTypes timestampType) {
+		this.timestampType = timestampType;
+		this.saveSettings();
+	}
+
 	/**
 	 * @author Nils Christian Ehmke
 	 */
@@ -233,6 +246,10 @@ public final class PropertiesModel {
 	 */
 	public enum OperationNames {
 		SHORT, LONG
+	}
+
+	public enum TimestampTypes {
+		TIMESTAMP, DATE_AND_TIME, DATE, LONG_TIME, SHORT_TIME
 	}
 
 	public enum Threshold {

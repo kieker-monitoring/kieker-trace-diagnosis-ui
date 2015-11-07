@@ -27,6 +27,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -44,14 +45,15 @@ import kieker.diagnosis.util.NameConverter;
  */
 public final class AggregatedCallsViewController extends AbstractController {
 
-	private FilteredList<AggregatedOperationCall> fstFilteredData;
-	private FilteredList<AggregatedOperationCall> sndFilteredData;
-	private FilteredList<AggregatedOperationCall> thdFilteredData;
-	private FilteredList<AggregatedOperationCall> fthFilteredData;
+	private FilteredList<AggregatedOperationCall> filteredData;
 
 	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
 
 	@FXML private TableView<AggregatedOperationCall> table;
+	
+	@FXML private RadioButton showAllButton;
+	@FXML private RadioButton showJustFailedButton;
+	
 	@FXML private TextField filterContainer;
 	@FXML private TextField filterComponent;
 	@FXML private TextField filterOperation;
@@ -79,14 +81,10 @@ public final class AggregatedCallsViewController extends AbstractController {
 	public void initialize() {
 		final DataModel dataModel = DataModel.getInstance();
 
-		this.fstFilteredData = new FilteredList<>(dataModel.getAggregatedOperationCalls());
-		this.sndFilteredData = new FilteredList<>(this.fstFilteredData);
-		this.thdFilteredData = new FilteredList<>(this.sndFilteredData);
-		this.fthFilteredData = new FilteredList<>(this.thdFilteredData);
+		this.filteredData = new FilteredList<>(dataModel.getAggregatedOperationCalls());
+		this.filteredData.addListener((ListChangeListener<AggregatedOperationCall>) change -> this.selection.set(Optional.empty()));
 
-		this.fthFilteredData.addListener((ListChangeListener<AggregatedOperationCall>) change -> this.selection.set(Optional.empty()));
-
-		final SortedList<AggregatedOperationCall> sortedData = new SortedList<>(this.fthFilteredData);
+		final SortedList<AggregatedOperationCall> sortedData = new SortedList<>(this.filteredData);
 		sortedData.comparatorProperty().bind(this.table.comparatorProperty());
 		this.table.setItems(sortedData);
 
@@ -129,33 +127,16 @@ public final class AggregatedCallsViewController extends AbstractController {
 	public void selectCall(final MouseEvent event) {
 		this.selection.set(Optional.ofNullable(this.table.getSelectionModel().getSelectedItem()));
 	}
-
+	
 	@ErrorHandling
-	public void showAllMethods() {
-		this.fstFilteredData.setPredicate(null);
-	}
+	public void useFilter() {
+		final Predicate<AggregatedOperationCall> predicate1 = (showAllButton.isSelected()) ? FilterUtility.alwaysTrue() : AggregatedOperationCall::isFailed;
+		final Predicate<AggregatedOperationCall> predicate2 = FilterUtility.useFilter(this.filterContainer, AggregatedOperationCall::getContainer);
+		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter(this.filterComponent, AggregatedOperationCall::getComponent);
+		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter(this.filterOperation, AggregatedOperationCall::getOperation);
 
-	@ErrorHandling
-	public void showJustFailedMethods() {
-		this.fstFilteredData.setPredicate(call -> call.isFailed());
+		final Predicate<AggregatedOperationCall> predicate = predicate1.and(predicate2).and(predicate3).and(predicate4);
+		filteredData.setPredicate(predicate);
 	}
-
-	@ErrorHandling
-	public void useContainerFilter() {
-		final Predicate<AggregatedOperationCall> predicate = FilterUtility.useFilter(this.filterContainer, AggregatedOperationCall::getContainer);
-		this.sndFilteredData.setPredicate(predicate);
-	}
-
-	@ErrorHandling
-	public void useComponentFilter() {
-		final Predicate<AggregatedOperationCall> predicate = FilterUtility.useFilter(this.filterComponent, AggregatedOperationCall::getComponent);
-		this.thdFilteredData.setPredicate(predicate);
-	}
-
-	@ErrorHandling
-	public void useOperationFilter() {
-		final Predicate<AggregatedOperationCall> predicate = FilterUtility.useFilter(this.filterOperation, AggregatedOperationCall::getOperation);
-		this.fthFilteredData.setPredicate(predicate);
-	}
-
+	
 }

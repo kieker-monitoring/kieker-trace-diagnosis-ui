@@ -26,6 +26,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
@@ -49,6 +50,11 @@ public final class AggregatedTracesViewController extends AbstractController {
 	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
 
 	@FXML private TreeTableView<AggregatedOperationCall> treetable;
+	
+	@FXML private RadioButton showAllButton;
+	@FXML private RadioButton showJustFailedButton;
+	@FXML private RadioButton showJustFailureContainingButton;
+	
 	@FXML private TextField filterContainer;
 	@FXML private TextField filterComponent;
 	@FXML private TextField filterOperation;
@@ -70,10 +76,7 @@ public final class AggregatedTracesViewController extends AbstractController {
 
 	@FXML private ResourceBundle resources;
 
-	private Predicate<AggregatedOperationCall> fstPredicate = call -> true;
-	private Predicate<AggregatedOperationCall> sndPredicate = call -> true;
-	private Predicate<AggregatedOperationCall> thdPredicate = call -> true;
-	private Predicate<AggregatedOperationCall> fthPredicate = call -> true;
+	private Predicate<AggregatedOperationCall> predicate = FilterUtility.alwaysTrue();
 	
 	public AggregatedTracesViewController(final Context context) {
 		super(context);
@@ -132,42 +135,15 @@ public final class AggregatedTracesViewController extends AbstractController {
 	}
 
 	@ErrorHandling
-	public void showAllTraces() {
-		this.fstPredicate = call -> true;
-		this.reloadTreetable();
-	}
-	
-	@ErrorHandling
-	public void showJustFailedTraces() {
-		this.fstPredicate = AggregatedOperationCall::isFailed;
-		this.reloadTreetable();
-	}
+	public void useFilter() {
+		final Predicate<AggregatedOperationCall> predicate1 = (showJustFailedButton.isSelected()) ? AggregatedOperationCall::isFailed : FilterUtility.alwaysTrue();
+		final Predicate<AggregatedOperationCall> predicate2 = (showJustFailureContainingButton.isSelected()) ?  AggregatedOperationCall::containsFailure : FilterUtility.alwaysTrue();
+		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter(this.filterContainer, AggregatedOperationCall::getContainer);
+		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter(this.filterComponent, AggregatedOperationCall::getComponent);
+		final Predicate<AggregatedOperationCall> predicate5 = FilterUtility.useFilter(this.filterOperation, AggregatedOperationCall::getOperation);
 
-	@ErrorHandling
-	public void showJustFailureContainingTraces() {
-		this.fstPredicate = AggregatedOperationCall::containsFailure;
-		this.reloadTreetable();
-	}
-
-	@ErrorHandling
-	public void useContainerFilter() {
-		final Predicate<AggregatedOperationCall> predicate = FilterUtility.useFilter(this.filterContainer, AggregatedOperationCall::getContainer);
-		this.sndPredicate = predicate;
-		this.reloadTreetable();
-	}
-
-	@ErrorHandling
-	public void useComponentFilter() {
-		final Predicate<AggregatedOperationCall> predicate = FilterUtility.useFilter(this.filterComponent, AggregatedOperationCall::getComponent);
-		this.thdPredicate = predicate;
-		this.reloadTreetable();
-	}
-
-	@ErrorHandling
-	public void useOperationFilter() {
-		final Predicate<AggregatedOperationCall> predicate = FilterUtility.useFilter(this.filterOperation, AggregatedOperationCall::getOperation);
-		this.fthPredicate = predicate;
-		this.reloadTreetable();
+		predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5);
+		reloadTreetable();
 	}
 
 	private void reloadTreetable() {
@@ -180,12 +156,7 @@ public final class AggregatedTracesViewController extends AbstractController {
 		this.treetable.setRoot(root);
 		this.treetable.setShowRoot(false);
 
-		for (final AggregatedTrace trace : traces) {
-			if (this.fstPredicate.test(trace.getRootOperationCall()) && this.sndPredicate.test(trace.getRootOperationCall())
-					&& this.thdPredicate.test(trace.getRootOperationCall()) && this.fthPredicate.test(trace.getRootOperationCall())) {
-				rootChildren.add(new LazyAggregatedOperationCallTreeItem(trace.getRootOperationCall()));
-			}
-		}
+		traces.stream().map(trace -> trace.getRootOperationCall()).filter(predicate).forEach(call -> rootChildren.add(new LazyAggregatedOperationCallTreeItem(call)));
 		
 		this.counter.textProperty().set(rootChildren.size() + " " + this.resources.getString("AggregatedTracesView.lblCounter.text"));
 	}

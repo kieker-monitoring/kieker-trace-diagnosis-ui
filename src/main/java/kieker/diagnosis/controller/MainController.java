@@ -272,6 +272,8 @@ public final class MainController {
 	}
 
 	private static PaneData loadPaneData(final Class<?> controllerClass, final ContextEntry... arguments) throws Exception {
+		final long tin = System.currentTimeMillis();
+		
 		final String baseName = controllerClass.getCanonicalName().replace("Controller", "").replace(".controller.", ".view.");
 		final String viewFXMLName = "views/" + baseName.replace(".", "/") + ".fxml";
 		final String cssName = "views/" + baseName.replace(".", "/") + ".css";
@@ -292,6 +294,10 @@ public final class MainController {
 		final String title = (resourceBundle.containsKey("title") ? resourceBundle.getString("title") : "");
 
 		final PaneData paneData = new PaneData(node, title, cssResource.toExternalForm());
+		
+		final long tout = System.currentTimeMillis();
+		LOGGER.info("View for '" + controllerClass.getCanonicalName() + "' loaded in " + (tout - tin) + "ms");
+		
 		return paneData;
 	}
 
