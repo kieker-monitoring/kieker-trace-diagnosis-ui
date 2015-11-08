@@ -101,7 +101,7 @@ public final class CallsViewController extends AbstractController {
 			this.container.setText(call.getContainer());
 			this.component.setText(call.getComponent());
 			this.operation.setText(call.getOperation());
-			this.timestamp.setText(Long.toString(call.getTimestamp()));
+			this.timestamp.setText(NameConverter.toTimestampString(call.getTimestamp(), sourceTimeUnit) + " (" + call.getTimestamp() + ")");
 			this.duration.setText(NameConverter.toDurationString(call.getDuration(), sourceTimeUnit, targetTimeUnit));
 			this.traceID.setText(Long.toString(call.getTraceID()));
 			this.failed.setText(call.getFailedCause() != null ? call.getFailedCause() : "N/A");
