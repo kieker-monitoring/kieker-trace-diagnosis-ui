@@ -1,6 +1,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.cell.*?>
+<?import jfxtras.scene.control.*?>
 
 <GridPane fx:id="view" xmlns:fx="http://javafx.com/fxml"
 	AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0"
@@ -34,9 +35,9 @@
 				<TextField promptText="%filterTraceID" onAction="#useFilter" fx:id="filterTraceID" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
 				
 				<DatePicker promptText="%filterLowerDate" fx:id="filterLowerDate" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
-				<TextField promptText="%filterLowerTime" fx:id="filterLowerTime" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+				<CalendarTimeTextField promptText="%filterLowerTime" fx:id="filterLowerTime"  GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
 				<DatePicker promptText="%filterUpperDate" fx:id="filterUpperDate" GridPane.rowIndex="1" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
-				<TextField promptText="%filterUpperTime" fx:id="filterUpperTime" GridPane.rowIndex="1" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
+				<CalendarTimeTextField promptText="%filterUpperTime" fx:id="filterUpperTime" GridPane.rowIndex="1" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
 			</GridPane>
 		</VBox>
 	</TitledPane>
