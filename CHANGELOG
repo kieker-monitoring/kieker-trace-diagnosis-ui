@@ -1,4 +1,8 @@
 1.1:
+	08 Nov 2015
+	Feature (Issue #22)
+	It is now possible to configure the appearance of the timestamps in the traces and the calls views.
+
 	01 Nov 2015
 	Feature (Issue #21)
 	A switch within the settings allows to activate a new kind of percent calculation. When activated, the percent calculation within traces refers to the topmost method call (the root of the trace) instead of to the direct caller of the method.
