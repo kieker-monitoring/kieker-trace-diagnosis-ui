@@ -119,9 +119,9 @@ final class LegacyTraceReconstructor extends AbstractTransformation<OperationExe
 		}
 
 		private String extractComponent(final String operationSignature) {
-			return operationSignature.replaceFirst("\\.\\w*\\(.*", "");
+			return operationSignature.replaceFirst("\\.<?\\w*>?\\(.*", "");
 		}
-
+		
 		public boolean isTraceComplete() {
 			return this.traceComplete;
 		}

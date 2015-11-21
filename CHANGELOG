@@ -1,5 +1,9 @@
 1.1:
 	21 Nov 2015
+	Bugfix (Issue #26)
+	Short components were not always correctly displayed in case of operation execution records.
+
+	21 Nov 2015
 	Feature (Issue #23)
 	Added filter and search possibilities for dates and times.
 
