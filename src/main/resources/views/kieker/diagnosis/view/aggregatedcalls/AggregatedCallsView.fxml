@@ -1,6 +1,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.cell.*?>
+<?import kieker.diagnosis.components.table.*?>
 
 <GridPane xmlns:fx="http://javafx.com/fxml"
 	AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0"
@@ -43,7 +44,7 @@
 		<columns>
 			<TableColumn text="%AggregatedCallsView.tblclmnExecutionContainer.text">
 				<cellFactory>
-					<kieker.diagnosis.components.FailedTableCellFactory />
+					<FailedTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
 					<PropertyValueFactory property="container" />
@@ -52,25 +53,25 @@
 
 			<TableColumn text="%AggregatedCallsView.tblclmnComponent.text">
 				<cellFactory>
-					<kieker.diagnosis.components.FailedTableCellFactory />
+					<FailedTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.components.ComponentCellValueFactory property="component" />
+					<ComponentCellValueFactory property="component" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%AggregatedCallsView.tblclmnOperation.text">
 				<cellFactory>
-					<kieker.diagnosis.components.FailedTableCellFactory />
+					<FailedTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.components.OperationCellValueFactory property="operation" />
+					<OperationCellValueFactory property="operation" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%AggregatedCallsView.tblclmnNumberOfCalls.text">
 				<cellFactory>
-					<kieker.diagnosis.components.FailedTableCellFactory />
+					<FailedTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
 					<PropertyValueFactory property="calls" />
@@ -79,50 +80,50 @@
 
 			<TableColumn text="%AggregatedCallsView.tblclmnMinimalDuration.text">
 				<cellFactory>
-					<kieker.diagnosis.components.DurationTableCellFactory />
+					<DurationTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.components.DurationCellValueFactory
+					<DurationCellValueFactory
 						property="minDuration" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%AggregatedCallsView.tblclmnMeanDuration.text">
 				<cellFactory>
-					<kieker.diagnosis.components.DurationTableCellFactory />
+					<DurationTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.components.DurationCellValueFactory
+					<DurationCellValueFactory
 						property="meanDuration" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%AggregatedCallsView.tblclmnMedianDuration.text">
 				<cellFactory>
-					<kieker.diagnosis.components.DurationTableCellFactory />
+					<DurationTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.components.DurationCellValueFactory
+					<DurationCellValueFactory
 						property="medianDuration" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%AggregatedCallsView.tblclmnMaximalDuration.text">
 				<cellFactory>
-					<kieker.diagnosis.components.DurationTableCellFactory />
+					<DurationTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.components.DurationCellValueFactory
+					<DurationCellValueFactory
 						property="maxDuration" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%AggregatedCallsView.tblclmnTotalDuration.text">
 				<cellFactory>
-					<kieker.diagnosis.components.DurationTableCellFactory />
+					<DurationTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.components.DurationCellValueFactory
+					<DurationCellValueFactory
 						property="totalDuration" />
 				</cellValueFactory>
 			</TableColumn>

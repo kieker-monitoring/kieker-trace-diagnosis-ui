@@ -14,33 +14,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.components;
+package kieker.diagnosis.components.converter;
 
-import javafx.util.StringConverter;
+import java.util.ResourceBundle;
+
 import kieker.diagnosis.model.PropertiesModel.OperationNames;
 import kieker.diagnosis.util.Mapper;
 
 /**
  * @author Nils Christian Ehmke
  */
-public class OperationNamesStringConverter extends StringConverter<OperationNames> {
-
-	private static Mapper<OperationNames, String> operationMapper;
-
-	static {
-		OperationNamesStringConverter.operationMapper = new Mapper<>();
-		OperationNamesStringConverter.operationMapper.map(OperationNames.SHORT).to("getBook(...)");
-		OperationNamesStringConverter.operationMapper.map(OperationNames.LONG).to("public void kieker.examples.bookstore.Catalog.getBook(boolean)");
-	}
+public class OperationNamesStringConverter extends AbstractStringConverter<OperationNames> {
 
 	@Override
-	public OperationNames fromString(final String string) {
-		return OperationNamesStringConverter.operationMapper.invertedResolve(string);
-	}
-
-	@Override
-	public String toString(final OperationNames object) {
-		return OperationNamesStringConverter.operationMapper.resolve(object);
+	protected void fillMapper(final Mapper<OperationNames, String> mapper, final ResourceBundle resourceBundle) {
+		mapper.map(OperationNames.SHORT).to("getBook(...)");
+		mapper.map(OperationNames.LONG).to("public void kieker.examples.bookstore.Catalog.getBook(boolean)");
 	}
 
 }

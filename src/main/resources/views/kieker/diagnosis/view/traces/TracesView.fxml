@@ -2,6 +2,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.cell.*?>
 <?import jfxtras.scene.control.*?>
+<?import kieker.diagnosis.components.treetable.*?>
 
 <GridPane fx:id="view" xmlns:fx="http://javafx.com/fxml"
 	AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0"
@@ -52,7 +53,7 @@
 		<columns>
 			<TreeTableColumn text="%TracesView.trclmnExecutionContainer.text">
 			<cellFactory>
-						<kieker.diagnosis.components.FailedTreeCellFactory />
+						<FailedTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory
@@ -62,25 +63,25 @@
 
 			<TreeTableColumn text="%TracesView.trclmnComponent.text">
 			<cellFactory>
-						<kieker.diagnosis.components.FailedTreeCellFactory />
+						<FailedTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.components.ComponentTreeCellValueFactory property="component" />
+					<ComponentTreeCellValueFactory property="component" />
 				</cellValueFactory>
 			</TreeTableColumn>
 
 			<TreeTableColumn text="%TracesView.trclmnOperation.text">
 			<cellFactory>
-						<kieker.diagnosis.components.FailedTreeCellFactory />
+						<FailedTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.components.OperationTreeCellValueFactory property="operation" />
+					<OperationTreeCellValueFactory property="operation" />
 				</cellValueFactory>
 			</TreeTableColumn>
 
 			<TreeTableColumn text="%TracesView.trclmnTraceDepth.text">
 			<cellFactory>
-						<kieker.diagnosis.components.FailedTreeCellFactory />
+						<FailedTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory
@@ -90,7 +91,7 @@
 
 			<TreeTableColumn text="%TracesView.trclmnTraceSize.text">
 			<cellFactory>
-					<kieker.diagnosis.components.FailedTreeCellFactory />
+					<FailedTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory
@@ -100,17 +101,17 @@
 
 			<TreeTableColumn text="%TracesView.trclmnDuration.text" >
 			<cellFactory>
-					<kieker.diagnosis.components.DurationTreeCellFactory />
+					<DurationTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.components.DurationTreeCellValueFactory
+					<DurationTreeCellValueFactory
 						property="duration" />
 				</cellValueFactory>
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%TracesView.trclmnPercent.text" >
 			<cellFactory>
-						<kieker.diagnosis.components.PercentTreeCellFactory />
+						<PercentTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory
@@ -120,7 +121,7 @@
 			
 			<TreeTableColumn text="%TracesView.trclmnTraceId.text" >
 			<cellFactory>
-					<kieker.diagnosis.components.FailedTreeCellFactory />
+					<FailedTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory
@@ -130,7 +131,7 @@
 			
 			<TreeTableColumn text="%TracesView.trclmnTimestamp.text" >
 			<cellFactory>
-					<kieker.diagnosis.components.TimestampTreeTableCellFactory />
+					<TimestampTreeTableCellFactory />
 				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory

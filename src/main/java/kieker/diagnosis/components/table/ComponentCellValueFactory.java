@@ -14,12 +14,11 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.components;
+package kieker.diagnosis.components.table;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,36 +28,31 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.util.Callback;
-import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
-
-/**
- * @author Nils Christian Ehmke
- */
-public class DurationCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<Long>> {
-
-	private static final Logger LOGGER = LogManager.getLogger(DurationCellValueFactory.class);
+import kieker.diagnosis.model.PropertiesModel.ComponentNames;
+import kieker.diagnosis.util.NameConverter;
+ 
+public class ComponentCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<String>> {
 	
-	private final DataModel dataModel = DataModel.getInstance();
-	private final PropertiesModel propertiesModel = PropertiesModel.getInstance();
-
+	private static final Logger LOGGER = LogManager.getLogger(ComponentCellValueFactory.class);
+	
 	private final String property;
 
-	public DurationCellValueFactory(@NamedArg(value = "property") final String property) {
+	public ComponentCellValueFactory(@NamedArg(value = "property") final String property) {
 		this.property = property.substring(0, 1).toUpperCase(Locale.ROOT) + property.substring(1);
 	}
 
 	@Override
-	public ObservableValue<Long> call(final CellDataFeatures<?, String> call) {
+	public ObservableValue<String> call(final CellDataFeatures<?, String> call) {
 		try {
-			final TimeUnit srcTimeUnit = this.dataModel.getTimeUnit();
-			final TimeUnit dstTimeUnit = this.propertiesModel.getTimeUnit();
-
 			final Method getter = call.getValue().getClass().getMethod("get" + this.property, new Class<?>[0]);
-			final long duration = (long) getter.invoke(call.getValue(), new Object[0]);
+			String componentName = (String) getter.invoke(call.getValue(), new Object[0]);
 
-			final long newDuration = dstTimeUnit.convert(duration, srcTimeUnit);
-			return new ReadOnlyObjectWrapper<Long>(newDuration);
+			if (PropertiesModel.getInstance().getComponentNames() == ComponentNames.SHORT) {
+				componentName = NameConverter.toShortComponentName(componentName);
+			}
+
+			return new ReadOnlyObjectWrapper<String>(componentName);
 		} catch (final NullPointerException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 			LOGGER.warn(ex);
 			return null;

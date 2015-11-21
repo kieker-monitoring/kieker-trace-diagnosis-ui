@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.components;
+package kieker.diagnosis.components.table;
 
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -22,29 +22,28 @@ import javafx.scene.control.TableRow;
 import javafx.util.Callback;
 import kieker.diagnosis.domain.AbstractOperationCall;
 
-/**
- * @author Nils Christian Ehmke
- */
-public final class FailedTableCellFactory<S, T> implements Callback<TableColumn<S, T>, TableCell<S, T>> {
+public abstract class AbstractTableCellFactory<S, T> implements Callback<TableColumn<S, T>, TableCell<S, T>> {
 
 	@Override
 	public TableCell<S, T> call(final TableColumn<S, T> p) {
 		return new FailedTableCell();
 	}
+	
+	protected abstract String getItemLabel(T item);
 
 	private final class FailedTableCell extends TableCell<S, T> {
 
 		@Override
 		protected void updateItem(final T item, final boolean empty) {
 			setFailedStyle();
-			 
+
 			super.updateItem(item, empty);
 
 			if (empty || item == null) {
 				setText(null);
 				setGraphic(null);
 			} else {
-				setText(item.toString());
+				setText(getItemLabel(item));
 			}
 		}
 

@@ -14,31 +14,19 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.components;
+package kieker.diagnosis.components.treetable;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javafx.scene.control.TreeItem;
-import kieker.diagnosis.domain.AggregatedOperationCall;
+import kieker.diagnosis.model.PropertiesModel;
+import kieker.diagnosis.util.NameConverter;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class LazyAggregatedOperationCallTreeItem extends AbstractLazyOperationCallTreeItem<AggregatedOperationCall> {
+public final class DurationTreeCellFactory<S, T> extends AbstractTreeTableCellFactory<S, T> {
 
-	public LazyAggregatedOperationCallTreeItem(final AggregatedOperationCall value) {
-		super(value);
+	@Override
+	protected String getItemLabel(T item) {
+		return (item.toString() + " " + NameConverter.toShortTimeUnit(PropertiesModel.getInstance().getTimeUnit()));
 	}
 
-	protected void initializeChildren() {
-		final List<TreeItem<AggregatedOperationCall>> result = new ArrayList<>();
-
-		for (final AggregatedOperationCall child : super.getValue().getChildren()) {
-			result.add(new LazyAggregatedOperationCallTreeItem(child)); 
-		}
-
-		super.getChildren().setAll(result);
-	}
-	
 }

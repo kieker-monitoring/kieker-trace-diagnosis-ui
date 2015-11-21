@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.components;
+package kieker.diagnosis.components.treetable;
 
 import java.util.ArrayList;
 import java.util.Comparator;

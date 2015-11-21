@@ -1,6 +1,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.cell.*?>
+<?import kieker.diagnosis.components.treetable.*?>
 
 <GridPane fx:id="view" xmlns:fx="http://javafx.com/fxml"
 	AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0"
@@ -44,7 +45,7 @@
 	<columns>
 			<TreeTableColumn text="%AggregatedTracesView.trclmnExecutionContainer.text">
 				<cellFactory>
-					<kieker.diagnosis.components.FailedTreeCellFactory/>
+					<FailedTreeCellFactory/>
 				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory property="container" />
@@ -53,25 +54,25 @@
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnComponent.text">
 				<cellFactory>
-					<kieker.diagnosis.components.FailedTreeCellFactory />
+					<FailedTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.components.ComponentTreeCellValueFactory property="component" />
+					<ComponentTreeCellValueFactory property="component" />
 				</cellValueFactory>
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnOperation.text">
 				<cellFactory>
-					<kieker.diagnosis.components.FailedTreeCellFactory />
+					<FailedTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.components.OperationTreeCellValueFactory property="operation" />
+					<OperationTreeCellValueFactory property="operation" />
 				</cellValueFactory>
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnCalls.text">
 				<cellFactory>
-					<kieker.diagnosis.components.FailedTreeCellFactory />
+					<FailedTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory property="calls" />
@@ -80,7 +81,7 @@
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnTraceDepth.text">
 				<cellFactory>
-					<kieker.diagnosis.components.FailedTreeCellFactory />
+					<FailedTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory property="stackDepth" />
@@ -89,7 +90,7 @@
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnTraceSize.text">
 				<cellFactory>
-					<kieker.diagnosis.components.FailedTreeCellFactory />
+					<FailedTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory property="stackSize" />
@@ -98,50 +99,50 @@
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnMinimalDuration.text" >
 			<cellFactory>
-					<kieker.diagnosis.components.DurationTreeCellFactory />
+					<DurationTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.components.DurationTreeCellValueFactory
+					<DurationTreeCellValueFactory
 						property="minDuration" />
 				</cellValueFactory>
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnAverageDuration.text" >
 			<cellFactory>
-					<kieker.diagnosis.components.DurationTreeCellFactory />
+					<DurationTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.components.DurationTreeCellValueFactory
+					<DurationTreeCellValueFactory
 						property="meanDuration" />
 				</cellValueFactory>
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnMeanDuration.text" >
 			<cellFactory>
-					<kieker.diagnosis.components.DurationTreeCellFactory />
+					<DurationTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.components.DurationTreeCellValueFactory
+					<DurationTreeCellValueFactory
 						property="medianDuration" />
 				</cellValueFactory>
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnMaximalDuration.text" >
 			<cellFactory>
-					<kieker.diagnosis.components.DurationTreeCellFactory />
+					<DurationTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.components.DurationTreeCellValueFactory
+					<DurationTreeCellValueFactory
 						property="maxDuration" />
 				</cellValueFactory>
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnTotalDuration.text" >
 			<cellFactory>
-					<kieker.diagnosis.components.DurationTreeCellFactory />
+					<DurationTreeCellFactory />
 				</cellFactory>
 				<cellValueFactory>
-					<kieker.diagnosis.components.DurationTreeCellValueFactory
+					<DurationTreeCellValueFactory
 						property="totalDuration" />
 				</cellValueFactory>
 			</TreeTableColumn>

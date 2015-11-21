@@ -33,7 +33,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.input.MouseEvent;
 import jfxtras.scene.control.CalendarTimeTextField;
-import kieker.diagnosis.components.LazyOperationCallTreeItem;
+import kieker.diagnosis.components.treetable.LazyOperationCallTreeItem;
 import kieker.diagnosis.controller.AbstractController;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;

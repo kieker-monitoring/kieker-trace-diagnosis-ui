@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.components;
+package kieker.diagnosis.components.treetable;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;

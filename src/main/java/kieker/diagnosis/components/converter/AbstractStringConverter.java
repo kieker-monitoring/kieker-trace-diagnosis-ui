@@ -14,33 +14,38 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.components;
+package kieker.diagnosis.components.converter;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javafx.util.StringConverter;
-import kieker.diagnosis.model.PropertiesModel.ComponentNames;
 import kieker.diagnosis.util.Mapper;
 
 /**
  * @author Nils Christian Ehmke
  */
-public class ComponentNamesStringConverter extends StringConverter<ComponentNames> {
+public abstract class AbstractStringConverter<T> extends StringConverter<T> {
 	
-	private static Mapper<ComponentNames, String> componentMapper;
-
-	static {
-		ComponentNamesStringConverter.componentMapper = new Mapper<>();
-		ComponentNamesStringConverter.componentMapper.map(ComponentNames.SHORT).to("Catalog");
-		ComponentNamesStringConverter.componentMapper.map(ComponentNames.LONG).to("kieker.examples.bookstore.Catalog");
+	private final Mapper<T, String> mapper = new Mapper<>();
+	
+	public AbstractStringConverter() {
+		final String bundleBaseName = "locale.kieker.diagnosis.components.components";
+		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
+		
+		this.fillMapper(mapper, resourceBundle); 
 	}
 	
+	protected abstract void fillMapper(final Mapper<T, String> mapper, final ResourceBundle resourceBundle);
+	
 	@Override
-	public ComponentNames fromString(final String string) {
-		return ComponentNamesStringConverter.componentMapper.invertedResolve(string);
+	public T fromString(final String string) {
+		return this.mapper.invertedResolve(string);
 	}
 
 	@Override
-	public String toString(final ComponentNames object) {
-		return ComponentNamesStringConverter.componentMapper.resolve(object);
+	public String toString(final T object) {
+		return this.mapper.resolve(object);
 	}
 
 }

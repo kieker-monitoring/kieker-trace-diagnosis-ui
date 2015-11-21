@@ -31,7 +31,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.input.MouseEvent;
-import kieker.diagnosis.components.LazyAggregatedOperationCallTreeItem;
+import kieker.diagnosis.components.treetable.LazyAggregatedOperationCallTreeItem;
 import kieker.diagnosis.controller.AbstractController;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
