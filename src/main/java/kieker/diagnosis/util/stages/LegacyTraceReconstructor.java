@@ -119,9 +119,19 @@ final class LegacyTraceReconstructor extends AbstractTransformation<OperationExe
 		}
 
 		private String extractComponent(final String operationSignature) {
-			return operationSignature.replaceFirst("\\.<?\\w*>?\\(.*", "");
+			// Remove modifiers and return values (Issue #26)
+			final int firstOpeningParenthesisPos = operationSignature.indexOf('(');
+			int gapPos = operationSignature.indexOf(' ');
+			String result = operationSignature;
+			while (gapPos != -1 && gapPos < firstOpeningParenthesisPos) {
+				result = result.substring(gapPos + 1);
+				gapPos = result.indexOf(' ');
+			}
+			
+			result = result.replaceFirst("\\.<?\\w*>?\\(.*", "");
+			return result;
 		}
-		
+
 		public boolean isTraceComplete() {
 			return this.traceComplete;
 		}

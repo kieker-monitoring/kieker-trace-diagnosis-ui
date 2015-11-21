@@ -135,6 +135,21 @@ public class LegacyTraceReconstructorTest {
 		assertThat(result.get(0).getRootOperationCall().getOperation(), is("org.mybatis.jpetstore.domain.Cart.<init>()"));
 	}
 	
+	@Test
+	public void traceReconstructionShouldExtractCorrectComponentName() throws Exception {
+		final List<OperationExecutionRecord> records = new ArrayList<>();
+		records.add(new OperationExecutionRecord("public java.lang.String org.mybatis.jpetstore.domain.Product.getName()", "1", 42, 15L, 20L, "SRV1", 0, 0));
+
+		final LegacyTraceReconstructor reconstructor = new LegacyTraceReconstructor();
+		final List<Trace> result = new ArrayList<>();
+		test(reconstructor).and().send(records).to(reconstructor.getInputPort()).and().receive(result).from(reconstructor.getOutputPort()).start();
+
+		assertThat(result, hasSize(1));
+		assertThat(result.get(0).getRootOperationCall().getContainer(), is("SRV1"));
+		assertThat(result.get(0).getRootOperationCall().getComponent(), is("org.mybatis.jpetstore.domain.Product"));
+		assertThat(result.get(0).getRootOperationCall().getOperation(), is("public java.lang.String org.mybatis.jpetstore.domain.Product.getName()"));
+	}
+	
 	private static class ExampleLogReconstructionConfiguration extends Configuration {
 
 		private final List<Trace> traceCollectorList = new ArrayList<>();
