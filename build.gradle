@@ -96,13 +96,63 @@ def commonDistBinConfiguration = {
 		from jar.archivePath 
 		from 'licenses'
 	}
+	
 	into ('example') { from 'example' }
+	into ('manual') { from 'manual/Manual_DE.pdf' }
+	into ('manual') { from 'manual/Manual_EN.pdf' }
+	
 	into('.') {
 		from 'LICENSE'
 	}
 }
 
-task distBinWin(type: Zip, dependsOn: [jar, createStartScript]) {
+task latexRunDE1(type: Exec) {
+	workingDir 'manual'
+	commandLine 'pdflatex', 'Manual_DE'
+}
+
+task latexRunDE2(type: Exec) {
+	workingDir 'manual'
+	commandLine 'pdflatex', 'Manual_DE'
+}
+
+task latexRunEN1(type: Exec) {
+	workingDir 'manual'
+	commandLine 'pdflatex', 'Manual_EN'
+}
+
+task latexRunEN2(type: Exec) {
+	workingDir 'manual'
+	commandLine 'pdflatex', 'Manual_EN'
+}
+
+task buildUserManualDE() {
+  
+	inputs.files fileTree('manual') {
+		include 'Manual_DE.tex'
+	}
+	outputs.file file('manual/Manual_DE.pdf')
+  
+	doLast {
+		tasks.latexRunDE1.execute()
+		tasks.latexRunDE2.execute()
+	}
+}
+
+task buildUserManualEN() {
+  
+	inputs.files fileTree('manual') {
+		include 'Manual_EN.tex'
+	}
+	outputs.file file('manual/Manual_EN.pdf')
+  
+	doLast {
+		tasks.latexRunEN1.execute()
+		tasks.latexRunEN2.execute()
+	}
+}
+
+task distBinWin(type: Zip, dependsOn: [jar, createStartScript, buildUserManualDE, buildUserManualEN]) {
 	description = 'Bundles the project as a JVM application with OS specific libs and script for Windows.'
 	classifier = 'windows'
 
@@ -125,7 +175,7 @@ task distBinLinux(type: Tar, dependsOn: [jar, createStartScript]) {
 	}
 }
 
-task distAllBin(dependsOn: [distBinWin, distBinLinux]) {
+task distAllBin(dependsOn: [distBinWin, distBinLinux, buildUserManualDE, buildUserManualEN]) {
 	description = 'Bundles the project as a JVM application with OS specific libs and scripts for all platforms.'
 }
 
@@ -136,6 +186,9 @@ def commonDistSrcConfiguration = {
 	into ('config') { from 'config' }
 	into ('example') { from 'example' }
 	into ('licenses') { from 'licenses' }
+	
+	into ('manual') { from 'manual/Manual_DE.tex' }
+	into ('manual') { from 'manual/Manual_EN.tex' }
 	
 	from ('.') {
 		include 'CHANGELOG'

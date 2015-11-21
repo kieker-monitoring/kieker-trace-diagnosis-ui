@@ -1,0 +1,34 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[parfill]{parskip}
+
+\title{Kieker Trace Diagnosis\\User Manual}
+\date{Version 1.1-SNAPSHOT}
+\author{Kieker Project\\(kieker-monitoring.net)}
+
+\begin{document}
+
+  \newcommand{\KiekerTraceDiagnosis}[0]{\texttt{Kieker Trace Diagnosis}}
+  \newcommand{\file}[1]{\textit{#1}}
+
+  \maketitle
+
+  \section{Requirements}
+  The following requirements are necessary to use \KiekerTraceDiagnosis{}.
+  \begin{itemize}
+    \item Windows or Linux
+    \item Java Runtime Environment 8
+  \end{itemize}
+  The usage of Oracle's JDK for the tool is recommended. The troubleshooting for the usage of OpenJDK can be found in section~\ref{OpenJDK}.
+
+  \section{Licence}
+  \KiekerTraceDiagnosis{} is licensed under the Apache License Version 2.0. The complete license text can be found in the provided file \file{LICENSE}.
+
+  \section{Troubleshooting}
+
+  \subsection{Usage of OpenJDK}\label{OpenJDK}
+  The usage of OpenJDK instead of Oracle's JDK is basically possible. However, it can be necessary to install OpenJFX explicitly.
+
+\end{document}

@@ -7,3 +7,6 @@
 /teetime.log
 /*.log
 /.nb-gradle/private/
+/manual/*.log
+/manual/*.pdf
+/manual/*.aux
