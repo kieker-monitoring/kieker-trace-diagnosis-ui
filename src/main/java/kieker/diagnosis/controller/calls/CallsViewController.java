@@ -27,10 +27,12 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import jfxtras.scene.control.CalendarTimeTextField;
 import kieker.diagnosis.controller.AbstractController;
 import kieker.diagnosis.controller.MainController;
 import kieker.diagnosis.domain.OperationCall;
@@ -59,6 +61,11 @@ public final class CallsViewController extends AbstractController {
 	@FXML private TextField filterComponent;
 	@FXML private TextField filterOperation;
 	@FXML private TextField filterTraceID;
+	
+	@FXML private DatePicker filterLowerDate;
+	@FXML private CalendarTimeTextField filterLowerTime;
+	@FXML private DatePicker filterUpperDate;
+	@FXML private CalendarTimeTextField filterUpperTime;
 
 	@FXML private TextField container;
 	@FXML private TextField component;
@@ -141,8 +148,12 @@ public final class CallsViewController extends AbstractController {
 		final Predicate<OperationCall> predicate3 = FilterUtility.useFilter(this.filterComponent, OperationCall::getComponent);
 		final Predicate<OperationCall> predicate4 = FilterUtility.useFilter(this.filterOperation, OperationCall::getOperation);
 		final Predicate<OperationCall> predicate5 = FilterUtility.useFilter(this.filterTraceID, (call -> Long.toString(call.getTraceID())));
-
-		final Predicate<OperationCall> predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5);
+		final Predicate<OperationCall> predicate6 = FilterUtility.useFilter(this.filterLowerDate, OperationCall::getTimestamp, true); 
+		final Predicate<OperationCall> predicate7 = FilterUtility.useFilter(this.filterUpperDate, OperationCall::getTimestamp, false);
+		final Predicate<OperationCall> predicate8 = FilterUtility.useFilter(this.filterLowerTime, OperationCall::getTimestamp, true); 
+		final Predicate<OperationCall> predicate9 = FilterUtility.useFilter(this.filterUpperTime, OperationCall::getTimestamp, false);
+		 
+		final Predicate<OperationCall> predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5).and(predicate6).and(predicate7).and(predicate8).and(predicate9);
 		filteredData.setPredicate(predicate);
 	}
 

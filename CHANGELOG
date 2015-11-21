@@ -1,4 +1,8 @@
 1.1:
+	21 Nov 2015
+	Feature (Issue #23)
+	Added filter and search possibilities for dates and times.
+
 	08 Nov 2015
 	Feature (Issue #22)
 	It is now possible to configure the appearance of the timestamps in the traces and the calls views.

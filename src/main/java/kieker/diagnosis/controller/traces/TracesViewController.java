@@ -26,11 +26,13 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.input.MouseEvent;
+import jfxtras.scene.control.CalendarTimeTextField;
 import kieker.diagnosis.components.LazyOperationCallTreeItem;
 import kieker.diagnosis.controller.AbstractController;
 import kieker.diagnosis.domain.OperationCall;
@@ -64,7 +66,12 @@ public final class TracesViewController extends AbstractController {
 	@FXML private TextField filterComponent;
 	@FXML private TextField filterOperation;
 	@FXML private TextField filterTraceID;
-
+	
+	@FXML private DatePicker filterLowerDate;
+	@FXML private CalendarTimeTextField filterLowerTime;
+	@FXML private DatePicker filterUpperDate;
+	@FXML private CalendarTimeTextField filterUpperTime;
+	
 	@FXML private TextField traceDepth;
 	@FXML private TextField traceSize;
 	@FXML private TextField timestamp;
@@ -180,8 +187,12 @@ public final class TracesViewController extends AbstractController {
 		final Predicate<OperationCall> predicate4 = FilterUtility.useFilter(this.filterComponent, OperationCall::getComponent);
 		final Predicate<OperationCall> predicate5 = FilterUtility.useFilter(this.filterOperation, OperationCall::getOperation);
 		final Predicate<OperationCall> predicate6 = FilterUtility.useFilter(this.filterTraceID, (call -> Long.toString(call.getTraceID())));
-
-		predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5).and(predicate6);
+		final Predicate<OperationCall> predicate7 = FilterUtility.useFilter(this.filterLowerDate, OperationCall::getTimestamp, true); 
+		final Predicate<OperationCall> predicate8 = FilterUtility.useFilter(this.filterUpperDate, OperationCall::getTimestamp, false);
+		final Predicate<OperationCall> predicate9 = FilterUtility.useFilter(this.filterLowerTime, OperationCall::getTimestamp, true); 
+		final Predicate<OperationCall> predicate10 = FilterUtility.useFilter(this.filterUpperTime, OperationCall::getTimestamp, false);
+		
+		predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5).and(predicate6).and(predicate7).and(predicate8).and(predicate9).and(predicate10);
 		reloadTreetable();
 	}
 	

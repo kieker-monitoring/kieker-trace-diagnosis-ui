@@ -16,11 +16,21 @@
 
 package kieker.diagnosis.util;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoField;
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import jfxtras.scene.control.CalendarTimeTextField;
+import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
 
 public final class FilterUtility {
@@ -54,6 +64,80 @@ public final class FilterUtility {
 
 	private static void checkRegularExpression(String text) {
 		Pattern.compile(text);
+	}
+ 
+	public static <T> Predicate<T> useFilter(final DatePicker datePicker, final Function<T, Long> function, boolean filterBefore) {
+		final LocalDate value = datePicker.getValue();
+		if (value == null) {
+			return x -> true;
+		}
+		Predicate<T> result = x -> {
+			final long timestamp = function.apply(x);
+			final long timestampInMS = TimeUnit.MILLISECONDS.convert(timestamp, DataModel.getInstance().getTimeUnit());
+			final Instant instant = Instant.ofEpochMilli(timestampInMS);
+			final ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
+			final LocalDate localDate = LocalDate.from(zonedDateTime);
+			if (filterBefore) {
+				return value.isBefore(localDate) || value.isEqual(localDate);
+			} else {
+				return value.isAfter(localDate) || value.isEqual(localDate);
+			}
+			};
+		
+	
+		return result; 
+	}
+
+	public static <T> Predicate<T> useFilter(CalendarTimeTextField timeTextField, final Function<T, Long> function, boolean filterBefore) {
+		final Calendar value = timeTextField.getCalendar();
+		if (value == null) {
+			return x -> true;
+		}
+		Predicate<T> result = x -> { 
+			final long timestamp = function.apply(x);
+			final long timestampInMS = TimeUnit.MILLISECONDS.convert(timestamp, DataModel.getInstance().getTimeUnit());
+			final Instant instant = Instant.ofEpochMilli(timestampInMS);
+			final ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
+
+			final int hour1 = zonedDateTime.get(ChronoField.HOUR_OF_DAY);
+			final int minute1 = zonedDateTime.get(ChronoField.MINUTE_OF_HOUR);
+
+			final int hour2 = value.get(Calendar.HOUR_OF_DAY);
+			final int minute2 = value.get(Calendar.MINUTE);
+
+			if (filterBefore) {
+				if (hour2 < hour1) {
+					return true;
+				} 
+				if (hour2 > hour1) {
+					return false;
+				}
+				if (minute2 < minute1) {
+					return true;
+				} 
+				if (minute2 > minute1) {
+					return false;
+				}
+				return true;
+			} else {
+				if (hour2 > hour1) {
+					return true;
+				} 
+				if (hour2 < hour1) {
+					return false;
+				}
+				if (minute2 > minute1) {
+					return true;
+				} 
+				if (minute2 < minute1) {
+					return false;
+				}
+				return true;
+			}
+			};
+		
+	
+		return result; 
 	}
 	
 }
