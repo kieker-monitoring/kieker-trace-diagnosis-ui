@@ -28,6 +28,7 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import jfxtras.scene.control.CalendarTimeTextField;
 import kieker.diagnosis.model.DataModel;
@@ -135,9 +136,34 @@ public final class FilterUtility {
 				return true;
 			}
 			};
-		
+		 
 	
 		return result; 
+	}
+
+	public static <T> Predicate<T> useFilter(final RadioButton showAllButton, final RadioButton showJustSuccessfulButton, final RadioButton showJustFailedButton, final Function<T, Boolean> isFailedFunction) {
+		if (showAllButton.isSelected()) {
+			return (x -> true);
+		}
+		Predicate<T> predicate = (x -> isFailedFunction.apply(x));
+		if (showJustSuccessfulButton.isSelected()) {
+			predicate = predicate.negate();
+		} 
+		return predicate;
+	}
+
+	public static <T> Predicate<T> useFilter(final RadioButton showAllButton, final RadioButton showJustSuccessfulButton, final RadioButton showJustFailedButton, final RadioButton showJustFailureContainingButton, final Function<T, Boolean> isFailedFunction, final Function<T, Boolean> containsFailureFunction) {
+		if (showAllButton.isSelected()) {
+			return (x -> true);
+		}
+		if (showJustFailureContainingButton.isSelected()) {
+			return (x -> containsFailureFunction.apply(x));
+		}
+		Predicate<T> predicate = (x -> isFailedFunction.apply(x));
+		if (showJustSuccessfulButton.isSelected()) {
+			predicate = predicate.negate();
+		} 
+		return predicate;
 	}
 	
 }

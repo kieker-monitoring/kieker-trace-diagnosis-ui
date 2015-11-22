@@ -56,6 +56,7 @@ import kieker.diagnosis.controller.calls.CallsViewController;
 import kieker.diagnosis.controller.monitoringstatistics.MonitoringStatisticsViewController;
 import kieker.diagnosis.controller.settings.SettingsDialogViewController;
 import kieker.diagnosis.controller.traces.TracesViewController;
+import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
@@ -96,9 +97,7 @@ public final class MainController {
 
 	@ErrorHandling
 	public void showTraces() throws Exception {
-		this.toggleDisabledButton(this.traces);
-		this.activeController = Optional.of(TracesViewController.class);
-		this.loadPane(TracesViewController.class);
+		this.showTraces(new ContextEntry[0]);
 	}
 
 	private void showTraces(final ContextEntry... contextEntries) throws Exception {
@@ -116,11 +115,16 @@ public final class MainController {
 
 	@ErrorHandling
 	public void showCalls() throws Exception {
+		this.showCalls(new ContextEntry[0]);
+	}
+	
+	@ErrorHandling
+	public void showCalls(final ContextEntry... contextEntries) throws Exception {
 		this.toggleDisabledButton(this.calls);
 		this.activeController = Optional.of(CallsViewController.class);
-		this.loadPane(CallsViewController.class);
+		this.loadPane(CallsViewController.class, contextEntries);
 	}
-
+	
 	@ErrorHandling
 	public void showAggregatedCalls() throws Exception {
 		this.toggleDisabledButton(this.aggregatedcalls);
@@ -309,6 +313,10 @@ public final class MainController {
 		showTraces(new ContextEntry(ContextKey.OPERATION_CALL, call));
 	}
 
+	public void jumpToCalls(final AggregatedOperationCall call) throws Exception {
+		showCalls(new ContextEntry(ContextKey.AGGREGATED_OPERATION_CALL, call));
+	}
+	
 	private static class PaneData {
 
 		private final Node node;
@@ -334,5 +342,6 @@ public final class MainController {
 		}
 
 	}
+
 
 }

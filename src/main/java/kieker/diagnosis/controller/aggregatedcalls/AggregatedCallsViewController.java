@@ -32,6 +32,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import kieker.diagnosis.controller.AbstractController;
+import kieker.diagnosis.controller.MainController;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
@@ -53,6 +54,7 @@ public final class AggregatedCallsViewController extends AbstractController {
 	
 	@FXML private RadioButton showAllButton;
 	@FXML private RadioButton showJustFailedButton;
+	@FXML private RadioButton showJustSuccessful;
 	
 	@FXML private TextField filterContainer;
 	@FXML private TextField filterComponent;
@@ -124,13 +126,26 @@ public final class AggregatedCallsViewController extends AbstractController {
 	}
 
 	@ErrorHandling
-	public void selectCall(final MouseEvent event) {
-		this.selection.set(Optional.ofNullable(this.table.getSelectionModel().getSelectedItem()));
+	public void selectCall(final MouseEvent event) throws Exception {
+		final int clicked = event.getClickCount();
+
+		if (clicked == 1) {
+			this.selection.set(Optional.ofNullable(this.table.getSelectionModel().getSelectedItem()));
+		} else if (clicked == 2) {
+			jumpToCalls(); 
+		}
+	}
+	
+	private void jumpToCalls() throws Exception {
+		if (this.selection.get().isPresent()) {
+			final AggregatedOperationCall call = this.selection.get().get();
+			MainController.instance().jumpToCalls(call);
+		}
 	}
 	
 	@ErrorHandling
 	public void useFilter() {
-		final Predicate<AggregatedOperationCall> predicate1 = (showAllButton.isSelected()) ? FilterUtility.alwaysTrue() : AggregatedOperationCall::isFailed;
+		final Predicate<AggregatedOperationCall> predicate1 = FilterUtility.useFilter(this.showAllButton, this.showJustSuccessful, this.showJustFailedButton, AggregatedOperationCall::isFailed);
 		final Predicate<AggregatedOperationCall> predicate2 = FilterUtility.useFilter(this.filterContainer, AggregatedOperationCall::getContainer);
 		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter(this.filterComponent, AggregatedOperationCall::getComponent);
 		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter(this.filterOperation, AggregatedOperationCall::getOperation);

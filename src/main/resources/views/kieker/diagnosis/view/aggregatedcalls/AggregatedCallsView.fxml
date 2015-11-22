@@ -21,6 +21,7 @@
 				</fx:define>
 		
 				<RadioButton text="%AggregatedCallsView.btnShowAll.text" fx:id="showAllButton" selected="true" toggleGroup="$togglegroup" onAction="#useFilter" />
+				<RadioButton text="%showJustSuccessful" fx:id="showJustSuccessful" toggleGroup="$togglegroup" onAction="#useFilter" />
 				<RadioButton text="%AggregatedCallsView.btnShowJustFailed.text" fx:id="showJustFailedButton" toggleGroup="$togglegroup" onAction="#useFilter" />
 			</HBox>
 			
@@ -30,6 +31,7 @@
 				<TextField promptText="%filterContainer" onAction="#useFilter" fx:id="filterContainer" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS"/>
 				<TextField promptText="%filterComponent" onAction="#useFilter" fx:id="filterComponent" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
 				<TextField promptText="%filterOperation" onAction="#useFilter" fx:id="filterOperation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterException" onAction="#useFilter" fx:id="filterException" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
 			</GridPane>
 		</VBox>
 	</TitledPane>

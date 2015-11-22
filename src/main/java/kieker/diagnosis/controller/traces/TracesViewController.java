@@ -61,6 +61,7 @@ public final class TracesViewController extends AbstractController {
 	@FXML private RadioButton showAllButton;
 	@FXML private RadioButton showJustFailedButton;
 	@FXML private RadioButton showJustFailureContainingButton;
+	@FXML private RadioButton showJustSuccessful;
 	
 	@FXML private TextField filterContainer;
 	@FXML private TextField filterComponent;
@@ -181,18 +182,17 @@ public final class TracesViewController extends AbstractController {
 	
 	@ErrorHandling
 	public void useFilter() {
-		final Predicate<OperationCall> predicate1 = (showJustFailedButton.isSelected()) ? OperationCall::isFailed : FilterUtility.alwaysTrue();
-		final Predicate<OperationCall> predicate2 = (showJustFailureContainingButton.isSelected()) ?  OperationCall::containsFailure : FilterUtility.alwaysTrue();
-		final Predicate<OperationCall> predicate3 = FilterUtility.useFilter(this.filterContainer, OperationCall::getContainer);
-		final Predicate<OperationCall> predicate4 = FilterUtility.useFilter(this.filterComponent, OperationCall::getComponent);
-		final Predicate<OperationCall> predicate5 = FilterUtility.useFilter(this.filterOperation, OperationCall::getOperation);
-		final Predicate<OperationCall> predicate6 = FilterUtility.useFilter(this.filterTraceID, (call -> Long.toString(call.getTraceID())));
-		final Predicate<OperationCall> predicate7 = FilterUtility.useFilter(this.filterLowerDate, OperationCall::getTimestamp, true); 
-		final Predicate<OperationCall> predicate8 = FilterUtility.useFilter(this.filterUpperDate, OperationCall::getTimestamp, false);
-		final Predicate<OperationCall> predicate9 = FilterUtility.useFilter(this.filterLowerTime, OperationCall::getTimestamp, true); 
-		final Predicate<OperationCall> predicate10 = FilterUtility.useFilter(this.filterUpperTime, OperationCall::getTimestamp, false);
+		final Predicate<OperationCall> predicate1 = FilterUtility.useFilter(this.showAllButton, this.showJustSuccessful, this.showJustFailedButton, this.showJustFailureContainingButton, OperationCall::isFailed, OperationCall::containsFailure);
+		final Predicate<OperationCall> predicate2 = FilterUtility.useFilter(this.filterContainer, OperationCall::getContainer);
+		final Predicate<OperationCall> predicate3 = FilterUtility.useFilter(this.filterComponent, OperationCall::getComponent);
+		final Predicate<OperationCall> predicate4 = FilterUtility.useFilter(this.filterOperation, OperationCall::getOperation);
+		final Predicate<OperationCall> predicate5 = FilterUtility.useFilter(this.filterTraceID, (call -> Long.toString(call.getTraceID())));
+		final Predicate<OperationCall> predicate6 = FilterUtility.useFilter(this.filterLowerDate, OperationCall::getTimestamp, true); 
+		final Predicate<OperationCall> predicate7 = FilterUtility.useFilter(this.filterUpperDate, OperationCall::getTimestamp, false);
+		final Predicate<OperationCall> predicate8 = FilterUtility.useFilter(this.filterLowerTime, OperationCall::getTimestamp, true); 
+		final Predicate<OperationCall> predicate9 = FilterUtility.useFilter(this.filterUpperTime, OperationCall::getTimestamp, false);
 		
-		predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5).and(predicate6).and(predicate7).and(predicate8).and(predicate9).and(predicate10);
+		predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5).and(predicate6).and(predicate7).and(predicate8).and(predicate9);
 		reloadTreetable();
 	}
 	

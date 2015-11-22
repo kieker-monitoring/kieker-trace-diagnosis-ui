@@ -35,10 +35,12 @@ import javafx.scene.input.MouseEvent;
 import jfxtras.scene.control.CalendarTimeTextField;
 import kieker.diagnosis.controller.AbstractController;
 import kieker.diagnosis.controller.MainController;
+import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.util.Context;
+import kieker.diagnosis.util.ContextKey;
 import kieker.diagnosis.util.ErrorHandling;
 import kieker.diagnosis.util.FilterUtility;
 import kieker.diagnosis.util.NameConverter;
@@ -56,11 +58,13 @@ public final class CallsViewController extends AbstractController {
 
 	@FXML private RadioButton showAllButton;
 	@FXML private RadioButton showJustFailedButton;
+	@FXML private RadioButton showJustSuccessful;
 
 	@FXML private TextField filterContainer;
 	@FXML private TextField filterComponent;
 	@FXML private TextField filterOperation;
 	@FXML private TextField filterTraceID;
+	@FXML private TextField filterException;
 	
 	@FXML private DatePicker filterLowerDate;
 	@FXML private CalendarTimeTextField filterLowerTime;
@@ -97,6 +101,26 @@ public final class CallsViewController extends AbstractController {
 		this.selection.addListener(e -> this.updateDetailPanel());
 
 		this.counter.textProperty().bind(Bindings.createStringBinding(() -> sortedData.size() + " " + this.resources.getString("CallsView.lbCounter.text"), sortedData));
+
+		final Object call = super.getContext().get(ContextKey.AGGREGATED_OPERATION_CALL);
+		if (call instanceof AggregatedOperationCall) {
+			jumpToCalls((AggregatedOperationCall) call);
+		}
+
+	}
+
+	private void jumpToCalls(final AggregatedOperationCall call) {
+		this.filterContainer.setText(call.getContainer());
+		this.filterComponent.setText(call.getComponent());
+		this.filterOperation.setText(call.getOperation());
+		
+		if (call.getFailedCause() != null) {
+			this.filterException.setText(call.getFailedCause());
+		} else {
+			this.showJustSuccessful.setSelected(true);
+		}
+
+		this.useFilter();
 	}
 
 	private void updateDetailPanel() {
@@ -142,8 +166,8 @@ public final class CallsViewController extends AbstractController {
 	}
 
 	@ErrorHandling
-	public void useFilter() {
-		final Predicate<OperationCall> predicate1 = (showAllButton.isSelected()) ? FilterUtility.alwaysTrue() : OperationCall::isFailed;
+	public void useFilter() { 
+		final Predicate<OperationCall> predicate1 = FilterUtility.useFilter(this.showAllButton, this.showJustSuccessful, this.showJustFailedButton, OperationCall::isFailed);
 		final Predicate<OperationCall> predicate2 = FilterUtility.useFilter(this.filterContainer, OperationCall::getContainer);
 		final Predicate<OperationCall> predicate3 = FilterUtility.useFilter(this.filterComponent, OperationCall::getComponent);
 		final Predicate<OperationCall> predicate4 = FilterUtility.useFilter(this.filterOperation, OperationCall::getOperation);
@@ -152,8 +176,9 @@ public final class CallsViewController extends AbstractController {
 		final Predicate<OperationCall> predicate7 = FilterUtility.useFilter(this.filterUpperDate, OperationCall::getTimestamp, false);
 		final Predicate<OperationCall> predicate8 = FilterUtility.useFilter(this.filterLowerTime, OperationCall::getTimestamp, true); 
 		final Predicate<OperationCall> predicate9 = FilterUtility.useFilter(this.filterUpperTime, OperationCall::getTimestamp, false);
-		 
-		final Predicate<OperationCall> predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5).and(predicate6).and(predicate7).and(predicate8).and(predicate9);
+		final Predicate<OperationCall> predicate10 = FilterUtility.useFilter(this.filterException, (call -> call.isFailed() ? call.getFailedCause() : ""));
+		
+		final Predicate<OperationCall> predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5).and(predicate6).and(predicate7).and(predicate8).and(predicate9).and(predicate10);
 		filteredData.setPredicate(predicate);
 	}
 

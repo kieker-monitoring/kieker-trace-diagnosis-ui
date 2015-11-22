@@ -23,6 +23,7 @@
 				</fx:define>
 			
 				<RadioButton text="%CallsView.btnShowAll.text" fx:id="showAllButton" selected="true" toggleGroup="$togglegroup" onAction="#useFilter" />
+				<RadioButton text="%showJustSuccessful" fx:id="showJustSuccessful" toggleGroup="$togglegroup" onAction="#useFilter" />
 				<RadioButton text="%CallsView.btnShowJustFailed.text" fx:id="showJustFailedButton" toggleGroup="$togglegroup" onAction="#useFilter" />
 			</HBox>
 		
@@ -33,7 +34,8 @@
 				<TextField promptText="%filterContainer" onAction="#useFilter" fx:id="filterContainer" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS"/>
 				<TextField promptText="%filterComponent" onAction="#useFilter" fx:id="filterComponent" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
 				<TextField promptText="%filterOperation" onAction="#useFilter" fx:id="filterOperation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
-				<TextField promptText="%filterTraceID" onAction="#useFilter" fx:id="filterTraceID" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterException" onAction="#useFilter" fx:id="filterException" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterTraceID" onAction="#useFilter" fx:id="filterTraceID" GridPane.columnIndex="4" GridPane.hgrow="ALWAYS"/>
 				
 				<DatePicker promptText="%filterLowerDate" onAction="#useFilter" fx:id="filterLowerDate" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
 				<CalendarTimeTextField promptText="%filterLowerTime" onKeyReleased="#useFilter" fx:id="filterLowerTime" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>

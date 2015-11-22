@@ -54,6 +54,7 @@ public final class AggregatedTracesViewController extends AbstractController {
 	@FXML private RadioButton showAllButton;
 	@FXML private RadioButton showJustFailedButton;
 	@FXML private RadioButton showJustFailureContainingButton;
+	@FXML private RadioButton showJustSuccessful;
 	
 	@FXML private TextField filterContainer;
 	@FXML private TextField filterComponent;
@@ -136,13 +137,12 @@ public final class AggregatedTracesViewController extends AbstractController {
 
 	@ErrorHandling
 	public void useFilter() {
-		final Predicate<AggregatedOperationCall> predicate1 = (showJustFailedButton.isSelected()) ? AggregatedOperationCall::isFailed : FilterUtility.alwaysTrue();
-		final Predicate<AggregatedOperationCall> predicate2 = (showJustFailureContainingButton.isSelected()) ?  AggregatedOperationCall::containsFailure : FilterUtility.alwaysTrue();
-		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter(this.filterContainer, AggregatedOperationCall::getContainer);
-		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter(this.filterComponent, AggregatedOperationCall::getComponent);
-		final Predicate<AggregatedOperationCall> predicate5 = FilterUtility.useFilter(this.filterOperation, AggregatedOperationCall::getOperation);
+		final Predicate<AggregatedOperationCall> predicate1 = FilterUtility.useFilter(this.showAllButton, this.showJustSuccessful, this.showJustFailedButton, this.showJustFailureContainingButton, AggregatedOperationCall::isFailed, AggregatedOperationCall::containsFailure);
+		final Predicate<AggregatedOperationCall> predicate2 = FilterUtility.useFilter(this.filterContainer, AggregatedOperationCall::getContainer);
+		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter(this.filterComponent, AggregatedOperationCall::getComponent);
+		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter(this.filterOperation, AggregatedOperationCall::getOperation);
 
-		predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5);
+		predicate = predicate1.and(predicate2).and(predicate3).and(predicate4);
 		reloadTreetable();
 	}
 

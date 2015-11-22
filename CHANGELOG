@@ -1,4 +1,12 @@
 1.1:
+	22 Nov 2015
+	Feature (Issue #28)
+	It is now possible to double click on an aggregated method call to jump directly to the corresponding actual calls.
+
+	22 Nov 2015
+	Feature (Issue #27)
+	Added filter and search possibilities for exceptions.
+	
 	21 Nov 2015
 	Bugfix (Issue #26)
 	Short components were not always correctly displayed in case of operation execution records.
@@ -25,7 +33,7 @@
 	
 	31 Oct 2015
 	Feature (Issue #18)
-	It is now possible to doubleclick on a method call to jump directly into the corresponding trace.
+	It is now possible to double click on a method call to jump directly into the corresponding trace.
 
 	31 Oct 2015
 	Feature (Issue #16)
