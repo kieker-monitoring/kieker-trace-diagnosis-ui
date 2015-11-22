@@ -1,5 +1,9 @@
 1.1:
 	22 Nov 2015
+	Feature (Issue #25)
+	Detailed the settings for operation and component appearances.
+
+	22 Nov 2015
 	Feature (Issue #28)
 	It is now possible to double click on an aggregated method call to jump directly to the corresponding actual calls.
 

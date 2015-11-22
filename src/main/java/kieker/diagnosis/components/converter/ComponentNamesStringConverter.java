@@ -28,8 +28,11 @@ public class ComponentNamesStringConverter extends AbstractStringConverter<Compo
 		
 	@Override
 	protected void fillMapper(final Mapper<ComponentNames, String> mapper, final ResourceBundle resourceBundle) {
-		mapper.map(ComponentNames.SHORT).to("Catalog");
-		mapper.map(ComponentNames.LONG).to("kieker.examples.bookstore.Catalog");
+		final String shortStr = resourceBundle.getString("short");
+		final String longStr = resourceBundle.getString("long");
+		
+		mapper.map(ComponentNames.SHORT).to(shortStr + " (Catalog)");
+		mapper.map(ComponentNames.LONG).to(longStr + " (kieker.examples.bookstore.Catalog)");
 	}
 	
 }

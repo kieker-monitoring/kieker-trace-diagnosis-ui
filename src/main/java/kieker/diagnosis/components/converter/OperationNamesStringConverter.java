@@ -28,8 +28,11 @@ public class OperationNamesStringConverter extends AbstractStringConverter<Opera
 
 	@Override
 	protected void fillMapper(final Mapper<OperationNames, String> mapper, final ResourceBundle resourceBundle) {
-		mapper.map(OperationNames.SHORT).to("getBook(...)");
-		mapper.map(OperationNames.LONG).to("public void kieker.examples.bookstore.Catalog.getBook(boolean)");
+		final String shortStr = resourceBundle.getString("short");
+		final String longStr = resourceBundle.getString("long");
+		
+		mapper.map(OperationNames.SHORT).to(shortStr + " (getBook(...))");
+		mapper.map(OperationNames.LONG).to(longStr + " (public void kieker.examples.bookstore.Catalog.getBook(boolean))");
 	}
 
 }
