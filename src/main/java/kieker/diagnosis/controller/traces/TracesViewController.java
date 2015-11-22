@@ -67,6 +67,7 @@ public final class TracesViewController extends AbstractController {
 	@FXML private TextField filterComponent;
 	@FXML private TextField filterOperation;
 	@FXML private TextField filterTraceID;
+	@FXML private TextField filterException;
 	
 	@FXML private DatePicker filterLowerDate;
 	@FXML private CalendarTimeTextField filterLowerTime;
@@ -191,8 +192,9 @@ public final class TracesViewController extends AbstractController {
 		final Predicate<OperationCall> predicate7 = FilterUtility.useFilter(this.filterUpperDate, OperationCall::getTimestamp, false);
 		final Predicate<OperationCall> predicate8 = FilterUtility.useFilter(this.filterLowerTime, OperationCall::getTimestamp, true); 
 		final Predicate<OperationCall> predicate9 = FilterUtility.useFilter(this.filterUpperTime, OperationCall::getTimestamp, false);
+		final Predicate<OperationCall> predicate10 = FilterUtility.useFilter(this.filterException, (call -> call.isFailed() ? call.getFailedCause() : ""));
 		
-		predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5).and(predicate6).and(predicate7).and(predicate8).and(predicate9);
+		predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5).and(predicate6).and(predicate7).and(predicate8).and(predicate9).and(predicate10);
 		reloadTreetable();
 	}
 	

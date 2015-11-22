@@ -59,6 +59,7 @@ public final class AggregatedTracesViewController extends AbstractController {
 	@FXML private TextField filterContainer;
 	@FXML private TextField filterComponent;
 	@FXML private TextField filterOperation;
+	@FXML private TextField filterException;
 
 	@FXML private TextField medianDuration;
 	@FXML private TextField totalDuration;
@@ -141,8 +142,9 @@ public final class AggregatedTracesViewController extends AbstractController {
 		final Predicate<AggregatedOperationCall> predicate2 = FilterUtility.useFilter(this.filterContainer, AggregatedOperationCall::getContainer);
 		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter(this.filterComponent, AggregatedOperationCall::getComponent);
 		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter(this.filterOperation, AggregatedOperationCall::getOperation);
-
-		predicate = predicate1.and(predicate2).and(predicate3).and(predicate4);
+		final Predicate<AggregatedOperationCall> predicate5 = FilterUtility.useFilter(this.filterException, (call -> call.isFailed() ? call.getFailedCause() : ""));
+		
+		predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5);
 		reloadTreetable();
 	}
 
