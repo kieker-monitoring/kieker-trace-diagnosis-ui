@@ -73,6 +73,22 @@ task testGUI(type: Test) {
 	reports.html.destination = file("$buildDir/reports/testsGUI")
 	jvmArgs = ['-Dglass.platform=Monocle', '-Dmonocle.platform=Headless', '-Dprism.order=sw', '-Dprism.text=t2k', '-Dtestfx.robot=glass'] 
 }
+
+apply plugin: 'pmd'
+pmd { 
+	ignoreFailures = true
+
+	ruleSets = []
+	ruleSetFiles = files('config/pmd/ruleset.xml')
+	
+	toolVersion = '5.3.3'
+}
+
+apply plugin: 'checkstyle'
+checkstyle {
+	ignoreFailures = true
+	showViolations = false
+}
 	
 apply plugin: 'findbugs'
 findbugs { 
