@@ -31,14 +31,15 @@ public final class LazyAggregatedOperationCallTreeItem extends AbstractLazyOpera
 		super(value);
 	}
 
+	@Override
 	protected void initializeChildren() {
 		final List<TreeItem<AggregatedOperationCall>> result = new ArrayList<>();
 
 		for (final AggregatedOperationCall child : super.getValue().getChildren()) {
-			result.add(new LazyAggregatedOperationCallTreeItem(child)); 
+			result.add(new LazyAggregatedOperationCallTreeItem(child));
 		}
 
 		super.getChildren().setAll(result);
 	}
-	
+
 }

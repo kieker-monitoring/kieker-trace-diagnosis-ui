@@ -61,7 +61,7 @@ public final class SettingsDialogViewController extends AbstractDialogController
 		this.timestamps.setItems(FXCollections.observableArrayList(TimestampTypes.values()));
 		this.thresholds.setItems(FXCollections.observableArrayList(Threshold.values()));
 
-		this.thresholds.disableProperty().bind(aggregateMethodCalls.selectedProperty().not());
+		this.thresholds.disableProperty().bind(this.aggregateMethodCalls.selectedProperty().not());
 
 		this.loadSettings();
 	}

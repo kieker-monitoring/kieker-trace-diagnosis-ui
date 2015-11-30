@@ -117,14 +117,14 @@ public final class MainController {
 	public void showCalls() throws Exception {
 		this.showCalls(new ContextEntry[0]);
 	}
-	
+
 	@ErrorHandling
 	public void showCalls(final ContextEntry... contextEntries) throws Exception {
 		this.toggleDisabledButton(this.calls);
 		this.activeController = Optional.of(CallsViewController.class);
 		this.loadPane(CallsViewController.class, contextEntries);
 	}
-	
+
 	@ErrorHandling
 	public void showAggregatedCalls() throws Exception {
 		this.toggleDisabledButton(this.aggregatedcalls);
@@ -229,12 +229,12 @@ public final class MainController {
 
 	public static void loadMainPane(final Stage stage) throws Exception {
 		try {
-			INSTANCE = new MainController();
+			MainController.INSTANCE = new MainController();
 			final URL resource = MainController.class.getClassLoader().getResource("views/kieker/diagnosis/view/View.fxml");
 			final FXMLLoader fxmlLoader = new FXMLLoader();
 			fxmlLoader.setResources(ResourceBundle.getBundle("locale.kieker.diagnosis.view.view", Locale.getDefault()));
 			fxmlLoader.setLocation(resource);
-			fxmlLoader.setController(INSTANCE);
+			fxmlLoader.setController(MainController.INSTANCE);
 			final Pane pane = (Pane) fxmlLoader.load();
 
 			final Scene root = new Scene(pane);
@@ -277,7 +277,7 @@ public final class MainController {
 
 	private static PaneData loadPaneData(final Class<?> controllerClass, final ContextEntry... arguments) throws Exception {
 		final long tin = System.currentTimeMillis();
-		
+
 		final String baseName = controllerClass.getCanonicalName().replace("Controller", "").replace(".controller.", ".view.");
 		final String viewFXMLName = "views/" + baseName.replace(".", "/") + ".fxml";
 		final String cssName = "views/" + baseName.replace(".", "/") + ".css";
@@ -298,10 +298,10 @@ public final class MainController {
 		final String title = (resourceBundle.containsKey("title") ? resourceBundle.getString("title") : "");
 
 		final PaneData paneData = new PaneData(node, title, cssResource.toExternalForm());
-		
+
 		final long tout = System.currentTimeMillis();
-		LOGGER.info("View for '" + controllerClass.getCanonicalName() + "' loaded in " + (tout - tin) + "ms");
-		
+		MainController.LOGGER.info("View for '" + controllerClass.getCanonicalName() + "' loaded in " + (tout - tin) + "ms");
+
 		return paneData;
 	}
 
@@ -310,13 +310,13 @@ public final class MainController {
 	}
 
 	public void jumpToTrace(final OperationCall call) throws Exception {
-		showTraces(new ContextEntry(ContextKey.OPERATION_CALL, call));
+		this.showTraces(new ContextEntry(ContextKey.OPERATION_CALL, call));
 	}
 
 	public void jumpToCalls(final AggregatedOperationCall call) throws Exception {
-		showCalls(new ContextEntry(ContextKey.AGGREGATED_OPERATION_CALL, call));
+		this.showCalls(new ContextEntry(ContextKey.AGGREGATED_OPERATION_CALL, call));
 	}
-	
+
 	private static class PaneData {
 
 		private final Node node;
@@ -342,6 +342,5 @@ public final class MainController {
 		}
 
 	}
-
 
 }

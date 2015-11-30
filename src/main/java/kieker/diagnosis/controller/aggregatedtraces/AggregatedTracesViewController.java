@@ -50,12 +50,12 @@ public final class AggregatedTracesViewController extends AbstractController {
 	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
 
 	@FXML private TreeTableView<AggregatedOperationCall> treetable;
-	
+
 	@FXML private RadioButton showAllButton;
 	@FXML private RadioButton showJustFailedButton;
 	@FXML private RadioButton showJustFailureContainingButton;
 	@FXML private RadioButton showJustSuccessful;
-	
+
 	@FXML private TextField filterContainer;
 	@FXML private TextField filterComponent;
 	@FXML private TextField filterOperation;
@@ -79,11 +79,11 @@ public final class AggregatedTracesViewController extends AbstractController {
 	@FXML private ResourceBundle resources;
 
 	private Predicate<AggregatedOperationCall> predicate = FilterUtility.alwaysTrue();
-	
+
 	public AggregatedTracesViewController(final Context context) {
 		super(context);
 	}
-	
+
 	@ErrorHandling
 	public void initialize() {
 		this.reloadTreetable();
@@ -138,14 +138,15 @@ public final class AggregatedTracesViewController extends AbstractController {
 
 	@ErrorHandling
 	public void useFilter() {
-		final Predicate<AggregatedOperationCall> predicate1 = FilterUtility.useFilter(this.showAllButton, this.showJustSuccessful, this.showJustFailedButton, this.showJustFailureContainingButton, AggregatedOperationCall::isFailed, AggregatedOperationCall::containsFailure);
+		final Predicate<AggregatedOperationCall> predicate1 = FilterUtility.useFilter(this.showAllButton, this.showJustSuccessful, this.showJustFailedButton,
+				this.showJustFailureContainingButton, AggregatedOperationCall::isFailed, AggregatedOperationCall::containsFailure);
 		final Predicate<AggregatedOperationCall> predicate2 = FilterUtility.useFilter(this.filterContainer, AggregatedOperationCall::getContainer);
 		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter(this.filterComponent, AggregatedOperationCall::getComponent);
 		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter(this.filterOperation, AggregatedOperationCall::getOperation);
 		final Predicate<AggregatedOperationCall> predicate5 = FilterUtility.useFilter(this.filterException, (call -> call.isFailed() ? call.getFailedCause() : ""));
-		
-		predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5);
-		reloadTreetable();
+
+		this.predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5);
+		this.reloadTreetable();
 	}
 
 	private void reloadTreetable() {
@@ -158,8 +159,8 @@ public final class AggregatedTracesViewController extends AbstractController {
 		this.treetable.setRoot(root);
 		this.treetable.setShowRoot(false);
 
-		traces.stream().map(trace -> trace.getRootOperationCall()).filter(predicate).forEach(call -> rootChildren.add(new LazyAggregatedOperationCallTreeItem(call)));
-		
+		traces.stream().map(trace -> trace.getRootOperationCall()).filter(this.predicate).forEach(call -> rootChildren.add(new LazyAggregatedOperationCallTreeItem(call)));
+
 		this.counter.textProperty().set(rootChildren.size() + " " + this.resources.getString("AggregatedTracesView.lblCounter.text"));
 	}
 }

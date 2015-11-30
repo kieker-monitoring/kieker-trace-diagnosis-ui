@@ -27,7 +27,7 @@ public abstract class AbstractController {
 	}
 
 	protected Context getContext() {
-		return context;
+		return this.context;
 	}
 
 }

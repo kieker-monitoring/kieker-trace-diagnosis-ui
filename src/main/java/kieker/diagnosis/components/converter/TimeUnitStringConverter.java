@@ -24,10 +24,10 @@ import kieker.diagnosis.util.Mapper;
 /**
  * @author Nils Christian Ehmke
  */
-public class TimeUnitStringConverter extends AbstractStringConverter<TimeUnit> {
+public final class TimeUnitStringConverter extends AbstractStringConverter<TimeUnit> {
 
 	@Override
-	protected void fillMapper(Mapper<TimeUnit, String> mapper, final ResourceBundle resourceBundle) {
+	protected void fillMapper(final Mapper<TimeUnit, String> mapper, final ResourceBundle resourceBundle) {
 		final String nanoseconds = resourceBundle.getString("nanoseconds");
 		final String microseconds = resourceBundle.getString("microseconds");
 		final String milliseconds = resourceBundle.getString("milliseconds");

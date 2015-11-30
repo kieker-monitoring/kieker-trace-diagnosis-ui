@@ -21,10 +21,10 @@ import java.util.ResourceBundle;
 import kieker.diagnosis.model.PropertiesModel.TimestampTypes;
 import kieker.diagnosis.util.Mapper;
 
-public class TimestampTypesStringConverter extends AbstractStringConverter<TimestampTypes> {
+public final class TimestampTypesStringConverter extends AbstractStringConverter<TimestampTypes> {
 
 	@Override
-	protected void fillMapper(Mapper<TimestampTypes, String> mapper, final ResourceBundle resourceBundle) {
+	protected void fillMapper(final Mapper<TimestampTypes, String> mapper, final ResourceBundle resourceBundle) {
 		mapper.map(TimestampTypes.TIMESTAMP).to("1418993603113900610");
 		mapper.map(TimestampTypes.DATE).to("19.12.14");
 		mapper.map(TimestampTypes.SHORT_TIME).to("13:53");

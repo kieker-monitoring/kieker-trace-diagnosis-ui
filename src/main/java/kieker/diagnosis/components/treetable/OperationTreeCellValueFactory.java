@@ -33,10 +33,10 @@ import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.model.PropertiesModel.OperationNames;
 import kieker.diagnosis.util.NameConverter;
 
-public class OperationTreeCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<String>> {
+public final class OperationTreeCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<String>> {
 
 	private static final Logger LOGGER = LogManager.getLogger(DurationTreeCellValueFactory.class);
-	
+
 	private final String property;
 
 	public OperationTreeCellValueFactory(@NamedArg(value = "property") final String property) {
@@ -56,7 +56,7 @@ public class OperationTreeCellValueFactory implements Callback<CellDataFeatures<
 
 			return new ReadOnlyObjectWrapper<String>(operationName);
 		} catch (final NullPointerException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-			LOGGER.warn(ex);
+			OperationTreeCellValueFactory.LOGGER.warn(ex);
 			return null;
 		}
 	}

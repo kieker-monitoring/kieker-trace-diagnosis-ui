@@ -63,11 +63,11 @@ public final class MonitoringStatisticsViewController extends AbstractController
 	@FXML private TextField incompletetraces;
 	@FXML private TextField danglingrecords;
 	@FXML private TextField ignoredRecords;
-	
+
 	public MonitoringStatisticsViewController(final Context context) {
 		super(context);
 	}
-	
+
 	@ErrorHandling
 	public void initialize() {
 		final ObjectProperty<File> importDirectory = this.dataModel.getImportDirectory();

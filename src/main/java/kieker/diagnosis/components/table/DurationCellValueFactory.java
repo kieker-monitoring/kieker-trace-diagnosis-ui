@@ -35,10 +35,10 @@ import kieker.diagnosis.model.PropertiesModel;
 /**
  * @author Nils Christian Ehmke
  */
-public class DurationCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<Long>> {
+public final class DurationCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<Long>> {
 
 	private static final Logger LOGGER = LogManager.getLogger(DurationCellValueFactory.class);
-	
+
 	private final DataModel dataModel = DataModel.getInstance();
 	private final PropertiesModel propertiesModel = PropertiesModel.getInstance();
 
@@ -60,7 +60,7 @@ public class DurationCellValueFactory implements Callback<CellDataFeatures<?, St
 			final long newDuration = dstTimeUnit.convert(duration, srcTimeUnit);
 			return new ReadOnlyObjectWrapper<Long>(newDuration);
 		} catch (final NullPointerException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-			LOGGER.warn(ex);
+			DurationCellValueFactory.LOGGER.warn(ex);
 			return null;
 		}
 	}

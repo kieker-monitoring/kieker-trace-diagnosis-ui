@@ -57,23 +57,23 @@ public final class TracesViewController extends AbstractController {
 	private final SimpleObjectProperty<Optional<OperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
 
 	@FXML private TreeTableView<OperationCall> treetable;
-	
+
 	@FXML private RadioButton showAllButton;
 	@FXML private RadioButton showJustFailedButton;
 	@FXML private RadioButton showJustFailureContainingButton;
 	@FXML private RadioButton showJustSuccessful;
-	
+
 	@FXML private TextField filterContainer;
 	@FXML private TextField filterComponent;
 	@FXML private TextField filterOperation;
 	@FXML private TextField filterTraceID;
 	@FXML private TextField filterException;
-	
+
 	@FXML private DatePicker filterLowerDate;
 	@FXML private CalendarTimeTextField filterLowerTime;
 	@FXML private DatePicker filterUpperDate;
 	@FXML private CalendarTimeTextField filterUpperTime;
-	
+
 	@FXML private TextField traceDepth;
 	@FXML private TextField traceSize;
 	@FXML private TextField timestamp;
@@ -106,7 +106,7 @@ public final class TracesViewController extends AbstractController {
 
 		final Object call = super.getContext().get(ContextKey.OPERATION_CALL);
 		if (call instanceof OperationCall) {
-			jumpToCall((OperationCall) call);
+			this.jumpToCall((OperationCall) call);
 		}
 
 	}
@@ -114,9 +114,9 @@ public final class TracesViewController extends AbstractController {
 	private void jumpToCall(final OperationCall call) {
 		final TreeItem<OperationCall> root = this.treetable.getRoot();
 
-		final Optional<TreeItem<OperationCall>> traceRoot = findTraceRoot(root, call);
+		final Optional<TreeItem<OperationCall>> traceRoot = this.findTraceRoot(root, call);
 		if (traceRoot.isPresent()) {
-			final TreeItem<OperationCall> treeItem = findCall(traceRoot.get(), call);
+			final TreeItem<OperationCall> treeItem = this.findCall(traceRoot.get(), call);
 			if (treeItem != null) {
 				this.treetable.getSelectionModel().select(treeItem);
 				this.selection.set(Optional.ofNullable(treeItem.getValue()));
@@ -129,20 +129,20 @@ public final class TracesViewController extends AbstractController {
 	}
 
 	private TreeItem<OperationCall> findCall(final TreeItem<OperationCall> root, final OperationCall call) {
-		 if (root.getValue() == call) {
-			 root.setExpanded(true);
-			 return root;
-		 }
-		 
-		 for (final TreeItem<OperationCall> child : root.getChildren()) {
-			final TreeItem<OperationCall> item = findCall(child, call);
+		if (root.getValue() == call) {
+			root.setExpanded(true);
+			return root;
+		}
+
+		for (final TreeItem<OperationCall> child : root.getChildren()) {
+			final TreeItem<OperationCall> item = this.findCall(child, call);
 			if (item != null) {
 				root.setExpanded(true);
 				return item;
 			}
 		}
-		 
-		 return null;
+
+		return null;
 	}
 
 	private void updateDetailPanel() {
@@ -180,24 +180,25 @@ public final class TracesViewController extends AbstractController {
 			this.selection.set(Optional.ofNullable(selectedItem.getValue()));
 		}
 	}
-	
+
 	@ErrorHandling
 	public void useFilter() {
-		final Predicate<OperationCall> predicate1 = FilterUtility.useFilter(this.showAllButton, this.showJustSuccessful, this.showJustFailedButton, this.showJustFailureContainingButton, OperationCall::isFailed, OperationCall::containsFailure);
+		final Predicate<OperationCall> predicate1 = FilterUtility.useFilter(this.showAllButton, this.showJustSuccessful, this.showJustFailedButton, this.showJustFailureContainingButton,
+				OperationCall::isFailed, OperationCall::containsFailure);
 		final Predicate<OperationCall> predicate2 = FilterUtility.useFilter(this.filterContainer, OperationCall::getContainer);
 		final Predicate<OperationCall> predicate3 = FilterUtility.useFilter(this.filterComponent, OperationCall::getComponent);
 		final Predicate<OperationCall> predicate4 = FilterUtility.useFilter(this.filterOperation, OperationCall::getOperation);
 		final Predicate<OperationCall> predicate5 = FilterUtility.useFilter(this.filterTraceID, (call -> Long.toString(call.getTraceID())));
-		final Predicate<OperationCall> predicate6 = FilterUtility.useFilter(this.filterLowerDate, OperationCall::getTimestamp, true); 
+		final Predicate<OperationCall> predicate6 = FilterUtility.useFilter(this.filterLowerDate, OperationCall::getTimestamp, true);
 		final Predicate<OperationCall> predicate7 = FilterUtility.useFilter(this.filterUpperDate, OperationCall::getTimestamp, false);
-		final Predicate<OperationCall> predicate8 = FilterUtility.useFilter(this.filterLowerTime, OperationCall::getTimestamp, true); 
+		final Predicate<OperationCall> predicate8 = FilterUtility.useFilter(this.filterLowerTime, OperationCall::getTimestamp, true);
 		final Predicate<OperationCall> predicate9 = FilterUtility.useFilter(this.filterUpperTime, OperationCall::getTimestamp, false);
 		final Predicate<OperationCall> predicate10 = FilterUtility.useFilter(this.filterException, (call -> call.isFailed() ? call.getFailedCause() : ""));
-		
-		predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5).and(predicate6).and(predicate7).and(predicate8).and(predicate9).and(predicate10);
-		reloadTreetable();
+
+		this.predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5).and(predicate6).and(predicate7).and(predicate8).and(predicate9).and(predicate10);
+		this.reloadTreetable();
 	}
-	
+
 	private void reloadTreetable() {
 		this.selection.set(Optional.empty());
 
@@ -207,7 +208,7 @@ public final class TracesViewController extends AbstractController {
 		this.treetable.setRoot(root);
 		this.treetable.setShowRoot(false);
 
-		traces.stream().map(trace -> trace.getRootOperationCall()).filter(predicate).forEach(call -> rootChildren.add(new LazyOperationCallTreeItem(call)));
+		traces.stream().map(trace -> trace.getRootOperationCall()).filter(this.predicate).forEach(call -> rootChildren.add(new LazyOperationCallTreeItem(call)));
 
 		this.counter.textProperty().set(rootChildren.size() + " " + this.resources.getString("TracesView.lblCounter.text"));
 	}

@@ -27,5 +27,5 @@ public final class AboutDialogViewController extends AbstractDialogController {
 	public AboutDialogViewController(final Context context) {
 		super(context);
 	}
-	
+
 }

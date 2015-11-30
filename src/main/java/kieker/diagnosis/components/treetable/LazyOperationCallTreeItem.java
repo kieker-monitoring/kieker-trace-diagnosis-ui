@@ -31,24 +31,24 @@ import kieker.diagnosis.model.PropertiesModel;
  * @author Nils Christian Ehmke
  */
 public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTreeItem<OperationCall> {
-	
+
 	private static final String methodCallsAggregated;
-	
+
 	static {
 		final String bundleBaseName = "locale.kieker.diagnosis.components.components";
 		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
 
 		methodCallsAggregated = resourceBundle.getString("methodCallsAggregated");
 	}
-	
+
 	public LazyOperationCallTreeItem(final OperationCall value) {
 		super(value);
 	}
 
+	@Override
 	protected void initializeChildren() {
 		final List<TreeItem<OperationCall>> result = new ArrayList<>();
 
-		
 		if (PropertiesModel.getInstance().isMethodCallAggregationActive()) {
 			final float threshold = PropertiesModel.getInstance().getThreshold().percent;
 			final List<OperationCall> underThreshold = new ArrayList<>();
@@ -64,20 +64,20 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 				final long duration = underThreshold.stream().map(OperationCall::getDuration).collect(Collectors.summingLong(Long::longValue));
 				final int traceDepth = underThreshold.stream().map(OperationCall::getStackDepth).max(Comparator.naturalOrder()).get();
 				final int traceSize = underThreshold.stream().map(OperationCall::getStackSize).collect(Collectors.summingInt(Integer::intValue));
-				final OperationCall call = new OperationCall("-", "-", underThreshold.size() + " " + methodCallsAggregated, super.getValue().getTraceID(), -1);
+				final OperationCall call = new OperationCall("-", "-", underThreshold.size() + " " + LazyOperationCallTreeItem.methodCallsAggregated, super.getValue().getTraceID(), -1);
 				call.setPercent((float) percent);
-				call.setDuration(duration); 
+				call.setDuration(duration);
 				call.setStackDepth(traceDepth);
 				call.setStackSize(traceSize);
 				result.add(new LazyOperationCallTreeItem(call));
 			}
-			
+
 		} else {
 			for (final OperationCall child : super.getValue().getChildren()) {
 				result.add(new LazyOperationCallTreeItem(child));
 			}
 		}
-		
+
 		super.getChildren().setAll(result);
 	}
 }

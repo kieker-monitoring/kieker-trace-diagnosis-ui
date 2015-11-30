@@ -65,7 +65,7 @@ public final class CallsViewController extends AbstractController {
 	@FXML private TextField filterOperation;
 	@FXML private TextField filterTraceID;
 	@FXML private TextField filterException;
-	
+
 	@FXML private DatePicker filterLowerDate;
 	@FXML private CalendarTimeTextField filterLowerTime;
 	@FXML private DatePicker filterUpperDate;
@@ -104,7 +104,7 @@ public final class CallsViewController extends AbstractController {
 
 		final Object call = super.getContext().get(ContextKey.AGGREGATED_OPERATION_CALL);
 		if (call instanceof AggregatedOperationCall) {
-			jumpToCalls((AggregatedOperationCall) call);
+			this.jumpToCalls((AggregatedOperationCall) call);
 		}
 
 	}
@@ -113,7 +113,7 @@ public final class CallsViewController extends AbstractController {
 		this.filterContainer.setText(call.getContainer());
 		this.filterComponent.setText(call.getComponent());
 		this.filterOperation.setText(call.getOperation());
-		
+
 		if (call.getFailedCause() != null) {
 			this.filterException.setText(call.getFailedCause());
 		} else {
@@ -154,7 +154,7 @@ public final class CallsViewController extends AbstractController {
 		if (clicked == 1) {
 			this.selection.set(Optional.ofNullable(this.table.getSelectionModel().getSelectedItem()));
 		} else if (clicked == 2) {
-			jumpToTrace();
+			this.jumpToTrace();
 		}
 	}
 
@@ -166,20 +166,21 @@ public final class CallsViewController extends AbstractController {
 	}
 
 	@ErrorHandling
-	public void useFilter() { 
+	public void useFilter() {
 		final Predicate<OperationCall> predicate1 = FilterUtility.useFilter(this.showAllButton, this.showJustSuccessful, this.showJustFailedButton, OperationCall::isFailed);
 		final Predicate<OperationCall> predicate2 = FilterUtility.useFilter(this.filterContainer, OperationCall::getContainer);
 		final Predicate<OperationCall> predicate3 = FilterUtility.useFilter(this.filterComponent, OperationCall::getComponent);
 		final Predicate<OperationCall> predicate4 = FilterUtility.useFilter(this.filterOperation, OperationCall::getOperation);
 		final Predicate<OperationCall> predicate5 = FilterUtility.useFilter(this.filterTraceID, (call -> Long.toString(call.getTraceID())));
-		final Predicate<OperationCall> predicate6 = FilterUtility.useFilter(this.filterLowerDate, OperationCall::getTimestamp, true); 
+		final Predicate<OperationCall> predicate6 = FilterUtility.useFilter(this.filterLowerDate, OperationCall::getTimestamp, true);
 		final Predicate<OperationCall> predicate7 = FilterUtility.useFilter(this.filterUpperDate, OperationCall::getTimestamp, false);
-		final Predicate<OperationCall> predicate8 = FilterUtility.useFilter(this.filterLowerTime, OperationCall::getTimestamp, true); 
+		final Predicate<OperationCall> predicate8 = FilterUtility.useFilter(this.filterLowerTime, OperationCall::getTimestamp, true);
 		final Predicate<OperationCall> predicate9 = FilterUtility.useFilter(this.filterUpperTime, OperationCall::getTimestamp, false);
 		final Predicate<OperationCall> predicate10 = FilterUtility.useFilter(this.filterException, (call -> call.isFailed() ? call.getFailedCause() : ""));
-		
-		final Predicate<OperationCall> predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5).and(predicate6).and(predicate7).and(predicate8).and(predicate9).and(predicate10);
-		filteredData.setPredicate(predicate);
+
+		final Predicate<OperationCall> predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5).and(predicate6).and(predicate7).and(predicate8)
+				.and(predicate9).and(predicate10);
+		this.filteredData.setPredicate(predicate);
 	}
 
 }

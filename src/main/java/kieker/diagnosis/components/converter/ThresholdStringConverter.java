@@ -21,10 +21,10 @@ import java.util.ResourceBundle;
 import kieker.diagnosis.model.PropertiesModel.Threshold;
 import kieker.diagnosis.util.Mapper;
 
-public class ThresholdStringConverter extends AbstractStringConverter<Threshold> {
+public final class ThresholdStringConverter extends AbstractStringConverter<Threshold> {
 
 	@Override
-	protected void fillMapper(Mapper<Threshold, String> mapper, final ResourceBundle resourceBundle) {
+	protected void fillMapper(final Mapper<Threshold, String> mapper, final ResourceBundle resourceBundle) {
 		final String threshold = resourceBundle.getString("threshold");
 
 		mapper.map(Threshold.THRESHOLD_0_5).to(threshold + " < 0.5 %");

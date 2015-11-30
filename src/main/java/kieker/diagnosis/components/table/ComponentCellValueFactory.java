@@ -31,11 +31,11 @@ import javafx.util.Callback;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.model.PropertiesModel.ComponentNames;
 import kieker.diagnosis.util.NameConverter;
- 
-public class ComponentCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<String>> {
-	
+
+public final class ComponentCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<String>> {
+
 	private static final Logger LOGGER = LogManager.getLogger(ComponentCellValueFactory.class);
-	
+
 	private final String property;
 
 	public ComponentCellValueFactory(@NamedArg(value = "property") final String property) {
@@ -54,7 +54,7 @@ public class ComponentCellValueFactory implements Callback<CellDataFeatures<?, S
 
 			return new ReadOnlyObjectWrapper<String>(componentName);
 		} catch (final NullPointerException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-			LOGGER.warn(ex);
+			ComponentCellValueFactory.LOGGER.warn(ex);
 			return null;
 		}
 	}

@@ -51,11 +51,11 @@ public final class AggregatedCallsViewController extends AbstractController {
 	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
 
 	@FXML private TableView<AggregatedOperationCall> table;
-	
+
 	@FXML private RadioButton showAllButton;
 	@FXML private RadioButton showJustFailedButton;
 	@FXML private RadioButton showJustSuccessful;
-	
+
 	@FXML private TextField filterContainer;
 	@FXML private TextField filterComponent;
 	@FXML private TextField filterOperation;
@@ -75,11 +75,11 @@ public final class AggregatedCallsViewController extends AbstractController {
 	@FXML private TextField counter;
 
 	@FXML private ResourceBundle resources;
-	
+
 	public AggregatedCallsViewController(final Context context) {
 		super(context);
 	}
-	
+
 	@ErrorHandling
 	public void initialize() {
 		final DataModel dataModel = DataModel.getInstance();
@@ -133,27 +133,28 @@ public final class AggregatedCallsViewController extends AbstractController {
 		if (clicked == 1) {
 			this.selection.set(Optional.ofNullable(this.table.getSelectionModel().getSelectedItem()));
 		} else if (clicked == 2) {
-			jumpToCalls(); 
+			this.jumpToCalls();
 		}
 	}
-	
+
 	private void jumpToCalls() throws Exception {
 		if (this.selection.get().isPresent()) {
 			final AggregatedOperationCall call = this.selection.get().get();
 			MainController.instance().jumpToCalls(call);
 		}
 	}
-	
+
 	@ErrorHandling
 	public void useFilter() {
-		final Predicate<AggregatedOperationCall> predicate1 = FilterUtility.useFilter(this.showAllButton, this.showJustSuccessful, this.showJustFailedButton, AggregatedOperationCall::isFailed);
+		final Predicate<AggregatedOperationCall> predicate1 = FilterUtility.useFilter(this.showAllButton, this.showJustSuccessful, this.showJustFailedButton,
+				AggregatedOperationCall::isFailed);
 		final Predicate<AggregatedOperationCall> predicate2 = FilterUtility.useFilter(this.filterContainer, AggregatedOperationCall::getContainer);
 		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter(this.filterComponent, AggregatedOperationCall::getComponent);
 		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter(this.filterOperation, AggregatedOperationCall::getOperation);
 		final Predicate<AggregatedOperationCall> predicate5 = FilterUtility.useFilter(this.filterException, (call -> call.isFailed() ? call.getFailedCause() : ""));
-		
+
 		final Predicate<AggregatedOperationCall> predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5);
-		filteredData.setPredicate(predicate);
+		this.filteredData.setPredicate(predicate);
 	}
-	
+
 }

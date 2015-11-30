@@ -19,10 +19,10 @@ package kieker.diagnosis.components.table;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.util.NameConverter;
 
-public class TimestampTableCellFactory<S, T> extends AbstractTableCellFactory<S, T> {
+public final class TimestampTableCellFactory<S, T> extends AbstractTableCellFactory<S, T> {
 
 	@Override
-	protected String getItemLabel(T item) {
+	protected String getItemLabel(final T item) {
 		return (NameConverter.toTimestampString((Long) item, DataModel.getInstance().getTimeUnit()));
 	}
 

@@ -22,7 +22,7 @@ import kieker.diagnosis.util.NameConverter;
 public final class TimestampTreeTableCellFactory<S, T> extends AbstractTreeTableCellFactory<S, T> {
 
 	@Override
-	protected String getItemLabel(T item) {
+	protected String getItemLabel(final T item) {
 		return NameConverter.toTimestampString((Long) item, DataModel.getInstance().getTimeUnit());
 	}
 

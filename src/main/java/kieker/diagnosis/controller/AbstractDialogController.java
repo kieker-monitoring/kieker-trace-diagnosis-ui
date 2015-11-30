@@ -24,7 +24,7 @@ import javafx.stage.Window;
 import kieker.diagnosis.util.Context;
 
 public abstract class AbstractDialogController extends AbstractController {
-	
+
 	@FXML private Node view;
 
 	public AbstractDialogController(final Context context) {

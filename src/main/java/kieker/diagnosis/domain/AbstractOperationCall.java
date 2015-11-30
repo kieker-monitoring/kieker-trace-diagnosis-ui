@@ -30,7 +30,7 @@ import java.util.List;
  *            The precise type of the children. This should usually be the implementing class itself.
  */
 public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> {
-
+ 
 	private final List<T> children = new ArrayList<>();
 
 	private final String container;
