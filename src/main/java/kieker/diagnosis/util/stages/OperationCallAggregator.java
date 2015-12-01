@@ -46,14 +46,13 @@ public final class OperationCallAggregator extends AbstractTransformation<Operat
 	}
 
 	@Override
-	public void onTerminating() throws Exception { 
+	public void onTerminating() throws Exception {
 		for (final List<OperationCall> aggregationList : this.aggregationMap.values()) {
 			final List<Long> durations = this.extractDurations(aggregationList);
 			final Statistics statistics = StatisticsUtility.calculateStatistics(durations);
-			super.getOutputPort().send( 
-					new AggregatedOperationCall(aggregationList.get(0).getContainer(), aggregationList.get(0).getComponent(), aggregationList.get(0).getOperation(),
-							aggregationList.get(0).getFailedCause(), statistics.getTotalDuration(), statistics.getMedianDuration(), statistics.getMinDuration(), statistics
-									.getMaxDuration(), statistics.getMeanDuration(), aggregationList.size()));
+			super.getOutputPort().send(new AggregatedOperationCall(aggregationList.get(0).getContainer(), aggregationList.get(0).getComponent(), aggregationList.get(0).getOperation(),
+					aggregationList.get(0).getFailedCause(), statistics.getTotalDuration(), statistics.getMedianDuration(), statistics.getMinDuration(), statistics.getMaxDuration(),
+					statistics.getMeanDuration(), aggregationList.size()));
 		}
 
 		super.onTerminating();

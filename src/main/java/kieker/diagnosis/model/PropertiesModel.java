@@ -120,7 +120,7 @@ public final class PropertiesModel {
 			PropertiesModel.LOGGER.error(e);
 		}
 
-		version++;
+		this.version++;
 	}
 
 	public String getGraphvizPath() {
@@ -186,7 +186,7 @@ public final class PropertiesModel {
 	}
 
 	public boolean isMethodCallAggregationActive() {
-		return methodCallAggregationActive;
+		return this.methodCallAggregationActive;
 	}
 
 	public void setMethodCallAggregationActive(final boolean active) {
@@ -195,7 +195,7 @@ public final class PropertiesModel {
 	}
 
 	public Threshold getThreshold() {
-		return threshold;
+		return this.threshold;
 	}
 
 	public void setThreshold(final Threshold threshold) {
@@ -204,7 +204,7 @@ public final class PropertiesModel {
 	}
 
 	public boolean isCaseSensitivityActive() {
-		return caseSensitivityActive;
+		return this.caseSensitivityActive;
 	}
 
 	public void setCaseSensitivityActive(final boolean active) {
@@ -213,11 +213,11 @@ public final class PropertiesModel {
 	}
 
 	public long getVersion() {
-		return version;
+		return this.version;
 	}
 
 	public boolean isPercentageCalculationActive() {
-		return percentageCalculationActive;
+		return this.percentageCalculationActive;
 	}
 
 	public void setPercentageCalculationActive(final boolean active) {
@@ -226,10 +226,10 @@ public final class PropertiesModel {
 	}
 
 	public TimestampTypes getTimestampType() {
-		return timestampType;
+		return this.timestampType;
 	}
 
-	public void setTimestampType(TimestampTypes timestampType) {
+	public void setTimestampType(final TimestampTypes timestampType) {
 		this.timestampType = timestampType;
 		this.saveSettings();
 	}

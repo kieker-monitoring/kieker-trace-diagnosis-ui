@@ -30,9 +30,9 @@ public final class TraceStatisticsDecorator extends AbstractTransformation<Trace
 
 	@Override
 	public void execute(final Trace trace) {
-		addTraceDepth(trace.getRootOperationCall());
-		addTraceSize(trace.getRootOperationCall());
-		addPercentValues(trace.getRootOperationCall(), trace.getRootOperationCall().getDuration(), trace.getRootOperationCall().getDuration());
+		TraceStatisticsDecorator.addTraceDepth(trace.getRootOperationCall());
+		TraceStatisticsDecorator.addTraceSize(trace.getRootOperationCall());
+		TraceStatisticsDecorator.addPercentValues(trace.getRootOperationCall(), trace.getRootOperationCall().getDuration(), trace.getRootOperationCall().getDuration());
 
 		super.getOutputPort().send(trace);
 	}
@@ -46,7 +46,7 @@ public final class TraceStatisticsDecorator extends AbstractTransformation<Trace
 			int maxTraceDepthOfChildren = 0;
 
 			for (final OperationCall child : call.getChildren()) {
-				final int traceDepthOfChild = addTraceDepth(child);
+				final int traceDepthOfChild = TraceStatisticsDecorator.addTraceDepth(child);
 				maxTraceDepthOfChildren = Math.max(traceDepthOfChild, maxTraceDepthOfChildren);
 			}
 
@@ -61,7 +61,7 @@ public final class TraceStatisticsDecorator extends AbstractTransformation<Trace
 		int traceSize = 1;
 
 		for (final OperationCall child : call.getChildren()) {
-			final int traceSizeOfChild = addTraceSize(child);
+			final int traceSizeOfChild = TraceStatisticsDecorator.addTraceSize(child);
 			traceSize += traceSizeOfChild;
 		}
 
@@ -82,7 +82,7 @@ public final class TraceStatisticsDecorator extends AbstractTransformation<Trace
 		}
 
 		for (final OperationCall child : call.getChildren()) {
-			addPercentValues(child, call.getDuration(), rootDuration);
+			TraceStatisticsDecorator.addPercentValues(child, call.getDuration(), rootDuration);
 		}
 	}
 }

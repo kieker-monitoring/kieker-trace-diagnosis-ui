@@ -36,8 +36,9 @@ import kieker.diagnosis.model.PropertiesModel;
 
 public final class FilterUtility {
 
-	private FilterUtility() {}
-	
+	private FilterUtility() {
+	}
+
 	public static <T> Predicate<T> useFilter(final TextField filter, final Function<T, String> function) {
 		final String text = filter.getText();
 
@@ -46,7 +47,7 @@ public final class FilterUtility {
 		} else {
 			final boolean regularExpressionsActive = PropertiesModel.getInstance().isRegularExpressionsActive();
 			if (regularExpressionsActive) {
-				checkRegularExpression(text);
+				FilterUtility.checkRegularExpression(text);
 				return (x -> function.apply(x).matches(text));
 			} else {
 				final boolean caseSensitivityActive = PropertiesModel.getInstance().isCaseSensitivityActive();
@@ -58,21 +59,21 @@ public final class FilterUtility {
 			}
 		}
 	}
-	
+
 	public static <T> Predicate<T> alwaysTrue() {
 		return (x -> true);
 	}
 
-	private static void checkRegularExpression(String text) {
+	private static void checkRegularExpression(final String text) {
 		Pattern.compile(text);
 	}
- 
-	public static <T> Predicate<T> useFilter(final DatePicker datePicker, final Function<T, Long> function, boolean filterBefore) {
+
+	public static <T> Predicate<T> useFilter(final DatePicker datePicker, final Function<T, Long> function, final boolean filterBefore) {
 		final LocalDate value = datePicker.getValue();
 		if (value == null) {
 			return x -> true;
 		}
-		Predicate<T> result = x -> {
+		final Predicate<T> result = x -> {
 			final long timestamp = function.apply(x);
 			final long timestampInMS = TimeUnit.MILLISECONDS.convert(timestamp, DataModel.getInstance().getTimeUnit());
 			final Instant instant = Instant.ofEpochMilli(timestampInMS);
@@ -83,18 +84,17 @@ public final class FilterUtility {
 			} else {
 				return value.isAfter(localDate) || value.isEqual(localDate);
 			}
-			};
-		
-	
-		return result; 
+		};
+
+		return result;
 	}
 
-	public static <T> Predicate<T> useFilter(CalendarTimeTextField timeTextField, final Function<T, Long> function, boolean filterBefore) {
+	public static <T> Predicate<T> useFilter(final CalendarTimeTextField timeTextField, final Function<T, Long> function, final boolean filterBefore) {
 		final Calendar value = timeTextField.getCalendar();
 		if (value == null) {
 			return x -> true;
 		}
-		Predicate<T> result = x -> { 
+		final Predicate<T> result = x -> {
 			final long timestamp = function.apply(x);
 			final long timestampInMS = TimeUnit.MILLISECONDS.convert(timestamp, DataModel.getInstance().getTimeUnit());
 			final Instant instant = Instant.ofEpochMilli(timestampInMS);
@@ -109,13 +109,13 @@ public final class FilterUtility {
 			if (filterBefore) {
 				if (hour2 < hour1) {
 					return true;
-				} 
+				}
 				if (hour2 > hour1) {
 					return false;
 				}
 				if (minute2 < minute1) {
 					return true;
-				} 
+				}
 				if (minute2 > minute1) {
 					return false;
 				}
@@ -123,36 +123,37 @@ public final class FilterUtility {
 			} else {
 				if (hour2 > hour1) {
 					return true;
-				} 
+				}
 				if (hour2 < hour1) {
 					return false;
 				}
 				if (minute2 > minute1) {
 					return true;
-				} 
+				}
 				if (minute2 < minute1) {
 					return false;
 				}
 				return true;
 			}
-			};
-		 
-	
-		return result; 
+		};
+
+		return result;
 	}
 
-	public static <T> Predicate<T> useFilter(final RadioButton showAllButton, final RadioButton showJustSuccessfulButton, final RadioButton showJustFailedButton, final Function<T, Boolean> isFailedFunction) {
+	public static <T> Predicate<T> useFilter(final RadioButton showAllButton, final RadioButton showJustSuccessfulButton, final RadioButton showJustFailedButton,
+			final Function<T, Boolean> isFailedFunction) {
 		if (showAllButton.isSelected()) {
 			return (x -> true);
 		}
 		Predicate<T> predicate = (x -> isFailedFunction.apply(x));
 		if (showJustSuccessfulButton.isSelected()) {
 			predicate = predicate.negate();
-		} 
+		}
 		return predicate;
 	}
 
-	public static <T> Predicate<T> useFilter(final RadioButton showAllButton, final RadioButton showJustSuccessfulButton, final RadioButton showJustFailedButton, final RadioButton showJustFailureContainingButton, final Function<T, Boolean> isFailedFunction, final Function<T, Boolean> containsFailureFunction) {
+	public static <T> Predicate<T> useFilter(final RadioButton showAllButton, final RadioButton showJustSuccessfulButton, final RadioButton showJustFailedButton,
+			final RadioButton showJustFailureContainingButton, final Function<T, Boolean> isFailedFunction, final Function<T, Boolean> containsFailureFunction) {
 		if (showAllButton.isSelected()) {
 			return (x -> true);
 		}
@@ -162,8 +163,8 @@ public final class FilterUtility {
 		Predicate<T> predicate = (x -> isFailedFunction.apply(x));
 		if (showJustSuccessfulButton.isSelected()) {
 			predicate = predicate.negate();
-		} 
+		}
 		return predicate;
 	}
-	
+
 }

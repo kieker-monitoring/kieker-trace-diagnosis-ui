@@ -123,11 +123,11 @@ final class LegacyTraceReconstructor extends AbstractTransformation<OperationExe
 			final int firstOpeningParenthesisPos = operationSignature.indexOf('(');
 			int gapPos = operationSignature.indexOf(' ');
 			String result = operationSignature;
-			while (gapPos != -1 && gapPos < firstOpeningParenthesisPos) {
+			while ((gapPos != -1) && (gapPos < firstOpeningParenthesisPos)) {
 				result = result.substring(gapPos + 1);
 				gapPos = result.indexOf(' ');
 			}
-			
+
 			result = result.replaceFirst("\\.<?\\w*>?\\(.*", "");
 			return result;
 		}

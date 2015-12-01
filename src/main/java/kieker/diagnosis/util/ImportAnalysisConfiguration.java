@@ -57,7 +57,7 @@ public final class ImportAnalysisConfiguration extends Configuration {
 	private final AllowedRecordsFilter allowedRecordsFilter;
 
 	public ImportAnalysisConfiguration(final File importDirectory) {
-		// Create the stages 
+		// Create the stages
 		final ReadingComposite reader = new ReadingComposite(importDirectory);
 		final MultipleInstanceOfFilter<IMonitoringRecord> typeFilter = new MultipleInstanceOfFilter<>();
 		final Distributor<Trace> distributor = new Distributor<>(new CopyByReferenceStrategy());
@@ -70,8 +70,8 @@ public final class ImportAnalysisConfiguration extends Configuration {
 		this.reconstruction = new TraceReconstructionComposite(this.traces, PropertiesModel.getInstance().isAdditionalLogChecksActive());
 
 		// Connect the stages
-		super.connectPorts(reader.getOutputPort(), allowedRecordsFilter.getInputPort());
-		super.connectPorts(allowedRecordsFilter.getOutputPort(), typeFilter.getInputPort());
+		super.connectPorts(reader.getOutputPort(), this.allowedRecordsFilter.getInputPort());
+		super.connectPorts(this.allowedRecordsFilter.getOutputPort(), typeFilter.getInputPort());
 		super.connectPorts(typeFilter.getOutputPortForType(IMonitoringRecord.class), this.beginEndOfMonitoringDetector.getInputPort());
 		super.connectPorts(this.beginEndOfMonitoringDetector.getOutputPort(), this.reconstruction.getInputPort());
 		super.connectPorts(this.reconstruction.getOutputPort(), distributor.getInputPort());
@@ -95,7 +95,7 @@ public final class ImportAnalysisConfiguration extends Configuration {
 	public int countDanglingEvents() {
 		return this.reconstruction.countDanglingRecords();
 	}
-	
+
 	public int countIgnoredRecords() {
 		return this.allowedRecordsFilter.getIgnoredRecords();
 	}

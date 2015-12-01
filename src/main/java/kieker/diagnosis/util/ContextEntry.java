@@ -27,11 +27,11 @@ public final class ContextEntry {
 	}
 
 	public ContextKey getKey() {
-		return key;
+		return this.key;
 	}
 
 	public Object getValue() {
-		return value;
+		return this.value;
 	}
 
 }

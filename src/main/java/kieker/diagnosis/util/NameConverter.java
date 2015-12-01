@@ -37,7 +37,7 @@ public final class NameConverter {
 	}
 
 	static {
-		initializeMapper();
+		NameConverter.initializeMapper();
 	}
 
 	private static void initializeMapper() {
@@ -84,21 +84,21 @@ public final class NameConverter {
 		final DateTimeFormatter formatter;
 
 		switch (timestampType) {
-		case DATE:
-			formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
-			break;
-		case DATE_AND_TIME:
-			formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
-			break;
-		case LONG_TIME:
-			formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.LONG);
-			break;
-		case SHORT_TIME:
-			formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
-			break;
-		default:
-			formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
-			break;
+			case DATE:
+				formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+				break;
+			case DATE_AND_TIME:
+				formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
+				break;
+			case LONG_TIME:
+				formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.LONG);
+				break;
+			case SHORT_TIME:
+				formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
+				break;
+			default:
+				formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+				break;
 
 		}
 
