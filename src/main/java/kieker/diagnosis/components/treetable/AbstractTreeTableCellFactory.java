@@ -28,22 +28,22 @@ public abstract class AbstractTreeTableCellFactory<S, T> implements Callback<Tre
 	public TreeTableCell<S, T> call(final TreeTableColumn<S, T> p) {
 		return new FailedTableCell();
 	}
-	
+
 	protected abstract String getItemLabel(T item);
 
 	private final class FailedTableCell extends TreeTableCell<S, T> {
 
 		@Override
 		protected void updateItem(final T item, final boolean empty) {
-			setFailedStyle();
+			this.setFailedStyle();
 
 			super.updateItem(item, empty);
 
-			if (empty || item == null) {
-				setText(null);
-				setGraphic(null);
+			if (empty || (item == null)) {
+				this.setText(null);
+				this.setGraphic(null);
 			} else {
-				setText(getItemLabel(item));
+				this.setText(AbstractTreeTableCellFactory.this.getItemLabel(item));
 			}
 		}
 

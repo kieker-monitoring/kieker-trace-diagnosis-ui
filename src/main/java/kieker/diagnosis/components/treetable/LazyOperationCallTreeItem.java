@@ -32,13 +32,13 @@ import kieker.diagnosis.model.PropertiesModel;
  */
 public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTreeItem<OperationCall> {
 
-	private static final String methodCallsAggregated;
+	private static final String METHOD_CALLS_AGGREGATED;
 
 	static {
 		final String bundleBaseName = "locale.kieker.diagnosis.components.components";
 		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
 
-		methodCallsAggregated = resourceBundle.getString("methodCallsAggregated");
+		METHOD_CALLS_AGGREGATED = resourceBundle.getString("methodCallsAggregated");
 	}
 
 	public LazyOperationCallTreeItem(final OperationCall value) {
@@ -50,7 +50,7 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 		final List<TreeItem<OperationCall>> result = new ArrayList<>();
 
 		if (PropertiesModel.getInstance().isMethodCallAggregationActive()) {
-			final float threshold = PropertiesModel.getInstance().getThreshold().percent;
+			final float threshold = PropertiesModel.getInstance().getThreshold().getPercent();
 			final List<OperationCall> underThreshold = new ArrayList<>();
 			for (final OperationCall child : super.getValue().getChildren()) {
 				if (child.getPercent() < threshold) {
@@ -64,7 +64,7 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 				final long duration = underThreshold.stream().map(OperationCall::getDuration).collect(Collectors.summingLong(Long::longValue));
 				final int traceDepth = underThreshold.stream().map(OperationCall::getStackDepth).max(Comparator.naturalOrder()).get();
 				final int traceSize = underThreshold.stream().map(OperationCall::getStackSize).collect(Collectors.summingInt(Integer::intValue));
-				final OperationCall call = new OperationCall("-", "-", underThreshold.size() + " " + LazyOperationCallTreeItem.methodCallsAggregated, super.getValue().getTraceID(), -1);
+				final OperationCall call = new OperationCall("-", "-", underThreshold.size() + " " + LazyOperationCallTreeItem.METHOD_CALLS_AGGREGATED, super.getValue().getTraceID(), -1);
 				call.setPercent((float) percent);
 				call.setDuration(duration);
 				call.setStackDepth(traceDepth);

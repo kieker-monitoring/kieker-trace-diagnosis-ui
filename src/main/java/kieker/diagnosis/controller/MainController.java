@@ -76,7 +76,7 @@ public final class MainController {
 
 	private static final Logger LOGGER = LogManager.getLogger(MainController.class);
 
-	private static MainController INSTANCE;
+	private static MainController instance;
 
 	private final DataModel dataModel = DataModel.getInstance();
 
@@ -229,12 +229,12 @@ public final class MainController {
 
 	public static void loadMainPane(final Stage stage) throws Exception {
 		try {
-			MainController.INSTANCE = new MainController();
+			MainController.instance = new MainController();
 			final URL resource = MainController.class.getClassLoader().getResource("views/kieker/diagnosis/view/View.fxml");
 			final FXMLLoader fxmlLoader = new FXMLLoader();
 			fxmlLoader.setResources(ResourceBundle.getBundle("locale.kieker.diagnosis.view.view", Locale.getDefault()));
 			fxmlLoader.setLocation(resource);
-			fxmlLoader.setController(MainController.INSTANCE);
+			fxmlLoader.setController(MainController.instance);
 			final Pane pane = (Pane) fxmlLoader.load();
 
 			final Scene root = new Scene(pane);
@@ -306,7 +306,7 @@ public final class MainController {
 	}
 
 	public static MainController instance() {
-		return MainController.INSTANCE;
+		return MainController.instance;
 	}
 
 	public void jumpToTrace(final OperationCall call) throws Exception {

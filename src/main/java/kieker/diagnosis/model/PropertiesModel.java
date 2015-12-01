@@ -256,10 +256,14 @@ public final class PropertiesModel {
 
 		THRESHOLD_0_5(0.5f), THRESHOLD_1(1f), THRESHOLD_10(10f), THRESHOLD_20(20f), THRESHOLD_30(30f), THRESHOLD_40(40f), THRESHOLD_50(50f);
 
-		public final float percent;
+		private final float percent;
 
 		private Threshold(final float percent) {
 			this.percent = percent;
+		}
+
+		public float getPercent() {
+			return this.percent;
 		}
 
 	}

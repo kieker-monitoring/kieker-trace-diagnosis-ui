@@ -18,6 +18,7 @@
     <exclude name="CallSuperInConstructor"/>
     <exclude name="UseConcurrentHashMap"/>
     <exclude name="AvoidFinalLocalVariable"/>
+	<exclude name="AtLeastOneConstructor"/>
   </rule>
   <rule ref="rulesets/java/coupling.xml">
     <exclude name="LoosePackageCoupling"/>
