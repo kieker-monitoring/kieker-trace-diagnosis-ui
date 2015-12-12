@@ -27,7 +27,7 @@ import kieker.diagnosis.controller.MainController;
  */
 public final class Main extends Application {
 
-	public static void main(final String[] aArgs) {
+	public static void main(final String... aArgs) {
 		Application.launch(aArgs);
 	}
 

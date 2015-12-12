@@ -46,7 +46,7 @@ public final class ComponentTreeCellValueFactory implements Callback<CellDataFea
 	@Override
 	public ObservableValue<String> call(final CellDataFeatures<?, String> aCall) {
 		try {
-			final TreeItem<?> item = (aCall.getValue());
+			final TreeItem<?> item = aCall.getValue();
 			final Method getter = item.getValue().getClass().getMethod("get" + this.ivProperty, new Class<?>[0]);
 			String componentName = (String) getter.invoke(item.getValue(), new Object[0]);
 
@@ -55,7 +55,7 @@ public final class ComponentTreeCellValueFactory implements Callback<CellDataFea
 			}
 
 			return new ReadOnlyObjectWrapper<String>(componentName);
-		} catch (final NullPointerException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+		} catch (final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 			ComponentTreeCellValueFactory.LOGGER.warn(ex);
 			return null;
 		}

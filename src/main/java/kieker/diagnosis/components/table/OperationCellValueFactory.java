@@ -54,7 +54,7 @@ public final class OperationCellValueFactory implements Callback<CellDataFeature
 			}
 
 			return new ReadOnlyObjectWrapper<String>(operationName);
-		} catch (final NullPointerException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+		} catch (final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 			OperationCellValueFactory.LOGGER.warn(ex);
 			return null;
 		}

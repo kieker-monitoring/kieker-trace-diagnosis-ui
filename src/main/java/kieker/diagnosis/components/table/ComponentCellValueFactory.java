@@ -53,7 +53,7 @@ public final class ComponentCellValueFactory implements Callback<CellDataFeature
 			}
 
 			return new ReadOnlyObjectWrapper<String>(componentName);
-		} catch (final NullPointerException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+		} catch (final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 			ComponentCellValueFactory.LOGGER.warn(ex);
 			return null;
 		}

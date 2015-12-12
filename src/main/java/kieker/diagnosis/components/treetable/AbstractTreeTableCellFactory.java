@@ -54,10 +54,8 @@ public abstract class AbstractTreeTableCellFactory<S, T> implements Callback<Tre
 				final Object rowItem = currentRow.getItem();
 
 				super.getStyleClass().remove("failed");
-				if (rowItem instanceof AbstractOperationCall) {
-					if (((AbstractOperationCall<?>) rowItem).isFailed()) {
-						super.getStyleClass().add("failed");
-					}
+				if ((rowItem instanceof AbstractOperationCall) && ((AbstractOperationCall<?>) rowItem).isFailed()) {
+					super.getStyleClass().add("failed");
 				}
 			}
 		}
