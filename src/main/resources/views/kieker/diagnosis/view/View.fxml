@@ -4,17 +4,17 @@
 <VBox fx:id="ivView" xmlns:fx="http://javafx.com/fxml">
 
 	<MenuBar>
-		<Menu text="%View.mntmFile.text" id="file">
+		<Menu text="%View.mntmFile.text" id="ivFile">
 			<MenuItem text="%View.mntmOpenMonitoringLog.text" onAction="#showImportDialog" id="openMonitoringLog"/>
 			<SeparatorMenuItem />
-			<MenuItem text="%View.mntmSettings.text" onAction="#showSettings" id="settings" />
+			<MenuItem text="%View.mntmSettings.text" onAction="#showSettings" id="ivSettings" />
 			<SeparatorMenuItem />
 			<MenuItem text="%View.mntmExit.text" onAction="#close"/>
 		</Menu>
-		<Menu text="%View.mntmHelp.text" id="help">
+		<Menu text="%View.mntmHelp.text" id="ivHelp">
 			<MenuItem text="%reportBugsAndFeatures" onAction="#showBugReporting"/>
 			<SeparatorMenuItem />
-			<MenuItem text="%View.mntmAbout.text" onAction="#showAbout" id="about"/>
+			<MenuItem text="%View.mntmAbout.text" onAction="#showAbout" id="ivAbout"/>
 		</Menu>
 	</MenuBar>
 
