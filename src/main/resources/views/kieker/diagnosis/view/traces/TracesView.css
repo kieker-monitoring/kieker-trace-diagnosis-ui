@@ -8,6 +8,6 @@
 	-fx-background-insets: 0px;
 }
 
-.ivFailed {
+.failed {
 	-fx-text-fill: red;
 }

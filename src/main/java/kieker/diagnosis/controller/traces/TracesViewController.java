@@ -80,10 +80,10 @@ public final class TracesViewController extends AbstractController {
 	@FXML private TextField ivContainer;
 	@FXML private TextField ivComponent;
 	@FXML private TextField ivOperation;
-	@FXML private TextField duration;
-	@FXML private TextField percent;
-	@FXML private TextField traceID;
-	@FXML private TextField failed;
+	@FXML private TextField ivDuration;
+	@FXML private TextField ivPercent;
+	@FXML private TextField ivTraceID;
+	@FXML private TextField ivFailed;
 
 	@FXML private TextField ivCounter;
 
@@ -155,21 +155,21 @@ public final class TracesViewController extends AbstractController {
 			this.ivComponent.setText(call.getComponent());
 			this.ivOperation.setText(call.getOperation());
 			this.ivTimestamp.setText(NameConverter.toTimestampString(call.getTimestamp(), sourceTimeUnit) + " (" + call.getTimestamp() + ")");
-			this.duration.setText(NameConverter.toDurationString(call.getDuration(), sourceTimeUnit, targetTimeUnit));
-			this.traceID.setText(Long.toString(call.getTraceID()));
+			this.ivDuration.setText(NameConverter.toDurationString(call.getDuration(), sourceTimeUnit, targetTimeUnit));
+			this.ivTraceID.setText(Long.toString(call.getTraceID()));
 			this.ivTraceDepth.setText(Integer.toString(call.getStackDepth()));
 			this.ivTraceSize.setText(Integer.toString(call.getStackSize()));
-			this.percent.setText(call.getPercent() + " %");
-			this.failed.setText(call.getFailedCause() != null ? call.getFailedCause() : "N/A");
+			this.ivPercent.setText(call.getPercent() + " %");
+			this.ivFailed.setText(call.getFailedCause() != null ? call.getFailedCause() : "N/A");
 		} else {
 			this.ivContainer.setText("N/A");
 			this.ivComponent.setText("N/A");
 			this.ivOperation.setText("N/A");
 			this.ivTimestamp.setText("N/A");
-			this.duration.setText("N/A");
-			this.traceID.setText("N/A");
-			this.percent.setText("N/A");
-			this.failed.setText("N/A");
+			this.ivDuration.setText("N/A");
+			this.ivTraceID.setText("N/A");
+			this.ivPercent.setText("N/A");
+			this.ivFailed.setText("N/A");
 		}
 	}
 
