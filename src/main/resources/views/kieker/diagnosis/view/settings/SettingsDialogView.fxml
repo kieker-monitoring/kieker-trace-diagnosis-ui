@@ -66,8 +66,8 @@
 			<javafx.geometry.Insets right="10" />
 		</VBox.margin>
 		<buttons>
-			<Button text="%SettingsDialog.btnOkay.text" onAction="#saveAndCloseDialog" id="okay" />
-			<Button text="%SettingsDialog.btnCancel.text" onAction="#closeDialog" id="cancel" />
+			<Button text="%SettingsDialog.btnOkay.text" onAction="#saveAndCloseDialog" id="ivOkay" />
+			<Button text="%SettingsDialog.btnCancel.text" onAction="#closeDialog" id="ivCancel" />
 		</buttons>
 	</ButtonBar>
 
