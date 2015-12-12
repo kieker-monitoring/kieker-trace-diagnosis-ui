@@ -17,7 +17,7 @@
 				<spacing>10</spacing>
 		
 				<fx:define>
-					<ToggleGroup fx:id="ivTogglegroup" />
+					<ToggleGroup fx:id="togglegroup" />
 				</fx:define>
 			
 				<RadioButton text="%AggregatedTracesView.btnShowAll.text" fx:id="ivShowAllButton" selected="true" toggleGroup="$togglegroup" onAction="#useFilter" />
