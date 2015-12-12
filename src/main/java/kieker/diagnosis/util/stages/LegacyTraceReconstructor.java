@@ -36,10 +36,10 @@ import teetime.stage.basic.AbstractTransformation;
  */
 final class LegacyTraceReconstructor extends AbstractTransformation<OperationExecutionRecord, Trace> {
 
-	private final Map<Long, TraceBuffer> traceBuffers = new HashMap<>();
+	private final Map<Long, TraceBuffer> ivTraceBuffers = new HashMap<>();
 
 	public int countIncompleteTraces() {
-		return this.traceBuffers.size();
+		return this.ivTraceBuffers.size();
 	}
 
 	public int countDanglingRecords() {
@@ -47,21 +47,21 @@ final class LegacyTraceReconstructor extends AbstractTransformation<OperationExe
 	}
 
 	@Override
-	protected void execute(final OperationExecutionRecord input) {
-		this.handleOperationExecutionRecord(input);
+	protected void execute(final OperationExecutionRecord aInput) {
+		this.handleOperationExecutionRecord(aInput);
 	}
 
-	private void handleOperationExecutionRecord(final OperationExecutionRecord input) {
-		final long traceID = input.getTraceId();
-		if (!this.traceBuffers.containsKey(traceID)) {
-			this.traceBuffers.put(traceID, new TraceBuffer(traceID));
+	private void handleOperationExecutionRecord(final OperationExecutionRecord aInput) {
+		final long traceID = aInput.getTraceId();
+		if (!this.ivTraceBuffers.containsKey(traceID)) {
+			this.ivTraceBuffers.put(traceID, new TraceBuffer(traceID));
 		}
-		final TraceBuffer traceBuffer = this.traceBuffers.get(traceID);
+		final TraceBuffer traceBuffer = this.ivTraceBuffers.get(traceID);
 
-		traceBuffer.handleEvent(input);
+		traceBuffer.handleEvent(aInput);
 		if (traceBuffer.isTraceComplete()) {
 			final Trace trace = traceBuffer.reconstructTrace();
-			this.traceBuffers.remove(traceID);
+			this.ivTraceBuffers.remove(traceID);
 			super.getOutputPort().send(trace);
 		}
 	}
@@ -71,31 +71,31 @@ final class LegacyTraceReconstructor extends AbstractTransformation<OperationExe
 	 */
 	private static final class TraceBuffer {
 
-		private final List<OperationExecutionRecord> records = new ArrayList<>();
-		private final long traceID;
-		private boolean traceComplete = false;
+		private final List<OperationExecutionRecord> ivRecords = new ArrayList<>();
+		private final long ivTraceID;
+		private boolean ivTraceComplete = false;
 
-		public TraceBuffer(final long traceID) {
-			this.traceID = traceID;
+		public TraceBuffer(final long aTraceID) {
+			this.ivTraceID = aTraceID;
 		}
 
-		public void handleEvent(final OperationExecutionRecord record) {
-			this.records.add(record);
+		public void handleEvent(final OperationExecutionRecord aRecord) {
+			this.ivRecords.add(aRecord);
 
-			if ((record.getEoi() == 0) && (record.getEss() == 0)) {
-				this.traceComplete = true;
+			if ((aRecord.getEoi() == 0) && (aRecord.getEss() == 0)) {
+				this.ivTraceComplete = true;
 			}
 		}
 
 		public Trace reconstructTrace() {
-			Collections.sort(this.records, new EOIComparator());
+			Collections.sort(this.ivRecords, new EOIComparator());
 
 			OperationCall root = null;
 			OperationCall header = null;
 			int ess = 0;
-			for (final OperationExecutionRecord record : this.records) {
+			for (final OperationExecutionRecord record : this.ivRecords) {
 				final OperationCall newCall = new OperationCall(record.getHostname(), this.extractComponent(record.getOperationSignature()), record.getOperationSignature(),
-						this.traceID, record.getLoggingTimestamp());
+						this.ivTraceID, record.getLoggingTimestamp());
 				newCall.setDuration(record.getTout() - record.getTin());
 
 				// There can be "jumps" in the ess, as the operation execution records do not log the return jumps of methods. Therefore multiple of these jumps can
@@ -115,14 +115,14 @@ final class LegacyTraceReconstructor extends AbstractTransformation<OperationExe
 				ess = record.getEss();
 			}
 
-			return new Trace(root, this.traceID);
+			return new Trace(root, this.ivTraceID);
 		}
 
-		private String extractComponent(final String operationSignature) {
+		private String extractComponent(final String aOperationSignature) {
 			// Remove modifiers and return values (Issue #26)
-			final int firstOpeningParenthesisPos = operationSignature.indexOf('(');
-			int gapPos = operationSignature.indexOf(' ');
-			String result = operationSignature;
+			final int firstOpeningParenthesisPos = aOperationSignature.indexOf('(');
+			int gapPos = aOperationSignature.indexOf(' ');
+			String result = aOperationSignature;
 			while ((gapPos != -1) && (gapPos < firstOpeningParenthesisPos)) {
 				result = result.substring(gapPos + 1);
 				gapPos = result.indexOf(' ');
@@ -133,7 +133,7 @@ final class LegacyTraceReconstructor extends AbstractTransformation<OperationExe
 		}
 
 		public boolean isTraceComplete() {
-			return this.traceComplete;
+			return this.ivTraceComplete;
 		}
 
 		/**
@@ -144,8 +144,8 @@ final class LegacyTraceReconstructor extends AbstractTransformation<OperationExe
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public int compare(final OperationExecutionRecord o1, final OperationExecutionRecord o2) {
-				return Long.compare(o1.getEoi(), o2.getEoi());
+			public int compare(final OperationExecutionRecord aO1, final OperationExecutionRecord aO2) {
+				return Long.compare(aO1.getEoi(), aO2.getEoi());
 			}
 
 		}

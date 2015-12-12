@@ -25,25 +25,25 @@ import kieker.diagnosis.domain.AbstractOperationCall;
 public abstract class AbstractTableCellFactory<S, T> implements Callback<TableColumn<S, T>, TableCell<S, T>> {
 
 	@Override
-	public TableCell<S, T> call(final TableColumn<S, T> p) {
+	public final TableCell<S, T> call(final TableColumn<S, T> aTableColumn) {
 		return new FailedTableCell();
 	}
 
-	protected abstract String getItemLabel(T item);
+	protected abstract String getItemLabel(T aItem);
 
 	private final class FailedTableCell extends TableCell<S, T> {
 
 		@Override
-		protected void updateItem(final T item, final boolean empty) {
+		protected void updateItem(final T aItem, final boolean aEmpty) {
 			this.setFailedStyle();
 
-			super.updateItem(item, empty);
+			super.updateItem(aItem, aEmpty);
 
-			if (empty || (item == null)) {
+			if (aEmpty || (aItem == null)) {
 				this.setText(null);
 				this.setGraphic(null);
 			} else {
-				this.setText(AbstractTableCellFactory.this.getItemLabel(item));
+				this.setText(AbstractTableCellFactory.this.getItemLabel(aItem));
 			}
 		}
 

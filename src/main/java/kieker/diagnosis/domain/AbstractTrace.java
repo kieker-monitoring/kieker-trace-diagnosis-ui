@@ -28,40 +28,40 @@ package kieker.diagnosis.domain;
  */
 public abstract class AbstractTrace<T extends AbstractOperationCall<T>> {
 
-	private final T rootOperationCall;
+	private final T ivRootOperationCall;
 
-	public AbstractTrace(final T rootOperationCall) {
-		this.rootOperationCall = rootOperationCall;
+	public AbstractTrace(final T aRootOperationCall) {
+		this.ivRootOperationCall = aRootOperationCall;
 	}
 
 	public final T getRootOperationCall() {
-		return this.rootOperationCall;
+		return this.ivRootOperationCall;
 	}
 
 	public final int calculateHashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = (prime * result) + ((this.rootOperationCall == null) ? 0 : this.rootOperationCall.calculateHashCode());
+		result = (prime * result) + ((this.ivRootOperationCall == null) ? 0 : this.ivRootOperationCall.calculateHashCode());
 		return result;
 	}
 
 	@SuppressWarnings("rawtypes")
-	public final boolean isEqualTo(final Object obj) {
-		if (this == obj) {
+	public final boolean isEqualTo(final Object aObj) {
+		if (this == aObj) {
 			return true;
 		}
-		if (obj == null) {
+		if (aObj == null) {
 			return false;
 		}
-		if (this.getClass() != obj.getClass()) {
+		if (this.getClass() != aObj.getClass()) {
 			return false;
 		}
-		final AbstractTrace other = (AbstractTrace) obj;
-		if (this.rootOperationCall == null) {
-			if (other.rootOperationCall != null) {
+		final AbstractTrace other = (AbstractTrace) aObj;
+		if (this.ivRootOperationCall == null) {
+			if (other.ivRootOperationCall != null) {
 				return false;
 			}
-		} else if (!this.rootOperationCall.isEqualTo(other.rootOperationCall)) {
+		} else if (!this.ivRootOperationCall.isEqualTo(other.ivRootOperationCall)) {
 			return false;
 		}
 		return true;

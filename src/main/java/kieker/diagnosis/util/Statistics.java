@@ -21,38 +21,38 @@ package kieker.diagnosis.util;
  */
 public final class Statistics {
 
-	private final long totalDuration;
-	private final long meanDuration;
-	private final long medianDuration;
-	private final long minDuration;
-	private final long maxDuration;
+	private final long ivTotalDuration;
+	private final long ivMeanDuration;
+	private final long ivMedianDuration;
+	private final long ivMinDuration;
+	private final long ivMaxDuration;
 
-	public Statistics(final long totalDuration, final long meanDuration, final long medianDuration, final long minDuration, final long maxDuration) {
-		this.totalDuration = totalDuration;
-		this.meanDuration = meanDuration;
-		this.medianDuration = medianDuration;
-		this.minDuration = minDuration;
-		this.maxDuration = maxDuration;
+	public Statistics(final long aTotalDuration, final long aMeanDuration, final long aMedianDuration, final long aMinDuration, final long aMaxDuration) {
+		this.ivTotalDuration = aTotalDuration;
+		this.ivMeanDuration = aMeanDuration;
+		this.ivMedianDuration = aMedianDuration;
+		this.ivMinDuration = aMinDuration;
+		this.ivMaxDuration = aMaxDuration;
 	}
 
 	public long getTotalDuration() {
-		return this.totalDuration;
+		return this.ivTotalDuration;
 	}
 
 	public long getMeanDuration() {
-		return this.meanDuration;
+		return this.ivMeanDuration;
 	}
 
 	public long getMedianDuration() {
-		return this.medianDuration;
+		return this.ivMedianDuration;
 	}
 
 	public long getMinDuration() {
-		return this.minDuration;
+		return this.ivMinDuration;
 	}
 
 	public long getMaxDuration() {
-		return this.maxDuration;
+		return this.ivMaxDuration;
 	}
 
 }

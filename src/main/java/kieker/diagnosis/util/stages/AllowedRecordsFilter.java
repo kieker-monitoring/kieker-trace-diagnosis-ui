@@ -29,20 +29,20 @@ import teetime.stage.basic.AbstractTransformation;
  */
 public final class AllowedRecordsFilter extends AbstractTransformation<IMonitoringRecord, IMonitoringRecord> {
 
-	private int ignoredRecords;
+	private int ivIgnoredRecords;
 
 	@Override
-	protected void execute(final IMonitoringRecord element) {
-		if ((element instanceof TraceMetadata) || (element instanceof BeforeOperationEvent) || (element instanceof AfterOperationEvent) || (element instanceof KiekerMetadataRecord)
-				|| (element instanceof OperationExecutionRecord)) {
-			super.getOutputPort().send(element);
+	protected void execute(final IMonitoringRecord aElement) {
+		if ((aElement instanceof TraceMetadata) || (aElement instanceof BeforeOperationEvent) || (aElement instanceof AfterOperationEvent) || (aElement instanceof KiekerMetadataRecord)
+				|| (aElement instanceof OperationExecutionRecord)) {
+			super.getOutputPort().send(aElement);
 		} else {
-			this.ignoredRecords++;
+			this.ivIgnoredRecords++;
 		}
 	}
 
 	public int getIgnoredRecords() {
-		return this.ignoredRecords;
+		return this.ivIgnoredRecords;
 	}
 
 }

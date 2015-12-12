@@ -46,78 +46,78 @@ import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
  */
 public final class ImportAnalysisConfiguration extends Configuration {
 
-	private final List<Trace> traces = new ArrayList<>(1000);
-	private final List<OperationCall> operationCalls = new ArrayList<>(1000);
-	private final List<AggregatedOperationCall> aggregatedOperationCalls = new ArrayList<>(1000);
-	private final List<AggregatedTrace> aggregatedTraces = new ArrayList<>(1000);
+	private final List<Trace> ivTraces = new ArrayList<>(1000);
+	private final List<OperationCall> ivOperationCalls = new ArrayList<>(1000);
+	private final List<AggregatedOperationCall> ivAggregatedOperationCalls = new ArrayList<>(1000);
+	private final List<AggregatedTrace> ivAggregatedTraces = new ArrayList<>(1000);
 
-	private final List<KiekerMetadataRecord> metadataRecords = new ArrayList<>(1000);
-	private final TraceReconstructionComposite reconstruction;
-	private final BeginEndOfMonitoringDetector beginEndOfMonitoringDetector;
-	private final AllowedRecordsFilter allowedRecordsFilter;
+	private final List<KiekerMetadataRecord> ivMetadataRecords = new ArrayList<>(1000);
+	private final TraceReconstructionComposite ivReconstruction;
+	private final BeginEndOfMonitoringDetector ivBeginEndOfMonitoringDetector;
+	private final AllowedRecordsFilter ivAllowedRecordsFilter;
 
-	public ImportAnalysisConfiguration(final File importDirectory) {
+	public ImportAnalysisConfiguration(final File aImportDirectory) {
 		// Create the stages
-		final ReadingComposite reader = new ReadingComposite(importDirectory);
+		final ReadingComposite reader = new ReadingComposite(aImportDirectory);
 		final MultipleInstanceOfFilter<IMonitoringRecord> typeFilter = new MultipleInstanceOfFilter<>();
 		final Distributor<Trace> distributor = new Distributor<>(new CopyByReferenceStrategy());
-		final TraceAggregationComposite aggregation = new TraceAggregationComposite(this.aggregatedTraces);
-		final CollectorSink<KiekerMetadataRecord> metadataCollector = new CollectorSink<>(this.metadataRecords);
-		final OperationCallHandlerComposite operationCallHandler = new OperationCallHandlerComposite(this.operationCalls, this.aggregatedOperationCalls);
+		final TraceAggregationComposite aggregation = new TraceAggregationComposite(this.ivAggregatedTraces);
+		final CollectorSink<KiekerMetadataRecord> metadataCollector = new CollectorSink<>(this.ivMetadataRecords);
+		final OperationCallHandlerComposite operationCallHandler = new OperationCallHandlerComposite(this.ivOperationCalls, this.ivAggregatedOperationCalls);
 
-		this.allowedRecordsFilter = new AllowedRecordsFilter();
-		this.beginEndOfMonitoringDetector = new BeginEndOfMonitoringDetector();
-		this.reconstruction = new TraceReconstructionComposite(this.traces, PropertiesModel.getInstance().isAdditionalLogChecksActive());
+		this.ivAllowedRecordsFilter = new AllowedRecordsFilter();
+		this.ivBeginEndOfMonitoringDetector = new BeginEndOfMonitoringDetector();
+		this.ivReconstruction = new TraceReconstructionComposite(this.ivTraces, PropertiesModel.getInstance().isAdditionalLogChecksActive());
 
 		// Connect the stages
-		super.connectPorts(reader.getOutputPort(), this.allowedRecordsFilter.getInputPort());
-		super.connectPorts(this.allowedRecordsFilter.getOutputPort(), typeFilter.getInputPort());
-		super.connectPorts(typeFilter.getOutputPortForType(IMonitoringRecord.class), this.beginEndOfMonitoringDetector.getInputPort());
-		super.connectPorts(this.beginEndOfMonitoringDetector.getOutputPort(), this.reconstruction.getInputPort());
-		super.connectPorts(this.reconstruction.getOutputPort(), distributor.getInputPort());
+		super.connectPorts(reader.getOutputPort(), this.ivAllowedRecordsFilter.getInputPort());
+		super.connectPorts(this.ivAllowedRecordsFilter.getOutputPort(), typeFilter.getInputPort());
+		super.connectPorts(typeFilter.getOutputPortForType(IMonitoringRecord.class), this.ivBeginEndOfMonitoringDetector.getInputPort());
+		super.connectPorts(this.ivBeginEndOfMonitoringDetector.getOutputPort(), this.ivReconstruction.getInputPort());
+		super.connectPorts(this.ivReconstruction.getOutputPort(), distributor.getInputPort());
 		super.connectPorts(distributor.getNewOutputPort(), operationCallHandler.getInputPort());
 		super.connectPorts(distributor.getNewOutputPort(), aggregation.getInputPort());
 		super.connectPorts(typeFilter.getOutputPortForType(KiekerMetadataRecord.class), metadataCollector.getInputPort());
 	}
 
 	public long getBeginTimestamp() {
-		return this.beginEndOfMonitoringDetector.getBeginTimestamp();
+		return this.ivBeginEndOfMonitoringDetector.getBeginTimestamp();
 	}
 
 	public long getEndTimestamp() {
-		return this.beginEndOfMonitoringDetector.getEndTimestamp();
+		return this.ivBeginEndOfMonitoringDetector.getEndTimestamp();
 	}
 
 	public int countIncompleteTraces() {
-		return this.reconstruction.countIncompleteTraces();
+		return this.ivReconstruction.countIncompleteTraces();
 	}
 
 	public int countDanglingEvents() {
-		return this.reconstruction.countDanglingRecords();
+		return this.ivReconstruction.countDanglingRecords();
 	}
 
 	public int countIgnoredRecords() {
-		return this.allowedRecordsFilter.getIgnoredRecords();
+		return this.ivAllowedRecordsFilter.getIgnoredRecords();
 	}
 
 	public List<Trace> getTracesList() {
-		return this.traces;
+		return this.ivTraces;
 	}
 
 	public List<AggregatedTrace> getAggregatedTraces() {
-		return this.aggregatedTraces;
+		return this.ivAggregatedTraces;
 	}
 
 	public List<KiekerMetadataRecord> getMetadataRecords() {
-		return this.metadataRecords;
+		return this.ivMetadataRecords;
 	}
 
 	public List<OperationCall> getOperationCalls() {
-		return this.operationCalls;
+		return this.ivOperationCalls;
 	}
 
 	public List<AggregatedOperationCall> getAggregatedOperationCalls() {
-		return this.aggregatedOperationCalls;
+		return this.ivAggregatedOperationCalls;
 	}
 
 }

@@ -30,16 +30,16 @@ import teetime.stage.basic.AbstractTransformation;
  */
 public final class Filter<T> extends AbstractTransformation<T, T> {
 
-	private final Predicate<T> predicate;
+	private final Predicate<T> ivPredicate;
 
-	public Filter(final Predicate<T> predicate) {
-		this.predicate = predicate;
+	public Filter(final Predicate<T> aPredicate) {
+		this.ivPredicate = aPredicate;
 	}
 
 	@Override
-	protected void execute(final T element) {
-		if (this.predicate.test(element)) {
-			super.getOutputPort().send(element);
+	protected void execute(final T aElement) {
+		if (this.ivPredicate.test(aElement)) {
+			super.getOutputPort().send(aElement);
 		}
 	}
 

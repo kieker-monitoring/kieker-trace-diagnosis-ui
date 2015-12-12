@@ -27,20 +27,20 @@ import kieker.diagnosis.util.Mapper;
 public final class TimeUnitStringConverter extends AbstractStringConverter<TimeUnit> {
 
 	@Override
-	protected void fillMapper(final Mapper<TimeUnit, String> mapper, final ResourceBundle resourceBundle) {
-		final String nanoseconds = resourceBundle.getString("nanoseconds");
-		final String microseconds = resourceBundle.getString("microseconds");
-		final String milliseconds = resourceBundle.getString("milliseconds");
-		final String seconds = resourceBundle.getString("seconds");
-		final String minutes = resourceBundle.getString("minutes");
-		final String hours = resourceBundle.getString("hours");
+	protected void fillMapper(final Mapper<TimeUnit, String> aMapper, final ResourceBundle aResourceBundle) {
+		final String nanoseconds = aResourceBundle.getString("nanoseconds");
+		final String microseconds = aResourceBundle.getString("microseconds");
+		final String milliseconds = aResourceBundle.getString("milliseconds");
+		final String seconds = aResourceBundle.getString("seconds");
+		final String minutes = aResourceBundle.getString("minutes");
+		final String hours = aResourceBundle.getString("hours");
 
-		mapper.map(TimeUnit.NANOSECONDS).to(nanoseconds);
-		mapper.map(TimeUnit.MICROSECONDS).to(microseconds);
-		mapper.map(TimeUnit.MILLISECONDS).to(milliseconds);
-		mapper.map(TimeUnit.SECONDS).to(seconds);
-		mapper.map(TimeUnit.MINUTES).to(minutes);
-		mapper.map(TimeUnit.HOURS).to(hours);
+		aMapper.map(TimeUnit.NANOSECONDS).to(nanoseconds);
+		aMapper.map(TimeUnit.MICROSECONDS).to(microseconds);
+		aMapper.map(TimeUnit.MILLISECONDS).to(milliseconds);
+		aMapper.map(TimeUnit.SECONDS).to(seconds);
+		aMapper.map(TimeUnit.MINUTES).to(minutes);
+		aMapper.map(TimeUnit.HOURS).to(hours);
 	}
 
 }

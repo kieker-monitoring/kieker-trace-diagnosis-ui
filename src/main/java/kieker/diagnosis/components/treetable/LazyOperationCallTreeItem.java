@@ -41,8 +41,8 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 		METHOD_CALLS_AGGREGATED = resourceBundle.getString("methodCallsAggregated");
 	}
 
-	public LazyOperationCallTreeItem(final OperationCall value) {
-		super(value);
+	public LazyOperationCallTreeItem(final OperationCall aValue) {
+		super(aValue);
 	}
 
 	@Override
@@ -64,7 +64,8 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 				final long duration = underThreshold.stream().map(OperationCall::getDuration).collect(Collectors.summingLong(Long::longValue));
 				final int traceDepth = underThreshold.stream().map(OperationCall::getStackDepth).max(Comparator.naturalOrder()).get();
 				final int traceSize = underThreshold.stream().map(OperationCall::getStackSize).collect(Collectors.summingInt(Integer::intValue));
-				final OperationCall call = new OperationCall("-", "-", underThreshold.size() + " " + LazyOperationCallTreeItem.METHOD_CALLS_AGGREGATED, super.getValue().getTraceID(), -1);
+				final OperationCall call = new OperationCall("-", "-", underThreshold.size() + " " + LazyOperationCallTreeItem.METHOD_CALLS_AGGREGATED, super.getValue().getTraceID(),
+						-1);
 				call.setPercent((float) percent);
 				call.setDuration(duration);
 				call.setStackDepth(traceDepth);

@@ -37,31 +37,31 @@ public final class SettingsDialogViewController extends AbstractDialogController
 
 	private static final TimeUnit[] TIME_UNITS = { TimeUnit.NANOSECONDS, TimeUnit.MICROSECONDS, TimeUnit.MILLISECONDS, TimeUnit.SECONDS, TimeUnit.MINUTES, TimeUnit.HOURS };
 
-	private final PropertiesModel propertiesModel = PropertiesModel.getInstance();
+	private final PropertiesModel ivPropertiesModel = PropertiesModel.getInstance();
 
-	@FXML private ComboBox<OperationNames> operationNames;
-	@FXML private ComboBox<ComponentNames> componentNames;
-	@FXML private ComboBox<Threshold> thresholds;
-	@FXML private ComboBox<TimeUnit> timeunits;
-	@FXML private ComboBox<TimestampTypes> timestamps;
-	@FXML private CheckBox additionalLogChecks;
-	@FXML private CheckBox activateRegularExpressions;
-	@FXML private CheckBox aggregateMethodCalls;
-	@FXML private CheckBox caseSensitive;
-	@FXML private CheckBox percentageCalculation;
+	@FXML private ComboBox<OperationNames> ivOperationNames;
+	@FXML private ComboBox<ComponentNames> ivComponentNames;
+	@FXML private ComboBox<Threshold> ivThresholds;
+	@FXML private ComboBox<TimeUnit> ivTimeunits;
+	@FXML private ComboBox<TimestampTypes> ivTimestamps;
+	@FXML private CheckBox ivAdditionalLogChecks;
+	@FXML private CheckBox ivActivateRegularExpressions;
+	@FXML private CheckBox ivAggregateMethodCalls;
+	@FXML private CheckBox ivCaseSensitive;
+	@FXML private CheckBox ivPercentageCalculation;
 
-	public SettingsDialogViewController(final Context context) {
-		super(context);
+	public SettingsDialogViewController(final Context aContext) {
+		super(aContext);
 	}
 
 	public void initialize() {
-		this.timeunits.setItems(FXCollections.observableArrayList(SettingsDialogViewController.TIME_UNITS));
-		this.componentNames.setItems(FXCollections.observableArrayList(ComponentNames.values()));
-		this.operationNames.setItems(FXCollections.observableArrayList(OperationNames.values()));
-		this.timestamps.setItems(FXCollections.observableArrayList(TimestampTypes.values()));
-		this.thresholds.setItems(FXCollections.observableArrayList(Threshold.values()));
+		this.ivTimeunits.setItems(FXCollections.observableArrayList(SettingsDialogViewController.TIME_UNITS));
+		this.ivComponentNames.setItems(FXCollections.observableArrayList(ComponentNames.values()));
+		this.ivOperationNames.setItems(FXCollections.observableArrayList(OperationNames.values()));
+		this.ivTimestamps.setItems(FXCollections.observableArrayList(TimestampTypes.values()));
+		this.ivThresholds.setItems(FXCollections.observableArrayList(Threshold.values()));
 
-		this.thresholds.disableProperty().bind(this.aggregateMethodCalls.selectedProperty().not());
+		this.ivThresholds.disableProperty().bind(this.ivAggregateMethodCalls.selectedProperty().not());
 
 		this.loadSettings();
 	}
@@ -72,29 +72,29 @@ public final class SettingsDialogViewController extends AbstractDialogController
 	}
 
 	private void loadSettings() {
-		this.operationNames.getSelectionModel().select(this.propertiesModel.getOperationNames());
-		this.componentNames.getSelectionModel().select(this.propertiesModel.getComponentNames());
-		this.timeunits.getSelectionModel().select(this.propertiesModel.getTimeUnit());
-		this.additionalLogChecks.setSelected(this.propertiesModel.isAdditionalLogChecksActive());
-		this.activateRegularExpressions.setSelected(this.propertiesModel.isRegularExpressionsActive());
-		this.aggregateMethodCalls.setSelected(this.propertiesModel.isMethodCallAggregationActive());
-		this.thresholds.getSelectionModel().select(this.propertiesModel.getThreshold());
-		this.caseSensitive.setSelected(this.propertiesModel.isCaseSensitivityActive());
-		this.percentageCalculation.setSelected(this.propertiesModel.isPercentageCalculationActive());
-		this.timestamps.getSelectionModel().select(this.propertiesModel.getTimestampType());
+		this.ivOperationNames.getSelectionModel().select(this.ivPropertiesModel.getOperationNames());
+		this.ivComponentNames.getSelectionModel().select(this.ivPropertiesModel.getComponentNames());
+		this.ivTimeunits.getSelectionModel().select(this.ivPropertiesModel.getTimeUnit());
+		this.ivAdditionalLogChecks.setSelected(this.ivPropertiesModel.isAdditionalLogChecksActive());
+		this.ivActivateRegularExpressions.setSelected(this.ivPropertiesModel.isRegularExpressionsActive());
+		this.ivAggregateMethodCalls.setSelected(this.ivPropertiesModel.isMethodCallAggregationActive());
+		this.ivThresholds.getSelectionModel().select(this.ivPropertiesModel.getThreshold());
+		this.ivCaseSensitive.setSelected(this.ivPropertiesModel.isCaseSensitivityActive());
+		this.ivPercentageCalculation.setSelected(this.ivPropertiesModel.isPercentageCalculationActive());
+		this.ivTimestamps.getSelectionModel().select(this.ivPropertiesModel.getTimestampType());
 	}
 
 	private void saveSettings() {
-		this.propertiesModel.setOperationNames(this.operationNames.getSelectionModel().getSelectedItem());
-		this.propertiesModel.setComponentNames(this.componentNames.getSelectionModel().getSelectedItem());
-		this.propertiesModel.setTimeUnit(this.timeunits.getSelectionModel().getSelectedItem());
-		this.propertiesModel.setAdditionalLogChecksActive(this.additionalLogChecks.isSelected());
-		this.propertiesModel.setRegularExpressionsActive(this.activateRegularExpressions.isSelected());
-		this.propertiesModel.setMethodCallAggregationActive(this.aggregateMethodCalls.isSelected());
-		this.propertiesModel.setThreshold(this.thresholds.getSelectionModel().getSelectedItem());
-		this.propertiesModel.setCaseSensitivityActive(this.caseSensitive.isSelected());
-		this.propertiesModel.setPercentageCalculationActive(this.percentageCalculation.isSelected());
-		this.propertiesModel.setTimestampType(this.timestamps.getSelectionModel().getSelectedItem());
+		this.ivPropertiesModel.setOperationNames(this.ivOperationNames.getSelectionModel().getSelectedItem());
+		this.ivPropertiesModel.setComponentNames(this.ivComponentNames.getSelectionModel().getSelectedItem());
+		this.ivPropertiesModel.setTimeUnit(this.ivTimeunits.getSelectionModel().getSelectedItem());
+		this.ivPropertiesModel.setAdditionalLogChecksActive(this.ivAdditionalLogChecks.isSelected());
+		this.ivPropertiesModel.setRegularExpressionsActive(this.ivActivateRegularExpressions.isSelected());
+		this.ivPropertiesModel.setMethodCallAggregationActive(this.ivAggregateMethodCalls.isSelected());
+		this.ivPropertiesModel.setThreshold(this.ivThresholds.getSelectionModel().getSelectedItem());
+		this.ivPropertiesModel.setCaseSensitivityActive(this.ivCaseSensitive.isSelected());
+		this.ivPropertiesModel.setPercentageCalculationActive(this.ivPercentageCalculation.isSelected());
+		this.ivPropertiesModel.setTimestampType(this.ivTimestamps.getSelectionModel().getSelectedItem());
 	}
 
 }

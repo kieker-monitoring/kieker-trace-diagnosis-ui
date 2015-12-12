@@ -32,44 +32,44 @@ import teetime.stage.basic.AbstractTransformation;
  */
 public final class TraceAggregator extends AbstractTransformation<Trace, AggregatedTrace> {
 
-	private final Map<TraceWrapper, List<Trace>> aggregationMap = new HashMap<>();
+	private final Map<TraceWrapper, List<Trace>> ivAggregationMap = new HashMap<>();
 
 	@Override
-	protected void execute(final Trace trace) {
-		final TraceWrapper wrapper = new TraceWrapper(trace);
-		if (!this.aggregationMap.containsKey(wrapper)) {
+	protected void execute(final Trace aTrace) {
+		final TraceWrapper wrapper = new TraceWrapper(aTrace);
+		if (!this.ivAggregationMap.containsKey(wrapper)) {
 			final List<Trace> aggregationList = new ArrayList<>();
-			this.aggregationMap.put(wrapper, aggregationList);
+			this.ivAggregationMap.put(wrapper, aggregationList);
 		}
-		this.aggregationMap.get(wrapper).add(trace);
+		this.ivAggregationMap.get(wrapper).add(aTrace);
 	}
 
 	@Override
 	public void onTerminating() throws Exception { // NOPMD (the throws clause is forced by the framework)
-		this.aggregationMap.values().forEach(list -> super.getOutputPort().send(new AggregatedTrace(list)));
+		this.ivAggregationMap.values().forEach(list -> super.getOutputPort().send(new AggregatedTrace(list)));
 
 		super.onTerminating();
 	}
 
 	private static class TraceWrapper {
 
-		private final Trace trace;
+		private final Trace ivTrace;
 
-		public TraceWrapper(final Trace trace) {
-			this.trace = trace;
+		public TraceWrapper(final Trace aTrace) {
+			this.ivTrace = aTrace;
 		}
 
 		@Override
 		public int hashCode() {
-			return this.trace.calculateHashCode();
+			return this.ivTrace.calculateHashCode();
 		}
 
 		@Override
-		public boolean equals(final Object obj) {
-			if (!(obj instanceof TraceWrapper)) {
+		public boolean equals(final Object aObj) {
+			if (!(aObj instanceof TraceWrapper)) {
 				return false;
 			}
-			return this.trace.isEqualTo(((TraceWrapper) obj).trace);
+			return this.ivTrace.isEqualTo(((TraceWrapper) aObj).ivTrace);
 		}
 
 	}

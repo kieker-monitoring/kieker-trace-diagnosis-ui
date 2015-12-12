@@ -22,8 +22,8 @@ package kieker.diagnosis.components.table;
 public final class FailedTableCellFactory<S, T> extends AbstractTableCellFactory<S, T> {
 
 	@Override
-	protected String getItemLabel(final T item) {
-		return item.toString();
+	protected String getItemLabel(final T aItem) {
+		return aItem.toString();
 	}
 
 }

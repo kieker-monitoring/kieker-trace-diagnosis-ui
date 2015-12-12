@@ -25,7 +25,7 @@ import kieker.diagnosis.domain.AbstractOperationCall;
 public abstract class AbstractTreeTableCellFactory<S, T> implements Callback<TreeTableColumn<S, T>, TreeTableCell<S, T>> {
 
 	@Override
-	public TreeTableCell<S, T> call(final TreeTableColumn<S, T> p) {
+	public final TreeTableCell<S, T> call(final TreeTableColumn<S, T> aTreeTableColumn) {
 		return new FailedTableCell();
 	}
 
@@ -34,16 +34,16 @@ public abstract class AbstractTreeTableCellFactory<S, T> implements Callback<Tre
 	private final class FailedTableCell extends TreeTableCell<S, T> {
 
 		@Override
-		protected void updateItem(final T item, final boolean empty) {
+		protected void updateItem(final T aItem, final boolean aEmpty) {
 			this.setFailedStyle();
 
-			super.updateItem(item, empty);
+			super.updateItem(aItem, aEmpty);
 
-			if (empty || (item == null)) {
+			if (aEmpty || (aItem == null)) {
 				this.setText(null);
 				this.setGraphic(null);
 			} else {
-				this.setText(AbstractTreeTableCellFactory.this.getItemLabel(item));
+				this.setText(AbstractTreeTableCellFactory.this.getItemLabel(aItem));
 			}
 		}
 

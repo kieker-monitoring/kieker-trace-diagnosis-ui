@@ -24,22 +24,22 @@ package kieker.diagnosis.domain;
  */
 public final class AggregatedOperationCall extends AbstractOperationCall<AggregatedOperationCall> {
 
-	private long totalDuration;
-	private long medianDuration;
-	private long minDuration;
-	private long maxDuration;
-	private long meanDuration;
-	private int calls;
+	private long ivTotalDuration;
+	private long ivMedianDuration;
+	private long ivMinDuration;
+	private long ivMaxDuration;
+	private long ivMeanDuration;
+	private int ivCalls;
 
-	public AggregatedOperationCall(final OperationCall call) {
-		super(call.getContainer(), call.getComponent(), call.getOperation(), call.getFailedCause());
+	public AggregatedOperationCall(final OperationCall aCall) {
+		super(aCall.getContainer(), aCall.getComponent(), aCall.getOperation(), aCall.getFailedCause());
 
-		for (final OperationCall child : call.getChildren()) {
+		for (final OperationCall child : aCall.getChildren()) {
 			super.addChild(new AggregatedOperationCall(child));
 		}
 
-		this.setStackDepth(call.getStackDepth());
-		this.setStackSize(call.getStackSize());
+		this.setStackDepth(aCall.getStackDepth());
+		this.setStackSize(aCall.getStackSize());
 	}
 
 	public AggregatedOperationCall(final String container, final String component, final String operation, // NOPMD (a long parameter list cannot be avoided)
@@ -47,62 +47,62 @@ public final class AggregatedOperationCall extends AbstractOperationCall<Aggrega
 			final int calls) {
 		super(container, component, operation);
 
-		this.totalDuration = totalDuration;
-		this.medianDuration = medianDuration;
-		this.minDuration = minDuration;
-		this.maxDuration = maxDuration;
-		this.meanDuration = meanDuration;
-		this.calls = calls;
+		this.ivTotalDuration = totalDuration;
+		this.ivMedianDuration = medianDuration;
+		this.ivMinDuration = minDuration;
+		this.ivMaxDuration = maxDuration;
+		this.ivMeanDuration = meanDuration;
+		this.ivCalls = calls;
 
 		this.setFailedCause(failedCause);
 	}
 
 	public long getTotalDuration() {
-		return this.totalDuration;
+		return this.ivTotalDuration;
 	}
 
 	public void setTotalDuration(final long totalDuration) {
-		this.totalDuration = totalDuration;
+		this.ivTotalDuration = totalDuration;
 	}
 
 	public long getMedianDuration() {
-		return this.medianDuration;
+		return this.ivMedianDuration;
 	}
 
 	public void setMedianDuration(final long meanDuration) {
-		this.medianDuration = meanDuration;
+		this.ivMedianDuration = meanDuration;
 	}
 
 	public long getMinDuration() {
-		return this.minDuration;
+		return this.ivMinDuration;
 	}
 
 	public void setMinDuration(final long minDuration) {
-		this.minDuration = minDuration;
+		this.ivMinDuration = minDuration;
 	}
 
 	public long getMaxDuration() {
-		return this.maxDuration;
+		return this.ivMaxDuration;
 	}
 
 	public void setMaxDuration(final long maxDuration) {
-		this.maxDuration = maxDuration;
+		this.ivMaxDuration = maxDuration;
 	}
 
 	public long getMeanDuration() {
-		return this.meanDuration;
+		return this.ivMeanDuration;
 	}
 
 	public void setMeanDuration(final long avgDuration) {
-		this.meanDuration = avgDuration;
+		this.ivMeanDuration = avgDuration;
 	}
 
 	public int getCalls() {
-		return this.calls;
+		return this.ivCalls;
 	}
 
 	public void setCalls(final int calls) {
-		this.calls = calls;
+		this.ivCalls = calls;
 	}
 
 }

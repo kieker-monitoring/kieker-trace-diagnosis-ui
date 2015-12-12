@@ -38,48 +38,48 @@ import teetime.stage.basic.merger.Merger;
  */
 public final class TraceReconstructionComposite extends AbstractCompositeStage {
 
-	private final MultipleInstanceOfFilter<IMonitoringRecord> typeFilter;
-	private final CollectorSink<Trace> tracesCollector;
-	private final TraceStatisticsDecorator statisticsDecorator;
-	private final OutputPort<Trace> outputPort;
-	private final LegacyTraceReconstructor legacyReconstructor;
-	private final TraceReconstructor reconstructor;
+	private final MultipleInstanceOfFilter<IMonitoringRecord> ivTypeFilter;
+	private final CollectorSink<Trace> ivTracesCollector;
+	private final TraceStatisticsDecorator ivStatisticsDecorator;
+	private final OutputPort<Trace> ivOutputPort;
+	private final LegacyTraceReconstructor ivLegacyReconstructor;
+	private final TraceReconstructor ivReconstructor;
 
-	public TraceReconstructionComposite(final List<Trace> traces, final boolean activateAdditionalLogChecks) {
+	public TraceReconstructionComposite(final List<Trace> aTraces, final boolean aActivateAdditionalLogChecks) {
 		final Distributor<Trace> distributor = new Distributor<>(new CopyByReferenceStrategy());
 		final Merger<Trace> merger = new Merger<>();
 
-		this.typeFilter = new MultipleInstanceOfFilter<>();
-		this.tracesCollector = new CollectorSink<>(traces);
-		this.statisticsDecorator = new TraceStatisticsDecorator();
-		this.reconstructor = new TraceReconstructor(activateAdditionalLogChecks);
-		this.legacyReconstructor = new LegacyTraceReconstructor();
+		this.ivTypeFilter = new MultipleInstanceOfFilter<>();
+		this.ivTracesCollector = new CollectorSink<>(aTraces);
+		this.ivStatisticsDecorator = new TraceStatisticsDecorator();
+		this.ivReconstructor = new TraceReconstructor(aActivateAdditionalLogChecks);
+		this.ivLegacyReconstructor = new LegacyTraceReconstructor();
 
-		this.outputPort = this.statisticsDecorator.getOutputPort();
+		this.ivOutputPort = this.ivStatisticsDecorator.getOutputPort();
 
-		super.connectPorts(this.typeFilter.getOutputPortForType(IFlowRecord.class), this.reconstructor.getInputPort());
-		super.connectPorts(this.typeFilter.getOutputPortForType(OperationExecutionRecord.class), this.legacyReconstructor.getInputPort());
-		super.connectPorts(this.reconstructor.getOutputPort(), merger.getNewInputPort());
-		super.connectPorts(this.legacyReconstructor.getOutputPort(), merger.getNewInputPort());
+		super.connectPorts(this.ivTypeFilter.getOutputPortForType(IFlowRecord.class), this.ivReconstructor.getInputPort());
+		super.connectPorts(this.ivTypeFilter.getOutputPortForType(OperationExecutionRecord.class), this.ivLegacyReconstructor.getInputPort());
+		super.connectPorts(this.ivReconstructor.getOutputPort(), merger.getNewInputPort());
+		super.connectPorts(this.ivLegacyReconstructor.getOutputPort(), merger.getNewInputPort());
 		super.connectPorts(merger.getOutputPort(), distributor.getInputPort());
-		super.connectPorts(distributor.getNewOutputPort(), this.tracesCollector.getInputPort());
-		super.connectPorts(distributor.getNewOutputPort(), this.statisticsDecorator.getInputPort());
+		super.connectPorts(distributor.getNewOutputPort(), this.ivTracesCollector.getInputPort());
+		super.connectPorts(distributor.getNewOutputPort(), this.ivStatisticsDecorator.getInputPort());
 	}
 
 	public int countIncompleteTraces() {
-		return this.reconstructor.countIncompleteTraces() + this.legacyReconstructor.countIncompleteTraces();
+		return this.ivReconstructor.countIncompleteTraces() + this.ivLegacyReconstructor.countIncompleteTraces();
 	}
 
 	public int countDanglingRecords() {
-		return this.reconstructor.countDanglingRecords() + this.legacyReconstructor.countDanglingRecords();
+		return this.ivReconstructor.countDanglingRecords() + this.ivLegacyReconstructor.countDanglingRecords();
 	}
 
 	public InputPort<IMonitoringRecord> getInputPort() {
-		return this.typeFilter.getInputPort();
+		return this.ivTypeFilter.getInputPort();
 	}
 
 	public OutputPort<Trace> getOutputPort() {
-		return this.outputPort;
+		return this.ivOutputPort;
 	}
 
 }

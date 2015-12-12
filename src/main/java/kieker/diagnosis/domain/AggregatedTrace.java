@@ -25,16 +25,16 @@ import java.util.List;
  */
 public final class AggregatedTrace extends AbstractTrace<AggregatedOperationCall> {
 
-	private final List<Trace> traces;
+	private final List<Trace> ivTraces;
 
 	public AggregatedTrace(final List<Trace> traces) {
 		super(new AggregatedOperationCall(traces.get(0).getRootOperationCall()));
 
-		this.traces = traces;
+		this.ivTraces = traces;
 	}
 
 	public List<Trace> getTraces() {
-		return this.traces;
+		return this.ivTraces;
 	}
 
 }

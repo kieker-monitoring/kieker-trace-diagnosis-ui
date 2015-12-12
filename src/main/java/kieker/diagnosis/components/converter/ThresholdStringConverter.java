@@ -24,16 +24,16 @@ import kieker.diagnosis.util.Mapper;
 public final class ThresholdStringConverter extends AbstractStringConverter<Threshold> {
 
 	@Override
-	protected void fillMapper(final Mapper<Threshold, String> mapper, final ResourceBundle resourceBundle) {
-		final String threshold = resourceBundle.getString("threshold");
+	protected void fillMapper(final Mapper<Threshold, String> aMapper, final ResourceBundle aResourceBundle) {
+		final String threshold = aResourceBundle.getString("threshold");
 
-		mapper.map(Threshold.THRESHOLD_0_5).to(threshold + " < 0.5 %");
-		mapper.map(Threshold.THRESHOLD_1).to(threshold + " < 1 %");
-		mapper.map(Threshold.THRESHOLD_10).to(threshold + " < 10 %");
-		mapper.map(Threshold.THRESHOLD_20).to(threshold + " < 20 %");
-		mapper.map(Threshold.THRESHOLD_30).to(threshold + " < 30 %");
-		mapper.map(Threshold.THRESHOLD_40).to(threshold + " < 40 %");
-		mapper.map(Threshold.THRESHOLD_50).to(threshold + " < 50 %");
+		aMapper.map(Threshold.THRESHOLD_0_5).to(threshold + " < 0.5 %");
+		aMapper.map(Threshold.THRESHOLD_1).to(threshold + " < 1 %");
+		aMapper.map(Threshold.THRESHOLD_10).to(threshold + " < 10 %");
+		aMapper.map(Threshold.THRESHOLD_20).to(threshold + " < 20 %");
+		aMapper.map(Threshold.THRESHOLD_30).to(threshold + " < 30 %");
+		aMapper.map(Threshold.THRESHOLD_40).to(threshold + " < 40 %");
+		aMapper.map(Threshold.THRESHOLD_50).to(threshold + " < 50 %");
 	}
 
 }

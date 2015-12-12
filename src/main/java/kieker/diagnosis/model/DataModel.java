@@ -41,27 +41,27 @@ public final class DataModel {
 
 	private static final DataModel INSTANCE = new DataModel();
 
-	private final ObservableList<Trace> traces = FXCollections.observableArrayList();
-	private final ObservableList<AggregatedTrace> aggregatedTraces = FXCollections.observableArrayList();
-	private final ObservableList<OperationCall> operationCalls = FXCollections.observableArrayList();
-	private final ObservableList<AggregatedOperationCall> aggregatedOperationCalls = FXCollections.observableArrayList();
+	private final ObservableList<Trace> ivTraces = FXCollections.observableArrayList();
+	private final ObservableList<AggregatedTrace> ivAggregatedTraces = FXCollections.observableArrayList();
+	private final ObservableList<OperationCall> ivOperationCalls = FXCollections.observableArrayList();
+	private final ObservableList<AggregatedOperationCall> ivAggregatedOperationCalls = FXCollections.observableArrayList();
 
-	private final ObjectProperty<File> importDirectory = new SimpleObjectProperty<>();
-	private final ObjectProperty<Long> analysisDurationInMS = new SimpleObjectProperty<>(0L);
+	private final ObjectProperty<File> ivImportDirectory = new SimpleObjectProperty<>();
+	private final ObjectProperty<Long> ivAnalysisDurationInMS = new SimpleObjectProperty<>(0L);
 
-	private TimeUnit timeUnit;
-	private final ObjectProperty<Integer> incompleteTraces = new SimpleObjectProperty<>(0);
-	private final ObjectProperty<Integer> faultyTraces = new SimpleObjectProperty<>(0);
-	private final ObjectProperty<Integer> danglingRecords = new SimpleObjectProperty<>(0);
-	private final ObjectProperty<Integer> ignoredRecords = new SimpleObjectProperty<>(0);
-	private final ObjectProperty<Long> beginTimestamp = new SimpleObjectProperty<>();
-	private final ObjectProperty<Long> endTimestamp = new SimpleObjectProperty<>();
+	private TimeUnit ivTimeUnit;
+	private final ObjectProperty<Integer> ivIncompleteTraces = new SimpleObjectProperty<>(0);
+	private final ObjectProperty<Integer> ivFaultyTraces = new SimpleObjectProperty<>(0);
+	private final ObjectProperty<Integer> ivDanglingRecords = new SimpleObjectProperty<>(0);
+	private final ObjectProperty<Integer> ivIgnoredRecords = new SimpleObjectProperty<>(0);
+	private final ObjectProperty<Long> ivBeginTimestamp = new SimpleObjectProperty<>();
+	private final ObjectProperty<Long> ivEndTimestamp = new SimpleObjectProperty<>();
 
 	private DataModel() {
 	}
 
 	public void loadMonitoringLogFromFS(final File importDirectory) {
-		this.importDirectory.set(importDirectory);
+		this.ivImportDirectory.set(importDirectory);
 		final long tin = System.currentTimeMillis();
 
 		// Load and analyze the monitoring logs from the given directory
@@ -70,80 +70,80 @@ public final class DataModel {
 		analysis.executeBlocking();
 
 		// Store the results from the analysis
-		this.traces.setAll(analysisConfiguration.getTracesList());
-		this.aggregatedTraces.setAll(analysisConfiguration.getAggregatedTraces());
-		this.operationCalls.setAll(analysisConfiguration.getOperationCalls());
-		this.aggregatedOperationCalls.setAll(analysisConfiguration.getAggregatedOperationCalls());
+		this.ivTraces.setAll(analysisConfiguration.getTracesList());
+		this.ivAggregatedTraces.setAll(analysisConfiguration.getAggregatedTraces());
+		this.ivOperationCalls.setAll(analysisConfiguration.getOperationCalls());
+		this.ivAggregatedOperationCalls.setAll(analysisConfiguration.getAggregatedOperationCalls());
 
-		this.incompleteTraces.set(analysisConfiguration.countIncompleteTraces());
-		this.danglingRecords.set(analysisConfiguration.countDanglingEvents());
-		this.ignoredRecords.set(analysisConfiguration.countIgnoredRecords());
-		this.beginTimestamp.set(analysisConfiguration.getBeginTimestamp());
-		this.endTimestamp.set(analysisConfiguration.getEndTimestamp());
+		this.ivIncompleteTraces.set(analysisConfiguration.countIncompleteTraces());
+		this.ivDanglingRecords.set(analysisConfiguration.countDanglingEvents());
+		this.ivIgnoredRecords.set(analysisConfiguration.countIgnoredRecords());
+		this.ivBeginTimestamp.set(analysisConfiguration.getBeginTimestamp());
+		this.ivEndTimestamp.set(analysisConfiguration.getEndTimestamp());
 
 		final List<KiekerMetadataRecord> metadataRecords = analysisConfiguration.getMetadataRecords();
 		if (!metadataRecords.isEmpty()) {
 			final KiekerMetadataRecord metadataRecord = metadataRecords.get(0);
-			this.timeUnit = TimeUnit.valueOf(metadataRecord.getTimeUnit());
+			this.ivTimeUnit = TimeUnit.valueOf(metadataRecord.getTimeUnit());
 		} else {
-			this.timeUnit = TimeUnit.NANOSECONDS;
+			this.ivTimeUnit = TimeUnit.NANOSECONDS;
 		}
 
 		final long tout = System.currentTimeMillis();
 
-		this.analysisDurationInMS.set(tout - tin);
+		this.ivAnalysisDurationInMS.set(tout - tin);
 	}
 
 	public ObjectProperty<Long> getBeginTimestamp() {
-		return this.beginTimestamp;
+		return this.ivBeginTimestamp;
 	}
 
 	public ObjectProperty<Long> getEndTimestamp() {
-		return this.endTimestamp;
+		return this.ivEndTimestamp;
 	}
 
 	public ObjectProperty<Integer> countIncompleteTraces() {
-		return this.incompleteTraces;
+		return this.ivIncompleteTraces;
 	}
 
 	public ObjectProperty<Integer> countDanglingRecords() {
-		return this.danglingRecords;
+		return this.ivDanglingRecords;
 	}
 
 	public ObjectProperty<Integer> countFaultyTraces() {
-		return this.faultyTraces;
+		return this.ivFaultyTraces;
 	}
 
 	public ObjectProperty<Integer> countIgnoredRecords() {
-		return this.ignoredRecords;
+		return this.ivIgnoredRecords;
 	}
 	
 	public ObjectProperty<File> getImportDirectory() {
-		return this.importDirectory;
+		return this.ivImportDirectory;
 	}
 
 	public ObjectProperty<Long> getAnalysisDurationInMS() {
-		return this.analysisDurationInMS;
+		return this.ivAnalysisDurationInMS;
 	}
 
 	public ObservableList<Trace> getTraces() {
-		return this.traces;
+		return this.ivTraces;
 	}
 
 	public ObservableList<AggregatedTrace> getAggregatedTraces() {
-		return this.aggregatedTraces;
+		return this.ivAggregatedTraces;
 	}
 
 	public ObservableList<OperationCall> getOperationCalls() {
-		return this.operationCalls;
+		return this.ivOperationCalls;
 	}
 
 	public ObservableList<AggregatedOperationCall> getAggregatedOperationCalls() {
-		return this.aggregatedOperationCalls;
+		return this.ivAggregatedOperationCalls;
 	}
 
 	public TimeUnit getTimeUnit() {
-		return this.timeUnit;
+		return this.ivTimeUnit;
 	}
 
 	public static DataModel getInstance() {

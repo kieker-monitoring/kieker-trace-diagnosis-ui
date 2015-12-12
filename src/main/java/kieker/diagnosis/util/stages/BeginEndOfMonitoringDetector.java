@@ -24,29 +24,29 @@ import teetime.stage.basic.AbstractTransformation;
  */
 public final class BeginEndOfMonitoringDetector extends AbstractTransformation<IMonitoringRecord, IMonitoringRecord> {
 
-	private long beginTimestamp = Long.MAX_VALUE;
-	private long endTimestamp = 0;
+	private long ivBeginTimestamp = Long.MAX_VALUE;
+	private long ivEndTimestamp = 0;
 
 	@Override
-	protected void execute(final IMonitoringRecord record) {
-		final long loggingTimestamp = record.getLoggingTimestamp();
+	protected void execute(final IMonitoringRecord aRecord) {
+		final long loggingTimestamp = aRecord.getLoggingTimestamp();
 
-		if (loggingTimestamp < this.beginTimestamp) {
-			this.beginTimestamp = loggingTimestamp;
+		if (loggingTimestamp < this.ivBeginTimestamp) {
+			this.ivBeginTimestamp = loggingTimestamp;
 		}
-		if (loggingTimestamp > this.endTimestamp) {
-			this.endTimestamp = loggingTimestamp;
+		if (loggingTimestamp > this.ivEndTimestamp) {
+			this.ivEndTimestamp = loggingTimestamp;
 		}
 
-		super.getOutputPort().send(record);
+		super.getOutputPort().send(aRecord);
 	}
 
 	public long getBeginTimestamp() {
-		return this.beginTimestamp;
+		return this.ivBeginTimestamp;
 	}
 
 	public long getEndTimestamp() {
-		return this.endTimestamp;
+		return this.ivEndTimestamp;
 	}
 
 }

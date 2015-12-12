@@ -40,23 +40,23 @@ public final class DurationTreeCellValueFactory implements Callback<CellDataFeat
 
 	private static final Logger LOGGER = LogManager.getLogger(DurationTreeCellValueFactory.class);
 
-	private final DataModel dataModel = DataModel.getInstance();
-	private final PropertiesModel propertiesModel = PropertiesModel.getInstance();
+	private final DataModel ivDataModel = DataModel.getInstance();
+	private final PropertiesModel ivPropertiesModel = PropertiesModel.getInstance();
 
-	private final String property;
+	private final String ivProperty;
 
-	public DurationTreeCellValueFactory(@NamedArg(value = "property") final String property) {
-		this.property = property.substring(0, 1).toUpperCase(Locale.ROOT) + property.substring(1);
+	public DurationTreeCellValueFactory(@NamedArg(value = "property") final String aProperty) {
+		this.ivProperty = aProperty.substring(0, 1).toUpperCase(Locale.ROOT) + aProperty.substring(1);
 	}
 
 	@Override
-	public ObservableValue<Long> call(final CellDataFeatures<?, String> call) {
+	public ObservableValue<Long> call(final CellDataFeatures<?, String> aCall) {
 		try {
-			final TimeUnit srcTimeUnit = this.dataModel.getTimeUnit();
-			final TimeUnit dstTimeUnit = this.propertiesModel.getTimeUnit();
+			final TimeUnit srcTimeUnit = this.ivDataModel.getTimeUnit();
+			final TimeUnit dstTimeUnit = this.ivPropertiesModel.getTimeUnit();
 
-			final TreeItem<?> item = (call.getValue());
-			final Method getter = item.getValue().getClass().getMethod("get" + this.property, new Class<?>[0]);
+			final TreeItem<?> item = (aCall.getValue());
+			final Method getter = item.getValue().getClass().getMethod("get" + this.ivProperty, new Class<?>[0]);
 			final long duration = (long) getter.invoke(item.getValue(), new Object[0]);
 
 			final long newDuration = dstTimeUnit.convert(duration, srcTimeUnit);

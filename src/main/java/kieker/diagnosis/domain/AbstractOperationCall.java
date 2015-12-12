@@ -31,154 +31,154 @@ import java.util.List;
  */
 public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> {
  
-	private final List<T> children = new ArrayList<>();
+	private final List<T> ivChildren = new ArrayList<>();
 
-	private final String container;
-	private final String component;
-	private final String operation;
+	private final String ivContainer;
+	private final String ivComponent;
+	private final String ivOperation;
 
-	private int stackDepth;
-	private int stackSize;
-	private String failedCause;
+	private int ivStackDepth;
+	private int ivStackSize;
+	private String ivFailedCause;
 
-	public AbstractOperationCall(final String container, final String component, final String operation) {
-		this(container, component, operation, null);
+	public AbstractOperationCall(final String aContainer, final String aComponent, final String aOperation) {
+		this(aContainer, aComponent, aOperation, null);
 	}
 
-	public AbstractOperationCall(final String container, final String component, final String operation, final String failedCause) {
-		this.container = container.intern();
-		this.component = component.intern();
-		this.operation = operation.intern();
-		this.failedCause = (failedCause != null) ? failedCause.intern() : null;
+	public AbstractOperationCall(final String aContainer, final String aComponent, final String aOperation, final String aFailedCause) {
+		this.ivContainer = aContainer.intern();
+		this.ivComponent = aComponent.intern();
+		this.ivOperation = aOperation.intern();
+		this.ivFailedCause = (aFailedCause != null) ? aFailedCause.intern() : null;
 	}
 
-	public void addChild(final T child) {
-		this.children.add(child);
+	public void addChild(final T aChild) {
+		this.ivChildren.add(aChild);
 	}
 
 	public final List<T> getChildren() {
-		return this.children;
+		return this.ivChildren;
 	}
 
 	public final String getContainer() {
-		return this.container;
+		return this.ivContainer;
 	}
 
 	public final String getComponent() {
-		return this.component;
+		return this.ivComponent;
 	}
 
 	public final String getOperation() {
-		return this.operation;
+		return this.ivOperation;
 	}
 
 	public final int getStackDepth() {
-		return this.stackDepth;
+		return this.ivStackDepth;
 	}
 
-	public final void setStackDepth(final int stackDepth) {
-		this.stackDepth = stackDepth;
+	public final void setStackDepth(final int aStackDepth) {
+		this.ivStackDepth = aStackDepth;
 	}
 
 	public final int getStackSize() {
-		return this.stackSize;
+		return this.ivStackSize;
 	}
 
-	public final void setStackSize(final int stackSize) {
-		this.stackSize = stackSize;
+	public final void setStackSize(final int aStackSize) {
+		this.ivStackSize = aStackSize;
 	}
 
 	public final boolean isFailed() {
-		return (this.failedCause != null);
+		return (this.ivFailedCause != null);
 	}
 
 	public final String getFailedCause() {
-		return this.failedCause;
+		return this.ivFailedCause;
 	}
 
-	public final void setFailedCause(final String failedCause) {
-		this.failedCause = (failedCause != null) ? failedCause.intern() : null;
+	public final void setFailedCause(final String aFailedCause) {
+		this.ivFailedCause = (aFailedCause != null) ? aFailedCause.intern() : null;
 	}
 
 	public final boolean containsFailure() {
-		return this.isFailed() || this.children.parallelStream().anyMatch(T::containsFailure);
+		return this.isFailed() || this.ivChildren.parallelStream().anyMatch(T::containsFailure);
 	}
 
 	public final int calculateHashCode() {
 		final int prime = 31;
 		int result = 1;
 
-		result = (prime * result) + ((this.children == null) ? 0 : this.calculateHashCodeForChildren());
-		result = (prime * result) + ((this.component == null) ? 0 : this.component.hashCode());
-		result = (prime * result) + ((this.container == null) ? 0 : this.container.hashCode());
-		result = (prime * result) + ((this.failedCause == null) ? 0 : this.failedCause.hashCode());
-		result = (prime * result) + ((this.operation == null) ? 0 : this.operation.hashCode());
+		result = (prime * result) + ((this.ivChildren == null) ? 0 : this.calculateHashCodeForChildren());
+		result = (prime * result) + ((this.ivComponent == null) ? 0 : this.ivComponent.hashCode());
+		result = (prime * result) + ((this.ivContainer == null) ? 0 : this.ivContainer.hashCode());
+		result = (prime * result) + ((this.ivFailedCause == null) ? 0 : this.ivFailedCause.hashCode());
+		result = (prime * result) + ((this.ivOperation == null) ? 0 : this.ivOperation.hashCode());
 
 		return result;
 	}
 
 	private final int calculateHashCodeForChildren() {
 		int hashCode = 1;
-		for (final T child : this.children) {
+		for (final T child : this.ivChildren) {
 			hashCode = (31 * hashCode) + (child == null ? 0 : child.calculateHashCode());
 		}
 		return hashCode;
 	}
 
 	@SuppressWarnings("unchecked")
-	public final boolean isEqualTo(final Object obj) { // NOPMD (this method violates some metrics)
-		if (this == obj) {
+	public final boolean isEqualTo(final Object aObj) { // NOPMD (this method violates some metrics)
+		if (this == aObj) {
 			return true;
 		}
-		if (obj == null) {
+		if (aObj == null) {
 			return false;
 		}
-		if (this.getClass() != obj.getClass()) {
+		if (this.getClass() != aObj.getClass()) {
 			return false;
 		}
-		final T other = (T) obj;
-		if (this.children == null) {
+		final T other = (T) aObj;
+		if (this.ivChildren == null) {
 			if (other.getChildren() != null) {
 				return false;
 			}
 		} else {
-			final int length1 = this.children.size();
+			final int length1 = this.ivChildren.size();
 			final int length2 = other.getChildren().size();
 			if (length1 != length2) {
 				return false;
 			}
 			for (int i = 0; i < length1; i++) {
-				if (!this.children.get(i).isEqualTo(other.getChildren().get(i))) {
+				if (!this.ivChildren.get(i).isEqualTo(other.getChildren().get(i))) {
 					return false;
 				}
 			}
 		}
-		if (this.component == null) {
+		if (this.ivComponent == null) {
 			if (other.getComponent() != null) {
 				return false;
 			}
-		} else if (!this.component.equals(other.getComponent())) {
+		} else if (!this.ivComponent.equals(other.getComponent())) {
 			return false;
 		}
-		if (this.container == null) {
+		if (this.ivContainer == null) {
 			if (other.getContainer() != null) {
 				return false;
 			}
-		} else if (!this.container.equals(other.getContainer())) {
+		} else if (!this.ivContainer.equals(other.getContainer())) {
 			return false;
 		}
-		if (this.failedCause == null) {
+		if (this.ivFailedCause == null) {
 			if (other.getFailedCause() != null) {
 				return false;
 			}
-		} else if (!this.failedCause.equals(other.getFailedCause())) {
+		} else if (!this.ivFailedCause.equals(other.getFailedCause())) {
 			return false;
 		}
-		if (this.operation == null) {
+		if (this.ivOperation == null) {
 			if (other.getOperation() != null) {
 				return false;
 			}
-		} else if (!this.operation.equals(other.getOperation())) {
+		} else if (!this.ivOperation.equals(other.getOperation())) {
 			return false;
 		}
 		return true;

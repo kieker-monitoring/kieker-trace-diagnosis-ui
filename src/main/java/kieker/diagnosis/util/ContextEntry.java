@@ -18,20 +18,20 @@ package kieker.diagnosis.util;
 
 public final class ContextEntry {
 
-	private final ContextKey key;
-	private final Object value;
+	private final ContextKey ivKey;
+	private final Object ivValue;
 
-	public ContextEntry(final ContextKey key, final Object value) {
-		this.key = key;
-		this.value = value;
+	public ContextEntry(final ContextKey aKey, final Object aValue) {
+		this.ivKey = aKey;
+		this.ivValue = aValue;
 	}
 
 	public ContextKey getKey() {
-		return this.key;
+		return this.ivKey;
 	}
 
 	public Object getValue() {
-		return this.value;
+		return this.ivValue;
 	}
 
 }

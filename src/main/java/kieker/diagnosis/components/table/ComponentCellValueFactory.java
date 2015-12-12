@@ -36,17 +36,17 @@ public final class ComponentCellValueFactory implements Callback<CellDataFeature
 
 	private static final Logger LOGGER = LogManager.getLogger(ComponentCellValueFactory.class);
 
-	private final String property;
+	private final String ivProperty;
 
-	public ComponentCellValueFactory(@NamedArg(value = "property") final String property) {
-		this.property = property.substring(0, 1).toUpperCase(Locale.ROOT) + property.substring(1);
+	public ComponentCellValueFactory(@NamedArg(value = "property") final String aProperty) {
+		this.ivProperty = aProperty.substring(0, 1).toUpperCase(Locale.ROOT) + aProperty.substring(1);
 	}
 
 	@Override
-	public ObservableValue<String> call(final CellDataFeatures<?, String> call) {
+	public ObservableValue<String> call(final CellDataFeatures<?, String> aCall) {
 		try {
-			final Method getter = call.getValue().getClass().getMethod("get" + this.property, new Class<?>[0]);
-			String componentName = (String) getter.invoke(call.getValue(), new Object[0]);
+			final Method getter = aCall.getValue().getClass().getMethod("get" + this.ivProperty, new Class<?>[0]);
+			String componentName = (String) getter.invoke(aCall.getValue(), new Object[0]);
 
 			if (PropertiesModel.getInstance().getComponentNames() == ComponentNames.SHORT) {
 				componentName = NameConverter.toShortComponentName(componentName);

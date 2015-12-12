@@ -50,57 +50,57 @@ import kieker.diagnosis.util.NameConverter;
  */
 public final class CallsViewController extends AbstractController {
 
-	private final SimpleObjectProperty<Optional<OperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
+	private final SimpleObjectProperty<Optional<OperationCall>> ivSelection = new SimpleObjectProperty<>(Optional.empty());
 
-	private FilteredList<OperationCall> filteredData;
+	private FilteredList<OperationCall> ivFilteredData;
 
-	@FXML private TableView<OperationCall> table;
+	@FXML private TableView<OperationCall> ivTable;
 
-	@FXML private RadioButton showAllButton;
-	@FXML private RadioButton showJustFailedButton;
-	@FXML private RadioButton showJustSuccessful;
+	@FXML private RadioButton ivShowAllButton;
+	@FXML private RadioButton ivShowJustFailedButton;
+	@FXML private RadioButton ivShowJustSuccessful;
 
-	@FXML private TextField filterContainer;
-	@FXML private TextField filterComponent;
-	@FXML private TextField filterOperation;
-	@FXML private TextField filterTraceID;
-	@FXML private TextField filterException;
+	@FXML private TextField ivFilterContainer;
+	@FXML private TextField ivFilterComponent;
+	@FXML private TextField ivFilterOperation;
+	@FXML private TextField ivFilterTraceID;
+	@FXML private TextField ivFilterException;
 
-	@FXML private DatePicker filterLowerDate;
-	@FXML private CalendarTimeTextField filterLowerTime;
-	@FXML private DatePicker filterUpperDate;
-	@FXML private CalendarTimeTextField filterUpperTime;
+	@FXML private DatePicker ivFilterLowerDate;
+	@FXML private CalendarTimeTextField ivFilterLowerTime;
+	@FXML private DatePicker ivFilterUpperDate;
+	@FXML private CalendarTimeTextField ivFilterUpperTime;
 
-	@FXML private TextField container;
-	@FXML private TextField component;
-	@FXML private TextField operation;
-	@FXML private TextField timestamp;
-	@FXML private TextField duration;
-	@FXML private TextField traceID;
-	@FXML private TextField failed;
+	@FXML private TextField ivContainer;
+	@FXML private TextField ivComponent;
+	@FXML private TextField ivOperation;
+	@FXML private TextField ivTimestamp;
+	@FXML private TextField ivDuration;
+	@FXML private TextField ivTraceID;
+	@FXML private TextField ivFailed;
 
-	@FXML private TextField counter;
+	@FXML private TextField ivCounter;
 
-	@FXML private ResourceBundle resources;
+	@FXML private ResourceBundle ivResources;
 
-	public CallsViewController(final Context context) {
-		super(context);
+	public CallsViewController(final Context aContext) {
+		super(aContext);
 	}
 
 	@ErrorHandling
 	public void initialize() {
 		final DataModel dataModel = DataModel.getInstance();
 
-		this.filteredData = new FilteredList<>(dataModel.getOperationCalls());
-		this.filteredData.addListener((ListChangeListener<OperationCall>) change -> this.selection.set(Optional.empty()));
+		this.ivFilteredData = new FilteredList<>(dataModel.getOperationCalls());
+		this.ivFilteredData.addListener((ListChangeListener<OperationCall>) change -> this.ivSelection.set(Optional.empty()));
 
-		final SortedList<OperationCall> sortedData = new SortedList<>(this.filteredData);
-		sortedData.comparatorProperty().bind(this.table.comparatorProperty());
-		this.table.setItems(sortedData);
+		final SortedList<OperationCall> sortedData = new SortedList<>(this.ivFilteredData);
+		sortedData.comparatorProperty().bind(this.ivTable.comparatorProperty());
+		this.ivTable.setItems(sortedData);
 
-		this.selection.addListener(e -> this.updateDetailPanel());
+		this.ivSelection.addListener(e -> this.updateDetailPanel());
 
-		this.counter.textProperty().bind(Bindings.createStringBinding(() -> sortedData.size() + " " + this.resources.getString("CallsView.lbCounter.text"), sortedData));
+		this.ivCounter.textProperty().bind(Bindings.createStringBinding(() -> sortedData.size() + " " + this.ivResources.getString("CallsView.lbCounter.text"), sortedData));
 
 		final Object call = super.getContext().get(ContextKey.AGGREGATED_OPERATION_CALL);
 		if (call instanceof AggregatedOperationCall) {
@@ -109,78 +109,78 @@ public final class CallsViewController extends AbstractController {
 
 	}
 
-	private void jumpToCalls(final AggregatedOperationCall call) {
-		this.filterContainer.setText(call.getContainer());
-		this.filterComponent.setText(call.getComponent());
-		this.filterOperation.setText(call.getOperation());
+	private void jumpToCalls(final AggregatedOperationCall aCall) {
+		this.ivFilterContainer.setText(aCall.getContainer());
+		this.ivFilterComponent.setText(aCall.getComponent());
+		this.ivFilterOperation.setText(aCall.getOperation());
 
-		if (call.getFailedCause() != null) {
-			this.filterException.setText(call.getFailedCause());
+		if (aCall.getFailedCause() != null) {
+			this.ivFilterException.setText(aCall.getFailedCause());
 		} else {
-			this.showJustSuccessful.setSelected(true);
+			this.ivShowJustSuccessful.setSelected(true);
 		}
 
 		this.useFilter();
 	}
 
 	private void updateDetailPanel() {
-		if (this.selection.get().isPresent()) {
-			final OperationCall call = this.selection.get().get();
+		if (this.ivSelection.get().isPresent()) {
+			final OperationCall call = this.ivSelection.get().get();
 			final TimeUnit sourceTimeUnit = DataModel.getInstance().getTimeUnit();
 			final TimeUnit targetTimeUnit = PropertiesModel.getInstance().getTimeUnit();
 
-			this.container.setText(call.getContainer());
-			this.component.setText(call.getComponent());
-			this.operation.setText(call.getOperation());
-			this.timestamp.setText(NameConverter.toTimestampString(call.getTimestamp(), sourceTimeUnit) + " (" + call.getTimestamp() + ")");
-			this.duration.setText(NameConverter.toDurationString(call.getDuration(), sourceTimeUnit, targetTimeUnit));
-			this.traceID.setText(Long.toString(call.getTraceID()));
-			this.failed.setText(call.getFailedCause() != null ? call.getFailedCause() : "N/A");
+			this.ivContainer.setText(call.getContainer());
+			this.ivComponent.setText(call.getComponent());
+			this.ivOperation.setText(call.getOperation());
+			this.ivTimestamp.setText(NameConverter.toTimestampString(call.getTimestamp(), sourceTimeUnit) + " (" + call.getTimestamp() + ")");
+			this.ivDuration.setText(NameConverter.toDurationString(call.getDuration(), sourceTimeUnit, targetTimeUnit));
+			this.ivTraceID.setText(Long.toString(call.getTraceID()));
+			this.ivFailed.setText(call.getFailedCause() != null ? call.getFailedCause() : "N/A");
 		} else {
-			this.container.setText("N/A");
-			this.component.setText("N/A");
-			this.operation.setText("N/A");
-			this.timestamp.setText("N/A");
-			this.duration.setText("N/A");
-			this.traceID.setText("N/A");
-			this.failed.setText("N/A");
+			this.ivContainer.setText("N/A");
+			this.ivComponent.setText("N/A");
+			this.ivOperation.setText("N/A");
+			this.ivTimestamp.setText("N/A");
+			this.ivDuration.setText("N/A");
+			this.ivTraceID.setText("N/A");
+			this.ivFailed.setText("N/A");
 		}
 	}
 
 	@ErrorHandling
-	public void selectCall(final MouseEvent event) throws Exception {
-		final int clicked = event.getClickCount();
+	public void selectCall(final MouseEvent aEvent) throws Exception {
+		final int clicked = aEvent.getClickCount();
 
 		if (clicked == 1) {
-			this.selection.set(Optional.ofNullable(this.table.getSelectionModel().getSelectedItem()));
+			this.ivSelection.set(Optional.ofNullable(this.ivTable.getSelectionModel().getSelectedItem()));
 		} else if (clicked == 2) {
 			this.jumpToTrace();
 		}
 	}
 
 	private void jumpToTrace() throws Exception {
-		if (this.selection.get().isPresent()) {
-			final OperationCall call = this.selection.get().get();
+		if (this.ivSelection.get().isPresent()) {
+			final OperationCall call = this.ivSelection.get().get();
 			MainController.instance().jumpToTrace(call);
 		}
 	}
 
 	@ErrorHandling
 	public void useFilter() {
-		final Predicate<OperationCall> predicate1 = FilterUtility.useFilter(this.showAllButton, this.showJustSuccessful, this.showJustFailedButton, OperationCall::isFailed);
-		final Predicate<OperationCall> predicate2 = FilterUtility.useFilter(this.filterContainer, OperationCall::getContainer);
-		final Predicate<OperationCall> predicate3 = FilterUtility.useFilter(this.filterComponent, OperationCall::getComponent);
-		final Predicate<OperationCall> predicate4 = FilterUtility.useFilter(this.filterOperation, OperationCall::getOperation);
-		final Predicate<OperationCall> predicate5 = FilterUtility.useFilter(this.filterTraceID, (call -> Long.toString(call.getTraceID())));
-		final Predicate<OperationCall> predicate6 = FilterUtility.useFilter(this.filterLowerDate, OperationCall::getTimestamp, true);
-		final Predicate<OperationCall> predicate7 = FilterUtility.useFilter(this.filterUpperDate, OperationCall::getTimestamp, false);
-		final Predicate<OperationCall> predicate8 = FilterUtility.useFilter(this.filterLowerTime, OperationCall::getTimestamp, true);
-		final Predicate<OperationCall> predicate9 = FilterUtility.useFilter(this.filterUpperTime, OperationCall::getTimestamp, false);
-		final Predicate<OperationCall> predicate10 = FilterUtility.useFilter(this.filterException, (call -> call.isFailed() ? call.getFailedCause() : ""));
+		final Predicate<OperationCall> predicate1 = FilterUtility.useFilter(this.ivShowAllButton, this.ivShowJustSuccessful, this.ivShowJustFailedButton, OperationCall::isFailed);
+		final Predicate<OperationCall> predicate2 = FilterUtility.useFilter(this.ivFilterContainer, OperationCall::getContainer);
+		final Predicate<OperationCall> predicate3 = FilterUtility.useFilter(this.ivFilterComponent, OperationCall::getComponent);
+		final Predicate<OperationCall> predicate4 = FilterUtility.useFilter(this.ivFilterOperation, OperationCall::getOperation);
+		final Predicate<OperationCall> predicate5 = FilterUtility.useFilter(this.ivFilterTraceID, (call -> Long.toString(call.getTraceID())));
+		final Predicate<OperationCall> predicate6 = FilterUtility.useFilter(this.ivFilterLowerDate, OperationCall::getTimestamp, true);
+		final Predicate<OperationCall> predicate7 = FilterUtility.useFilter(this.ivFilterUpperDate, OperationCall::getTimestamp, false);
+		final Predicate<OperationCall> predicate8 = FilterUtility.useFilter(this.ivFilterLowerTime, OperationCall::getTimestamp, true);
+		final Predicate<OperationCall> predicate9 = FilterUtility.useFilter(this.ivFilterUpperTime, OperationCall::getTimestamp, false);
+		final Predicate<OperationCall> predicate10 = FilterUtility.useFilter(this.ivFilterException, (call -> call.isFailed() ? call.getFailedCause() : ""));
 
 		final Predicate<OperationCall> predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5).and(predicate6).and(predicate7).and(predicate8)
 				.and(predicate9).and(predicate10);
-		this.filteredData.setPredicate(predicate);
+		this.ivFilteredData.setPredicate(predicate);
 	}
 
 }

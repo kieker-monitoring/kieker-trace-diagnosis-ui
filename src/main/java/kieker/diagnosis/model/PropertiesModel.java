@@ -49,19 +49,19 @@ public final class PropertiesModel {
 	private static final String KEY_GITLAB_URL = "GitLabURL";
 	private static final String KEY_TRAC_URL = "TracURL";
 
-	private String graphvizPath;
-	private TimeUnit timeUnit;
-	private ComponentNames componentNames;
-	private OperationNames operationNames;
-	private Threshold threshold;
-	private TimestampTypes timestampType;
-	private boolean additionalLogChecksActive;
-	private boolean regularExpressionsActive;
-	private boolean methodCallAggregationActive;
-	private boolean caseSensitivityActive;
-	private boolean percentageCalculationActive;
-	private String gitLabURL;
-	private String tracURL;
+	private String ivGraphvizPath;
+	private TimeUnit ivTimeUnit;
+	private ComponentNames ivComponentNames;
+	private OperationNames ivOperationNames;
+	private Threshold ivThreshold;
+	private TimestampTypes ivTimestampType;
+	private boolean ivAdditionalLogChecksActive;
+	private boolean ivRegularExpressionsActive;
+	private boolean ivMethodCallAggregationActive;
+	private boolean ivCaseSensitivityActive;
+	private boolean ivPercentageCalculationActive;
+	private String ivGitLabURL;
+	private String ivTracURL;
 
 	private long version = 0L;
 
@@ -76,24 +76,24 @@ public final class PropertiesModel {
 	private void loadSettings() {
 		final Preferences preferences = Preferences.userNodeForPackage(PropertiesModel.class);
 
-		this.graphvizPath = preferences.get(PropertiesModel.KEY_GRAPHVIZ_PATH, ".");
-		this.timeUnit = TimeUnit.valueOf(preferences.get(PropertiesModel.KEY_TIMEUNIT, TimeUnit.NANOSECONDS.name()));
-		this.componentNames = ComponentNames.valueOf(preferences.get(PropertiesModel.KEY_COMPONENTS, ComponentNames.LONG.name()));
-		this.operationNames = OperationNames.valueOf(preferences.get(PropertiesModel.KEY_OPERATIONS, OperationNames.SHORT.name()));
-		this.additionalLogChecksActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_ADDITIONAL_LOG_CHECKS, Boolean.FALSE.toString()));
-		this.regularExpressionsActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_REGULAR_EXPRESSIONS, Boolean.FALSE.toString()));
-		this.methodCallAggregationActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_METHOD_CALL_AGGREGATION, Boolean.FALSE.toString()));
-		this.threshold = Threshold.valueOf(preferences.get(PropertiesModel.KEY_THRESHOLD, Threshold.THRESHOLD_1.name()));
-		this.caseSensitivityActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_CASE_SENSITIVE, Boolean.FALSE.toString()));
-		this.percentageCalculationActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.FALSE.toString()));
-		this.timestampType = TimestampTypes.valueOf(preferences.get(PropertiesModel.KEY_TIMESTAMP_TYPE, TimestampTypes.TIMESTAMP.name()));
+		this.ivGraphvizPath = preferences.get(PropertiesModel.KEY_GRAPHVIZ_PATH, ".");
+		this.ivTimeUnit = TimeUnit.valueOf(preferences.get(PropertiesModel.KEY_TIMEUNIT, TimeUnit.NANOSECONDS.name()));
+		this.ivComponentNames = ComponentNames.valueOf(preferences.get(PropertiesModel.KEY_COMPONENTS, ComponentNames.LONG.name()));
+		this.ivOperationNames = OperationNames.valueOf(preferences.get(PropertiesModel.KEY_OPERATIONS, OperationNames.SHORT.name()));
+		this.ivAdditionalLogChecksActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_ADDITIONAL_LOG_CHECKS, Boolean.FALSE.toString()));
+		this.ivRegularExpressionsActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_REGULAR_EXPRESSIONS, Boolean.FALSE.toString()));
+		this.ivMethodCallAggregationActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_METHOD_CALL_AGGREGATION, Boolean.FALSE.toString()));
+		this.ivThreshold = Threshold.valueOf(preferences.get(PropertiesModel.KEY_THRESHOLD, Threshold.THRESHOLD_1.name()));
+		this.ivCaseSensitivityActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_CASE_SENSITIVE, Boolean.FALSE.toString()));
+		this.ivPercentageCalculationActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.FALSE.toString()));
+		this.ivTimestampType = TimestampTypes.valueOf(preferences.get(PropertiesModel.KEY_TIMESTAMP_TYPE, TimestampTypes.TIMESTAMP.name()));
 
 		final Properties properties = new Properties();
 		final ClassLoader classLoader = PropertiesModel.class.getClassLoader();
 		try (InputStream inputStream = classLoader.getResourceAsStream("config.properties")) {
 			properties.load(inputStream);
-			this.gitLabURL = properties.getProperty(PropertiesModel.KEY_GITLAB_URL);
-			this.tracURL = properties.getProperty(PropertiesModel.KEY_TRAC_URL);
+			this.ivGitLabURL = properties.getProperty(PropertiesModel.KEY_GITLAB_URL);
+			this.ivTracURL = properties.getProperty(PropertiesModel.KEY_TRAC_URL);
 		} catch (final IOException e) {
 			PropertiesModel.LOGGER.error(e);
 		}
@@ -102,17 +102,17 @@ public final class PropertiesModel {
 	private void saveSettings() {
 		final Preferences preferences = Preferences.userNodeForPackage(PropertiesModel.class);
 
-		preferences.put(PropertiesModel.KEY_GRAPHVIZ_PATH, this.graphvizPath);
-		preferences.put(PropertiesModel.KEY_TIMEUNIT, this.timeUnit.name());
-		preferences.put(PropertiesModel.KEY_COMPONENTS, this.componentNames.name());
-		preferences.put(PropertiesModel.KEY_OPERATIONS, this.operationNames.name());
-		preferences.put(PropertiesModel.KEY_ADDITIONAL_LOG_CHECKS, Boolean.toString(this.additionalLogChecksActive));
-		preferences.put(PropertiesModel.KEY_REGULAR_EXPRESSIONS, Boolean.toString(this.regularExpressionsActive));
-		preferences.put(PropertiesModel.KEY_METHOD_CALL_AGGREGATION, Boolean.toString(this.methodCallAggregationActive));
-		preferences.put(PropertiesModel.KEY_THRESHOLD, this.threshold.name());
-		preferences.put(PropertiesModel.KEY_CASE_SENSITIVE, Boolean.toString(this.caseSensitivityActive));
-		preferences.put(PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.toString(this.percentageCalculationActive));
-		preferences.put(PropertiesModel.KEY_TIMESTAMP_TYPE, this.timestampType.name());
+		preferences.put(PropertiesModel.KEY_GRAPHVIZ_PATH, this.ivGraphvizPath);
+		preferences.put(PropertiesModel.KEY_TIMEUNIT, this.ivTimeUnit.name());
+		preferences.put(PropertiesModel.KEY_COMPONENTS, this.ivComponentNames.name());
+		preferences.put(PropertiesModel.KEY_OPERATIONS, this.ivOperationNames.name());
+		preferences.put(PropertiesModel.KEY_ADDITIONAL_LOG_CHECKS, Boolean.toString(this.ivAdditionalLogChecksActive));
+		preferences.put(PropertiesModel.KEY_REGULAR_EXPRESSIONS, Boolean.toString(this.ivRegularExpressionsActive));
+		preferences.put(PropertiesModel.KEY_METHOD_CALL_AGGREGATION, Boolean.toString(this.ivMethodCallAggregationActive));
+		preferences.put(PropertiesModel.KEY_THRESHOLD, this.ivThreshold.name());
+		preferences.put(PropertiesModel.KEY_CASE_SENSITIVE, Boolean.toString(this.ivCaseSensitivityActive));
+		preferences.put(PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.toString(this.ivPercentageCalculationActive));
+		preferences.put(PropertiesModel.KEY_TIMESTAMP_TYPE, this.ivTimestampType.name());
 
 		try {
 			preferences.flush();
@@ -124,91 +124,91 @@ public final class PropertiesModel {
 	}
 
 	public String getGraphvizPath() {
-		return this.graphvizPath;
+		return this.ivGraphvizPath;
 	}
 
-	public void setGraphvizPath(final String graphvizPath) {
-		this.graphvizPath = graphvizPath;
+	public void setGraphvizPath(final String aGraphvizPath) {
+		this.ivGraphvizPath = aGraphvizPath;
 		this.saveSettings();
 	}
 
 	public TimeUnit getTimeUnit() {
-		return this.timeUnit;
+		return this.ivTimeUnit;
 	}
 
-	public void setTimeUnit(final TimeUnit timeUnit) {
-		this.timeUnit = timeUnit;
+	public void setTimeUnit(final TimeUnit aTimeUnit) {
+		this.ivTimeUnit = aTimeUnit;
 		this.saveSettings();
 	}
 
 	public ComponentNames getComponentNames() {
-		return this.componentNames;
+		return this.ivComponentNames;
 	}
 
-	public void setComponentNames(final ComponentNames componentNames) {
-		this.componentNames = componentNames;
+	public void setComponentNames(final ComponentNames aComponentNames) {
+		this.ivComponentNames = aComponentNames;
 		this.saveSettings();
 	}
 
 	public OperationNames getOperationNames() {
-		return this.operationNames;
+		return this.ivOperationNames;
 	}
 
-	public void setOperationNames(final OperationNames operationNames) {
-		this.operationNames = operationNames;
+	public void setOperationNames(final OperationNames aOperationNames) {
+		this.ivOperationNames = aOperationNames;
 		this.saveSettings();
 	}
 
 	public boolean isAdditionalLogChecksActive() {
-		return this.additionalLogChecksActive;
+		return this.ivAdditionalLogChecksActive;
 	}
 
-	public void setAdditionalLogChecksActive(final boolean active) {
-		this.additionalLogChecksActive = active;
+	public void setAdditionalLogChecksActive(final boolean aActive) {
+		this.ivAdditionalLogChecksActive = aActive;
 		this.saveSettings();
 	}
 
 	public boolean isRegularExpressionsActive() {
-		return this.regularExpressionsActive;
+		return this.ivRegularExpressionsActive;
 	}
 
-	public void setRegularExpressionsActive(final boolean active) {
-		this.regularExpressionsActive = active;
+	public void setRegularExpressionsActive(final boolean aActive) {
+		this.ivRegularExpressionsActive = aActive;
 		this.saveSettings();
 	}
 
 	public String getGitLabURL() {
-		return this.gitLabURL;
+		return this.ivGitLabURL;
 	}
 
 	public String getTracURL() {
-		return this.tracURL;
+		return this.ivTracURL;
 	}
 
 	public boolean isMethodCallAggregationActive() {
-		return this.methodCallAggregationActive;
+		return this.ivMethodCallAggregationActive;
 	}
 
-	public void setMethodCallAggregationActive(final boolean active) {
-		this.methodCallAggregationActive = active;
+	public void setMethodCallAggregationActive(final boolean aActive) {
+		this.ivMethodCallAggregationActive = aActive;
 		this.saveSettings();
 	}
 
 	public Threshold getThreshold() {
-		return this.threshold;
+		return this.ivThreshold;
 	}
 
-	public void setThreshold(final Threshold threshold) {
-		this.threshold = threshold;
+	public void setThreshold(final Threshold aThreshold) {
+		this.ivThreshold = aThreshold;
 		this.saveSettings();
 	}
 
 	public boolean isCaseSensitivityActive() {
-		return this.caseSensitivityActive;
+		return this.ivCaseSensitivityActive;
 	}
 
-	public void setCaseSensitivityActive(final boolean active) {
-		this.caseSensitivityActive = active;
+	public void setCaseSensitivityActive(final boolean aActive) {
+		this.ivCaseSensitivityActive = aActive;
 		this.saveSettings();
 	}
 
@@ -217,20 +217,20 @@ public final class PropertiesModel {
 	}
 
 	public boolean isPercentageCalculationActive() {
-		return this.percentageCalculationActive;
+		return this.ivPercentageCalculationActive;
 	}
 
-	public void setPercentageCalculationActive(final boolean active) {
-		this.percentageCalculationActive = active;
+	public void setPercentageCalculationActive(final boolean aActive) {
+		this.ivPercentageCalculationActive = aActive;
 		this.saveSettings();
 	}
 
 	public TimestampTypes getTimestampType() {
-		return this.timestampType;
+		return this.ivTimestampType;
 	}
 
-	public void setTimestampType(final TimestampTypes timestampType) {
-		this.timestampType = timestampType;
+	public void setTimestampType(final TimestampTypes aTimestampType) {
+		this.ivTimestampType = aTimestampType;
 		this.saveSettings();
 	}
 
@@ -256,14 +256,14 @@ public final class PropertiesModel {
 
 		THRESHOLD_0_5(0.5f), THRESHOLD_1(1f), THRESHOLD_10(10f), THRESHOLD_20(20f), THRESHOLD_30(30f), THRESHOLD_40(40f), THRESHOLD_50(50f);
 
-		private final float percent;
+		private final float ivPercent;
 
-		private Threshold(final float percent) {
-			this.percent = percent;
+		private Threshold(final float aPercent) {
+			this.ivPercent = aPercent;
 		}
 
 		public float getPercent() {
-			return this.percent;
+			return this.ivPercent;
 		}
 
 	}

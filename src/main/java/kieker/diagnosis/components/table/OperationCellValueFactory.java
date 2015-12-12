@@ -37,17 +37,17 @@ public final class OperationCellValueFactory implements Callback<CellDataFeature
 
 	private static final Logger LOGGER = LogManager.getLogger(DurationTreeCellValueFactory.class);
 
-	private final String property;
+	private final String ivProperty;
 
-	public OperationCellValueFactory(@NamedArg(value = "property") final String property) {
-		this.property = property.substring(0, 1).toUpperCase(Locale.ROOT) + property.substring(1);
+	public OperationCellValueFactory(@NamedArg(value = "property") final String aProperty) {
+		this.ivProperty = aProperty.substring(0, 1).toUpperCase(Locale.ROOT) + aProperty.substring(1);
 	}
 
 	@Override
-	public ObservableValue<String> call(final CellDataFeatures<?, String> call) {
+	public ObservableValue<String> call(final CellDataFeatures<?, String> aCall) {
 		try {
-			final Method getter = call.getValue().getClass().getMethod("get" + this.property, new Class<?>[0]);
-			String operationName = (String) getter.invoke(call.getValue(), new Object[0]);
+			final Method getter = aCall.getValue().getClass().getMethod("get" + this.ivProperty, new Class<?>[0]);
+			String operationName = (String) getter.invoke(aCall.getValue(), new Object[0]);
 
 			if (PropertiesModel.getInstance().getOperationNames() == OperationNames.SHORT) {
 				operationName = NameConverter.toShortOperationName(operationName);

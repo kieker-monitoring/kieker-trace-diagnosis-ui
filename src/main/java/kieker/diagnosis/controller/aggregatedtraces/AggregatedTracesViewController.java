@@ -47,41 +47,41 @@ import kieker.diagnosis.util.NameConverter;
  */
 public final class AggregatedTracesViewController extends AbstractController {
 
-	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> selection = new SimpleObjectProperty<>(Optional.empty());
+	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> ivSelection = new SimpleObjectProperty<>(Optional.empty());
 
-	@FXML private TreeTableView<AggregatedOperationCall> treetable;
+	@FXML private TreeTableView<AggregatedOperationCall> ivTreetable;
 
-	@FXML private RadioButton showAllButton;
-	@FXML private RadioButton showJustFailedButton;
-	@FXML private RadioButton showJustFailureContainingButton;
-	@FXML private RadioButton showJustSuccessful;
+	@FXML private RadioButton ivShowAllButton;
+	@FXML private RadioButton ivShowJustFailedButton;
+	@FXML private RadioButton ivShowJustFailureContainingButton;
+	@FXML private RadioButton ivShowJustSuccessful;
 
-	@FXML private TextField filterContainer;
-	@FXML private TextField filterComponent;
-	@FXML private TextField filterOperation;
-	@FXML private TextField filterException;
+	@FXML private TextField ivFilterContainer;
+	@FXML private TextField ivFilterComponent;
+	@FXML private TextField ivFilterOperation;
+	@FXML private TextField ivFilterException;
 
-	@FXML private TextField medianDuration;
-	@FXML private TextField totalDuration;
-	@FXML private TextField minDuration;
-	@FXML private TextField avgDuration;
-	@FXML private TextField maxDuration;
-	@FXML private TextField traceDepth;
-	@FXML private TextField traceSize;
-	@FXML private TextField container;
-	@FXML private TextField component;
-	@FXML private TextField operation;
-	@FXML private TextField failed;
-	@FXML private TextField calls;
+	@FXML private TextField ivMedianDuration;
+	@FXML private TextField ivTotalDuration;
+	@FXML private TextField ivMinDuration;
+	@FXML private TextField ivAvgDuration;
+	@FXML private TextField ivMaxDuration;
+	@FXML private TextField ivTraceDepth;
+	@FXML private TextField ivTraceSize;
+	@FXML private TextField ivContainer;
+	@FXML private TextField ivComponent;
+	@FXML private TextField ivOperation;
+	@FXML private TextField ivFailed;
+	@FXML private TextField ivCalls;
 
-	@FXML private TextField counter;
+	@FXML private TextField ivCounter;
 
-	@FXML private ResourceBundle resources;
+	@FXML private ResourceBundle ivResources;
 
-	private Predicate<AggregatedOperationCall> predicate = FilterUtility.alwaysTrue();
+	private Predicate<AggregatedOperationCall> ivPredicate = FilterUtility.alwaysTrue();
 
-	public AggregatedTracesViewController(final Context context) {
-		super(context);
+	public AggregatedTracesViewController(final Context aContext) {
+		super(aContext);
 	}
 
 	@ErrorHandling
@@ -91,76 +91,76 @@ public final class AggregatedTracesViewController extends AbstractController {
 		final DataModel dataModel = DataModel.getInstance();
 		dataModel.getAggregatedTraces().addListener((final Change<? extends AggregatedTrace> c) -> this.reloadTreetable());
 
-		this.selection.addListener(e -> this.updateDetailPanel());
+		this.ivSelection.addListener(e -> this.updateDetailPanel());
 	}
 
 	private void updateDetailPanel() {
-		if (this.selection.get().isPresent()) {
-			final AggregatedOperationCall call = this.selection.get().get();
+		if (this.ivSelection.get().isPresent()) {
+			final AggregatedOperationCall call = this.ivSelection.get().get();
 			final TimeUnit sourceTimeUnit = DataModel.getInstance().getTimeUnit();
 			final TimeUnit targetTimeUnit = PropertiesModel.getInstance().getTimeUnit();
 
-			this.container.setText(call.getContainer());
-			this.component.setText(call.getComponent());
-			this.operation.setText(call.getOperation());
-			this.minDuration.setText(NameConverter.toDurationString(call.getMinDuration(), sourceTimeUnit, targetTimeUnit));
-			this.maxDuration.setText(NameConverter.toDurationString(call.getMaxDuration(), sourceTimeUnit, targetTimeUnit));
-			this.medianDuration.setText(NameConverter.toDurationString(call.getMedianDuration(), sourceTimeUnit, targetTimeUnit));
-			this.totalDuration.setText(NameConverter.toDurationString(call.getTotalDuration(), sourceTimeUnit, targetTimeUnit));
-			this.avgDuration.setText(NameConverter.toDurationString(call.getMeanDuration(), sourceTimeUnit, targetTimeUnit));
-			this.calls.setText(Integer.toString(call.getCalls()));
-			this.traceDepth.setText(Integer.toString(call.getStackDepth()));
-			this.traceSize.setText(Integer.toString(call.getStackSize()));
-			this.failed.setText(call.getFailedCause() != null ? call.getFailedCause() : "N/A");
+			this.ivContainer.setText(call.getContainer());
+			this.ivComponent.setText(call.getComponent());
+			this.ivOperation.setText(call.getOperation());
+			this.ivMinDuration.setText(NameConverter.toDurationString(call.getMinDuration(), sourceTimeUnit, targetTimeUnit));
+			this.ivMaxDuration.setText(NameConverter.toDurationString(call.getMaxDuration(), sourceTimeUnit, targetTimeUnit));
+			this.ivMedianDuration.setText(NameConverter.toDurationString(call.getMedianDuration(), sourceTimeUnit, targetTimeUnit));
+			this.ivTotalDuration.setText(NameConverter.toDurationString(call.getTotalDuration(), sourceTimeUnit, targetTimeUnit));
+			this.ivAvgDuration.setText(NameConverter.toDurationString(call.getMeanDuration(), sourceTimeUnit, targetTimeUnit));
+			this.ivCalls.setText(Integer.toString(call.getCalls()));
+			this.ivTraceDepth.setText(Integer.toString(call.getStackDepth()));
+			this.ivTraceSize.setText(Integer.toString(call.getStackSize()));
+			this.ivFailed.setText(call.getFailedCause() != null ? call.getFailedCause() : "N/A");
 		} else {
-			this.container.setText("N/A");
-			this.component.setText("N/A");
-			this.operation.setText("N/A");
-			this.minDuration.setText("N/A");
-			this.maxDuration.setText("N/A");
-			this.medianDuration.setText("N/A");
-			this.totalDuration.setText("N/A");
-			this.avgDuration.setText("N/A");
-			this.calls.setText("N/A");
-			this.traceDepth.setText("N/A");
-			this.traceSize.setText("N/A");
-			this.failed.setText("N/A");
+			this.ivContainer.setText("N/A");
+			this.ivComponent.setText("N/A");
+			this.ivOperation.setText("N/A");
+			this.ivMinDuration.setText("N/A");
+			this.ivMaxDuration.setText("N/A");
+			this.ivMedianDuration.setText("N/A");
+			this.ivTotalDuration.setText("N/A");
+			this.ivAvgDuration.setText("N/A");
+			this.ivCalls.setText("N/A");
+			this.ivTraceDepth.setText("N/A");
+			this.ivTraceSize.setText("N/A");
+			this.ivFailed.setText("N/A");
 		}
 	}
 
 	@ErrorHandling
-	public void selectCall(final MouseEvent event) {
-		final TreeItem<AggregatedOperationCall> selectedItem = this.treetable.getSelectionModel().getSelectedItem();
+	public void selectCall(final MouseEvent aEvent) {
+		final TreeItem<AggregatedOperationCall> selectedItem = this.ivTreetable.getSelectionModel().getSelectedItem();
 		if (selectedItem != null) {
-			this.selection.set(Optional.ofNullable(selectedItem.getValue()));
+			this.ivSelection.set(Optional.ofNullable(selectedItem.getValue()));
 		}
 	}
 
 	@ErrorHandling
 	public void useFilter() {
-		final Predicate<AggregatedOperationCall> predicate1 = FilterUtility.useFilter(this.showAllButton, this.showJustSuccessful, this.showJustFailedButton,
-				this.showJustFailureContainingButton, AggregatedOperationCall::isFailed, AggregatedOperationCall::containsFailure);
-		final Predicate<AggregatedOperationCall> predicate2 = FilterUtility.useFilter(this.filterContainer, AggregatedOperationCall::getContainer);
-		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter(this.filterComponent, AggregatedOperationCall::getComponent);
-		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter(this.filterOperation, AggregatedOperationCall::getOperation);
-		final Predicate<AggregatedOperationCall> predicate5 = FilterUtility.useFilter(this.filterException, (call -> call.isFailed() ? call.getFailedCause() : ""));
+		final Predicate<AggregatedOperationCall> predicate1 = FilterUtility.useFilter(this.ivShowAllButton, this.ivShowJustSuccessful, this.ivShowJustFailedButton,
+				this.ivShowJustFailureContainingButton, AggregatedOperationCall::isFailed, AggregatedOperationCall::containsFailure);
+		final Predicate<AggregatedOperationCall> predicate2 = FilterUtility.useFilter(this.ivFilterContainer, AggregatedOperationCall::getContainer);
+		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter(this.ivFilterComponent, AggregatedOperationCall::getComponent);
+		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter(this.ivFilterOperation, AggregatedOperationCall::getOperation);
+		final Predicate<AggregatedOperationCall> predicate5 = FilterUtility.useFilter(this.ivFilterException, (call -> call.isFailed() ? call.getFailedCause() : ""));
 
-		this.predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5);
+		this.ivPredicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5);
 		this.reloadTreetable();
 	}
 
 	private void reloadTreetable() {
-		this.selection.set(Optional.empty());
+		this.ivSelection.set(Optional.empty());
 
 		final DataModel dataModel = DataModel.getInstance();
 		final List<AggregatedTrace> traces = dataModel.getAggregatedTraces();
 		final TreeItem<AggregatedOperationCall> root = new TreeItem<>();
 		final ObservableList<TreeItem<AggregatedOperationCall>> rootChildren = root.getChildren();
-		this.treetable.setRoot(root);
-		this.treetable.setShowRoot(false);
+		this.ivTreetable.setRoot(root);
+		this.ivTreetable.setShowRoot(false);
 
-		traces.stream().map(trace -> trace.getRootOperationCall()).filter(this.predicate).forEach(call -> rootChildren.add(new LazyAggregatedOperationCallTreeItem(call)));
+		traces.stream().map(trace -> trace.getRootOperationCall()).filter(this.ivPredicate).forEach(call -> rootChildren.add(new LazyAggregatedOperationCallTreeItem(call)));
 
-		this.counter.textProperty().set(rootChildren.size() + " " + this.resources.getString("AggregatedTracesView.lblCounter.text"));
+		this.ivCounter.textProperty().set(rootChildren.size() + " " + this.ivResources.getString("AggregatedTracesView.lblCounter.text"));
 	}
 }

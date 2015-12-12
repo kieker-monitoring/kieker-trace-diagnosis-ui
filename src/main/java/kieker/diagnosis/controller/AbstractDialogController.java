@@ -25,10 +25,10 @@ import kieker.diagnosis.util.Context;
 
 public abstract class AbstractDialogController extends AbstractController {
 
-	@FXML private Node view;
+	@FXML private Node ivView;
 
-	public AbstractDialogController(final Context context) {
-		super(context);
+	public AbstractDialogController(final Context aContext) {
+		super(aContext);
 	}
 
 	public final void closeDialog() {
@@ -40,7 +40,7 @@ public abstract class AbstractDialogController extends AbstractController {
 	}
 
 	protected final Node getView() {
-		return this.view;
+		return this.ivView;
 	}
 
 }

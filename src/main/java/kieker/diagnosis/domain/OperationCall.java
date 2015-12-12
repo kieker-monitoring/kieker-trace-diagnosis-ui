@@ -24,12 +24,12 @@ package kieker.diagnosis.domain;
  */
 public final class OperationCall extends AbstractOperationCall<OperationCall> {
 
-	private final long traceID;
+	private final long ivTraceID;
 
-	private OperationCall parent;
-	private float percent;
-	private long duration;
-	private long timestamp;
+	private OperationCall ivParent;
+	private float ivPercent;
+	private long ivDuration;
+	private long ivTimestamp;
 
 	public OperationCall(final String container, final String component, final String operation, final long traceID, final long timestamp) {
 		this(container, component, operation, null, traceID, timestamp);
@@ -38,46 +38,46 @@ public final class OperationCall extends AbstractOperationCall<OperationCall> {
 	public OperationCall(final String container, final String component, final String operation, final String failedCause, final long traceID, final long timestamp) {
 		super(container, component, operation, failedCause);
 
-		this.traceID = traceID;
-		this.timestamp = timestamp;
+		this.ivTraceID = traceID;
+		this.ivTimestamp = timestamp;
 	}
 
 	@Override
 	public void addChild(final OperationCall child) {
 		super.addChild(child);
-		child.parent = this;
+		child.ivParent = this;
 	}
 
 	public OperationCall getParent() {
-		return this.parent;
+		return this.ivParent;
 	}
 
 	public float getPercent() {
-		return this.percent;
+		return this.ivPercent;
 	}
 
 	public void setPercent(final float percent) {
-		this.percent = percent;
+		this.ivPercent = percent;
 	}
 
 	public long getDuration() {
-		return this.duration;
+		return this.ivDuration;
 	}
 
 	public void setDuration(final long duration) {
-		this.duration = duration;
+		this.ivDuration = duration;
 	}
 
 	public long getTraceID() {
-		return this.traceID;
+		return this.ivTraceID;
 	}
 
 	public long getTimestamp() {
-		return this.timestamp;
+		return this.ivTimestamp;
 	}
 
 	public void setTimestamp(final long timestamp) {
-		this.timestamp = timestamp;
+		this.ivTimestamp = timestamp;
 	}
 
 }

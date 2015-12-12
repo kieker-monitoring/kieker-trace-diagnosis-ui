@@ -23,16 +23,16 @@ package kieker.diagnosis.domain;
  */
 public final class Trace extends AbstractTrace<OperationCall> {
 
-	private final long traceID;
+	private final long ivTraceID;
 
 	public Trace(final OperationCall rootOperationCall, final long traceID) {
 		super(rootOperationCall);
 
-		this.traceID = traceID;
+		this.ivTraceID = traceID;
 	}
 
 	public long getTraceID() {
-		return this.traceID;
+		return this.ivTraceID;
 	}
 
 }

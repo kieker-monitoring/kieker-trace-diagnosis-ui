@@ -32,18 +32,18 @@ import teetime.stage.io.filesystem.Dir2RecordsFilter;
  */
 public final class ReadingComposite extends AbstractCompositeStage {
 
-	private final InitialElementProducer<File> producer;
-	private final Dir2RecordsFilter reader;
+	private final InitialElementProducer<File> ivProducer;
+	private final Dir2RecordsFilter ivReader;
 
-	public ReadingComposite(final File importDirectory) {
-		this.producer = new InitialElementProducer<>(importDirectory);
-		this.reader = new Dir2RecordsFilter(new ClassNameRegistryRepository());
+	public ReadingComposite(final File aImportDirectory) {
+		this.ivProducer = new InitialElementProducer<>(aImportDirectory);
+		this.ivReader = new Dir2RecordsFilter(new ClassNameRegistryRepository());
 
-		super.connectPorts(this.producer.getOutputPort(), this.reader.getInputPort());
+		super.connectPorts(this.ivProducer.getOutputPort(), this.ivReader.getInputPort());
 	}
 
 	public OutputPort<IMonitoringRecord> getOutputPort() {
-		return this.reader.getOutputPort();
+		return this.ivReader.getOutputPort();
 	}
 
 }

@@ -28,16 +28,16 @@ import kieker.diagnosis.domain.AbstractOperationCall;
  */
 public abstract class AbstractLazyOperationCallTreeItem<T extends AbstractOperationCall<T>> extends TreeItem<T> {
 
-	private boolean childrenInitialized = false;
+	private boolean ivChildrenInitialized = false;
 
-	public AbstractLazyOperationCallTreeItem(final T value) {
-		super(value);
+	public AbstractLazyOperationCallTreeItem(final T aValue) {
+		super(aValue);
 	}
 
 	@Override
 	public final ObservableList<TreeItem<T>> getChildren() {
-		if (!this.childrenInitialized) {
-			this.childrenInitialized = true;
+		if (!this.ivChildrenInitialized) {
+			this.ivChildrenInitialized = true;
 			this.initializeChildren();
 		}
 

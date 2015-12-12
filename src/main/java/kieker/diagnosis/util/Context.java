@@ -22,10 +22,10 @@ public class Context extends EnumMap<ContextKey, Object> {
 
 	private static final long serialVersionUID = 1L;
 
-	public Context(final ContextEntry... entries) {
+	public Context(final ContextEntry... aEntries) {
 		super(ContextKey.class);
 
-		for (final ContextEntry entry : entries) {
+		for (final ContextEntry entry : aEntries) {
 			super.put(entry.getKey(), entry.getValue());
 		}
 	}

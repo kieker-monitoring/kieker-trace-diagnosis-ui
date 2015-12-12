@@ -44,36 +44,36 @@ import javafx.stage.Window;
 @Aspect
 public final class ErrorHandlingAspect {
 
-	private final ResourceBundle resourceBundle = ResourceBundle.getBundle("locale.kieker.diagnosis.util.errorhandling", Locale.getDefault());
-	private final String title = this.resourceBundle.getString("error");
-	private final String header = this.resourceBundle.getString("errorHeader");
+	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle("locale.kieker.diagnosis.util.errorhandling", Locale.getDefault());
+	private final String ivTitle = this.ivResourceBundle.getString("error");
+	private final String ivHeader = this.ivResourceBundle.getString("errorHeader");
 
 	@Pointcut("execution(@kieker.diagnosis.util.ErrorHandling * *(..))")
 	public void errorHandlingRequested() {
 	}
 
-	@Around("errorHandlingRequested() && this(thisObject)")
-	public Object methodHandling(final Object thisObject, final ProceedingJoinPoint thisJoinPoint) throws Throwable {
+	@Around("errorHandlingRequested() && this(aThisObject)")
+	public Object methodHandling(final Object aThisObject, final ProceedingJoinPoint aThisJoinPoint) throws Throwable {
 		try {
-			return thisJoinPoint.proceed();
+			return aThisJoinPoint.proceed();
 		} catch (final Exception ex) {
-			this.logError(thisObject, ex);
+			this.logError(aThisObject, ex);
 			this.showAlertDialog(ex);
 
 			return null;
 		}
 	}
 
-	private void logError(final Object thisObject, final Exception ex) {
-		final Logger logger = LogManager.getLogger(thisObject.getClass());
-		logger.error(ex.getMessage(), ex);
+	private void logError(final Object aThisObject, final Exception aEx) {
+		final Logger logger = LogManager.getLogger(aThisObject.getClass());
+		logger.error(aEx.getMessage(), aEx);
 	}
 
-	private void showAlertDialog(final Exception ex) {
+	private void showAlertDialog(final Exception aEx) {
 		final Alert alert = new Alert(AlertType.ERROR);
-		alert.setContentText(ex.getLocalizedMessage());
-		alert.setTitle(this.title);
-		alert.setHeaderText(this.header);
+		alert.setContentText(aEx.getLocalizedMessage());
+		alert.setTitle(this.ivTitle);
+		alert.setHeaderText(this.ivHeader);
 		final Window window = alert.getDialogPane().getScene().getWindow();
 		if (window instanceof Stage) {
 			final Stage stage = (Stage) window;

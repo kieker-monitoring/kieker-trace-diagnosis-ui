@@ -24,12 +24,12 @@ import kieker.diagnosis.util.Mapper;
 public final class TimestampTypesStringConverter extends AbstractStringConverter<TimestampTypes> {
 
 	@Override
-	protected void fillMapper(final Mapper<TimestampTypes, String> mapper, final ResourceBundle resourceBundle) {
-		mapper.map(TimestampTypes.TIMESTAMP).to("1418993603113900610");
-		mapper.map(TimestampTypes.DATE).to("19.12.14");
-		mapper.map(TimestampTypes.SHORT_TIME).to("13:53");
-		mapper.map(TimestampTypes.LONG_TIME).to("13:53:23");
-		mapper.map(TimestampTypes.DATE_AND_TIME).to("19.12.2014 13:53:23");
+	protected void fillMapper(final Mapper<TimestampTypes, String> aMapper, final ResourceBundle aResourceBundle) {
+		aMapper.map(TimestampTypes.TIMESTAMP).to("1418993603113900610");
+		aMapper.map(TimestampTypes.DATE).to("19.12.14");
+		aMapper.map(TimestampTypes.SHORT_TIME).to("13:53");
+		aMapper.map(TimestampTypes.LONG_TIME).to("13:53:23");
+		aMapper.map(TimestampTypes.DATE_AND_TIME).to("19.12.2014 13:53:23");
 	}
 
 }

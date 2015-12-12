@@ -27,8 +27,8 @@ import kieker.diagnosis.domain.AggregatedOperationCall;
  */
 public final class LazyAggregatedOperationCallTreeItem extends AbstractLazyOperationCallTreeItem<AggregatedOperationCall> {
 
-	public LazyAggregatedOperationCallTreeItem(final AggregatedOperationCall value) {
-		super(value);
+	public LazyAggregatedOperationCallTreeItem(final AggregatedOperationCall aValue) {
+		super(aValue);
 	}
 
 	@Override

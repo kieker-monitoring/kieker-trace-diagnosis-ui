@@ -31,7 +31,7 @@ import kieker.diagnosis.model.PropertiesModel.TimestampTypes;
  */
 public final class NameConverter {
 
-	private static Mapper<TimeUnit, String> shortTimeUnitMapper = new Mapper<>();
+	private static Mapper<TimeUnit, String> cvShortTimeUnitMapper = new Mapper<>();
 
 	private NameConverter() {
 	}
@@ -41,44 +41,44 @@ public final class NameConverter {
 	}
 
 	private static void initializeMapper() {
-		NameConverter.shortTimeUnitMapper.map(TimeUnit.NANOSECONDS).to("ns");
-		NameConverter.shortTimeUnitMapper.map(TimeUnit.MICROSECONDS).to("us");
-		NameConverter.shortTimeUnitMapper.map(TimeUnit.MILLISECONDS).to("ms");
-		NameConverter.shortTimeUnitMapper.map(TimeUnit.SECONDS).to("s");
-		NameConverter.shortTimeUnitMapper.map(TimeUnit.MINUTES).to("m");
-		NameConverter.shortTimeUnitMapper.map(TimeUnit.HOURS).to("h");
-		NameConverter.shortTimeUnitMapper.map(TimeUnit.DAYS).to("d");
-		NameConverter.shortTimeUnitMapper.mapPerDefault().to("");
+		NameConverter.cvShortTimeUnitMapper.map(TimeUnit.NANOSECONDS).to("ns");
+		NameConverter.cvShortTimeUnitMapper.map(TimeUnit.MICROSECONDS).to("us");
+		NameConverter.cvShortTimeUnitMapper.map(TimeUnit.MILLISECONDS).to("ms");
+		NameConverter.cvShortTimeUnitMapper.map(TimeUnit.SECONDS).to("s");
+		NameConverter.cvShortTimeUnitMapper.map(TimeUnit.MINUTES).to("m");
+		NameConverter.cvShortTimeUnitMapper.map(TimeUnit.HOURS).to("h");
+		NameConverter.cvShortTimeUnitMapper.map(TimeUnit.DAYS).to("d");
+		NameConverter.cvShortTimeUnitMapper.mapPerDefault().to("");
 	}
 
-	public static String toShortTimeUnit(final TimeUnit timeUnit) {
-		return NameConverter.shortTimeUnitMapper.resolve(timeUnit);
+	public static String toShortTimeUnit(final TimeUnit aTimeUnit) {
+		return NameConverter.cvShortTimeUnitMapper.resolve(aTimeUnit);
 	}
 
-	public static String toShortComponentName(final String componentName) {
-		final int lastPointPos = componentName.lastIndexOf('.');
-		return componentName.substring(lastPointPos + 1);
+	public static String toShortComponentName(final String aComponentName) {
+		final int lastPointPos = aComponentName.lastIndexOf('.');
+		return aComponentName.substring(lastPointPos + 1);
 	}
 
-	public static String toShortOperationName(final String operationName) {
-		final String result = operationName.replaceAll("\\(.*\\)", "(...)");
+	public static String toShortOperationName(final String aOperationName) {
+		final String result = aOperationName.replaceAll("\\(.*\\)", "(...)");
 		final int lastPointPos = result.lastIndexOf('.', result.length() - 5);
 		return result.substring(lastPointPos + 1);
 	}
 
-	public static String toDurationString(final long duration, final TimeUnit sourceUnit, final TimeUnit targetUnit) {
-		final String shortSourceUnit = NameConverter.toShortTimeUnit(sourceUnit);
-		final String shortTargetUnit = NameConverter.toShortTimeUnit(targetUnit);
+	public static String toDurationString(final long aDuration, final TimeUnit aSourceUnit, final TimeUnit aTargetUnit) {
+		final String shortSourceUnit = NameConverter.toShortTimeUnit(aSourceUnit);
+		final String shortTargetUnit = NameConverter.toShortTimeUnit(aTargetUnit);
 
-		final long targetDuration = targetUnit.convert(duration, sourceUnit);
+		final long targetDuration = aTargetUnit.convert(aDuration, aSourceUnit);
 
-		return targetDuration + " " + shortTargetUnit + " (" + duration + " " + shortSourceUnit + ")";
+		return targetDuration + " " + shortTargetUnit + " (" + aDuration + " " + shortSourceUnit + ")";
 	}
 
-	public static String toTimestampString(final long timestamp, final TimeUnit sourceUnit) {
+	public static String toTimestampString(final long aTimestamp, final TimeUnit aSourceUnit) {
 		final TimestampTypes timestampType = PropertiesModel.getInstance().getTimestampType();
 		if (timestampType == TimestampTypes.TIMESTAMP) {
-			return Long.toString(timestamp);
+			return Long.toString(aTimestamp);
 		}
 
 		final DateTimeFormatter formatter;
@@ -102,7 +102,7 @@ public final class NameConverter {
 
 		}
 
-		final long timestampInMS = TimeUnit.MILLISECONDS.convert(timestamp, sourceUnit);
+		final long timestampInMS = TimeUnit.MILLISECONDS.convert(aTimestamp, aSourceUnit);
 		final Instant instant = Instant.ofEpochMilli(timestampInMS);
 		final ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
 		return formatter.format(zonedDateTime);
