@@ -29,7 +29,7 @@ public abstract class AbstractTreeTableCellFactory<S, T> implements Callback<Tre
 		return new FailedTableCell();
 	}
 
-	protected abstract String getItemLabel(T item);
+	protected abstract String getItemLabel(T aItem);
 
 	private final class FailedTableCell extends TreeTableCell<S, T> {
 

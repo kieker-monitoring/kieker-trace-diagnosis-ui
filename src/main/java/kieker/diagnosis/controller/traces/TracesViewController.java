@@ -100,7 +100,7 @@ public final class TracesViewController extends AbstractController {
 		this.reloadTreetable();
 
 		final ObservableList<Trace> traces = this.ivDataModel.getTraces();
-		traces.addListener((final Change<? extends Trace> c) -> this.reloadTreetable());
+		traces.addListener((final Change<? extends Trace> aChange) -> this.reloadTreetable());
 
 		this.ivSelection.addListener(e -> this.updateDetailPanel());
 

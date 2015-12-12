@@ -17,8 +17,8 @@
 package kieker.diagnosis.domain;
 
 /**
- * This class represents an aggregated operation call within this application. It adds some properties that are only available due to aggregation, like the average
- * duration of all calls.
+ * This class represents an aggregated operation call within this application. It adds some properties that are only available due to aggregation, like the average duration of all
+ * calls.
  * 
  * @author Nils Christian Ehmke
  */
@@ -42,67 +42,67 @@ public final class AggregatedOperationCall extends AbstractOperationCall<Aggrega
 		this.setStackSize(aCall.getStackSize());
 	}
 
-	public AggregatedOperationCall(final String container, final String component, final String operation, // NOPMD (a long parameter list cannot be avoided)
-			final String failedCause, final long totalDuration, final long medianDuration, final long minDuration, final long maxDuration, final long meanDuration,
-			final int calls) {
-		super(container, component, operation);
+	public AggregatedOperationCall(final String aContainer, final String aComponent, final String aOperation, // NOPMD (a long parameter list cannot be avoided)
+			final String aFailedCause, final long aTotalDuration, final long aMedianDuration, final long aMinDuration, final long aMaxDuration, final long aMeanDuration,
+			final int aCalls) {
+		super(aContainer, aComponent, aOperation);
 
-		this.ivTotalDuration = totalDuration;
-		this.ivMedianDuration = medianDuration;
-		this.ivMinDuration = minDuration;
-		this.ivMaxDuration = maxDuration;
-		this.ivMeanDuration = meanDuration;
-		this.ivCalls = calls;
+		this.ivTotalDuration = aTotalDuration;
+		this.ivMedianDuration = aMedianDuration;
+		this.ivMinDuration = aMinDuration;
+		this.ivMaxDuration = aMaxDuration;
+		this.ivMeanDuration = aMeanDuration;
+		this.ivCalls = aCalls;
 
-		this.setFailedCause(failedCause);
+		this.setFailedCause(aFailedCause);
 	}
 
 	public long getTotalDuration() {
 		return this.ivTotalDuration;
 	}
 
-	public void setTotalDuration(final long totalDuration) {
-		this.ivTotalDuration = totalDuration;
+	public void setTotalDuration(final long aTotalDuration) {
+		this.ivTotalDuration = aTotalDuration;
 	}
 
 	public long getMedianDuration() {
 		return this.ivMedianDuration;
 	}
 
-	public void setMedianDuration(final long meanDuration) {
-		this.ivMedianDuration = meanDuration;
+	public void setMedianDuration(final long aMeanDuration) {
+		this.ivMedianDuration = aMeanDuration;
 	}
 
 	public long getMinDuration() {
 		return this.ivMinDuration;
 	}
 
-	public void setMinDuration(final long minDuration) {
-		this.ivMinDuration = minDuration;
+	public void setMinDuration(final long aMinDuration) {
+		this.ivMinDuration = aMinDuration;
 	}
 
 	public long getMaxDuration() {
 		return this.ivMaxDuration;
 	}
 
-	public void setMaxDuration(final long maxDuration) {
-		this.ivMaxDuration = maxDuration;
+	public void setMaxDuration(final long aMaxDuration) {
+		this.ivMaxDuration = aMaxDuration;
 	}
 
 	public long getMeanDuration() {
 		return this.ivMeanDuration;
 	}
 
-	public void setMeanDuration(final long avgDuration) {
-		this.ivMeanDuration = avgDuration;
+	public void setMeanDuration(final long aAvgDuration) {
+		this.ivMeanDuration = aAvgDuration;
 	}
 
 	public int getCalls() {
 		return this.ivCalls;
 	}
 
-	public void setCalls(final int calls) {
-		this.ivCalls = calls;
+	public void setCalls(final int aCalls) {
+		this.ivCalls = aCalls;
 	}
 
 }
