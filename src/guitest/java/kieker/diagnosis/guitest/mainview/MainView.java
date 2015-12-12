@@ -16,9 +16,9 @@
 
 package kieker.diagnosis.guitest.mainview;
 
-import kieker.diagnosis.guitest.components.Button;
-
 import org.testfx.framework.junit.ApplicationTest;
+
+import kieker.diagnosis.guitest.components.Button;
 
 public final class MainView {
 
@@ -29,43 +29,43 @@ public final class MainView {
 	}
 
 	public Button getTracesButton() {
-		return new Button(this.applicationTest, "#traces");
+		return new Button(this.applicationTest, "#ivTraces");
 	}
 
 	public Button getAggregatedTracesButton() {
-		return new Button(this.applicationTest, "#aggregatedtraces");
+		return new Button(this.applicationTest, "#ivAggregatedtraces");
 	}
 
 	public Button getCallsButton() {
-		return new Button(this.applicationTest, "#calls");
+		return new Button(this.applicationTest, "#ivCalls");
 	}
 
 	public Button getAggregatedCallsButton() {
-		return new Button(this.applicationTest, "#aggregatedcalls");
+		return new Button(this.applicationTest, "#ivAggregatedcalls");
 	}
 
 	public Button getStatisticsButton() {
-		return new Button(this.applicationTest, "#statistics");
+		return new Button(this.applicationTest, "#ivStatistics");
 	}
 
 	public Button getHelpButton() {
-		return new Button(this.applicationTest, "#help");
+		return new Button(this.applicationTest, "#ivHelp");
 	}
 
 	public Button getAboutButton() {
-		return new Button(this.applicationTest, "#about");
+		return new Button(this.applicationTest, "#ivAbout");
 	}
 
 	public Button getFileButton() {
-		return new Button(this.applicationTest, "#file");
+		return new Button(this.applicationTest, "#ivFile");
 	}
 
 	public Button getSettingsButton() {
-		return new Button(this.applicationTest, "#settings");
+		return new Button(this.applicationTest, "#ivSettings");
 	}
 
 	public Button getOpenMonitoringLogButton() {
-		return new Button(this.applicationTest, "#openMonitoringLog");
+		return new Button(this.applicationTest, "#ivOpenMonitoringLog");
 	}
 
 }

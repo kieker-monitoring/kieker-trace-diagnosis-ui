@@ -16,9 +16,9 @@
 
 package kieker.diagnosis.guitest.mainview.dialog;
 
-import kieker.diagnosis.guitest.components.Button;
-
 import org.testfx.framework.junit.ApplicationTest;
+
+import kieker.diagnosis.guitest.components.Button;
 
 public final class SettingsDialog {
 
@@ -29,11 +29,11 @@ public final class SettingsDialog {
 	}
 
 	public Button getCancelButton() {
-		return new Button(this.applicationTest, "#cancel");
+		return new Button(this.applicationTest, "#ivCancel");
 	}
 
 	public Button getOkayButton() {
-		return new Button(this.applicationTest, "#okay");
+		return new Button(this.applicationTest, "#ivOkay");
 	}
 
 }

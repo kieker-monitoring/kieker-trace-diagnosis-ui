@@ -16,10 +16,10 @@
 
 package kieker.diagnosis.guitest.mainview.dialog;
 
+import org.testfx.framework.junit.ApplicationTest;
+
 import kieker.diagnosis.guitest.components.Button;
 import kieker.diagnosis.guitest.components.Label;
-
-import org.testfx.framework.junit.ApplicationTest;
 
 public final class AboutDialog {
 
@@ -30,11 +30,11 @@ public final class AboutDialog {
 	}
 
 	public Button getOkayButton() {
-		return new Button(this.applicationTest, "#okay");
+		return new Button(this.applicationTest, "#ivOkay");
 	}
 
 	public Label getDescriptionLabel() {
-		return new Label(this.applicationTest, "#description");
+		return new Label(this.applicationTest, "#ivDescription");
 	}
 
 }

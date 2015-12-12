@@ -16,9 +16,9 @@
 
 package kieker.diagnosis.guitest.mainview.subview;
 
-import kieker.diagnosis.guitest.components.TextField;
-
 import org.testfx.framework.junit.ApplicationTest;
+
+import kieker.diagnosis.guitest.components.TextField;
 
 public final class TracesView {
 
@@ -29,23 +29,23 @@ public final class TracesView {
 	}
 
 	public TextField getCounterTextField() {
-		return new TextField(this.applicationTest, "#counter");
+		return new TextField(this.applicationTest, "#ivCounter");
 	}
-	
+
 	public TextField getFilterContainerTextField() {
-		return new TextField(this.applicationTest, "#filterContainer");
+		return new TextField(this.applicationTest, "#ivFilterContainer");
 	}
 
 	public TextField getFilterComponentTextField() {
-		return new TextField(this.applicationTest, "#filterComponent");
+		return new TextField(this.applicationTest, "#ivFilterComponent");
 	}
 
 	public TextField getFilterOperationTextField() {
-		return new TextField(this.applicationTest, "#filterOperation");
+		return new TextField(this.applicationTest, "#ivFilterOperation");
 	}
 
 	public TextField getFilterTraceIDTextField() {
-		return new TextField(this.applicationTest, "#filterTraceID");
+		return new TextField(this.applicationTest, "#ivFilterTraceID");
 	}
-	
+
 }
