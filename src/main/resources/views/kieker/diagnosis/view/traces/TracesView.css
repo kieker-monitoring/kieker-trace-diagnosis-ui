@@ -1,4 +1,4 @@
-#filterContainer, #filterComponent, #filterOperation, #filterTraceID, #filterLowerDate, #filterLowerTime, #filterUpperDate, #filterUpperTime, #filterException {
+#ivFilterContainer, #ivFilterComponent, #ivFilterOperation, #ivFilterTraceID, #ivFilterLowerDate, #ivFilterLowerTime, #ivFilterUpperDate, #ivFilterUpperTime, #ivFilterException {
 	-fx-background-color: white;
 	-fx-border-color: lightgray;
 }
@@ -8,6 +8,6 @@
 	-fx-background-insets: 0px;
 }
 
-.failed {
+.ivFailed {
 	-fx-text-fill: red;
 }

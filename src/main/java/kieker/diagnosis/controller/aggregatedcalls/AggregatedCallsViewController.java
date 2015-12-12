@@ -74,7 +74,7 @@ public final class AggregatedCallsViewController extends AbstractController {
 
 	@FXML private TextField ivCounter;
 
-	@FXML private ResourceBundle ivResources;
+	@FXML private ResourceBundle resources;
 
 	public AggregatedCallsViewController(final Context aContext) {
 		super(aContext);
@@ -93,7 +93,7 @@ public final class AggregatedCallsViewController extends AbstractController {
 
 		this.ivSelection.addListener(e -> this.updateDetailPanel());
 
-		this.ivCounter.textProperty().bind(Bindings.createStringBinding(() -> sortedData.size() + " " + this.ivResources.getString("AggregatedCallsView.lblCounter.text"), sortedData));
+		this.ivCounter.textProperty().bind(Bindings.createStringBinding(() -> sortedData.size() + " " + this.resources.getString("AggregatedCallsView.lblCounter.text"), sortedData));
 	}
 
 	private void updateDetailPanel() {

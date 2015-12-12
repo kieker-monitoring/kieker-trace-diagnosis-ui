@@ -87,7 +87,7 @@ public final class TracesViewController extends AbstractController {
 
 	@FXML private TextField ivCounter;
 
-	@FXML private ResourceBundle ivResources;
+	@FXML private ResourceBundle resources;
 
 	private Predicate<OperationCall> ivPredicate = FilterUtility.alwaysTrue();
 
@@ -210,6 +210,6 @@ public final class TracesViewController extends AbstractController {
 
 		traces.stream().map(trace -> trace.getRootOperationCall()).filter(this.ivPredicate).forEach(call -> rootChildren.add(new LazyOperationCallTreeItem(call)));
 
-		this.ivCounter.textProperty().set(rootChildren.size() + " " + this.ivResources.getString("TracesView.lblCounter.text"));
+		this.ivCounter.textProperty().set(rootChildren.size() + " " + this.resources.getString("TracesView.lblCounter.text"));
 	}
 }
