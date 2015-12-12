@@ -36,7 +36,7 @@
 		</VBox>
 	</TitledPane>
 	
-	<TableView fx:id="table" GridPane.hgrow="ALWAYS"
+	<TableView fx:id="ivTable" GridPane.hgrow="ALWAYS"
 		GridPane.vgrow="ALWAYS" GridPane.rowIndex="1" tableMenuButtonVisible="true" onMouseClicked="#selectCall">
 		
 		<placeholder>
