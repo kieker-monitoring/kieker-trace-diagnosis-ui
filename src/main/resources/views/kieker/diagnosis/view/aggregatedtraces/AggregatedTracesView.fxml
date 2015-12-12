@@ -3,7 +3,7 @@
 <?import javafx.scene.control.cell.*?>
 <?import kieker.diagnosis.components.treetable.*?>
 
-<GridPane fx:id="view" xmlns:fx="http://javafx.com/fxml"
+<GridPane fx:id="ivView" xmlns:fx="http://javafx.com/fxml"
 	AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0"
 	AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
 
@@ -17,27 +17,27 @@
 				<spacing>10</spacing>
 		
 				<fx:define>
-					<ToggleGroup fx:id="togglegroup" />
+					<ToggleGroup fx:id="ivTogglegroup" />
 				</fx:define>
 			
-				<RadioButton text="%AggregatedTracesView.btnShowAll.text" fx:id="showAllButton" selected="true" toggleGroup="$togglegroup" onAction="#useFilter" />
-				<RadioButton text="%showJustSuccessful" fx:id="showJustSuccessful" toggleGroup="$togglegroup" onAction="#useFilter" />
-				<RadioButton text="%AggregatedTracesView.btnShowJustFailed.text" fx:id="showJustFailedButton" toggleGroup="$togglegroup" onAction="#useFilter" />	
-				<RadioButton text="%AggregatedTracesView.btnShowJustFailureContaining.text" fx:id="showJustFailureContainingButton"  toggleGroup="$togglegroup" onAction="#useFilter" />	
+				<RadioButton text="%AggregatedTracesView.btnShowAll.text" fx:id="ivShowAllButton" selected="true" toggleGroup="$togglegroup" onAction="#useFilter" />
+				<RadioButton text="%showJustSuccessful" fx:id="ivShowJustSuccessful" toggleGroup="$togglegroup" onAction="#useFilter" />
+				<RadioButton text="%AggregatedTracesView.btnShowJustFailed.text" fx:id="ivShowJustFailedButton" toggleGroup="$togglegroup" onAction="#useFilter" />	
+				<RadioButton text="%AggregatedTracesView.btnShowJustFailureContaining.text" fx:id="ivShowJustFailureContainingButton"  toggleGroup="$togglegroup" onAction="#useFilter" />	
 			</HBox>
 			
 			<GridPane GridPane.rowIndex="1">
 				<hgap>5</hgap>
 				
-				<TextField promptText="%filterContainer" onAction="#useFilter" fx:id="filterContainer" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS"/>
-				<TextField promptText="%filterComponent" onAction="#useFilter" fx:id="filterComponent" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
-				<TextField promptText="%filterOperation" onAction="#useFilter" fx:id="filterOperation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
-				<TextField promptText="%filterException" onAction="#useFilter" fx:id="filterException" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterContainer" onAction="#useFilter" fx:id="ivFilterContainer" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterComponent" onAction="#useFilter" fx:id="ivFilterComponent" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterOperation" onAction="#useFilter" fx:id="ivFilterOperation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterException" onAction="#useFilter" fx:id="ivFilterException" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
 			</GridPane>
 		</VBox>
 	</TitledPane>
 
-	<TreeTableView fx:id="treetable" GridPane.hgrow="ALWAYS"
+	<TreeTableView fx:id="ivTreetable" GridPane.hgrow="ALWAYS"
 		GridPane.vgrow="ALWAYS" GridPane.rowIndex="1" tableMenuButtonVisible="true"  onMouseClicked="#selectCall">
 		
 		<placeholder>
@@ -156,67 +156,67 @@
 		<TextField text="%AggregatedTracesView.lblExecutionContainer.text"
 			editable="false" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="1" GridPane.columnIndex="2" fx:id="container" GridPane.hgrow="ALWAYS" />
+			GridPane.rowIndex="1" GridPane.columnIndex="2" fx:id="ivContainer" GridPane.hgrow="ALWAYS" />
 
 		<TextField text="%AggregatedTracesView.lblComponent.text" editable="false"
 			GridPane.rowIndex="2" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="2" GridPane.columnIndex="2" fx:id="component" />
+			GridPane.rowIndex="2" GridPane.columnIndex="2" fx:id="ivComponent" />
 
 		<TextField text="%AggregatedTracesView.lblOperation.text" editable="false"
 			GridPane.rowIndex="3" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="3" GridPane.columnIndex="2" fx:id="operation" />
+			GridPane.rowIndex="3" GridPane.columnIndex="2" fx:id="ivOperation" />
 
 		<TextField text="%AggregatedTracesView.lblFailed.text" editable="false"
 			GridPane.rowIndex="4" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="4" GridPane.columnIndex="2" fx:id="failed" />
+			GridPane.rowIndex="4" GridPane.columnIndex="2" fx:id="ivFailed" />
 	
 		<TextField text="%AggregatedTracesView.lblNumberOfCalls.text" editable="false"
 			GridPane.rowIndex="5" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="5" GridPane.columnIndex="2" fx:id="calls" />
+			GridPane.rowIndex="5" GridPane.columnIndex="2" fx:id="ivCalls" />
 			
 		<TextField text="%AggregatedTracesView.lblTraceDepth.text" editable="false"
 			GridPane.rowIndex="6" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="6" GridPane.columnIndex="2" fx:id="traceDepth" />
+			GridPane.rowIndex="6" GridPane.columnIndex="2" fx:id="ivTraceDepth" />
 			
 		<TextField text="%AggregatedTracesView.trclmnTraceSize.text" editable="false"
 			GridPane.rowIndex="7" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="7" GridPane.columnIndex="2" fx:id="traceSize" />
+			GridPane.rowIndex="7" GridPane.columnIndex="2" fx:id="ivTraceSize" />
 			
 		<TextField text="%AggregatedTracesView.lblMinimalDuration.text" editable="false"
 			GridPane.rowIndex="8" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="8" GridPane.columnIndex="2" fx:id="minDuration" />
+			GridPane.rowIndex="8" GridPane.columnIndex="2" fx:id="ivMinDuration" />
 			
 		<TextField text="%AggregatedTracesView.lblAverageDuration.text" editable="false"
 			GridPane.rowIndex="9" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="9" GridPane.columnIndex="2" fx:id="avgDuration" />
+			GridPane.rowIndex="9" GridPane.columnIndex="2" fx:id="ivAvgDuration" />
 			
 		<TextField text="%AggregatedTracesView.lblMeanDuration.text" editable="false"
 			GridPane.rowIndex="10" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="10" GridPane.columnIndex="2" fx:id="medianDuration" />
+			GridPane.rowIndex="10" GridPane.columnIndex="2" fx:id="ivMedianDuration" />
 			
 		<TextField text="%AggregatedTracesView.lblMaximalDuration.text" editable="false"
 			GridPane.rowIndex="11" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="11" GridPane.columnIndex="2" fx:id="maxDuration" />
+			GridPane.rowIndex="11" GridPane.columnIndex="2" fx:id="ivMaxDuration" />
 			
 		<TextField text="%AggregatedTracesView.lblTotalDuration.text" editable="false"
 			GridPane.rowIndex="12" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="12" GridPane.columnIndex="2" fx:id="totalDuration" />
+			GridPane.rowIndex="12" GridPane.columnIndex="2" fx:id="ivTotalDuration" />
 			
 	</GridPane>
 </TitledPane>
-	<HBox fx:id="statusbar" GridPane.rowIndex="3">
-		<TextField text="%AggregatedTracesView.lblCounter.text" editable="false" fx:id="counter" />
+	<HBox fx:id="ivStatusbar" GridPane.rowIndex="3">
+		<TextField text="%AggregatedTracesView.lblCounter.text" editable="false" fx:id="ivCounter" />
 	</HBox>
 	
 </GridPane>

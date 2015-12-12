@@ -1,4 +1,4 @@
-#filterContainer, #filterComponent, #filterOperation, #filterException {
+#ivFilterContainer, #ivFilterComponent, #ivFilterOperation, #ivFilterException {
 	-fx-background-color: white;
 	-fx-border-color: lightgray;
 }
