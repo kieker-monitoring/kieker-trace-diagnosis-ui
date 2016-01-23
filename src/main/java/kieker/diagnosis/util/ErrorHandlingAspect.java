@@ -19,18 +19,18 @@ package kieker.diagnosis.util;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+import javafx.stage.Window;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
-import javafx.stage.Window;
 
 /**
  * This is an aspect adding error handling where it is requested. The advice is added around methods marked with {@link ErrorHandling} during the compiling. All exceptions (instances of

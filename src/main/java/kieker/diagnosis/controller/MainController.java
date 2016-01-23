@@ -26,9 +26,6 @@ import java.util.ResourceBundle;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -48,6 +45,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import javafx.util.Duration;
+
 import kieker.diagnosis.controller.about.AboutDialogViewController;
 import kieker.diagnosis.controller.aggregatedcalls.AggregatedCallsViewController;
 import kieker.diagnosis.controller.aggregatedtraces.AggregatedTracesViewController;
@@ -65,9 +63,12 @@ import kieker.diagnosis.util.ContextEntry;
 import kieker.diagnosis.util.ContextKey;
 import kieker.diagnosis.util.ErrorHandling;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * The main controller of this application. It is responsible for controlling the application's main window.
- *
+ * 
  * @author Nils Christian Ehmke
  */
 public final class MainController {
