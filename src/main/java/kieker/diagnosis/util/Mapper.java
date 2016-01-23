@@ -60,8 +60,8 @@ public final class Mapper<I, O> extends HashMap<I, O> {
 		private final I ivKey;
 		private final boolean ivKeyAvailable;
 
-		protected To(final I akey) {
-			this.ivKey = akey;
+		protected To(final I aKey) {
+			this.ivKey = aKey;
 			this.ivKeyAvailable = true;
 		}
 

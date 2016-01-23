@@ -63,7 +63,7 @@ public final class PropertiesModel {
 	private String ivGitLabURL;
 	private String ivTracURL;
 
-	private long version = 0L;
+	private long ivVersion = 0L;
 
 	public PropertiesModel() {
 		this.loadSettings();
@@ -120,7 +120,7 @@ public final class PropertiesModel {
 			PropertiesModel.LOGGER.error(e);
 		}
 
-		this.version++;
+		this.ivVersion++;
 	}
 
 	public String getGraphvizPath() {
@@ -213,7 +213,7 @@ public final class PropertiesModel {
 	}
 
 	public long getVersion() {
-		return this.version;
+		return this.ivVersion;
 	}
 
 	public boolean isPercentageCalculationActive() {

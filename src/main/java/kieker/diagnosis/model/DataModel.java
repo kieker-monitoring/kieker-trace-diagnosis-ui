@@ -60,12 +60,12 @@ public final class DataModel {
 	private DataModel() {
 	}
 
-	public void loadMonitoringLogFromFS(final File importDirectory) {
-		this.ivImportDirectory.set(importDirectory);
+	public void loadMonitoringLogFromFS(final File aImportDirectory) {
+		this.ivImportDirectory.set(aImportDirectory);
 		final long tin = System.currentTimeMillis();
 
 		// Load and analyze the monitoring logs from the given directory
-		final ImportAnalysisConfiguration analysisConfiguration = new ImportAnalysisConfiguration(importDirectory);
+		final ImportAnalysisConfiguration analysisConfiguration = new ImportAnalysisConfiguration(aImportDirectory);
 		final Execution<ImportAnalysisConfiguration> analysis = new Execution<>(analysisConfiguration);
 		analysis.executeBlocking();
 

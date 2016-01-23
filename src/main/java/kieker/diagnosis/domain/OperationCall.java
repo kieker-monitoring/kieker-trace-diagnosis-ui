@@ -31,21 +31,21 @@ public final class OperationCall extends AbstractOperationCall<OperationCall> {
 	private long ivDuration;
 	private long ivTimestamp;
 
-	public OperationCall(final String container, final String component, final String operation, final long traceID, final long timestamp) {
-		this(container, component, operation, null, traceID, timestamp);
+	public OperationCall(final String aContainer, final String aComponent, final String aOperation, final long aTraceID, final long aTimestamp) {
+		this(aContainer, aComponent, aOperation, null, aTraceID, aTimestamp);
 	}
 
-	public OperationCall(final String container, final String component, final String operation, final String failedCause, final long traceID, final long timestamp) {
-		super(container, component, operation, failedCause);
+	public OperationCall(final String aContainer, final String aComponent, final String aOperation, final String aFailedCause, final long aTraceID, final long aTimestamp) {
+		super(aContainer, aComponent, aOperation, aFailedCause);
 
-		this.ivTraceID = traceID;
-		this.ivTimestamp = timestamp;
+		this.ivTraceID = aTraceID;
+		this.ivTimestamp = aTimestamp;
 	}
 
 	@Override
-	public void addChild(final OperationCall child) {
-		super.addChild(child);
-		child.ivParent = this;
+	public void addChild(final OperationCall aChild) {
+		super.addChild(aChild);
+		aChild.ivParent = this;
 	}
 
 	public OperationCall getParent() {
@@ -56,16 +56,16 @@ public final class OperationCall extends AbstractOperationCall<OperationCall> {
 		return this.ivPercent;
 	}
 
-	public void setPercent(final float percent) {
-		this.ivPercent = percent;
+	public void setPercent(final float aPercent) {
+		this.ivPercent = aPercent;
 	}
 
 	public long getDuration() {
 		return this.ivDuration;
 	}
 
-	public void setDuration(final long duration) {
-		this.ivDuration = duration;
+	public void setDuration(final long aDuration) {
+		this.ivDuration = aDuration;
 	}
 
 	public long getTraceID() {
@@ -76,8 +76,8 @@ public final class OperationCall extends AbstractOperationCall<OperationCall> {
 		return this.ivTimestamp;
 	}
 
-	public void setTimestamp(final long timestamp) {
-		this.ivTimestamp = timestamp;
+	public void setTimestamp(final long aTimestamp) {
+		this.ivTimestamp = aTimestamp;
 	}
 
 }
