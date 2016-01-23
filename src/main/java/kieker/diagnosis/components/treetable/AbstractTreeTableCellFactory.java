@@ -20,8 +20,12 @@ import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableRow;
 import javafx.util.Callback;
+
 import kieker.diagnosis.domain.AbstractOperationCall;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public abstract class AbstractTreeTableCellFactory<S, T> implements Callback<TreeTableColumn<S, T>, TreeTableCell<S, T>> {
 
 	@Override

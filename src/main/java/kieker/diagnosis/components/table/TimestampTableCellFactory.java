@@ -19,6 +19,9 @@ package kieker.diagnosis.components.table;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.util.NameConverter;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public final class TimestampTableCellFactory<S, T> extends AbstractTableCellFactory<S, T> {
 
 	@Override

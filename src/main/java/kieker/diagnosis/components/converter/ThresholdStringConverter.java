@@ -21,6 +21,9 @@ import java.util.ResourceBundle;
 import kieker.diagnosis.model.PropertiesModel.Threshold;
 import kieker.diagnosis.util.Mapper;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public final class ThresholdStringConverter extends AbstractStringConverter<Threshold> {
 
 	@Override

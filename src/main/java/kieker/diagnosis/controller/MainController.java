@@ -73,6 +73,8 @@ import org.apache.logging.log4j.Logger;
  */
 public final class MainController {
 
+	private static final String KIEKER_LOGO_PNG = "kieker-logo.png";
+
 	private static final String KEY_LAST_IMPORT_PATH = "lastimportpath";
 
 	private static final Logger LOGGER = LogManager.getLogger(MainController.class);
@@ -218,7 +220,7 @@ public final class MainController {
 		scene.getStylesheets().add(paneData.ivStylesheetURL);
 
 		final Stage dialogStage = new Stage();
-		dialogStage.getIcons().add(new Image("kieker-logo.png"));
+		dialogStage.getIcons().add(new Image(KIEKER_LOGO_PNG));
 		dialogStage.setTitle(paneData.getTitle());
 		dialogStage.setResizable(false);
 		dialogStage.initModality(Modality.WINDOW_MODAL);
@@ -241,7 +243,7 @@ public final class MainController {
 			final Scene root = new Scene(pane);
 			aStage.setScene(root);
 
-			aStage.getIcons().add(new Image("kieker-logo.png"));
+			aStage.getIcons().add(new Image(KIEKER_LOGO_PNG));
 			aStage.setTitle("Kieker Trace Diagnosis - 1.1-SNAPSHOT");
 			aStage.setMaximized(true);
 

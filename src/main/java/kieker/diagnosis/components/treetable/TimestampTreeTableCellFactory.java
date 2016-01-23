@@ -19,6 +19,9 @@ package kieker.diagnosis.components.treetable;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.util.NameConverter;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public final class TimestampTreeTableCellFactory<S, T> extends AbstractTreeTableCellFactory<S, T> {
 
 	@Override

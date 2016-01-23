@@ -20,10 +20,14 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javafx.util.StringConverter;
+
 import kieker.diagnosis.util.Mapper;
 
 /**
  * @author Nils Christian Ehmke
+ * 
+ * @param The
+ *            type of the objects to convert from and to {@link String}.
  */
 public abstract class AbstractStringConverter<T> extends StringConverter<T> {
 

@@ -34,6 +34,9 @@ import kieker.diagnosis.util.NameConverter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public final class OperationTreeCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<String>> {
 
 	private static final Logger LOGGER = LogManager.getLogger(DurationTreeCellValueFactory.class);

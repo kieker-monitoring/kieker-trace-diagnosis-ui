@@ -21,6 +21,9 @@ import java.util.ResourceBundle;
 import kieker.diagnosis.model.PropertiesModel.TimestampTypes;
 import kieker.diagnosis.util.Mapper;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public final class TimestampTypesStringConverter extends AbstractStringConverter<TimestampTypes> {
 
 	@Override

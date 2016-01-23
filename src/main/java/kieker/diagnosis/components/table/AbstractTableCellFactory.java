@@ -20,8 +20,12 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.util.Callback;
+
 import kieker.diagnosis.domain.AbstractOperationCall;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public abstract class AbstractTableCellFactory<S, T> implements Callback<TableColumn<S, T>, TableCell<S, T>> {
 
 	@Override
