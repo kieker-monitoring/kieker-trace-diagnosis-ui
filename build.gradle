@@ -168,7 +168,7 @@ task buildUserManualEN() {
 	}
 }
 
-task distBinWin(type: Zip, dependsOn: [jar, createStartScript, buildUserManualDE, buildUserManualEN]) {
+task distBinWinWithoutDocumentation(type: Zip, dependsOn: [jar, createStartScript]) {
 	description = 'Bundles the project as a JVM application with OS specific libs and script for Windows.'
 	classifier = 'windows'
 
@@ -179,7 +179,11 @@ task distBinWin(type: Zip, dependsOn: [jar, createStartScript, buildUserManualDE
 	}
 }
 
-task distBinLinux(type: Tar, dependsOn: [jar, createStartScript]) {
+task distBinWin(dependsOn: [buildUserManualDE, buildUserManualEN, distBinWinWithoutDocumentation]) {
+	description = 'Bundles the project as a JVM application with OS specific libs and script for Windows.'
+}
+
+task distBinLinuxWithoutDocumentation(type: Tar, dependsOn: [jar, createStartScript]) {
 	description = 'Bundles the project as a JVM application with OS specific libs and script for Linux.'
 	classifier = 'linux'
 	compression = Compression.GZIP
@@ -191,7 +195,15 @@ task distBinLinux(type: Tar, dependsOn: [jar, createStartScript]) {
 	}
 }
 
-task distAllBin(dependsOn: [distBinWin, distBinLinux, buildUserManualDE, buildUserManualEN]) {
+task distBinLinux(dependsOn: [buildUserManualDE, buildUserManualEN, distBinLinuxWithoutDocumentation]) {
+	description = 'Bundles the project as a JVM application with OS specific libs and script for Linux.'
+}
+
+task distAllBin(dependsOn: [distBinWin, distBinLinux]) {
+	description = 'Bundles the project as a JVM application with OS specific libs and scripts for all platforms.'
+}
+
+task distAllBinWithoutDocumentation(dependsOn: [distBinWinWithoutDocumentation, distBinLinuxWithoutDocumentation]) {
 	description = 'Bundles the project as a JVM application with OS specific libs and scripts for all platforms.'
 }
 
