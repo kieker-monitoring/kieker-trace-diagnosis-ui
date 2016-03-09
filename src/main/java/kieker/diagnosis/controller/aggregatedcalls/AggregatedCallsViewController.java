@@ -16,6 +16,7 @@
 
 package kieker.diagnosis.controller.aggregatedcalls;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
@@ -24,6 +25,7 @@ import java.util.function.Predicate;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
@@ -34,8 +36,11 @@ import javafx.scene.input.MouseEvent;
 import kieker.diagnosis.controller.AbstractController;
 import kieker.diagnosis.controller.MainController;
 import kieker.diagnosis.domain.AggregatedOperationCall;
+import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
+import kieker.diagnosis.util.CSVData;
+import kieker.diagnosis.util.CSVDataCollector;
 import kieker.diagnosis.util.Context;
 import kieker.diagnosis.util.ErrorHandling;
 import kieker.diagnosis.util.FilterUtility;
@@ -156,5 +161,40 @@ public final class AggregatedCallsViewController extends AbstractController {
 		final Predicate<AggregatedOperationCall> predicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5);
 		this.ivFilteredData.setPredicate(predicate);
 	}
+	
+	@ErrorHandling
+	public void exportToCSV() throws IOException {
+		MainController.instance().exportToCSV(new AggregatedCallsCSVDataCollector());
+	}
+	
+	private final class AggregatedCallsCSVDataCollector implements CSVDataCollector {
 
+		@Override
+		public CSVData collectData() {
+			final ObservableList<AggregatedOperationCall> items = ivTable.getItems();
+			final String[][] rows = new String[items.size()][10];
+			
+			int idx = 0;
+			for (final AggregatedOperationCall item : items) {
+				rows[idx][0] = item.getContainer();
+				rows[idx][1] = item.getComponent();
+				rows[idx][2] = item.getOperation();
+				rows[idx][3] = Long.toString(item.getMinDuration());
+				rows[idx][4] = Long.toString(item.getMaxDuration());
+				rows[idx][5] = Long.toString(item.getMedianDuration());
+				rows[idx][6] = Long.toString(item.getMeanDuration());
+				rows[idx][7] = Long.toString(item.getTotalDuration());
+				rows[idx][8] = Long.toString(item.getCalls());
+				rows[idx][9] = item.getFailedCause();
+				idx++;
+			}
+					
+			final CSVData result = new CSVData();	
+			result.setHeader(new String[] {"Container", "Component", "Operation", "MinimalDuration", "MaximalDuration", "MedianDuration", "MeanDuration", "TotalDuration", "Calls", "Failed"});
+			result.setRows(rows);
+			return result; 
+		}
+
+	}
+	
 }

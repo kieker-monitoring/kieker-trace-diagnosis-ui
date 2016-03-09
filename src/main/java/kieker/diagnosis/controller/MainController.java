@@ -40,6 +40,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -58,6 +59,9 @@ import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
+import kieker.diagnosis.util.CSVData;
+import kieker.diagnosis.util.CSVDataCollector;
+import kieker.diagnosis.util.CSVExporter;
 import kieker.diagnosis.util.Context;
 import kieker.diagnosis.util.ContextEntry;
 import kieker.diagnosis.util.ContextKey;
@@ -67,7 +71,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * The main controller of this application. It is responsible for controlling the application's main window.
+ * The main controller of this application. It is responsible for controlling
+ * the application's main window.
  * 
  * @author Nils Christian Ehmke
  */
@@ -76,6 +81,7 @@ public final class MainController {
 	private static final String KIEKER_LOGO_PNG = "kieker-logo.png";
 
 	private static final String KEY_LAST_IMPORT_PATH = "lastimportpath";
+	private static final String KEY_LAST_EXPORT_PATH = "lastexportpath";
 
 	private static final Logger LOGGER = LogManager.getLogger(MainController.class);
 
@@ -83,14 +89,21 @@ public final class MainController {
 
 	private final DataModel ivDataModel = DataModel.getInstance();
 
-	@FXML private Node ivView;
-	@FXML private Pane ivContent;
+	@FXML
+	private Node ivView;
+	@FXML
+	private Pane ivContent;
 
-	@FXML private Button ivTraces;
-	@FXML private Button ivAggregatedtraces;
-	@FXML private Button ivCalls;
-	@FXML private Button ivAggregatedcalls;
-	@FXML private Button ivStatistics;
+	@FXML
+	private Button ivTraces;
+	@FXML
+	private Button ivAggregatedtraces;
+	@FXML
+	private Button ivCalls;
+	@FXML
+	private Button ivAggregatedcalls;
+	@FXML
+	private Button ivStatistics;
 
 	private Optional<Button> ivDisabledButton = Optional.empty();
 	private Optional<Class<?>> ivActiveController = Optional.empty();
@@ -233,7 +246,8 @@ public final class MainController {
 	public static void loadMainPane(final Stage aStage) throws Exception {
 		try {
 			MainController.cvInstance = new MainController();
-			final URL resource = MainController.class.getClassLoader().getResource("views/kieker/diagnosis/view/View.fxml");
+			final URL resource = MainController.class.getClassLoader()
+					.getResource("views/kieker/diagnosis/view/View.fxml");
 			final FXMLLoader fxmlLoader = new FXMLLoader();
 			fxmlLoader.setResources(ResourceBundle.getBundle("locale.kieker.diagnosis.view.view", Locale.getDefault()));
 			fxmlLoader.setLocation(resource);
@@ -278,10 +292,12 @@ public final class MainController {
 		stage.showAndWait();
 	}
 
-	private static PaneData loadPaneData(final Class<?> aControllerClass, final ContextEntry... aArguments) throws Exception {
+	private static PaneData loadPaneData(final Class<?> aControllerClass, final ContextEntry... aArguments)
+			throws Exception {
 		final long tin = System.currentTimeMillis();
 
-		final String baseName = aControllerClass.getCanonicalName().replace("Controller", "").replace(".controller.", ".view.");
+		final String baseName = aControllerClass.getCanonicalName().replace("Controller", "").replace(".controller.",
+				".view.");
 		final String viewFXMLName = "views/" + baseName.replace(".", "/") + ".fxml";
 		final String cssName = "views/" + baseName.replace(".", "/") + ".css";
 		final String bundleBaseName = "locale." + baseName.toLowerCase(Locale.ROOT);
@@ -303,7 +319,8 @@ public final class MainController {
 		final PaneData paneData = new PaneData(node, title, cssResource.toExternalForm());
 
 		final long tout = System.currentTimeMillis();
-		MainController.LOGGER.info("View for '" + aControllerClass.getCanonicalName() + "' loaded in " + (tout - tin) + "ms");
+		MainController.LOGGER
+				.info("View for '" + aControllerClass.getCanonicalName() + "' loaded in " + (tout - tin) + "ms");
 
 		return paneData;
 	}
@@ -318,6 +335,29 @@ public final class MainController {
 
 	public void jumpToCalls(final AggregatedOperationCall aCall) throws Exception {
 		this.showCalls(new ContextEntry(ContextKey.AGGREGATED_OPERATION_CALL, aCall));
+	}
+
+	public void exportToCSV(final CSVDataCollector aDataCollector) throws IOException {
+		final Preferences preferences = Preferences.userNodeForPackage(MainController.class);
+		final File initialDirectory = new File(preferences.get(MainController.KEY_LAST_EXPORT_PATH, "."));
+
+		final FileChooser fileChooser = new FileChooser();
+		if (initialDirectory.exists()) {
+			fileChooser.setInitialDirectory(initialDirectory);
+		}
+
+		final File selectedFile = fileChooser.showSaveDialog((this.ivView.getScene().getWindow()));
+		if (null != selectedFile) {
+			final CSVData data = aDataCollector.collectData();
+			CSVExporter.exportToCSV(data, selectedFile);
+			
+			preferences.put(MainController.KEY_LAST_EXPORT_PATH, selectedFile.getParent());
+			try {
+				preferences.flush();
+			} catch (final BackingStoreException ex) {
+				MainController.LOGGER.error(ex);
+			}
+		}
 	}
 
 	private static class PaneData {

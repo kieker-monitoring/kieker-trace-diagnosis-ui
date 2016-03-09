@@ -2,6 +2,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.cell.*?>
 <?import kieker.diagnosis.components.table.*?>
+<?import javafx.scene.control.Hyperlink?>
 
 <GridPane xmlns:fx="http://javafx.com/fxml"
 	AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0"
@@ -191,5 +192,6 @@
 	<HBox fx:id="statusbar" GridPane.rowIndex="3" GridPane.hgrow="ALWAYS">
 		<TextField text="%AggregatedCallsView.lblCounter.text" fx:id="ivCounter"
 			editable="false" HBox.hgrow="ALWAYS"/>
+		<Hyperlink text="%ExportToCSV" onAction="#exportToCSV" HBox.hgrow="ALWAYS"/>	
 	</HBox>
 </GridPane>
