@@ -3,7 +3,7 @@ apply plugin: 'eclipse'
 
 jar.baseName = 'kieker-trace-diagnosis'
 mainClassName = 'kieker.diagnosis.Main'
-version = '1.1-SNAPSHOT'
+version = '1.1.0-SNAPSHOT'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
