@@ -1,4 +1,8 @@
 1.1:
+	13 Mar 2016
+	Feature (Issue #29)
+	It is now possible to export the visible data of the method call and the aggregated method call views to CSV files.
+
 	22 Nov 2015
 	Feature (Issue #25)
 	Detailed the settings for operation and component appearances.
