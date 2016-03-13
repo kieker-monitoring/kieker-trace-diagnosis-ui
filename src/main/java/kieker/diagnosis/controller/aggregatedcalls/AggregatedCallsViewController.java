@@ -30,13 +30,14 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+
 import kieker.diagnosis.controller.AbstractController;
 import kieker.diagnosis.controller.MainController;
 import kieker.diagnosis.domain.AggregatedOperationCall;
-import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.util.CSVData;
@@ -172,25 +173,25 @@ public final class AggregatedCallsViewController extends AbstractController {
 		@Override
 		public CSVData collectData() {
 			final ObservableList<AggregatedOperationCall> items = ivTable.getItems();
-			final String[][] rows = new String[items.size()][10];
+			final ObservableList<TableColumn<AggregatedOperationCall,?>> columns = ivTable.getVisibleLeafColumns();
 			
-			int idx = 0;
-			for (final AggregatedOperationCall item : items) {
-				rows[idx][0] = item.getContainer();
-				rows[idx][1] = item.getComponent();
-				rows[idx][2] = item.getOperation();
-				rows[idx][3] = Long.toString(item.getMinDuration());
-				rows[idx][4] = Long.toString(item.getMaxDuration());
-				rows[idx][5] = Long.toString(item.getMedianDuration());
-				rows[idx][6] = Long.toString(item.getMeanDuration());
-				rows[idx][7] = Long.toString(item.getTotalDuration());
-				rows[idx][8] = Long.toString(item.getCalls());
-				rows[idx][9] = item.getFailedCause();
-				idx++;
+			final String[][] rows = new String[items.size()][columns.size()];
+			final String[] header = new String[columns.size()];
+			
+			
+			for (int i = 0; i < columns.size(); i++) {
+				final TableColumn<AggregatedOperationCall, ?> column = columns.get(i);
+				
+				header[i] = column.getText();
+				
+				for (int j = 0; j < items.size(); j++) {
+					final Object cellData = column.getCellData(j);
+					rows[j][i] = cellData != null ? cellData.toString() : null;
+				}
 			}
-					
+		
 			final CSVData result = new CSVData();	
-			result.setHeader(new String[] {"Container", "Component", "Operation", "MinimalDuration", "MaximalDuration", "MedianDuration", "MeanDuration", "TotalDuration", "Calls", "Failed"});
+			result.setHeader(header);
 			result.setRows(rows);
 			return result; 
 		}

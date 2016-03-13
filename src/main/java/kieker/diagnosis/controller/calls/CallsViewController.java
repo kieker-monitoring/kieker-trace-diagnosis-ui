@@ -31,6 +31,7 @@ import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -198,22 +199,25 @@ public final class CallsViewController extends AbstractController {
 		@Override
 		public CSVData collectData() {
 			final ObservableList<OperationCall> items = ivTable.getItems();
-			final String[][] rows = new String[items.size()][7];
+			final ObservableList<TableColumn<OperationCall,?>> columns = ivTable.getVisibleLeafColumns();
 			
-			int idx = 0;
-			for (final OperationCall item : items) {
-				rows[idx][0] = item.getContainer();
-				rows[idx][1] = item.getComponent();
-				rows[idx][2] = item.getOperation();
-				rows[idx][3] = Long.toString(item.getTimestamp());
-				rows[idx][4] = Long.toString(item.getDuration());
-				rows[idx][5] = Long.toString(item.getTraceID());
-				rows[idx][6] = item.getFailedCause();
-				idx++;
+			final String[][] rows = new String[items.size()][columns.size()];
+			final String[] header = new String[columns.size()];
+			
+			
+			for (int i = 0; i < columns.size(); i++) {
+				final TableColumn<OperationCall, ?> column = columns.get(i);
+				
+				header[i] = column.getText();
+				
+				for (int j = 0; j < items.size(); j++) {
+					final Object cellData = column.getCellData(j);
+					rows[j][i] = cellData != null ? cellData.toString() : null;
+				}
 			}
-					
+		
 			final CSVData result = new CSVData();	
-			result.setHeader(new String[] {"Container", "Component", "Operation", "Timestamp", "Duration", "Trace-ID", "Failed"});
+			result.setHeader(header);
 			result.setRows(rows);
 			return result; 
 		}
