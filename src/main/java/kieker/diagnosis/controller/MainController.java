@@ -258,7 +258,7 @@ public final class MainController {
 			aStage.setScene(root);
 
 			aStage.getIcons().add(new Image(KIEKER_LOGO_PNG));
-			aStage.setTitle("Kieker Trace Diagnosis - 1.1-SNAPSHOT");
+			aStage.setTitle("Kieker Trace Diagnosis - 1.1.0");
 			aStage.setMaximized(true);
 
 			MainController.showSplashScreen(root);
