@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015-2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ public final class GUITest extends ApplicationTest {
 
 		final AboutDialog aboutDialog = new AboutDialog(this);
 		assertTrue(aboutDialog.getDescriptionLabel().getText().contains("Kieker Trace Diagnosis"));
-		assertTrue(aboutDialog.getDescriptionLabel().getText().contains("Copyright 2015 Kieker Project (http://kieker-monitoring.net)"));
+		assertTrue(aboutDialog.getDescriptionLabel().getText().contains("Copyright 2015-2016 Kieker Project (http://kieker-monitoring.net)"));
 		aboutDialog.getOkayButton().click();
 	}
 
