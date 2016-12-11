@@ -248,6 +248,6 @@ def regexpReplaceInFile(File file, String searchExp, String replaceExp) {
 task updateLicenseHeaderYear() << {
 	FileTree tree = fileTree(dir: 'src', include: '**/*.java')
 	tree.each { File file ->
-		regexpReplaceInFile(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2015 Kieker Project')
+		regexpReplaceInFile(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2015-2016 Kieker Project')
 	}
 }
