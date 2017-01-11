@@ -49,6 +49,7 @@ public final class SettingsDialogViewController extends AbstractDialogController
 	@FXML private CheckBox ivAggregateMethodCalls;
 	@FXML private CheckBox ivCaseSensitive;
 	@FXML private CheckBox ivPercentageCalculation;
+	@FXML private CheckBox ivCacheViews;
 
 	public SettingsDialogViewController(final Context aContext) {
 		super(aContext);
@@ -82,6 +83,7 @@ public final class SettingsDialogViewController extends AbstractDialogController
 		this.ivCaseSensitive.setSelected(this.ivPropertiesModel.isCaseSensitivityActive());
 		this.ivPercentageCalculation.setSelected(this.ivPropertiesModel.isPercentageCalculationActive());
 		this.ivTimestamps.getSelectionModel().select(this.ivPropertiesModel.getTimestampType());
+		this.ivCacheViews.setSelected(this.ivPropertiesModel.isCacheViews());
 	}
 
 	private void saveSettings() {
@@ -95,6 +97,7 @@ public final class SettingsDialogViewController extends AbstractDialogController
 		this.ivPropertiesModel.setCaseSensitivityActive(this.ivCaseSensitive.isSelected());
 		this.ivPropertiesModel.setPercentageCalculationActive(this.ivPercentageCalculation.isSelected());
 		this.ivPropertiesModel.setTimestampType(this.ivTimestamps.getSelectionModel().getSelectedItem());
+		this.ivPropertiesModel.setCacheViews(this.ivCacheViews.isSelected());
 	}
 
 }

@@ -20,7 +20,9 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.prefs.BackingStoreException;
@@ -85,8 +87,9 @@ public final class MainController {
 
 	private static final Logger LOGGER = LogManager.getLogger(MainController.class);
 
+	private static Map<Class<?>, PaneData> cvCache = new HashMap<>();
 	private static MainController cvInstance;
-
+	
 	private final DataModel ivDataModel = DataModel.getInstance();
 
 	@FXML
@@ -107,6 +110,7 @@ public final class MainController {
 
 	private Optional<Button> ivDisabledButton = Optional.empty();
 	private Optional<Class<?>> ivActiveController = Optional.empty();
+
 
 	private MainController() {
 	}
@@ -187,6 +191,7 @@ public final class MainController {
 		if (this.ivActiveController.isPresent()) {
 			final long propertiesVersionPost = PropertiesModel.getInstance().getVersion();
 			if (propertiesVersionPre != propertiesVersionPost) {
+				cvCache.clear();
 				this.loadPane(this.ivActiveController.get());
 			}
 		}
@@ -229,7 +234,11 @@ public final class MainController {
 	private void loadDialogPane(final Class<?> aControllerClass) throws Exception {
 		final PaneData paneData = MainController.loadPaneData(aControllerClass);
 
-		final Scene scene = new Scene((Parent) paneData.getNode());
+		final Parent parent = (Parent) paneData.getNode();
+		Scene scene = parent.getScene();
+		if (scene == null) {
+			scene = new Scene(parent);
+		}
 		scene.getStylesheets().add(paneData.ivStylesheetURL);
 
 		final Stage dialogStage = new Stage();
@@ -240,7 +249,6 @@ public final class MainController {
 		dialogStage.initOwner((this.ivView.getScene().getWindow()));
 		dialogStage.setScene(scene);
 		dialogStage.showAndWait();
-
 	}
 
 	public static void loadMainPane(final Stage aStage) throws Exception {
@@ -294,8 +302,13 @@ public final class MainController {
 
 	private static PaneData loadPaneData(final Class<?> aControllerClass, final ContextEntry... aArguments)
 			throws Exception {
+		
+		if (cvCache.containsKey(aControllerClass) && PropertiesModel.getInstance().isCacheViews()) {
+			return cvCache.get(aControllerClass);
+		}
+		
 		final long tin = System.currentTimeMillis();
-
+		
 		final String baseName = aControllerClass.getCanonicalName().replace("Controller", "").replace(".controller.",
 				".view.");
 		final String viewFXMLName = "views/" + baseName.replace(".", "/") + ".fxml";
@@ -318,6 +331,10 @@ public final class MainController {
 
 		final PaneData paneData = new PaneData(node, title, cssResource.toExternalForm());
 
+		if (PropertiesModel.getInstance().isCacheViews()) {
+			cvCache.put(aControllerClass, paneData);
+		}
+		
 		final long tout = System.currentTimeMillis();
 		MainController.LOGGER
 				.info("View for '" + aControllerClass.getCanonicalName() + "' loaded in " + (tout - tin) + "ms");

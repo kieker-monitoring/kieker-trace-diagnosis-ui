@@ -45,6 +45,7 @@ public final class PropertiesModel {
 	private static final String KEY_CASE_SENSITIVE = "caseSensitive";
 	private static final String KEY_PERCENTAGE_CALCULATION = "percentageCalculation";
 	private static final String KEY_TIMESTAMP_TYPE = "timestampType";
+	private static final String KEY_CACHE_VIEWS = "cacheViews";
 
 	private static final String KEY_GITLAB_URL = "GitLabURL";
 	private static final String KEY_TRAC_URL = "TracURL";
@@ -60,6 +61,7 @@ public final class PropertiesModel {
 	private boolean ivMethodCallAggregationActive;
 	private boolean ivCaseSensitivityActive;
 	private boolean ivPercentageCalculationActive;
+	private boolean ivCacheViews;
 	private String ivGitLabURL;
 	private String ivTracURL;
 
@@ -87,7 +89,8 @@ public final class PropertiesModel {
 		this.ivCaseSensitivityActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_CASE_SENSITIVE, Boolean.FALSE.toString()));
 		this.ivPercentageCalculationActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.FALSE.toString()));
 		this.ivTimestampType = TimestampTypes.valueOf(preferences.get(PropertiesModel.KEY_TIMESTAMP_TYPE, TimestampTypes.TIMESTAMP.name()));
-
+		this.ivCacheViews = Boolean.valueOf(preferences.get(PropertiesModel.KEY_CACHE_VIEWS, Boolean.FALSE.toString()));
+		
 		final Properties properties = new Properties();
 		final ClassLoader classLoader = PropertiesModel.class.getClassLoader();
 		try (InputStream inputStream = classLoader.getResourceAsStream("config.properties")) {
@@ -113,6 +116,7 @@ public final class PropertiesModel {
 		preferences.put(PropertiesModel.KEY_CASE_SENSITIVE, Boolean.toString(this.ivCaseSensitivityActive));
 		preferences.put(PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.toString(this.ivPercentageCalculationActive));
 		preferences.put(PropertiesModel.KEY_TIMESTAMP_TYPE, this.ivTimestampType.name());
+		preferences.put(PropertiesModel.KEY_CACHE_VIEWS, Boolean.toString(this.ivCacheViews));
 
 		try {
 			preferences.flush();
@@ -231,6 +235,15 @@ public final class PropertiesModel {
 
 	public void setTimestampType(final TimestampTypes aTimestampType) {
 		this.ivTimestampType = aTimestampType;
+		this.saveSettings();
+	}
+
+	public boolean isCacheViews() {
+		return ivCacheViews;
+	}
+
+	public void setCacheViews(boolean ivCacheViews) {
+		this.ivCacheViews = ivCacheViews;
 		this.saveSettings();
 	}
 
