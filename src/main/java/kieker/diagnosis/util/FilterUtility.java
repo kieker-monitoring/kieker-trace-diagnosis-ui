@@ -31,6 +31,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import jfxtras.scene.control.CalendarTimeTextField;
+import kieker.diagnosis.domain.AbstractOperationCall;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
 
@@ -58,6 +59,32 @@ public final class FilterUtility {
 				}
 			}
 		}
+	}
+
+	public static <T extends AbstractOperationCall<T>> Predicate<T> useFilter(final TextField aFilter, final Function<T, String> aFunction, final boolean aSearchInChildren) {
+		 final Predicate<T> filter = useFilter(aFilter, aFunction);
+		
+		 if (aSearchInChildren) {
+			 return x -> {
+				 return checkRecursive(x, filter);
+			 };
+		 } else {
+			 return filter;
+		 }
+	}
+	
+	private static <T extends AbstractOperationCall<T>> boolean checkRecursive(final T aElement, final Predicate<T> aPredicate) {
+		if (aPredicate.test(aElement)) {
+			return true;
+		} else {
+			for (final T child : aElement.getChildren()) {
+				if (checkRecursive(child, aPredicate)) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 
 	public static <T> Predicate<T> alwaysTrue() {
@@ -88,7 +115,31 @@ public final class FilterUtility {
 
 		return result;
 	}
-
+	
+	public static <T extends AbstractOperationCall<T>> Predicate<T> useFilter(final DatePicker aDatePicker, final Function<T, Long> aFunction, final boolean aFilterBefore, final boolean aSearchInChildren) {
+		 final Predicate<T> filter = useFilter(aDatePicker, aFunction, aFilterBefore);
+			
+		 if (aSearchInChildren) {
+			 return x -> {
+				 return checkRecursive(x, filter);
+			 };
+		 } else {
+			 return filter;
+		 }
+	}
+	
+	public static <T extends AbstractOperationCall<T>> Predicate<T> useFilter(final CalendarTimeTextField aTimeTextField, final Function<T, Long> aFunction, final boolean aFilterBefore, final boolean aSearchInChildren) {
+		final Predicate<T> filter = useFilter(aTimeTextField, aFunction, aFilterBefore);
+		
+		 if (aSearchInChildren) {
+			 return x -> {
+				 return checkRecursive(x, filter);
+			 };
+		 } else {
+			 return filter;
+		 }
+	}
+	
 	public static <T> Predicate<T> useFilter(final CalendarTimeTextField aTimeTextField, final Function<T, Long> aFunction, final boolean aFilterBefore) {
 		final Calendar value = aTimeTextField.getCalendar();
 		if (value == null) {

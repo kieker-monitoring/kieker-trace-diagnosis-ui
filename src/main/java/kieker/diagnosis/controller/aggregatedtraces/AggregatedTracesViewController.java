@@ -140,10 +140,10 @@ public final class AggregatedTracesViewController extends AbstractController {
 	public void useFilter() {
 		final Predicate<AggregatedOperationCall> predicate1 = FilterUtility.useFilter(this.ivShowAllButton, this.ivShowJustSuccessful, this.ivShowJustFailedButton,
 				this.ivShowJustFailureContainingButton, AggregatedOperationCall::isFailed, AggregatedOperationCall::containsFailure);
-		final Predicate<AggregatedOperationCall> predicate2 = FilterUtility.useFilter(this.ivFilterContainer, AggregatedOperationCall::getContainer);
-		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter(this.ivFilterComponent, AggregatedOperationCall::getComponent);
-		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter(this.ivFilterOperation, AggregatedOperationCall::getOperation);
-		final Predicate<AggregatedOperationCall> predicate5 = FilterUtility.useFilter(this.ivFilterException, (call -> call.isFailed() ? call.getFailedCause() : ""));
+		final Predicate<AggregatedOperationCall> predicate2 = FilterUtility.useFilter(this.ivFilterContainer, AggregatedOperationCall::getContainer, PropertiesModel.getInstance().isSearchInEntireTrace());
+		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter(this.ivFilterComponent, AggregatedOperationCall::getComponent, PropertiesModel.getInstance().isSearchInEntireTrace());
+		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter(this.ivFilterOperation, AggregatedOperationCall::getOperation, PropertiesModel.getInstance().isSearchInEntireTrace());
+		final Predicate<AggregatedOperationCall> predicate5 = FilterUtility.useFilter(this.ivFilterException, (call -> call.isFailed() ? call.getFailedCause() : ""), PropertiesModel.getInstance().isSearchInEntireTrace());
 
 		this.ivPredicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5);
 		this.reloadTreetable();

@@ -46,6 +46,7 @@ public final class PropertiesModel {
 	private static final String KEY_PERCENTAGE_CALCULATION = "percentageCalculation";
 	private static final String KEY_TIMESTAMP_TYPE = "timestampType";
 	private static final String KEY_CACHE_VIEWS = "cacheViews";
+	private static final String KEY_SEARCH_IN_ENTIRE_TRACE = "searchInEntireTrace";
 
 	private static final String KEY_GITLAB_URL = "GitLabURL";
 	private static final String KEY_TRAC_URL = "TracURL";
@@ -64,6 +65,7 @@ public final class PropertiesModel {
 	private boolean ivCacheViews;
 	private String ivGitLabURL;
 	private String ivTracURL;
+	private boolean ivSearchInEntireTrace;
 
 	private long ivVersion = 0L;
 
@@ -90,6 +92,7 @@ public final class PropertiesModel {
 		this.ivPercentageCalculationActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.FALSE.toString()));
 		this.ivTimestampType = TimestampTypes.valueOf(preferences.get(PropertiesModel.KEY_TIMESTAMP_TYPE, TimestampTypes.TIMESTAMP.name()));
 		this.ivCacheViews = Boolean.valueOf(preferences.get(PropertiesModel.KEY_CACHE_VIEWS, Boolean.FALSE.toString()));
+		this.ivSearchInEntireTrace =  Boolean.valueOf(preferences.get(PropertiesModel.KEY_SEARCH_IN_ENTIRE_TRACE, Boolean.FALSE.toString()));
 		
 		final Properties properties = new Properties();
 		final ClassLoader classLoader = PropertiesModel.class.getClassLoader();
@@ -117,7 +120,8 @@ public final class PropertiesModel {
 		preferences.put(PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.toString(this.ivPercentageCalculationActive));
 		preferences.put(PropertiesModel.KEY_TIMESTAMP_TYPE, this.ivTimestampType.name());
 		preferences.put(PropertiesModel.KEY_CACHE_VIEWS, Boolean.toString(this.ivCacheViews));
-
+		preferences.put(PropertiesModel.KEY_SEARCH_IN_ENTIRE_TRACE, Boolean.toString(this.ivSearchInEntireTrace));
+		
 		try {
 			preferences.flush();
 		} catch (final BackingStoreException e) {
@@ -244,6 +248,15 @@ public final class PropertiesModel {
 
 	public void setCacheViews(boolean ivCacheViews) {
 		this.ivCacheViews = ivCacheViews;
+		this.saveSettings();
+	}
+
+	public boolean isSearchInEntireTrace() {
+		return ivSearchInEntireTrace;
+	}
+
+	public void setSearchInEntireTrace(boolean ivSearchInEntireTrace) {
+		this.ivSearchInEntireTrace = ivSearchInEntireTrace;
 		this.saveSettings();
 	}
 

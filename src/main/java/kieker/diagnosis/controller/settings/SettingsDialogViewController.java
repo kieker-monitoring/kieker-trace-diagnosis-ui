@@ -50,7 +50,8 @@ public final class SettingsDialogViewController extends AbstractDialogController
 	@FXML private CheckBox ivCaseSensitive;
 	@FXML private CheckBox ivPercentageCalculation;
 	@FXML private CheckBox ivCacheViews;
-
+	@FXML private CheckBox ivSearchInEntireTrace;
+	
 	public SettingsDialogViewController(final Context aContext) {
 		super(aContext);
 	}
@@ -84,6 +85,7 @@ public final class SettingsDialogViewController extends AbstractDialogController
 		this.ivPercentageCalculation.setSelected(this.ivPropertiesModel.isPercentageCalculationActive());
 		this.ivTimestamps.getSelectionModel().select(this.ivPropertiesModel.getTimestampType());
 		this.ivCacheViews.setSelected(this.ivPropertiesModel.isCacheViews());
+		this.ivSearchInEntireTrace.setSelected(this.ivPropertiesModel.isSearchInEntireTrace());	
 	}
 
 	private void saveSettings() {
@@ -98,6 +100,7 @@ public final class SettingsDialogViewController extends AbstractDialogController
 		this.ivPropertiesModel.setPercentageCalculationActive(this.ivPercentageCalculation.isSelected());
 		this.ivPropertiesModel.setTimestampType(this.ivTimestamps.getSelectionModel().getSelectedItem());
 		this.ivPropertiesModel.setCacheViews(this.ivCacheViews.isSelected());
+		this.ivPropertiesModel.setSearchInEntireTrace(this.ivSearchInEntireTrace.isSelected());
 	}
 
 }

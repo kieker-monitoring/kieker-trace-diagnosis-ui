@@ -49,6 +49,7 @@
 		
 			<CheckBox fx:id="ivActivateRegularExpressions" text="%activateRegularExpressions" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
 			<CheckBox fx:id="ivCaseSensitive" text="%caseSensitive" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
+			<CheckBox fx:id="ivSearchInEntireTrace" text="%searchInEntireTrace" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>	
 		</GridPane>
 	</TitledPane>
 	
