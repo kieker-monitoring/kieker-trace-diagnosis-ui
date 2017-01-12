@@ -30,7 +30,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
-import javafx.scene.input.MouseEvent;
 import kieker.diagnosis.components.treetable.LazyAggregatedOperationCallTreeItem;
 import kieker.diagnosis.controller.AbstractController;
 import kieker.diagnosis.domain.AggregatedOperationCall;
@@ -133,7 +132,7 @@ public final class AggregatedTracesViewController extends AbstractController {
 	}
 
 	@ErrorHandling
-	public void selectCall(final MouseEvent aEvent) {
+	public void selectCall() {
 		final TreeItem<AggregatedOperationCall> selectedItem = this.ivTreetable.getSelectionModel().getSelectedItem();
 		if (selectedItem != null) {
 			this.ivSelection.set(Optional.ofNullable(selectedItem.getValue()));

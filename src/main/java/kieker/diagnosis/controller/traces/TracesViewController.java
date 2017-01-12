@@ -31,7 +31,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
-import javafx.scene.input.MouseEvent;
 import jfxtras.scene.control.CalendarTimeTextField;
 import kieker.diagnosis.components.treetable.LazyOperationCallTreeItem;
 import kieker.diagnosis.controller.AbstractController;
@@ -182,7 +181,7 @@ public final class TracesViewController extends AbstractController {
 	}
 
 	@ErrorHandling
-	public void selectCall(final MouseEvent aEvent) {
+	public void selectCall() {
 		final TreeItem<OperationCall> selectedItem = this.ivTreetable.getSelectionModel().getSelectedItem();
 		if (selectedItem != null) {
 			this.ivSelection.set(Optional.ofNullable(selectedItem.getValue()));

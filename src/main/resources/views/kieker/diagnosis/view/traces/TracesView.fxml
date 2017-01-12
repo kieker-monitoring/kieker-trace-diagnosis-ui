@@ -46,7 +46,7 @@
 	</TitledPane>
 	
 	<TreeTableView fx:id="ivTreetable" GridPane.hgrow="ALWAYS"
-		GridPane.vgrow="ALWAYS" GridPane.rowIndex="1" tableMenuButtonVisible="true" onMouseClicked="#selectCall">
+		GridPane.vgrow="ALWAYS" GridPane.rowIndex="1" tableMenuButtonVisible="true" onMouseClicked="#selectCall" onKeyReleased="#selectCall">
 		
 		<placeholder>
 			<Label text="%emptyTableText"/>

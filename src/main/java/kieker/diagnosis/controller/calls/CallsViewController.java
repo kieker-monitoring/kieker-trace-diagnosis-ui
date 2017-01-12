@@ -34,6 +34,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.InputEvent;
 import javafx.scene.input.MouseEvent;
 
 import jfxtras.scene.control.CalendarTimeTextField;
@@ -165,9 +166,14 @@ public final class CallsViewController extends AbstractController {
 	}
 
 	@ErrorHandling
-	public void selectCall(final MouseEvent aEvent) throws Exception {
-		final int clicked = aEvent.getClickCount();
-
+	public void selectCall(final InputEvent aEvent) throws Exception {
+		final int clicked;
+		if (aEvent instanceof MouseEvent) {
+			clicked = ((MouseEvent) aEvent).getClickCount();
+		} else {
+			clicked = 1;
+		}
+		
 		if (clicked == 1) {
 			this.ivSelection.set(Optional.ofNullable(this.ivTable.getSelectionModel().getSelectedItem()));
 		} else if (clicked == 2) {
