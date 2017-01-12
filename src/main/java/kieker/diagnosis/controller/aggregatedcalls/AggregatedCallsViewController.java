@@ -34,7 +34,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-
 import kieker.diagnosis.controller.AbstractController;
 import kieker.diagnosis.controller.MainController;
 import kieker.diagnosis.domain.AggregatedOperationCall;
@@ -101,7 +100,11 @@ public final class AggregatedCallsViewController extends AbstractController {
 
 		this.ivCounter.textProperty().bind(Bindings.createStringBinding(() -> sortedData.size() + " " + this.resources.getString("AggregatedCallsView.lblCounter.text"), sortedData));
 	}
-
+	
+	@Override
+	protected void reinitialize() {
+	}
+	
 	private void updateDetailPanel() {
 		if (this.ivSelection.get().isPresent()) {
 			final AggregatedOperationCall call = this.ivSelection.get().get();

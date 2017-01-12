@@ -108,9 +108,17 @@ public final class TracesViewController extends AbstractController {
 		if (call instanceof OperationCall) {
 			this.jumpToCall((OperationCall) call);
 		}
-
 	}
-
+	
+	@Override
+	@ErrorHandling
+	protected void reinitialize() {
+		final Object call = super.getContext().get(ContextKey.OPERATION_CALL);
+		if (call instanceof OperationCall) {
+			this.jumpToCall((OperationCall) call);
+		}
+	}
+	
 	private void jumpToCall(final OperationCall aCall) {
 		final TreeItem<OperationCall> root = this.ivTreetable.getRoot();
 

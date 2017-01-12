@@ -27,5 +27,9 @@ public final class AboutDialogViewController extends AbstractDialogController {
 	public AboutDialogViewController(final Context aContext) {
 		super(aContext);
 	}
-
+	
+	@Override
+	protected void reinitialize() {
+	}
+	
 }

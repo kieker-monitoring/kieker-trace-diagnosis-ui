@@ -87,7 +87,8 @@ public final class MainController {
 
 	private static final Logger LOGGER = LogManager.getLogger(MainController.class);
 
-	private static Map<Class<?>, PaneData> cvCache = new HashMap<>();
+	private static Map<Class<?>, PaneData> cvPaneDataCache = new HashMap<>();
+	private static Map<Class<?>, AbstractController> cvControllerCache = new HashMap<>();
 	private static MainController cvInstance;
 	
 	private final DataModel ivDataModel = DataModel.getInstance();
@@ -109,7 +110,7 @@ public final class MainController {
 	private Button ivStatistics;
 
 	private Optional<Button> ivDisabledButton = Optional.empty();
-	private Optional<Class<?>> ivActiveController = Optional.empty();
+	private Optional<Class<? extends AbstractController>> ivActiveController = Optional.empty();
 
 
 	private MainController() {
@@ -191,7 +192,8 @@ public final class MainController {
 		if (this.ivActiveController.isPresent()) {
 			final long propertiesVersionPost = PropertiesModel.getInstance().getVersion();
 			if (propertiesVersionPre != propertiesVersionPost) {
-				cvCache.clear();
+				cvPaneDataCache.clear();
+				cvControllerCache.clear();
 				this.loadPane(this.ivActiveController.get());
 			}
 		}
@@ -221,7 +223,7 @@ public final class MainController {
 		aDisabledButton.setDisable(true);
 	}
 
-	private void loadPane(final Class<?> aControllerClass, final ContextEntry... aArguments) throws Exception {
+	private void loadPane(final Class<? extends AbstractController> aControllerClass, final ContextEntry... aArguments) throws Exception {
 		final PaneData paneData = MainController.loadPaneData(aControllerClass, aArguments);
 
 		this.ivContent.getChildren().clear();
@@ -231,7 +233,7 @@ public final class MainController {
 		this.ivContent.getChildren().setAll(paneData.getNode());
 	}
 
-	private void loadDialogPane(final Class<?> aControllerClass) throws Exception {
+	private void loadDialogPane(final Class<? extends AbstractController> aControllerClass) throws Exception {
 		final PaneData paneData = MainController.loadPaneData(aControllerClass);
 
 		final Parent parent = (Parent) paneData.getNode();
@@ -300,11 +302,13 @@ public final class MainController {
 		stage.showAndWait();
 	}
 
-	private static PaneData loadPaneData(final Class<?> aControllerClass, final ContextEntry... aArguments)
+	private static PaneData loadPaneData(final Class<? extends AbstractController> aControllerClass, final ContextEntry... aArguments)
 			throws Exception {
 		
-		if (cvCache.containsKey(aControllerClass) && PropertiesModel.getInstance().isCacheViews()) {
-			return cvCache.get(aControllerClass);
+		if (cvPaneDataCache.containsKey(aControllerClass) && PropertiesModel.getInstance().isCacheViews()) {
+			final Context context = new Context(aArguments);
+			cvControllerCache.get(aControllerClass).setContext(context);
+			return cvPaneDataCache.get(aControllerClass);
 		}
 		
 		final long tin = System.currentTimeMillis();
@@ -315,9 +319,9 @@ public final class MainController {
 		final String cssName = "views/" + baseName.replace(".", "/") + ".css";
 		final String bundleBaseName = "locale." + baseName.toLowerCase(Locale.ROOT);
 
-		final Constructor<?> constructor = aControllerClass.getConstructor(Context.class);
+		final Constructor<? extends AbstractController> constructor = aControllerClass.getConstructor(Context.class);
 		final Context context = new Context(aArguments);
-		final Object controller = constructor.newInstance(context);
+		final AbstractController controller = constructor.newInstance(context);
 
 		final URL viewResource = MainController.class.getClassLoader().getResource(viewFXMLName);
 		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
@@ -332,7 +336,8 @@ public final class MainController {
 		final PaneData paneData = new PaneData(node, title, cssResource.toExternalForm());
 
 		if (PropertiesModel.getInstance().isCacheViews()) {
-			cvCache.put(aControllerClass, paneData);
+			cvPaneDataCache.put(aControllerClass, paneData);
+			cvControllerCache.put(aControllerClass, controller);
 		}
 		
 		final long tout = System.currentTimeMillis();

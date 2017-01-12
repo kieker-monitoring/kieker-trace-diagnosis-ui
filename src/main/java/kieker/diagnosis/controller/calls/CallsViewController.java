@@ -114,7 +114,16 @@ public final class CallsViewController extends AbstractController {
 		}
 
 	}
-
+	
+	@Override
+	@ErrorHandling
+	protected void reinitialize() {
+		final Object call = super.getContext().get(ContextKey.AGGREGATED_OPERATION_CALL);
+		if (call instanceof AggregatedOperationCall) {
+			this.jumpToCalls((AggregatedOperationCall) call);
+		}
+	}
+	
 	private void jumpToCalls(final AggregatedOperationCall aCall) {
 		this.ivFilterContainer.setText(aCall.getContainer());
 		this.ivFilterComponent.setText(aCall.getComponent());
@@ -122,7 +131,9 @@ public final class CallsViewController extends AbstractController {
 
 		if (aCall.getFailedCause() != null) {
 			this.ivFilterException.setText(aCall.getFailedCause());
+			this.ivShowAllButton.setSelected(true);
 		} else {
+			this.ivFilterException.setText(null);
 			this.ivShowJustSuccessful.setSelected(true);
 		}
 
@@ -223,5 +234,7 @@ public final class CallsViewController extends AbstractController {
 		}
 
 	}
+
+
 	
 }

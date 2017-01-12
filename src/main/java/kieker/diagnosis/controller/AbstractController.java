@@ -20,7 +20,7 @@ import kieker.diagnosis.util.Context;
 
 public abstract class AbstractController {
 
-	private final Context ivContext;
+	private Context ivContext;
 
 	public AbstractController(final Context aContext) {
 		this.ivContext = aContext;
@@ -29,5 +29,12 @@ public abstract class AbstractController {
 	protected final Context getContext() {
 		return this.ivContext;
 	}
+
+	public final void setContext(final Context aContext) {
+		this.ivContext = aContext;
+		reinitialize();
+	}
+
+	protected abstract void reinitialize();
 
 }

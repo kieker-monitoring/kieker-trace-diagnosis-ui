@@ -93,7 +93,11 @@ public final class AggregatedTracesViewController extends AbstractController {
 
 		this.ivSelection.addListener(e -> this.updateDetailPanel());
 	}
-
+	
+	@Override
+	protected void reinitialize() {
+	}
+	
 	private void updateDetailPanel() {
 		if (this.ivSelection.get().isPresent()) {
 			final AggregatedOperationCall call = this.ivSelection.get().get();

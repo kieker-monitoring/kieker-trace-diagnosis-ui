@@ -116,6 +116,10 @@ public final class MonitoringStatisticsViewController extends AbstractController
 		this.ivIgnoredRecords.textProperty().bind(Bindings.createStringBinding(() -> Integer.toString(countIgnoredRecords.get()), countIgnoredRecords));
 	}
 
+	@Override
+	protected void reinitialize() {
+	}
+	
 	private String assembleTimeString(final Long aTimestamp) {
 		return (aTimestamp == null) ? "N/A" : LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(aTimestamp);
 	}

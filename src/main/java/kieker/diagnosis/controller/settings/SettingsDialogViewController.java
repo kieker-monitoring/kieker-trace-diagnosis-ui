@@ -67,7 +67,11 @@ public final class SettingsDialogViewController extends AbstractDialogController
 
 		this.loadSettings();
 	}
-
+	
+	@Override
+	protected void reinitialize() {
+	}
+	
 	public void saveAndCloseDialog() {
 		this.saveSettings();
 		this.closeDialog();

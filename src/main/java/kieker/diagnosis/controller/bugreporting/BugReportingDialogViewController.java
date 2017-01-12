@@ -36,7 +36,11 @@ public final class BugReportingDialogViewController extends AbstractDialogContro
 	public BugReportingDialogViewController(final Context aContext) {
 		super(aContext);
 	}
-
+	
+	@Override
+	protected void reinitialize() {
+	}
+	
 	@ErrorHandling
 	public void visitGitLab() throws IOException, URISyntaxException {
 		final String gitLabURL = this.ivPropertiesModel.getGitLabURL();
