@@ -1,4 +1,17 @@
-1.1:
+1.2.0:
+	14 Jan 2017
+	Feature (Issue #30)
+	It is now possible to enable the caching of the views. This increases the memory consumption of the application, but makes sure that the contents of each view (e.g., filters) are not reset while switching between them.
+	
+	14 Jan 2017
+	Feature (Issue #31)
+	An additional option has been implemented to apply the filters in the entire trace and not only on the root of the traces.
+
+	14 Jan 2017
+	Bugfix (Issue #32)
+	When one used the arrow keys to navigate in the trees or the lists, the detail view has not been updated.
+
+1.1.0:
 	13 Mar 2016
 	Feature (Issue #29)
 	It is now possible to export the visible data of the method call and the aggregated method call views to CSV files.
