@@ -1,5 +1,9 @@
 1.2.0:
 	14 Jan 2017
+	Feature (#33)
+	The binary archive now contains the CHANGELOG file.
+	
+	14 Jan 2017
 	Feature (Issue #30)
 	It is now possible to enable the caching of the views. This increases the memory consumption of the application, but makes sure that the contents of each view (e.g., filters) are not reset while switching between them.
 	

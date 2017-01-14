@@ -119,6 +119,7 @@ def commonDistBinConfiguration = {
 	
 	into('.') {
 		from 'LICENSE'
+		from 'CHANGELOG'
 	}
 }
 
