@@ -126,15 +126,23 @@ public final class CallsViewController extends AbstractController {
 	}
 	
 	private void jumpToCalls(final AggregatedOperationCall aCall) {
+		// Clear all filters (as the view might be cached)
+		this.ivFilterLowerDate.setValue(null);
+		this.ivFilterLowerTime.setCalendar(null);
+		this.ivFilterUpperDate.setValue(null);
+		this.ivFilterUpperTime.setCalendar(null);
+		this.ivFilterTraceID.setText(null);
+		this.ivFilterException.setText(null);
+		this.ivShowAllButton.setSelected(true);
+		
+		// Now use the values from the given aggregated call for the filters
 		this.ivFilterContainer.setText(aCall.getContainer());
 		this.ivFilterComponent.setText(aCall.getComponent());
 		this.ivFilterOperation.setText(aCall.getOperation());
 
 		if (aCall.getFailedCause() != null) {
 			this.ivFilterException.setText(aCall.getFailedCause());
-			this.ivShowAllButton.setSelected(true);
 		} else {
-			this.ivFilterException.setText(null);
 			this.ivShowJustSuccessful.setSelected(true);
 		}
 

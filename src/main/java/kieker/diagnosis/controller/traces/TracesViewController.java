@@ -119,6 +119,20 @@ public final class TracesViewController extends AbstractController {
 	}
 	
 	private void jumpToCall(final OperationCall aCall) {
+		// Clear all filters (as the view might be cached)
+		this.ivFilterComponent.setText(null);
+		this.ivFilterContainer.setText(null);
+		this.ivFilterException.setText(null);
+		this.ivFilterOperation.setText(null);
+		this.ivFilterLowerDate.setValue(null);
+		this.ivFilterLowerTime.setCalendar(null);
+		this.ivFilterUpperDate.setValue(null);
+		this.ivFilterUpperTime.setCalendar(null);
+		this.ivFilterTraceID.setText(null);
+		this.ivFilterException.setText(null);
+		this.ivShowAllButton.setSelected(true);
+		this.useFilter();
+				
 		final TreeItem<OperationCall> root = this.ivTreetable.getRoot();
 
 		final Optional<TreeItem<OperationCall>> traceRoot = this.findTraceRoot(root, aCall);
