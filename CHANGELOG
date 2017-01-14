@@ -1,5 +1,9 @@
 1.2.0:
 	14 Jan 2017
+	Internal Improvement (#34)
+	The fxml and properties files for the views and the localization are now in an own resources folder.
+	
+	14 Jan 2017
 	Feature (#33)
 	The binary archive now contains the CHANGELOG file.
 	

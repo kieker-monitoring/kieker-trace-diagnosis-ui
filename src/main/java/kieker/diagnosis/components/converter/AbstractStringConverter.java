@@ -34,7 +34,7 @@ public abstract class AbstractStringConverter<T> extends StringConverter<T> {
 	private final Mapper<T, String> ivMapper = new Mapper<>();
 
 	public AbstractStringConverter() {
-		final String bundleBaseName = "locale.kieker.diagnosis.components.components";
+		final String bundleBaseName = "kieker.diagnosis.view.components.components";
 		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
 
 		this.fillMapper(this.ivMapper, resourceBundle);

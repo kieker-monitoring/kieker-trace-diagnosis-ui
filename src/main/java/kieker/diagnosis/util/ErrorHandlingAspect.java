@@ -44,7 +44,7 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public final class ErrorHandlingAspect {
 
-	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle("locale.kieker.diagnosis.util.errorhandling", Locale.getDefault());
+	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle("kieker.diagnosis.view.util.errorhandling", Locale.getDefault());
 	private final String ivTitle = this.ivResourceBundle.getString("error");
 	private final String ivHeader = this.ivResourceBundle.getString("errorHeader");
 

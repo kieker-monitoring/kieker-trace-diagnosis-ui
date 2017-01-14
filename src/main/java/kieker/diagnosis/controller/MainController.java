@@ -257,9 +257,9 @@ public final class MainController {
 		try {
 			MainController.cvInstance = new MainController();
 			final URL resource = MainController.class.getClassLoader()
-					.getResource("views/kieker/diagnosis/view/View.fxml");
+					.getResource("kieker/diagnosis/view/View.fxml");
 			final FXMLLoader fxmlLoader = new FXMLLoader();
-			fxmlLoader.setResources(ResourceBundle.getBundle("locale.kieker.diagnosis.view.view", Locale.getDefault()));
+			fxmlLoader.setResources(ResourceBundle.getBundle("kieker.diagnosis.view.view", Locale.getDefault()));
 			fxmlLoader.setLocation(resource);
 			fxmlLoader.setController(MainController.cvInstance);
 			final Pane pane = (Pane) fxmlLoader.load();
@@ -315,9 +315,9 @@ public final class MainController {
 		
 		final String baseName = aControllerClass.getCanonicalName().replace("Controller", "").replace(".controller.",
 				".view.");
-		final String viewFXMLName = "views/" + baseName.replace(".", "/") + ".fxml";
-		final String cssName = "views/" + baseName.replace(".", "/") + ".css";
-		final String bundleBaseName = "locale." + baseName.toLowerCase(Locale.ROOT);
+		final String viewFXMLName = baseName.replace(".", "/") + ".fxml";
+		final String cssName = baseName.replace(".", "/") + ".css";
+		final String bundleBaseName = baseName.toLowerCase(Locale.ROOT);
 
 		final Constructor<? extends AbstractController> constructor = aControllerClass.getConstructor(Context.class);
 		final Context context = new Context(aArguments);

@@ -52,6 +52,12 @@ dependencies {
 	testCompile 'junit:junit:4.12'
 }
 sourceSets {
+	main {
+		resources {
+			srcDirs += 'src/main/views'
+		}
+	}
+	
 	guitest {
 		java {
 			srcDir 'guitest' 
