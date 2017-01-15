@@ -41,6 +41,8 @@
 				<CalendarTimeTextField promptText="%filterLowerTime" onKeyReleased="#useFilter" fx:id="ivFilterLowerTime"  GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
 				<DatePicker promptText="%filterUpperDate" onAction="#useFilter" fx:id="ivFilterUpperDate" GridPane.rowIndex="1" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
 				<CalendarTimeTextField promptText="%filterUpperTime" onKeyReleased="#useFilter" fx:id="ivFilterUpperTime" GridPane.rowIndex="1" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
+			
+				<Hyperlink text="%saveAsFavorite" onAction="#saveAsFavorite" GridPane.rowIndex="2" GridPane.columnIndex="0"  />
 			</GridPane>
 		</VBox>
 	</TitledPane>

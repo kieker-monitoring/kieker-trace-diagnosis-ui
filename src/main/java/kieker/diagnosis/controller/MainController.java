@@ -28,19 +28,27 @@ import java.util.ResourceBundle;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -48,7 +56,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import javafx.util.Duration;
-
 import kieker.diagnosis.controller.about.AboutDialogViewController;
 import kieker.diagnosis.controller.aggregatedcalls.AggregatedCallsViewController;
 import kieker.diagnosis.controller.aggregatedtraces.AggregatedTracesViewController;
@@ -68,9 +75,6 @@ import kieker.diagnosis.util.Context;
 import kieker.diagnosis.util.ContextEntry;
 import kieker.diagnosis.util.ContextKey;
 import kieker.diagnosis.util.ErrorHandling;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * The main controller of this application. It is responsible for controlling
@@ -97,6 +101,8 @@ public final class MainController {
 	private Node ivView;
 	@FXML
 	private Pane ivContent;
+	@FXML
+	private VBox ivLeftButtonBox;
 
 	@FXML
 	private Button ivTraces;
@@ -112,6 +118,7 @@ public final class MainController {
 	private Optional<Button> ivDisabledButton = Optional.empty();
 	private Optional<Class<? extends AbstractController>> ivActiveController = Optional.empty();
 
+	private int ivFavoritesAvailable;
 
 	private MainController() {
 	}
@@ -120,18 +127,40 @@ public final class MainController {
 	public void showTraces() throws Exception {
 		this.showTraces(new ContextEntry[0]);
 	}
+	
+	private <T extends AbstractController> void showCorrespondingView(final Class<T> aController, final ContextEntry... aContextEntries) throws Exception {
+		if (aController == TracesViewController.class) {
+			showTraces(aContextEntries);
+		} else if (aController == AggregatedTracesViewController.class) {
+			showAggregatedTraces(aContextEntries);
+		} else if (aController == CallsViewController.class) {
+			showCalls(aContextEntries);
+		} else if (aController == AggregatedCallsViewController.class) {
+			showAggregatedCalls(aContextEntries);
+		}
+	}
 
 	private void showTraces(final ContextEntry... aContextEntries) throws Exception {
 		this.toggleDisabledButton(this.ivTraces);
 		this.ivActiveController = Optional.of(TracesViewController.class);
 		this.loadPane(TracesViewController.class, aContextEntries);
 	}
-
-	@ErrorHandling
-	public void showAggregatedTraces() throws Exception {
+	
+	private void showAggregatedTraces(final ContextEntry... aContextEntries) throws Exception {
 		this.toggleDisabledButton(this.ivAggregatedtraces);
 		this.ivActiveController = Optional.of(AggregatedTracesViewController.class);
-		this.loadPane(AggregatedTracesViewController.class);
+		this.loadPane(AggregatedTracesViewController.class, aContextEntries);
+	}
+	
+	private void showAggregatedCalls(final ContextEntry... aContextEntries) throws Exception {
+		this.toggleDisabledButton(this.ivAggregatedcalls);
+		this.ivActiveController = Optional.of(AggregatedCallsViewController.class);
+		this.loadPane(AggregatedCallsViewController.class, aContextEntries);
+	}
+	
+	@ErrorHandling
+	public void showAggregatedTraces() throws Exception {
+		this.showAggregatedTraces(new ContextEntry[0]);
 	}
 
 	@ErrorHandling
@@ -148,9 +177,7 @@ public final class MainController {
 
 	@ErrorHandling
 	public void showAggregatedCalls() throws Exception {
-		this.toggleDisabledButton(this.ivAggregatedcalls);
-		this.ivActiveController = Optional.of(AggregatedCallsViewController.class);
-		this.loadPane(AggregatedCallsViewController.class);
+		this.showAggregatedCalls(new ContextEntry[0]);
 	}
 
 	@ErrorHandling
@@ -381,7 +408,71 @@ public final class MainController {
 			}
 		}
 	}
+	
+	public <T extends AbstractController> void saveAsFavorite(final Object aFilterContent, final Class<T> aFilterLoader) {
+		// Ask the user for the name of the favorite
+		final ResourceBundle resourceBundle = ResourceBundle.getBundle("kieker.diagnosis.view.view", Locale.getDefault());
+		
+		final TextInputDialog textInputDialog = new TextInputDialog();
+		textInputDialog.setTitle(resourceBundle.getString("newFilterFavorite"));
+		textInputDialog.setHeaderText(resourceBundle.getString("newFilterFavoriteName"));
+		final Optional<String> result = textInputDialog.showAndWait();
+		
+		if (result.isPresent()) {
+			// If necessary, add a horizontal line first
+			if (ivFavoritesAvailable == 0) {				
+				final Separator separator = new Separator();
+				VBox.setMargin(separator, new Insets(10, 0, 0, 10));
+				ivLeftButtonBox.getChildren().add(separator);
+			}
+			
+			// Now we can add the button for the favorite and the button to remove it
+			final HBox hbox = new HBox();
+			hbox.setSpacing(10);
+			VBox.setMargin(hbox, new Insets(10, 0, 0, 10));
+			
+			final Button favoriteButton = new Button(result.get());
+			favoriteButton.setPrefWidth(155);
+			favoriteButton.setOnAction(event -> {
+				loadFavorite(aFilterContent, aFilterLoader);
+			});
+			hbox.getChildren().add(favoriteButton);
+			
+			final Button removeButton = new Button("-");
+			removeButton.setPrefWidth(20);
+			removeButton.setOnAction(event -> {
+				ivLeftButtonBox.getChildren().remove(hbox);
+				ivFavoritesAvailable--;
+				
+				if (ivFavoritesAvailable == 0) {
+					final Optional<Node> first = ivLeftButtonBox.getChildren().stream().filter(node -> node instanceof Separator).findFirst();
+					if (first.isPresent()) {
+						ivLeftButtonBox.getChildren().remove(first.get());
+					}
+				}
+			});
+			hbox.getChildren().add(removeButton);
+			
+			ivFavoritesAvailable++;
+			ivLeftButtonBox.getChildren().add(hbox);
+		}
+	}
 
+	@ErrorHandling
+	private <T extends AbstractController> void loadFavorite(final Object aFilterContent, final Class<T> aFilterLoader) {
+		try {
+			final ContextEntry contextEntry = new ContextEntry(ContextKey.FILTER_CONTENT, aFilterContent);
+			showCorrespondingView(aFilterLoader, contextEntry); 
+		} catch (final Exception ex) {
+			silentRethrow(ex);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static <T extends Throwable> RuntimeException silentRethrow(final Throwable aThrowable) throws T {
+	    throw (T) aThrowable; 
+	}
+	
 	private static class PaneData {
 
 		private final Node ivNode;

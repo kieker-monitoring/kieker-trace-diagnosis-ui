@@ -33,6 +33,8 @@
 				<TextField promptText="%filterComponent" onAction="#useFilter" fx:id="ivFilterComponent" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
 				<TextField promptText="%filterOperation" onAction="#useFilter" fx:id="ivFilterOperation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
 				<TextField promptText="%filterException" onAction="#useFilter" fx:id="ivFilterException" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
+			
+				<Hyperlink text="%saveAsFavorite" onAction="#saveAsFavorite" GridPane.rowIndex="1" GridPane.columnIndex="0"  />
 			</GridPane>
 		</VBox>
 	</TitledPane>

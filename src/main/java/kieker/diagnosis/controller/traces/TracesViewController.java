@@ -16,6 +16,8 @@
 
 package kieker.diagnosis.controller.traces;
 
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -34,6 +36,7 @@ import javafx.scene.control.TreeTableView;
 import jfxtras.scene.control.CalendarTimeTextField;
 import kieker.diagnosis.components.treetable.LazyOperationCallTreeItem;
 import kieker.diagnosis.controller.AbstractController;
+import kieker.diagnosis.controller.MainController;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.model.DataModel;
@@ -96,7 +99,13 @@ public final class TracesViewController extends AbstractController {
 
 	@ErrorHandling
 	public void initialize() {
-		this.reloadTreetable();
+		final Object filterContent = getContext().get(ContextKey.FILTER_CONTENT);
+		if (filterContent instanceof FilterContent) {
+			loadFilterContent((FilterContent) filterContent);
+			useFilter();
+		} else {
+			this.reloadTreetable();
+		}
 
 		final ObservableList<Trace> traces = this.ivDataModel.getTraces();
 		traces.addListener((final Change<? extends Trace> aChange) -> this.reloadTreetable());
@@ -115,6 +124,12 @@ public final class TracesViewController extends AbstractController {
 		final Object call = super.getContext().get(ContextKey.OPERATION_CALL);
 		if (call instanceof OperationCall) {
 			this.jumpToCall((OperationCall) call);
+		}
+		
+		final Object filterContent = getContext().get(ContextKey.FILTER_CONTENT);
+		if (filterContent instanceof FilterContent) {
+			loadFilterContent((FilterContent) filterContent);
+			useFilter();
 		}
 	}
 	
@@ -219,6 +234,47 @@ public final class TracesViewController extends AbstractController {
 		this.ivPredicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5).and(predicate6).and(predicate7).and(predicate8).and(predicate9).and(predicate10);
 		this.reloadTreetable();
 	}
+	
+	@ErrorHandling
+	public void saveAsFavorite() {
+		MainController.instance().saveAsFavorite(saveFilterContent(), TracesViewController.class);
+	}
+	
+	private FilterContent saveFilterContent() {
+		final FilterContent filterContent = new FilterContent();
+		
+		filterContent.setFilterComponent(ivFilterComponent.getText());
+		filterContent.setFilterContainer(ivFilterContainer.getText());
+		filterContent.setFilterException(ivFilterException.getText());
+		filterContent.setFilterOperation(ivFilterOperation.getText());
+		filterContent.setFilterLowerDate(ivFilterLowerDate.getValue());
+		filterContent.setFilterLowerTime(ivFilterLowerTime.getCalendar());
+		filterContent.setFilterTraceID(ivFilterTraceID.getText());
+		filterContent.setFilterUpperDate(ivFilterUpperDate.getValue());
+		filterContent.setFilterUpperTime(ivFilterUpperTime.getCalendar());
+		filterContent.setShowAllButton(ivShowAllButton.isSelected());
+		filterContent.setShowJustFailedButton(ivShowJustFailedButton.isSelected());
+		filterContent.setShowJustSuccessful(ivShowJustSuccessful.isSelected());
+		filterContent.setShowJustFailureContainingButton(ivShowJustFailureContainingButton.isSelected());
+		
+		return filterContent;
+	}
+	
+	private void loadFilterContent(final FilterContent aFilterContent) {
+		ivFilterComponent.setText(aFilterContent.getFilterComponent());
+		ivFilterContainer.setText(aFilterContent.getFilterContainer());
+		ivFilterException.setText(aFilterContent.getFilterException());
+		ivFilterOperation.setText(aFilterContent.getFilterOperation());
+		ivFilterTraceID.setText(aFilterContent.getFilterTraceID());
+		ivFilterLowerDate.setValue(aFilterContent.getFilterLowerDate());
+		ivFilterUpperDate.setValue(aFilterContent.getFilterUpperDate());
+		ivFilterLowerTime.setCalendar(aFilterContent.getFilterLowerTime());
+		ivFilterUpperTime.setCalendar(aFilterContent.getFilterUpperTime());
+		ivShowAllButton.setSelected(aFilterContent.isShowAllButton());
+		ivShowJustFailedButton.setSelected(aFilterContent.isShowJustFailedButton());
+		ivShowJustSuccessful.setSelected(aFilterContent.isShowJustSuccessful());
+		ivShowJustFailureContainingButton.setSelected(aFilterContent.isShowJustFailureContainingButton());
+	}
 
 	private void reloadTreetable() {
 		this.ivSelection.set(Optional.empty());
@@ -233,4 +289,128 @@ public final class TracesViewController extends AbstractController {
 
 		this.ivCounter.textProperty().set(rootChildren.size() + " " + this.resources.getString("TracesView.lblCounter.text"));
 	}
+	
+	private class FilterContent {
+
+		private String ivFilterComponent;
+		private String ivFilterContainer;
+		private String ivFilterException;
+		private String ivFilterOperation;
+		private String ivFilterTraceID;
+		private LocalDate ivFilterLowerDate;
+		private LocalDate ivFilterUpperDate;
+		private Calendar ivFilterLowerTime;
+		private Calendar ivFilterUpperTime;
+		private boolean ivShowAllButton;
+		private boolean ivShowJustFailedButton;
+		private boolean ivShowJustSuccessful;
+		private boolean ivShowJustFailureContainingButton;
+		
+		public String getFilterComponent() {
+			return ivFilterComponent;
+		}
+		
+		public void setFilterComponent(String filterComponent) {
+			this.ivFilterComponent = filterComponent;
+		}
+		
+		public String getFilterContainer() {
+			return ivFilterContainer;
+		}
+		
+		public void setFilterContainer(String filterContainer) {
+			this.ivFilterContainer = filterContainer;
+		}
+		
+		public String getFilterException() {
+			return ivFilterException;
+		}
+		
+		public void setFilterException(String filterException) {
+			this.ivFilterException = filterException;
+		}
+		
+		public String getFilterOperation() {
+			return ivFilterOperation;
+		}
+		
+		public void setFilterOperation(String filterOperation) {
+			this.ivFilterOperation = filterOperation;
+		}
+		
+		public String getFilterTraceID() {
+			return ivFilterTraceID;
+		}
+		
+		public void setFilterTraceID(String filterTraceID) {
+			this.ivFilterTraceID = filterTraceID;
+		}
+		
+		public LocalDate getFilterLowerDate() {
+			return ivFilterLowerDate;
+		}
+		
+		public void setFilterLowerDate(LocalDate filterLowerDate) {
+			this.ivFilterLowerDate = filterLowerDate;
+		}
+		
+		public LocalDate getFilterUpperDate() {
+			return ivFilterUpperDate;
+		}
+		
+		public void setFilterUpperDate(LocalDate filterUpperDate) {
+			this.ivFilterUpperDate = filterUpperDate;
+		}
+		
+		public Calendar getFilterLowerTime() {
+			return ivFilterLowerTime;
+		}
+		
+		public void setFilterLowerTime(Calendar filterLowerTime) {
+			this.ivFilterLowerTime = filterLowerTime;
+		}
+		
+		public Calendar getFilterUpperTime() {
+			return ivFilterUpperTime;
+		}
+		
+		public void setFilterUpperTime(Calendar filterUpperTime) {
+			this.ivFilterUpperTime = filterUpperTime;
+		}
+		
+		public boolean isShowAllButton() {
+			return ivShowAllButton;
+		}
+		
+		public void setShowAllButton(boolean showAllButton) {
+			this.ivShowAllButton = showAllButton;
+		}
+		
+		public boolean isShowJustFailedButton() {
+			return ivShowJustFailedButton;
+		}
+		
+		public void setShowJustFailedButton(boolean showJustFailedButton) {
+			this.ivShowJustFailedButton = showJustFailedButton;
+		}
+		
+		public boolean isShowJustSuccessful() {
+			return ivShowJustSuccessful;
+		}
+		
+		public void setShowJustSuccessful(boolean showJustSuccessful) {
+			this.ivShowJustSuccessful = showJustSuccessful;
+		}
+		
+		public boolean isShowJustFailureContainingButton() {
+			return ivShowJustFailureContainingButton;
+		}
+		
+		public void setShowJustFailureContainingButton(boolean ivShowJustFailureContainingButton) {
+			this.ivShowJustFailureContainingButton = ivShowJustFailureContainingButton;
+		}
+
+		
+	}
+	
 }

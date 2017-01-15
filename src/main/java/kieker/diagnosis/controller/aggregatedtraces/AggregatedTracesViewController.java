@@ -32,11 +32,13 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
 import kieker.diagnosis.components.treetable.LazyAggregatedOperationCallTreeItem;
 import kieker.diagnosis.controller.AbstractController;
+import kieker.diagnosis.controller.MainController;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.util.Context;
+import kieker.diagnosis.util.ContextKey;
 import kieker.diagnosis.util.ErrorHandling;
 import kieker.diagnosis.util.FilterUtility;
 import kieker.diagnosis.util.NameConverter;
@@ -85,7 +87,14 @@ public final class AggregatedTracesViewController extends AbstractController {
 
 	@ErrorHandling
 	public void initialize() {
-		this.reloadTreetable();
+		final Object filterContent = getContext().get(ContextKey.FILTER_CONTENT);
+		if (filterContent instanceof FilterContent) {
+			loadFilterContent((FilterContent) filterContent);
+			useFilter();
+		} else {
+			this.reloadTreetable();
+		}
+		
 
 		final DataModel dataModel = DataModel.getInstance();
 		dataModel.getAggregatedTraces().addListener((final Change<? extends AggregatedTrace> c) -> this.reloadTreetable());
@@ -95,6 +104,11 @@ public final class AggregatedTracesViewController extends AbstractController {
 	
 	@Override
 	protected void reinitialize() {
+		final Object filterContent = getContext().get(ContextKey.FILTER_CONTENT);
+		if (filterContent instanceof FilterContent) {
+			loadFilterContent((FilterContent) filterContent);
+			useFilter();
+		} 
 	}
 	
 	private void updateDetailPanel() {
@@ -166,4 +180,115 @@ public final class AggregatedTracesViewController extends AbstractController {
 
 		this.ivCounter.textProperty().set(rootChildren.size() + " " + this.resources.getString("AggregatedTracesView.lblCounter.text"));
 	}
+	
+	@ErrorHandling
+	public void saveAsFavorite() {
+		MainController.instance().saveAsFavorite(saveFilterContent(), AggregatedTracesViewController.class);
+	}
+	
+	private FilterContent saveFilterContent() {
+		final FilterContent filterContent = new FilterContent();
+		
+		filterContent.setFilterComponent(ivFilterComponent.getText());
+		filterContent.setFilterContainer(ivFilterContainer.getText());
+		filterContent.setFilterException(ivFilterException.getText());
+		filterContent.setFilterOperation(ivFilterOperation.getText());
+		filterContent.setShowAllButton(ivShowAllButton.isSelected());
+		filterContent.setShowJustFailedButton(ivShowJustFailedButton.isSelected());
+		filterContent.setShowJustSuccessful(ivShowJustSuccessful.isSelected());
+		filterContent.setShowJustFailureContainingButton(ivShowJustFailureContainingButton.isSelected());
+		
+		return filterContent;
+	}
+	
+	private void loadFilterContent(final FilterContent aFilterContent) {
+		ivFilterComponent.setText(aFilterContent.getFilterComponent());
+		ivFilterContainer.setText(aFilterContent.getFilterContainer());
+		ivFilterException.setText(aFilterContent.getFilterException());
+		ivFilterOperation.setText(aFilterContent.getFilterOperation());
+		ivShowAllButton.setSelected(aFilterContent.isShowAllButton());
+		ivShowJustFailedButton.setSelected(aFilterContent.isShowJustFailedButton());
+		ivShowJustSuccessful.setSelected(aFilterContent.isShowJustSuccessful());
+		ivShowJustFailureContainingButton.setSelected(aFilterContent.isShowJustFailureContainingButton());
+	}
+	
+	private class FilterContent {
+		
+		private boolean ivShowAllButton;
+		private boolean ivShowJustSuccessful;
+		private boolean ivShowJustFailedButton;
+		private boolean ivShowJustFailureContainingButton;
+
+		private String ivFilterContainer;
+		private String ivFilterComponent;
+		private String ivFilterOperation;
+		private String ivFilterException;
+		
+		public boolean isShowAllButton() {
+			return ivShowAllButton;
+		}
+		
+		public void setShowAllButton(boolean showAllButton) {
+			this.ivShowAllButton = showAllButton;
+		}
+		
+		public boolean isShowJustSuccessful() {
+			return ivShowJustSuccessful;
+		}
+		
+		public void setShowJustSuccessful(boolean showJustSuccessful) {
+			this.ivShowJustSuccessful = showJustSuccessful;
+		}
+		
+		public boolean isShowJustFailedButton() {
+			return ivShowJustFailedButton;
+		}
+		
+		public void setShowJustFailedButton(boolean showJustFailedButton) {
+			this.ivShowJustFailedButton = showJustFailedButton;
+		}
+		
+		public boolean isShowJustFailureContainingButton() {
+			return ivShowJustFailureContainingButton;
+		}
+		
+		public void setShowJustFailureContainingButton(boolean ivShowJustFailureContainingButton) {
+			this.ivShowJustFailureContainingButton = ivShowJustFailureContainingButton;
+		}
+
+		public String getFilterContainer() {
+			return ivFilterContainer;
+		}
+		
+		public void setFilterContainer(String filterContainer) {
+			this.ivFilterContainer = filterContainer;
+		}
+		
+		public String getFilterComponent() {
+			return ivFilterComponent;
+		}
+		
+		public void setFilterComponent(String filterComponent) {
+			this.ivFilterComponent = filterComponent;
+		}
+		
+		public String getFilterOperation() {
+			return ivFilterOperation;
+		}
+		
+		public void setFilterOperation(String filterOperation) {
+			this.ivFilterOperation = filterOperation;
+		}
+		
+		public String getFilterException() {
+			return ivFilterException;
+		}
+		
+		public void setFilterException(String filterException) {
+			this.ivFilterException = filterException;
+		}
+		
+	}
+	
+
 }

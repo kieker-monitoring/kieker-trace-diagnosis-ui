@@ -1,4 +1,8 @@
 1.2.0:
+	15 Jan 2017
+	Feature (#35)
+	Added the possibility to bookmark filter favorites during the analysis session.
+	
 	14 Jan 2017
 	Internal Improvement (#34)
 	The fxml and properties files for the views and the localization are now in an own resources folder.

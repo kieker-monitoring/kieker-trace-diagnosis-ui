@@ -1,5 +1,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
 
 <VBox fx:id="ivView" xmlns:fx="http://javafx.com/fxml">
 
@@ -19,35 +25,33 @@
 	</MenuBar>
 
 	<HBox VBox.vgrow="ALWAYS">
-		<FlowPane orientation="VERTICAL" columnHalignment="CENTER"
-			vgap="10">
-
+		<VBox fx:id="ivLeftButtonBox">
 			<Button text="%View.trtmTraces.text(java.lang.String)" fx:id="ivTraces" wrapText="true" prefWidth="180" onAction="#showTraces">
-				<FlowPane.margin>
+				<VBox.margin>
 					<javafx.geometry.Insets left="10" top="10" />
-				</FlowPane.margin>
+				</VBox.margin>
 			</Button>
 			<Button text="%View.trtmAggregatedTraces.text(java.lang.String)" fx:id="ivAggregatedtraces" prefWidth="180" onAction="#showAggregatedTraces">
-				<FlowPane.margin>
+				<VBox.margin>
 					<javafx.geometry.Insets left="10" top="10" />
-				</FlowPane.margin>
+				</VBox.margin>
 			</Button>
 			<Button text="%View.trtmOperationCalls.text(java.lang.String)" fx:id="ivCalls" prefWidth="180" onAction="#showCalls">
-				<FlowPane.margin>
+				<VBox.margin>
 					<javafx.geometry.Insets left="10" top="10" />
-				</FlowPane.margin>
+				</VBox.margin>
 			</Button>
 			<Button text="%View.trtmAggregatedOperationCalls.text(java.lang.String)" fx:id="ivAggregatedcalls" prefWidth="180" onAction="#showAggregatedCalls">
-				<FlowPane.margin>
+				<VBox.margin>
 					<javafx.geometry.Insets left="10" top="10" />
-				</FlowPane.margin>
+				</VBox.margin>
 			</Button>
 			<Button text="%View.trtmMonitoringLogStatistics.text(java.lang.String)" fx:id="ivStatistics" prefWidth="180" onAction="#showStatistics">
-				<FlowPane.margin>
+				<VBox.margin>
 					<javafx.geometry.Insets left="10" top="10" />
-				</FlowPane.margin>
+				</VBox.margin>
 			</Button>
-		</FlowPane>
+		</VBox>
 
 		<AnchorPane fx:id="ivContent" HBox.hgrow="ALWAYS">
 			<HBox.margin>

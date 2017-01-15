@@ -43,6 +43,7 @@ import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.util.CSVData;
 import kieker.diagnosis.util.CSVDataCollector;
 import kieker.diagnosis.util.Context;
+import kieker.diagnosis.util.ContextKey;
 import kieker.diagnosis.util.ErrorHandling;
 import kieker.diagnosis.util.FilterUtility;
 import kieker.diagnosis.util.NameConverter;
@@ -97,6 +98,12 @@ public final class AggregatedCallsViewController extends AbstractController {
 		sortedData.comparatorProperty().bind(this.ivTable.comparatorProperty());
 		this.ivTable.setItems(sortedData);
 
+		final Object filterContent = getContext().get(ContextKey.FILTER_CONTENT);
+		if (filterContent instanceof FilterContent) {
+			loadFilterContent((FilterContent) filterContent);
+			useFilter();
+		}
+		
 		this.ivSelection.addListener(e -> this.updateDetailPanel());
 
 		this.ivCounter.textProperty().bind(Bindings.createStringBinding(() -> sortedData.size() + " " + this.resources.getString("AggregatedCallsView.lblCounter.text"), sortedData));
@@ -104,6 +111,11 @@ public final class AggregatedCallsViewController extends AbstractController {
 	
 	@Override
 	protected void reinitialize() {
+		final Object filterContent = getContext().get(ContextKey.FILTER_CONTENT);
+		if (filterContent instanceof FilterContent) {
+			loadFilterContent((FilterContent) filterContent);
+			useFilter();
+		}
 	}
 	
 	private void updateDetailPanel() {
@@ -177,6 +189,104 @@ public final class AggregatedCallsViewController extends AbstractController {
 		MainController.instance().exportToCSV(new AggregatedCallsCSVDataCollector());
 	}
 	
+	@ErrorHandling
+	public void saveAsFavorite() {
+		MainController.instance().saveAsFavorite(saveFilterContent(), AggregatedCallsViewController.class);
+	}
+	
+	private FilterContent saveFilterContent() {
+		final FilterContent filterContent = new FilterContent();
+		
+		filterContent.setFilterComponent(ivFilterComponent.getText());
+		filterContent.setFilterContainer(ivFilterContainer.getText());
+		filterContent.setFilterException(ivFilterException.getText());
+		filterContent.setFilterOperation(ivFilterOperation.getText());
+		filterContent.setShowAllButton(ivShowAllButton.isSelected());
+		filterContent.setShowJustFailedButton(ivShowJustFailedButton.isSelected());
+		filterContent.setShowJustSuccessful(ivShowJustSuccessful.isSelected());
+		
+		return filterContent;
+	}
+	
+	private void loadFilterContent(final FilterContent aFilterContent) {
+		ivFilterComponent.setText(aFilterContent.getFilterComponent());
+		ivFilterContainer.setText(aFilterContent.getFilterContainer());
+		ivFilterException.setText(aFilterContent.getFilterException());
+		ivFilterOperation.setText(aFilterContent.getFilterOperation());
+		ivShowAllButton.setSelected(aFilterContent.isShowAllButton());
+		ivShowJustFailedButton.setSelected(aFilterContent.isShowJustFailedButton());
+		ivShowJustSuccessful.setSelected(aFilterContent.isShowJustSuccessful());
+	}
+	
+	private class FilterContent {
+		
+		private boolean ivShowAllButton;
+		private boolean ivShowJustSuccessful;
+		private boolean ivShowJustFailedButton;
+
+		private String ivFilterContainer;
+		private String ivFilterComponent;
+		private String ivFilterOperation;
+		private String ivFilterException;
+		
+		public boolean isShowAllButton() {
+			return ivShowAllButton;
+		}
+		
+		public void setShowAllButton(boolean showAllButton) {
+			this.ivShowAllButton = showAllButton;
+		}
+		
+		public boolean isShowJustSuccessful() {
+			return ivShowJustSuccessful;
+		}
+		
+		public void setShowJustSuccessful(boolean showJustSuccessful) {
+			this.ivShowJustSuccessful = showJustSuccessful;
+		}
+		
+		public boolean isShowJustFailedButton() {
+			return ivShowJustFailedButton;
+		}
+		
+		public void setShowJustFailedButton(boolean showJustFailedButton) {
+			this.ivShowJustFailedButton = showJustFailedButton;
+		}
+	
+		public String getFilterContainer() {
+			return ivFilterContainer;
+		}
+		
+		public void setFilterContainer(String filterContainer) {
+			this.ivFilterContainer = filterContainer;
+		}
+		
+		public String getFilterComponent() {
+			return ivFilterComponent;
+		}
+		
+		public void setFilterComponent(String filterComponent) {
+			this.ivFilterComponent = filterComponent;
+		}
+		
+		public String getFilterOperation() {
+			return ivFilterOperation;
+		}
+		
+		public void setFilterOperation(String filterOperation) {
+			this.ivFilterOperation = filterOperation;
+		}
+		
+		public String getFilterException() {
+			return ivFilterException;
+		}
+		
+		public void setFilterException(String filterException) {
+			this.ivFilterException = filterException;
+		}
+		
+	}
+
 	private final class AggregatedCallsCSVDataCollector implements CSVDataCollector {
 
 		@Override

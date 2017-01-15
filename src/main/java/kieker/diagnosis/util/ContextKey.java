@@ -18,6 +18,6 @@ package kieker.diagnosis.util;
 
 public enum ContextKey {
 
-	OPERATION_CALL, AGGREGATED_OPERATION_CALL
+	OPERATION_CALL, AGGREGATED_OPERATION_CALL, FILTER_CONTENT
 
 }

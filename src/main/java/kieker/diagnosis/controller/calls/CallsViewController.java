@@ -17,6 +17,8 @@
 package kieker.diagnosis.controller.calls;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
@@ -36,7 +38,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.MouseEvent;
-
 import jfxtras.scene.control.CalendarTimeTextField;
 import kieker.diagnosis.controller.AbstractController;
 import kieker.diagnosis.controller.MainController;
@@ -105,6 +106,12 @@ public final class CallsViewController extends AbstractController {
 		sortedData.comparatorProperty().bind(this.ivTable.comparatorProperty());
 		this.ivTable.setItems(sortedData);
 
+		final Object filterContent = getContext().get(ContextKey.FILTER_CONTENT);
+		if (filterContent instanceof FilterContent) {
+			loadFilterContent((FilterContent) filterContent);
+			useFilter();
+		}
+		
 		this.ivSelection.addListener(e -> this.updateDetailPanel());
 
 		this.ivCounter.textProperty().bind(Bindings.createStringBinding(() -> sortedData.size() + " " + this.resources.getString("CallsView.lbCounter.text"), sortedData));
@@ -122,6 +129,12 @@ public final class CallsViewController extends AbstractController {
 		final Object call = super.getContext().get(ContextKey.AGGREGATED_OPERATION_CALL);
 		if (call instanceof AggregatedOperationCall) {
 			this.jumpToCalls((AggregatedOperationCall) call);
+		}
+		
+		final Object filterContent = getContext().get(ContextKey.FILTER_CONTENT);
+		if (filterContent instanceof FilterContent) {
+			loadFilterContent((FilterContent) filterContent);
+			useFilter();
 		}
 	}
 	
@@ -219,6 +232,45 @@ public final class CallsViewController extends AbstractController {
 		MainController.instance().exportToCSV(new CallsCSVDataCollector());
 	}
 	
+	@ErrorHandling
+	public void saveAsFavorite() {
+		MainController.instance().saveAsFavorite(saveFilterContent(), CallsViewController.class);
+	}
+	
+	private FilterContent saveFilterContent() {
+		final FilterContent filterContent = new FilterContent();
+		
+		filterContent.setFilterComponent(ivFilterComponent.getText());
+		filterContent.setFilterContainer(ivFilterContainer.getText());
+		filterContent.setFilterException(ivFilterException.getText());
+		filterContent.setFilterOperation(ivFilterOperation.getText());
+		filterContent.setFilterLowerDate(ivFilterLowerDate.getValue());
+		filterContent.setFilterLowerTime(ivFilterLowerTime.getCalendar());
+		filterContent.setFilterTraceID(ivFilterTraceID.getText());
+		filterContent.setFilterUpperDate(ivFilterUpperDate.getValue());
+		filterContent.setFilterUpperTime(ivFilterUpperTime.getCalendar());
+		filterContent.setShowAllButton(ivShowAllButton.isSelected());
+		filterContent.setShowJustFailedButton(ivShowJustFailedButton.isSelected());
+		filterContent.setShowJustSuccessful(ivShowJustSuccessful.isSelected());
+		
+		return filterContent;
+	}
+	
+	private void loadFilterContent(final FilterContent aFilterContent) {
+		ivFilterComponent.setText(aFilterContent.getFilterComponent());
+		ivFilterContainer.setText(aFilterContent.getFilterContainer());
+		ivFilterException.setText(aFilterContent.getFilterException());
+		ivFilterOperation.setText(aFilterContent.getFilterOperation());
+		ivFilterTraceID.setText(aFilterContent.getFilterTraceID());
+		ivFilterLowerDate.setValue(aFilterContent.getFilterLowerDate());
+		ivFilterUpperDate.setValue(aFilterContent.getFilterUpperDate());
+		ivFilterLowerTime.setCalendar(aFilterContent.getFilterLowerTime());
+		ivFilterUpperTime.setCalendar(aFilterContent.getFilterUpperTime());
+		ivShowAllButton.setSelected(aFilterContent.isShowAllButton());
+		ivShowJustFailedButton.setSelected(aFilterContent.isShowJustFailedButton());
+		ivShowJustSuccessful.setSelected(aFilterContent.isShowJustSuccessful());
+	}
+	
 	private final class CallsCSVDataCollector implements CSVDataCollector {
 
 		@Override
@@ -249,6 +301,117 @@ public final class CallsViewController extends AbstractController {
 
 	}
 
+	private class FilterContent {
 
+		private String ivFilterComponent;
+		private String ivFilterContainer;
+		private String ivFilterException;
+		private String ivFilterOperation;
+		private String ivFilterTraceID;
+		private LocalDate ivFilterLowerDate;
+		private LocalDate ivFilterUpperDate;
+		private Calendar ivFilterLowerTime;
+		private Calendar ivFilterUpperTime;
+		private boolean ivShowAllButton;
+		private boolean ivShowJustFailedButton;
+		private boolean ivShowJustSuccessful;
+		
+		public String getFilterComponent() {
+			return ivFilterComponent;
+		}
+		
+		public void setFilterComponent(String filterComponent) {
+			this.ivFilterComponent = filterComponent;
+		}
+		
+		public String getFilterContainer() {
+			return ivFilterContainer;
+		}
+		
+		public void setFilterContainer(String filterContainer) {
+			this.ivFilterContainer = filterContainer;
+		}
+		
+		public String getFilterException() {
+			return ivFilterException;
+		}
+		
+		public void setFilterException(String filterException) {
+			this.ivFilterException = filterException;
+		}
+		
+		public String getFilterOperation() {
+			return ivFilterOperation;
+		}
+		
+		public void setFilterOperation(String filterOperation) {
+			this.ivFilterOperation = filterOperation;
+		}
+		
+		public String getFilterTraceID() {
+			return ivFilterTraceID;
+		}
+		
+		public void setFilterTraceID(String filterTraceID) {
+			this.ivFilterTraceID = filterTraceID;
+		}
+		
+		public LocalDate getFilterLowerDate() {
+			return ivFilterLowerDate;
+		}
+		
+		public void setFilterLowerDate(LocalDate filterLowerDate) {
+			this.ivFilterLowerDate = filterLowerDate;
+		}
+		
+		public LocalDate getFilterUpperDate() {
+			return ivFilterUpperDate;
+		}
+		
+		public void setFilterUpperDate(LocalDate filterUpperDate) {
+			this.ivFilterUpperDate = filterUpperDate;
+		}
+		
+		public Calendar getFilterLowerTime() {
+			return ivFilterLowerTime;
+		}
+		
+		public void setFilterLowerTime(Calendar filterLowerTime) {
+			this.ivFilterLowerTime = filterLowerTime;
+		}
+		
+		public Calendar getFilterUpperTime() {
+			return ivFilterUpperTime;
+		}
+		
+		public void setFilterUpperTime(Calendar filterUpperTime) {
+			this.ivFilterUpperTime = filterUpperTime;
+		}
+		
+		public boolean isShowAllButton() {
+			return ivShowAllButton;
+		}
+		
+		public void setShowAllButton(boolean showAllButton) {
+			this.ivShowAllButton = showAllButton;
+		}
+		
+		public boolean isShowJustFailedButton() {
+			return ivShowJustFailedButton;
+		}
+		
+		public void setShowJustFailedButton(boolean showJustFailedButton) {
+			this.ivShowJustFailedButton = showJustFailedButton;
+		}
+		
+		public boolean isShowJustSuccessful() {
+			return ivShowJustSuccessful;
+		}
+		
+		public void setShowJustSuccessful(boolean showJustSuccessful) {
+			this.ivShowJustSuccessful = showJustSuccessful;
+		}
+		
+	}
 	
 }
