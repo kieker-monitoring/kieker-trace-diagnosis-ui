@@ -35,7 +35,7 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 	private static final String METHOD_CALLS_AGGREGATED;
 
 	static {
-		final String bundleBaseName = "kieker.diagnosis.view..components.components";
+		final String bundleBaseName = "kieker.diagnosis.view.components.components";
 		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
 
 		METHOD_CALLS_AGGREGATED = resourceBundle.getString("methodCallsAggregated");
