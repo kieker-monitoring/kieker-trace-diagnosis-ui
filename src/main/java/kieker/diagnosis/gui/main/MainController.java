@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.gui;
+package kieker.diagnosis.gui.main;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +39,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.OperationCall;
+import kieker.diagnosis.gui.AbstractController;
+import kieker.diagnosis.gui.GUIUtil;
 import kieker.diagnosis.gui.about.AboutDialogController;
 import kieker.diagnosis.gui.aggregatedcalls.AggregatedCallsController;
 import kieker.diagnosis.gui.aggregatedtraces.AggregatedTracesController;

@@ -31,7 +31,7 @@ import kieker.diagnosis.components.treetable.LazyOperationCallTreeItem;
 import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.gui.AbstractController;
-import kieker.diagnosis.gui.MainController;
+import kieker.diagnosis.gui.main.MainController;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.util.Context;

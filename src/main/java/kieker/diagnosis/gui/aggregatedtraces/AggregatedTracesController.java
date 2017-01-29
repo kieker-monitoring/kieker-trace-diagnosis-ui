@@ -29,7 +29,7 @@ import kieker.diagnosis.components.treetable.LazyAggregatedOperationCallTreeItem
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.gui.AbstractController;
-import kieker.diagnosis.gui.MainController;
+import kieker.diagnosis.gui.main.MainController;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.util.Context;

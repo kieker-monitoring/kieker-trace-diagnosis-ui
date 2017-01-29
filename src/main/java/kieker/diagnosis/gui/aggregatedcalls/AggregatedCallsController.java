@@ -32,7 +32,7 @@ import javafx.scene.input.InputEvent;
 import javafx.scene.input.MouseEvent;
 import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.gui.AbstractController;
-import kieker.diagnosis.gui.MainController;
+import kieker.diagnosis.gui.main.MainController;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.util.CSVData;

@@ -1,4 +1,4 @@
-package kieker.diagnosis.gui;
+package kieker.diagnosis.gui.main;
 
 public interface MainControllerIfc {
 

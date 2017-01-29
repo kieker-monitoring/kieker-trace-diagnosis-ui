@@ -19,7 +19,7 @@ package kieker.diagnosis;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import kieker.diagnosis.gui.GUIUtil;
-import kieker.diagnosis.gui.MainController;
+import kieker.diagnosis.gui.main.MainController;
 
 /**
  * Contains the main method of this application.

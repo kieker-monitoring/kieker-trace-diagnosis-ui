@@ -1,4 +1,4 @@
-package kieker.diagnosis.gui;
+package kieker.diagnosis.gui.main;
 
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
+import kieker.diagnosis.gui.AbstractView;
 
 public class MainView extends AbstractView {
 
