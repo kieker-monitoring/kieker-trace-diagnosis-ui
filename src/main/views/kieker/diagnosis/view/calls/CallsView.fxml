@@ -51,51 +51,40 @@
 	<TableView fx:id="ivTable" GridPane.hgrow="ALWAYS"
 		GridPane.vgrow="ALWAYS" GridPane.rowIndex="1" tableMenuButtonVisible="true" onMouseClicked="#selectCall" onKeyReleased="#selectCall">
 		
+		<rowFactory>
+			<FailedRowFactory/>
+		</rowFactory>
+		
 		<placeholder>
 			<Label text="%emptyTableText"/>
 		</placeholder>
 		
 		<columns>
 			<TableColumn text="%CallsView.tblclmnExecutionContainer.text">
-				<cellFactory>
-					<FailedTableCellFactory />
-				</cellFactory>
 				<cellValueFactory>
 					<PropertyValueFactory property="container" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%CallsView.tblclmnComponent.text">
-				<cellFactory>
-					<FailedTableCellFactory />
-				</cellFactory>
 				<cellValueFactory>
 					<ComponentCellValueFactory property="component" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%CallsView.tblclmnOperation.text">
-				<cellFactory>
-					<FailedTableCellFactory />
-				</cellFactory>
 				<cellValueFactory>
 					<OperationCellValueFactory property="operation" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%CallsView.tblclmnDuration.text">
-				<cellFactory>
-					<DurationTableCellFactory />
-				</cellFactory>
 				<cellValueFactory>
 					<DurationCellValueFactory property="duration" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%CallsView.tblclmnTraceID.text">
-				<cellFactory>
-					<FailedTableCellFactory />
-				</cellFactory>
 				<cellValueFactory>
 					<PropertyValueFactory property="traceID" />
 				</cellValueFactory>

@@ -1,4 +1,8 @@
 1.2.0:
+	29 Jan 2017
+	Internal Improvement (#36)
+	The (Tree)TableCellFactories have been replaced with (Tree)TableRowFactories.
+
 	15 Jan 2017
 	Feature (#35)
 	Added the possibility to bookmark filter favorites during the analysis session.

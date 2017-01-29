@@ -18,10 +18,7 @@ package kieker.diagnosis.components.table;
 
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.util.Callback;
-
-import kieker.diagnosis.domain.AbstractOperationCall;
 
 /**
  * @author Nils Christian Ehmke
@@ -39,30 +36,15 @@ public abstract class AbstractTableCellFactory<S, T> implements Callback<TableCo
 
 		@Override
 		protected void updateItem(final T aItem, final boolean aEmpty) {
-			this.setFailedStyle();
-
 			super.updateItem(aItem, aEmpty);
 
 			if (aEmpty || (aItem == null)) {
-				this.setText(null);
-				this.setGraphic(null);
+				setText(null);
+				setGraphic(null);
 			} else {
-				this.setText(AbstractTableCellFactory.this.getItemLabel(aItem));
+				setText(getItemLabel(aItem));
 			}
 		}
-
-		private void setFailedStyle() {
-			final TableRow<?> currentRow = super.getTableRow();
-
-			if (currentRow != null) {
-				final Object rowItem = currentRow.getItem();
-
-				super.getStyleClass().remove("failed");
-				if ((rowItem instanceof AbstractOperationCall) && ((AbstractOperationCall<?>) rowItem).isFailed()) {
-					super.getStyleClass().add("failed");
-				}
-			}
-		}
-
 	}
+	
 }

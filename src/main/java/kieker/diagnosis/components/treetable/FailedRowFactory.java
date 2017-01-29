@@ -16,14 +16,38 @@
 
 package kieker.diagnosis.components.treetable;
 
+import javafx.scene.control.TreeTableRow;
+import javafx.scene.control.TreeTableView;
+import javafx.util.Callback;
+import kieker.diagnosis.domain.AbstractOperationCall;
+
 /**
  * @author Nils Christian Ehmke
  */
-public final class FailedTreeCellFactory<S, T> extends AbstractTreeTableCellFactory<S, T> {
+public class FailedRowFactory<S> implements Callback<TreeTableView<S>, TreeTableRow<S>> {
 
 	@Override
-	protected String getItemLabel(final T aItem) {
-		return aItem.toString();
+	public TreeTableRow<S> call(final TreeTableView<S> param) {
+		return new FailedTreeTableRow();
+	}
+
+	private class FailedTreeTableRow extends TreeTableRow<S> {
+
+		@Override
+		protected void updateItem(S item, boolean empty) {
+			super.updateItem(item, empty);
+
+			if (item instanceof AbstractOperationCall<?>) {
+				final AbstractOperationCall<?> call = (AbstractOperationCall<?>) item;
+
+				getStyleClass().remove("failed");
+
+				if (call.isFailed()) {
+					getStyleClass().add("failed");
+				}
+			}
+		}
+
 	}
 
 }

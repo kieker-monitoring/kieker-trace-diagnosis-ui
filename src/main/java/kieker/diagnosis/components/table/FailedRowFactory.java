@@ -16,14 +16,38 @@
 
 package kieker.diagnosis.components.table;
 
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
+import javafx.util.Callback;
+import kieker.diagnosis.domain.AbstractOperationCall;
+
 /**
  * @author Nils Christian Ehmke
  */
-public final class FailedTableCellFactory<S, T> extends AbstractTableCellFactory<S, T> {
+public class FailedRowFactory<S> implements Callback<TableView<S>, TableRow<S>> {
 
 	@Override
-	protected String getItemLabel(final T aItem) {
-		return aItem.toString();
+	public TableRow<S> call(final TableView<S> param) {
+		return new FailedTableRow();
+	}
+
+	private class FailedTableRow extends TableRow<S> {
+
+		@Override
+		protected void updateItem(S item, boolean empty) {
+			super.updateItem(item, empty);
+
+			if (item instanceof AbstractOperationCall<?>) {
+				final AbstractOperationCall<?> call = (AbstractOperationCall<?>) item;
+
+				getStyleClass().remove("failed");
+
+				if (call.isFailed()) {
+					getStyleClass().add("failed");
+				}
+			}
+		}
+
 	}
 
 }

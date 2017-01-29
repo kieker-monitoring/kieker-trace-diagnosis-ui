@@ -42,42 +42,34 @@
 	<TableView fx:id="ivTable" GridPane.hgrow="ALWAYS"
 		GridPane.vgrow="ALWAYS" GridPane.rowIndex="1" tableMenuButtonVisible="true" onMouseClicked="#selectCall" onKeyReleased="#selectCall">
 		
+		<rowFactory>
+			<FailedRowFactory/>
+		</rowFactory>
+		
 		<placeholder>
 			<Label text="%emptyTableText"/>
 		</placeholder>
 		
 		<columns>
 			<TableColumn text="%AggregatedCallsView.tblclmnExecutionContainer.text">
-				<cellFactory>
-					<FailedTableCellFactory />
-				</cellFactory>
 				<cellValueFactory>
 					<PropertyValueFactory property="container" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%AggregatedCallsView.tblclmnComponent.text">
-				<cellFactory>
-					<FailedTableCellFactory />
-				</cellFactory>
 				<cellValueFactory>
 					<ComponentCellValueFactory property="component" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%AggregatedCallsView.tblclmnOperation.text">
-				<cellFactory>
-					<FailedTableCellFactory />
-				</cellFactory>
 				<cellValueFactory>
 					<OperationCellValueFactory property="operation" />
 				</cellValueFactory>
 			</TableColumn>
 
 			<TableColumn text="%AggregatedCallsView.tblclmnNumberOfCalls.text">
-				<cellFactory>
-					<FailedTableCellFactory />
-				</cellFactory>
 				<cellValueFactory>
 					<PropertyValueFactory property="calls" />
 				</cellValueFactory>

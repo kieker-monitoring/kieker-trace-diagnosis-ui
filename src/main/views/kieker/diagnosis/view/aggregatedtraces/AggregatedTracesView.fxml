@@ -42,60 +42,46 @@
 	<TreeTableView fx:id="ivTreetable" GridPane.hgrow="ALWAYS"
 		GridPane.vgrow="ALWAYS" GridPane.rowIndex="1" tableMenuButtonVisible="true"  onMouseClicked="#selectCall" onKeyReleased="#selectCall">
 		
+		<rowFactory>
+			<FailedRowFactory/>
+		</rowFactory>
+		
 		<placeholder>
 			<Label text="%emptyTableText"/>
 		</placeholder>
 		
-	<columns>
+		<columns>
 			<TreeTableColumn text="%AggregatedTracesView.trclmnExecutionContainer.text">
-				<cellFactory>
-					<FailedTreeCellFactory/>
-				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory property="container" />
 				</cellValueFactory>
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnComponent.text">
-				<cellFactory>
-					<FailedTreeCellFactory />
-				</cellFactory>
 				<cellValueFactory>
 					<ComponentTreeCellValueFactory property="component" />
 				</cellValueFactory>
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnOperation.text">
-				<cellFactory>
-					<FailedTreeCellFactory />
-				</cellFactory>
 				<cellValueFactory>
 					<OperationTreeCellValueFactory property="operation" />
 				</cellValueFactory>
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnCalls.text">
-				<cellFactory>
-					<FailedTreeCellFactory />
-				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory property="calls" />
 				</cellValueFactory>
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnTraceDepth.text">
-				<cellFactory>
-					<FailedTreeCellFactory />
-				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory property="stackDepth" />
 				</cellValueFactory>
 			</TreeTableColumn>
 			
 			<TreeTableColumn text="%AggregatedTracesView.trclmnTraceSize.text">
-				<cellFactory>
-					<FailedTreeCellFactory />
-				</cellFactory>
 				<cellValueFactory>
 					<TreeItemPropertyValueFactory property="stackSize" />
 				</cellValueFactory>
