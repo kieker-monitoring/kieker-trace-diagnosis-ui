@@ -14,27 +14,31 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis;
+package kieker.diagnosis.gui;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
-import kieker.diagnosis.gui.GUIUtil;
-import kieker.diagnosis.gui.MainController;
+import kieker.diagnosis.util.Context;
 
-/**
- * Contains the main method of this application.
- *
- * @author Nils Christian Ehmke
- */
-public final class Main extends Application {
+public abstract class AbstractController<T extends AbstractView> {
 
-	public static void main( final String... aArgs ) {
-		Application.launch( aArgs );
+	private final Context ivContext;
+	private T ivView;
+
+	public AbstractController( final Context aContext ) {
+		ivContext = aContext;
 	}
 
-	@Override
-	public void start( final Stage aStage ) throws Exception {
-		GUIUtil.loadView( MainController.class, aStage );
+	protected final Context getContext( ) {
+		return ivContext;
 	}
+
+	protected final T getView( ) {
+		return ivView;
+	}
+
+	public final void setView( final T aView ) {
+		ivView = aView;
+	}
+
+	public abstract void doInitialize( );
 
 }

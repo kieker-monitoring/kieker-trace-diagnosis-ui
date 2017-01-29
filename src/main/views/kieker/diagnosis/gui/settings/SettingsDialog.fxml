@@ -1,0 +1,76 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.control.CheckBox?>
+<?import kieker.diagnosis.components.converter.*?>
+
+<VBox fx:id="ivView" xmlns:fx="http://javafx.com/fxml">
+
+	<spacing>10</spacing>
+
+	<TitledPane text="%SettingsDialog.grpAppearance.text" collapsible="false" >
+		<GridPane>
+			<hgap>10</hgap>
+			<vgap>10</vgap>
+
+			<Label text="%SettingsDialog.lblTimeUnit.text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+			<ComboBox fx:id="ivTimeunits" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
+				<converter><TimeUnitStringConverter/></converter>
+			</ComboBox>
+
+			<Label text="%SettingsDialog.lblOperationNames.text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+			<ComboBox fx:id="ivOperationNames" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity" >
+				<converter><OperationNamesStringConverter/></converter>
+			</ComboBox>
+			
+			<Label text="%SettingsDialog.lblComponentNames.text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+			<ComboBox fx:id="ivComponentNames" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
+				<converter><ComponentNamesStringConverter/></converter>
+			</ComboBox>
+			
+			<Label text="%timestamps" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+			<ComboBox fx:id="ivTimestamps" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
+				<converter><TimestampTypesStringConverter/></converter>
+			</ComboBox>
+			
+ 			<CheckBox text="%aggregateMethodCalls" fx:id="ivAggregateMethodCalls" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
+			<ComboBox fx:id="ivThresholds" GridPane.columnIndex="2" GridPane.rowIndex="5" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
+				<converter><ThresholdStringConverter/></converter>
+			</ComboBox>
+			
+			<CheckBox fx:id="ivCacheViews" text="%cacheViews" GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.columnSpan="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
+		</GridPane>
+	</TitledPane>
+	
+	<TitledPane text="%searchAndFilter" collapsible="false" >
+		<GridPane>
+			<hgap>5</hgap>
+			<vgap>10</vgap>
+		
+			<CheckBox fx:id="ivActivateRegularExpressions" text="%activateRegularExpressions" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
+			<CheckBox fx:id="ivCaseSensitive" text="%caseSensitive" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
+			<CheckBox fx:id="ivSearchInEntireTrace" text="%searchInEntireTrace" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>	
+		</GridPane>
+	</TitledPane>
+	
+	<TitledPane text="%analysis" collapsible="false" >
+		<GridPane>
+			<hgap>5</hgap>
+			<vgap>10</vgap>
+
+			<CheckBox fx:id="ivAdditionalLogChecks" text="%additionalLogChecks" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
+			<CheckBox fx:id="ivPercentageCalculation" text="%percentageCalculation" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
+		</GridPane>
+	</TitledPane>
+	
+	<ButtonBar>
+		<VBox.margin>
+			<javafx.geometry.Insets right="10" />
+		</VBox.margin>
+		<buttons>
+			<Button text="%SettingsDialog.btnOkay.text" onAction="#saveAndCloseDialog" id="ivOkay" />
+			<Button text="%SettingsDialog.btnCancel.text" onAction="#closeDialog" id="ivCancel" />
+		</buttons>
+	</ButtonBar>
+
+</VBox>

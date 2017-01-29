@@ -19,18 +19,18 @@ package kieker.diagnosis.util;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
-import javafx.stage.Window;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 /**
  * This is an aspect adding error handling where it is requested. The advice is added around methods marked with {@link ErrorHandling} during the compiling. All
@@ -44,9 +44,9 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public final class ErrorHandlingAspect {
 
-	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle( "kieker.diagnosis.view.util.errorhandling", Locale.getDefault( ) );
-	private final String ivTitle = this.ivResourceBundle.getString( "error" );
-	private final String ivHeader = this.ivResourceBundle.getString( "errorHeader" );
+	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle( "kieker.diagnosis.gui.util.errorhandling", Locale.getDefault( ) );
+	private final String ivTitle = ivResourceBundle.getString( "error" );
+	private final String ivHeader = ivResourceBundle.getString( "errorHeader" );
 
 	@Pointcut ( "execution(@kieker.diagnosis.util.ErrorHandling * *(..))" )
 	public void errorHandlingRequested( ) {
@@ -58,8 +58,8 @@ public final class ErrorHandlingAspect {
 			return aThisJoinPoint.proceed( );
 		}
 		catch ( final Exception ex ) {
-			this.logError( aThisObject, ex );
-			this.showAlertDialog( ex );
+			logError( aThisObject, ex );
+			showAlertDialog( ex );
 
 			return null;
 		}
@@ -73,8 +73,8 @@ public final class ErrorHandlingAspect {
 	private void showAlertDialog( final Exception aEx ) {
 		final Alert alert = new Alert( AlertType.ERROR );
 		alert.setContentText( aEx.getLocalizedMessage( ) );
-		alert.setTitle( this.ivTitle );
-		alert.setHeaderText( this.ivHeader );
+		alert.setTitle( ivTitle );
+		alert.setHeaderText( ivHeader );
 		final Window window = alert.getDialogPane( ).getScene( ).getWindow( );
 		if ( window instanceof Stage ) {
 			final Stage stage = (Stage) window;

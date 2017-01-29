@@ -20,12 +20,11 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javafx.util.StringConverter;
-
 import kieker.diagnosis.util.Mapper;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @param <T>
  *            The type of the objects to convert from and to {@link String}.
  */
@@ -34,7 +33,7 @@ public abstract class AbstractStringConverter<T> extends StringConverter<T> {
 	private final Mapper<T, String> ivMapper = new Mapper<>( );
 
 	public AbstractStringConverter( ) {
-		final String bundleBaseName = "kieker.diagnosis.view.components.components";
+		final String bundleBaseName = "kieker.diagnosis.gui.components.components";
 		final ResourceBundle resourceBundle = ResourceBundle.getBundle( bundleBaseName, Locale.getDefault( ) );
 
 		this.fillMapper( this.ivMapper, resourceBundle );
