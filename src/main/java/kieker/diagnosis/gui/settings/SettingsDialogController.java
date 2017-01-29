@@ -19,7 +19,7 @@ package kieker.diagnosis.gui.settings;
 import java.util.concurrent.TimeUnit;
 
 import javafx.collections.FXCollections;
-import kieker.diagnosis.gui.AbstractDialogController;
+import kieker.diagnosis.gui.AbstractController;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.model.PropertiesModel.ComponentNames;
 import kieker.diagnosis.model.PropertiesModel.OperationNames;
@@ -30,7 +30,7 @@ import kieker.diagnosis.util.Context;
 /**
  * @author Nils Christian Ehmke
  */
-public final class SettingsDialogController extends AbstractDialogController<SettingsDialogView> {
+public final class SettingsDialogController extends AbstractController<SettingsDialogView> implements SettingsDialogControllerIfc {
 
 	private static final TimeUnit[] TIME_UNITS = { TimeUnit.NANOSECONDS, TimeUnit.MICROSECONDS, TimeUnit.MILLISECONDS, TimeUnit.SECONDS, TimeUnit.MINUTES,
 			TimeUnit.HOURS };
@@ -54,9 +54,15 @@ public final class SettingsDialogController extends AbstractDialogController<Set
 		loadSettings( );
 	}
 
+	@Override
 	public void saveAndCloseDialog( ) {
 		saveSettings( );
 		closeDialog( );
+	}
+
+	@Override
+	public void closeDialog( ) {
+		getView( ).getStage( ).hide( );
 	}
 
 	private void loadSettings( ) {

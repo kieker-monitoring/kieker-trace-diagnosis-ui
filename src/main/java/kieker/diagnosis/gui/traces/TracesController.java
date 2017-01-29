@@ -20,14 +20,12 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
 import kieker.diagnosis.components.treetable.LazyOperationCallTreeItem;
 import kieker.diagnosis.domain.OperationCall;
@@ -38,7 +36,6 @@ import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.util.Context;
 import kieker.diagnosis.util.ContextKey;
-import kieker.diagnosis.util.ErrorHandling;
 import kieker.diagnosis.util.FilterUtility;
 import kieker.diagnosis.util.NameConverter;
 
@@ -47,14 +44,11 @@ import kieker.diagnosis.util.NameConverter;
  *
  * @author Nils Christian Ehmke
  */
-public final class TracesController extends AbstractController<TracesView> {
+public final class TracesController extends AbstractController<TracesView> implements TracesControllerIfc {
 
 	private final DataModel ivDataModel = DataModel.getInstance( );
 
 	private final SimpleObjectProperty<Optional<OperationCall>> ivSelection = new SimpleObjectProperty<>( Optional.empty( ) );
-
-	@FXML
-	private ResourceBundle resources;
 
 	private Predicate<OperationCall> ivPredicate = FilterUtility.alwaysTrue( );
 
@@ -63,7 +57,6 @@ public final class TracesController extends AbstractController<TracesView> {
 	}
 
 	@Override
-	@ErrorHandling
 	public void doInitialize( ) {
 		final Object filterContent = getContext( ).get( ContextKey.FILTER_CONTENT );
 		if ( filterContent instanceof FilterContent ) {
@@ -162,7 +155,7 @@ public final class TracesController extends AbstractController<TracesView> {
 		}
 	}
 
-	@ErrorHandling
+	@Override
 	public void selectCall( ) {
 		final TreeItem<OperationCall> selectedItem = getView( ).getTreetable( ).getSelectionModel( ).getSelectedItem( );
 		if ( selectedItem != null ) {
@@ -170,7 +163,7 @@ public final class TracesController extends AbstractController<TracesView> {
 		}
 	}
 
-	@ErrorHandling
+	@Override
 	public void useFilter( ) {
 		final Predicate<OperationCall> predicate1 = FilterUtility.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
 				getView( ).getShowJustFailedButton( ), getView( ).getShowJustFailureContainingButton( ), OperationCall::isFailed,
@@ -199,7 +192,7 @@ public final class TracesController extends AbstractController<TracesView> {
 		reloadTreetable( );
 	}
 
-	@ErrorHandling
+	@Override
 	public void saveAsFavorite( ) {
 		MainController.instance( ).saveAsFavorite( saveFilterContent( ), TracesController.class );
 	}
@@ -252,7 +245,7 @@ public final class TracesController extends AbstractController<TracesView> {
 		traces.stream( ).map( trace -> trace.getRootOperationCall( ) ).filter( ivPredicate )
 				.forEach( call -> rootChildren.add( new LazyOperationCallTreeItem( call ) ) );
 
-		getView( ).getCounter( ).textProperty( ).set( rootChildren.size( ) + " " + resources.getString( "TracesView.lblCounter.text" ) );
+		getView( ).getCounter( ).textProperty( ).set( rootChildren.size( ) + " " + getView( ).getResourceBundle( ).getString( "TracesView.lblCounter.text" ) );
 	}
 
 	private class FilterContent {

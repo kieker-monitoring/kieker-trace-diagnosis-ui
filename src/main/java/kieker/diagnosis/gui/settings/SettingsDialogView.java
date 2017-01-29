@@ -2,8 +2,11 @@ package kieker.diagnosis.gui.settings;
 
 import java.util.concurrent.TimeUnit;
 
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.stage.Window;
 import kieker.diagnosis.gui.AbstractView;
 import kieker.diagnosis.model.PropertiesModel.ComponentNames;
 import kieker.diagnosis.model.PropertiesModel.OperationNames;
@@ -24,6 +27,7 @@ public class SettingsDialogView extends AbstractView {
 	private CheckBox ivPercentageCalculation;
 	private CheckBox ivCacheViews;
 	private CheckBox ivSearchInEntireTrace;
+	private Node ivView;
 
 	public ComboBox<OperationNames> getOperationNames( ) {
 		return ivOperationNames;
@@ -119,6 +123,15 @@ public class SettingsDialogView extends AbstractView {
 
 	public void setSearchInEntireTrace( final CheckBox aSearchInEntireTrace ) {
 		ivSearchInEntireTrace = aSearchInEntireTrace;
+	}
+
+	public Node getView( ) {
+		return ivView;
+	}
+
+	public Window getStage( ) {
+		final Scene scene = ivView.getScene( );
+		return scene.getWindow( );
 	}
 
 }

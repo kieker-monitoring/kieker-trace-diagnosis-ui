@@ -14,27 +14,6 @@ repositories {
 	maven { url 'https://jitpack.io' }
 }
 
-buildscript {
-    repositories {
-        maven {
-            url "https://maven.eveoh.nl/content/repositories/releases"
-        }
-    }
-
-    dependencies {
-        classpath "nl.eveoh:gradle-aspectj:1.6"
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
-project.ext {
-    aspectjVersion = '1.8.4'
-}
-
-apply plugin: 'aspectj' 
 dependencies {
 	runtime 'org.apache.logging.log4j:log4j-core:2.4'
 	

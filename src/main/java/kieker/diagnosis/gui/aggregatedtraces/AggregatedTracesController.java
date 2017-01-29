@@ -18,14 +18,12 @@ package kieker.diagnosis.gui.aggregatedtraces;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
 import kieker.diagnosis.components.treetable.LazyAggregatedOperationCallTreeItem;
 import kieker.diagnosis.domain.AggregatedOperationCall;
@@ -36,19 +34,15 @@ import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.util.Context;
 import kieker.diagnosis.util.ContextKey;
-import kieker.diagnosis.util.ErrorHandling;
 import kieker.diagnosis.util.FilterUtility;
 import kieker.diagnosis.util.NameConverter;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class AggregatedTracesController extends AbstractController<AggregatedTracesView> {
+public final class AggregatedTracesController extends AbstractController<AggregatedTracesView> implements AggregatedTracesControllerIfc {
 
 	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> ivSelection = new SimpleObjectProperty<>( Optional.empty( ) );
-
-	@FXML
-	private ResourceBundle resources;
 
 	private Predicate<AggregatedOperationCall> ivPredicate = FilterUtility.alwaysTrue( );
 
@@ -57,7 +51,6 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 	}
 
 	@Override
-	@ErrorHandling
 	public void doInitialize( ) {
 		final Object filterContent = getContext( ).get( ContextKey.FILTER_CONTENT );
 		if ( filterContent instanceof FilterContent ) {
@@ -109,7 +102,7 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 		}
 	}
 
-	@ErrorHandling
+	@Override
 	public void selectCall( ) {
 		final TreeItem<AggregatedOperationCall> selectedItem = getView( ).getTreetable( ).getSelectionModel( ).getSelectedItem( );
 		if ( selectedItem != null ) {
@@ -117,7 +110,7 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 		}
 	}
 
-	@ErrorHandling
+	@Override
 	public void useFilter( ) {
 		final Predicate<AggregatedOperationCall> predicate1 = FilterUtility.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
 				getView( ).getShowJustFailedButton( ), getView( ).getShowJustFailureContainingButton( ), AggregatedOperationCall::isFailed,
@@ -148,10 +141,11 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 		traces.stream( ).map( trace -> trace.getRootOperationCall( ) ).filter( ivPredicate )
 				.forEach( call -> rootChildren.add( new LazyAggregatedOperationCallTreeItem( call ) ) );
 
-		getView( ).getCounter( ).textProperty( ).set( rootChildren.size( ) + " " + resources.getString( "AggregatedTracesView.lblCounter.text" ) );
+		getView( ).getCounter( ).textProperty( )
+				.set( rootChildren.size( ) + " " + getView( ).getResourceBundle( ).getString( "AggregatedTracesView.lblCounter.text" ) );
 	}
 
-	@ErrorHandling
+	@Override
 	public void saveAsFavorite( ) {
 		MainController.instance( ).saveAsFavorite( saveFilterContent( ), AggregatedTracesController.class );
 	}

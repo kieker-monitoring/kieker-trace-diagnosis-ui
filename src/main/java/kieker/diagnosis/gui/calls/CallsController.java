@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
@@ -30,7 +29,6 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.MouseEvent;
@@ -44,28 +42,23 @@ import kieker.diagnosis.util.CSVData;
 import kieker.diagnosis.util.CSVDataCollector;
 import kieker.diagnosis.util.Context;
 import kieker.diagnosis.util.ContextKey;
-import kieker.diagnosis.util.ErrorHandling;
 import kieker.diagnosis.util.FilterUtility;
 import kieker.diagnosis.util.NameConverter;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class CallsController extends AbstractController<CallsView> {
+public final class CallsController extends AbstractController<CallsView> implements CallsControllerIfc {
 
 	private final SimpleObjectProperty<Optional<OperationCall>> ivSelection = new SimpleObjectProperty<>( Optional.empty( ) );
 
 	private FilteredList<OperationCall> ivFilteredData;
-
-	@FXML
-	private ResourceBundle resources;
 
 	public CallsController( final Context aContext ) {
 		super( aContext );
 	}
 
 	@Override
-	@ErrorHandling
 	public void doInitialize( ) {
 		final DataModel dataModel = DataModel.getInstance( );
 
@@ -84,8 +77,8 @@ public final class CallsController extends AbstractController<CallsView> {
 
 		ivSelection.addListener( e -> updateDetailPanel( ) );
 
-		getView( ).getCounter( ).textProperty( )
-				.bind( Bindings.createStringBinding( ( ) -> sortedData.size( ) + " " + resources.getString( "CallsView.lbCounter.text" ), sortedData ) );
+		getView( ).getCounter( ).textProperty( ).bind( Bindings
+				.createStringBinding( ( ) -> sortedData.size( ) + " " + getView( ).getResourceBundle( ).getString( "CallsView.lbCounter.text" ), sortedData ) );
 
 		final Object call = super.getContext( ).get( ContextKey.AGGREGATED_OPERATION_CALL );
 		if ( call instanceof AggregatedOperationCall ) {
@@ -144,7 +137,7 @@ public final class CallsController extends AbstractController<CallsView> {
 		}
 	}
 
-	@ErrorHandling
+	@Override
 	public void selectCall( final InputEvent aEvent ) throws Exception {
 		final int clicked;
 		if ( aEvent instanceof MouseEvent ) {
@@ -169,7 +162,7 @@ public final class CallsController extends AbstractController<CallsView> {
 		}
 	}
 
-	@ErrorHandling
+	@Override
 	public void useFilter( ) {
 		final Predicate<OperationCall> predicate1 = FilterUtility.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
 				getView( ).getShowJustFailedButton( ), OperationCall::isFailed );
@@ -189,12 +182,12 @@ public final class CallsController extends AbstractController<CallsView> {
 		ivFilteredData.setPredicate( predicate );
 	}
 
-	@ErrorHandling
+	@Override
 	public void exportToCSV( ) throws IOException {
 		MainController.instance( ).exportToCSV( new CallsCSVDataCollector( ) );
 	}
 
-	@ErrorHandling
+	@Override
 	public void saveAsFavorite( ) {
 		MainController.instance( ).saveAsFavorite( saveFilterContent( ), CallsController.class );
 	}

@@ -18,12 +18,18 @@ package kieker.diagnosis.gui;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
@@ -32,6 +38,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -62,17 +70,17 @@ public class GUIUtil {
 
 	public static <V extends AbstractView, C extends AbstractController<V>> void loadView( final Class<C> aControllerClass, final Stage aRootStage )
 			throws Exception {
-		LoadedView loadedView = getLoadedViewFromCache( aControllerClass );
+		LoadedView loadedView = getLoadedViewFromCache( aControllerClass, new ContextEntry[0] );
 
 		if ( loadedView == null ) {
-			loadedView = createLoadedView( aControllerClass );
+			loadedView = createLoadedView( aControllerClass, new ContextEntry[0] );
 		}
 
 		applyLoadedView( loadedView, aRootStage );
 	}
 
 	public static <V extends AbstractView, C extends AbstractController<V>> void loadView( final Class<C> aControllerClass, final AnchorPane aRootStage,
-			final ContextEntry... aArguments ) throws Exception {
+			final ContextEntry[] aArguments ) throws Exception {
 		LoadedView loadedView = getLoadedViewFromCache( aControllerClass, aArguments );
 
 		if ( loadedView == null ) {
@@ -84,10 +92,10 @@ public class GUIUtil {
 
 	public static <V extends AbstractView, C extends AbstractController<V>> void loadDialog( final Class<C> aControllerClass, final Window aOwner )
 			throws Exception {
-		LoadedView loadedView = getLoadedViewFromCache( aControllerClass );
+		LoadedView loadedView = getLoadedViewFromCache( aControllerClass, new ContextEntry[0] );
 
 		if ( loadedView == null ) {
-			loadedView = createLoadedView( aControllerClass );
+			loadedView = createLoadedView( aControllerClass, new ContextEntry[0] );
 		}
 
 		// We have to reuse the scene if necessary. Otherwise we get problems when we used the cache views.
@@ -109,7 +117,7 @@ public class GUIUtil {
 		dialogStage.showAndWait( );
 	}
 
-	private static LoadedView getLoadedViewFromCache( final Class<?> aControllerClass, final ContextEntry... aArguments ) {
+	private static LoadedView getLoadedViewFromCache( final Class<?> aControllerClass, final ContextEntry[] aArguments ) {
 		// If we should not cache the views, we do not access the cache
 		if ( !PropertiesModel.getInstance( ).isCacheViews( ) ) {
 			return null;
@@ -125,16 +133,18 @@ public class GUIUtil {
 	}
 
 	private static <V extends AbstractView, C extends AbstractController<V>> LoadedView createLoadedView( final Class<C> aControllerClass,
-			final ContextEntry... aArguments ) throws Exception {
+			final ContextEntry[] aArguments ) throws Exception {
+		final ClassLoader classLoader = GUIUtil.class.getClassLoader( );
+
 		final String baseName = aControllerClass.getCanonicalName( ).replace( "Controller", "" );
 
 		// Get the FXML file
 		final String viewFXMLName = baseName.replace( ".", "/" ) + ".fxml";
-		final URL viewResource = GUIUtil.class.getClassLoader( ).getResource( viewFXMLName );
+		final URL viewResource = classLoader.getResource( viewFXMLName );
 
 		// Get the CSS file name
 		final String cssName = baseName.replace( ".", "/" ) + ".css";
-		final URL cssResource = GUIUtil.class.getClassLoader( ).getResource( cssName );
+		final URL cssResource = classLoader.getResource( cssName );
 
 		// Get the resource bundle
 		final String bundleBaseName = baseName.toLowerCase( Locale.ROOT );
@@ -145,9 +155,14 @@ public class GUIUtil {
 		final Context context = new Context( aArguments );
 		final C controller = controllerConstructor.newInstance( context );
 
+		// Create the controller proxy
+		final String controllerIfcName = aControllerClass.getCanonicalName( ) + "Ifc";
+		final Class<?> controllerIfc = classLoader.loadClass( controllerIfcName );
+		final Object contrProxy = Proxy.newProxyInstance( classLoader, new Class<?>[] { controllerIfc }, new ErrorHandlingInvocationHandler( controller ) );
+
 		// Load the FXML file
 		final FXMLLoader loader = new FXMLLoader( );
-		loader.setController( controller );
+		loader.setController( contrProxy );
 		loader.setLocation( viewResource );
 		loader.setResources( resourceBundle );
 		final Node node = (Node) loader.load( );
@@ -155,8 +170,9 @@ public class GUIUtil {
 		// Create the view
 		final String viewName = aControllerClass.getCanonicalName( ).replace( "Controller", "View" );
 		@SuppressWarnings ( "unchecked" )
-		final Class<V> viewClass = (Class<V>) GUIUtil.class.getClassLoader( ).loadClass( viewName );
+		final Class<V> viewClass = (Class<V>) classLoader.loadClass( viewName );
 		final V view = viewClass.newInstance( );
+		view.setResourceBundle( resourceBundle );
 		controller.setView( view );
 
 		// Now inject the fields of the view
@@ -301,4 +317,50 @@ public class GUIUtil {
 
 	}
 
+	private static class ErrorHandlingInvocationHandler implements InvocationHandler {
+
+		private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle( "kieker.diagnosis.gui.util.errorhandling", Locale.getDefault( ) );
+		private final String ivTitle = ivResourceBundle.getString( "error" );
+		private final String ivHeader = ivResourceBundle.getString( "errorHeader" );
+
+		private final Object ivDelegate;
+
+		public ErrorHandlingInvocationHandler( final Object aDelegate ) {
+			ivDelegate = aDelegate;
+		}
+
+		@Override
+		public Object invoke( final Object aProxy, final Method aMethod, final Object[] aArgs ) throws Throwable {
+			try {
+				return aMethod.invoke( ivDelegate, aArgs );
+			}
+			catch ( final Exception ex ) {
+				logError( ex );
+				showAlertDialog( ex );
+
+				return null;
+			}
+		}
+
+		private void logError( final Exception aEx ) {
+			final Logger logger = LogManager.getLogger( ivDelegate.getClass( ) );
+			logger.error( aEx.getMessage( ), aEx );
+		}
+
+		private void showAlertDialog( final Exception aEx ) {
+			final Alert alert = new Alert( AlertType.ERROR );
+			alert.setContentText( aEx.toString( ) );
+			alert.setTitle( ivTitle );
+			alert.setHeaderText( ivHeader );
+
+			final Window window = alert.getDialogPane( ).getScene( ).getWindow( );
+			if ( window instanceof Stage ) {
+				final Stage stage = (Stage) window;
+				stage.getIcons( ).add( new Image( "kieker-logo.png" ) );
+			}
+
+			alert.showAndWait( );
+		}
+
+	}
 }

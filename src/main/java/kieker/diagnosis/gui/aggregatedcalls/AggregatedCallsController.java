@@ -18,7 +18,6 @@ package kieker.diagnosis.gui.aggregatedcalls;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
@@ -28,7 +27,6 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.MouseEvent;
@@ -41,28 +39,23 @@ import kieker.diagnosis.util.CSVData;
 import kieker.diagnosis.util.CSVDataCollector;
 import kieker.diagnosis.util.Context;
 import kieker.diagnosis.util.ContextKey;
-import kieker.diagnosis.util.ErrorHandling;
 import kieker.diagnosis.util.FilterUtility;
 import kieker.diagnosis.util.NameConverter;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class AggregatedCallsController extends AbstractController<AggregatedCallsView> {
+public final class AggregatedCallsController extends AbstractController<AggregatedCallsView> implements AggregatedCallsControllerIfc {
 
 	private FilteredList<AggregatedOperationCall> ivFilteredData;
 
 	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> ivSelection = new SimpleObjectProperty<>( Optional.empty( ) );
-
-	@FXML
-	private ResourceBundle resources;
 
 	public AggregatedCallsController( final Context aContext ) {
 		super( aContext );
 	}
 
 	@Override
-	@ErrorHandling
 	public void doInitialize( ) {
 		final DataModel dataModel = DataModel.getInstance( );
 
@@ -81,8 +74,8 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 
 		ivSelection.addListener( e -> updateDetailPanel( ) );
 
-		getView( ).getCounter( ).textProperty( ).bind(
-				Bindings.createStringBinding( ( ) -> sortedData.size( ) + " " + resources.getString( "AggregatedCallsView.lblCounter.text" ), sortedData ) );
+		getView( ).getCounter( ).textProperty( ).bind( Bindings.createStringBinding(
+				( ) -> sortedData.size( ) + " " + getView( ).getResourceBundle( ).getString( "AggregatedCallsView.lblCounter.text" ), sortedData ) );
 	}
 
 	private void updateDetailPanel( ) {
@@ -116,7 +109,7 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 		}
 	}
 
-	@ErrorHandling
+	@Override
 	public void selectCall( final InputEvent aEvent ) throws Exception {
 		final int clicked;
 		if ( aEvent instanceof MouseEvent ) {
@@ -141,7 +134,7 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 		}
 	}
 
-	@ErrorHandling
+	@Override
 	public void useFilter( ) {
 		final Predicate<AggregatedOperationCall> predicate1 = FilterUtility.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
 				getView( ).getShowJustFailedButton( ), AggregatedOperationCall::isFailed );
@@ -158,12 +151,12 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 		ivFilteredData.setPredicate( predicate );
 	}
 
-	@ErrorHandling
+	@Override
 	public void exportToCSV( ) throws IOException {
 		MainController.instance( ).exportToCSV( new AggregatedCallsCSVDataCollector( ) );
 	}
 
-	@ErrorHandling
+	@Override
 	public void saveAsFavorite( ) {
 		MainController.instance( ).saveAsFavorite( saveFilterContent( ), AggregatedCallsController.class );
 	}

@@ -55,14 +55,13 @@ import kieker.diagnosis.util.CSVExporter;
 import kieker.diagnosis.util.Context;
 import kieker.diagnosis.util.ContextEntry;
 import kieker.diagnosis.util.ContextKey;
-import kieker.diagnosis.util.ErrorHandling;
 
 /**
  * The main controller of this application. It is responsible for controlling the application's main window.
  *
  * @author Nils Christian Ehmke
  */
-public final class MainController extends AbstractController<MainView> {
+public final class MainController extends AbstractController<MainView> implements MainControllerIfc {
 
 	private static final String KEY_LAST_IMPORT_PATH = "lastimportpath";
 	private static final String KEY_LAST_EXPORT_PATH = "lastexportpath";
@@ -74,7 +73,8 @@ public final class MainController extends AbstractController<MainView> {
 	private final DataModel ivDataModel = DataModel.getInstance( );
 
 	private Optional<Button> ivDisabledButton = Optional.empty( );
-	private Optional<Class<? extends AbstractController<?>>> ivActiveController = Optional.empty( );
+	@SuppressWarnings ( "rawtypes" )
+	private Optional<Class<? extends AbstractController>> ivActiveController = Optional.empty( );
 
 	private int ivFavoritesAvailable;
 
@@ -87,7 +87,7 @@ public final class MainController extends AbstractController<MainView> {
 
 	}
 
-	@ErrorHandling
+	@Override
 	public void showTraces( ) throws Exception {
 		this.showTraces( new ContextEntry[0] );
 	}
@@ -125,36 +125,35 @@ public final class MainController extends AbstractController<MainView> {
 		GUIUtil.loadView( AggregatedCallsController.class, getView( ).getContent( ), aContextEntries );
 	}
 
-	@ErrorHandling
+	@Override
 	public void showAggregatedTraces( ) throws Exception {
 		this.showAggregatedTraces( new ContextEntry[0] );
 	}
 
-	@ErrorHandling
+	@Override
 	public void showCalls( ) throws Exception {
 		this.showCalls( new ContextEntry[0] );
 	}
 
-	@ErrorHandling
 	public void showCalls( final ContextEntry... aContextEntries ) throws Exception {
 		toggleDisabledButton( getView( ).getCalls( ) );
 		ivActiveController = Optional.of( CallsController.class );
 		GUIUtil.loadView( CallsController.class, getView( ).getContent( ), aContextEntries );
 	}
 
-	@ErrorHandling
+	@Override
 	public void showAggregatedCalls( ) throws Exception {
 		this.showAggregatedCalls( new ContextEntry[0] );
 	}
 
-	@ErrorHandling
+	@Override
 	public void showStatistics( ) throws Exception {
 		toggleDisabledButton( getView( ).getStatistics( ) );
 		ivActiveController = Optional.of( MonitoringStatisticsController.class );
-		GUIUtil.loadView( MonitoringStatisticsController.class, getView( ).getContent( ) );
+		GUIUtil.loadView( MonitoringStatisticsController.class, getView( ).getContent( ), new ContextEntry[0] );
 	}
 
-	@ErrorHandling
+	@Override
 	public void showImportDialog( ) {
 		final Preferences preferences = Preferences.userNodeForPackage( MainController.class );
 		final File initialDirectory = new File( preferences.get( MainController.KEY_LAST_IMPORT_PATH, "." ) );
@@ -177,7 +176,8 @@ public final class MainController extends AbstractController<MainView> {
 		}
 	}
 
-	@ErrorHandling
+	@Override
+	@SuppressWarnings ( "unchecked" )
 	public void showSettings( ) throws Exception {
 		final long propertiesVersionPre = PropertiesModel.getInstance( ).getVersion( );
 		GUIUtil.loadDialog( SettingsDialogController.class, getView( ).getWindow( ) );
@@ -186,22 +186,22 @@ public final class MainController extends AbstractController<MainView> {
 			final long propertiesVersionPost = PropertiesModel.getInstance( ).getVersion( );
 			if ( propertiesVersionPre != propertiesVersionPost ) {
 				GUIUtil.clearCache( );
-				GUIUtil.loadView( ivActiveController.get( ), getView( ).getContent( ) );
+				GUIUtil.loadView( ivActiveController.get( ), getView( ).getContent( ), new ContextEntry[0] );
 			}
 		}
 	}
 
-	@ErrorHandling
+	@Override
 	public void showAbout( ) throws Exception {
 		GUIUtil.loadDialog( AboutDialogController.class, getView( ).getWindow( ) );
 	}
 
-	@ErrorHandling
+	@Override
 	public void showBugReporting( ) throws Exception {
 		GUIUtil.loadDialog( BugReportingDialogController.class, getView( ).getWindow( ) );
 	}
 
-	@ErrorHandling
+	@Override
 	public void close( ) {
 		final Window window = getView( ).getWindow( );
 		window.hide( );
@@ -299,7 +299,6 @@ public final class MainController extends AbstractController<MainView> {
 		}
 	}
 
-	@ErrorHandling
 	private <T extends AbstractController<?>> void loadFavorite( final Object aFilterContent, final Class<T> aFilterLoader ) {
 		try {
 			final ContextEntry contextEntry = new ContextEntry( ContextKey.FILTER_CONTENT, aFilterContent );

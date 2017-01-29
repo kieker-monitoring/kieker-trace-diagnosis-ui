@@ -1,5 +1,9 @@
 1.2.0:
 	29 Jan 2017
+	Internal Improvement (#40)
+	Removed the AspectJ dependency.
+
+	29 Jan 2017
 	Internal Improvement (#39)
 	Separated controllers and views.
 	

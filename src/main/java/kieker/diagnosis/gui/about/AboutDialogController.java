@@ -16,13 +16,13 @@
 
 package kieker.diagnosis.gui.about;
 
-import kieker.diagnosis.gui.AbstractDialogController;
+import kieker.diagnosis.gui.AbstractController;
 import kieker.diagnosis.util.Context;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class AboutDialogController extends AbstractDialogController<AboutDialogView> {
+public final class AboutDialogController extends AbstractController<AboutDialogView> implements AboutDialogControllerIfc {
 
 	public AboutDialogController( final Context aContext ) {
 		super( aContext );
@@ -30,6 +30,11 @@ public final class AboutDialogController extends AbstractDialogController<AboutD
 
 	@Override
 	public void doInitialize( ) {
+	}
+
+	@Override
+	public void closeDialog( ) {
+		getView( ).getStage( ).hide( );
 	}
 
 }

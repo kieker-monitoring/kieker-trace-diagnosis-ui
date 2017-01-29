@@ -21,15 +21,14 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import kieker.diagnosis.gui.AbstractDialogController;
+import kieker.diagnosis.gui.AbstractController;
 import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.util.Context;
-import kieker.diagnosis.util.ErrorHandling;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class BugReportingDialogController extends AbstractDialogController<BugReportingDialogView> {
+public final class BugReportingDialogController extends AbstractController<BugReportingDialogView> implements BugReportingDialogControllerIfc {
 
 	private final PropertiesModel ivPropertiesModel = PropertiesModel.getInstance( );
 
@@ -41,18 +40,23 @@ public final class BugReportingDialogController extends AbstractDialogController
 	public void doInitialize( ) {
 	}
 
-	@ErrorHandling
+	@Override
 	public void visitGitLab( ) throws IOException, URISyntaxException {
 		final String gitLabURL = ivPropertiesModel.getGitLabURL( );
 		final Desktop desktop = Desktop.getDesktop( );
 		desktop.browse( new URI( gitLabURL ) );
 	}
 
-	@ErrorHandling
+	@Override
 	public void visitTrac( ) throws IOException, URISyntaxException {
 		final String tracURL = ivPropertiesModel.getTracURL( );
 		final Desktop desktop = Desktop.getDesktop( );
 		desktop.browse( new URI( tracURL ) );
+	}
+
+	@Override
+	public void closeDialog( ) {
+		getView( ).getStage( ).hide( );
 	}
 
 }

@@ -30,13 +30,12 @@ import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.gui.AbstractController;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.util.Context;
-import kieker.diagnosis.util.ErrorHandling;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class MonitoringStatisticsController extends AbstractController<MonitoringStatisticsView> {
+public final class MonitoringStatisticsController extends AbstractController<MonitoringStatisticsView> implements MonitoringStatisticsControllerIfc {
 
 	private static final String[] UNITS = { "Bytes", "Kilobytes", "Megabytes", "Gigabytes", };
 	private static final float SIZE_OF_BYTE = 1024.0f;
@@ -48,7 +47,6 @@ public final class MonitoringStatisticsController extends AbstractController<Mon
 	}
 
 	@Override
-	@ErrorHandling
 	public void doInitialize( ) {
 		final ObjectProperty<File> importDirectory = ivDataModel.getImportDirectory( );
 		getView( ).getMonitoringlog( ).textProperty( )
