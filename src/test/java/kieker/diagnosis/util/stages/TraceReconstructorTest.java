@@ -38,175 +38,192 @@ import org.junit.Test;
 public final class TraceReconstructorTest {
 
 	@Test
-	public void reconstructionOfSingleTraceShouldWork() {
-		final List<IFlowRecord> records = new ArrayList<>();
-		records.add(new TraceMetadata(1, 1, TraceMetadata.NO_SESSION_ID, TraceMetadata.NO_HOSTNAME, TraceMetadata.NO_PARENT_TRACEID, TraceMetadata.NO_PARENT_ORDER_INDEX));
-		records.add(new BeforeOperationEvent(1, 1, 1, "main()", "Main"));
-		records.add(new BeforeOperationEvent(1, 1, 1, "Bookstore()", "Bookstore"));
-		records.add(new AfterOperationEvent(1, 1, 1, "Bookstore()", "Bookstore"));
-		records.add(new BeforeOperationEvent(1, 1, 1, "Catalog()", "Catalog"));
-		records.add(new BeforeOperationEvent(1, 1, 1, "CRM()", "CRM"));
-		records.add(new AfterOperationEvent(1, 1, 1, "CRM()", "CRM"));
-		records.add(new AfterOperationEvent(1, 1, 1, "Catalog()", "Catalog"));
-		records.add(new AfterOperationEvent(1, 1, 1, "main()", "Main"));
+	public void reconstructionOfSingleTraceShouldWork( ) {
+		final List<IFlowRecord> records = new ArrayList<>( );
+		records.add( new TraceMetadata( 1, 1, TraceMetadata.NO_SESSION_ID, TraceMetadata.NO_HOSTNAME, TraceMetadata.NO_PARENT_TRACEID,
+				TraceMetadata.NO_PARENT_ORDER_INDEX ) );
+		records.add( new BeforeOperationEvent( 1, 1, 1, "main()", "Main" ) );
+		records.add( new BeforeOperationEvent( 1, 1, 1, "Bookstore()", "Bookstore" ) );
+		records.add( new AfterOperationEvent( 1, 1, 1, "Bookstore()", "Bookstore" ) );
+		records.add( new BeforeOperationEvent( 1, 1, 1, "Catalog()", "Catalog" ) );
+		records.add( new BeforeOperationEvent( 1, 1, 1, "CRM()", "CRM" ) );
+		records.add( new AfterOperationEvent( 1, 1, 1, "CRM()", "CRM" ) );
+		records.add( new AfterOperationEvent( 1, 1, 1, "Catalog()", "Catalog" ) );
+		records.add( new AfterOperationEvent( 1, 1, 1, "main()", "Main" ) );
 
-		final TraceReconstructor reconstructor = new TraceReconstructor(false);
-		final List<Trace> result = new ArrayList<>();
-		test(reconstructor).and().send(records).to(reconstructor.getInputPort()).and().receive(result).from(reconstructor.getOutputPort()).start();
+		final TraceReconstructor reconstructor = new TraceReconstructor( false );
+		final List<Trace> result = new ArrayList<>( );
+		test( reconstructor ).and( ).send( records ).to( reconstructor.getInputPort( ) ).and( ).receive( result ).from( reconstructor.getOutputPort( ) )
+				.start( );
 
-		Assert.assertThat(result, hasSize(1));
+		Assert.assertThat( result, hasSize( 1 ) );
 
-		final Trace trace = result.get(0);
-		final OperationCall rootCall = trace.getRootOperationCall();
-		Assert.assertThat(rootCall.getOperation(), Matchers.is("main()"));
-		Assert.assertThat(rootCall.getChildren(), Matchers.hasSize(2));
-		Assert.assertThat(rootCall.getChildren().get(0).getOperation(), Matchers.is("Bookstore()"));
-		Assert.assertThat(rootCall.getChildren().get(1).getOperation(), Matchers.is("Catalog()"));
-		Assert.assertThat(rootCall.getChildren().get(1).getChildren(), Matchers.hasSize(1));
-		Assert.assertThat(rootCall.getChildren().get(1).getChildren().get(0).getOperation(), Matchers.is("CRM()"));
+		final Trace trace = result.get( 0 );
+		final OperationCall rootCall = trace.getRootOperationCall( );
+		Assert.assertThat( rootCall.getOperation( ), Matchers.is( "main()" ) );
+		Assert.assertThat( rootCall.getChildren( ), Matchers.hasSize( 2 ) );
+		Assert.assertThat( rootCall.getChildren( ).get( 0 ).getOperation( ), Matchers.is( "Bookstore()" ) );
+		Assert.assertThat( rootCall.getChildren( ).get( 1 ).getOperation( ), Matchers.is( "Catalog()" ) );
+		Assert.assertThat( rootCall.getChildren( ).get( 1 ).getChildren( ), Matchers.hasSize( 1 ) );
+		Assert.assertThat( rootCall.getChildren( ).get( 1 ).getChildren( ).get( 0 ).getOperation( ), Matchers.is( "CRM()" ) );
 	}
 
 	@Test
-	public void reconstructionOfInterleavedTracesShouldWork() {
-		final List<IFlowRecord> records = new ArrayList<>();
-		records.add(new TraceMetadata(1, 1, TraceMetadata.NO_SESSION_ID, TraceMetadata.NO_HOSTNAME, TraceMetadata.NO_PARENT_TRACEID, TraceMetadata.NO_PARENT_ORDER_INDEX));
-		records.add(new BeforeOperationEvent(1, 1, 1, "main()", "Main"));
-		records.add(new TraceMetadata(2, 1, TraceMetadata.NO_SESSION_ID, TraceMetadata.NO_HOSTNAME, TraceMetadata.NO_PARENT_TRACEID, TraceMetadata.NO_PARENT_ORDER_INDEX));
-		records.add(new BeforeOperationEvent(1, 2, 1, "Bookstore()", "Bookstore"));
-		records.add(new AfterOperationEvent(1, 1, 1, "main()", "Main"));
-		records.add(new AfterOperationEvent(1, 2, 1, "Bookstore()", "Bookstore"));
+	public void reconstructionOfInterleavedTracesShouldWork( ) {
+		final List<IFlowRecord> records = new ArrayList<>( );
+		records.add( new TraceMetadata( 1, 1, TraceMetadata.NO_SESSION_ID, TraceMetadata.NO_HOSTNAME, TraceMetadata.NO_PARENT_TRACEID,
+				TraceMetadata.NO_PARENT_ORDER_INDEX ) );
+		records.add( new BeforeOperationEvent( 1, 1, 1, "main()", "Main" ) );
+		records.add( new TraceMetadata( 2, 1, TraceMetadata.NO_SESSION_ID, TraceMetadata.NO_HOSTNAME, TraceMetadata.NO_PARENT_TRACEID,
+				TraceMetadata.NO_PARENT_ORDER_INDEX ) );
+		records.add( new BeforeOperationEvent( 1, 2, 1, "Bookstore()", "Bookstore" ) );
+		records.add( new AfterOperationEvent( 1, 1, 1, "main()", "Main" ) );
+		records.add( new AfterOperationEvent( 1, 2, 1, "Bookstore()", "Bookstore" ) );
 
-		final TraceReconstructor reconstructor = new TraceReconstructor(false);
-		final List<Trace> result = new ArrayList<>();
-		test(reconstructor).and().send(records).to(reconstructor.getInputPort()).and().receive(result).from(reconstructor.getOutputPort()).start();
+		final TraceReconstructor reconstructor = new TraceReconstructor( false );
+		final List<Trace> result = new ArrayList<>( );
+		test( reconstructor ).and( ).send( records ).to( reconstructor.getInputPort( ) ).and( ).receive( result ).from( reconstructor.getOutputPort( ) )
+				.start( );
 
-		Assert.assertThat(result, hasSize(2));
+		Assert.assertThat( result, hasSize( 2 ) );
 
-		final Trace fstTrace = result.get(0);
-		final Trace sndTrace = result.get(1);
+		final Trace fstTrace = result.get( 0 );
+		final Trace sndTrace = result.get( 1 );
 
-		Assert.assertThat(fstTrace.getRootOperationCall().getOperation(), Matchers.is("main()"));
-		Assert.assertThat(sndTrace.getRootOperationCall().getOperation(), Matchers.is("Bookstore()"));
+		Assert.assertThat( fstTrace.getRootOperationCall( ).getOperation( ), Matchers.is( "main()" ) );
+		Assert.assertThat( sndTrace.getRootOperationCall( ).getOperation( ), Matchers.is( "Bookstore()" ) );
 	}
 
 	@Test
-	public void reconstructionOfCompleteFailedTraceShouldWork() {
-		final List<IFlowRecord> records = new ArrayList<>();
-		records.add(new TraceMetadata(1, 1, TraceMetadata.NO_SESSION_ID, TraceMetadata.NO_HOSTNAME, TraceMetadata.NO_PARENT_TRACEID, TraceMetadata.NO_PARENT_ORDER_INDEX));
-		records.add(new BeforeOperationEvent(1, 1, 1, "main()", "Main"));
-		records.add(new BeforeOperationEvent(1, 1, 1, "Bookstore()", "Bookstore"));
-		records.add(new AfterOperationFailedEvent(1, 1, 1, "Bookstore()", "Bookstore", "NullPointerException"));
-		records.add(new AfterOperationFailedEvent(1, 1, 1, "main()", "Main", "IllegalArgumentException"));
+	public void reconstructionOfCompleteFailedTraceShouldWork( ) {
+		final List<IFlowRecord> records = new ArrayList<>( );
+		records.add( new TraceMetadata( 1, 1, TraceMetadata.NO_SESSION_ID, TraceMetadata.NO_HOSTNAME, TraceMetadata.NO_PARENT_TRACEID,
+				TraceMetadata.NO_PARENT_ORDER_INDEX ) );
+		records.add( new BeforeOperationEvent( 1, 1, 1, "main()", "Main" ) );
+		records.add( new BeforeOperationEvent( 1, 1, 1, "Bookstore()", "Bookstore" ) );
+		records.add( new AfterOperationFailedEvent( 1, 1, 1, "Bookstore()", "Bookstore", "NullPointerException" ) );
+		records.add( new AfterOperationFailedEvent( 1, 1, 1, "main()", "Main", "IllegalArgumentException" ) );
 
-		final TraceReconstructor reconstructor = new TraceReconstructor(false);
-		final List<Trace> result = new ArrayList<>();
-		test(reconstructor).and().send(records).to(reconstructor.getInputPort()).and().receive(result).from(reconstructor.getOutputPort()).start();
+		final TraceReconstructor reconstructor = new TraceReconstructor( false );
+		final List<Trace> result = new ArrayList<>( );
+		test( reconstructor ).and( ).send( records ).to( reconstructor.getInputPort( ) ).and( ).receive( result ).from( reconstructor.getOutputPort( ) )
+				.start( );
 
-		Assert.assertThat(result, hasSize(1));
+		Assert.assertThat( result, hasSize( 1 ) );
 
-		final Trace trace = result.get(0);
-		final OperationCall rootCall = trace.getRootOperationCall();
-		Assert.assertThat(rootCall.isFailed(), Matchers.is(true));
-		Assert.assertThat(rootCall.getFailedCause(), Matchers.is("IllegalArgumentException"));
-		Assert.assertThat(rootCall.getChildren().get(0).isFailed(), Matchers.is(true));
-		Assert.assertThat(rootCall.getChildren().get(0).getFailedCause(), Matchers.is("NullPointerException"));
+		final Trace trace = result.get( 0 );
+		final OperationCall rootCall = trace.getRootOperationCall( );
+		Assert.assertThat( rootCall.isFailed( ), Matchers.is( true ) );
+		Assert.assertThat( rootCall.getFailedCause( ), Matchers.is( "IllegalArgumentException" ) );
+		Assert.assertThat( rootCall.getChildren( ).get( 0 ).isFailed( ), Matchers.is( true ) );
+		Assert.assertThat( rootCall.getChildren( ).get( 0 ).getFailedCause( ), Matchers.is( "NullPointerException" ) );
 	}
 
 	@Test
-	public void reconstructionOfPartialFailedTraceShouldWork() {
-		final List<IFlowRecord> records = new ArrayList<>();
-		records.add(new TraceMetadata(1, 1, TraceMetadata.NO_SESSION_ID, TraceMetadata.NO_HOSTNAME, TraceMetadata.NO_PARENT_TRACEID, TraceMetadata.NO_PARENT_ORDER_INDEX));
-		records.add(new BeforeOperationEvent(1, 1, 1, "main()", "Main"));
-		records.add(new BeforeOperationEvent(1, 1, 1, "Bookstore()", "Bookstore"));
-		records.add(new AfterOperationFailedEvent(1, 1, 1, "Bookstore()", "Bookstore", "NullPointerException"));
-		records.add(new AfterOperationEvent(1, 1, 1, "main()", "Main"));
+	public void reconstructionOfPartialFailedTraceShouldWork( ) {
+		final List<IFlowRecord> records = new ArrayList<>( );
+		records.add( new TraceMetadata( 1, 1, TraceMetadata.NO_SESSION_ID, TraceMetadata.NO_HOSTNAME, TraceMetadata.NO_PARENT_TRACEID,
+				TraceMetadata.NO_PARENT_ORDER_INDEX ) );
+		records.add( new BeforeOperationEvent( 1, 1, 1, "main()", "Main" ) );
+		records.add( new BeforeOperationEvent( 1, 1, 1, "Bookstore()", "Bookstore" ) );
+		records.add( new AfterOperationFailedEvent( 1, 1, 1, "Bookstore()", "Bookstore", "NullPointerException" ) );
+		records.add( new AfterOperationEvent( 1, 1, 1, "main()", "Main" ) );
 
-		final TraceReconstructor reconstructor = new TraceReconstructor(false);
-		final List<Trace> result = new ArrayList<>();
-		test(reconstructor).and().send(records).to(reconstructor.getInputPort()).and().receive(result).from(reconstructor.getOutputPort()).start();
+		final TraceReconstructor reconstructor = new TraceReconstructor( false );
+		final List<Trace> result = new ArrayList<>( );
+		test( reconstructor ).and( ).send( records ).to( reconstructor.getInputPort( ) ).and( ).receive( result ).from( reconstructor.getOutputPort( ) )
+				.start( );
 
-		Assert.assertThat(result, hasSize(1));
+		Assert.assertThat( result, hasSize( 1 ) );
 
-		final Trace trace = result.get(0);
-		final OperationCall rootCall = trace.getRootOperationCall();
-		Assert.assertThat(rootCall.isFailed(), is(false));
-		Assert.assertThat(rootCall.containsFailure(), is(true));
-		Assert.assertThat(rootCall.getChildren().get(0).isFailed(), is(true));
-		Assert.assertThat(rootCall.getChildren().get(0).getFailedCause(), is("NullPointerException"));
+		final Trace trace = result.get( 0 );
+		final OperationCall rootCall = trace.getRootOperationCall( );
+		Assert.assertThat( rootCall.isFailed( ), is( false ) );
+		Assert.assertThat( rootCall.containsFailure( ), is( true ) );
+		Assert.assertThat( rootCall.getChildren( ).get( 0 ).isFailed( ), is( true ) );
+		Assert.assertThat( rootCall.getChildren( ).get( 0 ).getFailedCause( ), is( "NullPointerException" ) );
 	}
 
 	@Test
-	public void faultyTracesShouldBeDetected() {
-		final List<IFlowRecord> records = new ArrayList<>();
-		records.add(new TraceMetadata(1, 1, TraceMetadata.NO_SESSION_ID, TraceMetadata.NO_HOSTNAME, TraceMetadata.NO_PARENT_TRACEID, TraceMetadata.NO_PARENT_ORDER_INDEX));
-		records.add(new BeforeOperationEvent(1, 1, 1, "main()", "Main"));
-		records.add(new BeforeOperationEvent(1, 1, 1, "Bookstore()", "Bookstore"));
-		records.add(new AfterOperationEvent(1, 1, 1, "NotBookstore()", "Bookstore"));
-		records.add(new AfterOperationEvent(1, 1, 1, "main()", "Main"));
+	public void faultyTracesShouldBeDetected( ) {
+		final List<IFlowRecord> records = new ArrayList<>( );
+		records.add( new TraceMetadata( 1, 1, TraceMetadata.NO_SESSION_ID, TraceMetadata.NO_HOSTNAME, TraceMetadata.NO_PARENT_TRACEID,
+				TraceMetadata.NO_PARENT_ORDER_INDEX ) );
+		records.add( new BeforeOperationEvent( 1, 1, 1, "main()", "Main" ) );
+		records.add( new BeforeOperationEvent( 1, 1, 1, "Bookstore()", "Bookstore" ) );
+		records.add( new AfterOperationEvent( 1, 1, 1, "NotBookstore()", "Bookstore" ) );
+		records.add( new AfterOperationEvent( 1, 1, 1, "main()", "Main" ) );
 
-		final TraceReconstructor reconstructor = new TraceReconstructor(true);
-		final List<Trace> result = new ArrayList<>();
-		test(reconstructor).and().send(records).to(reconstructor.getInputPort()).and().receive(result).from(reconstructor.getOutputPort()).start();
+		final TraceReconstructor reconstructor = new TraceReconstructor( true );
+		final List<Trace> result = new ArrayList<>( );
+		test( reconstructor ).and( ).send( records ).to( reconstructor.getInputPort( ) ).and( ).receive( result ).from( reconstructor.getOutputPort( ) )
+				.start( );
 
-		Assert.assertThat(result, hasSize(0));
-		Assert.assertThat(reconstructor.countIncompleteTraces(), is(1));
+		Assert.assertThat( result, hasSize( 0 ) );
+		Assert.assertThat( reconstructor.countIncompleteTraces( ), is( 1 ) );
 	}
 
 	@Test
-	public void faultyTracesShouldNotBeDetected() {
-		final List<IFlowRecord> records = new ArrayList<>();
-		records.add(new TraceMetadata(1, 1, TraceMetadata.NO_SESSION_ID, TraceMetadata.NO_HOSTNAME, TraceMetadata.NO_PARENT_TRACEID, TraceMetadata.NO_PARENT_ORDER_INDEX));
-		records.add(new BeforeOperationEvent(1, 1, 1, "main()", "Main"));
-		records.add(new BeforeOperationEvent(1, 1, 1, "Bookstore()", "Bookstore"));
-		records.add(new AfterOperationEvent(1, 1, 1, "NotBookstore()1", "Bookstore"));
-		records.add(new AfterOperationEvent(1, 1, 1, "main()", "Main"));
+	public void faultyTracesShouldNotBeDetected( ) {
+		final List<IFlowRecord> records = new ArrayList<>( );
+		records.add( new TraceMetadata( 1, 1, TraceMetadata.NO_SESSION_ID, TraceMetadata.NO_HOSTNAME, TraceMetadata.NO_PARENT_TRACEID,
+				TraceMetadata.NO_PARENT_ORDER_INDEX ) );
+		records.add( new BeforeOperationEvent( 1, 1, 1, "main()", "Main" ) );
+		records.add( new BeforeOperationEvent( 1, 1, 1, "Bookstore()", "Bookstore" ) );
+		records.add( new AfterOperationEvent( 1, 1, 1, "NotBookstore()1", "Bookstore" ) );
+		records.add( new AfterOperationEvent( 1, 1, 1, "main()", "Main" ) );
 
-		final TraceReconstructor reconstructor = new TraceReconstructor(false);
-		final List<Trace> result = new ArrayList<>();
-		test(reconstructor).and().send(records).to(reconstructor.getInputPort()).and().receive(result).from(reconstructor.getOutputPort()).start();
+		final TraceReconstructor reconstructor = new TraceReconstructor( false );
+		final List<Trace> result = new ArrayList<>( );
+		test( reconstructor ).and( ).send( records ).to( reconstructor.getInputPort( ) ).and( ).receive( result ).from( reconstructor.getOutputPort( ) )
+				.start( );
 
-		Assert.assertThat(result, hasSize(1));
-		Assert.assertThat(reconstructor.countIncompleteTraces(), is(0));
+		Assert.assertThat( result, hasSize( 1 ) );
+		Assert.assertThat( reconstructor.countIncompleteTraces( ), is( 0 ) );
 	}
 
 	@Test
-	public void danglingRecordsOfCorrectTracesShouldBeDetected() {
-		final List<IFlowRecord> records = new ArrayList<>();
-		records.add(new TraceMetadata(1, 1, TraceMetadata.NO_SESSION_ID, TraceMetadata.NO_HOSTNAME, TraceMetadata.NO_PARENT_TRACEID, TraceMetadata.NO_PARENT_ORDER_INDEX));
-		records.add(new BeforeOperationEvent(1, 1, 1, "main()", "Main"));
-		records.add(new BeforeOperationEvent(1, 1, 1, "Bookstore()", "Bookstore"));
-		records.add(new AfterOperationEvent(1, 1, 1, "Bookstore()", "Bookstore"));
-		records.add(new AfterOperationEvent(1, 1, 1, "main()", "Main"));
-		records.add(new AfterOperationEvent(1, 1, 1, "main()", "Main"));
-		records.add(new AfterOperationEvent(1, 1, 1, "main()", "Main"));
+	public void danglingRecordsOfCorrectTracesShouldBeDetected( ) {
+		final List<IFlowRecord> records = new ArrayList<>( );
+		records.add( new TraceMetadata( 1, 1, TraceMetadata.NO_SESSION_ID, TraceMetadata.NO_HOSTNAME, TraceMetadata.NO_PARENT_TRACEID,
+				TraceMetadata.NO_PARENT_ORDER_INDEX ) );
+		records.add( new BeforeOperationEvent( 1, 1, 1, "main()", "Main" ) );
+		records.add( new BeforeOperationEvent( 1, 1, 1, "Bookstore()", "Bookstore" ) );
+		records.add( new AfterOperationEvent( 1, 1, 1, "Bookstore()", "Bookstore" ) );
+		records.add( new AfterOperationEvent( 1, 1, 1, "main()", "Main" ) );
+		records.add( new AfterOperationEvent( 1, 1, 1, "main()", "Main" ) );
+		records.add( new AfterOperationEvent( 1, 1, 1, "main()", "Main" ) );
 
-		final TraceReconstructor reconstructor = new TraceReconstructor(true);
-		final List<Trace> result = new ArrayList<>();
-		test(reconstructor).and().send(records).to(reconstructor.getInputPort()).and().receive(result).from(reconstructor.getOutputPort()).start();
+		final TraceReconstructor reconstructor = new TraceReconstructor( true );
+		final List<Trace> result = new ArrayList<>( );
+		test( reconstructor ).and( ).send( records ).to( reconstructor.getInputPort( ) ).and( ).receive( result ).from( reconstructor.getOutputPort( ) )
+				.start( );
 
-		Assert.assertThat(result, hasSize(1));
-		Assert.assertThat(reconstructor.countDanglingRecords(), is(2));
-		Assert.assertThat(reconstructor.countIncompleteTraces(), is(0));
+		Assert.assertThat( result, hasSize( 1 ) );
+		Assert.assertThat( reconstructor.countDanglingRecords( ), is( 2 ) );
+		Assert.assertThat( reconstructor.countIncompleteTraces( ), is( 0 ) );
 	}
 
 	@Test
-	public void danglingRecordsInFaultyTracesShouldBeDetected() {
-		final List<IFlowRecord> records = new ArrayList<>();
-		records.add(new TraceMetadata(1, 1, TraceMetadata.NO_SESSION_ID, TraceMetadata.NO_HOSTNAME, TraceMetadata.NO_PARENT_TRACEID, TraceMetadata.NO_PARENT_ORDER_INDEX));
-		records.add(new BeforeOperationEvent(1, 1, 1, "main()", "Main"));
-		records.add(new BeforeOperationEvent(1, 1, 1, "Bookstore()", "Bookstore"));
-		records.add(new AfterOperationEvent(1, 1, 1, "NotBookstore()", "Bookstore"));
-		records.add(new AfterOperationEvent(1, 1, 1, "main()", "Main"));
-		records.add(new AfterOperationEvent(1, 1, 1, "main()", "Main"));
-		records.add(new AfterOperationEvent(1, 1, 1, "main()", "Main"));
+	public void danglingRecordsInFaultyTracesShouldBeDetected( ) {
+		final List<IFlowRecord> records = new ArrayList<>( );
+		records.add( new TraceMetadata( 1, 1, TraceMetadata.NO_SESSION_ID, TraceMetadata.NO_HOSTNAME, TraceMetadata.NO_PARENT_TRACEID,
+				TraceMetadata.NO_PARENT_ORDER_INDEX ) );
+		records.add( new BeforeOperationEvent( 1, 1, 1, "main()", "Main" ) );
+		records.add( new BeforeOperationEvent( 1, 1, 1, "Bookstore()", "Bookstore" ) );
+		records.add( new AfterOperationEvent( 1, 1, 1, "NotBookstore()", "Bookstore" ) );
+		records.add( new AfterOperationEvent( 1, 1, 1, "main()", "Main" ) );
+		records.add( new AfterOperationEvent( 1, 1, 1, "main()", "Main" ) );
+		records.add( new AfterOperationEvent( 1, 1, 1, "main()", "Main" ) );
 
-		final TraceReconstructor reconstructor = new TraceReconstructor(true);
-		final List<Trace> result = new ArrayList<>();
-		test(reconstructor).and().send(records).to(reconstructor.getInputPort()).and().receive(result).from(reconstructor.getOutputPort()).start();
+		final TraceReconstructor reconstructor = new TraceReconstructor( true );
+		final List<Trace> result = new ArrayList<>( );
+		test( reconstructor ).and( ).send( records ).to( reconstructor.getInputPort( ) ).and( ).receive( result ).from( reconstructor.getOutputPort( ) )
+				.start( );
 
-		Assert.assertThat(result, hasSize(0));
-		Assert.assertThat(reconstructor.countDanglingRecords(), is(2));
-		Assert.assertThat(reconstructor.countIncompleteTraces(), is(1));
+		Assert.assertThat( result, hasSize( 0 ) );
+		Assert.assertThat( reconstructor.countDanglingRecords( ), is( 2 ) );
+		Assert.assertThat( reconstructor.countIncompleteTraces( ), is( 1 ) );
 	}
 
 }

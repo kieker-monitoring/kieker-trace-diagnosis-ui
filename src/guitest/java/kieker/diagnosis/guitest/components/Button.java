@@ -23,13 +23,13 @@ public final class Button {
 	private final String id;
 	private final ApplicationTest applicationTest;
 
-	public Button(final ApplicationTest applicationTest, final String id) {
+	public Button( final ApplicationTest applicationTest, final String id ) {
 		this.applicationTest = applicationTest;
 		this.id = id;
 	}
 
-	public void click() {
-		this.applicationTest.clickOn(this.id);
+	public void click( ) {
+		this.applicationTest.clickOn( this.id );
 	}
 
 }

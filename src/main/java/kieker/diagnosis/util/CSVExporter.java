@@ -22,29 +22,29 @@ import java.io.IOException;
 
 public final class CSVExporter {
 
-	private CSVExporter() {
+	private CSVExporter( ) {
 	}
 
-	public static void exportToCSV(final CSVData aCSVData, final File aFile) throws IOException {
-		aFile.createNewFile();
+	public static void exportToCSV( final CSVData aCSVData, final File aFile ) throws IOException {
+		aFile.createNewFile( );
 
-		try (final FileWriter writer = new FileWriter(aFile)) {
-			writer.write("#");
+		try ( final FileWriter writer = new FileWriter( aFile ) ) {
+			writer.write( "#" );
 
-			for (final String header : aCSVData.getHeader()) {
-				writer.write(header);
-				writer.write(";");
+			for ( final String header : aCSVData.getHeader( ) ) {
+				writer.write( header );
+				writer.write( ";" );
 			}
-			writer.write("\n");
+			writer.write( "\n" );
 
-			for (final String[] row : aCSVData.getRows()) {
-				for (final String column : row) {
-					if (column != null) {
-						writer.write(column);
+			for ( final String[] row : aCSVData.getRows( ) ) {
+				for ( final String column : row ) {
+					if ( column != null ) {
+						writer.write( column );
 					}
-					writer.write(";");
+					writer.write( ";" );
 				}
-				writer.write("\n");
+				writer.write( "\n" );
 			}
 		}
 	}

@@ -25,8 +25,8 @@ import kieker.diagnosis.util.NameConverter;
 public final class TimestampTreeTableCellFactory<S, T> extends AbstractTreeTableCellFactory<S, T> {
 
 	@Override
-	protected String getItemLabel(final T aItem) {
-		return NameConverter.toTimestampString((Long) aItem, DataModel.getInstance().getTimeUnit());
+	protected String getItemLabel( final T aItem ) {
+		return NameConverter.toTimestampString( (Long) aItem, DataModel.getInstance( ).getTimeUnit( ) );
 	}
 
 }

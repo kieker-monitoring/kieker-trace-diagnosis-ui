@@ -31,28 +31,28 @@ import kieker.diagnosis.util.ErrorHandling;
  */
 public final class BugReportingDialogViewController extends AbstractDialogController {
 
-	private final PropertiesModel ivPropertiesModel = PropertiesModel.getInstance();
+	private final PropertiesModel ivPropertiesModel = PropertiesModel.getInstance( );
 
-	public BugReportingDialogViewController(final Context aContext) {
-		super(aContext);
+	public BugReportingDialogViewController( final Context aContext ) {
+		super( aContext );
 	}
-	
+
 	@Override
-	protected void reinitialize() {
-	}
-	
-	@ErrorHandling
-	public void visitGitLab() throws IOException, URISyntaxException {
-		final String gitLabURL = this.ivPropertiesModel.getGitLabURL();
-		final Desktop desktop = Desktop.getDesktop();
-		desktop.browse(new URI(gitLabURL));
+	protected void reinitialize( ) {
 	}
 
 	@ErrorHandling
-	public void visitTrac() throws IOException, URISyntaxException {
-		final String tracURL = this.ivPropertiesModel.getTracURL();
-		final Desktop desktop = Desktop.getDesktop();
-		desktop.browse(new URI(tracURL));
+	public void visitGitLab( ) throws IOException, URISyntaxException {
+		final String gitLabURL = this.ivPropertiesModel.getGitLabURL( );
+		final Desktop desktop = Desktop.getDesktop( );
+		desktop.browse( new URI( gitLabURL ) );
+	}
+
+	@ErrorHandling
+	public void visitTrac( ) throws IOException, URISyntaxException {
+		final String tracURL = this.ivPropertiesModel.getTracURL( );
+		final Desktop desktop = Desktop.getDesktop( );
+		desktop.browse( new URI( tracURL ) );
 	}
 
 }

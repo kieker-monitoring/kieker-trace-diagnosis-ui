@@ -25,16 +25,16 @@ public final class AboutDialog {
 
 	private final ApplicationTest applicationTest;
 
-	public AboutDialog(final ApplicationTest applicationTest) {
+	public AboutDialog( final ApplicationTest applicationTest ) {
 		this.applicationTest = applicationTest;
 	}
 
-	public Button getOkayButton() {
-		return new Button(this.applicationTest, "#ivOkay");
+	public Button getOkayButton( ) {
+		return new Button( this.applicationTest, "#ivOkay" );
 	}
 
-	public Label getDescriptionLabel() {
-		return new Label(this.applicationTest, "#ivDescription");
+	public Label getDescriptionLabel( ) {
+		return new Label( this.applicationTest, "#ivDescription" );
 	}
 
 }

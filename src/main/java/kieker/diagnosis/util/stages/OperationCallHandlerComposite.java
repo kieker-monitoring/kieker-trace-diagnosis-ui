@@ -37,22 +37,22 @@ public final class OperationCallHandlerComposite extends AbstractCompositeStage 
 	private final CollectorSink<OperationCall> ivCallCollector;
 	private final CollectorSink<AggregatedOperationCall> ivAggCallCollector;
 
-	public OperationCallHandlerComposite(final List<OperationCall> aOperationCalls, final List<AggregatedOperationCall> aAggOperationCalls) {
-		this.ivOperationCallExtractor = new OperationCallExtractor();
-		this.ivCallCollector = new CollectorSink<>(aOperationCalls);
-		final Distributor<OperationCall> distributor = new Distributor<>(new CopyByReferenceStrategy());
-		final OperationCallAggregator callAggregator = new OperationCallAggregator();
-		this.ivAggCallCollector = new CollectorSink<>(aAggOperationCalls);
+	public OperationCallHandlerComposite( final List<OperationCall> aOperationCalls, final List<AggregatedOperationCall> aAggOperationCalls ) {
+		this.ivOperationCallExtractor = new OperationCallExtractor( );
+		this.ivCallCollector = new CollectorSink<>( aOperationCalls );
+		final Distributor<OperationCall> distributor = new Distributor<>( new CopyByReferenceStrategy( ) );
+		final OperationCallAggregator callAggregator = new OperationCallAggregator( );
+		this.ivAggCallCollector = new CollectorSink<>( aAggOperationCalls );
 
-		this.ivInputPort = this.ivOperationCallExtractor.getInputPort();
+		this.ivInputPort = this.ivOperationCallExtractor.getInputPort( );
 
-		super.connectPorts(this.ivOperationCallExtractor.getOutputPort(), distributor.getInputPort());
-		super.connectPorts(distributor.getNewOutputPort(), this.ivCallCollector.getInputPort());
-		super.connectPorts(distributor.getNewOutputPort(), callAggregator.getInputPort());
-		super.connectPorts(callAggregator.getOutputPort(), this.ivAggCallCollector.getInputPort());
+		super.connectPorts( this.ivOperationCallExtractor.getOutputPort( ), distributor.getInputPort( ) );
+		super.connectPorts( distributor.getNewOutputPort( ), this.ivCallCollector.getInputPort( ) );
+		super.connectPorts( distributor.getNewOutputPort( ), callAggregator.getInputPort( ) );
+		super.connectPorts( callAggregator.getOutputPort( ), this.ivAggCallCollector.getInputPort( ) );
 	}
 
-	public InputPort<Trace> getInputPort() {
+	public InputPort<Trace> getInputPort( ) {
 		return this.ivInputPort;
 	}
 

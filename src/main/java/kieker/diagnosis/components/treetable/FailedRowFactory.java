@@ -27,23 +27,23 @@ import kieker.diagnosis.domain.AbstractOperationCall;
 public class FailedRowFactory<S> implements Callback<TreeTableView<S>, TreeTableRow<S>> {
 
 	@Override
-	public TreeTableRow<S> call(final TreeTableView<S> param) {
-		return new FailedTreeTableRow();
+	public TreeTableRow<S> call( final TreeTableView<S> param ) {
+		return new FailedTreeTableRow( );
 	}
 
 	private class FailedTreeTableRow extends TreeTableRow<S> {
 
 		@Override
-		protected void updateItem(S item, boolean empty) {
-			super.updateItem(item, empty);
+		protected void updateItem( S item, boolean empty ) {
+			super.updateItem( item, empty );
 
-			if (item instanceof AbstractOperationCall<?>) {
+			if ( item instanceof AbstractOperationCall<?> ) {
 				final AbstractOperationCall<?> call = (AbstractOperationCall<?>) item;
 
-				getStyleClass().remove("failed");
+				getStyleClass( ).remove( "failed" );
 
-				if (call.isFailed()) {
-					getStyleClass().add("failed");
+				if ( call.isFailed( ) ) {
+					getStyleClass( ).add( "failed" );
 				}
 			}
 		}

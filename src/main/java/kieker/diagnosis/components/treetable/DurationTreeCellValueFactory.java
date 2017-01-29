@@ -39,31 +39,32 @@ import org.apache.logging.log4j.Logger;
  */
 public final class DurationTreeCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<Long>> {
 
-	private static final Logger LOGGER = LogManager.getLogger(DurationTreeCellValueFactory.class);
+	private static final Logger LOGGER = LogManager.getLogger( DurationTreeCellValueFactory.class );
 
-	private final DataModel ivDataModel = DataModel.getInstance();
-	private final PropertiesModel ivPropertiesModel = PropertiesModel.getInstance();
+	private final DataModel ivDataModel = DataModel.getInstance( );
+	private final PropertiesModel ivPropertiesModel = PropertiesModel.getInstance( );
 
 	private final String ivProperty;
 
-	public DurationTreeCellValueFactory(@NamedArg(value = "property") final String aProperty) {
-		this.ivProperty = aProperty.substring(0, 1).toUpperCase(Locale.ROOT) + aProperty.substring(1);
+	public DurationTreeCellValueFactory( @NamedArg ( value = "property" ) final String aProperty ) {
+		this.ivProperty = aProperty.substring( 0, 1 ).toUpperCase( Locale.ROOT ) + aProperty.substring( 1 );
 	}
 
 	@Override
-	public ObservableValue<Long> call(final CellDataFeatures<?, String> aCall) {
+	public ObservableValue<Long> call( final CellDataFeatures<?, String> aCall ) {
 		try {
-			final TimeUnit srcTimeUnit = this.ivDataModel.getTimeUnit();
-			final TimeUnit dstTimeUnit = this.ivPropertiesModel.getTimeUnit();
+			final TimeUnit srcTimeUnit = this.ivDataModel.getTimeUnit( );
+			final TimeUnit dstTimeUnit = this.ivPropertiesModel.getTimeUnit( );
 
-			final TreeItem<?> item = (aCall.getValue());
-			final Method getter = item.getValue().getClass().getMethod("get" + this.ivProperty, new Class<?>[0]);
-			final long duration = (long) getter.invoke(item.getValue(), new Object[0]);
+			final TreeItem<?> item = (aCall.getValue( ));
+			final Method getter = item.getValue( ).getClass( ).getMethod( "get" + this.ivProperty, new Class<?>[0] );
+			final long duration = (long) getter.invoke( item.getValue( ), new Object[0] );
 
-			final long newDuration = dstTimeUnit.convert(duration, srcTimeUnit);
-			return new ReadOnlyObjectWrapper<Long>(newDuration);
-		} catch (final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-			DurationTreeCellValueFactory.LOGGER.warn(ex);
+			final long newDuration = dstTimeUnit.convert( duration, srcTimeUnit );
+			return new ReadOnlyObjectWrapper<Long>( newDuration );
+		}
+		catch ( final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex ) {
+			DurationTreeCellValueFactory.LOGGER.warn( ex );
 			return null;
 		}
 	}

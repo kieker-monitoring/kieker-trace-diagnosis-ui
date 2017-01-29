@@ -35,15 +35,15 @@ public final class ReadingComposite extends AbstractCompositeStage {
 	private final InitialElementProducer<File> ivProducer;
 	private final Dir2RecordsFilter ivReader;
 
-	public ReadingComposite(final File aImportDirectory) {
-		this.ivProducer = new InitialElementProducer<>(aImportDirectory);
-		this.ivReader = new Dir2RecordsFilter(new ClassNameRegistryRepository());
+	public ReadingComposite( final File aImportDirectory ) {
+		this.ivProducer = new InitialElementProducer<>( aImportDirectory );
+		this.ivReader = new Dir2RecordsFilter( new ClassNameRegistryRepository( ) );
 
-		super.connectPorts(this.ivProducer.getOutputPort(), this.ivReader.getInputPort());
+		super.connectPorts( this.ivProducer.getOutputPort( ), this.ivReader.getInputPort( ) );
 	}
 
-	public OutputPort<IMonitoringRecord> getOutputPort() {
-		return this.ivReader.getOutputPort();
+	public OutputPort<IMonitoringRecord> getOutputPort( ) {
+		return this.ivReader.getOutputPort( );
 	}
 
 }

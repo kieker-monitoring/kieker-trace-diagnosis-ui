@@ -26,22 +26,22 @@ public final class TextField {
 	private final String id;
 	private final ApplicationTest applicationTest;
 
-	public TextField(final ApplicationTest applicationTest, final String id) {
+	public TextField( final ApplicationTest applicationTest, final String id ) {
 		this.applicationTest = applicationTest;
 		this.id = id;
 	}
 
-	public String getText() {
-		final Node node = this.applicationTest.lookup(this.id).queryFirst();
-		return ((javafx.scene.control.TextField) node).getText();
+	public String getText( ) {
+		final Node node = this.applicationTest.lookup( this.id ).queryFirst( );
+		return ((javafx.scene.control.TextField) node).getText( );
 	}
 
-	public void setText(final String text) {
-		this.applicationTest.clickOn(this.id).write(text);
+	public void setText( final String text ) {
+		this.applicationTest.clickOn( this.id ).write( text );
 	}
 
-	public void pushEnter() {
-		this.applicationTest.clickOn(this.id).push(KeyCode.ENTER);
+	public void pushEnter( ) {
+		this.applicationTest.clickOn( this.id ).push( KeyCode.ENTER );
 	}
 
 }

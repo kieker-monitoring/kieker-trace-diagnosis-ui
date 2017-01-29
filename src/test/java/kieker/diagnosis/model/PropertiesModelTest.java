@@ -26,13 +26,13 @@ import org.junit.Test;
 public final class PropertiesModelTest {
 
 	@Test
-	public void settingShouldBePersisted() {
-		final PropertiesModel fstModel = new PropertiesModel();
-		fstModel.setTimeUnit(TimeUnit.NANOSECONDS);
-		fstModel.setTimeUnit(TimeUnit.MICROSECONDS);
+	public void settingShouldBePersisted( ) {
+		final PropertiesModel fstModel = new PropertiesModel( );
+		fstModel.setTimeUnit( TimeUnit.NANOSECONDS );
+		fstModel.setTimeUnit( TimeUnit.MICROSECONDS );
 
-		final PropertiesModel sndModel = new PropertiesModel();
-		assertThat(sndModel.getTimeUnit(), is(TimeUnit.MICROSECONDS));
+		final PropertiesModel sndModel = new PropertiesModel( );
+		assertThat( sndModel.getTimeUnit( ), is( TimeUnit.MICROSECONDS ) );
 	}
 
 }

@@ -27,13 +27,13 @@ import kieker.diagnosis.controller.MainController;
  */
 public final class Main extends Application {
 
-	public static void main(final String... aArgs) {
-		Application.launch(aArgs);
+	public static void main( final String... aArgs ) {
+		Application.launch( aArgs );
 	}
 
 	@Override
-	public void start(final Stage aStage) throws Exception {
-		MainController.loadMainPane(aStage);
+	public void start( final Stage aStage ) throws Exception {
+		MainController.loadMainPane( aStage );
 	}
 
 }

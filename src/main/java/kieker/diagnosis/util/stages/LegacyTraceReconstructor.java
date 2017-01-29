@@ -36,33 +36,33 @@ import teetime.stage.basic.AbstractTransformation;
  */
 final class LegacyTraceReconstructor extends AbstractTransformation<OperationExecutionRecord, Trace> {
 
-	private final Map<Long, TraceBuffer> ivTraceBuffers = new HashMap<>();
+	private final Map<Long, TraceBuffer> ivTraceBuffers = new HashMap<>( );
 
-	public int countIncompleteTraces() {
-		return this.ivTraceBuffers.size();
+	public int countIncompleteTraces( ) {
+		return this.ivTraceBuffers.size( );
 	}
 
-	public int countDanglingRecords() {
+	public int countDanglingRecords( ) {
 		return 0;
 	}
 
 	@Override
-	protected void execute(final OperationExecutionRecord aInput) {
-		this.handleOperationExecutionRecord(aInput);
+	protected void execute( final OperationExecutionRecord aInput ) {
+		this.handleOperationExecutionRecord( aInput );
 	}
 
-	private void handleOperationExecutionRecord(final OperationExecutionRecord aInput) {
-		final long traceID = aInput.getTraceId();
-		if (!this.ivTraceBuffers.containsKey(traceID)) {
-			this.ivTraceBuffers.put(traceID, new TraceBuffer(traceID));
+	private void handleOperationExecutionRecord( final OperationExecutionRecord aInput ) {
+		final long traceID = aInput.getTraceId( );
+		if ( !this.ivTraceBuffers.containsKey( traceID ) ) {
+			this.ivTraceBuffers.put( traceID, new TraceBuffer( traceID ) );
 		}
-		final TraceBuffer traceBuffer = this.ivTraceBuffers.get(traceID);
+		final TraceBuffer traceBuffer = this.ivTraceBuffers.get( traceID );
 
-		traceBuffer.handleEvent(aInput);
-		if (traceBuffer.isTraceComplete()) {
-			final Trace trace = traceBuffer.reconstructTrace();
-			this.ivTraceBuffers.remove(traceID);
-			super.getOutputPort().send(trace);
+		traceBuffer.handleEvent( aInput );
+		if ( traceBuffer.isTraceComplete( ) ) {
+			final Trace trace = traceBuffer.reconstructTrace( );
+			this.ivTraceBuffers.remove( traceID );
+			super.getOutputPort( ).send( trace );
 		}
 	}
 
@@ -71,68 +71,70 @@ final class LegacyTraceReconstructor extends AbstractTransformation<OperationExe
 	 */
 	private static final class TraceBuffer {
 
-		private final List<OperationExecutionRecord> ivRecords = new ArrayList<>();
+		private final List<OperationExecutionRecord> ivRecords = new ArrayList<>( );
 		private final long ivTraceID;
 		private boolean ivTraceComplete = false;
 
-		public TraceBuffer(final long aTraceID) {
+		public TraceBuffer( final long aTraceID ) {
 			this.ivTraceID = aTraceID;
 		}
 
-		public void handleEvent(final OperationExecutionRecord aRecord) {
-			this.ivRecords.add(aRecord);
+		public void handleEvent( final OperationExecutionRecord aRecord ) {
+			this.ivRecords.add( aRecord );
 
-			if ((aRecord.getEoi() == 0) && (aRecord.getEss() == 0)) {
+			if ( (aRecord.getEoi( ) == 0) && (aRecord.getEss( ) == 0) ) {
 				this.ivTraceComplete = true;
 			}
 		}
 
-		public Trace reconstructTrace() {
-			Collections.sort(this.ivRecords, new EOIComparator());
+		public Trace reconstructTrace( ) {
+			Collections.sort( this.ivRecords, new EOIComparator( ) );
 
 			OperationCall root = null;
 			OperationCall header = null;
 			int ess = 0;
-			for (final OperationExecutionRecord record : this.ivRecords) {
-				final OperationCall newCall = new OperationCall(record.getHostname(), this.extractComponent(record.getOperationSignature()), record.getOperationSignature(),
-						this.ivTraceID, record.getLoggingTimestamp());
-				newCall.setDuration(record.getTout() - record.getTin());
+			for ( final OperationExecutionRecord record : this.ivRecords ) {
+				final OperationCall newCall = new OperationCall( record.getHostname( ), this.extractComponent( record.getOperationSignature( ) ),
+						record.getOperationSignature( ), this.ivTraceID, record.getLoggingTimestamp( ) );
+				newCall.setDuration( record.getTout( ) - record.getTin( ) );
 
-				// There can be "jumps" in the ess, as the operation execution records do not log the return jumps of methods. Therefore multiple of these jumps can
+				// There can be "jumps" in the ess, as the operation execution records do not log the return jumps of methods. Therefore multiple of these jumps
+				// can
 				// be hidden.
-				int currentEss = record.getEss();
-				while ((currentEss <= ess) && (ess != 0)) {
-					header = header.getParent();
+				int currentEss = record.getEss( );
+				while ( (currentEss <= ess) && (ess != 0) ) {
+					header = header.getParent( );
 					currentEss++;
 				}
 
-				if (root == null) {
+				if ( root == null ) {
 					root = newCall;
-				} else {
-					header.addChild(newCall);
+				}
+				else {
+					header.addChild( newCall );
 				}
 				header = newCall;
-				ess = record.getEss();
+				ess = record.getEss( );
 			}
 
-			return new Trace(root, this.ivTraceID);
+			return new Trace( root, this.ivTraceID );
 		}
 
-		private String extractComponent(final String aOperationSignature) {
+		private String extractComponent( final String aOperationSignature ) {
 			// Remove modifiers and return values (Issue #26)
-			final int firstOpeningParenthesisPos = aOperationSignature.indexOf('(');
-			int gapPos = aOperationSignature.indexOf(' ');
+			final int firstOpeningParenthesisPos = aOperationSignature.indexOf( '(' );
+			int gapPos = aOperationSignature.indexOf( ' ' );
 			String result = aOperationSignature;
-			while ((gapPos != -1) && (gapPos < firstOpeningParenthesisPos)) {
-				result = result.substring(gapPos + 1);
-				gapPos = result.indexOf(' ');
+			while ( (gapPos != -1) && (gapPos < firstOpeningParenthesisPos) ) {
+				result = result.substring( gapPos + 1 );
+				gapPos = result.indexOf( ' ' );
 			}
 
-			result = result.replaceFirst("\\.<?\\w*>?\\(.*", "");
+			result = result.replaceFirst( "\\.<?\\w*>?\\(.*", "" );
 			return result;
 		}
 
-		public boolean isTraceComplete() {
+		public boolean isTraceComplete( ) {
 			return this.ivTraceComplete;
 		}
 
@@ -144,8 +146,8 @@ final class LegacyTraceReconstructor extends AbstractTransformation<OperationExe
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public int compare(final OperationExecutionRecord aO1, final OperationExecutionRecord aO2) {
-				return Long.compare(aO1.getEoi(), aO2.getEoi());
+			public int compare( final OperationExecutionRecord aO1, final OperationExecutionRecord aO2 ) {
+				return Long.compare( aO1.getEoi( ), aO2.getEoi( ) );
 			}
 
 		}

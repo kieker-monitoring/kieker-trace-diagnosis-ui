@@ -39,114 +39,115 @@ import teetime.framework.Execution;
  */
 public final class DataModel {
 
-	private static final DataModel INSTANCE = new DataModel();
+	private static final DataModel INSTANCE = new DataModel( );
 
-	private final ObservableList<Trace> ivTraces = FXCollections.observableArrayList();
-	private final ObservableList<AggregatedTrace> ivAggregatedTraces = FXCollections.observableArrayList();
-	private final ObservableList<OperationCall> ivOperationCalls = FXCollections.observableArrayList();
-	private final ObservableList<AggregatedOperationCall> ivAggregatedOperationCalls = FXCollections.observableArrayList();
+	private final ObservableList<Trace> ivTraces = FXCollections.observableArrayList( );
+	private final ObservableList<AggregatedTrace> ivAggregatedTraces = FXCollections.observableArrayList( );
+	private final ObservableList<OperationCall> ivOperationCalls = FXCollections.observableArrayList( );
+	private final ObservableList<AggregatedOperationCall> ivAggregatedOperationCalls = FXCollections.observableArrayList( );
 
-	private final ObjectProperty<File> ivImportDirectory = new SimpleObjectProperty<>();
-	private final ObjectProperty<Long> ivAnalysisDurationInMS = new SimpleObjectProperty<>(0L);
+	private final ObjectProperty<File> ivImportDirectory = new SimpleObjectProperty<>( );
+	private final ObjectProperty<Long> ivAnalysisDurationInMS = new SimpleObjectProperty<>( 0L );
 
 	private TimeUnit ivTimeUnit;
-	private final ObjectProperty<Integer> ivIncompleteTraces = new SimpleObjectProperty<>(0);
-	private final ObjectProperty<Integer> ivFaultyTraces = new SimpleObjectProperty<>(0);
-	private final ObjectProperty<Integer> ivDanglingRecords = new SimpleObjectProperty<>(0);
-	private final ObjectProperty<Integer> ivIgnoredRecords = new SimpleObjectProperty<>(0);
-	private final ObjectProperty<Long> ivBeginTimestamp = new SimpleObjectProperty<>();
-	private final ObjectProperty<Long> ivEndTimestamp = new SimpleObjectProperty<>();
+	private final ObjectProperty<Integer> ivIncompleteTraces = new SimpleObjectProperty<>( 0 );
+	private final ObjectProperty<Integer> ivFaultyTraces = new SimpleObjectProperty<>( 0 );
+	private final ObjectProperty<Integer> ivDanglingRecords = new SimpleObjectProperty<>( 0 );
+	private final ObjectProperty<Integer> ivIgnoredRecords = new SimpleObjectProperty<>( 0 );
+	private final ObjectProperty<Long> ivBeginTimestamp = new SimpleObjectProperty<>( );
+	private final ObjectProperty<Long> ivEndTimestamp = new SimpleObjectProperty<>( );
 
-	private DataModel() {
+	private DataModel( ) {
 	}
 
-	public void loadMonitoringLogFromFS(final File aImportDirectory) {
-		this.ivImportDirectory.set(aImportDirectory);
-		final long tin = System.currentTimeMillis();
+	public void loadMonitoringLogFromFS( final File aImportDirectory ) {
+		this.ivImportDirectory.set( aImportDirectory );
+		final long tin = System.currentTimeMillis( );
 
 		// Load and analyze the monitoring logs from the given directory
-		final ImportAnalysisConfiguration analysisConfiguration = new ImportAnalysisConfiguration(aImportDirectory);
-		final Execution<ImportAnalysisConfiguration> analysis = new Execution<>(analysisConfiguration);
-		analysis.executeBlocking();
+		final ImportAnalysisConfiguration analysisConfiguration = new ImportAnalysisConfiguration( aImportDirectory );
+		final Execution<ImportAnalysisConfiguration> analysis = new Execution<>( analysisConfiguration );
+		analysis.executeBlocking( );
 
 		// Store the results from the analysis
-		this.ivTraces.setAll(analysisConfiguration.getTracesList());
-		this.ivAggregatedTraces.setAll(analysisConfiguration.getAggregatedTraces());
-		this.ivOperationCalls.setAll(analysisConfiguration.getOperationCalls());
-		this.ivAggregatedOperationCalls.setAll(analysisConfiguration.getAggregatedOperationCalls());
+		this.ivTraces.setAll( analysisConfiguration.getTracesList( ) );
+		this.ivAggregatedTraces.setAll( analysisConfiguration.getAggregatedTraces( ) );
+		this.ivOperationCalls.setAll( analysisConfiguration.getOperationCalls( ) );
+		this.ivAggregatedOperationCalls.setAll( analysisConfiguration.getAggregatedOperationCalls( ) );
 
-		this.ivIncompleteTraces.set(analysisConfiguration.countIncompleteTraces());
-		this.ivDanglingRecords.set(analysisConfiguration.countDanglingEvents());
-		this.ivIgnoredRecords.set(analysisConfiguration.countIgnoredRecords());
-		this.ivBeginTimestamp.set(analysisConfiguration.getBeginTimestamp());
-		this.ivEndTimestamp.set(analysisConfiguration.getEndTimestamp());
+		this.ivIncompleteTraces.set( analysisConfiguration.countIncompleteTraces( ) );
+		this.ivDanglingRecords.set( analysisConfiguration.countDanglingEvents( ) );
+		this.ivIgnoredRecords.set( analysisConfiguration.countIgnoredRecords( ) );
+		this.ivBeginTimestamp.set( analysisConfiguration.getBeginTimestamp( ) );
+		this.ivEndTimestamp.set( analysisConfiguration.getEndTimestamp( ) );
 
-		final List<KiekerMetadataRecord> metadataRecords = analysisConfiguration.getMetadataRecords();
-		if (!metadataRecords.isEmpty()) {
-			final KiekerMetadataRecord metadataRecord = metadataRecords.get(0);
-			this.ivTimeUnit = TimeUnit.valueOf(metadataRecord.getTimeUnit());
-		} else {
+		final List<KiekerMetadataRecord> metadataRecords = analysisConfiguration.getMetadataRecords( );
+		if ( !metadataRecords.isEmpty( ) ) {
+			final KiekerMetadataRecord metadataRecord = metadataRecords.get( 0 );
+			this.ivTimeUnit = TimeUnit.valueOf( metadataRecord.getTimeUnit( ) );
+		}
+		else {
 			this.ivTimeUnit = TimeUnit.NANOSECONDS;
 		}
 
-		final long tout = System.currentTimeMillis();
+		final long tout = System.currentTimeMillis( );
 
-		this.ivAnalysisDurationInMS.set(tout - tin);
+		this.ivAnalysisDurationInMS.set( tout - tin );
 	}
 
-	public ObjectProperty<Long> getBeginTimestamp() {
+	public ObjectProperty<Long> getBeginTimestamp( ) {
 		return this.ivBeginTimestamp;
 	}
 
-	public ObjectProperty<Long> getEndTimestamp() {
+	public ObjectProperty<Long> getEndTimestamp( ) {
 		return this.ivEndTimestamp;
 	}
 
-	public ObjectProperty<Integer> countIncompleteTraces() {
+	public ObjectProperty<Integer> countIncompleteTraces( ) {
 		return this.ivIncompleteTraces;
 	}
 
-	public ObjectProperty<Integer> countDanglingRecords() {
+	public ObjectProperty<Integer> countDanglingRecords( ) {
 		return this.ivDanglingRecords;
 	}
 
-	public ObjectProperty<Integer> countFaultyTraces() {
+	public ObjectProperty<Integer> countFaultyTraces( ) {
 		return this.ivFaultyTraces;
 	}
 
-	public ObjectProperty<Integer> countIgnoredRecords() {
+	public ObjectProperty<Integer> countIgnoredRecords( ) {
 		return this.ivIgnoredRecords;
 	}
-	
-	public ObjectProperty<File> getImportDirectory() {
+
+	public ObjectProperty<File> getImportDirectory( ) {
 		return this.ivImportDirectory;
 	}
 
-	public ObjectProperty<Long> getAnalysisDurationInMS() {
+	public ObjectProperty<Long> getAnalysisDurationInMS( ) {
 		return this.ivAnalysisDurationInMS;
 	}
 
-	public ObservableList<Trace> getTraces() {
+	public ObservableList<Trace> getTraces( ) {
 		return this.ivTraces;
 	}
 
-	public ObservableList<AggregatedTrace> getAggregatedTraces() {
+	public ObservableList<AggregatedTrace> getAggregatedTraces( ) {
 		return this.ivAggregatedTraces;
 	}
 
-	public ObservableList<OperationCall> getOperationCalls() {
+	public ObservableList<OperationCall> getOperationCalls( ) {
 		return this.ivOperationCalls;
 	}
 
-	public ObservableList<AggregatedOperationCall> getAggregatedOperationCalls() {
+	public ObservableList<AggregatedOperationCall> getAggregatedOperationCalls( ) {
 		return this.ivAggregatedOperationCalls;
 	}
 
-	public TimeUnit getTimeUnit() {
+	public TimeUnit getTimeUnit( ) {
 		return this.ivTimeUnit;
 	}
 
-	public static DataModel getInstance() {
+	public static DataModel getInstance( ) {
 		return DataModel.INSTANCE;
 	}
 

@@ -24,16 +24,16 @@ public final class SettingsDialog {
 
 	private final ApplicationTest applicationTest;
 
-	public SettingsDialog(final ApplicationTest applicationTest) {
+	public SettingsDialog( final ApplicationTest applicationTest ) {
 		this.applicationTest = applicationTest;
 	}
 
-	public Button getCancelButton() {
-		return new Button(this.applicationTest, "#ivCancel");
+	public Button getCancelButton( ) {
+		return new Button( this.applicationTest, "#ivCancel" );
 	}
 
-	public Button getOkayButton() {
-		return new Button(this.applicationTest, "#ivOkay");
+	public Button getOkayButton( ) {
+		return new Button( this.applicationTest, "#ivOkay" );
 	}
 
 }

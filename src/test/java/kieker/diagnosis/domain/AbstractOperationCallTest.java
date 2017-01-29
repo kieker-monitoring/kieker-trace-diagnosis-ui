@@ -27,111 +27,111 @@ import org.junit.Test;
 
 public abstract class AbstractOperationCallTest<T extends AbstractOperationCall<T>> {
 
-	protected abstract T createOperationCall(final String container, final String component, final String operation, final String failedCause);
+	protected abstract T createOperationCall( final String container, final String component, final String operation, final String failedCause );
 
-	private final T createOperationCall(final String container, final String component, final String operation) {
-		return this.createOperationCall(container, component, operation, null);
+	private final T createOperationCall( final String container, final String component, final String operation ) {
+		return this.createOperationCall( container, component, operation, null );
 	}
 
 	@Test
-	public void equalsWithNullShouldNotLeadToException() {
-		final T fstCall = this.createOperationCall("", "", "");
+	public void equalsWithNullShouldNotLeadToException( ) {
+		final T fstCall = this.createOperationCall( "", "", "" );
 		final T sndCall = null;
 
-		assertFalse(fstCall.isEqualTo(sndCall));
+		assertFalse( fstCall.isEqualTo( sndCall ) );
 	}
 
 	@Test
-	public void equalsForSameInstanceShouldWork() {
-		final T fstCall = this.createOperationCall("", "", "");
+	public void equalsForSameInstanceShouldWork( ) {
+		final T fstCall = this.createOperationCall( "", "", "" );
 		final T sndCall = fstCall;
 
-		assertTrue(fstCall.isEqualTo(sndCall));
+		assertTrue( fstCall.isEqualTo( sndCall ) );
 	}
 
 	@Test
-	public void equalsForSameValuesShouldWork() {
-		final T fstCall = this.createOperationCall("container", "component", "operation");
-		final T sndCall = this.createOperationCall("container", "component", "operation");
+	public void equalsForSameValuesShouldWork( ) {
+		final T fstCall = this.createOperationCall( "container", "component", "operation" );
+		final T sndCall = this.createOperationCall( "container", "component", "operation" );
 
-		assertTrue(fstCall.isEqualTo(sndCall));
+		assertTrue( fstCall.isEqualTo( sndCall ) );
 	}
 
 	@Test
-	public void equalsForDifferentContainerShouldReturnFalse() {
-		final T fstCall = this.createOperationCall("container1", "component", "operation");
-		final T sndCall = this.createOperationCall("container2", "component", "operation");
+	public void equalsForDifferentContainerShouldReturnFalse( ) {
+		final T fstCall = this.createOperationCall( "container1", "component", "operation" );
+		final T sndCall = this.createOperationCall( "container2", "component", "operation" );
 
-		Assert.assertThat(fstCall, Is.is(IsNot.not(IsEqual.equalTo(sndCall))));
+		Assert.assertThat( fstCall, Is.is( IsNot.not( IsEqual.equalTo( sndCall ) ) ) );
 	}
 
 	@Test
-	public void equalsForDifferentComponentsShouldReturnFalse() {
-		final T fstCall = this.createOperationCall("container", "component1", "operation");
-		final T sndCall = this.createOperationCall("container", "component2", "operation");
+	public void equalsForDifferentComponentsShouldReturnFalse( ) {
+		final T fstCall = this.createOperationCall( "container", "component1", "operation" );
+		final T sndCall = this.createOperationCall( "container", "component2", "operation" );
 
-		assertFalse(fstCall.isEqualTo(sndCall));
+		assertFalse( fstCall.isEqualTo( sndCall ) );
 	}
 
 	@Test
-	public void equalsForDifferentOperationsShouldReturnFalse() {
-		final T fstCall = this.createOperationCall("container", "component", "operation1");
-		final T sndCall = this.createOperationCall("container", "component", "operation2");
+	public void equalsForDifferentOperationsShouldReturnFalse( ) {
+		final T fstCall = this.createOperationCall( "container", "component", "operation1" );
+		final T sndCall = this.createOperationCall( "container", "component", "operation2" );
 
-		assertFalse(fstCall.isEqualTo(sndCall));
+		assertFalse( fstCall.isEqualTo( sndCall ) );
 	}
 
 	@Test
-	public void equalsForSameValuesAndNestedOperationCallsShouldWork() {
-		final T fstCall = this.createOperationCall("container", "component", "operation");
-		final T sndCall = this.createOperationCall("container", "component", "operation");
+	public void equalsForSameValuesAndNestedOperationCallsShouldWork( ) {
+		final T fstCall = this.createOperationCall( "container", "component", "operation" );
+		final T sndCall = this.createOperationCall( "container", "component", "operation" );
 
-		fstCall.addChild(this.createOperationCall("container1", "component1", "operation1"));
-		sndCall.addChild(this.createOperationCall("container1", "component1", "operation1"));
+		fstCall.addChild( this.createOperationCall( "container1", "component1", "operation1" ) );
+		sndCall.addChild( this.createOperationCall( "container1", "component1", "operation1" ) );
 
-		assertTrue(fstCall.isEqualTo(sndCall));
+		assertTrue( fstCall.isEqualTo( sndCall ) );
 	}
 
 	@Test
-	public void equalsForDifferentValuesInNestedOperationCallsShouldReturnFalse() {
-		final T fstCall = this.createOperationCall("container", "component", "operation");
-		final T sndCall = this.createOperationCall("container", "component", "operation");
+	public void equalsForDifferentValuesInNestedOperationCallsShouldReturnFalse( ) {
+		final T fstCall = this.createOperationCall( "container", "component", "operation" );
+		final T sndCall = this.createOperationCall( "container", "component", "operation" );
 
-		fstCall.addChild(this.createOperationCall("container1", "component1", "operation1"));
-		sndCall.addChild(this.createOperationCall("container2", "component1", "operation1"));
+		fstCall.addChild( this.createOperationCall( "container1", "component1", "operation1" ) );
+		sndCall.addChild( this.createOperationCall( "container2", "component1", "operation1" ) );
 
-		assertFalse(fstCall.isEqualTo(sndCall));
+		assertFalse( fstCall.isEqualTo( sndCall ) );
 	}
 
 	@Test
-	public void containsFailureFoSimpleOperationCallsShouldWork() {
-		final T fstCall = this.createOperationCall("container", "component", "operation", "someException");
+	public void containsFailureFoSimpleOperationCallsShouldWork( ) {
+		final T fstCall = this.createOperationCall( "container", "component", "operation", "someException" );
 
-		assertTrue(fstCall.containsFailure());
+		assertTrue( fstCall.containsFailure( ) );
 	}
 
 	@Test
-	public void containsFailureForDeeplyNestedOperationCallsShouldWork() {
-		final T fstCall = this.createOperationCall("container", "component", "operation");
-		final T sndCall = this.createOperationCall("container", "component", "operation");
-		final T thdCall = this.createOperationCall("container", "component", "operation", "someException");
+	public void containsFailureForDeeplyNestedOperationCallsShouldWork( ) {
+		final T fstCall = this.createOperationCall( "container", "component", "operation" );
+		final T sndCall = this.createOperationCall( "container", "component", "operation" );
+		final T thdCall = this.createOperationCall( "container", "component", "operation", "someException" );
 
-		fstCall.addChild(sndCall);
-		sndCall.addChild(thdCall);
+		fstCall.addChild( sndCall );
+		sndCall.addChild( thdCall );
 
-		assertTrue(fstCall.containsFailure());
+		assertTrue( fstCall.containsFailure( ) );
 	}
-	
+
 	@Test
-	public void containsFailureForNoFailureShouldWork() {
-		final T fstCall = this.createOperationCall("container", "component", "operation");
-		final T sndCall = this.createOperationCall("container", "component", "operation");
-		final T thdCall = this.createOperationCall("container", "component", "operation");
+	public void containsFailureForNoFailureShouldWork( ) {
+		final T fstCall = this.createOperationCall( "container", "component", "operation" );
+		final T sndCall = this.createOperationCall( "container", "component", "operation" );
+		final T thdCall = this.createOperationCall( "container", "component", "operation" );
 
-		fstCall.addChild(sndCall);
-		sndCall.addChild(thdCall);
+		fstCall.addChild( sndCall );
+		sndCall.addChild( thdCall );
 
-		assertFalse(fstCall.containsFailure());
+		assertFalse( fstCall.containsFailure( ) );
 	}
-	
+
 }

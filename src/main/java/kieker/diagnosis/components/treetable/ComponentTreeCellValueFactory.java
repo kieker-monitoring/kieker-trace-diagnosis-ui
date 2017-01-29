@@ -39,28 +39,29 @@ import org.apache.logging.log4j.Logger;
  */
 public final class ComponentTreeCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<String>> {
 
-	private static final Logger LOGGER = LogManager.getLogger(ComponentTreeCellValueFactory.class);
+	private static final Logger LOGGER = LogManager.getLogger( ComponentTreeCellValueFactory.class );
 
 	private final String ivProperty;
 
-	public ComponentTreeCellValueFactory(@NamedArg(value = "property") final String aProperty) {
-		this.ivProperty = aProperty.substring(0, 1).toUpperCase(Locale.ROOT) + aProperty.substring(1);
+	public ComponentTreeCellValueFactory( @NamedArg ( value = "property" ) final String aProperty ) {
+		this.ivProperty = aProperty.substring( 0, 1 ).toUpperCase( Locale.ROOT ) + aProperty.substring( 1 );
 	}
 
 	@Override
-	public ObservableValue<String> call(final CellDataFeatures<?, String> aCall) {
+	public ObservableValue<String> call( final CellDataFeatures<?, String> aCall ) {
 		try {
-			final TreeItem<?> item = aCall.getValue();
-			final Method getter = item.getValue().getClass().getMethod("get" + this.ivProperty, new Class<?>[0]);
-			String componentName = (String) getter.invoke(item.getValue(), new Object[0]);
+			final TreeItem<?> item = aCall.getValue( );
+			final Method getter = item.getValue( ).getClass( ).getMethod( "get" + this.ivProperty, new Class<?>[0] );
+			String componentName = (String) getter.invoke( item.getValue( ), new Object[0] );
 
-			if (PropertiesModel.getInstance().getComponentNames() == ComponentNames.SHORT) {
-				componentName = NameConverter.toShortComponentName(componentName);
+			if ( PropertiesModel.getInstance( ).getComponentNames( ) == ComponentNames.SHORT ) {
+				componentName = NameConverter.toShortComponentName( componentName );
 			}
 
-			return new ReadOnlyObjectWrapper<String>(componentName);
-		} catch (final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-			ComponentTreeCellValueFactory.LOGGER.warn(ex);
+			return new ReadOnlyObjectWrapper<String>( componentName );
+		}
+		catch ( final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex ) {
+			ComponentTreeCellValueFactory.LOGGER.warn( ex );
 			return null;
 		}
 	}

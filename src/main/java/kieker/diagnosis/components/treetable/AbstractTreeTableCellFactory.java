@@ -26,23 +26,24 @@ import javafx.util.Callback;
 public abstract class AbstractTreeTableCellFactory<S, T> implements Callback<TreeTableColumn<S, T>, TreeTableCell<S, T>> {
 
 	@Override
-	public final TreeTableCell<S, T> call(final TreeTableColumn<S, T> aTreeTableColumn) {
-		return new FailedTableCell();
+	public final TreeTableCell<S, T> call( final TreeTableColumn<S, T> aTreeTableColumn ) {
+		return new FailedTableCell( );
 	}
 
-	protected abstract String getItemLabel(T aItem);
+	protected abstract String getItemLabel( T aItem );
 
 	private final class FailedTableCell extends TreeTableCell<S, T> {
 
 		@Override
-		protected void updateItem(final T aItem, final boolean aEmpty) {
-			super.updateItem(aItem, aEmpty);
+		protected void updateItem( final T aItem, final boolean aEmpty ) {
+			super.updateItem( aItem, aEmpty );
 
-			if (aEmpty || (aItem == null)) {
-				setText(null);
-				setGraphic(null);
-			} else {
-				setText(getItemLabel(aItem));
+			if ( aEmpty || (aItem == null) ) {
+				setText( null );
+				setGraphic( null );
+			}
+			else {
+				setText( getItemLabel( aItem ) );
 			}
 		}
 

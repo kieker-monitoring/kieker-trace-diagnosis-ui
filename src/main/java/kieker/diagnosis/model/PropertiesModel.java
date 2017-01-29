@@ -31,8 +31,8 @@ import org.apache.logging.log4j.Logger;
  */
 public final class PropertiesModel {
 
-	private static final Logger LOGGER = LogManager.getLogger(PropertiesModel.class);
-	private static final PropertiesModel INSTANCE = new PropertiesModel();
+	private static final Logger LOGGER = LogManager.getLogger( PropertiesModel.class );
+	private static final PropertiesModel INSTANCE = new PropertiesModel( );
 
 	private static final String KEY_TIMEUNIT = "timeunit";
 	private static final String KEY_OPERATIONS = "operations";
@@ -69,195 +69,197 @@ public final class PropertiesModel {
 
 	private long ivVersion = 0L;
 
-	public PropertiesModel() {
-		this.loadSettings();
+	public PropertiesModel( ) {
+		this.loadSettings( );
 	}
 
-	public static PropertiesModel getInstance() {
+	public static PropertiesModel getInstance( ) {
 		return PropertiesModel.INSTANCE;
 	}
 
-	private void loadSettings() {
-		final Preferences preferences = Preferences.userNodeForPackage(PropertiesModel.class);
+	private void loadSettings( ) {
+		final Preferences preferences = Preferences.userNodeForPackage( PropertiesModel.class );
 
-		this.ivGraphvizPath = preferences.get(PropertiesModel.KEY_GRAPHVIZ_PATH, ".");
-		this.ivTimeUnit = TimeUnit.valueOf(preferences.get(PropertiesModel.KEY_TIMEUNIT, TimeUnit.NANOSECONDS.name()));
-		this.ivComponentNames = ComponentNames.valueOf(preferences.get(PropertiesModel.KEY_COMPONENTS, ComponentNames.LONG.name()));
-		this.ivOperationNames = OperationNames.valueOf(preferences.get(PropertiesModel.KEY_OPERATIONS, OperationNames.SHORT.name()));
-		this.ivAdditionalLogChecksActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_ADDITIONAL_LOG_CHECKS, Boolean.FALSE.toString()));
-		this.ivRegularExpressionsActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_REGULAR_EXPRESSIONS, Boolean.FALSE.toString()));
-		this.ivMethodCallAggregationActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_METHOD_CALL_AGGREGATION, Boolean.FALSE.toString()));
-		this.ivThreshold = Threshold.valueOf(preferences.get(PropertiesModel.KEY_THRESHOLD, Threshold.THRESHOLD_1.name()));
-		this.ivCaseSensitivityActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_CASE_SENSITIVE, Boolean.FALSE.toString()));
-		this.ivPercentageCalculationActive = Boolean.valueOf(preferences.get(PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.FALSE.toString()));
-		this.ivTimestampType = TimestampTypes.valueOf(preferences.get(PropertiesModel.KEY_TIMESTAMP_TYPE, TimestampTypes.TIMESTAMP.name()));
-		this.ivCacheViews = Boolean.valueOf(preferences.get(PropertiesModel.KEY_CACHE_VIEWS, Boolean.FALSE.toString()));
-		this.ivSearchInEntireTrace =  Boolean.valueOf(preferences.get(PropertiesModel.KEY_SEARCH_IN_ENTIRE_TRACE, Boolean.FALSE.toString()));
-		
-		final Properties properties = new Properties();
-		final ClassLoader classLoader = PropertiesModel.class.getClassLoader();
-		try (InputStream inputStream = classLoader.getResourceAsStream("config.properties")) {
-			properties.load(inputStream);
-			this.ivGitLabURL = properties.getProperty(PropertiesModel.KEY_GITLAB_URL);
-			this.ivTracURL = properties.getProperty(PropertiesModel.KEY_TRAC_URL);
-		} catch (final IOException e) {
-			PropertiesModel.LOGGER.error(e);
+		this.ivGraphvizPath = preferences.get( PropertiesModel.KEY_GRAPHVIZ_PATH, "." );
+		this.ivTimeUnit = TimeUnit.valueOf( preferences.get( PropertiesModel.KEY_TIMEUNIT, TimeUnit.NANOSECONDS.name( ) ) );
+		this.ivComponentNames = ComponentNames.valueOf( preferences.get( PropertiesModel.KEY_COMPONENTS, ComponentNames.LONG.name( ) ) );
+		this.ivOperationNames = OperationNames.valueOf( preferences.get( PropertiesModel.KEY_OPERATIONS, OperationNames.SHORT.name( ) ) );
+		this.ivAdditionalLogChecksActive = Boolean.valueOf( preferences.get( PropertiesModel.KEY_ADDITIONAL_LOG_CHECKS, Boolean.FALSE.toString( ) ) );
+		this.ivRegularExpressionsActive = Boolean.valueOf( preferences.get( PropertiesModel.KEY_REGULAR_EXPRESSIONS, Boolean.FALSE.toString( ) ) );
+		this.ivMethodCallAggregationActive = Boolean.valueOf( preferences.get( PropertiesModel.KEY_METHOD_CALL_AGGREGATION, Boolean.FALSE.toString( ) ) );
+		this.ivThreshold = Threshold.valueOf( preferences.get( PropertiesModel.KEY_THRESHOLD, Threshold.THRESHOLD_1.name( ) ) );
+		this.ivCaseSensitivityActive = Boolean.valueOf( preferences.get( PropertiesModel.KEY_CASE_SENSITIVE, Boolean.FALSE.toString( ) ) );
+		this.ivPercentageCalculationActive = Boolean.valueOf( preferences.get( PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.FALSE.toString( ) ) );
+		this.ivTimestampType = TimestampTypes.valueOf( preferences.get( PropertiesModel.KEY_TIMESTAMP_TYPE, TimestampTypes.TIMESTAMP.name( ) ) );
+		this.ivCacheViews = Boolean.valueOf( preferences.get( PropertiesModel.KEY_CACHE_VIEWS, Boolean.FALSE.toString( ) ) );
+		this.ivSearchInEntireTrace = Boolean.valueOf( preferences.get( PropertiesModel.KEY_SEARCH_IN_ENTIRE_TRACE, Boolean.FALSE.toString( ) ) );
+
+		final Properties properties = new Properties( );
+		final ClassLoader classLoader = PropertiesModel.class.getClassLoader( );
+		try ( InputStream inputStream = classLoader.getResourceAsStream( "config.properties" ) ) {
+			properties.load( inputStream );
+			this.ivGitLabURL = properties.getProperty( PropertiesModel.KEY_GITLAB_URL );
+			this.ivTracURL = properties.getProperty( PropertiesModel.KEY_TRAC_URL );
+		}
+		catch ( final IOException e ) {
+			PropertiesModel.LOGGER.error( e );
 		}
 	}
 
-	private void saveSettings() {
-		final Preferences preferences = Preferences.userNodeForPackage(PropertiesModel.class);
+	private void saveSettings( ) {
+		final Preferences preferences = Preferences.userNodeForPackage( PropertiesModel.class );
 
-		preferences.put(PropertiesModel.KEY_GRAPHVIZ_PATH, this.ivGraphvizPath);
-		preferences.put(PropertiesModel.KEY_TIMEUNIT, this.ivTimeUnit.name());
-		preferences.put(PropertiesModel.KEY_COMPONENTS, this.ivComponentNames.name());
-		preferences.put(PropertiesModel.KEY_OPERATIONS, this.ivOperationNames.name());
-		preferences.put(PropertiesModel.KEY_ADDITIONAL_LOG_CHECKS, Boolean.toString(this.ivAdditionalLogChecksActive));
-		preferences.put(PropertiesModel.KEY_REGULAR_EXPRESSIONS, Boolean.toString(this.ivRegularExpressionsActive));
-		preferences.put(PropertiesModel.KEY_METHOD_CALL_AGGREGATION, Boolean.toString(this.ivMethodCallAggregationActive));
-		preferences.put(PropertiesModel.KEY_THRESHOLD, this.ivThreshold.name());
-		preferences.put(PropertiesModel.KEY_CASE_SENSITIVE, Boolean.toString(this.ivCaseSensitivityActive));
-		preferences.put(PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.toString(this.ivPercentageCalculationActive));
-		preferences.put(PropertiesModel.KEY_TIMESTAMP_TYPE, this.ivTimestampType.name());
-		preferences.put(PropertiesModel.KEY_CACHE_VIEWS, Boolean.toString(this.ivCacheViews));
-		preferences.put(PropertiesModel.KEY_SEARCH_IN_ENTIRE_TRACE, Boolean.toString(this.ivSearchInEntireTrace));
-		
+		preferences.put( PropertiesModel.KEY_GRAPHVIZ_PATH, this.ivGraphvizPath );
+		preferences.put( PropertiesModel.KEY_TIMEUNIT, this.ivTimeUnit.name( ) );
+		preferences.put( PropertiesModel.KEY_COMPONENTS, this.ivComponentNames.name( ) );
+		preferences.put( PropertiesModel.KEY_OPERATIONS, this.ivOperationNames.name( ) );
+		preferences.put( PropertiesModel.KEY_ADDITIONAL_LOG_CHECKS, Boolean.toString( this.ivAdditionalLogChecksActive ) );
+		preferences.put( PropertiesModel.KEY_REGULAR_EXPRESSIONS, Boolean.toString( this.ivRegularExpressionsActive ) );
+		preferences.put( PropertiesModel.KEY_METHOD_CALL_AGGREGATION, Boolean.toString( this.ivMethodCallAggregationActive ) );
+		preferences.put( PropertiesModel.KEY_THRESHOLD, this.ivThreshold.name( ) );
+		preferences.put( PropertiesModel.KEY_CASE_SENSITIVE, Boolean.toString( this.ivCaseSensitivityActive ) );
+		preferences.put( PropertiesModel.KEY_PERCENTAGE_CALCULATION, Boolean.toString( this.ivPercentageCalculationActive ) );
+		preferences.put( PropertiesModel.KEY_TIMESTAMP_TYPE, this.ivTimestampType.name( ) );
+		preferences.put( PropertiesModel.KEY_CACHE_VIEWS, Boolean.toString( this.ivCacheViews ) );
+		preferences.put( PropertiesModel.KEY_SEARCH_IN_ENTIRE_TRACE, Boolean.toString( this.ivSearchInEntireTrace ) );
+
 		try {
-			preferences.flush();
-		} catch (final BackingStoreException e) {
-			PropertiesModel.LOGGER.error(e);
+			preferences.flush( );
+		}
+		catch ( final BackingStoreException e ) {
+			PropertiesModel.LOGGER.error( e );
 		}
 
 		this.ivVersion++;
 	}
 
-	public String getGraphvizPath() {
+	public String getGraphvizPath( ) {
 		return this.ivGraphvizPath;
 	}
 
-	public void setGraphvizPath(final String aGraphvizPath) {
+	public void setGraphvizPath( final String aGraphvizPath ) {
 		this.ivGraphvizPath = aGraphvizPath;
-		this.saveSettings();
+		this.saveSettings( );
 	}
 
-	public TimeUnit getTimeUnit() {
+	public TimeUnit getTimeUnit( ) {
 		return this.ivTimeUnit;
 	}
 
-	public void setTimeUnit(final TimeUnit aTimeUnit) {
+	public void setTimeUnit( final TimeUnit aTimeUnit ) {
 		this.ivTimeUnit = aTimeUnit;
-		this.saveSettings();
+		this.saveSettings( );
 	}
 
-	public ComponentNames getComponentNames() {
+	public ComponentNames getComponentNames( ) {
 		return this.ivComponentNames;
 	}
 
-	public void setComponentNames(final ComponentNames aComponentNames) {
+	public void setComponentNames( final ComponentNames aComponentNames ) {
 		this.ivComponentNames = aComponentNames;
-		this.saveSettings();
+		this.saveSettings( );
 	}
 
-	public OperationNames getOperationNames() {
+	public OperationNames getOperationNames( ) {
 		return this.ivOperationNames;
 	}
 
-	public void setOperationNames(final OperationNames aOperationNames) {
+	public void setOperationNames( final OperationNames aOperationNames ) {
 		this.ivOperationNames = aOperationNames;
-		this.saveSettings();
+		this.saveSettings( );
 	}
 
-	public boolean isAdditionalLogChecksActive() {
+	public boolean isAdditionalLogChecksActive( ) {
 		return this.ivAdditionalLogChecksActive;
 	}
 
-	public void setAdditionalLogChecksActive(final boolean aActive) {
+	public void setAdditionalLogChecksActive( final boolean aActive ) {
 		this.ivAdditionalLogChecksActive = aActive;
-		this.saveSettings();
+		this.saveSettings( );
 	}
 
-	public boolean isRegularExpressionsActive() {
+	public boolean isRegularExpressionsActive( ) {
 		return this.ivRegularExpressionsActive;
 	}
 
-	public void setRegularExpressionsActive(final boolean aActive) {
+	public void setRegularExpressionsActive( final boolean aActive ) {
 		this.ivRegularExpressionsActive = aActive;
-		this.saveSettings();
+		this.saveSettings( );
 	}
 
-	public String getGitLabURL() {
+	public String getGitLabURL( ) {
 		return this.ivGitLabURL;
 	}
 
-	public String getTracURL() {
+	public String getTracURL( ) {
 		return this.ivTracURL;
 	}
 
-	public boolean isMethodCallAggregationActive() {
+	public boolean isMethodCallAggregationActive( ) {
 		return this.ivMethodCallAggregationActive;
 	}
 
-	public void setMethodCallAggregationActive(final boolean aActive) {
+	public void setMethodCallAggregationActive( final boolean aActive ) {
 		this.ivMethodCallAggregationActive = aActive;
-		this.saveSettings();
+		this.saveSettings( );
 	}
 
-	public Threshold getThreshold() {
+	public Threshold getThreshold( ) {
 		return this.ivThreshold;
 	}
 
-	public void setThreshold(final Threshold aThreshold) {
+	public void setThreshold( final Threshold aThreshold ) {
 		this.ivThreshold = aThreshold;
-		this.saveSettings();
+		this.saveSettings( );
 	}
 
-	public boolean isCaseSensitivityActive() {
+	public boolean isCaseSensitivityActive( ) {
 		return this.ivCaseSensitivityActive;
 	}
 
-	public void setCaseSensitivityActive(final boolean aActive) {
+	public void setCaseSensitivityActive( final boolean aActive ) {
 		this.ivCaseSensitivityActive = aActive;
-		this.saveSettings();
+		this.saveSettings( );
 	}
 
-	public long getVersion() {
+	public long getVersion( ) {
 		return this.ivVersion;
 	}
 
-	public boolean isPercentageCalculationActive() {
+	public boolean isPercentageCalculationActive( ) {
 		return this.ivPercentageCalculationActive;
 	}
 
-	public void setPercentageCalculationActive(final boolean aActive) {
+	public void setPercentageCalculationActive( final boolean aActive ) {
 		this.ivPercentageCalculationActive = aActive;
-		this.saveSettings();
+		this.saveSettings( );
 	}
 
-	public TimestampTypes getTimestampType() {
+	public TimestampTypes getTimestampType( ) {
 		return this.ivTimestampType;
 	}
 
-	public void setTimestampType(final TimestampTypes aTimestampType) {
+	public void setTimestampType( final TimestampTypes aTimestampType ) {
 		this.ivTimestampType = aTimestampType;
-		this.saveSettings();
+		this.saveSettings( );
 	}
 
-	public boolean isCacheViews() {
+	public boolean isCacheViews( ) {
 		return ivCacheViews;
 	}
 
-	public void setCacheViews(boolean ivCacheViews) {
+	public void setCacheViews( boolean ivCacheViews ) {
 		this.ivCacheViews = ivCacheViews;
-		this.saveSettings();
+		this.saveSettings( );
 	}
 
-	public boolean isSearchInEntireTrace() {
+	public boolean isSearchInEntireTrace( ) {
 		return ivSearchInEntireTrace;
 	}
 
-	public void setSearchInEntireTrace(boolean ivSearchInEntireTrace) {
+	public void setSearchInEntireTrace( boolean ivSearchInEntireTrace ) {
 		this.ivSearchInEntireTrace = ivSearchInEntireTrace;
-		this.saveSettings();
+		this.saveSettings( );
 	}
 
 	/**
@@ -280,15 +282,15 @@ public final class PropertiesModel {
 
 	public enum Threshold {
 
-		THRESHOLD_0_5(0.5f), THRESHOLD_1(1f), THRESHOLD_10(10f), THRESHOLD_20(20f), THRESHOLD_30(30f), THRESHOLD_40(40f), THRESHOLD_50(50f);
+		THRESHOLD_0_5( 0.5f ), THRESHOLD_1( 1f ), THRESHOLD_10( 10f ), THRESHOLD_20( 20f ), THRESHOLD_30( 30f ), THRESHOLD_40( 40f ), THRESHOLD_50( 50f );
 
 		private final float ivPercent;
 
-		private Threshold(final float aPercent) {
+		private Threshold( final float aPercent ) {
 			this.ivPercent = aPercent;
 		}
 
-		public float getPercent() {
+		public float getPercent( ) {
 			return this.ivPercent;
 		}
 

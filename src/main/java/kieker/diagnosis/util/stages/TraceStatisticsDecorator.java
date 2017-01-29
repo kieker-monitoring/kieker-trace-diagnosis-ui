@@ -22,67 +22,72 @@ import kieker.diagnosis.model.PropertiesModel;
 import teetime.stage.basic.AbstractTransformation;
 
 /**
- * This class is a {@code TeeTime} stage adding statistics (via the corresponding setters) to instances of {@link Trace}. The traces are forwarded to the output port.
+ * This class is a {@code TeeTime} stage adding statistics (via the corresponding setters) to instances of {@link Trace}. The traces are forwarded to the output
+ * port.
  *
  * @author Nils Christian Ehmke
  */
 public final class TraceStatisticsDecorator extends AbstractTransformation<Trace, Trace> {
 
 	@Override
-	public void execute(final Trace aTrace) {
-		TraceStatisticsDecorator.addTraceDepth(aTrace.getRootOperationCall());
-		TraceStatisticsDecorator.addTraceSize(aTrace.getRootOperationCall());
-		TraceStatisticsDecorator.addPercentValues(aTrace.getRootOperationCall(), aTrace.getRootOperationCall().getDuration(), aTrace.getRootOperationCall().getDuration());
+	public void execute( final Trace aTrace ) {
+		TraceStatisticsDecorator.addTraceDepth( aTrace.getRootOperationCall( ) );
+		TraceStatisticsDecorator.addTraceSize( aTrace.getRootOperationCall( ) );
+		TraceStatisticsDecorator.addPercentValues( aTrace.getRootOperationCall( ), aTrace.getRootOperationCall( ).getDuration( ),
+				aTrace.getRootOperationCall( ).getDuration( ) );
 
-		super.getOutputPort().send(aTrace);
+		super.getOutputPort( ).send( aTrace );
 	}
 
-	private static int addTraceDepth(final OperationCall aCall) {
+	private static int addTraceDepth( final OperationCall aCall ) {
 		final int ivTraceDepth;
 
-		if (aCall.getChildren().isEmpty()) {
+		if ( aCall.getChildren( ).isEmpty( ) ) {
 			ivTraceDepth = 0;
-		} else {
+		}
+		else {
 			int maxTraceDepthOfChildren = 0;
 
-			for (final OperationCall child : aCall.getChildren()) {
-				final int traceDepthOfChild = TraceStatisticsDecorator.addTraceDepth(child);
-				maxTraceDepthOfChildren = Math.max(traceDepthOfChild, maxTraceDepthOfChildren);
+			for ( final OperationCall child : aCall.getChildren( ) ) {
+				final int traceDepthOfChild = TraceStatisticsDecorator.addTraceDepth( child );
+				maxTraceDepthOfChildren = Math.max( traceDepthOfChild, maxTraceDepthOfChildren );
 			}
 
 			ivTraceDepth = 1 + maxTraceDepthOfChildren;
 		}
 
-		aCall.setStackDepth(ivTraceDepth);
+		aCall.setStackDepth( ivTraceDepth );
 		return ivTraceDepth;
 	}
 
-	private static int addTraceSize(final OperationCall aCall) {
+	private static int addTraceSize( final OperationCall aCall ) {
 		int traceSize = 1;
 
-		for (final OperationCall child : aCall.getChildren()) {
-			final int traceSizeOfChild = TraceStatisticsDecorator.addTraceSize(child);
+		for ( final OperationCall child : aCall.getChildren( ) ) {
+			final int traceSizeOfChild = TraceStatisticsDecorator.addTraceSize( child );
 			traceSize += traceSizeOfChild;
 		}
 
-		aCall.setStackSize(traceSize);
+		aCall.setStackSize( traceSize );
 		return traceSize;
 	}
 
-	private static void addPercentValues(final OperationCall aCall, final long aParentDuration, final long aRootDuration) {
-		if (aCall.getParent() == null) {
-			aCall.setPercent(100.0f);
-		} else {
-			final boolean percentCalculationsRefersToTopMost = PropertiesModel.getInstance().isPercentageCalculationActive();
-			if (percentCalculationsRefersToTopMost) {
-				aCall.setPercent((100.0f * aCall.getDuration()) / aRootDuration);
-			} else {
-				aCall.setPercent((100.0f * aCall.getDuration()) / aParentDuration);
+	private static void addPercentValues( final OperationCall aCall, final long aParentDuration, final long aRootDuration ) {
+		if ( aCall.getParent( ) == null ) {
+			aCall.setPercent( 100.0f );
+		}
+		else {
+			final boolean percentCalculationsRefersToTopMost = PropertiesModel.getInstance( ).isPercentageCalculationActive( );
+			if ( percentCalculationsRefersToTopMost ) {
+				aCall.setPercent( (100.0f * aCall.getDuration( )) / aRootDuration );
+			}
+			else {
+				aCall.setPercent( (100.0f * aCall.getDuration( )) / aParentDuration );
 			}
 		}
 
-		for (final OperationCall child : aCall.getChildren()) {
-			TraceStatisticsDecorator.addPercentValues(child, aCall.getDuration(), aRootDuration);
+		for ( final OperationCall child : aCall.getChildren( ) ) {
+			TraceStatisticsDecorator.addPercentValues( child, aCall.getDuration( ), aRootDuration );
 		}
 	}
 }

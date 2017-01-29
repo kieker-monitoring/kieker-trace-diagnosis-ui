@@ -25,13 +25,13 @@ public final class Trace extends AbstractTrace<OperationCall> {
 
 	private final long ivTraceID;
 
-	public Trace(final OperationCall aRootOperationCall, final long aTraceID) {
-		super(aRootOperationCall);
+	public Trace( final OperationCall aRootOperationCall, final long aTraceID ) {
+		super( aRootOperationCall );
 
 		this.ivTraceID = aTraceID;
 	}
 
-	public long getTraceID() {
+	public long getTraceID( ) {
 		return this.ivTraceID;
 	}
 

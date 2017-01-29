@@ -24,28 +24,28 @@ public final class CallsView {
 
 	private final ApplicationTest applicationTest;
 
-	public CallsView(final ApplicationTest applicationTest) {
+	public CallsView( final ApplicationTest applicationTest ) {
 		this.applicationTest = applicationTest;
 	}
 
-	public TextField getCounterTextField() {
-		return new TextField(this.applicationTest, "#ivCounter");
+	public TextField getCounterTextField( ) {
+		return new TextField( this.applicationTest, "#ivCounter" );
 	}
 
-	public TextField getFilterContainerTextField() {
-		return new TextField(this.applicationTest, "#ivFilterContainer");
+	public TextField getFilterContainerTextField( ) {
+		return new TextField( this.applicationTest, "#ivFilterContainer" );
 	}
 
-	public TextField getFilterComponentTextField() {
-		return new TextField(this.applicationTest, "#ivFilterComponent");
+	public TextField getFilterComponentTextField( ) {
+		return new TextField( this.applicationTest, "#ivFilterComponent" );
 	}
 
-	public TextField getFilterOperationTextField() {
-		return new TextField(this.applicationTest, "#ivFilterOperation");
+	public TextField getFilterOperationTextField( ) {
+		return new TextField( this.applicationTest, "#ivFilterOperation" );
 	}
 
-	public TextField getFilterTraceIDTextField() {
-		return new TextField(this.applicationTest, "#ivFilterTraceID");
+	public TextField getFilterTraceIDTextField( ) {
+		return new TextField( this.applicationTest, "#ivFilterTraceID" );
 	}
 
 }

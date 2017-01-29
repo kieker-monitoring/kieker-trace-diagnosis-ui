@@ -77,8 +77,7 @@ import kieker.diagnosis.util.ContextKey;
 import kieker.diagnosis.util.ErrorHandling;
 
 /**
- * The main controller of this application. It is responsible for controlling
- * the application's main window.
+ * The main controller of this application. It is responsible for controlling the application's main window.
  * 
  * @author Nils Christian Ehmke
  */
@@ -89,13 +88,13 @@ public final class MainController {
 	private static final String KEY_LAST_IMPORT_PATH = "lastimportpath";
 	private static final String KEY_LAST_EXPORT_PATH = "lastexportpath";
 
-	private static final Logger LOGGER = LogManager.getLogger(MainController.class);
+	private static final Logger LOGGER = LogManager.getLogger( MainController.class );
 
-	private static Map<Class<?>, PaneData> cvPaneDataCache = new HashMap<>();
-	private static Map<Class<?>, AbstractController> cvControllerCache = new HashMap<>();
+	private static Map<Class<?>, PaneData> cvPaneDataCache = new HashMap<>( );
+	private static Map<Class<?>, AbstractController> cvControllerCache = new HashMap<>( );
 	private static MainController cvInstance;
-	
-	private final DataModel ivDataModel = DataModel.getInstance();
+
+	private final DataModel ivDataModel = DataModel.getInstance( );
 
 	@FXML
 	private Node ivView;
@@ -115,385 +114,388 @@ public final class MainController {
 	@FXML
 	private Button ivStatistics;
 
-	private Optional<Button> ivDisabledButton = Optional.empty();
-	private Optional<Class<? extends AbstractController>> ivActiveController = Optional.empty();
+	private Optional<Button> ivDisabledButton = Optional.empty( );
+	private Optional<Class<? extends AbstractController>> ivActiveController = Optional.empty( );
 
 	private int ivFavoritesAvailable;
 
-	private MainController() {
+	private MainController( ) {
 	}
 
 	@ErrorHandling
-	public void showTraces() throws Exception {
-		this.showTraces(new ContextEntry[0]);
+	public void showTraces( ) throws Exception {
+		this.showTraces( new ContextEntry[0] );
 	}
-	
-	private <T extends AbstractController> void showCorrespondingView(final Class<T> aController, final ContextEntry... aContextEntries) throws Exception {
-		if (aController == TracesViewController.class) {
-			showTraces(aContextEntries);
-		} else if (aController == AggregatedTracesViewController.class) {
-			showAggregatedTraces(aContextEntries);
-		} else if (aController == CallsViewController.class) {
-			showCalls(aContextEntries);
-		} else if (aController == AggregatedCallsViewController.class) {
-			showAggregatedCalls(aContextEntries);
+
+	private <T extends AbstractController> void showCorrespondingView( final Class<T> aController, final ContextEntry... aContextEntries ) throws Exception {
+		if ( aController == TracesViewController.class ) {
+			showTraces( aContextEntries );
+		}
+		else if ( aController == AggregatedTracesViewController.class ) {
+			showAggregatedTraces( aContextEntries );
+		}
+		else if ( aController == CallsViewController.class ) {
+			showCalls( aContextEntries );
+		}
+		else if ( aController == AggregatedCallsViewController.class ) {
+			showAggregatedCalls( aContextEntries );
 		}
 	}
 
-	private void showTraces(final ContextEntry... aContextEntries) throws Exception {
-		this.toggleDisabledButton(this.ivTraces);
-		this.ivActiveController = Optional.of(TracesViewController.class);
-		this.loadPane(TracesViewController.class, aContextEntries);
+	private void showTraces( final ContextEntry... aContextEntries ) throws Exception {
+		this.toggleDisabledButton( this.ivTraces );
+		this.ivActiveController = Optional.of( TracesViewController.class );
+		this.loadPane( TracesViewController.class, aContextEntries );
 	}
-	
-	private void showAggregatedTraces(final ContextEntry... aContextEntries) throws Exception {
-		this.toggleDisabledButton(this.ivAggregatedtraces);
-		this.ivActiveController = Optional.of(AggregatedTracesViewController.class);
-		this.loadPane(AggregatedTracesViewController.class, aContextEntries);
+
+	private void showAggregatedTraces( final ContextEntry... aContextEntries ) throws Exception {
+		this.toggleDisabledButton( this.ivAggregatedtraces );
+		this.ivActiveController = Optional.of( AggregatedTracesViewController.class );
+		this.loadPane( AggregatedTracesViewController.class, aContextEntries );
 	}
-	
-	private void showAggregatedCalls(final ContextEntry... aContextEntries) throws Exception {
-		this.toggleDisabledButton(this.ivAggregatedcalls);
-		this.ivActiveController = Optional.of(AggregatedCallsViewController.class);
-		this.loadPane(AggregatedCallsViewController.class, aContextEntries);
-	}
-	
-	@ErrorHandling
-	public void showAggregatedTraces() throws Exception {
-		this.showAggregatedTraces(new ContextEntry[0]);
+
+	private void showAggregatedCalls( final ContextEntry... aContextEntries ) throws Exception {
+		this.toggleDisabledButton( this.ivAggregatedcalls );
+		this.ivActiveController = Optional.of( AggregatedCallsViewController.class );
+		this.loadPane( AggregatedCallsViewController.class, aContextEntries );
 	}
 
 	@ErrorHandling
-	public void showCalls() throws Exception {
-		this.showCalls(new ContextEntry[0]);
+	public void showAggregatedTraces( ) throws Exception {
+		this.showAggregatedTraces( new ContextEntry[0] );
 	}
 
 	@ErrorHandling
-	public void showCalls(final ContextEntry... aContextEntries) throws Exception {
-		this.toggleDisabledButton(this.ivCalls);
-		this.ivActiveController = Optional.of(CallsViewController.class);
-		this.loadPane(CallsViewController.class, aContextEntries);
+	public void showCalls( ) throws Exception {
+		this.showCalls( new ContextEntry[0] );
 	}
 
 	@ErrorHandling
-	public void showAggregatedCalls() throws Exception {
-		this.showAggregatedCalls(new ContextEntry[0]);
+	public void showCalls( final ContextEntry... aContextEntries ) throws Exception {
+		this.toggleDisabledButton( this.ivCalls );
+		this.ivActiveController = Optional.of( CallsViewController.class );
+		this.loadPane( CallsViewController.class, aContextEntries );
 	}
 
 	@ErrorHandling
-	public void showStatistics() throws Exception {
-		this.toggleDisabledButton(this.ivStatistics);
-		this.ivActiveController = Optional.of(MonitoringStatisticsViewController.class);
-		this.loadPane(MonitoringStatisticsViewController.class);
+	public void showAggregatedCalls( ) throws Exception {
+		this.showAggregatedCalls( new ContextEntry[0] );
 	}
 
 	@ErrorHandling
-	public void showImportDialog() {
-		final Preferences preferences = Preferences.userNodeForPackage(MainController.class);
-		final File initialDirectory = new File(preferences.get(MainController.KEY_LAST_IMPORT_PATH, "."));
+	public void showStatistics( ) throws Exception {
+		this.toggleDisabledButton( this.ivStatistics );
+		this.ivActiveController = Optional.of( MonitoringStatisticsViewController.class );
+		this.loadPane( MonitoringStatisticsViewController.class );
+	}
 
-		final DirectoryChooser directoryChooser = new DirectoryChooser();
-		if (initialDirectory.exists()) {
-			directoryChooser.setInitialDirectory(initialDirectory);
+	@ErrorHandling
+	public void showImportDialog( ) {
+		final Preferences preferences = Preferences.userNodeForPackage( MainController.class );
+		final File initialDirectory = new File( preferences.get( MainController.KEY_LAST_IMPORT_PATH, "." ) );
+
+		final DirectoryChooser directoryChooser = new DirectoryChooser( );
+		if ( initialDirectory.exists( ) ) {
+			directoryChooser.setInitialDirectory( initialDirectory );
 		}
-		final File selectedDirectory = directoryChooser.showDialog((this.ivView.getScene().getWindow()));
-		if (null != selectedDirectory) {
-			this.ivView.setCursor(Cursor.WAIT);
-			this.ivDataModel.loadMonitoringLogFromFS(selectedDirectory);
-			this.ivView.setCursor(Cursor.DEFAULT);
+		final File selectedDirectory = directoryChooser.showDialog( (this.ivView.getScene( ).getWindow( )) );
+		if ( null != selectedDirectory ) {
+			this.ivView.setCursor( Cursor.WAIT );
+			this.ivDataModel.loadMonitoringLogFromFS( selectedDirectory );
+			this.ivView.setCursor( Cursor.DEFAULT );
 
-			preferences.put(MainController.KEY_LAST_IMPORT_PATH, selectedDirectory.getAbsolutePath());
+			preferences.put( MainController.KEY_LAST_IMPORT_PATH, selectedDirectory.getAbsolutePath( ) );
 			try {
-				preferences.flush();
-			} catch (final BackingStoreException ex) {
-				MainController.LOGGER.error(ex);
+				preferences.flush( );
+			}
+			catch ( final BackingStoreException ex ) {
+				MainController.LOGGER.error( ex );
 			}
 		}
 	}
 
 	@ErrorHandling
-	public void showSettings() throws Exception {
-		final long propertiesVersionPre = PropertiesModel.getInstance().getVersion();
-		this.loadDialogPane(SettingsDialogViewController.class);
+	public void showSettings( ) throws Exception {
+		final long propertiesVersionPre = PropertiesModel.getInstance( ).getVersion( );
+		this.loadDialogPane( SettingsDialogViewController.class );
 
-		if (this.ivActiveController.isPresent()) {
-			final long propertiesVersionPost = PropertiesModel.getInstance().getVersion();
-			if (propertiesVersionPre != propertiesVersionPost) {
-				cvPaneDataCache.clear();
-				cvControllerCache.clear();
-				this.loadPane(this.ivActiveController.get());
+		if ( this.ivActiveController.isPresent( ) ) {
+			final long propertiesVersionPost = PropertiesModel.getInstance( ).getVersion( );
+			if ( propertiesVersionPre != propertiesVersionPost ) {
+				cvPaneDataCache.clear( );
+				cvControllerCache.clear( );
+				this.loadPane( this.ivActiveController.get( ) );
 			}
 		}
 	}
 
 	@ErrorHandling
-	public void showAbout() throws Exception {
-		this.loadDialogPane(AboutDialogViewController.class);
+	public void showAbout( ) throws Exception {
+		this.loadDialogPane( AboutDialogViewController.class );
 	}
 
 	@ErrorHandling
-	public void showBugReporting() throws Exception {
-		this.loadDialogPane(BugReportingDialogViewController.class);
+	public void showBugReporting( ) throws Exception {
+		this.loadDialogPane( BugReportingDialogViewController.class );
 	}
 
 	@ErrorHandling
-	public void close() {
-		final Window window = this.ivView.getScene().getWindow();
-		if (window instanceof Stage) {
-			((Stage) window).close();
+	public void close( ) {
+		final Window window = this.ivView.getScene( ).getWindow( );
+		if ( window instanceof Stage ) {
+			((Stage) window).close( );
 		}
 	}
 
-	private void toggleDisabledButton(final Button aDisabledButton) {
-		this.ivDisabledButton.ifPresent(b -> b.setDisable(false));
-		this.ivDisabledButton = Optional.of(aDisabledButton);
-		aDisabledButton.setDisable(true);
+	private void toggleDisabledButton( final Button aDisabledButton ) {
+		this.ivDisabledButton.ifPresent( b -> b.setDisable( false ) );
+		this.ivDisabledButton = Optional.of( aDisabledButton );
+		aDisabledButton.setDisable( true );
 	}
 
-	private void loadPane(final Class<? extends AbstractController> aControllerClass, final ContextEntry... aArguments) throws Exception {
-		final PaneData paneData = MainController.loadPaneData(aControllerClass, aArguments);
+	private void loadPane( final Class<? extends AbstractController> aControllerClass, final ContextEntry... aArguments ) throws Exception {
+		final PaneData paneData = MainController.loadPaneData( aControllerClass, aArguments );
 
-		this.ivContent.getChildren().clear();
-		this.ivContent.getStylesheets().clear();
+		this.ivContent.getChildren( ).clear( );
+		this.ivContent.getStylesheets( ).clear( );
 
-		this.ivContent.getStylesheets().add(paneData.getStylesheetURL());
-		this.ivContent.getChildren().setAll(paneData.getNode());
+		this.ivContent.getStylesheets( ).add( paneData.getStylesheetURL( ) );
+		this.ivContent.getChildren( ).setAll( paneData.getNode( ) );
 	}
 
-	private void loadDialogPane(final Class<? extends AbstractController> aControllerClass) throws Exception {
-		final PaneData paneData = MainController.loadPaneData(aControllerClass);
+	private void loadDialogPane( final Class<? extends AbstractController> aControllerClass ) throws Exception {
+		final PaneData paneData = MainController.loadPaneData( aControllerClass );
 
-		final Parent parent = (Parent) paneData.getNode();
-		Scene scene = parent.getScene();
-		if (scene == null) {
-			scene = new Scene(parent);
+		final Parent parent = (Parent) paneData.getNode( );
+		Scene scene = parent.getScene( );
+		if ( scene == null ) {
+			scene = new Scene( parent );
 		}
-		scene.getStylesheets().add(paneData.ivStylesheetURL);
+		scene.getStylesheets( ).add( paneData.ivStylesheetURL );
 
-		final Stage dialogStage = new Stage();
-		dialogStage.getIcons().add(new Image(KIEKER_LOGO_PNG));
-		dialogStage.setTitle(paneData.getTitle());
-		dialogStage.setResizable(false);
-		dialogStage.initModality(Modality.WINDOW_MODAL);
-		dialogStage.initOwner((this.ivView.getScene().getWindow()));
-		dialogStage.setScene(scene);
-		dialogStage.showAndWait();
+		final Stage dialogStage = new Stage( );
+		dialogStage.getIcons( ).add( new Image( KIEKER_LOGO_PNG ) );
+		dialogStage.setTitle( paneData.getTitle( ) );
+		dialogStage.setResizable( false );
+		dialogStage.initModality( Modality.WINDOW_MODAL );
+		dialogStage.initOwner( (this.ivView.getScene( ).getWindow( )) );
+		dialogStage.setScene( scene );
+		dialogStage.showAndWait( );
 	}
 
-	public static void loadMainPane(final Stage aStage) throws Exception {
+	public static void loadMainPane( final Stage aStage ) throws Exception {
 		try {
-			MainController.cvInstance = new MainController();
-			final URL resource = MainController.class.getClassLoader()
-					.getResource("kieker/diagnosis/view/View.fxml");
-			final FXMLLoader fxmlLoader = new FXMLLoader();
-			fxmlLoader.setResources(ResourceBundle.getBundle("kieker.diagnosis.view.view", Locale.getDefault()));
-			fxmlLoader.setLocation(resource);
-			fxmlLoader.setController(MainController.cvInstance);
-			final Pane pane = (Pane) fxmlLoader.load();
+			MainController.cvInstance = new MainController( );
+			final URL resource = MainController.class.getClassLoader( ).getResource( "kieker/diagnosis/view/View.fxml" );
+			final FXMLLoader fxmlLoader = new FXMLLoader( );
+			fxmlLoader.setResources( ResourceBundle.getBundle( "kieker.diagnosis.view.view", Locale.getDefault( ) ) );
+			fxmlLoader.setLocation( resource );
+			fxmlLoader.setController( MainController.cvInstance );
+			final Pane pane = (Pane) fxmlLoader.load( );
 
-			final Scene root = new Scene(pane);
-			aStage.setScene(root);
+			final Scene root = new Scene( pane );
+			aStage.setScene( root );
 
-			aStage.getIcons().add(new Image(KIEKER_LOGO_PNG));
-			aStage.setTitle("Kieker Trace Diagnosis - 1.2.0-SNAPSHOT");
-			aStage.setMaximized(true);
+			aStage.getIcons( ).add( new Image( KIEKER_LOGO_PNG ) );
+			aStage.setTitle( "Kieker Trace Diagnosis - 1.2.0-SNAPSHOT" );
+			aStage.setMaximized( true );
 
-			MainController.showSplashScreen(root);
+			MainController.showSplashScreen( root );
 
-			aStage.show();
-		} catch (final IOException ex) {
-			MainController.LOGGER.error(ex);
+			aStage.show( );
+		}
+		catch ( final IOException ex ) {
+			MainController.LOGGER.error( ex );
 			throw ex;
 		}
 	}
 
-	private static void showSplashScreen(final Scene aRoot) {
-		final ImageView imageView = new ImageView("splashscreen.png");
-		final Pane parent = new Pane(imageView);
-		final Scene scene = new Scene(parent);
+	private static void showSplashScreen( final Scene aRoot ) {
+		final ImageView imageView = new ImageView( "splashscreen.png" );
+		final Pane parent = new Pane( imageView );
+		final Scene scene = new Scene( parent );
 
-		final Stage stage = new Stage();
-		stage.setResizable(false);
-		stage.initStyle(StageStyle.UNDECORATED);
-		stage.initModality(Modality.WINDOW_MODAL);
-		stage.initOwner(aRoot.getWindow());
-		stage.setScene(scene);
+		final Stage stage = new Stage( );
+		stage.setResizable( false );
+		stage.initStyle( StageStyle.UNDECORATED );
+		stage.initModality( Modality.WINDOW_MODAL );
+		stage.initOwner( aRoot.getWindow( ) );
+		stage.setScene( scene );
 
-		final FadeTransition transition = new FadeTransition(Duration.millis(3000), stage.getScene().getRoot());
-		transition.setFromValue(1.0);
-		transition.setToValue(0.0);
-		final EventHandler<ActionEvent> handler = t -> stage.hide();
-		transition.setOnFinished(handler);
-		transition.play();
+		final FadeTransition transition = new FadeTransition( Duration.millis( 3000 ), stage.getScene( ).getRoot( ) );
+		transition.setFromValue( 1.0 );
+		transition.setToValue( 0.0 );
+		final EventHandler<ActionEvent> handler = t -> stage.hide( );
+		transition.setOnFinished( handler );
+		transition.play( );
 
-		stage.showAndWait();
+		stage.showAndWait( );
 	}
 
-	private static PaneData loadPaneData(final Class<? extends AbstractController> aControllerClass, final ContextEntry... aArguments)
-			throws Exception {
-		
-		if (cvPaneDataCache.containsKey(aControllerClass) && PropertiesModel.getInstance().isCacheViews()) {
-			final Context context = new Context(aArguments);
-			cvControllerCache.get(aControllerClass).setContext(context);
-			return cvPaneDataCache.get(aControllerClass);
+	private static PaneData loadPaneData( final Class<? extends AbstractController> aControllerClass, final ContextEntry... aArguments ) throws Exception {
+
+		if ( cvPaneDataCache.containsKey( aControllerClass ) && PropertiesModel.getInstance( ).isCacheViews( ) ) {
+			final Context context = new Context( aArguments );
+			cvControllerCache.get( aControllerClass ).setContext( context );
+			return cvPaneDataCache.get( aControllerClass );
 		}
-		
-		final long tin = System.currentTimeMillis();
-		
-		final String baseName = aControllerClass.getCanonicalName().replace("Controller", "").replace(".controller.",
-				".view.");
-		final String viewFXMLName = baseName.replace(".", "/") + ".fxml";
-		final String cssName = baseName.replace(".", "/") + ".css";
-		final String bundleBaseName = baseName.toLowerCase(Locale.ROOT);
 
-		final Constructor<? extends AbstractController> constructor = aControllerClass.getConstructor(Context.class);
-		final Context context = new Context(aArguments);
-		final AbstractController controller = constructor.newInstance(context);
+		final long tin = System.currentTimeMillis( );
 
-		final URL viewResource = MainController.class.getClassLoader().getResource(viewFXMLName);
-		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
-		final FXMLLoader loader = new FXMLLoader();
-		loader.setController(controller);
-		loader.setLocation(viewResource);
-		loader.setResources(resourceBundle);
-		final Node node = (Node) loader.load();
-		final URL cssResource = MainController.class.getClassLoader().getResource(cssName);
-		final String title = (resourceBundle.containsKey("title") ? resourceBundle.getString("title") : "");
+		final String baseName = aControllerClass.getCanonicalName( ).replace( "Controller", "" ).replace( ".controller.", ".view." );
+		final String viewFXMLName = baseName.replace( ".", "/" ) + ".fxml";
+		final String cssName = baseName.replace( ".", "/" ) + ".css";
+		final String bundleBaseName = baseName.toLowerCase( Locale.ROOT );
 
-		final PaneData paneData = new PaneData(node, title, cssResource.toExternalForm());
+		final Constructor<? extends AbstractController> constructor = aControllerClass.getConstructor( Context.class );
+		final Context context = new Context( aArguments );
+		final AbstractController controller = constructor.newInstance( context );
 
-		if (PropertiesModel.getInstance().isCacheViews()) {
-			cvPaneDataCache.put(aControllerClass, paneData);
-			cvControllerCache.put(aControllerClass, controller);
+		final URL viewResource = MainController.class.getClassLoader( ).getResource( viewFXMLName );
+		final ResourceBundle resourceBundle = ResourceBundle.getBundle( bundleBaseName, Locale.getDefault( ) );
+		final FXMLLoader loader = new FXMLLoader( );
+		loader.setController( controller );
+		loader.setLocation( viewResource );
+		loader.setResources( resourceBundle );
+		final Node node = (Node) loader.load( );
+		final URL cssResource = MainController.class.getClassLoader( ).getResource( cssName );
+		final String title = (resourceBundle.containsKey( "title" ) ? resourceBundle.getString( "title" ) : "");
+
+		final PaneData paneData = new PaneData( node, title, cssResource.toExternalForm( ) );
+
+		if ( PropertiesModel.getInstance( ).isCacheViews( ) ) {
+			cvPaneDataCache.put( aControllerClass, paneData );
+			cvControllerCache.put( aControllerClass, controller );
 		}
-		
-		final long tout = System.currentTimeMillis();
-		MainController.LOGGER
-				.info("View for '" + aControllerClass.getCanonicalName() + "' loaded in " + (tout - tin) + "ms");
+
+		final long tout = System.currentTimeMillis( );
+		MainController.LOGGER.info( "View for '" + aControllerClass.getCanonicalName( ) + "' loaded in " + (tout - tin) + "ms" );
 
 		return paneData;
 	}
 
-	public static MainController instance() {
+	public static MainController instance( ) {
 		return MainController.cvInstance;
 	}
 
-	public void jumpToTrace(final OperationCall aCall) throws Exception {
-		this.showTraces(new ContextEntry(ContextKey.OPERATION_CALL, aCall));
+	public void jumpToTrace( final OperationCall aCall ) throws Exception {
+		this.showTraces( new ContextEntry( ContextKey.OPERATION_CALL, aCall ) );
 	}
 
-	public void jumpToCalls(final AggregatedOperationCall aCall) throws Exception {
-		this.showCalls(new ContextEntry(ContextKey.AGGREGATED_OPERATION_CALL, aCall));
+	public void jumpToCalls( final AggregatedOperationCall aCall ) throws Exception {
+		this.showCalls( new ContextEntry( ContextKey.AGGREGATED_OPERATION_CALL, aCall ) );
 	}
 
-	public void exportToCSV(final CSVDataCollector aDataCollector) throws IOException {
-		final Preferences preferences = Preferences.userNodeForPackage(MainController.class);
-		final File initialDirectory = new File(preferences.get(MainController.KEY_LAST_EXPORT_PATH, "."));
+	public void exportToCSV( final CSVDataCollector aDataCollector ) throws IOException {
+		final Preferences preferences = Preferences.userNodeForPackage( MainController.class );
+		final File initialDirectory = new File( preferences.get( MainController.KEY_LAST_EXPORT_PATH, "." ) );
 
-		final FileChooser fileChooser = new FileChooser();
-		if (initialDirectory.exists()) {
-			fileChooser.setInitialDirectory(initialDirectory);
+		final FileChooser fileChooser = new FileChooser( );
+		if ( initialDirectory.exists( ) ) {
+			fileChooser.setInitialDirectory( initialDirectory );
 		}
 
-		final File selectedFile = fileChooser.showSaveDialog((this.ivView.getScene().getWindow()));
-		if (null != selectedFile) {
-			final CSVData data = aDataCollector.collectData();
-			CSVExporter.exportToCSV(data, selectedFile);
-			
-			preferences.put(MainController.KEY_LAST_EXPORT_PATH, selectedFile.getParent());
+		final File selectedFile = fileChooser.showSaveDialog( (this.ivView.getScene( ).getWindow( )) );
+		if ( null != selectedFile ) {
+			final CSVData data = aDataCollector.collectData( );
+			CSVExporter.exportToCSV( data, selectedFile );
+
+			preferences.put( MainController.KEY_LAST_EXPORT_PATH, selectedFile.getParent( ) );
 			try {
-				preferences.flush();
-			} catch (final BackingStoreException ex) {
-				MainController.LOGGER.error(ex);
+				preferences.flush( );
+			}
+			catch ( final BackingStoreException ex ) {
+				MainController.LOGGER.error( ex );
 			}
 		}
 	}
-	
-	public <T extends AbstractController> void saveAsFavorite(final Object aFilterContent, final Class<T> aFilterLoader) {
+
+	public <T extends AbstractController> void saveAsFavorite( final Object aFilterContent, final Class<T> aFilterLoader ) {
 		// Ask the user for the name of the favorite
-		final ResourceBundle resourceBundle = ResourceBundle.getBundle("kieker.diagnosis.view.view", Locale.getDefault());
-		
-		final TextInputDialog textInputDialog = new TextInputDialog();
-		textInputDialog.setTitle(resourceBundle.getString("newFilterFavorite"));
-		textInputDialog.setHeaderText(resourceBundle.getString("newFilterFavoriteName"));
-		final Optional<String> result = textInputDialog.showAndWait();
-		
-		if (result.isPresent()) {
+		final ResourceBundle resourceBundle = ResourceBundle.getBundle( "kieker.diagnosis.view.view", Locale.getDefault( ) );
+
+		final TextInputDialog textInputDialog = new TextInputDialog( );
+		textInputDialog.setTitle( resourceBundle.getString( "newFilterFavorite" ) );
+		textInputDialog.setHeaderText( resourceBundle.getString( "newFilterFavoriteName" ) );
+		final Optional<String> result = textInputDialog.showAndWait( );
+
+		if ( result.isPresent( ) ) {
 			// If necessary, add a horizontal line first
-			if (ivFavoritesAvailable == 0) {				
-				final Separator separator = new Separator();
-				VBox.setMargin(separator, new Insets(10, 0, 0, 10));
-				ivLeftButtonBox.getChildren().add(separator);
+			if ( ivFavoritesAvailable == 0 ) {
+				final Separator separator = new Separator( );
+				VBox.setMargin( separator, new Insets( 10, 0, 0, 10 ) );
+				ivLeftButtonBox.getChildren( ).add( separator );
 			}
-			
+
 			// Now we can add the button for the favorite and the button to remove it
-			final HBox hbox = new HBox();
-			hbox.setSpacing(10);
-			VBox.setMargin(hbox, new Insets(10, 0, 0, 10));
-			
-			final Button favoriteButton = new Button(result.get());
-			favoriteButton.setPrefWidth(155);
-			favoriteButton.setOnAction(event -> {
-				loadFavorite(aFilterContent, aFilterLoader);
-			});
-			hbox.getChildren().add(favoriteButton);
-			
-			final Button removeButton = new Button("-");
-			removeButton.setPrefWidth(20);
-			removeButton.setOnAction(event -> {
-				ivLeftButtonBox.getChildren().remove(hbox);
+			final HBox hbox = new HBox( );
+			hbox.setSpacing( 10 );
+			VBox.setMargin( hbox, new Insets( 10, 0, 0, 10 ) );
+
+			final Button favoriteButton = new Button( result.get( ) );
+			favoriteButton.setPrefWidth( 155 );
+			favoriteButton.setOnAction( event -> {
+				loadFavorite( aFilterContent, aFilterLoader );
+			} );
+			hbox.getChildren( ).add( favoriteButton );
+
+			final Button removeButton = new Button( "-" );
+			removeButton.setPrefWidth( 20 );
+			removeButton.setOnAction( event -> {
+				ivLeftButtonBox.getChildren( ).remove( hbox );
 				ivFavoritesAvailable--;
-				
-				if (ivFavoritesAvailable == 0) {
-					final Optional<Node> first = ivLeftButtonBox.getChildren().stream().filter(node -> node instanceof Separator).findFirst();
-					if (first.isPresent()) {
-						ivLeftButtonBox.getChildren().remove(first.get());
+
+				if ( ivFavoritesAvailable == 0 ) {
+					final Optional<Node> first = ivLeftButtonBox.getChildren( ).stream( ).filter( node -> node instanceof Separator ).findFirst( );
+					if ( first.isPresent( ) ) {
+						ivLeftButtonBox.getChildren( ).remove( first.get( ) );
 					}
 				}
-			});
-			hbox.getChildren().add(removeButton);
-			
+			} );
+			hbox.getChildren( ).add( removeButton );
+
 			ivFavoritesAvailable++;
-			ivLeftButtonBox.getChildren().add(hbox);
+			ivLeftButtonBox.getChildren( ).add( hbox );
 		}
 	}
 
 	@ErrorHandling
-	private <T extends AbstractController> void loadFavorite(final Object aFilterContent, final Class<T> aFilterLoader) {
+	private <T extends AbstractController> void loadFavorite( final Object aFilterContent, final Class<T> aFilterLoader ) {
 		try {
-			final ContextEntry contextEntry = new ContextEntry(ContextKey.FILTER_CONTENT, aFilterContent);
-			showCorrespondingView(aFilterLoader, contextEntry); 
-		} catch (final Exception ex) {
-			silentRethrow(ex);
+			final ContextEntry contextEntry = new ContextEntry( ContextKey.FILTER_CONTENT, aFilterContent );
+			showCorrespondingView( aFilterLoader, contextEntry );
+		}
+		catch ( final Exception ex ) {
+			silentRethrow( ex );
 		}
 	}
-	
-	@SuppressWarnings("unchecked")
-	private static <T extends Throwable> RuntimeException silentRethrow(final Throwable aThrowable) throws T {
-	    throw (T) aThrowable; 
+
+	@SuppressWarnings ( "unchecked" )
+	private static <T extends Throwable> RuntimeException silentRethrow( final Throwable aThrowable ) throws T {
+		throw (T) aThrowable;
 	}
-	
+
 	private static class PaneData {
 
 		private final Node ivNode;
 		private final String ivTitle;
 		private final String ivStylesheetURL;
 
-		public PaneData(final Node aNode, final String aTitle, final String aStylesheetURL) {
+		public PaneData( final Node aNode, final String aTitle, final String aStylesheetURL ) {
 			this.ivNode = aNode;
 			this.ivTitle = aTitle;
 			this.ivStylesheetURL = aStylesheetURL;
 		}
 
-		public Node getNode() {
+		public Node getNode( ) {
 			return this.ivNode;
 		}
 
-		public String getTitle() {
+		public String getTitle( ) {
 			return this.ivTitle;
 		}
 
-		public String getStylesheetURL() {
+		public String getStylesheetURL( ) {
 			return this.ivStylesheetURL;
 		}
 

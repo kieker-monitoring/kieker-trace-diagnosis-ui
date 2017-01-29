@@ -25,37 +25,37 @@ import org.junit.Test;
 public final class OperationCallTest extends AbstractOperationCallTest<OperationCall> {
 
 	@Test
-	public void addingChildrenShouldUpdateTheParent() {
-		final OperationCall call = new OperationCall("", "", "", 42, 0);
-		final OperationCall child = new OperationCall("", "", "", 42, 0);
+	public void addingChildrenShouldUpdateTheParent( ) {
+		final OperationCall call = new OperationCall( "", "", "", 42, 0 );
+		final OperationCall child = new OperationCall( "", "", "", 42, 0 );
 
-		call.addChild(child);
+		call.addChild( child );
 
-		assertThat(child.getParent(), is(call));
+		assertThat( child.getParent( ), is( call ) );
 	}
 
 	@Test
-	public void equalsForDifferentTIDsShouldWork() {
-		final OperationCall fstCall = new OperationCall("container", "component", "operation", 42, 0);
-		final OperationCall sndCall = new OperationCall("container", "component", "operation", 43, 0);
+	public void equalsForDifferentTIDsShouldWork( ) {
+		final OperationCall fstCall = new OperationCall( "container", "component", "operation", 42, 0 );
+		final OperationCall sndCall = new OperationCall( "container", "component", "operation", 43, 0 );
 
-		assertTrue(fstCall.isEqualTo(sndCall));
+		assertTrue( fstCall.isEqualTo( sndCall ) );
 	}
 
 	@Test
-	public void equalsForDifferentDurationsShouldWork() {
-		final OperationCall fstCall = new OperationCall("container", "component", "operation", 42, 0);
-		final OperationCall sndCall = new OperationCall("container", "component", "operation", 42, 0);
+	public void equalsForDifferentDurationsShouldWork( ) {
+		final OperationCall fstCall = new OperationCall( "container", "component", "operation", 42, 0 );
+		final OperationCall sndCall = new OperationCall( "container", "component", "operation", 42, 0 );
 
-		fstCall.setDuration(100);
-		sndCall.setDuration(200);
+		fstCall.setDuration( 100 );
+		sndCall.setDuration( 200 );
 
-		assertTrue(fstCall.isEqualTo(sndCall));
+		assertTrue( fstCall.isEqualTo( sndCall ) );
 	}
 
 	@Override
-	protected OperationCall createOperationCall(final String container, final String component, final String operation, final String failedCause) {
-		return new OperationCall(container, component, operation, failedCause, -1, 0);
+	protected OperationCall createOperationCall( final String container, final String component, final String operation, final String failedCause ) {
+		return new OperationCall( container, component, operation, failedCause, -1, 0 );
 	}
 
 }

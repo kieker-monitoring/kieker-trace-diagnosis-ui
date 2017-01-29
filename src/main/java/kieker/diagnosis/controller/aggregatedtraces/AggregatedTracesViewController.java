@@ -48,172 +48,202 @@ import kieker.diagnosis.util.NameConverter;
  */
 public final class AggregatedTracesViewController extends AbstractController {
 
-	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> ivSelection = new SimpleObjectProperty<>(Optional.empty());
+	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> ivSelection = new SimpleObjectProperty<>( Optional.empty( ) );
 
-	@FXML private TreeTableView<AggregatedOperationCall> ivTreetable;
+	@FXML
+	private TreeTableView<AggregatedOperationCall> ivTreetable;
 
-	@FXML private RadioButton ivShowAllButton;
-	@FXML private RadioButton ivShowJustFailedButton;
-	@FXML private RadioButton ivShowJustFailureContainingButton;
-	@FXML private RadioButton ivShowJustSuccessful;
+	@FXML
+	private RadioButton ivShowAllButton;
+	@FXML
+	private RadioButton ivShowJustFailedButton;
+	@FXML
+	private RadioButton ivShowJustFailureContainingButton;
+	@FXML
+	private RadioButton ivShowJustSuccessful;
 
-	@FXML private TextField ivFilterContainer;
-	@FXML private TextField ivFilterComponent;
-	@FXML private TextField ivFilterOperation;
-	@FXML private TextField ivFilterException;
+	@FXML
+	private TextField ivFilterContainer;
+	@FXML
+	private TextField ivFilterComponent;
+	@FXML
+	private TextField ivFilterOperation;
+	@FXML
+	private TextField ivFilterException;
 
-	@FXML private TextField ivMedianDuration;
-	@FXML private TextField ivTotalDuration;
-	@FXML private TextField ivMinDuration;
-	@FXML private TextField ivAvgDuration;
-	@FXML private TextField ivMaxDuration;
-	@FXML private TextField ivTraceDepth;
-	@FXML private TextField ivTraceSize;
-	@FXML private TextField ivContainer;
-	@FXML private TextField ivComponent;
-	@FXML private TextField ivOperation;
-	@FXML private TextField ivFailed;
-	@FXML private TextField ivCalls;
+	@FXML
+	private TextField ivMedianDuration;
+	@FXML
+	private TextField ivTotalDuration;
+	@FXML
+	private TextField ivMinDuration;
+	@FXML
+	private TextField ivAvgDuration;
+	@FXML
+	private TextField ivMaxDuration;
+	@FXML
+	private TextField ivTraceDepth;
+	@FXML
+	private TextField ivTraceSize;
+	@FXML
+	private TextField ivContainer;
+	@FXML
+	private TextField ivComponent;
+	@FXML
+	private TextField ivOperation;
+	@FXML
+	private TextField ivFailed;
+	@FXML
+	private TextField ivCalls;
 
-	@FXML private TextField ivCounter;
+	@FXML
+	private TextField ivCounter;
 
-	@FXML private ResourceBundle resources;
+	@FXML
+	private ResourceBundle resources;
 
-	private Predicate<AggregatedOperationCall> ivPredicate = FilterUtility.alwaysTrue();
+	private Predicate<AggregatedOperationCall> ivPredicate = FilterUtility.alwaysTrue( );
 
-	public AggregatedTracesViewController(final Context aContext) {
-		super(aContext);
+	public AggregatedTracesViewController( final Context aContext ) {
+		super( aContext );
 	}
 
 	@ErrorHandling
-	public void initialize() {
-		final Object filterContent = getContext().get(ContextKey.FILTER_CONTENT);
-		if (filterContent instanceof FilterContent) {
-			loadFilterContent((FilterContent) filterContent);
-			useFilter();
-		} else {
-			this.reloadTreetable();
+	public void initialize( ) {
+		final Object filterContent = getContext( ).get( ContextKey.FILTER_CONTENT );
+		if ( filterContent instanceof FilterContent ) {
+			loadFilterContent( (FilterContent) filterContent );
+			useFilter( );
 		}
-		
+		else {
+			this.reloadTreetable( );
+		}
 
-		final DataModel dataModel = DataModel.getInstance();
-		dataModel.getAggregatedTraces().addListener((final Change<? extends AggregatedTrace> c) -> this.reloadTreetable());
+		final DataModel dataModel = DataModel.getInstance( );
+		dataModel.getAggregatedTraces( ).addListener( ( final Change<? extends AggregatedTrace> c ) -> this.reloadTreetable( ) );
 
-		this.ivSelection.addListener(e -> this.updateDetailPanel());
+		this.ivSelection.addListener( e -> this.updateDetailPanel( ) );
 	}
-	
+
 	@Override
-	protected void reinitialize() {
-		final Object filterContent = getContext().get(ContextKey.FILTER_CONTENT);
-		if (filterContent instanceof FilterContent) {
-			loadFilterContent((FilterContent) filterContent);
-			useFilter();
-		} 
+	protected void reinitialize( ) {
+		final Object filterContent = getContext( ).get( ContextKey.FILTER_CONTENT );
+		if ( filterContent instanceof FilterContent ) {
+			loadFilterContent( (FilterContent) filterContent );
+			useFilter( );
+		}
 	}
-	
-	private void updateDetailPanel() {
-		if (this.ivSelection.get().isPresent()) {
-			final AggregatedOperationCall call = this.ivSelection.get().get();
-			final TimeUnit sourceTimeUnit = DataModel.getInstance().getTimeUnit();
-			final TimeUnit targetTimeUnit = PropertiesModel.getInstance().getTimeUnit();
 
-			this.ivContainer.setText(call.getContainer());
-			this.ivComponent.setText(call.getComponent());
-			this.ivOperation.setText(call.getOperation());
-			this.ivMinDuration.setText(NameConverter.toDurationString(call.getMinDuration(), sourceTimeUnit, targetTimeUnit));
-			this.ivMaxDuration.setText(NameConverter.toDurationString(call.getMaxDuration(), sourceTimeUnit, targetTimeUnit));
-			this.ivMedianDuration.setText(NameConverter.toDurationString(call.getMedianDuration(), sourceTimeUnit, targetTimeUnit));
-			this.ivTotalDuration.setText(NameConverter.toDurationString(call.getTotalDuration(), sourceTimeUnit, targetTimeUnit));
-			this.ivAvgDuration.setText(NameConverter.toDurationString(call.getMeanDuration(), sourceTimeUnit, targetTimeUnit));
-			this.ivCalls.setText(Integer.toString(call.getCalls()));
-			this.ivTraceDepth.setText(Integer.toString(call.getStackDepth()));
-			this.ivTraceSize.setText(Integer.toString(call.getStackSize()));
-			this.ivFailed.setText(call.getFailedCause() != null ? call.getFailedCause() : "N/A");
-		} else {
-			this.ivContainer.setText("N/A");
-			this.ivComponent.setText("N/A");
-			this.ivOperation.setText("N/A");
-			this.ivMinDuration.setText("N/A");
-			this.ivMaxDuration.setText("N/A");
-			this.ivMedianDuration.setText("N/A");
-			this.ivTotalDuration.setText("N/A");
-			this.ivAvgDuration.setText("N/A");
-			this.ivCalls.setText("N/A");
-			this.ivTraceDepth.setText("N/A");
-			this.ivTraceSize.setText("N/A");
-			this.ivFailed.setText("N/A");
+	private void updateDetailPanel( ) {
+		if ( this.ivSelection.get( ).isPresent( ) ) {
+			final AggregatedOperationCall call = this.ivSelection.get( ).get( );
+			final TimeUnit sourceTimeUnit = DataModel.getInstance( ).getTimeUnit( );
+			final TimeUnit targetTimeUnit = PropertiesModel.getInstance( ).getTimeUnit( );
+
+			this.ivContainer.setText( call.getContainer( ) );
+			this.ivComponent.setText( call.getComponent( ) );
+			this.ivOperation.setText( call.getOperation( ) );
+			this.ivMinDuration.setText( NameConverter.toDurationString( call.getMinDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			this.ivMaxDuration.setText( NameConverter.toDurationString( call.getMaxDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			this.ivMedianDuration.setText( NameConverter.toDurationString( call.getMedianDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			this.ivTotalDuration.setText( NameConverter.toDurationString( call.getTotalDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			this.ivAvgDuration.setText( NameConverter.toDurationString( call.getMeanDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			this.ivCalls.setText( Integer.toString( call.getCalls( ) ) );
+			this.ivTraceDepth.setText( Integer.toString( call.getStackDepth( ) ) );
+			this.ivTraceSize.setText( Integer.toString( call.getStackSize( ) ) );
+			this.ivFailed.setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : "N/A" );
+		}
+		else {
+			this.ivContainer.setText( "N/A" );
+			this.ivComponent.setText( "N/A" );
+			this.ivOperation.setText( "N/A" );
+			this.ivMinDuration.setText( "N/A" );
+			this.ivMaxDuration.setText( "N/A" );
+			this.ivMedianDuration.setText( "N/A" );
+			this.ivTotalDuration.setText( "N/A" );
+			this.ivAvgDuration.setText( "N/A" );
+			this.ivCalls.setText( "N/A" );
+			this.ivTraceDepth.setText( "N/A" );
+			this.ivTraceSize.setText( "N/A" );
+			this.ivFailed.setText( "N/A" );
 		}
 	}
 
 	@ErrorHandling
-	public void selectCall() {
-		final TreeItem<AggregatedOperationCall> selectedItem = this.ivTreetable.getSelectionModel().getSelectedItem();
-		if (selectedItem != null) {
-			this.ivSelection.set(Optional.ofNullable(selectedItem.getValue()));
+	public void selectCall( ) {
+		final TreeItem<AggregatedOperationCall> selectedItem = this.ivTreetable.getSelectionModel( ).getSelectedItem( );
+		if ( selectedItem != null ) {
+			this.ivSelection.set( Optional.ofNullable( selectedItem.getValue( ) ) );
 		}
 	}
 
 	@ErrorHandling
-	public void useFilter() {
-		final Predicate<AggregatedOperationCall> predicate1 = FilterUtility.useFilter(this.ivShowAllButton, this.ivShowJustSuccessful, this.ivShowJustFailedButton,
-				this.ivShowJustFailureContainingButton, AggregatedOperationCall::isFailed, AggregatedOperationCall::containsFailure);
-		final Predicate<AggregatedOperationCall> predicate2 = FilterUtility.useFilter(this.ivFilterContainer, AggregatedOperationCall::getContainer, PropertiesModel.getInstance().isSearchInEntireTrace());
-		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter(this.ivFilterComponent, AggregatedOperationCall::getComponent, PropertiesModel.getInstance().isSearchInEntireTrace());
-		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter(this.ivFilterOperation, AggregatedOperationCall::getOperation, PropertiesModel.getInstance().isSearchInEntireTrace());
-		final Predicate<AggregatedOperationCall> predicate5 = FilterUtility.useFilter(this.ivFilterException, (call -> call.isFailed() ? call.getFailedCause() : ""), PropertiesModel.getInstance().isSearchInEntireTrace());
+	public void useFilter( ) {
+		final Predicate<AggregatedOperationCall> predicate1 = FilterUtility.useFilter( this.ivShowAllButton, this.ivShowJustSuccessful,
+				this.ivShowJustFailedButton, this.ivShowJustFailureContainingButton, AggregatedOperationCall::isFailed,
+				AggregatedOperationCall::containsFailure );
+		final Predicate<AggregatedOperationCall> predicate2 = FilterUtility.useFilter( this.ivFilterContainer, AggregatedOperationCall::getContainer,
+				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
+		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter( this.ivFilterComponent, AggregatedOperationCall::getComponent,
+				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
+		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter( this.ivFilterOperation, AggregatedOperationCall::getOperation,
+				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
+		final Predicate<AggregatedOperationCall> predicate5 = FilterUtility.useFilter( this.ivFilterException,
+				(call -> call.isFailed( ) ? call.getFailedCause( ) : ""), PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
 
-		this.ivPredicate = predicate1.and(predicate2).and(predicate3).and(predicate4).and(predicate5);
-		this.reloadTreetable();
+		this.ivPredicate = predicate1.and( predicate2 ).and( predicate3 ).and( predicate4 ).and( predicate5 );
+		this.reloadTreetable( );
 	}
 
-	private void reloadTreetable() {
-		this.ivSelection.set(Optional.empty());
+	private void reloadTreetable( ) {
+		this.ivSelection.set( Optional.empty( ) );
 
-		final DataModel dataModel = DataModel.getInstance();
-		final List<AggregatedTrace> traces = dataModel.getAggregatedTraces();
-		final TreeItem<AggregatedOperationCall> root = new TreeItem<>();
-		final ObservableList<TreeItem<AggregatedOperationCall>> rootChildren = root.getChildren();
-		this.ivTreetable.setRoot(root);
-		this.ivTreetable.setShowRoot(false);
+		final DataModel dataModel = DataModel.getInstance( );
+		final List<AggregatedTrace> traces = dataModel.getAggregatedTraces( );
+		final TreeItem<AggregatedOperationCall> root = new TreeItem<>( );
+		final ObservableList<TreeItem<AggregatedOperationCall>> rootChildren = root.getChildren( );
+		this.ivTreetable.setRoot( root );
+		this.ivTreetable.setShowRoot( false );
 
-		traces.stream().map(trace -> trace.getRootOperationCall()).filter(this.ivPredicate).forEach(call -> rootChildren.add(new LazyAggregatedOperationCallTreeItem(call)));
+		traces.stream( ).map( trace -> trace.getRootOperationCall( ) ).filter( this.ivPredicate )
+				.forEach( call -> rootChildren.add( new LazyAggregatedOperationCallTreeItem( call ) ) );
 
-		this.ivCounter.textProperty().set(rootChildren.size() + " " + this.resources.getString("AggregatedTracesView.lblCounter.text"));
+		this.ivCounter.textProperty( ).set( rootChildren.size( ) + " " + this.resources.getString( "AggregatedTracesView.lblCounter.text" ) );
 	}
-	
+
 	@ErrorHandling
-	public void saveAsFavorite() {
-		MainController.instance().saveAsFavorite(saveFilterContent(), AggregatedTracesViewController.class);
+	public void saveAsFavorite( ) {
+		MainController.instance( ).saveAsFavorite( saveFilterContent( ), AggregatedTracesViewController.class );
 	}
-	
-	private FilterContent saveFilterContent() {
-		final FilterContent filterContent = new FilterContent();
-		
-		filterContent.setFilterComponent(ivFilterComponent.getText());
-		filterContent.setFilterContainer(ivFilterContainer.getText());
-		filterContent.setFilterException(ivFilterException.getText());
-		filterContent.setFilterOperation(ivFilterOperation.getText());
-		filterContent.setShowAllButton(ivShowAllButton.isSelected());
-		filterContent.setShowJustFailedButton(ivShowJustFailedButton.isSelected());
-		filterContent.setShowJustSuccessful(ivShowJustSuccessful.isSelected());
-		filterContent.setShowJustFailureContainingButton(ivShowJustFailureContainingButton.isSelected());
-		
+
+	private FilterContent saveFilterContent( ) {
+		final FilterContent filterContent = new FilterContent( );
+
+		filterContent.setFilterComponent( ivFilterComponent.getText( ) );
+		filterContent.setFilterContainer( ivFilterContainer.getText( ) );
+		filterContent.setFilterException( ivFilterException.getText( ) );
+		filterContent.setFilterOperation( ivFilterOperation.getText( ) );
+		filterContent.setShowAllButton( ivShowAllButton.isSelected( ) );
+		filterContent.setShowJustFailedButton( ivShowJustFailedButton.isSelected( ) );
+		filterContent.setShowJustSuccessful( ivShowJustSuccessful.isSelected( ) );
+		filterContent.setShowJustFailureContainingButton( ivShowJustFailureContainingButton.isSelected( ) );
+
 		return filterContent;
 	}
-	
-	private void loadFilterContent(final FilterContent aFilterContent) {
-		ivFilterComponent.setText(aFilterContent.getFilterComponent());
-		ivFilterContainer.setText(aFilterContent.getFilterContainer());
-		ivFilterException.setText(aFilterContent.getFilterException());
-		ivFilterOperation.setText(aFilterContent.getFilterOperation());
-		ivShowAllButton.setSelected(aFilterContent.isShowAllButton());
-		ivShowJustFailedButton.setSelected(aFilterContent.isShowJustFailedButton());
-		ivShowJustSuccessful.setSelected(aFilterContent.isShowJustSuccessful());
-		ivShowJustFailureContainingButton.setSelected(aFilterContent.isShowJustFailureContainingButton());
+
+	private void loadFilterContent( final FilterContent aFilterContent ) {
+		ivFilterComponent.setText( aFilterContent.getFilterComponent( ) );
+		ivFilterContainer.setText( aFilterContent.getFilterContainer( ) );
+		ivFilterException.setText( aFilterContent.getFilterException( ) );
+		ivFilterOperation.setText( aFilterContent.getFilterOperation( ) );
+		ivShowAllButton.setSelected( aFilterContent.isShowAllButton( ) );
+		ivShowJustFailedButton.setSelected( aFilterContent.isShowJustFailedButton( ) );
+		ivShowJustSuccessful.setSelected( aFilterContent.isShowJustSuccessful( ) );
+		ivShowJustFailureContainingButton.setSelected( aFilterContent.isShowJustFailureContainingButton( ) );
 	}
-	
+
 	private class FilterContent {
-		
+
 		private boolean ivShowAllButton;
 		private boolean ivShowJustSuccessful;
 		private boolean ivShowJustFailedButton;
@@ -223,72 +253,71 @@ public final class AggregatedTracesViewController extends AbstractController {
 		private String ivFilterComponent;
 		private String ivFilterOperation;
 		private String ivFilterException;
-		
-		public boolean isShowAllButton() {
+
+		public boolean isShowAllButton( ) {
 			return ivShowAllButton;
 		}
-		
-		public void setShowAllButton(boolean showAllButton) {
+
+		public void setShowAllButton( boolean showAllButton ) {
 			this.ivShowAllButton = showAllButton;
 		}
-		
-		public boolean isShowJustSuccessful() {
+
+		public boolean isShowJustSuccessful( ) {
 			return ivShowJustSuccessful;
 		}
-		
-		public void setShowJustSuccessful(boolean showJustSuccessful) {
+
+		public void setShowJustSuccessful( boolean showJustSuccessful ) {
 			this.ivShowJustSuccessful = showJustSuccessful;
 		}
-		
-		public boolean isShowJustFailedButton() {
+
+		public boolean isShowJustFailedButton( ) {
 			return ivShowJustFailedButton;
 		}
-		
-		public void setShowJustFailedButton(boolean showJustFailedButton) {
+
+		public void setShowJustFailedButton( boolean showJustFailedButton ) {
 			this.ivShowJustFailedButton = showJustFailedButton;
 		}
-		
-		public boolean isShowJustFailureContainingButton() {
+
+		public boolean isShowJustFailureContainingButton( ) {
 			return ivShowJustFailureContainingButton;
 		}
-		
-		public void setShowJustFailureContainingButton(boolean ivShowJustFailureContainingButton) {
+
+		public void setShowJustFailureContainingButton( boolean ivShowJustFailureContainingButton ) {
 			this.ivShowJustFailureContainingButton = ivShowJustFailureContainingButton;
 		}
 
-		public String getFilterContainer() {
+		public String getFilterContainer( ) {
 			return ivFilterContainer;
 		}
-		
-		public void setFilterContainer(String filterContainer) {
+
+		public void setFilterContainer( String filterContainer ) {
 			this.ivFilterContainer = filterContainer;
 		}
-		
-		public String getFilterComponent() {
+
+		public String getFilterComponent( ) {
 			return ivFilterComponent;
 		}
-		
-		public void setFilterComponent(String filterComponent) {
+
+		public void setFilterComponent( String filterComponent ) {
 			this.ivFilterComponent = filterComponent;
 		}
-		
-		public String getFilterOperation() {
+
+		public String getFilterOperation( ) {
 			return ivFilterOperation;
 		}
-		
-		public void setFilterOperation(String filterOperation) {
+
+		public void setFilterOperation( String filterOperation ) {
 			this.ivFilterOperation = filterOperation;
 		}
-		
-		public String getFilterException() {
+
+		public String getFilterException( ) {
 			return ivFilterException;
 		}
-		
-		public void setFilterException(String filterException) {
+
+		public void setFilterException( String filterException ) {
 			this.ivFilterException = filterException;
 		}
-		
+
 	}
-	
 
 }

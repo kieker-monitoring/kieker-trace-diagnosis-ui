@@ -24,49 +24,49 @@ import org.junit.Test;
 public final class AggregatedOperationCallTest extends AbstractOperationCallTest<AggregatedOperationCall> {
 
 	@Test
-	public void constructorShouldCopySingleOperationCall() {
-		final OperationCall call = new OperationCall("container", "component", "operation", 42, 0);
-		final AggregatedOperationCall aggregatedCall = new AggregatedOperationCall(call);
+	public void constructorShouldCopySingleOperationCall( ) {
+		final OperationCall call = new OperationCall( "container", "component", "operation", 42, 0 );
+		final AggregatedOperationCall aggregatedCall = new AggregatedOperationCall( call );
 
-		assertThat(aggregatedCall.getContainer(), is("container"));
-		assertThat(aggregatedCall.getComponent(), is("component"));
-		assertThat(aggregatedCall.getOperation(), is("operation"));
+		assertThat( aggregatedCall.getContainer( ), is( "container" ) );
+		assertThat( aggregatedCall.getComponent( ), is( "component" ) );
+		assertThat( aggregatedCall.getOperation( ), is( "operation" ) );
 	}
 
 	@Test
-	public void constructorShouldCopyNestedOperationCall() {
-		final OperationCall call = new OperationCall("container", "component", "operation", 42, 0);
-		call.addChild(new OperationCall("container1", "component1", "operation1", 42, 0));
-		call.addChild(new OperationCall("container2", "component2", "operation2", 42, 0));
+	public void constructorShouldCopyNestedOperationCall( ) {
+		final OperationCall call = new OperationCall( "container", "component", "operation", 42, 0 );
+		call.addChild( new OperationCall( "container1", "component1", "operation1", 42, 0 ) );
+		call.addChild( new OperationCall( "container2", "component2", "operation2", 42, 0 ) );
 
-		final AggregatedOperationCall aggregatedCall = new AggregatedOperationCall(call);
+		final AggregatedOperationCall aggregatedCall = new AggregatedOperationCall( call );
 
-		assertThat(aggregatedCall.getContainer(), is("container"));
-		assertThat(aggregatedCall.getComponent(), is("component"));
-		assertThat(aggregatedCall.getOperation(), is("operation"));
+		assertThat( aggregatedCall.getContainer( ), is( "container" ) );
+		assertThat( aggregatedCall.getComponent( ), is( "component" ) );
+		assertThat( aggregatedCall.getOperation( ), is( "operation" ) );
 
-		assertThat(aggregatedCall.getChildren().get(0).getContainer(), is("container1"));
-		assertThat(aggregatedCall.getChildren().get(0).getComponent(), is("component1"));
-		assertThat(aggregatedCall.getChildren().get(0).getOperation(), is("operation1"));
+		assertThat( aggregatedCall.getChildren( ).get( 0 ).getContainer( ), is( "container1" ) );
+		assertThat( aggregatedCall.getChildren( ).get( 0 ).getComponent( ), is( "component1" ) );
+		assertThat( aggregatedCall.getChildren( ).get( 0 ).getOperation( ), is( "operation1" ) );
 
-		assertThat(aggregatedCall.getChildren().get(1).getContainer(), is("container2"));
-		assertThat(aggregatedCall.getChildren().get(1).getComponent(), is("component2"));
-		assertThat(aggregatedCall.getChildren().get(1).getOperation(), is("operation2"));
+		assertThat( aggregatedCall.getChildren( ).get( 1 ).getContainer( ), is( "container2" ) );
+		assertThat( aggregatedCall.getChildren( ).get( 1 ).getComponent( ), is( "component2" ) );
+		assertThat( aggregatedCall.getChildren( ).get( 1 ).getOperation( ), is( "operation2" ) );
 	}
 
 	@Test
-	public void constructorShouldCopyStatistics() {
-		final OperationCall call = new OperationCall("container", "component", "operation", 42, 0);
-		call.setStackSize(1);
+	public void constructorShouldCopyStatistics( ) {
+		final OperationCall call = new OperationCall( "container", "component", "operation", 42, 0 );
+		call.setStackSize( 1 );
 
-		final AggregatedOperationCall aggregatedCall = new AggregatedOperationCall(call);
+		final AggregatedOperationCall aggregatedCall = new AggregatedOperationCall( call );
 
-		assertThat(aggregatedCall.getStackSize(), is((Object) 1));
+		assertThat( aggregatedCall.getStackSize( ), is( (Object) 1 ) );
 	}
 
 	@Override
-	protected AggregatedOperationCall createOperationCall(final String container, final String component, final String operation, final String failedCause) {
-		return new AggregatedOperationCall(new OperationCall(container, component, operation, failedCause, -1, 0));
+	protected AggregatedOperationCall createOperationCall( final String container, final String component, final String operation, final String failedCause ) {
+		return new AggregatedOperationCall( new OperationCall( container, component, operation, failedCause, -1, 0 ) );
 	}
 
 }

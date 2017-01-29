@@ -31,25 +31,25 @@ import kieker.diagnosis.util.Mapper;
  */
 public abstract class AbstractStringConverter<T> extends StringConverter<T> {
 
-	private final Mapper<T, String> ivMapper = new Mapper<>();
+	private final Mapper<T, String> ivMapper = new Mapper<>( );
 
-	public AbstractStringConverter() {
+	public AbstractStringConverter( ) {
 		final String bundleBaseName = "kieker.diagnosis.view.components.components";
-		final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleBaseName, Locale.getDefault());
+		final ResourceBundle resourceBundle = ResourceBundle.getBundle( bundleBaseName, Locale.getDefault( ) );
 
-		this.fillMapper(this.ivMapper, resourceBundle);
+		this.fillMapper( this.ivMapper, resourceBundle );
 	}
 
-	protected abstract void fillMapper(final Mapper<T, String> aMapper, final ResourceBundle aResourceBundle);
+	protected abstract void fillMapper( final Mapper<T, String> aMapper, final ResourceBundle aResourceBundle );
 
 	@Override
-	public final T fromString(final String aString) {
-		return this.ivMapper.invertedResolve(aString);
+	public final T fromString( final String aString ) {
+		return this.ivMapper.invertedResolve( aString );
 	}
 
 	@Override
-	public final String toString(final T aObject) {
-		return this.ivMapper.resolve(aObject);
+	public final String toString( final T aObject ) {
+		return this.ivMapper.resolve( aObject );
 	}
 
 }

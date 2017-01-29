@@ -33,9 +33,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
 /**
- * This is an aspect adding error handling where it is requested. The advice is added around methods marked with {@link ErrorHandling} during the compiling. All exceptions (instances of
- * {@link Exception} and its subclasses) are logged via the logger instance of the called object. A JavaFX alert dialog is shown on the screen and informs the user about the error. The
- * annotated method returns {@code null} afterwards.
+ * This is an aspect adding error handling where it is requested. The advice is added around methods marked with {@link ErrorHandling} during the compiling. All
+ * exceptions (instances of {@link Exception} and its subclasses) are logged via the logger instance of the called object. A JavaFX alert dialog is shown on the
+ * screen and informs the user about the error. The annotated method returns {@code null} afterwards.
  *
  * @see ErrorHandling
  *
@@ -44,42 +44,43 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public final class ErrorHandlingAspect {
 
-	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle("kieker.diagnosis.view.util.errorhandling", Locale.getDefault());
-	private final String ivTitle = this.ivResourceBundle.getString("error");
-	private final String ivHeader = this.ivResourceBundle.getString("errorHeader");
+	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle( "kieker.diagnosis.view.util.errorhandling", Locale.getDefault( ) );
+	private final String ivTitle = this.ivResourceBundle.getString( "error" );
+	private final String ivHeader = this.ivResourceBundle.getString( "errorHeader" );
 
-	@Pointcut("execution(@kieker.diagnosis.util.ErrorHandling * *(..))")
-	public void errorHandlingRequested() {
+	@Pointcut ( "execution(@kieker.diagnosis.util.ErrorHandling * *(..))" )
+	public void errorHandlingRequested( ) {
 	}
 
-	@Around("errorHandlingRequested() && this(aThisObject)")
-	public Object methodHandling(final Object aThisObject, final ProceedingJoinPoint aThisJoinPoint) throws Throwable {
+	@Around ( "errorHandlingRequested() && this(aThisObject)" )
+	public Object methodHandling( final Object aThisObject, final ProceedingJoinPoint aThisJoinPoint ) throws Throwable {
 		try {
-			return aThisJoinPoint.proceed();
-		} catch (final Exception ex) {
-			this.logError(aThisObject, ex);
-			this.showAlertDialog(ex);
+			return aThisJoinPoint.proceed( );
+		}
+		catch ( final Exception ex ) {
+			this.logError( aThisObject, ex );
+			this.showAlertDialog( ex );
 
 			return null;
 		}
 	}
 
-	private void logError(final Object aThisObject, final Exception aEx) {
-		final Logger logger = LogManager.getLogger(aThisObject.getClass());
-		logger.error(aEx.getMessage(), aEx);
+	private void logError( final Object aThisObject, final Exception aEx ) {
+		final Logger logger = LogManager.getLogger( aThisObject.getClass( ) );
+		logger.error( aEx.getMessage( ), aEx );
 	}
 
-	private void showAlertDialog(final Exception aEx) {
-		final Alert alert = new Alert(AlertType.ERROR);
-		alert.setContentText(aEx.getLocalizedMessage());
-		alert.setTitle(this.ivTitle);
-		alert.setHeaderText(this.ivHeader);
-		final Window window = alert.getDialogPane().getScene().getWindow();
-		if (window instanceof Stage) {
+	private void showAlertDialog( final Exception aEx ) {
+		final Alert alert = new Alert( AlertType.ERROR );
+		alert.setContentText( aEx.getLocalizedMessage( ) );
+		alert.setTitle( this.ivTitle );
+		alert.setHeaderText( this.ivHeader );
+		final Window window = alert.getDialogPane( ).getScene( ).getWindow( );
+		if ( window instanceof Stage ) {
 			final Stage stage = (Stage) window;
-			stage.getIcons().add(new Image("kieker-logo.png"));
+			stage.getIcons( ).add( new Image( "kieker-logo.png" ) );
 		}
-		alert.showAndWait();
+		alert.showAndWait( );
 	}
 
 }

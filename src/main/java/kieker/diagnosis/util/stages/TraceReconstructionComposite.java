@@ -45,40 +45,40 @@ public final class TraceReconstructionComposite extends AbstractCompositeStage {
 	private final LegacyTraceReconstructor ivLegacyReconstructor;
 	private final TraceReconstructor ivReconstructor;
 
-	public TraceReconstructionComposite(final List<Trace> aTraces, final boolean aActivateAdditionalLogChecks) {
-		final Distributor<Trace> distributor = new Distributor<>(new CopyByReferenceStrategy());
-		final Merger<Trace> merger = new Merger<>();
+	public TraceReconstructionComposite( final List<Trace> aTraces, final boolean aActivateAdditionalLogChecks ) {
+		final Distributor<Trace> distributor = new Distributor<>( new CopyByReferenceStrategy( ) );
+		final Merger<Trace> merger = new Merger<>( );
 
-		this.ivTypeFilter = new MultipleInstanceOfFilter<>();
-		this.ivTracesCollector = new CollectorSink<>(aTraces);
-		this.ivStatisticsDecorator = new TraceStatisticsDecorator();
-		this.ivReconstructor = new TraceReconstructor(aActivateAdditionalLogChecks);
-		this.ivLegacyReconstructor = new LegacyTraceReconstructor();
+		this.ivTypeFilter = new MultipleInstanceOfFilter<>( );
+		this.ivTracesCollector = new CollectorSink<>( aTraces );
+		this.ivStatisticsDecorator = new TraceStatisticsDecorator( );
+		this.ivReconstructor = new TraceReconstructor( aActivateAdditionalLogChecks );
+		this.ivLegacyReconstructor = new LegacyTraceReconstructor( );
 
-		this.ivOutputPort = this.ivStatisticsDecorator.getOutputPort();
+		this.ivOutputPort = this.ivStatisticsDecorator.getOutputPort( );
 
-		super.connectPorts(this.ivTypeFilter.getOutputPortForType(IFlowRecord.class), this.ivReconstructor.getInputPort());
-		super.connectPorts(this.ivTypeFilter.getOutputPortForType(OperationExecutionRecord.class), this.ivLegacyReconstructor.getInputPort());
-		super.connectPorts(this.ivReconstructor.getOutputPort(), merger.getNewInputPort());
-		super.connectPorts(this.ivLegacyReconstructor.getOutputPort(), merger.getNewInputPort());
-		super.connectPorts(merger.getOutputPort(), distributor.getInputPort());
-		super.connectPorts(distributor.getNewOutputPort(), this.ivTracesCollector.getInputPort());
-		super.connectPorts(distributor.getNewOutputPort(), this.ivStatisticsDecorator.getInputPort());
+		super.connectPorts( this.ivTypeFilter.getOutputPortForType( IFlowRecord.class ), this.ivReconstructor.getInputPort( ) );
+		super.connectPorts( this.ivTypeFilter.getOutputPortForType( OperationExecutionRecord.class ), this.ivLegacyReconstructor.getInputPort( ) );
+		super.connectPorts( this.ivReconstructor.getOutputPort( ), merger.getNewInputPort( ) );
+		super.connectPorts( this.ivLegacyReconstructor.getOutputPort( ), merger.getNewInputPort( ) );
+		super.connectPorts( merger.getOutputPort( ), distributor.getInputPort( ) );
+		super.connectPorts( distributor.getNewOutputPort( ), this.ivTracesCollector.getInputPort( ) );
+		super.connectPorts( distributor.getNewOutputPort( ), this.ivStatisticsDecorator.getInputPort( ) );
 	}
 
-	public int countIncompleteTraces() {
-		return this.ivReconstructor.countIncompleteTraces() + this.ivLegacyReconstructor.countIncompleteTraces();
+	public int countIncompleteTraces( ) {
+		return this.ivReconstructor.countIncompleteTraces( ) + this.ivLegacyReconstructor.countIncompleteTraces( );
 	}
 
-	public int countDanglingRecords() {
-		return this.ivReconstructor.countDanglingRecords() + this.ivLegacyReconstructor.countDanglingRecords();
+	public int countDanglingRecords( ) {
+		return this.ivReconstructor.countDanglingRecords( ) + this.ivLegacyReconstructor.countDanglingRecords( );
 	}
 
-	public InputPort<IMonitoringRecord> getInputPort() {
-		return this.ivTypeFilter.getInputPort();
+	public InputPort<IMonitoringRecord> getInputPort( ) {
+		return this.ivTypeFilter.getInputPort( );
 	}
 
-	public OutputPort<Trace> getOutputPort() {
+	public OutputPort<Trace> getOutputPort( ) {
 		return this.ivOutputPort;
 	}
 

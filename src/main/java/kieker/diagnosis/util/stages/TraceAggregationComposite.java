@@ -35,17 +35,17 @@ public final class TraceAggregationComposite extends AbstractCompositeStage {
 	private final CollectorSink<AggregatedTrace> ivTracesCollector;
 	private final AggregatedTraceStatisticsDecorator ivStatisticsDecorator;
 
-	public TraceAggregationComposite(final List<AggregatedTrace> aTraces) {
-		this.ivAggregator = new TraceAggregator();
-		this.ivStatisticsDecorator = new AggregatedTraceStatisticsDecorator();
-		this.ivTracesCollector = new CollectorSink<>(aTraces);
+	public TraceAggregationComposite( final List<AggregatedTrace> aTraces ) {
+		this.ivAggregator = new TraceAggregator( );
+		this.ivStatisticsDecorator = new AggregatedTraceStatisticsDecorator( );
+		this.ivTracesCollector = new CollectorSink<>( aTraces );
 
-		super.connectPorts(this.ivAggregator.getOutputPort(), this.ivStatisticsDecorator.getInputPort());
-		super.connectPorts(this.ivStatisticsDecorator.getOutputPort(), this.ivTracesCollector.getInputPort());
+		super.connectPorts( this.ivAggregator.getOutputPort( ), this.ivStatisticsDecorator.getInputPort( ) );
+		super.connectPorts( this.ivStatisticsDecorator.getOutputPort( ), this.ivTracesCollector.getInputPort( ) );
 	}
 
-	public InputPort<Trace> getInputPort() {
-		return this.ivAggregator.getInputPort();
+	public InputPort<Trace> getInputPort( ) {
+		return this.ivAggregator.getInputPort( );
 	}
 
 }

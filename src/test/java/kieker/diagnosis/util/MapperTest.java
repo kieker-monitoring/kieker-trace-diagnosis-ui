@@ -27,70 +27,70 @@ import kieker.diagnosis.util.Mapper;
 public class MapperTest {
 
 	@Test
-	public void mappingWithoutEntriesShouldNotLeadToException() {
-		final Mapper<Integer, String> mapper = new Mapper<>();
+	public void mappingWithoutEntriesShouldNotLeadToException( ) {
+		final Mapper<Integer, String> mapper = new Mapper<>( );
 
-		assertThat(mapper.resolve(1), is(nullValue()));
+		assertThat( mapper.resolve( 1 ), is( nullValue( ) ) );
 	}
 
 	@Test
-	public void mappingWithSingleEntryShouldWork() {
-		final Mapper<Integer, String> mapper = new Mapper<>();
+	public void mappingWithSingleEntryShouldWork( ) {
+		final Mapper<Integer, String> mapper = new Mapper<>( );
 
-		mapper.map(1).to("One");
+		mapper.map( 1 ).to( "One" );
 
-		assertThat(mapper.resolve(1), is("One"));
+		assertThat( mapper.resolve( 1 ), is( "One" ) );
 	}
 
 	@Test
-	public void mappingWithMultipleEntriesShouldWork() {
-		final Mapper<Integer, String> mapper = new Mapper<>();
+	public void mappingWithMultipleEntriesShouldWork( ) {
+		final Mapper<Integer, String> mapper = new Mapper<>( );
 
-		mapper.map(1).to("One");
-		mapper.map(2).to("Two");
+		mapper.map( 1 ).to( "One" );
+		mapper.map( 2 ).to( "Two" );
 
-		assertThat(mapper.resolve(1), is("One"));
-		assertThat(mapper.resolve(2), is("Two"));
+		assertThat( mapper.resolve( 1 ), is( "One" ) );
+		assertThat( mapper.resolve( 2 ), is( "Two" ) );
 	}
 
 	@Test
-	public void sameKeyShouldOverwriteMapping() {
-		final Mapper<Integer, String> mapper = new Mapper<>();
+	public void sameKeyShouldOverwriteMapping( ) {
+		final Mapper<Integer, String> mapper = new Mapper<>( );
 
-		mapper.map(1).to("One");
-		mapper.map(1).to("1");
+		mapper.map( 1 ).to( "One" );
+		mapper.map( 1 ).to( "1" );
 
-		assertThat(mapper.resolve(1), is("1"));
+		assertThat( mapper.resolve( 1 ), is( "1" ) );
 	}
 
 	@Test
-	public void reverseMappingShouldWork() {
-		final Mapper<Integer, String> mapper = new Mapper<>();
+	public void reverseMappingShouldWork( ) {
+		final Mapper<Integer, String> mapper = new Mapper<>( );
 
-		mapper.map(1).to("One");
+		mapper.map( 1 ).to( "One" );
 
-		assertThat(mapper.invertedResolve("One"), is(1));
+		assertThat( mapper.invertedResolve( "One" ), is( 1 ) );
 	}
 
 	@Test
-	public void defaultMappingShouldWork() {
-		final Mapper<Integer, String> mapper = new Mapper<>();
+	public void defaultMappingShouldWork( ) {
+		final Mapper<Integer, String> mapper = new Mapper<>( );
 
-		mapper.mapPerDefault().to("N/A");
-		mapper.map(1).to("One");
+		mapper.mapPerDefault( ).to( "N/A" );
+		mapper.map( 1 ).to( "One" );
 
-		assertThat(mapper.resolve(1), is("One"));
-		assertThat(mapper.resolve(2), is("N/A"));
+		assertThat( mapper.resolve( 1 ), is( "One" ) );
+		assertThat( mapper.resolve( 2 ), is( "N/A" ) );
 	}
 
 	@Test
-	public void defaultMappingDoesNotConflictWithNullMapping() {
-		final Mapper<Integer, String> mapper = new Mapper<>();
+	public void defaultMappingDoesNotConflictWithNullMapping( ) {
+		final Mapper<Integer, String> mapper = new Mapper<>( );
 
-		mapper.mapPerDefault().to("N/A");
-		mapper.map(null).to("Zero");
+		mapper.mapPerDefault( ).to( "N/A" );
+		mapper.map( null ).to( "Zero" );
 
-		assertThat(mapper.resolve(null), is("Zero"));
+		assertThat( mapper.resolve( null ), is( "Zero" ) );
 	}
 
 }

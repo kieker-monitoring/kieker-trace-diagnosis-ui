@@ -28,39 +28,40 @@ import kieker.diagnosis.util.StatisticsUtility;
 import teetime.stage.basic.AbstractTransformation;
 
 /**
- * This class is a {@code TeeTime} stage adding statistics (via the corresponding setters) to instances of {@link AggregatedTrace}. The traces are forwarded to the output port.
+ * This class is a {@code TeeTime} stage adding statistics (via the corresponding setters) to instances of {@link AggregatedTrace}. The traces are forwarded to
+ * the output port.
  *
  * @author Nils Christian Ehmke
  */
 public final class AggregatedTraceStatisticsDecorator extends AbstractTransformation<AggregatedTrace, AggregatedTrace> {
 
 	@Override
-	public void execute(final AggregatedTrace aTrace) {
-		AggregatedTraceStatisticsDecorator.addNumberOfCalls(aTrace.getRootOperationCall(), aTrace.getTraces().size());
-		AggregatedTraceStatisticsDecorator.addDurationStatistics(aTrace);
+	public void execute( final AggregatedTrace aTrace ) {
+		AggregatedTraceStatisticsDecorator.addNumberOfCalls( aTrace.getRootOperationCall( ), aTrace.getTraces( ).size( ) );
+		AggregatedTraceStatisticsDecorator.addDurationStatistics( aTrace );
 
 		// The references are no longer needed
-		aTrace.getTraces().clear();
+		aTrace.getTraces( ).clear( );
 
-		super.getOutputPort().send(aTrace);
+		super.getOutputPort( ).send( aTrace );
 	}
 
-	private static void addNumberOfCalls(final AggregatedOperationCall aCall, final int aCalls) {
-		aCall.setCalls(aCalls);
+	private static void addNumberOfCalls( final AggregatedOperationCall aCall, final int aCalls ) {
+		aCall.setCalls( aCalls );
 
-		for (final AggregatedOperationCall child : aCall.getChildren()) {
-			AggregatedTraceStatisticsDecorator.addNumberOfCalls(child, aCalls);
+		for ( final AggregatedOperationCall child : aCall.getChildren( ) ) {
+			AggregatedTraceStatisticsDecorator.addNumberOfCalls( child, aCalls );
 		}
 	}
 
-	private static void addDurationStatistics(final AggregatedTrace aTrace) {
-		final TraceDurationVisitor traceDurationVisitor = new TraceDurationVisitor();
+	private static void addDurationStatistics( final AggregatedTrace aTrace ) {
+		final TraceDurationVisitor traceDurationVisitor = new TraceDurationVisitor( );
 
-		for (final Trace t : aTrace.getTraces()) {
-			traceDurationVisitor.visit(t);
+		for ( final Trace t : aTrace.getTraces( ) ) {
+			traceDurationVisitor.visit( t );
 		}
 
-		traceDurationVisitor.addDurationStatistics(aTrace);
+		traceDurationVisitor.addDurationStatistics( aTrace );
 	}
 
 	/**
@@ -68,48 +69,48 @@ public final class AggregatedTraceStatisticsDecorator extends AbstractTransforma
 	 */
 	private static final class TraceDurationVisitor {
 
-		private final List<List<Long>> ivDurationsPerEdge = new ArrayList<>();
+		private final List<List<Long>> ivDurationsPerEdge = new ArrayList<>( );
 		private int ivEdgeIndex;
 
-		public void visit(final Trace aTrace) {
+		public void visit( final Trace aTrace ) {
 			this.ivEdgeIndex = -1;
-			this.visit(aTrace.getRootOperationCall());
+			this.visit( aTrace.getRootOperationCall( ) );
 		}
 
-		private void visit(final OperationCall aRootOperationCall) {
+		private void visit( final OperationCall aRootOperationCall ) {
 			this.ivEdgeIndex++;
-			if (this.ivDurationsPerEdge.size() <= this.ivEdgeIndex) {
-				this.ivDurationsPerEdge.add(new ArrayList<Long>());
+			if ( this.ivDurationsPerEdge.size( ) <= this.ivEdgeIndex ) {
+				this.ivDurationsPerEdge.add( new ArrayList<Long>( ) );
 			}
 
-			final List<Long> durationsOfCurrentEdge = this.ivDurationsPerEdge.get(this.ivEdgeIndex);
+			final List<Long> durationsOfCurrentEdge = this.ivDurationsPerEdge.get( this.ivEdgeIndex );
 
-			durationsOfCurrentEdge.add(aRootOperationCall.getDuration());
+			durationsOfCurrentEdge.add( aRootOperationCall.getDuration( ) );
 
-			for (final OperationCall child : aRootOperationCall.getChildren()) {
-				this.visit(child);
+			for ( final OperationCall child : aRootOperationCall.getChildren( ) ) {
+				this.visit( child );
 			}
 		}
 
-		public void addDurationStatistics(final AggregatedTrace aTrace) {
+		public void addDurationStatistics( final AggregatedTrace aTrace ) {
 			this.ivEdgeIndex = -1;
-			this.addDurationStatistics(aTrace.getRootOperationCall());
+			this.addDurationStatistics( aTrace.getRootOperationCall( ) );
 		}
 
-		private void addDurationStatistics(final AggregatedOperationCall aRootOperationCall) {
+		private void addDurationStatistics( final AggregatedOperationCall aRootOperationCall ) {
 			this.ivEdgeIndex++;
 
-			final List<Long> durationsOfCurrentEdge = this.ivDurationsPerEdge.get(this.ivEdgeIndex);
+			final List<Long> durationsOfCurrentEdge = this.ivDurationsPerEdge.get( this.ivEdgeIndex );
 
-			final Statistics statistics = StatisticsUtility.calculateStatistics(durationsOfCurrentEdge);
-			aRootOperationCall.setMinDuration(statistics.getMinDuration());
-			aRootOperationCall.setMaxDuration(statistics.getMaxDuration());
-			aRootOperationCall.setMeanDuration(statistics.getMeanDuration());
-			aRootOperationCall.setTotalDuration(statistics.getTotalDuration());
-			aRootOperationCall.setMedianDuration(statistics.getMedianDuration());
+			final Statistics statistics = StatisticsUtility.calculateStatistics( durationsOfCurrentEdge );
+			aRootOperationCall.setMinDuration( statistics.getMinDuration( ) );
+			aRootOperationCall.setMaxDuration( statistics.getMaxDuration( ) );
+			aRootOperationCall.setMeanDuration( statistics.getMeanDuration( ) );
+			aRootOperationCall.setTotalDuration( statistics.getTotalDuration( ) );
+			aRootOperationCall.setMedianDuration( statistics.getMedianDuration( ) );
 
-			for (final AggregatedOperationCall child : aRootOperationCall.getChildren()) {
-				this.addDurationStatistics(child);
+			for ( final AggregatedOperationCall child : aRootOperationCall.getChildren( ) ) {
+				this.addDurationStatistics( child );
 			}
 		}
 

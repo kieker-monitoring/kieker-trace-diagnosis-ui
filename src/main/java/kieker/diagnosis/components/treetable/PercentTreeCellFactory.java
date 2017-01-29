@@ -22,8 +22,8 @@ package kieker.diagnosis.components.treetable;
 public final class PercentTreeCellFactory<S, T> extends AbstractTreeTableCellFactory<S, T> {
 
 	@Override
-	protected String getItemLabel(final T aItem) {
-		return (aItem.toString() + " %");
+	protected String getItemLabel( final T aItem ) {
+		return (aItem.toString( ) + " %");
 	}
 
 }

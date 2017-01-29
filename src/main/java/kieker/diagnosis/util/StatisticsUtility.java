@@ -24,23 +24,23 @@ import java.util.List;
  */
 public final class StatisticsUtility {
 
-	private StatisticsUtility() {
+	private StatisticsUtility( ) {
 	}
 
-	public static Statistics calculateStatistics(final List<Long> aDurations) {
-		Collections.sort(aDurations);
+	public static Statistics calculateStatistics( final List<Long> aDurations ) {
+		Collections.sort( aDurations );
 
 		long totalDuration = 0;
-		for (final Long duration : aDurations) {
+		for ( final Long duration : aDurations ) {
 			totalDuration += duration;
 		}
 
-		final long minDuration = aDurations.get(0);
-		final long maxDuration = aDurations.get(aDurations.size() - 1);
-		final long meanDuration = totalDuration / aDurations.size();
-		final long medianDuration = aDurations.get(aDurations.size() / 2);
+		final long minDuration = aDurations.get( 0 );
+		final long maxDuration = aDurations.get( aDurations.size( ) - 1 );
+		final long meanDuration = totalDuration / aDurations.size( );
+		final long medianDuration = aDurations.get( aDurations.size( ) / 2 );
 
-		return new Statistics(totalDuration, meanDuration, medianDuration, minDuration, maxDuration);
+		return new Statistics( totalDuration, meanDuration, medianDuration, minDuration, maxDuration );
 	}
 
 }

@@ -32,14 +32,14 @@ public final class Filter<T> extends AbstractTransformation<T, T> {
 
 	private final Predicate<T> ivPredicate;
 
-	public Filter(final Predicate<T> aPredicate) {
+	public Filter( final Predicate<T> aPredicate ) {
 		this.ivPredicate = aPredicate;
 	}
 
 	@Override
-	protected void execute(final T aElement) {
-		if (this.ivPredicate.test(aElement)) {
-			super.getOutputPort().send(aElement);
+	protected void execute( final T aElement ) {
+		if ( this.ivPredicate.test( aElement ) ) {
+			super.getOutputPort( ).send( aElement );
 		}
 	}
 

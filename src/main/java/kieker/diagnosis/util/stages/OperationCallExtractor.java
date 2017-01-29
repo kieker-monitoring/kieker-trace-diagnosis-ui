@@ -26,14 +26,14 @@ import teetime.stage.basic.AbstractTransformation;
 public final class OperationCallExtractor extends AbstractTransformation<Trace, OperationCall> {
 
 	@Override
-	protected void execute(final Trace aElement) {
-		this.sendAllCalls(aElement.getRootOperationCall());
+	protected void execute( final Trace aElement ) {
+		this.sendAllCalls( aElement.getRootOperationCall( ) );
 	}
 
-	private void sendAllCalls(final OperationCall aCall) {
-		super.getOutputPort().send(aCall);
+	private void sendAllCalls( final OperationCall aCall ) {
+		super.getOutputPort( ).send( aCall );
 
-		aCall.getChildren().forEach(child -> this.sendAllCalls(child));
+		aCall.getChildren( ).forEach( child -> this.sendAllCalls( child ) );
 	}
 
 }

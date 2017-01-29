@@ -22,19 +22,19 @@ public abstract class AbstractController {
 
 	private Context ivContext;
 
-	public AbstractController(final Context aContext) {
+	public AbstractController( final Context aContext ) {
 		this.ivContext = aContext;
 	}
 
-	protected final Context getContext() {
+	protected final Context getContext( ) {
 		return this.ivContext;
 	}
 
-	public final void setContext(final Context aContext) {
+	public final void setContext( final Context aContext ) {
 		this.ivContext = aContext;
-		reinitialize();
+		reinitialize( );
 	}
 
-	protected abstract void reinitialize();
+	protected abstract void reinitialize( );
 
 }

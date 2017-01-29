@@ -28,24 +28,24 @@ public final class BeginEndOfMonitoringDetector extends AbstractTransformation<I
 	private long ivEndTimestamp = 0;
 
 	@Override
-	protected void execute(final IMonitoringRecord aRecord) {
-		final long loggingTimestamp = aRecord.getLoggingTimestamp();
+	protected void execute( final IMonitoringRecord aRecord ) {
+		final long loggingTimestamp = aRecord.getLoggingTimestamp( );
 
-		if (loggingTimestamp < this.ivBeginTimestamp) {
+		if ( loggingTimestamp < this.ivBeginTimestamp ) {
 			this.ivBeginTimestamp = loggingTimestamp;
 		}
-		if (loggingTimestamp > this.ivEndTimestamp) {
+		if ( loggingTimestamp > this.ivEndTimestamp ) {
 			this.ivEndTimestamp = loggingTimestamp;
 		}
 
-		super.getOutputPort().send(aRecord);
+		super.getOutputPort( ).send( aRecord );
 	}
 
-	public long getBeginTimestamp() {
+	public long getBeginTimestamp( ) {
 		return this.ivBeginTimestamp;
 	}
 
-	public long getEndTimestamp() {
+	public long getEndTimestamp( ) {
 		return this.ivEndTimestamp;
 	}
 

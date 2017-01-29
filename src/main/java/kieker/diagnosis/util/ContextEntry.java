@@ -21,16 +21,16 @@ public final class ContextEntry {
 	private final ContextKey ivKey;
 	private final Object ivValue;
 
-	public ContextEntry(final ContextKey aKey, final Object aValue) {
+	public ContextEntry( final ContextKey aKey, final Object aValue ) {
 		this.ivKey = aKey;
 		this.ivValue = aValue;
 	}
 
-	public ContextKey getKey() {
+	public ContextKey getKey( ) {
 		return this.ivKey;
 	}
 
-	public Object getValue() {
+	public Object getValue( ) {
 		return this.ivValue;
 	}
 

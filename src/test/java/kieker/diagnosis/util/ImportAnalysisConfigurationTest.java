@@ -31,48 +31,48 @@ import teetime.framework.Execution;
 public final class ImportAnalysisConfigurationTest {
 
 	@Test
-	public void exampleLogImportShouldWork() {
-		final ImportAnalysisConfiguration configuration = new ImportAnalysisConfiguration(new File("example/event monitoring log"));
-		final Execution<ImportAnalysisConfiguration> analysis = new Execution<>(configuration);
-		analysis.executeBlocking();
+	public void exampleLogImportShouldWork( ) {
+		final ImportAnalysisConfiguration configuration = new ImportAnalysisConfiguration( new File( "example/event monitoring log" ) );
+		final Execution<ImportAnalysisConfiguration> analysis = new Execution<>( configuration );
+		analysis.executeBlocking( );
 
-		assertThat(configuration.getMetadataRecords(), hasSize(1));
-		assertThat(configuration.getTracesList(), hasSize(100));
-		assertThat(configuration.getAggregatedTraces(), hasSize(4));
-		assertThat(configuration.getTracesList().stream().filter(t -> t.getRootOperationCall().isFailed()).count(), is(3L));
-		assertThat(configuration.getTracesList().stream().filter(t -> t.getRootOperationCall().containsFailure()).count(), is(4L));
-		assertThat(configuration.getAggregatedTraces().stream().filter(t -> t.getRootOperationCall().isFailed()).count(), is(2L));
-		assertThat(configuration.getAggregatedTraces().stream().filter(t -> t.getRootOperationCall().containsFailure()).count(), is(3L));
+		assertThat( configuration.getMetadataRecords( ), hasSize( 1 ) );
+		assertThat( configuration.getTracesList( ), hasSize( 100 ) );
+		assertThat( configuration.getAggregatedTraces( ), hasSize( 4 ) );
+		assertThat( configuration.getTracesList( ).stream( ).filter( t -> t.getRootOperationCall( ).isFailed( ) ).count( ), is( 3L ) );
+		assertThat( configuration.getTracesList( ).stream( ).filter( t -> t.getRootOperationCall( ).containsFailure( ) ).count( ), is( 4L ) );
+		assertThat( configuration.getAggregatedTraces( ).stream( ).filter( t -> t.getRootOperationCall( ).isFailed( ) ).count( ), is( 2L ) );
+		assertThat( configuration.getAggregatedTraces( ).stream( ).filter( t -> t.getRootOperationCall( ).containsFailure( ) ).count( ), is( 3L ) );
 	}
 
 	@Test
-	public void exampleLegacyLogImportShouldWork() {
-		final ImportAnalysisConfiguration configuration = new ImportAnalysisConfiguration(new File("example/execution monitoring log"));
-		final Execution<ImportAnalysisConfiguration> analysis = new Execution<>(configuration);
-		analysis.executeBlocking();
+	public void exampleLegacyLogImportShouldWork( ) {
+		final ImportAnalysisConfiguration configuration = new ImportAnalysisConfiguration( new File( "example/execution monitoring log" ) );
+		final Execution<ImportAnalysisConfiguration> analysis = new Execution<>( configuration );
+		analysis.executeBlocking( );
 
-		assertThat(configuration.getMetadataRecords(), hasSize(1));
-		assertThat(configuration.getTracesList(), hasSize(1635));
-		assertThat(configuration.getAggregatedTraces(), hasSize(4));
-		assertThat(configuration.getTracesList().stream().filter(t -> t.getRootOperationCall().isFailed()).count(), is(0L));
-		assertThat(configuration.getTracesList().stream().filter(t -> t.getRootOperationCall().containsFailure()).count(), is(0L));
-		assertThat(configuration.getAggregatedTraces().stream().filter(t -> t.getRootOperationCall().isFailed()).count(), is(0L));
-		assertThat(configuration.getAggregatedTraces().stream().filter(t -> t.getRootOperationCall().containsFailure()).count(), is(0L));
+		assertThat( configuration.getMetadataRecords( ), hasSize( 1 ) );
+		assertThat( configuration.getTracesList( ), hasSize( 1635 ) );
+		assertThat( configuration.getAggregatedTraces( ), hasSize( 4 ) );
+		assertThat( configuration.getTracesList( ).stream( ).filter( t -> t.getRootOperationCall( ).isFailed( ) ).count( ), is( 0L ) );
+		assertThat( configuration.getTracesList( ).stream( ).filter( t -> t.getRootOperationCall( ).containsFailure( ) ).count( ), is( 0L ) );
+		assertThat( configuration.getAggregatedTraces( ).stream( ).filter( t -> t.getRootOperationCall( ).isFailed( ) ).count( ), is( 0L ) );
+		assertThat( configuration.getAggregatedTraces( ).stream( ).filter( t -> t.getRootOperationCall( ).containsFailure( ) ).count( ), is( 0L ) );
 	}
 
 	@Test
-	public void nonExistingLogShouldNotLeadToCrash() {
-		final ImportAnalysisConfiguration configuration = new ImportAnalysisConfiguration(new File("nonExistingLog"));
-		final Execution<ImportAnalysisConfiguration> analysis = new Execution<>(configuration);
-		analysis.executeBlocking();
+	public void nonExistingLogShouldNotLeadToCrash( ) {
+		final ImportAnalysisConfiguration configuration = new ImportAnalysisConfiguration( new File( "nonExistingLog" ) );
+		final Execution<ImportAnalysisConfiguration> analysis = new Execution<>( configuration );
+		analysis.executeBlocking( );
 
-		assertThat(configuration.getMetadataRecords(), is(empty()));
-		assertThat(configuration.getTracesList(), is(empty()));
-		assertThat(configuration.getAggregatedTraces(), is(empty()));
-		assertThat(configuration.getTracesList().stream().filter(t -> t.getRootOperationCall().isFailed()).count(), is(0L));
-		assertThat(configuration.getTracesList().stream().filter(t -> t.getRootOperationCall().containsFailure()).count(), is(0L));
-		assertThat(configuration.getAggregatedTraces().stream().filter(t -> t.getRootOperationCall().isFailed()).count(), is(0L));
-		assertThat(configuration.getAggregatedTraces().stream().filter(t -> t.getRootOperationCall().containsFailure()).count(), is(0L));
+		assertThat( configuration.getMetadataRecords( ), is( empty( ) ) );
+		assertThat( configuration.getTracesList( ), is( empty( ) ) );
+		assertThat( configuration.getAggregatedTraces( ), is( empty( ) ) );
+		assertThat( configuration.getTracesList( ).stream( ).filter( t -> t.getRootOperationCall( ).isFailed( ) ).count( ), is( 0L ) );
+		assertThat( configuration.getTracesList( ).stream( ).filter( t -> t.getRootOperationCall( ).containsFailure( ) ).count( ), is( 0L ) );
+		assertThat( configuration.getAggregatedTraces( ).stream( ).filter( t -> t.getRootOperationCall( ).isFailed( ) ).count( ), is( 0L ) );
+		assertThat( configuration.getAggregatedTraces( ).stream( ).filter( t -> t.getRootOperationCall( ).containsFailure( ) ).count( ), is( 0L ) );
 	}
 
 }

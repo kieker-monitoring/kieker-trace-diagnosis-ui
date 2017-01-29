@@ -32,44 +32,44 @@ import teetime.stage.basic.AbstractTransformation;
  */
 public final class TraceAggregator extends AbstractTransformation<Trace, AggregatedTrace> {
 
-	private final Map<TraceWrapper, List<Trace>> ivAggregationMap = new HashMap<>();
+	private final Map<TraceWrapper, List<Trace>> ivAggregationMap = new HashMap<>( );
 
 	@Override
-	protected void execute(final Trace aTrace) {
-		final TraceWrapper wrapper = new TraceWrapper(aTrace);
-		if (!this.ivAggregationMap.containsKey(wrapper)) {
-			final List<Trace> aggregationList = new ArrayList<>();
-			this.ivAggregationMap.put(wrapper, aggregationList);
+	protected void execute( final Trace aTrace ) {
+		final TraceWrapper wrapper = new TraceWrapper( aTrace );
+		if ( !this.ivAggregationMap.containsKey( wrapper ) ) {
+			final List<Trace> aggregationList = new ArrayList<>( );
+			this.ivAggregationMap.put( wrapper, aggregationList );
 		}
-		this.ivAggregationMap.get(wrapper).add(aTrace);
+		this.ivAggregationMap.get( wrapper ).add( aTrace );
 	}
 
 	@Override
-	public void onTerminating() throws Exception { // NOPMD (the throws clause is forced by the framework)
-		this.ivAggregationMap.values().forEach(list -> super.getOutputPort().send(new AggregatedTrace(list)));
+	public void onTerminating( ) throws Exception { // NOPMD (the throws clause is forced by the framework)
+		this.ivAggregationMap.values( ).forEach( list -> super.getOutputPort( ).send( new AggregatedTrace( list ) ) );
 
-		super.onTerminating();
+		super.onTerminating( );
 	}
 
 	private static class TraceWrapper {
 
 		private final Trace ivTrace;
 
-		public TraceWrapper(final Trace aTrace) {
+		public TraceWrapper( final Trace aTrace ) {
 			this.ivTrace = aTrace;
 		}
 
 		@Override
-		public int hashCode() {
-			return this.ivTrace.calculateHashCode();
+		public int hashCode( ) {
+			return this.ivTrace.calculateHashCode( );
 		}
 
 		@Override
-		public boolean equals(final Object aObj) {
-			if (!(aObj instanceof TraceWrapper)) {
+		public boolean equals( final Object aObj ) {
+			if ( !(aObj instanceof TraceWrapper) ) {
 				return false;
 			}
-			return this.ivTrace.isEqualTo(((TraceWrapper) aObj).ivTrace);
+			return this.ivTrace.isEqualTo( ((TraceWrapper) aObj).ivTrace );
 		}
 
 	}

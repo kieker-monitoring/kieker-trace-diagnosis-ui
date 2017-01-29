@@ -33,30 +33,30 @@ import org.junit.Test;
 public final class AggregatedTraceStatisticsDecoratorTest {
 
 	@Test
-	public void minMaxMeanAndAvgCalculationForSingleCallShouldWork() throws Exception {
-		final OperationCall call1 = new OperationCall("", "", "", 43, 0);
-		final OperationCall call2 = new OperationCall("", "", "", 44, 0);
-		final OperationCall call3 = new OperationCall("", "", "", 45, 0);
+	public void minMaxMeanAndAvgCalculationForSingleCallShouldWork( ) throws Exception {
+		final OperationCall call1 = new OperationCall( "", "", "", 43, 0 );
+		final OperationCall call2 = new OperationCall( "", "", "", 44, 0 );
+		final OperationCall call3 = new OperationCall( "", "", "", 45, 0 );
 
-		call1.setDuration(15);
-		call2.setDuration(7);
-		call3.setDuration(44);
+		call1.setDuration( 15 );
+		call2.setDuration( 7 );
+		call3.setDuration( 44 );
 
-		final Trace trace1 = new Trace(call1, 43);
-		final Trace trace2 = new Trace(call2, 44);
-		final Trace trace3 = new Trace(call3, 45);
+		final Trace trace1 = new Trace( call1, 43 );
+		final Trace trace2 = new Trace( call2, 44 );
+		final Trace trace3 = new Trace( call3, 45 );
 
 		// We have to create an array list here as the later clean-operation wouldn't be supported by the list from Arrays.asList(...)
-		final AggregatedTrace trace = new AggregatedTrace(new ArrayList<>(Arrays.asList(trace1, trace2, trace3)));
+		final AggregatedTrace trace = new AggregatedTrace( new ArrayList<>( Arrays.asList( trace1, trace2, trace3 ) ) );
 
-		final AggregatedTraceStatisticsDecorator decorator = new AggregatedTraceStatisticsDecorator();
-		final List<AggregatedTrace> result = new ArrayList<>();
-		test(decorator).and().send(trace).to(decorator.getInputPort()).and().receive(result).from(decorator.getOutputPort()).start();
+		final AggregatedTraceStatisticsDecorator decorator = new AggregatedTraceStatisticsDecorator( );
+		final List<AggregatedTrace> result = new ArrayList<>( );
+		test( decorator ).and( ).send( trace ).to( decorator.getInputPort( ) ).and( ).receive( result ).from( decorator.getOutputPort( ) ).start( );
 
-		assertThat(trace.getRootOperationCall().getMinDuration(), is(7L));
-		assertThat(trace.getRootOperationCall().getMaxDuration(), is(44L));
-		assertThat(trace.getRootOperationCall().getMeanDuration(), is(22L));
-		assertThat(trace.getRootOperationCall().getMedianDuration(), is(15L));
+		assertThat( trace.getRootOperationCall( ).getMinDuration( ), is( 7L ) );
+		assertThat( trace.getRootOperationCall( ).getMaxDuration( ), is( 44L ) );
+		assertThat( trace.getRootOperationCall( ).getMeanDuration( ), is( 22L ) );
+		assertThat( trace.getRootOperationCall( ).getMedianDuration( ), is( 15L ) );
 	}
 
 }

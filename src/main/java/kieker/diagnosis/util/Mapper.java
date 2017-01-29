@@ -32,24 +32,25 @@ public final class Mapper<I, O> extends HashMap<I, O> {
 	private static final long serialVersionUID = 1L;
 	private O ivDefaultValue;
 
-	public To map(final I aKey) {
-		return new To(aKey);
+	public To map( final I aKey ) {
+		return new To( aKey );
 	}
 
-	public To mapPerDefault() {
-		return new To();
+	public To mapPerDefault( ) {
+		return new To( );
 	}
 
-	public O resolve(final I aKey) {
-		if (super.containsKey(aKey)) {
-			return super.get(aKey);
-		} else {
+	public O resolve( final I aKey ) {
+		if ( super.containsKey( aKey ) ) {
+			return super.get( aKey );
+		}
+		else {
 			return this.ivDefaultValue;
 		}
 	}
 
-	public I invertedResolve(final O aValue) {
-		return super.entrySet().parallelStream().filter(entry -> aValue.equals(entry.getValue())).map(Map.Entry::getKey).findFirst().orElse(null);
+	public I invertedResolve( final O aValue ) {
+		return super.entrySet( ).parallelStream( ).filter( entry -> aValue.equals( entry.getValue( ) ) ).map( Map.Entry::getKey ).findFirst( ).orElse( null );
 	}
 
 	/**
@@ -60,20 +61,21 @@ public final class Mapper<I, O> extends HashMap<I, O> {
 		private final I ivKey;
 		private final boolean ivKeyAvailable;
 
-		protected To(final I aKey) {
+		protected To( final I aKey ) {
 			this.ivKey = aKey;
 			this.ivKeyAvailable = true;
 		}
 
-		protected To() {
+		protected To( ) {
 			this.ivKey = null;
 			this.ivKeyAvailable = false;
 		}
 
-		public void to(final O aValue) {
-			if (this.ivKeyAvailable) {
-				Mapper.super.put(this.ivKey, aValue);
-			} else {
+		public void to( final O aValue ) {
+			if ( this.ivKeyAvailable ) {
+				Mapper.super.put( this.ivKey, aValue );
+			}
+			else {
 				Mapper.this.ivDefaultValue = aValue;
 			}
 		}

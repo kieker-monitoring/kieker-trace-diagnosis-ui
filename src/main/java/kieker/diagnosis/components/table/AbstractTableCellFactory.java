@@ -26,25 +26,26 @@ import javafx.util.Callback;
 public abstract class AbstractTableCellFactory<S, T> implements Callback<TableColumn<S, T>, TableCell<S, T>> {
 
 	@Override
-	public final TableCell<S, T> call(final TableColumn<S, T> aTableColumn) {
-		return new FailedTableCell();
+	public final TableCell<S, T> call( final TableColumn<S, T> aTableColumn ) {
+		return new FailedTableCell( );
 	}
 
-	protected abstract String getItemLabel(T aItem);
+	protected abstract String getItemLabel( T aItem );
 
 	private final class FailedTableCell extends TableCell<S, T> {
 
 		@Override
-		protected void updateItem(final T aItem, final boolean aEmpty) {
-			super.updateItem(aItem, aEmpty);
+		protected void updateItem( final T aItem, final boolean aEmpty ) {
+			super.updateItem( aItem, aEmpty );
 
-			if (aEmpty || (aItem == null)) {
-				setText(null);
-				setGraphic(null);
-			} else {
-				setText(getItemLabel(aItem));
+			if ( aEmpty || (aItem == null) ) {
+				setText( null );
+				setGraphic( null );
+			}
+			else {
+				setText( getItemLabel( aItem ) );
 			}
 		}
 	}
-	
+
 }

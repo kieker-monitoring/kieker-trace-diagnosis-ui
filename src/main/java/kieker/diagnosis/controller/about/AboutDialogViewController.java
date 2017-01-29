@@ -24,12 +24,12 @@ import kieker.diagnosis.util.Context;
  */
 public final class AboutDialogViewController extends AbstractDialogController {
 
-	public AboutDialogViewController(final Context aContext) {
-		super(aContext);
+	public AboutDialogViewController( final Context aContext ) {
+		super( aContext );
 	}
-	
+
 	@Override
-	protected void reinitialize() {
+	protected void reinitialize( ) {
 	}
-	
+
 }

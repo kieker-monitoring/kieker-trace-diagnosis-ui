@@ -25,21 +25,22 @@ import kieker.diagnosis.util.Context;
 
 public abstract class AbstractDialogController extends AbstractController {
 
-	@FXML private Node ivView;
+	@FXML
+	private Node ivView;
 
-	public AbstractDialogController(final Context aContext) {
-		super(aContext);
+	public AbstractDialogController( final Context aContext ) {
+		super( aContext );
 	}
 
-	public final void closeDialog() {
-		final Scene scene = this.getView().getScene();
-		final Window window = scene.getWindow();
-		if (window instanceof Stage) {
-			((Stage) window).close();
+	public final void closeDialog( ) {
+		final Scene scene = this.getView( ).getScene( );
+		final Window window = scene.getWindow( );
+		if ( window instanceof Stage ) {
+			((Stage) window).close( );
 		}
 	}
 
-	protected final Node getView() {
+	protected final Node getView( ) {
 		return this.ivView;
 	}
 

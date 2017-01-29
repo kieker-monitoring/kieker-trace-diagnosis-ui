@@ -27,7 +27,7 @@ public final class Statistics {
 	private final long ivMinDuration;
 	private final long ivMaxDuration;
 
-	public Statistics(final long aTotalDuration, final long aMeanDuration, final long aMedianDuration, final long aMinDuration, final long aMaxDuration) {
+	public Statistics( final long aTotalDuration, final long aMeanDuration, final long aMedianDuration, final long aMinDuration, final long aMaxDuration ) {
 		this.ivTotalDuration = aTotalDuration;
 		this.ivMeanDuration = aMeanDuration;
 		this.ivMedianDuration = aMedianDuration;
@@ -35,23 +35,23 @@ public final class Statistics {
 		this.ivMaxDuration = aMaxDuration;
 	}
 
-	public long getTotalDuration() {
+	public long getTotalDuration( ) {
 		return this.ivTotalDuration;
 	}
 
-	public long getMeanDuration() {
+	public long getMeanDuration( ) {
 		return this.ivMeanDuration;
 	}
 
-	public long getMedianDuration() {
+	public long getMedianDuration( ) {
 		return this.ivMedianDuration;
 	}
 
-	public long getMinDuration() {
+	public long getMinDuration( ) {
 		return this.ivMinDuration;
 	}
 
-	public long getMaxDuration() {
+	public long getMaxDuration( ) {
 		return this.ivMaxDuration;
 	}
 

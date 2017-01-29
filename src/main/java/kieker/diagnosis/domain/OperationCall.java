@@ -17,8 +17,9 @@
 package kieker.diagnosis.domain;
 
 /**
- * This class represents a concrete operation call within this application. It adds some properties that are only required for concrete operation calls, like the trace ID and the
- * duration. It extends the call tree mechanism (inherited from {@link AbstractOperationCall}) by a parent, allowing to navigate in both directions within the tree.
+ * This class represents a concrete operation call within this application. It adds some properties that are only required for concrete operation calls, like
+ * the trace ID and the duration. It extends the call tree mechanism (inherited from {@link AbstractOperationCall}) by a parent, allowing to navigate in both
+ * directions within the tree.
  *
  * @author Nils Christian Ehmke
  */
@@ -31,52 +32,53 @@ public final class OperationCall extends AbstractOperationCall<OperationCall> {
 	private long ivDuration;
 	private long ivTimestamp;
 
-	public OperationCall(final String aContainer, final String aComponent, final String aOperation, final long aTraceID, final long aTimestamp) {
-		this(aContainer, aComponent, aOperation, null, aTraceID, aTimestamp);
+	public OperationCall( final String aContainer, final String aComponent, final String aOperation, final long aTraceID, final long aTimestamp ) {
+		this( aContainer, aComponent, aOperation, null, aTraceID, aTimestamp );
 	}
 
-	public OperationCall(final String aContainer, final String aComponent, final String aOperation, final String aFailedCause, final long aTraceID, final long aTimestamp) {
-		super(aContainer, aComponent, aOperation, aFailedCause);
+	public OperationCall( final String aContainer, final String aComponent, final String aOperation, final String aFailedCause, final long aTraceID,
+			final long aTimestamp ) {
+		super( aContainer, aComponent, aOperation, aFailedCause );
 
 		this.ivTraceID = aTraceID;
 		this.ivTimestamp = aTimestamp;
 	}
 
 	@Override
-	public void addChild(final OperationCall aChild) {
-		super.addChild(aChild);
+	public void addChild( final OperationCall aChild ) {
+		super.addChild( aChild );
 		aChild.ivParent = this;
 	}
 
-	public OperationCall getParent() {
+	public OperationCall getParent( ) {
 		return this.ivParent;
 	}
 
-	public float getPercent() {
+	public float getPercent( ) {
 		return this.ivPercent;
 	}
 
-	public void setPercent(final float aPercent) {
+	public void setPercent( final float aPercent ) {
 		this.ivPercent = aPercent;
 	}
 
-	public long getDuration() {
+	public long getDuration( ) {
 		return this.ivDuration;
 	}
 
-	public void setDuration(final long aDuration) {
+	public void setDuration( final long aDuration ) {
 		this.ivDuration = aDuration;
 	}
 
-	public long getTraceID() {
+	public long getTraceID( ) {
 		return this.ivTraceID;
 	}
 
-	public long getTimestamp() {
+	public long getTimestamp( ) {
 		return this.ivTimestamp;
 	}
 
-	public void setTimestamp(final long aTimestamp) {
+	public void setTimestamp( final long aTimestamp ) {
 		this.ivTimestamp = aTimestamp;
 	}
 

@@ -38,27 +38,28 @@ import org.apache.logging.log4j.Logger;
  */
 public final class ComponentCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<String>> {
 
-	private static final Logger LOGGER = LogManager.getLogger(ComponentCellValueFactory.class);
+	private static final Logger LOGGER = LogManager.getLogger( ComponentCellValueFactory.class );
 
 	private final String ivProperty;
 
-	public ComponentCellValueFactory(@NamedArg(value = "property") final String aProperty) {
-		this.ivProperty = aProperty.substring(0, 1).toUpperCase(Locale.ROOT) + aProperty.substring(1);
+	public ComponentCellValueFactory( @NamedArg ( value = "property" ) final String aProperty ) {
+		this.ivProperty = aProperty.substring( 0, 1 ).toUpperCase( Locale.ROOT ) + aProperty.substring( 1 );
 	}
 
 	@Override
-	public ObservableValue<String> call(final CellDataFeatures<?, String> aCall) {
+	public ObservableValue<String> call( final CellDataFeatures<?, String> aCall ) {
 		try {
-			final Method getter = aCall.getValue().getClass().getMethod("get" + this.ivProperty, new Class<?>[0]);
-			String componentName = (String) getter.invoke(aCall.getValue(), new Object[0]);
+			final Method getter = aCall.getValue( ).getClass( ).getMethod( "get" + this.ivProperty, new Class<?>[0] );
+			String componentName = (String) getter.invoke( aCall.getValue( ), new Object[0] );
 
-			if (PropertiesModel.getInstance().getComponentNames() == ComponentNames.SHORT) {
-				componentName = NameConverter.toShortComponentName(componentName);
+			if ( PropertiesModel.getInstance( ).getComponentNames( ) == ComponentNames.SHORT ) {
+				componentName = NameConverter.toShortComponentName( componentName );
 			}
 
-			return new ReadOnlyObjectWrapper<String>(componentName);
-		} catch (final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-			ComponentCellValueFactory.LOGGER.warn(ex);
+			return new ReadOnlyObjectWrapper<String>( componentName );
+		}
+		catch ( final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex ) {
+			ComponentCellValueFactory.LOGGER.warn( ex );
 			return null;
 		}
 	}

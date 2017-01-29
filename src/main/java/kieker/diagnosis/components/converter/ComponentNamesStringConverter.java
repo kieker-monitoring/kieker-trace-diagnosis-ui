@@ -27,12 +27,12 @@ import kieker.diagnosis.util.Mapper;
 public final class ComponentNamesStringConverter extends AbstractStringConverter<ComponentNames> {
 
 	@Override
-	protected void fillMapper(final Mapper<ComponentNames, String> aMapper, final ResourceBundle aResourceBundle) {
-		final String shortStr = aResourceBundle.getString("short");
-		final String longStr = aResourceBundle.getString("long");
+	protected void fillMapper( final Mapper<ComponentNames, String> aMapper, final ResourceBundle aResourceBundle ) {
+		final String shortStr = aResourceBundle.getString( "short" );
+		final String longStr = aResourceBundle.getString( "long" );
 
-		aMapper.map(ComponentNames.SHORT).to(shortStr + " (Catalog)");
-		aMapper.map(ComponentNames.LONG).to(longStr + " (kieker.examples.bookstore.Catalog)");
+		aMapper.map( ComponentNames.SHORT ).to( shortStr + " (Catalog)" );
+		aMapper.map( ComponentNames.LONG ).to( longStr + " (kieker.examples.bookstore.Catalog)" );
 	}
 
 }

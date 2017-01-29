@@ -27,19 +27,19 @@ import kieker.diagnosis.domain.AggregatedOperationCall;
  */
 public final class LazyAggregatedOperationCallTreeItem extends AbstractLazyOperationCallTreeItem<AggregatedOperationCall> {
 
-	public LazyAggregatedOperationCallTreeItem(final AggregatedOperationCall aValue) {
-		super(aValue);
+	public LazyAggregatedOperationCallTreeItem( final AggregatedOperationCall aValue ) {
+		super( aValue );
 	}
 
 	@Override
-	protected void initializeChildren() {
-		final List<TreeItem<AggregatedOperationCall>> result = new ArrayList<>();
+	protected void initializeChildren( ) {
+		final List<TreeItem<AggregatedOperationCall>> result = new ArrayList<>( );
 
-		for (final AggregatedOperationCall child : super.getValue().getChildren()) {
-			result.add(new LazyAggregatedOperationCallTreeItem(child));
+		for ( final AggregatedOperationCall child : super.getValue( ).getChildren( ) ) {
+			result.add( new LazyAggregatedOperationCallTreeItem( child ) );
 		}
 
-		super.getChildren().setAll(result);
+		super.getChildren( ).setAll( result );
 	}
 
 }

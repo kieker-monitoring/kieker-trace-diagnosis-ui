@@ -24,48 +24,48 @@ public final class MainView {
 
 	private final ApplicationTest applicationTest;
 
-	public MainView(final ApplicationTest applicationTest) {
+	public MainView( final ApplicationTest applicationTest ) {
 		this.applicationTest = applicationTest;
 	}
 
-	public Button getTracesButton() {
-		return new Button(this.applicationTest, "#ivTraces");
+	public Button getTracesButton( ) {
+		return new Button( this.applicationTest, "#ivTraces" );
 	}
 
-	public Button getAggregatedTracesButton() {
-		return new Button(this.applicationTest, "#ivAggregatedtraces");
+	public Button getAggregatedTracesButton( ) {
+		return new Button( this.applicationTest, "#ivAggregatedtraces" );
 	}
 
-	public Button getCallsButton() {
-		return new Button(this.applicationTest, "#ivCalls");
+	public Button getCallsButton( ) {
+		return new Button( this.applicationTest, "#ivCalls" );
 	}
 
-	public Button getAggregatedCallsButton() {
-		return new Button(this.applicationTest, "#ivAggregatedcalls");
+	public Button getAggregatedCallsButton( ) {
+		return new Button( this.applicationTest, "#ivAggregatedcalls" );
 	}
 
-	public Button getStatisticsButton() {
-		return new Button(this.applicationTest, "#ivStatistics");
+	public Button getStatisticsButton( ) {
+		return new Button( this.applicationTest, "#ivStatistics" );
 	}
 
-	public Button getHelpButton() {
-		return new Button(this.applicationTest, "#ivHelp");
+	public Button getHelpButton( ) {
+		return new Button( this.applicationTest, "#ivHelp" );
 	}
 
-	public Button getAboutButton() {
-		return new Button(this.applicationTest, "#ivAbout");
+	public Button getAboutButton( ) {
+		return new Button( this.applicationTest, "#ivAbout" );
 	}
 
-	public Button getFileButton() {
-		return new Button(this.applicationTest, "#ivFile");
+	public Button getFileButton( ) {
+		return new Button( this.applicationTest, "#ivFile" );
 	}
 
-	public Button getSettingsButton() {
-		return new Button(this.applicationTest, "#ivSettings");
+	public Button getSettingsButton( ) {
+		return new Button( this.applicationTest, "#ivSettings" );
 	}
 
-	public Button getOpenMonitoringLogButton() {
-		return new Button(this.applicationTest, "#ivOpenMonitoringLog");
+	public Button getOpenMonitoringLogButton( ) {
+		return new Button( this.applicationTest, "#ivOpenMonitoringLog" );
 	}
 
 }

@@ -25,8 +25,8 @@ import kieker.diagnosis.util.NameConverter;
 public final class DurationTableCellFactory<S, T> extends AbstractTableCellFactory<S, T> {
 
 	@Override
-	protected String getItemLabel(final T aItem) {
-		return (aItem.toString() + " " + NameConverter.toShortTimeUnit(PropertiesModel.getInstance().getTimeUnit()));
+	protected String getItemLabel( final T aItem ) {
+		return (aItem.toString( ) + " " + NameConverter.toShortTimeUnit( PropertiesModel.getInstance( ).getTimeUnit( ) ));
 	}
 
 }

@@ -1,5 +1,9 @@
 1.2.0:
 	29 Jan 2017
+	Internal Improvement (#37)
+	Added a customized configuration for the formatter and cleanup in Eclipse.
+	
+	29 Jan 2017
 	Internal Improvement (#36)
 	The (Tree)TableCellFactories have been replaced with (Tree)TableRowFactories.
 

@@ -21,19 +21,19 @@ public final class CSVData {
 	private String[] ivHeader;
 	private String[][] ivRows;
 
-	public String[] getHeader() {
+	public String[] getHeader( ) {
 		return ivHeader;
 	}
 
-	public void setHeader(final String[] aHeader) {
+	public void setHeader( final String[] aHeader ) {
 		this.ivHeader = aHeader;
 	}
 
-	public String[][] getRows() {
+	public String[][] getRows( ) {
 		return ivRows;
 	}
 
-	public void setRows(final String[][] aRows) {
+	public void setRows( final String[][] aRows ) {
 		this.ivRows = aRows;
 	}
 

@@ -20,9 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This is an abstract base for classes representing operation calls (also called executions) within this application. As it can has multiple children, an instance of this class
- * can represent a whole call tree. This class implements the both methods {@link OperationCall#equals(Object)} and {@link OperationCall#hashCode()}, allowing to easily check
- * whether two traces are equal and should be in the same equivalence class.
+ * This is an abstract base for classes representing operation calls (also called executions) within this application. As it can has multiple children, an
+ * instance of this class can represent a whole call tree. This class implements the both methods {@link OperationCall#equals(Object)} and
+ * {@link OperationCall#hashCode()}, allowing to easily check whether two traces are equal and should be in the same equivalence class.
  *
  * @author Nils Christian Ehmke
  *
@@ -30,8 +30,8 @@ import java.util.List;
  *            The precise type of the children. This should usually be the implementing class itself.
  */
 public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> {
- 
-	private final List<T> ivChildren = new ArrayList<>();
+
+	private final List<T> ivChildren = new ArrayList<>( );
 
 	private final String ivContainer;
 	private final String ivComponent;
@@ -41,144 +41,149 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 	private int ivStackSize;
 	private String ivFailedCause;
 
-	public AbstractOperationCall(final String aContainer, final String aComponent, final String aOperation) {
-		this(aContainer, aComponent, aOperation, null);
+	public AbstractOperationCall( final String aContainer, final String aComponent, final String aOperation ) {
+		this( aContainer, aComponent, aOperation, null );
 	}
 
-	public AbstractOperationCall(final String aContainer, final String aComponent, final String aOperation, final String aFailedCause) {
-		this.ivContainer = aContainer.intern();
-		this.ivComponent = aComponent.intern();
-		this.ivOperation = aOperation.intern();
-		this.ivFailedCause = (aFailedCause != null) ? aFailedCause.intern() : null;
+	public AbstractOperationCall( final String aContainer, final String aComponent, final String aOperation, final String aFailedCause ) {
+		this.ivContainer = aContainer.intern( );
+		this.ivComponent = aComponent.intern( );
+		this.ivOperation = aOperation.intern( );
+		this.ivFailedCause = (aFailedCause != null) ? aFailedCause.intern( ) : null;
 	}
 
-	public void addChild(final T aChild) {
-		this.ivChildren.add(aChild);
+	public void addChild( final T aChild ) {
+		this.ivChildren.add( aChild );
 	}
 
-	public final List<T> getChildren() {
+	public final List<T> getChildren( ) {
 		return this.ivChildren;
 	}
 
-	public final String getContainer() {
+	public final String getContainer( ) {
 		return this.ivContainer;
 	}
 
-	public final String getComponent() {
+	public final String getComponent( ) {
 		return this.ivComponent;
 	}
 
-	public final String getOperation() {
+	public final String getOperation( ) {
 		return this.ivOperation;
 	}
 
-	public final int getStackDepth() {
+	public final int getStackDepth( ) {
 		return this.ivStackDepth;
 	}
 
-	public final void setStackDepth(final int aStackDepth) {
+	public final void setStackDepth( final int aStackDepth ) {
 		this.ivStackDepth = aStackDepth;
 	}
 
-	public final int getStackSize() {
+	public final int getStackSize( ) {
 		return this.ivStackSize;
 	}
 
-	public final void setStackSize(final int aStackSize) {
+	public final void setStackSize( final int aStackSize ) {
 		this.ivStackSize = aStackSize;
 	}
 
-	public final boolean isFailed() {
+	public final boolean isFailed( ) {
 		return (this.ivFailedCause != null);
 	}
 
-	public final String getFailedCause() {
+	public final String getFailedCause( ) {
 		return this.ivFailedCause;
 	}
 
-	public final void setFailedCause(final String aFailedCause) {
-		this.ivFailedCause = (aFailedCause != null) ? aFailedCause.intern() : null;
+	public final void setFailedCause( final String aFailedCause ) {
+		this.ivFailedCause = (aFailedCause != null) ? aFailedCause.intern( ) : null;
 	}
 
-	public final boolean containsFailure() {
-		return this.isFailed() || this.ivChildren.parallelStream().anyMatch(T::containsFailure);
+	public final boolean containsFailure( ) {
+		return this.isFailed( ) || this.ivChildren.parallelStream( ).anyMatch( T::containsFailure );
 	}
 
-	public final int calculateHashCode() {
+	public final int calculateHashCode( ) {
 		final int prime = 31;
 		int result = 1;
 
-		result = (prime * result) + ((this.ivChildren == null) ? 0 : this.calculateHashCodeForChildren());
-		result = (prime * result) + ((this.ivComponent == null) ? 0 : this.ivComponent.hashCode());
-		result = (prime * result) + ((this.ivContainer == null) ? 0 : this.ivContainer.hashCode());
-		result = (prime * result) + ((this.ivFailedCause == null) ? 0 : this.ivFailedCause.hashCode());
-		result = (prime * result) + ((this.ivOperation == null) ? 0 : this.ivOperation.hashCode());
+		result = (prime * result) + ((this.ivChildren == null) ? 0 : this.calculateHashCodeForChildren( ));
+		result = (prime * result) + ((this.ivComponent == null) ? 0 : this.ivComponent.hashCode( ));
+		result = (prime * result) + ((this.ivContainer == null) ? 0 : this.ivContainer.hashCode( ));
+		result = (prime * result) + ((this.ivFailedCause == null) ? 0 : this.ivFailedCause.hashCode( ));
+		result = (prime * result) + ((this.ivOperation == null) ? 0 : this.ivOperation.hashCode( ));
 
 		return result;
 	}
 
-	private final int calculateHashCodeForChildren() {
+	private final int calculateHashCodeForChildren( ) {
 		int hashCode = 1;
-		for (final T child : this.ivChildren) {
-			hashCode = (31 * hashCode) + (child == null ? 0 : child.calculateHashCode());
+		for ( final T child : this.ivChildren ) {
+			hashCode = (31 * hashCode) + (child == null ? 0 : child.calculateHashCode( ));
 		}
 		return hashCode;
 	}
 
-	@SuppressWarnings("unchecked")
-	public final boolean isEqualTo(final Object aObj) { // NOPMD (this method violates some metrics)
-		if (this == aObj) {
+	@SuppressWarnings ( "unchecked" )
+	public final boolean isEqualTo( final Object aObj ) { // NOPMD (this method violates some metrics)
+		if ( this == aObj ) {
 			return true;
 		}
-		if (aObj == null) {
+		if ( aObj == null ) {
 			return false;
 		}
-		if (this.getClass() != aObj.getClass()) {
+		if ( this.getClass( ) != aObj.getClass( ) ) {
 			return false;
 		}
 		final T other = (T) aObj;
-		if (this.ivChildren == null) {
-			if (other.getChildren() != null) {
+		if ( this.ivChildren == null ) {
+			if ( other.getChildren( ) != null ) {
 				return false;
 			}
-		} else {
-			final int length1 = this.ivChildren.size();
-			final int length2 = other.getChildren().size();
-			if (length1 != length2) {
+		}
+		else {
+			final int length1 = this.ivChildren.size( );
+			final int length2 = other.getChildren( ).size( );
+			if ( length1 != length2 ) {
 				return false;
 			}
-			for (int i = 0; i < length1; i++) {
-				if (!this.ivChildren.get(i).isEqualTo(other.getChildren().get(i))) {
+			for ( int i = 0; i < length1; i++ ) {
+				if ( !this.ivChildren.get( i ).isEqualTo( other.getChildren( ).get( i ) ) ) {
 					return false;
 				}
 			}
 		}
-		if (this.ivComponent == null) {
-			if (other.getComponent() != null) {
+		if ( this.ivComponent == null ) {
+			if ( other.getComponent( ) != null ) {
 				return false;
 			}
-		} else if (!this.ivComponent.equals(other.getComponent())) {
+		}
+		else if ( !this.ivComponent.equals( other.getComponent( ) ) ) {
 			return false;
 		}
-		if (this.ivContainer == null) {
-			if (other.getContainer() != null) {
+		if ( this.ivContainer == null ) {
+			if ( other.getContainer( ) != null ) {
 				return false;
 			}
-		} else if (!this.ivContainer.equals(other.getContainer())) {
+		}
+		else if ( !this.ivContainer.equals( other.getContainer( ) ) ) {
 			return false;
 		}
-		if (this.ivFailedCause == null) {
-			if (other.getFailedCause() != null) {
+		if ( this.ivFailedCause == null ) {
+			if ( other.getFailedCause( ) != null ) {
 				return false;
 			}
-		} else if (!this.ivFailedCause.equals(other.getFailedCause())) {
+		}
+		else if ( !this.ivFailedCause.equals( other.getFailedCause( ) ) ) {
 			return false;
 		}
-		if (this.ivOperation == null) {
-			if (other.getOperation() != null) {
+		if ( this.ivOperation == null ) {
+			if ( other.getOperation( ) != null ) {
 				return false;
 			}
-		} else if (!this.ivOperation.equals(other.getOperation())) {
+		}
+		else if ( !this.ivOperation.equals( other.getOperation( ) ) ) {
 			return false;
 		}
 		return true;

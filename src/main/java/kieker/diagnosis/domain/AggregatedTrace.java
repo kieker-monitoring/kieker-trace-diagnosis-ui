@@ -27,13 +27,13 @@ public final class AggregatedTrace extends AbstractTrace<AggregatedOperationCall
 
 	private final List<Trace> ivTraces;
 
-	public AggregatedTrace(final List<Trace> aTraces) {
-		super(new AggregatedOperationCall(aTraces.get(0).getRootOperationCall()));
+	public AggregatedTrace( final List<Trace> aTraces ) {
+		super( new AggregatedOperationCall( aTraces.get( 0 ).getRootOperationCall( ) ) );
 
 		this.ivTraces = aTraces;
 	}
 
-	public List<Trace> getTraces() {
+	public List<Trace> getTraces( ) {
 		return this.ivTraces;
 	}
 

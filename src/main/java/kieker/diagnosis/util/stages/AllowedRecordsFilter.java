@@ -32,16 +32,17 @@ public final class AllowedRecordsFilter extends AbstractTransformation<IMonitori
 	private int ivIgnoredRecords;
 
 	@Override
-	protected void execute(final IMonitoringRecord aElement) {
-		if ((aElement instanceof TraceMetadata) || (aElement instanceof BeforeOperationEvent) || (aElement instanceof AfterOperationEvent) || (aElement instanceof KiekerMetadataRecord)
-				|| (aElement instanceof OperationExecutionRecord)) {
-			super.getOutputPort().send(aElement);
-		} else {
+	protected void execute( final IMonitoringRecord aElement ) {
+		if ( (aElement instanceof TraceMetadata) || (aElement instanceof BeforeOperationEvent) || (aElement instanceof AfterOperationEvent)
+				|| (aElement instanceof KiekerMetadataRecord) || (aElement instanceof OperationExecutionRecord) ) {
+			super.getOutputPort( ).send( aElement );
+		}
+		else {
 			this.ivIgnoredRecords++;
 		}
 	}
 
-	public int getIgnoredRecords() {
+	public int getIgnoredRecords( ) {
 		return this.ivIgnoredRecords;
 	}
 

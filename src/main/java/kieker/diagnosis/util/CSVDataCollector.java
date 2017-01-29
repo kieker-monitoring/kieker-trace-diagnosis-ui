@@ -18,6 +18,6 @@ package kieker.diagnosis.util;
 
 public interface CSVDataCollector {
 
-	public CSVData collectData();
-	
+	public CSVData collectData( );
+
 }
