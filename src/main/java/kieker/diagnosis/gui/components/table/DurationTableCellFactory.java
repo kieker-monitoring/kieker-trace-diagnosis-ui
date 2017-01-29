@@ -16,17 +16,21 @@
 
 package kieker.diagnosis.gui.components.table;
 
-import kieker.diagnosis.model.PropertiesModel;
-import kieker.diagnosis.util.NameConverter;
+import kieker.diagnosis.service.ServiceUtil;
+import kieker.diagnosis.service.nameconverter.NameConverterService;
+import kieker.diagnosis.service.properties.PropertiesService;
 
 /**
  * @author Nils Christian Ehmke
  */
 public final class DurationTableCellFactory<S, T> extends AbstractTableCellFactory<S, T> {
 
+	private final NameConverterService ivNameConverterService = ServiceUtil.getService( NameConverterService.class );
+	private final PropertiesService ivPropertiesService = ServiceUtil.getService( PropertiesService.class );
+
 	@Override
 	protected String getItemLabel( final T aItem ) {
-		return (aItem.toString( ) + " " + NameConverter.toShortTimeUnit( PropertiesModel.getInstance( ).getTimeUnit( ) ));
+		return (aItem.toString( ) + " " + ivNameConverterService.toShortTimeUnit( ivPropertiesService.getTimeUnit( ) ));
 	}
 
 }

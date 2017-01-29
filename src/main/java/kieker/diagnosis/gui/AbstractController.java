@@ -16,8 +16,6 @@
 
 package kieker.diagnosis.gui;
 
-import kieker.diagnosis.util.Context;
-
 public abstract class AbstractController<T extends AbstractView> {
 
 	private final Context ivContext;

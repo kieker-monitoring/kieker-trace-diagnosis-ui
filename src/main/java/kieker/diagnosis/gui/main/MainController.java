@@ -35,9 +35,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
-import kieker.diagnosis.domain.AggregatedOperationCall;
-import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.gui.AbstractController;
+import kieker.diagnosis.gui.Context;
+import kieker.diagnosis.gui.ContextEntry;
+import kieker.diagnosis.gui.ContextKey;
 import kieker.diagnosis.gui.GUIUtil;
 import kieker.diagnosis.gui.about.AboutDialogController;
 import kieker.diagnosis.gui.aggregatedcalls.AggregatedCallsController;
@@ -47,14 +48,13 @@ import kieker.diagnosis.gui.calls.CallsController;
 import kieker.diagnosis.gui.monitoringstatistics.MonitoringStatisticsController;
 import kieker.diagnosis.gui.settings.SettingsDialogController;
 import kieker.diagnosis.gui.traces.TracesController;
-import kieker.diagnosis.model.DataModel;
-import kieker.diagnosis.model.PropertiesModel;
+import kieker.diagnosis.service.data.DataService;
+import kieker.diagnosis.service.data.domain.AggregatedOperationCall;
+import kieker.diagnosis.service.data.domain.OperationCall;
 import kieker.diagnosis.service.export.CSVData;
+import kieker.diagnosis.service.export.CSVDataCollector;
 import kieker.diagnosis.service.export.ExportService;
-import kieker.diagnosis.util.CSVDataCollector;
-import kieker.diagnosis.util.Context;
-import kieker.diagnosis.util.ContextEntry;
-import kieker.diagnosis.util.ContextKey;
+import kieker.diagnosis.service.properties.PropertiesService;
 
 /**
  * The main controller of this application. It is responsible for controlling the application's main window.
@@ -68,15 +68,15 @@ public final class MainController extends AbstractController<MainView> implement
 
 	private static final Logger LOGGER = LogManager.getLogger( MainController.class );
 
-	private final DataModel ivDataModel = DataModel.getInstance( );
-
 	private Optional<Button> ivDisabledButton = Optional.empty( );
 	@SuppressWarnings ( "rawtypes" )
 	private Optional<Class<? extends AbstractController>> ivActiveController = Optional.empty( );
 
 	private int ivFavoritesAvailable;
 
-	private ExportService exportService;
+	private PropertiesService ivPropertiesService;
+	private ExportService ivExportService;
+	private DataService ivDataService;
 
 	public MainController( final Context aContext ) {
 		super( aContext );
@@ -164,7 +164,7 @@ public final class MainController extends AbstractController<MainView> implement
 		}
 		final File selectedDirectory = directoryChooser.showDialog( getView( ).getWindow( ) );
 		if ( null != selectedDirectory ) {
-			ivDataModel.loadMonitoringLogFromFS( selectedDirectory );
+			ivDataService.loadMonitoringLogFromFS( selectedDirectory );
 
 			preferences.put( MainController.KEY_LAST_IMPORT_PATH, selectedDirectory.getAbsolutePath( ) );
 			try {
@@ -179,11 +179,11 @@ public final class MainController extends AbstractController<MainView> implement
 	@Override
 	@SuppressWarnings ( "unchecked" )
 	public void showSettings( ) throws Exception {
-		final long propertiesVersionPre = PropertiesModel.getInstance( ).getVersion( );
+		final long propertiesVersionPre = ivPropertiesService.getVersion( );
 		GUIUtil.loadDialog( SettingsDialogController.class, getView( ).getWindow( ) );
 
 		if ( ivActiveController.isPresent( ) ) {
-			final long propertiesVersionPost = PropertiesModel.getInstance( ).getVersion( );
+			final long propertiesVersionPost = ivPropertiesService.getVersion( );
 			if ( propertiesVersionPre != propertiesVersionPost ) {
 				GUIUtil.clearCache( );
 				GUIUtil.loadView( ivActiveController.get( ), getView( ).getContent( ), new ContextEntry[0] );
@@ -233,7 +233,7 @@ public final class MainController extends AbstractController<MainView> implement
 		final File selectedFile = fileChooser.showSaveDialog( getView( ).getWindow( ) );
 		if ( null != selectedFile ) {
 			final CSVData data = aDataCollector.collectData( );
-			exportService.exportToCSV( data, selectedFile );
+			ivExportService.exportToCSV( data, selectedFile );
 
 			preferences.put( MainController.KEY_LAST_EXPORT_PATH, selectedFile.getParent( ) );
 			try {

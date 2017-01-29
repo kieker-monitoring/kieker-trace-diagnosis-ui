@@ -3,8 +3,8 @@ package kieker.diagnosis.gui.aggregatedcalls;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.gui.AbstractView;
+import kieker.diagnosis.service.data.domain.AggregatedOperationCall;
 
 public class AggregatedCallsView extends AbstractView {
 

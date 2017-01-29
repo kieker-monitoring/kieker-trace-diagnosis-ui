@@ -8,10 +8,10 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Window;
 import kieker.diagnosis.gui.AbstractView;
-import kieker.diagnosis.model.PropertiesModel.ComponentNames;
-import kieker.diagnosis.model.PropertiesModel.OperationNames;
-import kieker.diagnosis.model.PropertiesModel.Threshold;
-import kieker.diagnosis.model.PropertiesModel.TimestampTypes;
+import kieker.diagnosis.service.properties.PropertiesService.ComponentNames;
+import kieker.diagnosis.service.properties.PropertiesService.OperationNames;
+import kieker.diagnosis.service.properties.PropertiesService.Threshold;
+import kieker.diagnosis.service.properties.PropertiesService.TimestampTypes;
 
 public class SettingsDialogView extends AbstractView {
 

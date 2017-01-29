@@ -32,18 +32,18 @@ import javafx.collections.transformation.SortedList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.MouseEvent;
-import kieker.diagnosis.domain.AggregatedOperationCall;
-import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.gui.AbstractController;
+import kieker.diagnosis.gui.Context;
+import kieker.diagnosis.gui.ContextKey;
 import kieker.diagnosis.gui.main.MainController;
-import kieker.diagnosis.model.DataModel;
-import kieker.diagnosis.model.PropertiesModel;
+import kieker.diagnosis.service.data.DataService;
+import kieker.diagnosis.service.data.domain.AggregatedOperationCall;
+import kieker.diagnosis.service.data.domain.OperationCall;
 import kieker.diagnosis.service.export.CSVData;
-import kieker.diagnosis.util.CSVDataCollector;
-import kieker.diagnosis.util.Context;
-import kieker.diagnosis.util.ContextKey;
-import kieker.diagnosis.util.FilterUtility;
-import kieker.diagnosis.util.NameConverter;
+import kieker.diagnosis.service.export.CSVDataCollector;
+import kieker.diagnosis.service.filter.FilterService;
+import kieker.diagnosis.service.nameconverter.NameConverterService;
+import kieker.diagnosis.service.properties.PropertiesService;
 
 /**
  * @author Nils Christian Ehmke
@@ -53,6 +53,12 @@ public final class CallsController extends AbstractController<CallsView> impleme
 	private final SimpleObjectProperty<Optional<OperationCall>> ivSelection = new SimpleObjectProperty<>( Optional.empty( ) );
 
 	private FilteredList<OperationCall> ivFilteredData;
+
+	private NameConverterService ivNameConverterService;
+	private PropertiesService ivPropertiesService;
+	private FilterService ivFilterService;
+	private DataService ivDataService;
+
 	private MainController ivMainController;
 
 	public CallsController( final Context aContext ) {
@@ -61,9 +67,7 @@ public final class CallsController extends AbstractController<CallsView> impleme
 
 	@Override
 	public void doInitialize( ) {
-		final DataModel dataModel = DataModel.getInstance( );
-
-		ivFilteredData = new FilteredList<>( dataModel.getOperationCalls( ) );
+		ivFilteredData = new FilteredList<>( ivDataService.getOperationCalls( ) );
 		ivFilteredData.addListener( (ListChangeListener<OperationCall>) change -> ivSelection.set( Optional.empty( ) ) );
 
 		final SortedList<OperationCall> sortedData = new SortedList<>( ivFilteredData );
@@ -116,14 +120,15 @@ public final class CallsController extends AbstractController<CallsView> impleme
 	private void updateDetailPanel( ) {
 		if ( ivSelection.get( ).isPresent( ) ) {
 			final OperationCall call = ivSelection.get( ).get( );
-			final TimeUnit sourceTimeUnit = DataModel.getInstance( ).getTimeUnit( );
-			final TimeUnit targetTimeUnit = PropertiesModel.getInstance( ).getTimeUnit( );
+			final TimeUnit sourceTimeUnit = ivDataService.getTimeUnit( );
+			final TimeUnit targetTimeUnit = ivPropertiesService.getTimeUnit( );
 
 			getView( ).getContainer( ).setText( call.getContainer( ) );
 			getView( ).getComponent( ).setText( call.getComponent( ) );
 			getView( ).getOperation( ).setText( call.getOperation( ) );
-			getView( ).getTimestamp( ).setText( NameConverter.toTimestampString( call.getTimestamp( ), sourceTimeUnit ) + " (" + call.getTimestamp( ) + ")" );
-			getView( ).getDuration( ).setText( NameConverter.toDurationString( call.getDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getTimestamp( )
+					.setText( ivNameConverterService.toTimestampString( call.getTimestamp( ), sourceTimeUnit ) + " (" + call.getTimestamp( ) + ")" );
+			getView( ).getDuration( ).setText( ivNameConverterService.toDurationString( call.getDuration( ), sourceTimeUnit, targetTimeUnit ) );
 			getView( ).getTraceID( ).setText( Long.toString( call.getTraceID( ) ) );
 			getView( ).getFailed( ).setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : "N/A" );
 		}
@@ -165,17 +170,17 @@ public final class CallsController extends AbstractController<CallsView> impleme
 
 	@Override
 	public void useFilter( ) {
-		final Predicate<OperationCall> predicate1 = FilterUtility.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
+		final Predicate<OperationCall> predicate1 = FilterService.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
 				getView( ).getShowJustFailedButton( ), OperationCall::isFailed );
-		final Predicate<OperationCall> predicate2 = FilterUtility.useFilter( getView( ).getFilterContainer( ), OperationCall::getContainer );
-		final Predicate<OperationCall> predicate3 = FilterUtility.useFilter( getView( ).getFilterComponent( ), OperationCall::getComponent );
-		final Predicate<OperationCall> predicate4 = FilterUtility.useFilter( getView( ).getFilterOperation( ), OperationCall::getOperation );
-		final Predicate<OperationCall> predicate5 = FilterUtility.useFilter( getView( ).getFilterTraceID( ), (call -> Long.toString( call.getTraceID( ) )) );
-		final Predicate<OperationCall> predicate6 = FilterUtility.useFilter( getView( ).getFilterLowerDate( ), OperationCall::getTimestamp, true );
-		final Predicate<OperationCall> predicate7 = FilterUtility.useFilter( getView( ).getFilterUpperDate( ), OperationCall::getTimestamp, false );
-		final Predicate<OperationCall> predicate8 = FilterUtility.useFilter( getView( ).getFilterLowerTime( ), OperationCall::getTimestamp, true );
-		final Predicate<OperationCall> predicate9 = FilterUtility.useFilter( getView( ).getFilterUpperTime( ), OperationCall::getTimestamp, false );
-		final Predicate<OperationCall> predicate10 = FilterUtility.useFilter( getView( ).getFilterException( ),
+		final Predicate<OperationCall> predicate2 = ivFilterService.useFilter( getView( ).getFilterContainer( ), OperationCall::getContainer );
+		final Predicate<OperationCall> predicate3 = ivFilterService.useFilter( getView( ).getFilterComponent( ), OperationCall::getComponent );
+		final Predicate<OperationCall> predicate4 = ivFilterService.useFilter( getView( ).getFilterOperation( ), OperationCall::getOperation );
+		final Predicate<OperationCall> predicate5 = ivFilterService.useFilter( getView( ).getFilterTraceID( ), (call -> Long.toString( call.getTraceID( ) )) );
+		final Predicate<OperationCall> predicate6 = ivFilterService.useFilter( getView( ).getFilterLowerDate( ), OperationCall::getTimestamp, true );
+		final Predicate<OperationCall> predicate7 = ivFilterService.useFilter( getView( ).getFilterUpperDate( ), OperationCall::getTimestamp, false );
+		final Predicate<OperationCall> predicate8 = ivFilterService.useFilter( getView( ).getFilterLowerTime( ), OperationCall::getTimestamp, true );
+		final Predicate<OperationCall> predicate9 = ivFilterService.useFilter( getView( ).getFilterUpperTime( ), OperationCall::getTimestamp, false );
+		final Predicate<OperationCall> predicate10 = ivFilterService.useFilter( getView( ).getFilterException( ),
 				(call -> call.isFailed( ) ? call.getFailedCause( ) : "") );
 
 		final Predicate<OperationCall> predicate = predicate1.and( predicate2 ).and( predicate3 ).and( predicate4 ).and( predicate5 ).and( predicate6 )

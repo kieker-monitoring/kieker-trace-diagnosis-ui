@@ -22,15 +22,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import kieker.diagnosis.gui.AbstractController;
-import kieker.diagnosis.model.PropertiesModel;
-import kieker.diagnosis.util.Context;
+import kieker.diagnosis.gui.Context;
+import kieker.diagnosis.service.properties.PropertiesService;
 
 /**
  * @author Nils Christian Ehmke
  */
 public final class BugReportingDialogController extends AbstractController<BugReportingDialogView> implements BugReportingDialogControllerIfc {
 
-	private final PropertiesModel ivPropertiesModel = PropertiesModel.getInstance( );
+	private PropertiesService ivPropertiesService;
 
 	public BugReportingDialogController( final Context aContext ) {
 		super( aContext );
@@ -42,14 +42,14 @@ public final class BugReportingDialogController extends AbstractController<BugRe
 
 	@Override
 	public void visitGitLab( ) throws IOException, URISyntaxException {
-		final String gitLabURL = ivPropertiesModel.getGitLabURL( );
+		final String gitLabURL = ivPropertiesService.getGitLabURL( );
 		final Desktop desktop = Desktop.getDesktop( );
 		desktop.browse( new URI( gitLabURL ) );
 	}
 
 	@Override
 	public void visitTrac( ) throws IOException, URISyntaxException {
-		final String tracURL = ivPropertiesModel.getTracURL( );
+		final String tracURL = ivPropertiesService.getTracURL( );
 		final Desktop desktop = Desktop.getDesktop( );
 		desktop.browse( new URI( tracURL ) );
 	}

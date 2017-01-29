@@ -19,7 +19,7 @@ package kieker.diagnosis.gui.components.converter;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
-import kieker.diagnosis.util.Mapper;
+import kieker.diagnosis.common.Mapper;
 
 /**
  * @author Nils Christian Ehmke

@@ -23,13 +23,13 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import kieker.diagnosis.domain.AggregatedOperationCall;
-import kieker.diagnosis.domain.AggregatedTrace;
-import kieker.diagnosis.domain.OperationCall;
-import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.gui.AbstractController;
-import kieker.diagnosis.model.DataModel;
-import kieker.diagnosis.util.Context;
+import kieker.diagnosis.gui.Context;
+import kieker.diagnosis.service.data.DataService;
+import kieker.diagnosis.service.data.domain.AggregatedOperationCall;
+import kieker.diagnosis.service.data.domain.AggregatedTrace;
+import kieker.diagnosis.service.data.domain.OperationCall;
+import kieker.diagnosis.service.data.domain.Trace;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
@@ -40,7 +40,7 @@ public final class MonitoringStatisticsController extends AbstractController<Mon
 	private static final String[] UNITS = { "Bytes", "Kilobytes", "Megabytes", "Gigabytes", };
 	private static final float SIZE_OF_BYTE = 1024.0f;
 
-	private final DataModel ivDataModel = DataModel.getInstance( );
+	private DataService ivDataService;
 
 	public MonitoringStatisticsController( final Context aContext ) {
 		super( aContext );
@@ -48,36 +48,36 @@ public final class MonitoringStatisticsController extends AbstractController<Mon
 
 	@Override
 	public void doInitialize( ) {
-		final ObjectProperty<File> importDirectory = ivDataModel.getImportDirectory( );
+		final ObjectProperty<File> importDirectory = ivDataService.getImportDirectory( );
 		getView( ).getMonitoringlog( ).textProperty( )
 				.bind( Bindings.createStringBinding( ( ) -> assemblePathString( importDirectory.get( ) ), importDirectory ) );
 		getView( ).getMonitoringsize( ).textProperty( )
 				.bind( Bindings.createStringBinding( ( ) -> assembleSizeString( importDirectory.get( ) ), importDirectory ) );
 
-		final ObjectProperty<Long> duration = ivDataModel.getAnalysisDurationInMS( );
+		final ObjectProperty<Long> duration = ivDataService.getAnalysisDurationInMS( );
 		getView( ).getAnalysistime( ).textProperty( ).bind( Bindings.createStringBinding( ( ) -> assembleDurationString( duration.get( ) ), duration ) );
 
-		final ObjectProperty<Long> beginTimestamp = ivDataModel.getBeginTimestamp( );
-		final ObjectProperty<Long> endTimestamp = ivDataModel.getEndTimestamp( );
+		final ObjectProperty<Long> beginTimestamp = ivDataService.getBeginTimestamp( );
+		final ObjectProperty<Long> endTimestamp = ivDataService.getEndTimestamp( );
 		getView( ).getBeginofmonitoring( ).textProperty( )
 				.bind( Bindings.createStringBinding( ( ) -> assembleTimeString( beginTimestamp.get( ) ), beginTimestamp ) );
 		getView( ).getEndofmonitoring( ).textProperty( ).bind( Bindings.createStringBinding( ( ) -> assembleTimeString( endTimestamp.get( ) ), endTimestamp ) );
 
-		final ObservableList<OperationCall> operationCalls = ivDataModel.getOperationCalls( );
+		final ObservableList<OperationCall> operationCalls = ivDataService.getOperationCalls( );
 		final FilteredList<OperationCall> failedOperationCalls = new FilteredList<>( operationCalls, OperationCall::isFailed );
 		getView( ).getNumberofcalls( ).textProperty( )
 				.bind( Bindings.createStringBinding( ( ) -> Integer.toString( operationCalls.size( ) ), operationCalls ) );
 		getView( ).getNumberoffailedcalls( ).textProperty( )
 				.bind( Bindings.createStringBinding( ( ) -> Integer.toString( failedOperationCalls.size( ) ), failedOperationCalls ) );
 
-		final ObservableList<AggregatedOperationCall> aggOperationCalls = ivDataModel.getAggregatedOperationCalls( );
+		final ObservableList<AggregatedOperationCall> aggOperationCalls = ivDataService.getAggregatedOperationCalls( );
 		final FilteredList<AggregatedOperationCall> failedAggOperationCalls = new FilteredList<>( aggOperationCalls, AggregatedOperationCall::isFailed );
 		getView( ).getNumberofaggcalls( ).textProperty( )
 				.bind( Bindings.createStringBinding( ( ) -> Integer.toString( aggOperationCalls.size( ) ), aggOperationCalls ) );
 		getView( ).getNumberoffailedaggcalls( ).textProperty( )
 				.bind( Bindings.createStringBinding( ( ) -> Integer.toString( failedAggOperationCalls.size( ) ), failedAggOperationCalls ) );
 
-		final ObservableList<Trace> traces = ivDataModel.getTraces( );
+		final ObservableList<Trace> traces = ivDataService.getTraces( );
 		final FilteredList<Trace> failedTraces = new FilteredList<>( traces, t -> t.getRootOperationCall( ).isFailed( ) );
 		final FilteredList<Trace> failureTraces = new FilteredList<>( traces, t -> t.getRootOperationCall( ).containsFailure( ) );
 		getView( ).getNumberoftraces( ).textProperty( ).bind( Bindings.createStringBinding( ( ) -> Integer.toString( traces.size( ) ), traces ) );
@@ -86,7 +86,7 @@ public final class MonitoringStatisticsController extends AbstractController<Mon
 		getView( ).getNumberoffailuretraces( ).textProperty( )
 				.bind( Bindings.createStringBinding( ( ) -> Integer.toString( failureTraces.size( ) ), failureTraces ) );
 
-		final ObservableList<AggregatedTrace> aggTraces = ivDataModel.getAggregatedTraces( );
+		final ObservableList<AggregatedTrace> aggTraces = ivDataService.getAggregatedTraces( );
 		final FilteredList<AggregatedTrace> failedAggTraces = new FilteredList<>( aggTraces, t -> t.getRootOperationCall( ).isFailed( ) );
 		final FilteredList<AggregatedTrace> failureAggTraces = new FilteredList<>( aggTraces, t -> t.getRootOperationCall( ).containsFailure( ) );
 		getView( ).getNumberofaggtraces( ).textProperty( ).bind( Bindings.createStringBinding( ( ) -> Integer.toString( aggTraces.size( ) ), aggTraces ) );
@@ -95,15 +95,15 @@ public final class MonitoringStatisticsController extends AbstractController<Mon
 		getView( ).getNumberofaggfailuretraces( ).textProperty( )
 				.bind( Bindings.createStringBinding( ( ) -> Integer.toString( failureAggTraces.size( ) ), failureAggTraces ) );
 
-		final ObjectProperty<Integer> countIncompleteTraces = ivDataModel.countIncompleteTraces( );
+		final ObjectProperty<Integer> countIncompleteTraces = ivDataService.countIncompleteTraces( );
 		getView( ).getIncompletetraces( ).textProperty( )
 				.bind( Bindings.createStringBinding( ( ) -> Integer.toString( countIncompleteTraces.get( ) ), countIncompleteTraces ) );
 
-		final ObjectProperty<Integer> countDanglingRecords = ivDataModel.countDanglingRecords( );
+		final ObjectProperty<Integer> countDanglingRecords = ivDataService.countDanglingRecords( );
 		getView( ).getDanglingrecords( ).textProperty( )
 				.bind( Bindings.createStringBinding( ( ) -> Integer.toString( countDanglingRecords.get( ) ), countDanglingRecords ) );
 
-		final ObjectProperty<Integer> countIgnoredRecords = ivDataModel.countIgnoredRecords( );
+		final ObjectProperty<Integer> countIgnoredRecords = ivDataService.countIgnoredRecords( );
 		getView( ).getIgnoredRecords( ).textProperty( )
 				.bind( Bindings.createStringBinding( ( ) -> Integer.toString( countIgnoredRecords.get( ) ), countIgnoredRecords ) );
 	}

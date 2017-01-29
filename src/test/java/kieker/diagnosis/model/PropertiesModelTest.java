@@ -23,15 +23,17 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
+import kieker.diagnosis.service.properties.PropertiesService;
+
 public final class PropertiesModelTest {
 
 	@Test
 	public void settingShouldBePersisted( ) {
-		final PropertiesModel fstModel = new PropertiesModel( );
+		final PropertiesService fstModel = new PropertiesService( );
 		fstModel.setTimeUnit( TimeUnit.NANOSECONDS );
 		fstModel.setTimeUnit( TimeUnit.MICROSECONDS );
 
-		final PropertiesModel sndModel = new PropertiesModel( );
+		final PropertiesService sndModel = new PropertiesService( );
 		assertThat( sndModel.getTimeUnit( ), is( TimeUnit.MICROSECONDS ) );
 	}
 

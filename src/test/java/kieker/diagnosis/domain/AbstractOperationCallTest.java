@@ -25,6 +25,8 @@ import org.hamcrest.core.IsNot;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.diagnosis.service.data.domain.AbstractOperationCall;
+
 public abstract class AbstractOperationCallTest<T extends AbstractOperationCall<T>> {
 
 	protected abstract T createOperationCall( final String container, final String component, final String operation, final String failedCause );

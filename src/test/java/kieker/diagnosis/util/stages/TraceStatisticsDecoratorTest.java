@@ -24,8 +24,9 @@ import static teetime.framework.test.StageTester.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import kieker.diagnosis.domain.OperationCall;
-import kieker.diagnosis.domain.Trace;
+import kieker.diagnosis.service.data.domain.OperationCall;
+import kieker.diagnosis.service.data.domain.Trace;
+import kieker.diagnosis.service.data.stages.TraceStatisticsDecorator;
 
 import org.junit.Test;
 

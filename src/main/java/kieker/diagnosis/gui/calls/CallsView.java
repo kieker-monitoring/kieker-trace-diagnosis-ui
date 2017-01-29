@@ -5,8 +5,8 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import jfxtras.scene.control.CalendarTimeTextField;
-import kieker.diagnosis.domain.OperationCall;
 import kieker.diagnosis.gui.AbstractView;
+import kieker.diagnosis.service.data.domain.OperationCall;
 
 public class CallsView extends AbstractView {
 

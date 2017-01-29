@@ -51,11 +51,9 @@ import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import javafx.util.Duration;
 import kieker.diagnosis.gui.main.MainController;
-import kieker.diagnosis.model.PropertiesModel;
 import kieker.diagnosis.service.ServiceIfc;
 import kieker.diagnosis.service.ServiceUtil;
-import kieker.diagnosis.util.Context;
-import kieker.diagnosis.util.ContextEntry;
+import kieker.diagnosis.service.properties.PropertiesService;
 
 /**
  * @author Nils Christian Ehmke
@@ -121,9 +119,10 @@ public class GUIUtil {
 		dialogStage.showAndWait( );
 	}
 
-	private static LoadedView getLoadedViewFromCache( final Class<?> aControllerClass, final ContextEntry[] aArguments ) {
+	private static LoadedView getLoadedViewFromCache( final Class<?> aControllerClass, final ContextEntry[] aArguments ) throws Exception {
 		// If we should not cache the views, we do not access the cache
-		if ( !PropertiesModel.getInstance( ).isCacheViews( ) ) {
+		final PropertiesService propertiesService = ServiceUtil.getService( PropertiesService.class );
+		if ( !propertiesService.isCacheViews( ) ) {
 			return null;
 		}
 
@@ -224,7 +223,8 @@ public class GUIUtil {
 		final String title = (resourceBundle.containsKey( "title" ) ? resourceBundle.getString( "title" ) : "");
 		final LoadedView loadedView = new LoadedView( node, title, cssResource.toExternalForm( ), null );
 
-		if ( PropertiesModel.getInstance( ).isCacheViews( ) ) {
+		final PropertiesService propertiesService = ServiceUtil.getService( PropertiesService.class );
+		if ( propertiesService.isCacheViews( ) ) {
 			cvLoadedViewCache.put( aControllerClass, loadedView );
 		}
 

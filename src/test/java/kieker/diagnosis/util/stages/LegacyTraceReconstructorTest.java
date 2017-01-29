@@ -26,7 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.diagnosis.domain.Trace;
+import kieker.diagnosis.service.data.domain.Trace;
+import kieker.diagnosis.service.data.stages.LegacyTraceReconstructor;
 
 import org.junit.Test;
 

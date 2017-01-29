@@ -20,19 +20,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Locale;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javafx.beans.NamedArg;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
 import javafx.util.Callback;
-
-import kieker.diagnosis.model.PropertiesModel;
-import kieker.diagnosis.model.PropertiesModel.ComponentNames;
-import kieker.diagnosis.util.NameConverter;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import kieker.diagnosis.service.ServiceUtil;
+import kieker.diagnosis.service.nameconverter.NameConverterService;
+import kieker.diagnosis.service.properties.PropertiesService;
+import kieker.diagnosis.service.properties.PropertiesService.ComponentNames;
 
 /**
  * @author Nils Christian Ehmke
@@ -41,24 +41,27 @@ public final class ComponentTreeCellValueFactory implements Callback<CellDataFea
 
 	private static final Logger LOGGER = LogManager.getLogger( ComponentTreeCellValueFactory.class );
 
+	private final NameConverterService ivNameConverterService = ServiceUtil.getService( NameConverterService.class );
+	private final PropertiesService ivPropertiesService = ServiceUtil.getService( PropertiesService.class );
+
 	private final String ivProperty;
 
 	public ComponentTreeCellValueFactory( @NamedArg ( value = "property" ) final String aProperty ) {
-		this.ivProperty = aProperty.substring( 0, 1 ).toUpperCase( Locale.ROOT ) + aProperty.substring( 1 );
+		ivProperty = aProperty.substring( 0, 1 ).toUpperCase( Locale.ROOT ) + aProperty.substring( 1 );
 	}
 
 	@Override
 	public ObservableValue<String> call( final CellDataFeatures<?, String> aCall ) {
 		try {
 			final TreeItem<?> item = aCall.getValue( );
-			final Method getter = item.getValue( ).getClass( ).getMethod( "get" + this.ivProperty, new Class<?>[0] );
+			final Method getter = item.getValue( ).getClass( ).getMethod( "get" + ivProperty, new Class<?>[0] );
 			String componentName = (String) getter.invoke( item.getValue( ), new Object[0] );
 
-			if ( PropertiesModel.getInstance( ).getComponentNames( ) == ComponentNames.SHORT ) {
-				componentName = NameConverter.toShortComponentName( componentName );
+			if ( ivPropertiesService.getComponentNames( ) == ComponentNames.SHORT ) {
+				componentName = ivNameConverterService.toShortComponentName( componentName );
 			}
 
-			return new ReadOnlyObjectWrapper<String>( componentName );
+			return new ReadOnlyObjectWrapper<>( componentName );
 		}
 		catch ( final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex ) {
 			ComponentTreeCellValueFactory.LOGGER.warn( ex );

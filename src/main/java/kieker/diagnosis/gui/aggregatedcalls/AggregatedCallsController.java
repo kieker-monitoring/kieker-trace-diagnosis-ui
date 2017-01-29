@@ -30,17 +30,17 @@ import javafx.collections.transformation.SortedList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.MouseEvent;
-import kieker.diagnosis.domain.AggregatedOperationCall;
 import kieker.diagnosis.gui.AbstractController;
+import kieker.diagnosis.gui.Context;
+import kieker.diagnosis.gui.ContextKey;
 import kieker.diagnosis.gui.main.MainController;
-import kieker.diagnosis.model.DataModel;
-import kieker.diagnosis.model.PropertiesModel;
+import kieker.diagnosis.service.data.DataService;
+import kieker.diagnosis.service.data.domain.AggregatedOperationCall;
 import kieker.diagnosis.service.export.CSVData;
-import kieker.diagnosis.util.CSVDataCollector;
-import kieker.diagnosis.util.Context;
-import kieker.diagnosis.util.ContextKey;
-import kieker.diagnosis.util.FilterUtility;
-import kieker.diagnosis.util.NameConverter;
+import kieker.diagnosis.service.export.CSVDataCollector;
+import kieker.diagnosis.service.filter.FilterService;
+import kieker.diagnosis.service.nameconverter.NameConverterService;
+import kieker.diagnosis.service.properties.PropertiesService;
 
 /**
  * @author Nils Christian Ehmke
@@ -50,6 +50,12 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 	private FilteredList<AggregatedOperationCall> ivFilteredData;
 
 	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> ivSelection = new SimpleObjectProperty<>( Optional.empty( ) );
+
+	private NameConverterService ivNameConverterService;
+	private PropertiesService ivPropertiesService;
+	private FilterService ivFilterService;
+	private DataService ivDataService;
+
 	private MainController ivMainController;
 
 	public AggregatedCallsController( final Context aContext ) {
@@ -58,9 +64,7 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 
 	@Override
 	public void doInitialize( ) {
-		final DataModel dataModel = DataModel.getInstance( );
-
-		ivFilteredData = new FilteredList<>( dataModel.getAggregatedOperationCalls( ) );
+		ivFilteredData = new FilteredList<>( ivDataService.getAggregatedOperationCalls( ) );
 		ivFilteredData.addListener( (ListChangeListener<AggregatedOperationCall>) change -> ivSelection.set( Optional.empty( ) ) );
 
 		final SortedList<AggregatedOperationCall> sortedData = new SortedList<>( ivFilteredData );
@@ -82,17 +86,17 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 	private void updateDetailPanel( ) {
 		if ( ivSelection.get( ).isPresent( ) ) {
 			final AggregatedOperationCall call = ivSelection.get( ).get( );
-			final TimeUnit sourceTimeUnit = DataModel.getInstance( ).getTimeUnit( );
-			final TimeUnit targetTimeUnit = PropertiesModel.getInstance( ).getTimeUnit( );
+			final TimeUnit sourceTimeUnit = ivDataService.getTimeUnit( );
+			final TimeUnit targetTimeUnit = ivPropertiesService.getTimeUnit( );
 
 			getView( ).getContainer( ).setText( call.getContainer( ) );
 			getView( ).getComponent( ).setText( call.getComponent( ) );
 			getView( ).getOperation( ).setText( call.getOperation( ) );
-			getView( ).getMinimalDuration( ).setText( NameConverter.toDurationString( call.getMinDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			getView( ).getMaximalDuration( ).setText( NameConverter.toDurationString( call.getMaxDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			getView( ).getMedianDuration( ).setText( NameConverter.toDurationString( call.getMedianDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			getView( ).getTotalDuration( ).setText( NameConverter.toDurationString( call.getTotalDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			getView( ).getMeanDuration( ).setText( NameConverter.toDurationString( call.getMeanDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getMinimalDuration( ).setText( ivNameConverterService.toDurationString( call.getMinDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getMaximalDuration( ).setText( ivNameConverterService.toDurationString( call.getMaxDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getMedianDuration( ).setText( ivNameConverterService.toDurationString( call.getMedianDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getTotalDuration( ).setText( ivNameConverterService.toDurationString( call.getTotalDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getMeanDuration( ).setText( ivNameConverterService.toDurationString( call.getMeanDuration( ), sourceTimeUnit, targetTimeUnit ) );
 			getView( ).getCalls( ).setText( Integer.toString( call.getCalls( ) ) );
 			getView( ).getFailed( ).setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : "N/A" );
 		}
@@ -137,15 +141,15 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 
 	@Override
 	public void useFilter( ) {
-		final Predicate<AggregatedOperationCall> predicate1 = FilterUtility.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
+		final Predicate<AggregatedOperationCall> predicate1 = FilterService.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
 				getView( ).getShowJustFailedButton( ), AggregatedOperationCall::isFailed );
-		final Predicate<AggregatedOperationCall> predicate2 = FilterUtility.useFilter( getView( ).getFilterContainer( ),
+		final Predicate<AggregatedOperationCall> predicate2 = ivFilterService.useFilter( getView( ).getFilterContainer( ),
 				AggregatedOperationCall::getContainer );
-		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter( getView( ).getFilterComponent( ),
+		final Predicate<AggregatedOperationCall> predicate3 = ivFilterService.useFilter( getView( ).getFilterComponent( ),
 				AggregatedOperationCall::getComponent );
-		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter( getView( ).getFilterOperation( ),
+		final Predicate<AggregatedOperationCall> predicate4 = ivFilterService.useFilter( getView( ).getFilterOperation( ),
 				AggregatedOperationCall::getOperation );
-		final Predicate<AggregatedOperationCall> predicate5 = FilterUtility.useFilter( getView( ).getFilterException( ),
+		final Predicate<AggregatedOperationCall> predicate5 = ivFilterService.useFilter( getView( ).getFilterException( ),
 				(call -> call.isFailed( ) ? call.getFailedCause( ) : "") );
 
 		final Predicate<AggregatedOperationCall> predicate = predicate1.and( predicate2 ).and( predicate3 ).and( predicate4 ).and( predicate5 );

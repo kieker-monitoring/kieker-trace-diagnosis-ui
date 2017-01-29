@@ -22,7 +22,7 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import kieker.diagnosis.util.Mapper;
+import kieker.diagnosis.common.Mapper;
 
 public class MapperTest {
 

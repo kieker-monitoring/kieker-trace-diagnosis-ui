@@ -25,17 +25,17 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
-import kieker.diagnosis.domain.AggregatedOperationCall;
-import kieker.diagnosis.domain.AggregatedTrace;
 import kieker.diagnosis.gui.AbstractController;
+import kieker.diagnosis.gui.Context;
+import kieker.diagnosis.gui.ContextKey;
 import kieker.diagnosis.gui.components.treetable.LazyAggregatedOperationCallTreeItem;
 import kieker.diagnosis.gui.main.MainController;
-import kieker.diagnosis.model.DataModel;
-import kieker.diagnosis.model.PropertiesModel;
-import kieker.diagnosis.util.Context;
-import kieker.diagnosis.util.ContextKey;
-import kieker.diagnosis.util.FilterUtility;
-import kieker.diagnosis.util.NameConverter;
+import kieker.diagnosis.service.data.DataService;
+import kieker.diagnosis.service.data.domain.AggregatedOperationCall;
+import kieker.diagnosis.service.data.domain.AggregatedTrace;
+import kieker.diagnosis.service.filter.FilterService;
+import kieker.diagnosis.service.nameconverter.NameConverterService;
+import kieker.diagnosis.service.properties.PropertiesService;
 
 /**
  * @author Nils Christian Ehmke
@@ -44,7 +44,14 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 
 	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> ivSelection = new SimpleObjectProperty<>( Optional.empty( ) );
 
-	private Predicate<AggregatedOperationCall> ivPredicate = FilterUtility.alwaysTrue( );
+	private Predicate<AggregatedOperationCall> ivPredicate = x -> true;
+
+	private NameConverterService ivNameConverterService;
+	private PropertiesService ivPropertiesService;
+	private FilterService ivFilterService;
+
+	private DataService ivDataService;
+
 	private MainController ivMainController;
 
 	public AggregatedTracesController( final Context aContext ) {
@@ -62,7 +69,7 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 			reloadTreetable( );
 		}
 
-		final DataModel dataModel = DataModel.getInstance( );
+		final DataService dataModel = ivDataService;
 		dataModel.getAggregatedTraces( ).addListener( ( final Change<? extends AggregatedTrace> c ) -> reloadTreetable( ) );
 
 		ivSelection.addListener( e -> updateDetailPanel( ) );
@@ -71,17 +78,17 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 	private void updateDetailPanel( ) {
 		if ( ivSelection.get( ).isPresent( ) ) {
 			final AggregatedOperationCall call = ivSelection.get( ).get( );
-			final TimeUnit sourceTimeUnit = DataModel.getInstance( ).getTimeUnit( );
-			final TimeUnit targetTimeUnit = PropertiesModel.getInstance( ).getTimeUnit( );
+			final TimeUnit sourceTimeUnit = ivDataService.getTimeUnit( );
+			final TimeUnit targetTimeUnit = ivPropertiesService.getTimeUnit( );
 
 			getView( ).getContainer( ).setText( call.getContainer( ) );
 			getView( ).getComponent( ).setText( call.getComponent( ) );
 			getView( ).getOperation( ).setText( call.getOperation( ) );
-			getView( ).getMinDuration( ).setText( NameConverter.toDurationString( call.getMinDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			getView( ).getMaxDuration( ).setText( NameConverter.toDurationString( call.getMaxDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			getView( ).getMedianDuration( ).setText( NameConverter.toDurationString( call.getMedianDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			getView( ).getTotalDuration( ).setText( NameConverter.toDurationString( call.getTotalDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			getView( ).getAvgDuration( ).setText( NameConverter.toDurationString( call.getMeanDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getMinDuration( ).setText( ivNameConverterService.toDurationString( call.getMinDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getMaxDuration( ).setText( ivNameConverterService.toDurationString( call.getMaxDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getMedianDuration( ).setText( ivNameConverterService.toDurationString( call.getMedianDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getTotalDuration( ).setText( ivNameConverterService.toDurationString( call.getTotalDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getAvgDuration( ).setText( ivNameConverterService.toDurationString( call.getMeanDuration( ), sourceTimeUnit, targetTimeUnit ) );
 			getView( ).getCalls( ).setText( Integer.toString( call.getCalls( ) ) );
 			getView( ).getTraceDepth( ).setText( Integer.toString( call.getStackDepth( ) ) );
 			getView( ).getTraceSize( ).setText( Integer.toString( call.getStackSize( ) ) );
@@ -113,17 +120,17 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 
 	@Override
 	public void useFilter( ) {
-		final Predicate<AggregatedOperationCall> predicate1 = FilterUtility.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
+		final Predicate<AggregatedOperationCall> predicate1 = FilterService.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
 				getView( ).getShowJustFailedButton( ), getView( ).getShowJustFailureContainingButton( ), AggregatedOperationCall::isFailed,
 				AggregatedOperationCall::containsFailure );
-		final Predicate<AggregatedOperationCall> predicate2 = FilterUtility.useFilter( getView( ).getFilterContainer( ), AggregatedOperationCall::getContainer,
-				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter( getView( ).getFilterComponent( ), AggregatedOperationCall::getComponent,
-				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter( getView( ).getFilterOperation( ), AggregatedOperationCall::getOperation,
-				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<AggregatedOperationCall> predicate5 = FilterUtility.useFilter( getView( ).getFilterException( ),
-				(call -> call.isFailed( ) ? call.getFailedCause( ) : ""), PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
+		final Predicate<AggregatedOperationCall> predicate2 = ivFilterService.useFilter( getView( ).getFilterContainer( ),
+				AggregatedOperationCall::getContainer, ivPropertiesService.isSearchInEntireTrace( ) );
+		final Predicate<AggregatedOperationCall> predicate3 = ivFilterService.useFilter( getView( ).getFilterComponent( ),
+				AggregatedOperationCall::getComponent, ivPropertiesService.isSearchInEntireTrace( ) );
+		final Predicate<AggregatedOperationCall> predicate4 = ivFilterService.useFilter( getView( ).getFilterOperation( ),
+				AggregatedOperationCall::getOperation, ivPropertiesService.isSearchInEntireTrace( ) );
+		final Predicate<AggregatedOperationCall> predicate5 = ivFilterService.useFilter( getView( ).getFilterException( ),
+				(call -> call.isFailed( ) ? call.getFailedCause( ) : ""), ivPropertiesService.isSearchInEntireTrace( ) );
 
 		ivPredicate = predicate1.and( predicate2 ).and( predicate3 ).and( predicate4 ).and( predicate5 );
 		reloadTreetable( );
@@ -132,7 +139,7 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 	private void reloadTreetable( ) {
 		ivSelection.set( Optional.empty( ) );
 
-		final DataModel dataModel = DataModel.getInstance( );
+		final DataService dataModel = ivDataService;
 		final List<AggregatedTrace> traces = dataModel.getAggregatedTraces( );
 		final TreeItem<AggregatedOperationCall> root = new TreeItem<>( );
 		final ObservableList<TreeItem<AggregatedOperationCall>> rootChildren = root.getChildren( );

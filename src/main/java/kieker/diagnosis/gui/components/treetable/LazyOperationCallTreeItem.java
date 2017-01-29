@@ -24,8 +24,9 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import javafx.scene.control.TreeItem;
-import kieker.diagnosis.domain.OperationCall;
-import kieker.diagnosis.model.PropertiesModel;
+import kieker.diagnosis.service.ServiceUtil;
+import kieker.diagnosis.service.data.domain.OperationCall;
+import kieker.diagnosis.service.properties.PropertiesService;
 
 /**
  * @author Nils Christian Ehmke
@@ -33,6 +34,8 @@ import kieker.diagnosis.model.PropertiesModel;
 public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTreeItem<OperationCall> {
 
 	private static final String METHOD_CALLS_AGGREGATED;
+
+	private final PropertiesService ivPropertiesService = ServiceUtil.getService( PropertiesService.class );
 
 	static {
 		final String bundleBaseName = "kieker.diagnosis.gui.components.components";
@@ -49,8 +52,8 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 	protected void initializeChildren( ) {
 		final List<TreeItem<OperationCall>> result = new ArrayList<>( );
 
-		if ( PropertiesModel.getInstance( ).isMethodCallAggregationActive( ) ) {
-			final float threshold = PropertiesModel.getInstance( ).getThreshold( ).getPercent( );
+		if ( ivPropertiesService.isMethodCallAggregationActive( ) ) {
+			final float threshold = ivPropertiesService.getThreshold( ).getPercent( );
 			final List<OperationCall> underThreshold = new ArrayList<>( );
 			for ( final OperationCall child : super.getValue( ).getChildren( ) ) {
 				if ( child.getPercent( ) < threshold ) {

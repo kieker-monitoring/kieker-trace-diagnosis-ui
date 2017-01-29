@@ -17,7 +17,7 @@
 package kieker.diagnosis.gui.about;
 
 import kieker.diagnosis.gui.AbstractController;
-import kieker.diagnosis.util.Context;
+import kieker.diagnosis.gui.Context;
 
 /**
  * @author Nils Christian Ehmke

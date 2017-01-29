@@ -27,17 +27,17 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
-import kieker.diagnosis.domain.OperationCall;
-import kieker.diagnosis.domain.Trace;
 import kieker.diagnosis.gui.AbstractController;
+import kieker.diagnosis.gui.Context;
+import kieker.diagnosis.gui.ContextKey;
 import kieker.diagnosis.gui.components.treetable.LazyOperationCallTreeItem;
 import kieker.diagnosis.gui.main.MainController;
-import kieker.diagnosis.model.DataModel;
-import kieker.diagnosis.model.PropertiesModel;
-import kieker.diagnosis.util.Context;
-import kieker.diagnosis.util.ContextKey;
-import kieker.diagnosis.util.FilterUtility;
-import kieker.diagnosis.util.NameConverter;
+import kieker.diagnosis.service.data.DataService;
+import kieker.diagnosis.service.data.domain.OperationCall;
+import kieker.diagnosis.service.data.domain.Trace;
+import kieker.diagnosis.service.filter.FilterService;
+import kieker.diagnosis.service.nameconverter.NameConverterService;
+import kieker.diagnosis.service.properties.PropertiesService;
 
 /**
  * The sub-controller responsible for the sub-view presenting the available traces.
@@ -46,11 +46,15 @@ import kieker.diagnosis.util.NameConverter;
  */
 public final class TracesController extends AbstractController<TracesView> implements TracesControllerIfc {
 
-	private final DataModel ivDataModel = DataModel.getInstance( );
-
 	private final SimpleObjectProperty<Optional<OperationCall>> ivSelection = new SimpleObjectProperty<>( Optional.empty( ) );
 
-	private Predicate<OperationCall> ivPredicate = FilterUtility.alwaysTrue( );
+	private Predicate<OperationCall> ivPredicate = x -> true;
+
+	private NameConverterService ivNameConverterService;
+	private PropertiesService ivPropertiesService;
+	private FilterService ivFilterService;
+	private DataService ivDataService;
+
 	private MainController ivMainController;
 
 	public TracesController( final Context aContext ) {
@@ -68,7 +72,7 @@ public final class TracesController extends AbstractController<TracesView> imple
 			reloadTreetable( );
 		}
 
-		final ObservableList<Trace> traces = ivDataModel.getTraces( );
+		final ObservableList<Trace> traces = ivDataService.getTraces( );
 		traces.addListener( ( final Change<? extends Trace> aChange ) -> reloadTreetable( ) );
 
 		ivSelection.addListener( e -> updateDetailPanel( ) );
@@ -130,14 +134,15 @@ public final class TracesController extends AbstractController<TracesView> imple
 	private void updateDetailPanel( ) {
 		if ( ivSelection.get( ).isPresent( ) ) {
 			final OperationCall call = ivSelection.get( ).get( );
-			final TimeUnit sourceTimeUnit = DataModel.getInstance( ).getTimeUnit( );
-			final TimeUnit targetTimeUnit = PropertiesModel.getInstance( ).getTimeUnit( );
+			final TimeUnit sourceTimeUnit = ivDataService.getTimeUnit( );
+			final TimeUnit targetTimeUnit = ivPropertiesService.getTimeUnit( );
 
 			getView( ).getContainer( ).setText( call.getContainer( ) );
 			getView( ).getComponent( ).setText( call.getComponent( ) );
 			getView( ).getOperation( ).setText( call.getOperation( ) );
-			getView( ).getTimestamp( ).setText( NameConverter.toTimestampString( call.getTimestamp( ), sourceTimeUnit ) + " (" + call.getTimestamp( ) + ")" );
-			getView( ).getDuration( ).setText( NameConverter.toDurationString( call.getDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getTimestamp( )
+					.setText( ivNameConverterService.toTimestampString( call.getTimestamp( ), sourceTimeUnit ) + " (" + call.getTimestamp( ) + ")" );
+			getView( ).getDuration( ).setText( ivNameConverterService.toDurationString( call.getDuration( ), sourceTimeUnit, targetTimeUnit ) );
 			getView( ).getTraceID( ).setText( Long.toString( call.getTraceID( ) ) );
 			getView( ).getTraceDepth( ).setText( Integer.toString( call.getStackDepth( ) ) );
 			getView( ).getTraceSize( ).setText( Integer.toString( call.getStackSize( ) ) );
@@ -166,27 +171,27 @@ public final class TracesController extends AbstractController<TracesView> imple
 
 	@Override
 	public void useFilter( ) {
-		final Predicate<OperationCall> predicate1 = FilterUtility.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
+		final Predicate<OperationCall> predicate1 = FilterService.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
 				getView( ).getShowJustFailedButton( ), getView( ).getShowJustFailureContainingButton( ), OperationCall::isFailed,
 				OperationCall::containsFailure );
-		final Predicate<OperationCall> predicate2 = FilterUtility.useFilter( getView( ).getFilterContainer( ), OperationCall::getContainer,
-				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<OperationCall> predicate3 = FilterUtility.useFilter( getView( ).getFilterComponent( ), OperationCall::getComponent,
-				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<OperationCall> predicate4 = FilterUtility.useFilter( getView( ).getFilterOperation( ), OperationCall::getOperation,
-				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<OperationCall> predicate5 = FilterUtility.useFilter( getView( ).getFilterTraceID( ), (call -> Long.toString( call.getTraceID( ) )),
-				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<OperationCall> predicate6 = FilterUtility.useFilter( getView( ).getFilterLowerDate( ), OperationCall::getTimestamp, true,
-				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<OperationCall> predicate7 = FilterUtility.useFilter( getView( ).getFilterUpperDate( ), OperationCall::getTimestamp, false,
-				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<OperationCall> predicate8 = FilterUtility.useFilter( getView( ).getFilterLowerTime( ), OperationCall::getTimestamp, true,
-				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<OperationCall> predicate9 = FilterUtility.useFilter( getView( ).getFilterUpperTime( ), OperationCall::getTimestamp, false,
-				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<OperationCall> predicate10 = FilterUtility.useFilter( getView( ).getFilterException( ),
-				(call -> call.isFailed( ) ? call.getFailedCause( ) : ""), PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
+		final Predicate<OperationCall> predicate2 = ivFilterService.useFilter( getView( ).getFilterContainer( ), OperationCall::getContainer,
+				ivPropertiesService.isSearchInEntireTrace( ) );
+		final Predicate<OperationCall> predicate3 = ivFilterService.useFilter( getView( ).getFilterComponent( ), OperationCall::getComponent,
+				ivPropertiesService.isSearchInEntireTrace( ) );
+		final Predicate<OperationCall> predicate4 = ivFilterService.useFilter( getView( ).getFilterOperation( ), OperationCall::getOperation,
+				ivPropertiesService.isSearchInEntireTrace( ) );
+		final Predicate<OperationCall> predicate5 = ivFilterService.useFilter( getView( ).getFilterTraceID( ), (call -> Long.toString( call.getTraceID( ) )),
+				ivPropertiesService.isSearchInEntireTrace( ) );
+		final Predicate<OperationCall> predicate6 = ivFilterService.useFilter( getView( ).getFilterLowerDate( ), OperationCall::getTimestamp, true,
+				ivPropertiesService.isSearchInEntireTrace( ) );
+		final Predicate<OperationCall> predicate7 = ivFilterService.useFilter( getView( ).getFilterUpperDate( ), OperationCall::getTimestamp, false,
+				ivPropertiesService.isSearchInEntireTrace( ) );
+		final Predicate<OperationCall> predicate8 = ivFilterService.useFilter( getView( ).getFilterLowerTime( ), OperationCall::getTimestamp, true,
+				ivPropertiesService.isSearchInEntireTrace( ) );
+		final Predicate<OperationCall> predicate9 = ivFilterService.useFilter( getView( ).getFilterUpperTime( ), OperationCall::getTimestamp, false,
+				ivPropertiesService.isSearchInEntireTrace( ) );
+		final Predicate<OperationCall> predicate10 = ivFilterService.useFilter( getView( ).getFilterException( ),
+				(call -> call.isFailed( ) ? call.getFailedCause( ) : ""), ivPropertiesService.isSearchInEntireTrace( ) );
 
 		ivPredicate = predicate1.and( predicate2 ).and( predicate3 ).and( predicate4 ).and( predicate5 ).and( predicate6 ).and( predicate7 ).and( predicate8 )
 				.and( predicate9 ).and( predicate10 );
@@ -237,7 +242,7 @@ public final class TracesController extends AbstractController<TracesView> imple
 	private void reloadTreetable( ) {
 		ivSelection.set( Optional.empty( ) );
 
-		final List<Trace> traces = ivDataModel.getTraces( );
+		final List<Trace> traces = ivDataService.getTraces( );
 		final TreeItem<OperationCall> root = new TreeItem<>( );
 		final ObservableList<TreeItem<OperationCall>> rootChildren = root.getChildren( );
 		getView( ).getTreetable( ).setRoot( root );

@@ -28,8 +28,9 @@ import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
-import kieker.diagnosis.domain.OperationCall;
-import kieker.diagnosis.domain.Trace;
+import kieker.diagnosis.service.data.domain.OperationCall;
+import kieker.diagnosis.service.data.domain.Trace;
+import kieker.diagnosis.service.data.stages.TraceReconstructor;
 
 import org.hamcrest.Matchers;
 import org.junit.Assert;

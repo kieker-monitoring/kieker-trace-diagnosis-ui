@@ -18,7 +18,7 @@ package kieker.diagnosis.gui.components.treetable;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
-import kieker.diagnosis.domain.AbstractOperationCall;
+import kieker.diagnosis.service.data.domain.AbstractOperationCall;
 
 /**
  * This is an abstract base for tree items who initialize their children in a lazy way. This class is necessary because the tree tables of JavaFX do not support

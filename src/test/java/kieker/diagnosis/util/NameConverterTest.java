@@ -23,34 +23,34 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-import kieker.diagnosis.util.NameConverter;
+import kieker.diagnosis.service.nameconverter.NameConverterService;
 
 public class NameConverterTest {
 
 	@Test
 	public void toShortComponentNameForCommonCaseShouldWork( ) {
-		final String result = NameConverter.toShortComponentName( "A.B.C" );
+		final String result = NameConverterService.toShortComponentName( "A.B.C" );
 
 		assertThat( result, is( "C" ) );
 	}
 
 	@Test
 	public void toShortComponentNameForSingleComponentShouldWork( ) {
-		final String result = NameConverter.toShortComponentName( "A" );
+		final String result = NameConverterService.toShortComponentName( "A" );
 
 		assertThat( result, is( "A" ) );
 	}
 
 	@Test
 	public void toShortOperationNameForCommonCaseShouldWork( ) {
-		final String result = NameConverter.toShortOperationName( "public void kieker.examples.bookstore.Catalog.getBook(boolean)" );
+		final String result = NameConverterService.toShortOperationName( "public void kieker.examples.bookstore.Catalog.getBook(boolean)" );
 
 		assertThat( result, is( "getBook(...)" ) );
 	}
 
 	@Test
 	public void toShortOperationNameForMultipleFullQualifiedClassesShouldWork( ) {
-		final String result = NameConverter
+		final String result = NameConverterService
 				.toShortOperationName( "public final kieker.examples.bookstore.CRM kieker.examples.bookstore.Catalog.getBook(boolean)" );
 
 		assertThat( result, is( "getBook(...)" ) );
@@ -58,56 +58,56 @@ public class NameConverterTest {
 
 	@Test
 	public void toShortTimeUnitForNanosecondsShouldWork( ) {
-		final String result = NameConverter.toShortTimeUnit( TimeUnit.NANOSECONDS );
+		final String result = NameConverterService.toShortTimeUnit( TimeUnit.NANOSECONDS );
 
 		assertThat( result, is( "ns" ) );
 	}
 
 	@Test
 	public void toShortTimeUnitForMicrosecondsShouldWork( ) {
-		final String result = NameConverter.toShortTimeUnit( TimeUnit.MICROSECONDS );
+		final String result = NameConverterService.toShortTimeUnit( TimeUnit.MICROSECONDS );
 
 		assertThat( result, is( "us" ) );
 	}
 
 	@Test
 	public void toShortTimeUnitForMillisecondsShouldWork( ) {
-		final String result = NameConverter.toShortTimeUnit( TimeUnit.MILLISECONDS );
+		final String result = NameConverterService.toShortTimeUnit( TimeUnit.MILLISECONDS );
 
 		assertThat( result, is( "ms" ) );
 	}
 
 	@Test
 	public void toShortTimeUnitForSecondsShouldWork( ) {
-		final String result = NameConverter.toShortTimeUnit( TimeUnit.SECONDS );
+		final String result = NameConverterService.toShortTimeUnit( TimeUnit.SECONDS );
 
 		assertThat( result, is( "s" ) );
 	}
 
 	@Test
 	public void toShortTimeUnitForMinutesShouldWork( ) {
-		final String result = NameConverter.toShortTimeUnit( TimeUnit.MINUTES );
+		final String result = NameConverterService.toShortTimeUnit( TimeUnit.MINUTES );
 
 		assertThat( result, is( "m" ) );
 	}
 
 	@Test
 	public void toShortTimeUnitForHoursShouldWork( ) {
-		final String result = NameConverter.toShortTimeUnit( TimeUnit.HOURS );
+		final String result = NameConverterService.toShortTimeUnit( TimeUnit.HOURS );
 
 		assertThat( result, is( "h" ) );
 	}
 
 	@Test
 	public void toShortTimeUnitForDaysShouldWork( ) {
-		final String result = NameConverter.toShortTimeUnit( TimeUnit.DAYS );
+		final String result = NameConverterService.toShortTimeUnit( TimeUnit.DAYS );
 
 		assertThat( result, is( "d" ) );
 	}
 
 	@Test
 	public void toShortTimeUnitForNullShouldReturnEmptyString( ) {
-		final String result = NameConverter.toShortTimeUnit( null );
+		final String result = NameConverterService.toShortTimeUnit( null );
 
 		assertThat( result, is( "" ) );
 	}

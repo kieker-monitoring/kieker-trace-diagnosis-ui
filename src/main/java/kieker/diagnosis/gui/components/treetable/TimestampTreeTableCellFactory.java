@@ -16,17 +16,21 @@
 
 package kieker.diagnosis.gui.components.treetable;
 
-import kieker.diagnosis.model.DataModel;
-import kieker.diagnosis.util.NameConverter;
+import kieker.diagnosis.service.ServiceUtil;
+import kieker.diagnosis.service.data.DataService;
+import kieker.diagnosis.service.nameconverter.NameConverterService;
 
 /**
  * @author Nils Christian Ehmke
  */
 public final class TimestampTreeTableCellFactory<S, T> extends AbstractTreeTableCellFactory<S, T> {
 
+	private final NameConverterService ivNameConverterService = ServiceUtil.getService( NameConverterService.class );
+	private final DataService ivDataService = ServiceUtil.getService( DataService.class );
+
 	@Override
 	protected String getItemLabel( final T aItem ) {
-		return NameConverter.toTimestampString( (Long) aItem, DataModel.getInstance( ).getTimeUnit( ) );
+		return ivNameConverterService.toTimestampString( (Long) aItem, ivDataService.getTimeUnit( ) );
 	}
 
 }

@@ -20,12 +20,12 @@ import java.util.concurrent.TimeUnit;
 
 import javafx.collections.FXCollections;
 import kieker.diagnosis.gui.AbstractController;
-import kieker.diagnosis.model.PropertiesModel;
-import kieker.diagnosis.model.PropertiesModel.ComponentNames;
-import kieker.diagnosis.model.PropertiesModel.OperationNames;
-import kieker.diagnosis.model.PropertiesModel.Threshold;
-import kieker.diagnosis.model.PropertiesModel.TimestampTypes;
-import kieker.diagnosis.util.Context;
+import kieker.diagnosis.gui.Context;
+import kieker.diagnosis.service.properties.PropertiesService;
+import kieker.diagnosis.service.properties.PropertiesService.ComponentNames;
+import kieker.diagnosis.service.properties.PropertiesService.OperationNames;
+import kieker.diagnosis.service.properties.PropertiesService.Threshold;
+import kieker.diagnosis.service.properties.PropertiesService.TimestampTypes;
 
 /**
  * @author Nils Christian Ehmke
@@ -35,7 +35,7 @@ public final class SettingsDialogController extends AbstractController<SettingsD
 	private static final TimeUnit[] TIME_UNITS = { TimeUnit.NANOSECONDS, TimeUnit.MICROSECONDS, TimeUnit.MILLISECONDS, TimeUnit.SECONDS, TimeUnit.MINUTES,
 			TimeUnit.HOURS };
 
-	private final PropertiesModel ivPropertiesModel = PropertiesModel.getInstance( );
+	private PropertiesService ivPropertiesService;
 
 	public SettingsDialogController( final Context aContext ) {
 		super( aContext );
@@ -66,33 +66,33 @@ public final class SettingsDialogController extends AbstractController<SettingsD
 	}
 
 	private void loadSettings( ) {
-		getView( ).getOperationNames( ).getSelectionModel( ).select( ivPropertiesModel.getOperationNames( ) );
-		getView( ).getComponentNames( ).getSelectionModel( ).select( ivPropertiesModel.getComponentNames( ) );
-		getView( ).getTimeunits( ).getSelectionModel( ).select( ivPropertiesModel.getTimeUnit( ) );
-		getView( ).getAdditionalLogChecks( ).setSelected( ivPropertiesModel.isAdditionalLogChecksActive( ) );
-		getView( ).getActivateRegularExpressions( ).setSelected( ivPropertiesModel.isRegularExpressionsActive( ) );
-		getView( ).getAggregateMethodCalls( ).setSelected( ivPropertiesModel.isMethodCallAggregationActive( ) );
-		getView( ).getThresholds( ).getSelectionModel( ).select( ivPropertiesModel.getThreshold( ) );
-		getView( ).getCaseSensitive( ).setSelected( ivPropertiesModel.isCaseSensitivityActive( ) );
-		getView( ).getPercentageCalculation( ).setSelected( ivPropertiesModel.isPercentageCalculationActive( ) );
-		getView( ).getTimestamps( ).getSelectionModel( ).select( ivPropertiesModel.getTimestampType( ) );
-		getView( ).getCacheViews( ).setSelected( ivPropertiesModel.isCacheViews( ) );
-		getView( ).getSearchInEntireTrace( ).setSelected( ivPropertiesModel.isSearchInEntireTrace( ) );
+		getView( ).getOperationNames( ).getSelectionModel( ).select( ivPropertiesService.getOperationNames( ) );
+		getView( ).getComponentNames( ).getSelectionModel( ).select( ivPropertiesService.getComponentNames( ) );
+		getView( ).getTimeunits( ).getSelectionModel( ).select( ivPropertiesService.getTimeUnit( ) );
+		getView( ).getAdditionalLogChecks( ).setSelected( ivPropertiesService.isAdditionalLogChecksActive( ) );
+		getView( ).getActivateRegularExpressions( ).setSelected( ivPropertiesService.isRegularExpressionsActive( ) );
+		getView( ).getAggregateMethodCalls( ).setSelected( ivPropertiesService.isMethodCallAggregationActive( ) );
+		getView( ).getThresholds( ).getSelectionModel( ).select( ivPropertiesService.getThreshold( ) );
+		getView( ).getCaseSensitive( ).setSelected( ivPropertiesService.isCaseSensitivityActive( ) );
+		getView( ).getPercentageCalculation( ).setSelected( ivPropertiesService.isPercentageCalculationActive( ) );
+		getView( ).getTimestamps( ).getSelectionModel( ).select( ivPropertiesService.getTimestampType( ) );
+		getView( ).getCacheViews( ).setSelected( ivPropertiesService.isCacheViews( ) );
+		getView( ).getSearchInEntireTrace( ).setSelected( ivPropertiesService.isSearchInEntireTrace( ) );
 	}
 
 	private void saveSettings( ) {
-		ivPropertiesModel.setOperationNames( getView( ).getOperationNames( ).getSelectionModel( ).getSelectedItem( ) );
-		ivPropertiesModel.setComponentNames( getView( ).getComponentNames( ).getSelectionModel( ).getSelectedItem( ) );
-		ivPropertiesModel.setTimeUnit( getView( ).getTimeunits( ).getSelectionModel( ).getSelectedItem( ) );
-		ivPropertiesModel.setAdditionalLogChecksActive( getView( ).getAdditionalLogChecks( ).isSelected( ) );
-		ivPropertiesModel.setRegularExpressionsActive( getView( ).getActivateRegularExpressions( ).isSelected( ) );
-		ivPropertiesModel.setMethodCallAggregationActive( getView( ).getAggregateMethodCalls( ).isSelected( ) );
-		ivPropertiesModel.setThreshold( getView( ).getThresholds( ).getSelectionModel( ).getSelectedItem( ) );
-		ivPropertiesModel.setCaseSensitivityActive( getView( ).getCaseSensitive( ).isSelected( ) );
-		ivPropertiesModel.setPercentageCalculationActive( getView( ).getPercentageCalculation( ).isSelected( ) );
-		ivPropertiesModel.setTimestampType( getView( ).getTimestamps( ).getSelectionModel( ).getSelectedItem( ) );
-		ivPropertiesModel.setCacheViews( getView( ).getCacheViews( ).isSelected( ) );
-		ivPropertiesModel.setSearchInEntireTrace( getView( ).getSearchInEntireTrace( ).isSelected( ) );
+		ivPropertiesService.setOperationNames( getView( ).getOperationNames( ).getSelectionModel( ).getSelectedItem( ) );
+		ivPropertiesService.setComponentNames( getView( ).getComponentNames( ).getSelectionModel( ).getSelectedItem( ) );
+		ivPropertiesService.setTimeUnit( getView( ).getTimeunits( ).getSelectionModel( ).getSelectedItem( ) );
+		ivPropertiesService.setAdditionalLogChecksActive( getView( ).getAdditionalLogChecks( ).isSelected( ) );
+		ivPropertiesService.setRegularExpressionsActive( getView( ).getActivateRegularExpressions( ).isSelected( ) );
+		ivPropertiesService.setMethodCallAggregationActive( getView( ).getAggregateMethodCalls( ).isSelected( ) );
+		ivPropertiesService.setThreshold( getView( ).getThresholds( ).getSelectionModel( ).getSelectedItem( ) );
+		ivPropertiesService.setCaseSensitivityActive( getView( ).getCaseSensitive( ).isSelected( ) );
+		ivPropertiesService.setPercentageCalculationActive( getView( ).getPercentageCalculation( ).isSelected( ) );
+		ivPropertiesService.setTimestampType( getView( ).getTimestamps( ).getSelectionModel( ).getSelectedItem( ) );
+		ivPropertiesService.setCacheViews( getView( ).getCacheViews( ).isSelected( ) );
+		ivPropertiesService.setSearchInEntireTrace( getView( ).getSearchInEntireTrace( ).isSelected( ) );
 	}
 
 }

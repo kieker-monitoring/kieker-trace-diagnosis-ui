@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.control.TreeItem;
-import kieker.diagnosis.domain.AggregatedOperationCall;
+import kieker.diagnosis.service.data.domain.AggregatedOperationCall;
 
 /**
  * @author Nils Christian Ehmke

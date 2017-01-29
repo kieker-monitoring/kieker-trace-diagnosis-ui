@@ -20,7 +20,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javafx.util.StringConverter;
-import kieker.diagnosis.util.Mapper;
+import kieker.diagnosis.common.Mapper;
 
 /**
  * @author Nils Christian Ehmke
