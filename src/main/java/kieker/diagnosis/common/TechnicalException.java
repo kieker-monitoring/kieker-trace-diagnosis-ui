@@ -14,13 +14,31 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.service;
+package kieker.diagnosis.common;
 
 /**
- * This is a marker interface for services within this application. By default, services are all singletons.
+ * This is a runtime exception indicating that something from a technical point of view failed (e.g. a missing file).
  *
  * @author Nils Christian Ehmke
  */
-public interface ServiceIfc {
+public class TechnicalException extends RuntimeException {
+
+	private static final long serialVersionUID = 1L;
+
+	public TechnicalException( ) {
+		super( );
+	}
+
+	public TechnicalException( final String aMessage, final Throwable aCause ) {
+		super( aMessage, aCause );
+	}
+
+	public TechnicalException( final String aMessage ) {
+		super( aMessage );
+	}
+
+	public TechnicalException( final Throwable aCause ) {
+		super( aCause );
+	}
 
 }

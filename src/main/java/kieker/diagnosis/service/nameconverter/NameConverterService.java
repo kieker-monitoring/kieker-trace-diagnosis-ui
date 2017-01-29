@@ -33,27 +33,23 @@ import kieker.diagnosis.service.properties.PropertiesService.TimestampTypes;
  */
 public final class NameConverterService implements ServiceIfc {
 
-	private static Mapper<TimeUnit, String> cvShortTimeUnitMapper = new Mapper<>( );
+	private final Mapper<TimeUnit, String> ivShortTimeUnitMapper = new Mapper<>( );
 
 	private PropertiesService ivPropertiesService;
 
-	static {
-		NameConverterService.initializeMapper( );
-	}
-
-	private static void initializeMapper( ) {
-		cvShortTimeUnitMapper.map( TimeUnit.NANOSECONDS ).to( "ns" );
-		cvShortTimeUnitMapper.map( TimeUnit.MICROSECONDS ).to( "us" );
-		cvShortTimeUnitMapper.map( TimeUnit.MILLISECONDS ).to( "ms" );
-		cvShortTimeUnitMapper.map( TimeUnit.SECONDS ).to( "s" );
-		cvShortTimeUnitMapper.map( TimeUnit.MINUTES ).to( "m" );
-		cvShortTimeUnitMapper.map( TimeUnit.HOURS ).to( "h" );
-		cvShortTimeUnitMapper.map( TimeUnit.DAYS ).to( "d" );
-		cvShortTimeUnitMapper.mapPerDefault( ).to( "" );
+	public NameConverterService( ) {
+		ivShortTimeUnitMapper.map( TimeUnit.NANOSECONDS ).to( "ns" );
+		ivShortTimeUnitMapper.map( TimeUnit.MICROSECONDS ).to( "us" );
+		ivShortTimeUnitMapper.map( TimeUnit.MILLISECONDS ).to( "ms" );
+		ivShortTimeUnitMapper.map( TimeUnit.SECONDS ).to( "s" );
+		ivShortTimeUnitMapper.map( TimeUnit.MINUTES ).to( "m" );
+		ivShortTimeUnitMapper.map( TimeUnit.HOURS ).to( "h" );
+		ivShortTimeUnitMapper.map( TimeUnit.DAYS ).to( "d" );
+		ivShortTimeUnitMapper.mapPerDefault( ).to( "" );
 	}
 
 	public String toShortTimeUnit( final TimeUnit aTimeUnit ) {
-		return NameConverterService.cvShortTimeUnitMapper.resolve( aTimeUnit );
+		return ivShortTimeUnitMapper.resolve( aTimeUnit );
 	}
 
 	public String toShortComponentName( final String aComponentName ) {
@@ -73,7 +69,7 @@ public final class NameConverterService implements ServiceIfc {
 
 		final long targetDuration = aTargetUnit.convert( aDuration, aSourceUnit );
 
-		return targetDuration + " " + shortTargetUnit + " (" + aDuration + " " + shortSourceUnit + ")";
+		return String.format( "%d %s (%d %s)", targetDuration, shortTargetUnit, aDuration, shortSourceUnit );
 	}
 
 	public String toTimestampString( final long aTimestamp, final TimeUnit aSourceUnit ) {

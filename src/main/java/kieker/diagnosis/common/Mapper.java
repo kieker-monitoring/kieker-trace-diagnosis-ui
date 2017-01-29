@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * This is a simple class replacing a {@link Map} to provide some more readable methods and a fluent API to create a mapping.
+ *
  * @author Nils Christian Ehmke
  *
  * @param <I>
@@ -41,16 +43,16 @@ public final class Mapper<I, O> extends HashMap<I, O> {
 	}
 
 	public O resolve( final I aKey ) {
-		if ( super.containsKey( aKey ) ) {
-			return super.get( aKey );
+		if ( containsKey( aKey ) ) {
+			return get( aKey );
 		}
 		else {
-			return this.ivDefaultValue;
+			return ivDefaultValue;
 		}
 	}
 
 	public I invertedResolve( final O aValue ) {
-		return super.entrySet( ).parallelStream( ).filter( entry -> aValue.equals( entry.getValue( ) ) ).map( Map.Entry::getKey ).findFirst( ).orElse( null );
+		return entrySet( ).parallelStream( ).filter( entry -> aValue.equals( entry.getValue( ) ) ).map( Map.Entry::getKey ).findFirst( ).orElse( null );
 	}
 
 	/**
@@ -62,21 +64,21 @@ public final class Mapper<I, O> extends HashMap<I, O> {
 		private final boolean ivKeyAvailable;
 
 		protected To( final I aKey ) {
-			this.ivKey = aKey;
-			this.ivKeyAvailable = true;
+			ivKey = aKey;
+			ivKeyAvailable = true;
 		}
 
 		protected To( ) {
-			this.ivKey = null;
-			this.ivKeyAvailable = false;
+			ivKey = null;
+			ivKeyAvailable = false;
 		}
 
 		public void to( final O aValue ) {
-			if ( this.ivKeyAvailable ) {
-				Mapper.super.put( this.ivKey, aValue );
+			if ( ivKeyAvailable ) {
+				put( ivKey, aValue );
 			}
 			else {
-				Mapper.this.ivDefaultValue = aValue;
+				ivDefaultValue = aValue;
 			}
 		}
 
