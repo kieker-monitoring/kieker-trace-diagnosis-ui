@@ -111,12 +111,12 @@ public final class AggregatedCallsViewController extends AbstractController {
 	public void initialize( ) {
 		final DataModel dataModel = DataModel.getInstance( );
 
-		this.ivFilteredData = new FilteredList<>( dataModel.getAggregatedOperationCalls( ) );
-		this.ivFilteredData.addListener( (ListChangeListener<AggregatedOperationCall>) change -> this.ivSelection.set( Optional.empty( ) ) );
+		ivFilteredData = new FilteredList<>( dataModel.getAggregatedOperationCalls( ) );
+		ivFilteredData.addListener( (ListChangeListener<AggregatedOperationCall>) change -> ivSelection.set( Optional.empty( ) ) );
 
-		final SortedList<AggregatedOperationCall> sortedData = new SortedList<>( this.ivFilteredData );
-		sortedData.comparatorProperty( ).bind( this.ivTable.comparatorProperty( ) );
-		this.ivTable.setItems( sortedData );
+		final SortedList<AggregatedOperationCall> sortedData = new SortedList<>( ivFilteredData );
+		sortedData.comparatorProperty( ).bind( ivTable.comparatorProperty( ) );
+		ivTable.setItems( sortedData );
 
 		final Object filterContent = getContext( ).get( ContextKey.FILTER_CONTENT );
 		if ( filterContent instanceof FilterContent ) {
@@ -124,49 +124,40 @@ public final class AggregatedCallsViewController extends AbstractController {
 			useFilter( );
 		}
 
-		this.ivSelection.addListener( e -> this.updateDetailPanel( ) );
+		ivSelection.addListener( e -> updateDetailPanel( ) );
 
-		this.ivCounter.textProperty( ).bind( Bindings
-				.createStringBinding( ( ) -> sortedData.size( ) + " " + this.resources.getString( "AggregatedCallsView.lblCounter.text" ), sortedData ) );
-	}
-
-	@Override
-	protected void reinitialize( ) {
-		final Object filterContent = getContext( ).get( ContextKey.FILTER_CONTENT );
-		if ( filterContent instanceof FilterContent ) {
-			loadFilterContent( (FilterContent) filterContent );
-			useFilter( );
-		}
+		ivCounter.textProperty( ).bind(
+				Bindings.createStringBinding( ( ) -> sortedData.size( ) + " " + resources.getString( "AggregatedCallsView.lblCounter.text" ), sortedData ) );
 	}
 
 	private void updateDetailPanel( ) {
-		if ( this.ivSelection.get( ).isPresent( ) ) {
-			final AggregatedOperationCall call = this.ivSelection.get( ).get( );
+		if ( ivSelection.get( ).isPresent( ) ) {
+			final AggregatedOperationCall call = ivSelection.get( ).get( );
 			final TimeUnit sourceTimeUnit = DataModel.getInstance( ).getTimeUnit( );
 			final TimeUnit targetTimeUnit = PropertiesModel.getInstance( ).getTimeUnit( );
 
-			this.ivContainer.setText( call.getContainer( ) );
-			this.ivComponent.setText( call.getComponent( ) );
-			this.ivOperation.setText( call.getOperation( ) );
-			this.ivMinimalDuration.setText( NameConverter.toDurationString( call.getMinDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			this.ivMaximalDuration.setText( NameConverter.toDurationString( call.getMaxDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			this.ivMedianDuration.setText( NameConverter.toDurationString( call.getMedianDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			this.ivTotalDuration.setText( NameConverter.toDurationString( call.getTotalDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			this.ivMeanDuration.setText( NameConverter.toDurationString( call.getMeanDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			this.ivCalls.setText( Integer.toString( call.getCalls( ) ) );
-			this.ivFailed.setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : "N/A" );
+			ivContainer.setText( call.getContainer( ) );
+			ivComponent.setText( call.getComponent( ) );
+			ivOperation.setText( call.getOperation( ) );
+			ivMinimalDuration.setText( NameConverter.toDurationString( call.getMinDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			ivMaximalDuration.setText( NameConverter.toDurationString( call.getMaxDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			ivMedianDuration.setText( NameConverter.toDurationString( call.getMedianDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			ivTotalDuration.setText( NameConverter.toDurationString( call.getTotalDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			ivMeanDuration.setText( NameConverter.toDurationString( call.getMeanDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			ivCalls.setText( Integer.toString( call.getCalls( ) ) );
+			ivFailed.setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : "N/A" );
 		}
 		else {
-			this.ivContainer.setText( "N/A" );
-			this.ivComponent.setText( "N/A" );
-			this.ivOperation.setText( "N/A" );
-			this.ivMinimalDuration.setText( "N/A" );
-			this.ivMaximalDuration.setText( "N/A" );
-			this.ivMedianDuration.setText( "N/A" );
-			this.ivTotalDuration.setText( "N/A" );
-			this.ivMeanDuration.setText( "N/A" );
-			this.ivCalls.setText( "N/A" );
-			this.ivFailed.setText( "N/A" );
+			ivContainer.setText( "N/A" );
+			ivComponent.setText( "N/A" );
+			ivOperation.setText( "N/A" );
+			ivMinimalDuration.setText( "N/A" );
+			ivMaximalDuration.setText( "N/A" );
+			ivMedianDuration.setText( "N/A" );
+			ivTotalDuration.setText( "N/A" );
+			ivMeanDuration.setText( "N/A" );
+			ivCalls.setText( "N/A" );
+			ivFailed.setText( "N/A" );
 		}
 	}
 
@@ -181,32 +172,32 @@ public final class AggregatedCallsViewController extends AbstractController {
 		}
 
 		if ( clicked == 1 ) {
-			this.ivSelection.set( Optional.ofNullable( this.ivTable.getSelectionModel( ).getSelectedItem( ) ) );
+			ivSelection.set( Optional.ofNullable( ivTable.getSelectionModel( ).getSelectedItem( ) ) );
 		}
 		else if ( clicked == 2 ) {
-			this.jumpToCalls( );
+			jumpToCalls( );
 		}
 	}
 
 	private void jumpToCalls( ) throws Exception {
-		if ( this.ivSelection.get( ).isPresent( ) ) {
-			final AggregatedOperationCall call = this.ivSelection.get( ).get( );
+		if ( ivSelection.get( ).isPresent( ) ) {
+			final AggregatedOperationCall call = ivSelection.get( ).get( );
 			MainController.instance( ).jumpToCalls( call );
 		}
 	}
 
 	@ErrorHandling
 	public void useFilter( ) {
-		final Predicate<AggregatedOperationCall> predicate1 = FilterUtility.useFilter( this.ivShowAllButton, this.ivShowJustSuccessful,
-				this.ivShowJustFailedButton, AggregatedOperationCall::isFailed );
-		final Predicate<AggregatedOperationCall> predicate2 = FilterUtility.useFilter( this.ivFilterContainer, AggregatedOperationCall::getContainer );
-		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter( this.ivFilterComponent, AggregatedOperationCall::getComponent );
-		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter( this.ivFilterOperation, AggregatedOperationCall::getOperation );
-		final Predicate<AggregatedOperationCall> predicate5 = FilterUtility.useFilter( this.ivFilterException,
+		final Predicate<AggregatedOperationCall> predicate1 = FilterUtility.useFilter( ivShowAllButton, ivShowJustSuccessful, ivShowJustFailedButton,
+				AggregatedOperationCall::isFailed );
+		final Predicate<AggregatedOperationCall> predicate2 = FilterUtility.useFilter( ivFilterContainer, AggregatedOperationCall::getContainer );
+		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter( ivFilterComponent, AggregatedOperationCall::getComponent );
+		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter( ivFilterOperation, AggregatedOperationCall::getOperation );
+		final Predicate<AggregatedOperationCall> predicate5 = FilterUtility.useFilter( ivFilterException,
 				(call -> call.isFailed( ) ? call.getFailedCause( ) : "") );
 
 		final Predicate<AggregatedOperationCall> predicate = predicate1.and( predicate2 ).and( predicate3 ).and( predicate4 ).and( predicate5 );
-		this.ivFilteredData.setPredicate( predicate );
+		ivFilteredData.setPredicate( predicate );
 	}
 
 	@ErrorHandling
@@ -258,56 +249,56 @@ public final class AggregatedCallsViewController extends AbstractController {
 			return ivShowAllButton;
 		}
 
-		public void setShowAllButton( boolean showAllButton ) {
-			this.ivShowAllButton = showAllButton;
+		public void setShowAllButton( final boolean showAllButton ) {
+			ivShowAllButton = showAllButton;
 		}
 
 		public boolean isShowJustSuccessful( ) {
 			return ivShowJustSuccessful;
 		}
 
-		public void setShowJustSuccessful( boolean showJustSuccessful ) {
-			this.ivShowJustSuccessful = showJustSuccessful;
+		public void setShowJustSuccessful( final boolean showJustSuccessful ) {
+			ivShowJustSuccessful = showJustSuccessful;
 		}
 
 		public boolean isShowJustFailedButton( ) {
 			return ivShowJustFailedButton;
 		}
 
-		public void setShowJustFailedButton( boolean showJustFailedButton ) {
-			this.ivShowJustFailedButton = showJustFailedButton;
+		public void setShowJustFailedButton( final boolean showJustFailedButton ) {
+			ivShowJustFailedButton = showJustFailedButton;
 		}
 
 		public String getFilterContainer( ) {
 			return ivFilterContainer;
 		}
 
-		public void setFilterContainer( String filterContainer ) {
-			this.ivFilterContainer = filterContainer;
+		public void setFilterContainer( final String filterContainer ) {
+			ivFilterContainer = filterContainer;
 		}
 
 		public String getFilterComponent( ) {
 			return ivFilterComponent;
 		}
 
-		public void setFilterComponent( String filterComponent ) {
-			this.ivFilterComponent = filterComponent;
+		public void setFilterComponent( final String filterComponent ) {
+			ivFilterComponent = filterComponent;
 		}
 
 		public String getFilterOperation( ) {
 			return ivFilterOperation;
 		}
 
-		public void setFilterOperation( String filterOperation ) {
-			this.ivFilterOperation = filterOperation;
+		public void setFilterOperation( final String filterOperation ) {
+			ivFilterOperation = filterOperation;
 		}
 
 		public String getFilterException( ) {
 			return ivFilterException;
 		}
 
-		public void setFilterException( String filterException ) {
-			this.ivFilterException = filterException;
+		public void setFilterException( final String filterException ) {
+			ivFilterException = filterException;
 		}
 
 	}

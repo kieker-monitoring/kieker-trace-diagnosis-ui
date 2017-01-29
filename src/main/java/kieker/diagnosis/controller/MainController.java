@@ -18,11 +18,7 @@ package kieker.diagnosis.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.net.URL;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.prefs.BackingStoreException;
@@ -31,31 +27,20 @@ import java.util.prefs.Preferences;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javafx.animation.FadeTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.Window;
-import javafx.util.Duration;
 import kieker.diagnosis.controller.about.AboutDialogViewController;
 import kieker.diagnosis.controller.aggregatedcalls.AggregatedCallsViewController;
 import kieker.diagnosis.controller.aggregatedtraces.AggregatedTracesViewController;
@@ -78,20 +63,16 @@ import kieker.diagnosis.util.ErrorHandling;
 
 /**
  * The main controller of this application. It is responsible for controlling the application's main window.
- * 
+ *
  * @author Nils Christian Ehmke
  */
-public final class MainController {
-
-	private static final String KIEKER_LOGO_PNG = "kieker-logo.png";
+public final class MainController extends AbstractController {
 
 	private static final String KEY_LAST_IMPORT_PATH = "lastimportpath";
 	private static final String KEY_LAST_EXPORT_PATH = "lastexportpath";
 
 	private static final Logger LOGGER = LogManager.getLogger( MainController.class );
 
-	private static Map<Class<?>, PaneData> cvPaneDataCache = new HashMap<>( );
-	private static Map<Class<?>, AbstractController> cvControllerCache = new HashMap<>( );
 	private static MainController cvInstance;
 
 	private final DataModel ivDataModel = DataModel.getInstance( );
@@ -99,7 +80,7 @@ public final class MainController {
 	@FXML
 	private Node ivView;
 	@FXML
-	private Pane ivContent;
+	private AnchorPane ivContent;
 	@FXML
 	private VBox ivLeftButtonBox;
 
@@ -119,7 +100,8 @@ public final class MainController {
 
 	private int ivFavoritesAvailable;
 
-	private MainController( ) {
+	public MainController( final Context aContext ) {
+		super( aContext );
 	}
 
 	@ErrorHandling
@@ -143,21 +125,21 @@ public final class MainController {
 	}
 
 	private void showTraces( final ContextEntry... aContextEntries ) throws Exception {
-		this.toggleDisabledButton( this.ivTraces );
-		this.ivActiveController = Optional.of( TracesViewController.class );
-		this.loadPane( TracesViewController.class, aContextEntries );
+		toggleDisabledButton( ivTraces );
+		ivActiveController = Optional.of( TracesViewController.class );
+		GUIUtil.loadView( TracesViewController.class, ivContent, aContextEntries );
 	}
 
 	private void showAggregatedTraces( final ContextEntry... aContextEntries ) throws Exception {
-		this.toggleDisabledButton( this.ivAggregatedtraces );
-		this.ivActiveController = Optional.of( AggregatedTracesViewController.class );
-		this.loadPane( AggregatedTracesViewController.class, aContextEntries );
+		toggleDisabledButton( ivAggregatedtraces );
+		ivActiveController = Optional.of( AggregatedTracesViewController.class );
+		GUIUtil.loadView( AggregatedTracesViewController.class, ivContent, aContextEntries );
 	}
 
 	private void showAggregatedCalls( final ContextEntry... aContextEntries ) throws Exception {
-		this.toggleDisabledButton( this.ivAggregatedcalls );
-		this.ivActiveController = Optional.of( AggregatedCallsViewController.class );
-		this.loadPane( AggregatedCallsViewController.class, aContextEntries );
+		toggleDisabledButton( ivAggregatedcalls );
+		ivActiveController = Optional.of( AggregatedCallsViewController.class );
+		GUIUtil.loadView( AggregatedCallsViewController.class, ivContent, aContextEntries );
 	}
 
 	@ErrorHandling
@@ -172,9 +154,9 @@ public final class MainController {
 
 	@ErrorHandling
 	public void showCalls( final ContextEntry... aContextEntries ) throws Exception {
-		this.toggleDisabledButton( this.ivCalls );
-		this.ivActiveController = Optional.of( CallsViewController.class );
-		this.loadPane( CallsViewController.class, aContextEntries );
+		toggleDisabledButton( ivCalls );
+		ivActiveController = Optional.of( CallsViewController.class );
+		GUIUtil.loadView( CallsViewController.class, ivContent, aContextEntries );
 	}
 
 	@ErrorHandling
@@ -184,9 +166,9 @@ public final class MainController {
 
 	@ErrorHandling
 	public void showStatistics( ) throws Exception {
-		this.toggleDisabledButton( this.ivStatistics );
-		this.ivActiveController = Optional.of( MonitoringStatisticsViewController.class );
-		this.loadPane( MonitoringStatisticsViewController.class );
+		toggleDisabledButton( ivStatistics );
+		ivActiveController = Optional.of( MonitoringStatisticsViewController.class );
+		GUIUtil.loadView( MonitoringStatisticsViewController.class, ivContent );
 	}
 
 	@ErrorHandling
@@ -198,11 +180,11 @@ public final class MainController {
 		if ( initialDirectory.exists( ) ) {
 			directoryChooser.setInitialDirectory( initialDirectory );
 		}
-		final File selectedDirectory = directoryChooser.showDialog( (this.ivView.getScene( ).getWindow( )) );
+		final File selectedDirectory = directoryChooser.showDialog( (ivView.getScene( ).getWindow( )) );
 		if ( null != selectedDirectory ) {
-			this.ivView.setCursor( Cursor.WAIT );
-			this.ivDataModel.loadMonitoringLogFromFS( selectedDirectory );
-			this.ivView.setCursor( Cursor.DEFAULT );
+			ivView.setCursor( Cursor.WAIT );
+			ivDataModel.loadMonitoringLogFromFS( selectedDirectory );
+			ivView.setCursor( Cursor.DEFAULT );
 
 			preferences.put( MainController.KEY_LAST_IMPORT_PATH, selectedDirectory.getAbsolutePath( ) );
 			try {
@@ -217,161 +199,39 @@ public final class MainController {
 	@ErrorHandling
 	public void showSettings( ) throws Exception {
 		final long propertiesVersionPre = PropertiesModel.getInstance( ).getVersion( );
-		this.loadDialogPane( SettingsDialogViewController.class );
+		GUIUtil.loadDialog( SettingsDialogViewController.class, ivContent.getScene( ).getWindow( ) );
 
-		if ( this.ivActiveController.isPresent( ) ) {
+		if ( ivActiveController.isPresent( ) ) {
 			final long propertiesVersionPost = PropertiesModel.getInstance( ).getVersion( );
 			if ( propertiesVersionPre != propertiesVersionPost ) {
-				cvPaneDataCache.clear( );
-				cvControllerCache.clear( );
-				this.loadPane( this.ivActiveController.get( ) );
+				GUIUtil.clearCache( );
+				GUIUtil.loadView( ivActiveController.get( ), ivContent );
 			}
 		}
 	}
 
 	@ErrorHandling
 	public void showAbout( ) throws Exception {
-		this.loadDialogPane( AboutDialogViewController.class );
+		GUIUtil.loadDialog( AboutDialogViewController.class, ivContent.getScene( ).getWindow( ) );
 	}
 
 	@ErrorHandling
 	public void showBugReporting( ) throws Exception {
-		this.loadDialogPane( BugReportingDialogViewController.class );
+		GUIUtil.loadDialog( BugReportingDialogViewController.class, ivContent.getScene( ).getWindow( ) );
 	}
 
 	@ErrorHandling
 	public void close( ) {
-		final Window window = this.ivView.getScene( ).getWindow( );
+		final Window window = ivView.getScene( ).getWindow( );
 		if ( window instanceof Stage ) {
 			((Stage) window).close( );
 		}
 	}
 
 	private void toggleDisabledButton( final Button aDisabledButton ) {
-		this.ivDisabledButton.ifPresent( b -> b.setDisable( false ) );
-		this.ivDisabledButton = Optional.of( aDisabledButton );
+		ivDisabledButton.ifPresent( b -> b.setDisable( false ) );
+		ivDisabledButton = Optional.of( aDisabledButton );
 		aDisabledButton.setDisable( true );
-	}
-
-	private void loadPane( final Class<? extends AbstractController> aControllerClass, final ContextEntry... aArguments ) throws Exception {
-		final PaneData paneData = MainController.loadPaneData( aControllerClass, aArguments );
-
-		this.ivContent.getChildren( ).clear( );
-		this.ivContent.getStylesheets( ).clear( );
-
-		this.ivContent.getStylesheets( ).add( paneData.getStylesheetURL( ) );
-		this.ivContent.getChildren( ).setAll( paneData.getNode( ) );
-	}
-
-	private void loadDialogPane( final Class<? extends AbstractController> aControllerClass ) throws Exception {
-		final PaneData paneData = MainController.loadPaneData( aControllerClass );
-
-		final Parent parent = (Parent) paneData.getNode( );
-		Scene scene = parent.getScene( );
-		if ( scene == null ) {
-			scene = new Scene( parent );
-		}
-		scene.getStylesheets( ).add( paneData.ivStylesheetURL );
-
-		final Stage dialogStage = new Stage( );
-		dialogStage.getIcons( ).add( new Image( KIEKER_LOGO_PNG ) );
-		dialogStage.setTitle( paneData.getTitle( ) );
-		dialogStage.setResizable( false );
-		dialogStage.initModality( Modality.WINDOW_MODAL );
-		dialogStage.initOwner( (this.ivView.getScene( ).getWindow( )) );
-		dialogStage.setScene( scene );
-		dialogStage.showAndWait( );
-	}
-
-	public static void loadMainPane( final Stage aStage ) throws Exception {
-		try {
-			MainController.cvInstance = new MainController( );
-			final URL resource = MainController.class.getClassLoader( ).getResource( "kieker/diagnosis/view/View.fxml" );
-			final FXMLLoader fxmlLoader = new FXMLLoader( );
-			fxmlLoader.setResources( ResourceBundle.getBundle( "kieker.diagnosis.view.view", Locale.getDefault( ) ) );
-			fxmlLoader.setLocation( resource );
-			fxmlLoader.setController( MainController.cvInstance );
-			final Pane pane = (Pane) fxmlLoader.load( );
-
-			final Scene root = new Scene( pane );
-			aStage.setScene( root );
-
-			aStage.getIcons( ).add( new Image( KIEKER_LOGO_PNG ) );
-			aStage.setTitle( "Kieker Trace Diagnosis - 1.2.0-SNAPSHOT" );
-			aStage.setMaximized( true );
-
-			MainController.showSplashScreen( root );
-
-			aStage.show( );
-		}
-		catch ( final IOException ex ) {
-			MainController.LOGGER.error( ex );
-			throw ex;
-		}
-	}
-
-	private static void showSplashScreen( final Scene aRoot ) {
-		final ImageView imageView = new ImageView( "splashscreen.png" );
-		final Pane parent = new Pane( imageView );
-		final Scene scene = new Scene( parent );
-
-		final Stage stage = new Stage( );
-		stage.setResizable( false );
-		stage.initStyle( StageStyle.UNDECORATED );
-		stage.initModality( Modality.WINDOW_MODAL );
-		stage.initOwner( aRoot.getWindow( ) );
-		stage.setScene( scene );
-
-		final FadeTransition transition = new FadeTransition( Duration.millis( 3000 ), stage.getScene( ).getRoot( ) );
-		transition.setFromValue( 1.0 );
-		transition.setToValue( 0.0 );
-		final EventHandler<ActionEvent> handler = t -> stage.hide( );
-		transition.setOnFinished( handler );
-		transition.play( );
-
-		stage.showAndWait( );
-	}
-
-	private static PaneData loadPaneData( final Class<? extends AbstractController> aControllerClass, final ContextEntry... aArguments ) throws Exception {
-
-		if ( cvPaneDataCache.containsKey( aControllerClass ) && PropertiesModel.getInstance( ).isCacheViews( ) ) {
-			final Context context = new Context( aArguments );
-			cvControllerCache.get( aControllerClass ).setContext( context );
-			return cvPaneDataCache.get( aControllerClass );
-		}
-
-		final long tin = System.currentTimeMillis( );
-
-		final String baseName = aControllerClass.getCanonicalName( ).replace( "Controller", "" ).replace( ".controller.", ".view." );
-		final String viewFXMLName = baseName.replace( ".", "/" ) + ".fxml";
-		final String cssName = baseName.replace( ".", "/" ) + ".css";
-		final String bundleBaseName = baseName.toLowerCase( Locale.ROOT );
-
-		final Constructor<? extends AbstractController> constructor = aControllerClass.getConstructor( Context.class );
-		final Context context = new Context( aArguments );
-		final AbstractController controller = constructor.newInstance( context );
-
-		final URL viewResource = MainController.class.getClassLoader( ).getResource( viewFXMLName );
-		final ResourceBundle resourceBundle = ResourceBundle.getBundle( bundleBaseName, Locale.getDefault( ) );
-		final FXMLLoader loader = new FXMLLoader( );
-		loader.setController( controller );
-		loader.setLocation( viewResource );
-		loader.setResources( resourceBundle );
-		final Node node = (Node) loader.load( );
-		final URL cssResource = MainController.class.getClassLoader( ).getResource( cssName );
-		final String title = (resourceBundle.containsKey( "title" ) ? resourceBundle.getString( "title" ) : "");
-
-		final PaneData paneData = new PaneData( node, title, cssResource.toExternalForm( ) );
-
-		if ( PropertiesModel.getInstance( ).isCacheViews( ) ) {
-			cvPaneDataCache.put( aControllerClass, paneData );
-			cvControllerCache.put( aControllerClass, controller );
-		}
-
-		final long tout = System.currentTimeMillis( );
-		MainController.LOGGER.info( "View for '" + aControllerClass.getCanonicalName( ) + "' loaded in " + (tout - tin) + "ms" );
-
-		return paneData;
 	}
 
 	public static MainController instance( ) {
@@ -395,7 +255,7 @@ public final class MainController {
 			fileChooser.setInitialDirectory( initialDirectory );
 		}
 
-		final File selectedFile = fileChooser.showSaveDialog( (this.ivView.getScene( ).getWindow( )) );
+		final File selectedFile = fileChooser.showSaveDialog( (ivView.getScene( ).getWindow( )) );
 		if ( null != selectedFile ) {
 			final CSVData data = aDataCollector.collectData( );
 			CSVExporter.exportToCSV( data, selectedFile );
@@ -473,32 +333,6 @@ public final class MainController {
 	@SuppressWarnings ( "unchecked" )
 	private static <T extends Throwable> RuntimeException silentRethrow( final Throwable aThrowable ) throws T {
 		throw (T) aThrowable;
-	}
-
-	private static class PaneData {
-
-		private final Node ivNode;
-		private final String ivTitle;
-		private final String ivStylesheetURL;
-
-		public PaneData( final Node aNode, final String aTitle, final String aStylesheetURL ) {
-			this.ivNode = aNode;
-			this.ivTitle = aTitle;
-			this.ivStylesheetURL = aStylesheetURL;
-		}
-
-		public Node getNode( ) {
-			return this.ivNode;
-		}
-
-		public String getTitle( ) {
-			return this.ivTitle;
-		}
-
-		public String getStylesheetURL( ) {
-			return this.ivStylesheetURL;
-		}
-
 	}
 
 }

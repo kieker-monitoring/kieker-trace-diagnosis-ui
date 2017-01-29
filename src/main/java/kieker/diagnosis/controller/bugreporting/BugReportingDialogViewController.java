@@ -37,20 +37,16 @@ public final class BugReportingDialogViewController extends AbstractDialogContro
 		super( aContext );
 	}
 
-	@Override
-	protected void reinitialize( ) {
-	}
-
 	@ErrorHandling
 	public void visitGitLab( ) throws IOException, URISyntaxException {
-		final String gitLabURL = this.ivPropertiesModel.getGitLabURL( );
+		final String gitLabURL = ivPropertiesModel.getGitLabURL( );
 		final Desktop desktop = Desktop.getDesktop( );
 		desktop.browse( new URI( gitLabURL ) );
 	}
 
 	@ErrorHandling
 	public void visitTrac( ) throws IOException, URISyntaxException {
-		final String tracURL = this.ivPropertiesModel.getTracURL( );
+		final String tracURL = ivPropertiesModel.getTracURL( );
 		final Desktop desktop = Desktop.getDesktop( );
 		desktop.browse( new URI( tracURL ) );
 	}

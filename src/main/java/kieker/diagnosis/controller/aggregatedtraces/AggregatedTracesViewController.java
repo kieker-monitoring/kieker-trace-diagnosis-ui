@@ -116,99 +116,89 @@ public final class AggregatedTracesViewController extends AbstractController {
 			useFilter( );
 		}
 		else {
-			this.reloadTreetable( );
+			reloadTreetable( );
 		}
 
 		final DataModel dataModel = DataModel.getInstance( );
-		dataModel.getAggregatedTraces( ).addListener( ( final Change<? extends AggregatedTrace> c ) -> this.reloadTreetable( ) );
+		dataModel.getAggregatedTraces( ).addListener( ( final Change<? extends AggregatedTrace> c ) -> reloadTreetable( ) );
 
-		this.ivSelection.addListener( e -> this.updateDetailPanel( ) );
-	}
-
-	@Override
-	protected void reinitialize( ) {
-		final Object filterContent = getContext( ).get( ContextKey.FILTER_CONTENT );
-		if ( filterContent instanceof FilterContent ) {
-			loadFilterContent( (FilterContent) filterContent );
-			useFilter( );
-		}
+		ivSelection.addListener( e -> updateDetailPanel( ) );
 	}
 
 	private void updateDetailPanel( ) {
-		if ( this.ivSelection.get( ).isPresent( ) ) {
-			final AggregatedOperationCall call = this.ivSelection.get( ).get( );
+		if ( ivSelection.get( ).isPresent( ) ) {
+			final AggregatedOperationCall call = ivSelection.get( ).get( );
 			final TimeUnit sourceTimeUnit = DataModel.getInstance( ).getTimeUnit( );
 			final TimeUnit targetTimeUnit = PropertiesModel.getInstance( ).getTimeUnit( );
 
-			this.ivContainer.setText( call.getContainer( ) );
-			this.ivComponent.setText( call.getComponent( ) );
-			this.ivOperation.setText( call.getOperation( ) );
-			this.ivMinDuration.setText( NameConverter.toDurationString( call.getMinDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			this.ivMaxDuration.setText( NameConverter.toDurationString( call.getMaxDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			this.ivMedianDuration.setText( NameConverter.toDurationString( call.getMedianDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			this.ivTotalDuration.setText( NameConverter.toDurationString( call.getTotalDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			this.ivAvgDuration.setText( NameConverter.toDurationString( call.getMeanDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			this.ivCalls.setText( Integer.toString( call.getCalls( ) ) );
-			this.ivTraceDepth.setText( Integer.toString( call.getStackDepth( ) ) );
-			this.ivTraceSize.setText( Integer.toString( call.getStackSize( ) ) );
-			this.ivFailed.setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : "N/A" );
+			ivContainer.setText( call.getContainer( ) );
+			ivComponent.setText( call.getComponent( ) );
+			ivOperation.setText( call.getOperation( ) );
+			ivMinDuration.setText( NameConverter.toDurationString( call.getMinDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			ivMaxDuration.setText( NameConverter.toDurationString( call.getMaxDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			ivMedianDuration.setText( NameConverter.toDurationString( call.getMedianDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			ivTotalDuration.setText( NameConverter.toDurationString( call.getTotalDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			ivAvgDuration.setText( NameConverter.toDurationString( call.getMeanDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			ivCalls.setText( Integer.toString( call.getCalls( ) ) );
+			ivTraceDepth.setText( Integer.toString( call.getStackDepth( ) ) );
+			ivTraceSize.setText( Integer.toString( call.getStackSize( ) ) );
+			ivFailed.setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : "N/A" );
 		}
 		else {
-			this.ivContainer.setText( "N/A" );
-			this.ivComponent.setText( "N/A" );
-			this.ivOperation.setText( "N/A" );
-			this.ivMinDuration.setText( "N/A" );
-			this.ivMaxDuration.setText( "N/A" );
-			this.ivMedianDuration.setText( "N/A" );
-			this.ivTotalDuration.setText( "N/A" );
-			this.ivAvgDuration.setText( "N/A" );
-			this.ivCalls.setText( "N/A" );
-			this.ivTraceDepth.setText( "N/A" );
-			this.ivTraceSize.setText( "N/A" );
-			this.ivFailed.setText( "N/A" );
+			ivContainer.setText( "N/A" );
+			ivComponent.setText( "N/A" );
+			ivOperation.setText( "N/A" );
+			ivMinDuration.setText( "N/A" );
+			ivMaxDuration.setText( "N/A" );
+			ivMedianDuration.setText( "N/A" );
+			ivTotalDuration.setText( "N/A" );
+			ivAvgDuration.setText( "N/A" );
+			ivCalls.setText( "N/A" );
+			ivTraceDepth.setText( "N/A" );
+			ivTraceSize.setText( "N/A" );
+			ivFailed.setText( "N/A" );
 		}
 	}
 
 	@ErrorHandling
 	public void selectCall( ) {
-		final TreeItem<AggregatedOperationCall> selectedItem = this.ivTreetable.getSelectionModel( ).getSelectedItem( );
+		final TreeItem<AggregatedOperationCall> selectedItem = ivTreetable.getSelectionModel( ).getSelectedItem( );
 		if ( selectedItem != null ) {
-			this.ivSelection.set( Optional.ofNullable( selectedItem.getValue( ) ) );
+			ivSelection.set( Optional.ofNullable( selectedItem.getValue( ) ) );
 		}
 	}
 
 	@ErrorHandling
 	public void useFilter( ) {
-		final Predicate<AggregatedOperationCall> predicate1 = FilterUtility.useFilter( this.ivShowAllButton, this.ivShowJustSuccessful,
-				this.ivShowJustFailedButton, this.ivShowJustFailureContainingButton, AggregatedOperationCall::isFailed,
-				AggregatedOperationCall::containsFailure );
-		final Predicate<AggregatedOperationCall> predicate2 = FilterUtility.useFilter( this.ivFilterContainer, AggregatedOperationCall::getContainer,
+		final Predicate<AggregatedOperationCall> predicate1 = FilterUtility.useFilter( ivShowAllButton, ivShowJustSuccessful, ivShowJustFailedButton,
+				ivShowJustFailureContainingButton, AggregatedOperationCall::isFailed, AggregatedOperationCall::containsFailure );
+		final Predicate<AggregatedOperationCall> predicate2 = FilterUtility.useFilter( ivFilterContainer, AggregatedOperationCall::getContainer,
 				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter( this.ivFilterComponent, AggregatedOperationCall::getComponent,
+		final Predicate<AggregatedOperationCall> predicate3 = FilterUtility.useFilter( ivFilterComponent, AggregatedOperationCall::getComponent,
 				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter( this.ivFilterOperation, AggregatedOperationCall::getOperation,
+		final Predicate<AggregatedOperationCall> predicate4 = FilterUtility.useFilter( ivFilterOperation, AggregatedOperationCall::getOperation,
 				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<AggregatedOperationCall> predicate5 = FilterUtility.useFilter( this.ivFilterException,
+		final Predicate<AggregatedOperationCall> predicate5 = FilterUtility.useFilter( ivFilterException,
 				(call -> call.isFailed( ) ? call.getFailedCause( ) : ""), PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
 
-		this.ivPredicate = predicate1.and( predicate2 ).and( predicate3 ).and( predicate4 ).and( predicate5 );
-		this.reloadTreetable( );
+		ivPredicate = predicate1.and( predicate2 ).and( predicate3 ).and( predicate4 ).and( predicate5 );
+		reloadTreetable( );
 	}
 
 	private void reloadTreetable( ) {
-		this.ivSelection.set( Optional.empty( ) );
+		ivSelection.set( Optional.empty( ) );
 
 		final DataModel dataModel = DataModel.getInstance( );
 		final List<AggregatedTrace> traces = dataModel.getAggregatedTraces( );
 		final TreeItem<AggregatedOperationCall> root = new TreeItem<>( );
 		final ObservableList<TreeItem<AggregatedOperationCall>> rootChildren = root.getChildren( );
-		this.ivTreetable.setRoot( root );
-		this.ivTreetable.setShowRoot( false );
+		ivTreetable.setRoot( root );
+		ivTreetable.setShowRoot( false );
 
-		traces.stream( ).map( trace -> trace.getRootOperationCall( ) ).filter( this.ivPredicate )
+		traces.stream( ).map( trace -> trace.getRootOperationCall( ) ).filter( ivPredicate )
 				.forEach( call -> rootChildren.add( new LazyAggregatedOperationCallTreeItem( call ) ) );
 
-		this.ivCounter.textProperty( ).set( rootChildren.size( ) + " " + this.resources.getString( "AggregatedTracesView.lblCounter.text" ) );
+		ivCounter.textProperty( ).set( rootChildren.size( ) + " " + resources.getString( "AggregatedTracesView.lblCounter.text" ) );
 	}
 
 	@ErrorHandling
@@ -258,31 +248,31 @@ public final class AggregatedTracesViewController extends AbstractController {
 			return ivShowAllButton;
 		}
 
-		public void setShowAllButton( boolean showAllButton ) {
-			this.ivShowAllButton = showAllButton;
+		public void setShowAllButton( final boolean showAllButton ) {
+			ivShowAllButton = showAllButton;
 		}
 
 		public boolean isShowJustSuccessful( ) {
 			return ivShowJustSuccessful;
 		}
 
-		public void setShowJustSuccessful( boolean showJustSuccessful ) {
-			this.ivShowJustSuccessful = showJustSuccessful;
+		public void setShowJustSuccessful( final boolean showJustSuccessful ) {
+			ivShowJustSuccessful = showJustSuccessful;
 		}
 
 		public boolean isShowJustFailedButton( ) {
 			return ivShowJustFailedButton;
 		}
 
-		public void setShowJustFailedButton( boolean showJustFailedButton ) {
-			this.ivShowJustFailedButton = showJustFailedButton;
+		public void setShowJustFailedButton( final boolean showJustFailedButton ) {
+			ivShowJustFailedButton = showJustFailedButton;
 		}
 
 		public boolean isShowJustFailureContainingButton( ) {
 			return ivShowJustFailureContainingButton;
 		}
 
-		public void setShowJustFailureContainingButton( boolean ivShowJustFailureContainingButton ) {
+		public void setShowJustFailureContainingButton( final boolean ivShowJustFailureContainingButton ) {
 			this.ivShowJustFailureContainingButton = ivShowJustFailureContainingButton;
 		}
 
@@ -290,32 +280,32 @@ public final class AggregatedTracesViewController extends AbstractController {
 			return ivFilterContainer;
 		}
 
-		public void setFilterContainer( String filterContainer ) {
-			this.ivFilterContainer = filterContainer;
+		public void setFilterContainer( final String filterContainer ) {
+			ivFilterContainer = filterContainer;
 		}
 
 		public String getFilterComponent( ) {
 			return ivFilterComponent;
 		}
 
-		public void setFilterComponent( String filterComponent ) {
-			this.ivFilterComponent = filterComponent;
+		public void setFilterComponent( final String filterComponent ) {
+			ivFilterComponent = filterComponent;
 		}
 
 		public String getFilterOperation( ) {
 			return ivFilterOperation;
 		}
 
-		public void setFilterOperation( String filterOperation ) {
-			this.ivFilterOperation = filterOperation;
+		public void setFilterOperation( final String filterOperation ) {
+			ivFilterOperation = filterOperation;
 		}
 
 		public String getFilterException( ) {
 			return ivFilterException;
 		}
 
-		public void setFilterException( String filterException ) {
-			this.ivFilterException = filterException;
+		public void setFilterException( final String filterException ) {
+			ivFilterException = filterException;
 		}
 
 	}

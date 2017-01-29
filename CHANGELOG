@@ -1,5 +1,9 @@
 1.2.0:
 	29 Jan 2017
+	Internal Improvement (#38)
+	Refactored the code for the GUI loading and moved it from the main controller into an own class.
+	
+	29 Jan 2017
 	Internal Improvement (#37)
 	Added a customized configuration for the formatter and cleanup in Eclipse.
 	

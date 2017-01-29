@@ -131,58 +131,43 @@ public final class TracesViewController extends AbstractController {
 			useFilter( );
 		}
 		else {
-			this.reloadTreetable( );
+			reloadTreetable( );
 		}
 
-		final ObservableList<Trace> traces = this.ivDataModel.getTraces( );
-		traces.addListener( ( final Change<? extends Trace> aChange ) -> this.reloadTreetable( ) );
+		final ObservableList<Trace> traces = ivDataModel.getTraces( );
+		traces.addListener( ( final Change<? extends Trace> aChange ) -> reloadTreetable( ) );
 
-		this.ivSelection.addListener( e -> this.updateDetailPanel( ) );
+		ivSelection.addListener( e -> updateDetailPanel( ) );
 
 		final Object call = super.getContext( ).get( ContextKey.OPERATION_CALL );
 		if ( call instanceof OperationCall ) {
-			this.jumpToCall( (OperationCall) call );
-		}
-	}
-
-	@Override
-	@ErrorHandling
-	protected void reinitialize( ) {
-		final Object call = super.getContext( ).get( ContextKey.OPERATION_CALL );
-		if ( call instanceof OperationCall ) {
-			this.jumpToCall( (OperationCall) call );
-		}
-
-		final Object filterContent = getContext( ).get( ContextKey.FILTER_CONTENT );
-		if ( filterContent instanceof FilterContent ) {
-			loadFilterContent( (FilterContent) filterContent );
-			useFilter( );
+			jumpToCall( (OperationCall) call );
 		}
 	}
 
 	private void jumpToCall( final OperationCall aCall ) {
 		// Clear all filters (as the view might be cached)
-		this.ivFilterComponent.setText( null );
-		this.ivFilterContainer.setText( null );
-		this.ivFilterException.setText( null );
-		this.ivFilterOperation.setText( null );
-		this.ivFilterLowerDate.setValue( null );
-		this.ivFilterLowerTime.setCalendar( null );
-		this.ivFilterUpperDate.setValue( null );
-		this.ivFilterUpperTime.setCalendar( null );
-		this.ivFilterTraceID.setText( null );
-		this.ivFilterException.setText( null );
-		this.ivShowAllButton.setSelected( true );
-		this.useFilter( );
+		ivFilterComponent.setText( null );
+		ivFilterContainer.setText( null );
+		ivFilterException.setText( null );
+		ivFilterOperation.setText( null );
+		ivFilterLowerDate.setValue( null );
+		ivFilterLowerTime.setCalendar( null );
+		ivFilterUpperDate.setValue( null );
+		ivFilterUpperTime.setCalendar( null );
+		ivFilterTraceID.setText( null );
+		ivFilterException.setText( null );
+		ivShowAllButton.setSelected( true );
+		useFilter( );
 
-		final TreeItem<OperationCall> root = this.ivTreetable.getRoot( );
+		final TreeItem<OperationCall> root = ivTreetable.getRoot( );
 
-		final Optional<TreeItem<OperationCall>> traceRoot = this.findTraceRoot( root, aCall );
+		final Optional<TreeItem<OperationCall>> traceRoot = findTraceRoot( root, aCall );
 		if ( traceRoot.isPresent( ) ) {
-			final TreeItem<OperationCall> treeItem = this.findCall( traceRoot.get( ), aCall );
+			final TreeItem<OperationCall> treeItem = findCall( traceRoot.get( ), aCall );
 			if ( treeItem != null ) {
-				this.ivTreetable.getSelectionModel( ).select( treeItem );
-				this.ivSelection.set( Optional.ofNullable( treeItem.getValue( ) ) );
+				ivTreetable.getSelectionModel( ).select( treeItem );
+				ivSelection.set( Optional.ofNullable( treeItem.getValue( ) ) );
 			}
 		}
 	}
@@ -198,7 +183,7 @@ public final class TracesViewController extends AbstractController {
 		}
 
 		for ( final TreeItem<OperationCall> child : aRoot.getChildren( ) ) {
-			final TreeItem<OperationCall> item = this.findCall( child, aCall );
+			final TreeItem<OperationCall> item = findCall( child, aCall );
 			if ( item != null ) {
 				aRoot.setExpanded( true );
 				return item;
@@ -209,68 +194,68 @@ public final class TracesViewController extends AbstractController {
 	}
 
 	private void updateDetailPanel( ) {
-		if ( this.ivSelection.get( ).isPresent( ) ) {
-			final OperationCall call = this.ivSelection.get( ).get( );
+		if ( ivSelection.get( ).isPresent( ) ) {
+			final OperationCall call = ivSelection.get( ).get( );
 			final TimeUnit sourceTimeUnit = DataModel.getInstance( ).getTimeUnit( );
 			final TimeUnit targetTimeUnit = PropertiesModel.getInstance( ).getTimeUnit( );
 
-			this.ivContainer.setText( call.getContainer( ) );
-			this.ivComponent.setText( call.getComponent( ) );
-			this.ivOperation.setText( call.getOperation( ) );
-			this.ivTimestamp.setText( NameConverter.toTimestampString( call.getTimestamp( ), sourceTimeUnit ) + " (" + call.getTimestamp( ) + ")" );
-			this.ivDuration.setText( NameConverter.toDurationString( call.getDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			this.ivTraceID.setText( Long.toString( call.getTraceID( ) ) );
-			this.ivTraceDepth.setText( Integer.toString( call.getStackDepth( ) ) );
-			this.ivTraceSize.setText( Integer.toString( call.getStackSize( ) ) );
-			this.ivPercent.setText( call.getPercent( ) + " %" );
-			this.ivFailed.setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : "N/A" );
+			ivContainer.setText( call.getContainer( ) );
+			ivComponent.setText( call.getComponent( ) );
+			ivOperation.setText( call.getOperation( ) );
+			ivTimestamp.setText( NameConverter.toTimestampString( call.getTimestamp( ), sourceTimeUnit ) + " (" + call.getTimestamp( ) + ")" );
+			ivDuration.setText( NameConverter.toDurationString( call.getDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			ivTraceID.setText( Long.toString( call.getTraceID( ) ) );
+			ivTraceDepth.setText( Integer.toString( call.getStackDepth( ) ) );
+			ivTraceSize.setText( Integer.toString( call.getStackSize( ) ) );
+			ivPercent.setText( call.getPercent( ) + " %" );
+			ivFailed.setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : "N/A" );
 		}
 		else {
-			this.ivContainer.setText( "N/A" );
-			this.ivComponent.setText( "N/A" );
-			this.ivOperation.setText( "N/A" );
-			this.ivTimestamp.setText( "N/A" );
-			this.ivDuration.setText( "N/A" );
-			this.ivTraceID.setText( "N/A" );
-			this.ivPercent.setText( "N/A" );
-			this.ivFailed.setText( "N/A" );
+			ivContainer.setText( "N/A" );
+			ivComponent.setText( "N/A" );
+			ivOperation.setText( "N/A" );
+			ivTimestamp.setText( "N/A" );
+			ivDuration.setText( "N/A" );
+			ivTraceID.setText( "N/A" );
+			ivPercent.setText( "N/A" );
+			ivFailed.setText( "N/A" );
 		}
 	}
 
 	@ErrorHandling
 	public void selectCall( ) {
-		final TreeItem<OperationCall> selectedItem = this.ivTreetable.getSelectionModel( ).getSelectedItem( );
+		final TreeItem<OperationCall> selectedItem = ivTreetable.getSelectionModel( ).getSelectedItem( );
 		if ( selectedItem != null ) {
-			this.ivSelection.set( Optional.ofNullable( selectedItem.getValue( ) ) );
+			ivSelection.set( Optional.ofNullable( selectedItem.getValue( ) ) );
 		}
 	}
 
 	@ErrorHandling
 	public void useFilter( ) {
-		final Predicate<OperationCall> predicate1 = FilterUtility.useFilter( this.ivShowAllButton, this.ivShowJustSuccessful, this.ivShowJustFailedButton,
-				this.ivShowJustFailureContainingButton, OperationCall::isFailed, OperationCall::containsFailure );
-		final Predicate<OperationCall> predicate2 = FilterUtility.useFilter( this.ivFilterContainer, OperationCall::getContainer,
+		final Predicate<OperationCall> predicate1 = FilterUtility.useFilter( ivShowAllButton, ivShowJustSuccessful, ivShowJustFailedButton,
+				ivShowJustFailureContainingButton, OperationCall::isFailed, OperationCall::containsFailure );
+		final Predicate<OperationCall> predicate2 = FilterUtility.useFilter( ivFilterContainer, OperationCall::getContainer,
 				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<OperationCall> predicate3 = FilterUtility.useFilter( this.ivFilterComponent, OperationCall::getComponent,
+		final Predicate<OperationCall> predicate3 = FilterUtility.useFilter( ivFilterComponent, OperationCall::getComponent,
 				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<OperationCall> predicate4 = FilterUtility.useFilter( this.ivFilterOperation, OperationCall::getOperation,
+		final Predicate<OperationCall> predicate4 = FilterUtility.useFilter( ivFilterOperation, OperationCall::getOperation,
 				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<OperationCall> predicate5 = FilterUtility.useFilter( this.ivFilterTraceID, (call -> Long.toString( call.getTraceID( ) )),
+		final Predicate<OperationCall> predicate5 = FilterUtility.useFilter( ivFilterTraceID, (call -> Long.toString( call.getTraceID( ) )),
 				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<OperationCall> predicate6 = FilterUtility.useFilter( this.ivFilterLowerDate, OperationCall::getTimestamp, true,
+		final Predicate<OperationCall> predicate6 = FilterUtility.useFilter( ivFilterLowerDate, OperationCall::getTimestamp, true,
 				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<OperationCall> predicate7 = FilterUtility.useFilter( this.ivFilterUpperDate, OperationCall::getTimestamp, false,
+		final Predicate<OperationCall> predicate7 = FilterUtility.useFilter( ivFilterUpperDate, OperationCall::getTimestamp, false,
 				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<OperationCall> predicate8 = FilterUtility.useFilter( this.ivFilterLowerTime, OperationCall::getTimestamp, true,
+		final Predicate<OperationCall> predicate8 = FilterUtility.useFilter( ivFilterLowerTime, OperationCall::getTimestamp, true,
 				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<OperationCall> predicate9 = FilterUtility.useFilter( this.ivFilterUpperTime, OperationCall::getTimestamp, false,
+		final Predicate<OperationCall> predicate9 = FilterUtility.useFilter( ivFilterUpperTime, OperationCall::getTimestamp, false,
 				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
-		final Predicate<OperationCall> predicate10 = FilterUtility.useFilter( this.ivFilterException, (call -> call.isFailed( ) ? call.getFailedCause( ) : ""),
+		final Predicate<OperationCall> predicate10 = FilterUtility.useFilter( ivFilterException, (call -> call.isFailed( ) ? call.getFailedCause( ) : ""),
 				PropertiesModel.getInstance( ).isSearchInEntireTrace( ) );
 
-		this.ivPredicate = predicate1.and( predicate2 ).and( predicate3 ).and( predicate4 ).and( predicate5 ).and( predicate6 ).and( predicate7 )
-				.and( predicate8 ).and( predicate9 ).and( predicate10 );
-		this.reloadTreetable( );
+		ivPredicate = predicate1.and( predicate2 ).and( predicate3 ).and( predicate4 ).and( predicate5 ).and( predicate6 ).and( predicate7 ).and( predicate8 )
+				.and( predicate9 ).and( predicate10 );
+		reloadTreetable( );
 	}
 
 	@ErrorHandling
@@ -315,18 +300,18 @@ public final class TracesViewController extends AbstractController {
 	}
 
 	private void reloadTreetable( ) {
-		this.ivSelection.set( Optional.empty( ) );
+		ivSelection.set( Optional.empty( ) );
 
-		final List<Trace> traces = this.ivDataModel.getTraces( );
+		final List<Trace> traces = ivDataModel.getTraces( );
 		final TreeItem<OperationCall> root = new TreeItem<>( );
 		final ObservableList<TreeItem<OperationCall>> rootChildren = root.getChildren( );
-		this.ivTreetable.setRoot( root );
-		this.ivTreetable.setShowRoot( false );
+		ivTreetable.setRoot( root );
+		ivTreetable.setShowRoot( false );
 
-		traces.stream( ).map( trace -> trace.getRootOperationCall( ) ).filter( this.ivPredicate )
+		traces.stream( ).map( trace -> trace.getRootOperationCall( ) ).filter( ivPredicate )
 				.forEach( call -> rootChildren.add( new LazyOperationCallTreeItem( call ) ) );
 
-		this.ivCounter.textProperty( ).set( rootChildren.size( ) + " " + this.resources.getString( "TracesView.lblCounter.text" ) );
+		ivCounter.textProperty( ).set( rootChildren.size( ) + " " + resources.getString( "TracesView.lblCounter.text" ) );
 	}
 
 	private class FilterContent {
@@ -349,103 +334,103 @@ public final class TracesViewController extends AbstractController {
 			return ivFilterComponent;
 		}
 
-		public void setFilterComponent( String filterComponent ) {
-			this.ivFilterComponent = filterComponent;
+		public void setFilterComponent( final String filterComponent ) {
+			ivFilterComponent = filterComponent;
 		}
 
 		public String getFilterContainer( ) {
 			return ivFilterContainer;
 		}
 
-		public void setFilterContainer( String filterContainer ) {
-			this.ivFilterContainer = filterContainer;
+		public void setFilterContainer( final String filterContainer ) {
+			ivFilterContainer = filterContainer;
 		}
 
 		public String getFilterException( ) {
 			return ivFilterException;
 		}
 
-		public void setFilterException( String filterException ) {
-			this.ivFilterException = filterException;
+		public void setFilterException( final String filterException ) {
+			ivFilterException = filterException;
 		}
 
 		public String getFilterOperation( ) {
 			return ivFilterOperation;
 		}
 
-		public void setFilterOperation( String filterOperation ) {
-			this.ivFilterOperation = filterOperation;
+		public void setFilterOperation( final String filterOperation ) {
+			ivFilterOperation = filterOperation;
 		}
 
 		public String getFilterTraceID( ) {
 			return ivFilterTraceID;
 		}
 
-		public void setFilterTraceID( String filterTraceID ) {
-			this.ivFilterTraceID = filterTraceID;
+		public void setFilterTraceID( final String filterTraceID ) {
+			ivFilterTraceID = filterTraceID;
 		}
 
 		public LocalDate getFilterLowerDate( ) {
 			return ivFilterLowerDate;
 		}
 
-		public void setFilterLowerDate( LocalDate filterLowerDate ) {
-			this.ivFilterLowerDate = filterLowerDate;
+		public void setFilterLowerDate( final LocalDate filterLowerDate ) {
+			ivFilterLowerDate = filterLowerDate;
 		}
 
 		public LocalDate getFilterUpperDate( ) {
 			return ivFilterUpperDate;
 		}
 
-		public void setFilterUpperDate( LocalDate filterUpperDate ) {
-			this.ivFilterUpperDate = filterUpperDate;
+		public void setFilterUpperDate( final LocalDate filterUpperDate ) {
+			ivFilterUpperDate = filterUpperDate;
 		}
 
 		public Calendar getFilterLowerTime( ) {
 			return ivFilterLowerTime;
 		}
 
-		public void setFilterLowerTime( Calendar filterLowerTime ) {
-			this.ivFilterLowerTime = filterLowerTime;
+		public void setFilterLowerTime( final Calendar filterLowerTime ) {
+			ivFilterLowerTime = filterLowerTime;
 		}
 
 		public Calendar getFilterUpperTime( ) {
 			return ivFilterUpperTime;
 		}
 
-		public void setFilterUpperTime( Calendar filterUpperTime ) {
-			this.ivFilterUpperTime = filterUpperTime;
+		public void setFilterUpperTime( final Calendar filterUpperTime ) {
+			ivFilterUpperTime = filterUpperTime;
 		}
 
 		public boolean isShowAllButton( ) {
 			return ivShowAllButton;
 		}
 
-		public void setShowAllButton( boolean showAllButton ) {
-			this.ivShowAllButton = showAllButton;
+		public void setShowAllButton( final boolean showAllButton ) {
+			ivShowAllButton = showAllButton;
 		}
 
 		public boolean isShowJustFailedButton( ) {
 			return ivShowJustFailedButton;
 		}
 
-		public void setShowJustFailedButton( boolean showJustFailedButton ) {
-			this.ivShowJustFailedButton = showJustFailedButton;
+		public void setShowJustFailedButton( final boolean showJustFailedButton ) {
+			ivShowJustFailedButton = showJustFailedButton;
 		}
 
 		public boolean isShowJustSuccessful( ) {
 			return ivShowJustSuccessful;
 		}
 
-		public void setShowJustSuccessful( boolean showJustSuccessful ) {
-			this.ivShowJustSuccessful = showJustSuccessful;
+		public void setShowJustSuccessful( final boolean showJustSuccessful ) {
+			ivShowJustSuccessful = showJustSuccessful;
 		}
 
 		public boolean isShowJustFailureContainingButton( ) {
 			return ivShowJustFailureContainingButton;
 		}
 
-		public void setShowJustFailureContainingButton( boolean ivShowJustFailureContainingButton ) {
+		public void setShowJustFailureContainingButton( final boolean ivShowJustFailureContainingButton ) {
 			this.ivShowJustFailureContainingButton = ivShowJustFailureContainingButton;
 		}
 

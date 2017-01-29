@@ -88,62 +88,54 @@ public final class MonitoringStatisticsViewController extends AbstractController
 
 	@ErrorHandling
 	public void initialize( ) {
-		final ObjectProperty<File> importDirectory = this.ivDataModel.getImportDirectory( );
-		this.ivMonitoringlog.textProperty( ).bind( Bindings.createStringBinding( ( ) -> this.assemblePathString( importDirectory.get( ) ), importDirectory ) );
-		this.ivMonitoringsize.textProperty( ).bind( Bindings.createStringBinding( ( ) -> this.assembleSizeString( importDirectory.get( ) ), importDirectory ) );
+		final ObjectProperty<File> importDirectory = ivDataModel.getImportDirectory( );
+		ivMonitoringlog.textProperty( ).bind( Bindings.createStringBinding( ( ) -> assemblePathString( importDirectory.get( ) ), importDirectory ) );
+		ivMonitoringsize.textProperty( ).bind( Bindings.createStringBinding( ( ) -> assembleSizeString( importDirectory.get( ) ), importDirectory ) );
 
-		final ObjectProperty<Long> duration = this.ivDataModel.getAnalysisDurationInMS( );
-		this.ivAnalysistime.textProperty( ).bind( Bindings.createStringBinding( ( ) -> this.assembleDurationString( duration.get( ) ), duration ) );
+		final ObjectProperty<Long> duration = ivDataModel.getAnalysisDurationInMS( );
+		ivAnalysistime.textProperty( ).bind( Bindings.createStringBinding( ( ) -> assembleDurationString( duration.get( ) ), duration ) );
 
-		final ObjectProperty<Long> beginTimestamp = this.ivDataModel.getBeginTimestamp( );
-		final ObjectProperty<Long> endTimestamp = this.ivDataModel.getEndTimestamp( );
-		this.ivBeginofmonitoring.textProperty( )
-				.bind( Bindings.createStringBinding( ( ) -> this.assembleTimeString( beginTimestamp.get( ) ), beginTimestamp ) );
-		this.ivEndofmonitoring.textProperty( ).bind( Bindings.createStringBinding( ( ) -> this.assembleTimeString( endTimestamp.get( ) ), endTimestamp ) );
+		final ObjectProperty<Long> beginTimestamp = ivDataModel.getBeginTimestamp( );
+		final ObjectProperty<Long> endTimestamp = ivDataModel.getEndTimestamp( );
+		ivBeginofmonitoring.textProperty( ).bind( Bindings.createStringBinding( ( ) -> assembleTimeString( beginTimestamp.get( ) ), beginTimestamp ) );
+		ivEndofmonitoring.textProperty( ).bind( Bindings.createStringBinding( ( ) -> assembleTimeString( endTimestamp.get( ) ), endTimestamp ) );
 
-		final ObservableList<OperationCall> operationCalls = this.ivDataModel.getOperationCalls( );
+		final ObservableList<OperationCall> operationCalls = ivDataModel.getOperationCalls( );
 		final FilteredList<OperationCall> failedOperationCalls = new FilteredList<>( operationCalls, OperationCall::isFailed );
-		this.ivNumberofcalls.textProperty( ).bind( Bindings.createStringBinding( ( ) -> Integer.toString( operationCalls.size( ) ), operationCalls ) );
-		this.ivNumberoffailedcalls.textProperty( )
+		ivNumberofcalls.textProperty( ).bind( Bindings.createStringBinding( ( ) -> Integer.toString( operationCalls.size( ) ), operationCalls ) );
+		ivNumberoffailedcalls.textProperty( )
 				.bind( Bindings.createStringBinding( ( ) -> Integer.toString( failedOperationCalls.size( ) ), failedOperationCalls ) );
 
-		final ObservableList<AggregatedOperationCall> aggOperationCalls = this.ivDataModel.getAggregatedOperationCalls( );
+		final ObservableList<AggregatedOperationCall> aggOperationCalls = ivDataModel.getAggregatedOperationCalls( );
 		final FilteredList<AggregatedOperationCall> failedAggOperationCalls = new FilteredList<>( aggOperationCalls, AggregatedOperationCall::isFailed );
-		this.ivNumberofaggcalls.textProperty( ).bind( Bindings.createStringBinding( ( ) -> Integer.toString( aggOperationCalls.size( ) ), aggOperationCalls ) );
-		this.ivNumberoffailedaggcalls.textProperty( )
+		ivNumberofaggcalls.textProperty( ).bind( Bindings.createStringBinding( ( ) -> Integer.toString( aggOperationCalls.size( ) ), aggOperationCalls ) );
+		ivNumberoffailedaggcalls.textProperty( )
 				.bind( Bindings.createStringBinding( ( ) -> Integer.toString( failedAggOperationCalls.size( ) ), failedAggOperationCalls ) );
 
-		final ObservableList<Trace> traces = this.ivDataModel.getTraces( );
+		final ObservableList<Trace> traces = ivDataModel.getTraces( );
 		final FilteredList<Trace> failedTraces = new FilteredList<>( traces, t -> t.getRootOperationCall( ).isFailed( ) );
 		final FilteredList<Trace> failureTraces = new FilteredList<>( traces, t -> t.getRootOperationCall( ).containsFailure( ) );
-		this.ivNumberoftraces.textProperty( ).bind( Bindings.createStringBinding( ( ) -> Integer.toString( traces.size( ) ), traces ) );
-		this.ivNumberoffailedtraces.textProperty( ).bind( Bindings.createStringBinding( ( ) -> Integer.toString( failedTraces.size( ) ), failedTraces ) );
-		this.ivNumberoffailuretraces.textProperty( ).bind( Bindings.createStringBinding( ( ) -> Integer.toString( failureTraces.size( ) ), failureTraces ) );
+		ivNumberoftraces.textProperty( ).bind( Bindings.createStringBinding( ( ) -> Integer.toString( traces.size( ) ), traces ) );
+		ivNumberoffailedtraces.textProperty( ).bind( Bindings.createStringBinding( ( ) -> Integer.toString( failedTraces.size( ) ), failedTraces ) );
+		ivNumberoffailuretraces.textProperty( ).bind( Bindings.createStringBinding( ( ) -> Integer.toString( failureTraces.size( ) ), failureTraces ) );
 
-		final ObservableList<AggregatedTrace> aggTraces = this.ivDataModel.getAggregatedTraces( );
+		final ObservableList<AggregatedTrace> aggTraces = ivDataModel.getAggregatedTraces( );
 		final FilteredList<AggregatedTrace> failedAggTraces = new FilteredList<>( aggTraces, t -> t.getRootOperationCall( ).isFailed( ) );
 		final FilteredList<AggregatedTrace> failureAggTraces = new FilteredList<>( aggTraces, t -> t.getRootOperationCall( ).containsFailure( ) );
-		this.ivNumberofaggtraces.textProperty( ).bind( Bindings.createStringBinding( ( ) -> Integer.toString( aggTraces.size( ) ), aggTraces ) );
-		this.ivNumberofaggfailedtraces.textProperty( )
-				.bind( Bindings.createStringBinding( ( ) -> Integer.toString( failedAggTraces.size( ) ), failedAggTraces ) );
-		this.ivNumberofaggfailuretraces.textProperty( )
+		ivNumberofaggtraces.textProperty( ).bind( Bindings.createStringBinding( ( ) -> Integer.toString( aggTraces.size( ) ), aggTraces ) );
+		ivNumberofaggfailedtraces.textProperty( ).bind( Bindings.createStringBinding( ( ) -> Integer.toString( failedAggTraces.size( ) ), failedAggTraces ) );
+		ivNumberofaggfailuretraces.textProperty( )
 				.bind( Bindings.createStringBinding( ( ) -> Integer.toString( failureAggTraces.size( ) ), failureAggTraces ) );
 
-		final ObjectProperty<Integer> countIncompleteTraces = this.ivDataModel.countIncompleteTraces( );
-		this.ivIncompletetraces.textProperty( )
+		final ObjectProperty<Integer> countIncompleteTraces = ivDataModel.countIncompleteTraces( );
+		ivIncompletetraces.textProperty( )
 				.bind( Bindings.createStringBinding( ( ) -> Integer.toString( countIncompleteTraces.get( ) ), countIncompleteTraces ) );
 
-		final ObjectProperty<Integer> countDanglingRecords = this.ivDataModel.countDanglingRecords( );
-		this.ivDanglingrecords.textProperty( )
-				.bind( Bindings.createStringBinding( ( ) -> Integer.toString( countDanglingRecords.get( ) ), countDanglingRecords ) );
+		final ObjectProperty<Integer> countDanglingRecords = ivDataModel.countDanglingRecords( );
+		ivDanglingrecords.textProperty( ).bind( Bindings.createStringBinding( ( ) -> Integer.toString( countDanglingRecords.get( ) ), countDanglingRecords ) );
 
-		final ObjectProperty<Integer> countIgnoredRecords = this.ivDataModel.countIgnoredRecords( );
-		this.ivIgnoredRecords.textProperty( )
-				.bind( Bindings.createStringBinding( ( ) -> Integer.toString( countIgnoredRecords.get( ) ), countIgnoredRecords ) );
-	}
-
-	@Override
-	protected void reinitialize( ) {
+		final ObjectProperty<Integer> countIgnoredRecords = ivDataModel.countIgnoredRecords( );
+		ivIgnoredRecords.textProperty( ).bind( Bindings.createStringBinding( ( ) -> Integer.toString( countIgnoredRecords.get( ) ), countIgnoredRecords ) );
 	}
 
 	private String assembleTimeString( final Long aTimestamp ) {

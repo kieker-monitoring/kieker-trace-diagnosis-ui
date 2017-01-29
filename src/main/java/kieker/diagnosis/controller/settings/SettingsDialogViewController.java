@@ -70,54 +70,50 @@ public final class SettingsDialogViewController extends AbstractDialogController
 	}
 
 	public void initialize( ) {
-		this.ivTimeunits.setItems( FXCollections.observableArrayList( SettingsDialogViewController.TIME_UNITS ) );
-		this.ivComponentNames.setItems( FXCollections.observableArrayList( ComponentNames.values( ) ) );
-		this.ivOperationNames.setItems( FXCollections.observableArrayList( OperationNames.values( ) ) );
-		this.ivTimestamps.setItems( FXCollections.observableArrayList( TimestampTypes.values( ) ) );
-		this.ivThresholds.setItems( FXCollections.observableArrayList( Threshold.values( ) ) );
+		ivTimeunits.setItems( FXCollections.observableArrayList( SettingsDialogViewController.TIME_UNITS ) );
+		ivComponentNames.setItems( FXCollections.observableArrayList( ComponentNames.values( ) ) );
+		ivOperationNames.setItems( FXCollections.observableArrayList( OperationNames.values( ) ) );
+		ivTimestamps.setItems( FXCollections.observableArrayList( TimestampTypes.values( ) ) );
+		ivThresholds.setItems( FXCollections.observableArrayList( Threshold.values( ) ) );
 
-		this.ivThresholds.disableProperty( ).bind( this.ivAggregateMethodCalls.selectedProperty( ).not( ) );
+		ivThresholds.disableProperty( ).bind( ivAggregateMethodCalls.selectedProperty( ).not( ) );
 
-		this.loadSettings( );
-	}
-
-	@Override
-	protected void reinitialize( ) {
+		loadSettings( );
 	}
 
 	public void saveAndCloseDialog( ) {
-		this.saveSettings( );
-		this.closeDialog( );
+		saveSettings( );
+		closeDialog( );
 	}
 
 	private void loadSettings( ) {
-		this.ivOperationNames.getSelectionModel( ).select( this.ivPropertiesModel.getOperationNames( ) );
-		this.ivComponentNames.getSelectionModel( ).select( this.ivPropertiesModel.getComponentNames( ) );
-		this.ivTimeunits.getSelectionModel( ).select( this.ivPropertiesModel.getTimeUnit( ) );
-		this.ivAdditionalLogChecks.setSelected( this.ivPropertiesModel.isAdditionalLogChecksActive( ) );
-		this.ivActivateRegularExpressions.setSelected( this.ivPropertiesModel.isRegularExpressionsActive( ) );
-		this.ivAggregateMethodCalls.setSelected( this.ivPropertiesModel.isMethodCallAggregationActive( ) );
-		this.ivThresholds.getSelectionModel( ).select( this.ivPropertiesModel.getThreshold( ) );
-		this.ivCaseSensitive.setSelected( this.ivPropertiesModel.isCaseSensitivityActive( ) );
-		this.ivPercentageCalculation.setSelected( this.ivPropertiesModel.isPercentageCalculationActive( ) );
-		this.ivTimestamps.getSelectionModel( ).select( this.ivPropertiesModel.getTimestampType( ) );
-		this.ivCacheViews.setSelected( this.ivPropertiesModel.isCacheViews( ) );
-		this.ivSearchInEntireTrace.setSelected( this.ivPropertiesModel.isSearchInEntireTrace( ) );
+		ivOperationNames.getSelectionModel( ).select( ivPropertiesModel.getOperationNames( ) );
+		ivComponentNames.getSelectionModel( ).select( ivPropertiesModel.getComponentNames( ) );
+		ivTimeunits.getSelectionModel( ).select( ivPropertiesModel.getTimeUnit( ) );
+		ivAdditionalLogChecks.setSelected( ivPropertiesModel.isAdditionalLogChecksActive( ) );
+		ivActivateRegularExpressions.setSelected( ivPropertiesModel.isRegularExpressionsActive( ) );
+		ivAggregateMethodCalls.setSelected( ivPropertiesModel.isMethodCallAggregationActive( ) );
+		ivThresholds.getSelectionModel( ).select( ivPropertiesModel.getThreshold( ) );
+		ivCaseSensitive.setSelected( ivPropertiesModel.isCaseSensitivityActive( ) );
+		ivPercentageCalculation.setSelected( ivPropertiesModel.isPercentageCalculationActive( ) );
+		ivTimestamps.getSelectionModel( ).select( ivPropertiesModel.getTimestampType( ) );
+		ivCacheViews.setSelected( ivPropertiesModel.isCacheViews( ) );
+		ivSearchInEntireTrace.setSelected( ivPropertiesModel.isSearchInEntireTrace( ) );
 	}
 
 	private void saveSettings( ) {
-		this.ivPropertiesModel.setOperationNames( this.ivOperationNames.getSelectionModel( ).getSelectedItem( ) );
-		this.ivPropertiesModel.setComponentNames( this.ivComponentNames.getSelectionModel( ).getSelectedItem( ) );
-		this.ivPropertiesModel.setTimeUnit( this.ivTimeunits.getSelectionModel( ).getSelectedItem( ) );
-		this.ivPropertiesModel.setAdditionalLogChecksActive( this.ivAdditionalLogChecks.isSelected( ) );
-		this.ivPropertiesModel.setRegularExpressionsActive( this.ivActivateRegularExpressions.isSelected( ) );
-		this.ivPropertiesModel.setMethodCallAggregationActive( this.ivAggregateMethodCalls.isSelected( ) );
-		this.ivPropertiesModel.setThreshold( this.ivThresholds.getSelectionModel( ).getSelectedItem( ) );
-		this.ivPropertiesModel.setCaseSensitivityActive( this.ivCaseSensitive.isSelected( ) );
-		this.ivPropertiesModel.setPercentageCalculationActive( this.ivPercentageCalculation.isSelected( ) );
-		this.ivPropertiesModel.setTimestampType( this.ivTimestamps.getSelectionModel( ).getSelectedItem( ) );
-		this.ivPropertiesModel.setCacheViews( this.ivCacheViews.isSelected( ) );
-		this.ivPropertiesModel.setSearchInEntireTrace( this.ivSearchInEntireTrace.isSelected( ) );
+		ivPropertiesModel.setOperationNames( ivOperationNames.getSelectionModel( ).getSelectedItem( ) );
+		ivPropertiesModel.setComponentNames( ivComponentNames.getSelectionModel( ).getSelectedItem( ) );
+		ivPropertiesModel.setTimeUnit( ivTimeunits.getSelectionModel( ).getSelectedItem( ) );
+		ivPropertiesModel.setAdditionalLogChecksActive( ivAdditionalLogChecks.isSelected( ) );
+		ivPropertiesModel.setRegularExpressionsActive( ivActivateRegularExpressions.isSelected( ) );
+		ivPropertiesModel.setMethodCallAggregationActive( ivAggregateMethodCalls.isSelected( ) );
+		ivPropertiesModel.setThreshold( ivThresholds.getSelectionModel( ).getSelectedItem( ) );
+		ivPropertiesModel.setCaseSensitivityActive( ivCaseSensitive.isSelected( ) );
+		ivPropertiesModel.setPercentageCalculationActive( ivPercentageCalculation.isSelected( ) );
+		ivPropertiesModel.setTimestampType( ivTimestamps.getSelectionModel( ).getSelectedItem( ) );
+		ivPropertiesModel.setCacheViews( ivCacheViews.isSelected( ) );
+		ivPropertiesModel.setSearchInEntireTrace( ivSearchInEntireTrace.isSelected( ) );
 	}
 
 }

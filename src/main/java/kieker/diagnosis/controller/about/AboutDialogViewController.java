@@ -28,8 +28,4 @@ public final class AboutDialogViewController extends AbstractDialogController {
 		super( aContext );
 	}
 
-	@Override
-	protected void reinitialize( ) {
-	}
-
 }

@@ -18,6 +18,7 @@ package kieker.diagnosis;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import kieker.diagnosis.controller.GUIUtil;
 import kieker.diagnosis.controller.MainController;
 
 /**
@@ -33,7 +34,7 @@ public final class Main extends Application {
 
 	@Override
 	public void start( final Stage aStage ) throws Exception {
-		MainController.loadMainPane( aStage );
+		GUIUtil.loadView( MainController.class, aStage );
 	}
 
 }
