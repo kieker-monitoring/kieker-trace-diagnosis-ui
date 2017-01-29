@@ -18,9 +18,7 @@ package kieker.diagnosis.gui.main;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Locale;
 import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -51,9 +49,9 @@ import kieker.diagnosis.gui.settings.SettingsDialogController;
 import kieker.diagnosis.gui.traces.TracesController;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
-import kieker.diagnosis.util.CSVData;
+import kieker.diagnosis.service.export.CSVData;
+import kieker.diagnosis.service.export.ExportService;
 import kieker.diagnosis.util.CSVDataCollector;
-import kieker.diagnosis.util.CSVExporter;
 import kieker.diagnosis.util.Context;
 import kieker.diagnosis.util.ContextEntry;
 import kieker.diagnosis.util.ContextKey;
@@ -70,8 +68,6 @@ public final class MainController extends AbstractController<MainView> implement
 
 	private static final Logger LOGGER = LogManager.getLogger( MainController.class );
 
-	private static MainController cvInstance;
-
 	private final DataModel ivDataModel = DataModel.getInstance( );
 
 	private Optional<Button> ivDisabledButton = Optional.empty( );
@@ -79,6 +75,8 @@ public final class MainController extends AbstractController<MainView> implement
 	private Optional<Class<? extends AbstractController>> ivActiveController = Optional.empty( );
 
 	private int ivFavoritesAvailable;
+
+	private ExportService exportService;
 
 	public MainController( final Context aContext ) {
 		super( aContext );
@@ -215,10 +213,6 @@ public final class MainController extends AbstractController<MainView> implement
 		aDisabledButton.setDisable( true );
 	}
 
-	public static MainController instance( ) {
-		return MainController.cvInstance;
-	}
-
 	public void jumpToTrace( final OperationCall aCall ) throws Exception {
 		this.showTraces( new ContextEntry( ContextKey.OPERATION_CALL, aCall ) );
 	}
@@ -239,7 +233,7 @@ public final class MainController extends AbstractController<MainView> implement
 		final File selectedFile = fileChooser.showSaveDialog( getView( ).getWindow( ) );
 		if ( null != selectedFile ) {
 			final CSVData data = aDataCollector.collectData( );
-			CSVExporter.exportToCSV( data, selectedFile );
+			exportService.exportToCSV( data, selectedFile );
 
 			preferences.put( MainController.KEY_LAST_EXPORT_PATH, selectedFile.getParent( ) );
 			try {
@@ -252,12 +246,9 @@ public final class MainController extends AbstractController<MainView> implement
 	}
 
 	public <T extends AbstractController<?>> void saveAsFavorite( final Object aFilterContent, final Class<T> aFilterLoader ) {
-		// Ask the user for the name of the favorite
-		final ResourceBundle resourceBundle = ResourceBundle.getBundle( "kieker.diagnosis.gui.view", Locale.getDefault( ) );
-
 		final TextInputDialog textInputDialog = new TextInputDialog( );
-		textInputDialog.setTitle( resourceBundle.getString( "newFilterFavorite" ) );
-		textInputDialog.setHeaderText( resourceBundle.getString( "newFilterFavoriteName" ) );
+		textInputDialog.setTitle( getView( ).getResourceBundle( ).getString( "newFilterFavorite" ) );
+		textInputDialog.setHeaderText( getView( ).getResourceBundle( ).getString( "newFilterFavoriteName" ) );
 		final Optional<String> result = textInputDialog.showAndWait( );
 
 		if ( result.isPresent( ) ) {

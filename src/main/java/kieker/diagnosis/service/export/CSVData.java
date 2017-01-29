@@ -14,39 +14,27 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.util;
+package kieker.diagnosis.service.export;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+public final class CSVData {
 
-public final class CSVExporter {
+	private String[] ivHeader;
+	private String[][] ivRows;
 
-	private CSVExporter( ) {
+	public String[] getHeader( ) {
+		return ivHeader;
 	}
 
-	public static void exportToCSV( final CSVData aCSVData, final File aFile ) throws IOException {
-		aFile.createNewFile( );
+	public void setHeader( final String[] aHeader ) {
+		this.ivHeader = aHeader;
+	}
 
-		try ( final FileWriter writer = new FileWriter( aFile ) ) {
-			writer.write( "#" );
+	public String[][] getRows( ) {
+		return ivRows;
+	}
 
-			for ( final String header : aCSVData.getHeader( ) ) {
-				writer.write( header );
-				writer.write( ";" );
-			}
-			writer.write( "\n" );
-
-			for ( final String[] row : aCSVData.getRows( ) ) {
-				for ( final String column : row ) {
-					if ( column != null ) {
-						writer.write( column );
-					}
-					writer.write( ";" );
-				}
-				writer.write( "\n" );
-			}
-		}
+	public void setRows( final String[][] aRows ) {
+		this.ivRows = aRows;
 	}
 
 }

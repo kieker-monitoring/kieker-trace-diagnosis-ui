@@ -35,7 +35,7 @@ import kieker.diagnosis.gui.AbstractController;
 import kieker.diagnosis.gui.main.MainController;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
-import kieker.diagnosis.util.CSVData;
+import kieker.diagnosis.service.export.CSVData;
 import kieker.diagnosis.util.CSVDataCollector;
 import kieker.diagnosis.util.Context;
 import kieker.diagnosis.util.ContextKey;
@@ -50,6 +50,7 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 	private FilteredList<AggregatedOperationCall> ivFilteredData;
 
 	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> ivSelection = new SimpleObjectProperty<>( Optional.empty( ) );
+	private MainController ivMainController;
 
 	public AggregatedCallsController( final Context aContext ) {
 		super( aContext );
@@ -130,7 +131,7 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 	private void jumpToCalls( ) throws Exception {
 		if ( ivSelection.get( ).isPresent( ) ) {
 			final AggregatedOperationCall call = ivSelection.get( ).get( );
-			MainController.instance( ).jumpToCalls( call );
+			ivMainController.jumpToCalls( call );
 		}
 	}
 
@@ -153,12 +154,12 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 
 	@Override
 	public void exportToCSV( ) throws IOException {
-		MainController.instance( ).exportToCSV( new AggregatedCallsCSVDataCollector( ) );
+		ivMainController.exportToCSV( new AggregatedCallsCSVDataCollector( ) );
 	}
 
 	@Override
 	public void saveAsFavorite( ) {
-		MainController.instance( ).saveAsFavorite( saveFilterContent( ), AggregatedCallsController.class );
+		ivMainController.saveAsFavorite( saveFilterContent( ), AggregatedCallsController.class );
 	}
 
 	private FilterContent saveFilterContent( ) {

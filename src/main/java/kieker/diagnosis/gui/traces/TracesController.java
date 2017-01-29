@@ -51,6 +51,7 @@ public final class TracesController extends AbstractController<TracesView> imple
 	private final SimpleObjectProperty<Optional<OperationCall>> ivSelection = new SimpleObjectProperty<>( Optional.empty( ) );
 
 	private Predicate<OperationCall> ivPredicate = FilterUtility.alwaysTrue( );
+	private MainController ivMainController;
 
 	public TracesController( final Context aContext ) {
 		super( aContext );
@@ -194,7 +195,7 @@ public final class TracesController extends AbstractController<TracesView> imple
 
 	@Override
 	public void saveAsFavorite( ) {
-		MainController.instance( ).saveAsFavorite( saveFilterContent( ), TracesController.class );
+		ivMainController.saveAsFavorite( saveFilterContent( ), TracesController.class );
 	}
 
 	private FilterContent saveFilterContent( ) {

@@ -38,7 +38,7 @@ import kieker.diagnosis.gui.AbstractController;
 import kieker.diagnosis.gui.main.MainController;
 import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
-import kieker.diagnosis.util.CSVData;
+import kieker.diagnosis.service.export.CSVData;
 import kieker.diagnosis.util.CSVDataCollector;
 import kieker.diagnosis.util.Context;
 import kieker.diagnosis.util.ContextKey;
@@ -53,6 +53,7 @@ public final class CallsController extends AbstractController<CallsView> impleme
 	private final SimpleObjectProperty<Optional<OperationCall>> ivSelection = new SimpleObjectProperty<>( Optional.empty( ) );
 
 	private FilteredList<OperationCall> ivFilteredData;
+	private MainController ivMainController;
 
 	public CallsController( final Context aContext ) {
 		super( aContext );
@@ -158,7 +159,7 @@ public final class CallsController extends AbstractController<CallsView> impleme
 	private void jumpToTrace( ) throws Exception {
 		if ( ivSelection.get( ).isPresent( ) ) {
 			final OperationCall call = ivSelection.get( ).get( );
-			MainController.instance( ).jumpToTrace( call );
+			ivMainController.jumpToTrace( call );
 		}
 	}
 
@@ -184,12 +185,12 @@ public final class CallsController extends AbstractController<CallsView> impleme
 
 	@Override
 	public void exportToCSV( ) throws IOException {
-		MainController.instance( ).exportToCSV( new CallsCSVDataCollector( ) );
+		ivMainController.exportToCSV( new CallsCSVDataCollector( ) );
 	}
 
 	@Override
 	public void saveAsFavorite( ) {
-		MainController.instance( ).saveAsFavorite( saveFilterContent( ), CallsController.class );
+		ivMainController.saveAsFavorite( saveFilterContent( ), CallsController.class );
 	}
 
 	private FilterContent saveFilterContent( ) {

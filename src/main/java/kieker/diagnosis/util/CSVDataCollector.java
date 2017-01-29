@@ -16,6 +16,8 @@
 
 package kieker.diagnosis.util;
 
+import kieker.diagnosis.service.export.CSVData;
+
 public interface CSVDataCollector {
 
 	public CSVData collectData( );

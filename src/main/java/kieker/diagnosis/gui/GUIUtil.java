@@ -50,7 +50,10 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import javafx.util.Duration;
+import kieker.diagnosis.gui.main.MainController;
 import kieker.diagnosis.model.PropertiesModel;
+import kieker.diagnosis.service.ServiceIfc;
+import kieker.diagnosis.service.ServiceUtil;
 import kieker.diagnosis.util.Context;
 import kieker.diagnosis.util.ContextEntry;
 
@@ -60,6 +63,7 @@ import kieker.diagnosis.util.ContextEntry;
 public class GUIUtil {
 
 	private static final Map<Class<?>, LoadedView> cvLoadedViewCache = new HashMap<>( );
+	private static MainController mainController;
 
 	private GUIUtil( ) {
 	}
@@ -177,8 +181,8 @@ public class GUIUtil {
 
 		// Now inject the fields of the view
 		node.applyCss( );
-		final Field[] declaredFields = viewClass.getDeclaredFields( );
-		for ( final Field field : declaredFields ) {
+		final Field[] declaredViewFields = viewClass.getDeclaredFields( );
+		for ( final Field field : declaredViewFields ) {
 			// Inject only JavaFX based fields
 			if ( Node.class.isAssignableFrom( field.getType( ) ) ) {
 				field.setAccessible( true );
@@ -194,6 +198,26 @@ public class GUIUtil {
 			}
 		}
 
+		// Inject the fields of the controller
+		final Field[] declaredControllerFields = aControllerClass.getDeclaredFields( );
+		for ( final Field field : declaredControllerFields ) {
+			// Inject services
+			if ( ServiceIfc.class.isAssignableFrom( field.getType( ) ) ) {
+				field.setAccessible( true );
+
+				@SuppressWarnings ( "unchecked" )
+				final Object service = ServiceUtil.getService( (Class<? extends ServiceIfc>) field.getType( ) );
+				field.set( controller, service );
+			}
+
+			// Inject the main controller
+			if ( MainController.class.isAssignableFrom( field.getType( ) ) ) {
+				field.setAccessible( true );
+
+				field.set( controller, mainController );
+			}
+		}
+
 		// Now that everything should be set, the controller can be initialized
 		controller.doInitialize( );
 
@@ -202,6 +226,10 @@ public class GUIUtil {
 
 		if ( PropertiesModel.getInstance( ).isCacheViews( ) ) {
 			cvLoadedViewCache.put( aControllerClass, loadedView );
+		}
+
+		if ( aControllerClass == MainController.class ) {
+			mainController = (MainController) controller;
 		}
 
 		return loadedView;

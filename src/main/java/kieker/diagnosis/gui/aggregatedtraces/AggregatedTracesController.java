@@ -45,6 +45,7 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> ivSelection = new SimpleObjectProperty<>( Optional.empty( ) );
 
 	private Predicate<AggregatedOperationCall> ivPredicate = FilterUtility.alwaysTrue( );
+	private MainController ivMainController;
 
 	public AggregatedTracesController( final Context aContext ) {
 		super( aContext );
@@ -147,7 +148,7 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 
 	@Override
 	public void saveAsFavorite( ) {
-		MainController.instance( ).saveAsFavorite( saveFilterContent( ), AggregatedTracesController.class );
+		ivMainController.saveAsFavorite( saveFilterContent( ), AggregatedTracesController.class );
 	}
 
 	private FilterContent saveFilterContent( ) {
