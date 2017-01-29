@@ -14,32 +14,25 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.components.treetable;
+package kieker.diagnosis.gui.components.converter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ResourceBundle;
 
-import javafx.scene.control.TreeItem;
-import kieker.diagnosis.domain.AggregatedOperationCall;
+import kieker.diagnosis.model.PropertiesModel.OperationNames;
+import kieker.diagnosis.util.Mapper;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class LazyAggregatedOperationCallTreeItem extends AbstractLazyOperationCallTreeItem<AggregatedOperationCall> {
-
-	public LazyAggregatedOperationCallTreeItem( final AggregatedOperationCall aValue ) {
-		super( aValue );
-	}
+public final class OperationNamesStringConverter extends AbstractStringConverter<OperationNames> {
 
 	@Override
-	protected void initializeChildren( ) {
-		final List<TreeItem<AggregatedOperationCall>> result = new ArrayList<>( );
+	protected void fillMapper( final Mapper<OperationNames, String> aMapper, final ResourceBundle aResourceBundle ) {
+		final String shortStr = aResourceBundle.getString( "short" );
+		final String longStr = aResourceBundle.getString( "long" );
 
-		for ( final AggregatedOperationCall child : super.getValue( ).getChildren( ) ) {
-			result.add( new LazyAggregatedOperationCallTreeItem( child ) );
-		}
-
-		super.getChildren( ).setAll( result );
+		aMapper.map( OperationNames.SHORT ).to( shortStr + " (getBook(...))" );
+		aMapper.map( OperationNames.LONG ).to( longStr + " (public void kieker.examples.bookstore.Catalog.getBook(boolean))" );
 	}
 
 }

@@ -2,7 +2,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.cell.*?>
 <?import jfxtras.scene.control.*?>
-<?import kieker.diagnosis.components.treetable.*?>
+<?import kieker.diagnosis.gui.components.treetable.*?>
 
 <GridPane fx:id="view" xmlns:fx="http://javafx.com/fxml"
 	AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0"

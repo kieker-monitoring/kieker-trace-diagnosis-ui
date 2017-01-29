@@ -14,21 +14,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.components.table;
+package kieker.diagnosis.gui.components.treetable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import javafx.beans.NamedArg;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn.CellDataFeatures;
 import javafx.util.Callback;
 
-import kieker.diagnosis.model.DataModel;
 import kieker.diagnosis.model.PropertiesModel;
+import kieker.diagnosis.model.PropertiesModel.ComponentNames;
+import kieker.diagnosis.util.NameConverter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,33 +37,31 @@ import org.apache.logging.log4j.Logger;
 /**
  * @author Nils Christian Ehmke
  */
-public final class DurationCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<Long>> {
+public final class ComponentTreeCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<String>> {
 
-	private static final Logger LOGGER = LogManager.getLogger( DurationCellValueFactory.class );
-
-	private final DataModel ivDataModel = DataModel.getInstance( );
-	private final PropertiesModel ivPropertiesModel = PropertiesModel.getInstance( );
+	private static final Logger LOGGER = LogManager.getLogger( ComponentTreeCellValueFactory.class );
 
 	private final String ivProperty;
 
-	public DurationCellValueFactory( @NamedArg ( value = "property" ) final String aProperty ) {
+	public ComponentTreeCellValueFactory( @NamedArg ( value = "property" ) final String aProperty ) {
 		this.ivProperty = aProperty.substring( 0, 1 ).toUpperCase( Locale.ROOT ) + aProperty.substring( 1 );
 	}
 
 	@Override
-	public ObservableValue<Long> call( final CellDataFeatures<?, String> aCall ) {
+	public ObservableValue<String> call( final CellDataFeatures<?, String> aCall ) {
 		try {
-			final TimeUnit srcTimeUnit = this.ivDataModel.getTimeUnit( );
-			final TimeUnit dstTimeUnit = this.ivPropertiesModel.getTimeUnit( );
+			final TreeItem<?> item = aCall.getValue( );
+			final Method getter = item.getValue( ).getClass( ).getMethod( "get" + this.ivProperty, new Class<?>[0] );
+			String componentName = (String) getter.invoke( item.getValue( ), new Object[0] );
 
-			final Method getter = aCall.getValue( ).getClass( ).getMethod( "get" + this.ivProperty, new Class<?>[0] );
-			final long duration = (long) getter.invoke( aCall.getValue( ), new Object[0] );
+			if ( PropertiesModel.getInstance( ).getComponentNames( ) == ComponentNames.SHORT ) {
+				componentName = NameConverter.toShortComponentName( componentName );
+			}
 
-			final long newDuration = dstTimeUnit.convert( duration, srcTimeUnit );
-			return new ReadOnlyObjectWrapper<Long>( newDuration );
+			return new ReadOnlyObjectWrapper<String>( componentName );
 		}
 		catch ( final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex ) {
-			DurationCellValueFactory.LOGGER.warn( ex );
+			ComponentTreeCellValueFactory.LOGGER.warn( ex );
 			return null;
 		}
 	}

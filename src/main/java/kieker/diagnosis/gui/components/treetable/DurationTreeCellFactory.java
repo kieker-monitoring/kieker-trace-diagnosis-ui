@@ -14,38 +14,19 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.components.treetable;
+package kieker.diagnosis.gui.components.treetable;
 
-import javafx.scene.control.TreeTableCell;
-import javafx.scene.control.TreeTableColumn;
-import javafx.util.Callback;
+import kieker.diagnosis.model.PropertiesModel;
+import kieker.diagnosis.util.NameConverter;
 
 /**
  * @author Nils Christian Ehmke
  */
-public abstract class AbstractTreeTableCellFactory<S, T> implements Callback<TreeTableColumn<S, T>, TreeTableCell<S, T>> {
+public final class DurationTreeCellFactory<S, T> extends AbstractTreeTableCellFactory<S, T> {
 
 	@Override
-	public final TreeTableCell<S, T> call( final TreeTableColumn<S, T> aTreeTableColumn ) {
-		return new FailedTableCell( );
+	protected String getItemLabel( final T aItem ) {
+		return (aItem.toString( ) + " " + NameConverter.toShortTimeUnit( PropertiesModel.getInstance( ).getTimeUnit( ) ));
 	}
 
-	protected abstract String getItemLabel( T aItem );
-
-	private final class FailedTableCell extends TreeTableCell<S, T> {
-
-		@Override
-		protected void updateItem( final T aItem, final boolean aEmpty ) {
-			super.updateItem( aItem, aEmpty );
-
-			if ( aEmpty || (aItem == null) ) {
-				setText( null );
-				setGraphic( null );
-			}
-			else {
-				setText( getItemLabel( aItem ) );
-			}
-		}
-
-	}
 }

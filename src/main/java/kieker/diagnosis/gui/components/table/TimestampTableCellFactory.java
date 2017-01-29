@@ -14,25 +14,19 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.components.converter;
+package kieker.diagnosis.gui.components.table;
 
-import java.util.ResourceBundle;
-
-import kieker.diagnosis.model.PropertiesModel.OperationNames;
-import kieker.diagnosis.util.Mapper;
+import kieker.diagnosis.model.DataModel;
+import kieker.diagnosis.util.NameConverter;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class OperationNamesStringConverter extends AbstractStringConverter<OperationNames> {
+public final class TimestampTableCellFactory<S, T> extends AbstractTableCellFactory<S, T> {
 
 	@Override
-	protected void fillMapper( final Mapper<OperationNames, String> aMapper, final ResourceBundle aResourceBundle ) {
-		final String shortStr = aResourceBundle.getString( "short" );
-		final String longStr = aResourceBundle.getString( "long" );
-
-		aMapper.map( OperationNames.SHORT ).to( shortStr + " (getBook(...))" );
-		aMapper.map( OperationNames.LONG ).to( longStr + " (public void kieker.examples.bookstore.Catalog.getBook(boolean))" );
+	protected String getItemLabel( final T aItem ) {
+		return (NameConverter.toTimestampString( (Long) aItem, DataModel.getInstance( ).getTimeUnit( ) ));
 	}
 
 }

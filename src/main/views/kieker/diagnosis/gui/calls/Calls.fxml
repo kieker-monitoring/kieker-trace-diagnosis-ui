@@ -3,7 +3,7 @@
 <?import javafx.scene.control.cell.*?>
 <?import javafx.scene.layout.VBox?>
 <?import jfxtras.scene.control.*?>
-<?import kieker.diagnosis.components.table.*?>
+<?import kieker.diagnosis.gui.components.table.*?>
 <?import javafx.scene.control.Hyperlink?>
 
 <GridPane xmlns:fx="http://javafx.com/fxml"

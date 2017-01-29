@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.components.converter;
+package kieker.diagnosis.gui.components.converter;
 
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;

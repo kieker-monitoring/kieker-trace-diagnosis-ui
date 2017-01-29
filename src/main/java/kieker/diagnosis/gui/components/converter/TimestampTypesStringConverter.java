@@ -14,40 +14,25 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.components.table;
+package kieker.diagnosis.gui.components.converter;
 
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
-import javafx.util.Callback;
-import kieker.diagnosis.domain.AbstractOperationCall;
+import java.util.ResourceBundle;
+
+import kieker.diagnosis.model.PropertiesModel.TimestampTypes;
+import kieker.diagnosis.util.Mapper;
 
 /**
  * @author Nils Christian Ehmke
  */
-public class FailedRowFactory<S> implements Callback<TableView<S>, TableRow<S>> {
+public final class TimestampTypesStringConverter extends AbstractStringConverter<TimestampTypes> {
 
 	@Override
-	public TableRow<S> call( final TableView<S> param ) {
-		return new FailedTableRow( );
-	}
-
-	private class FailedTableRow extends TableRow<S> {
-
-		@Override
-		protected void updateItem( S item, boolean empty ) {
-			super.updateItem( item, empty );
-
-			if ( item instanceof AbstractOperationCall<?> ) {
-				final AbstractOperationCall<?> call = (AbstractOperationCall<?>) item;
-
-				getStyleClass( ).remove( "failed" );
-
-				if ( call.isFailed( ) ) {
-					getStyleClass( ).add( "failed" );
-				}
-			}
-		}
-
+	protected void fillMapper( final Mapper<TimestampTypes, String> aMapper, final ResourceBundle aResourceBundle ) {
+		aMapper.map( TimestampTypes.TIMESTAMP ).to( "1418993603113900610" );
+		aMapper.map( TimestampTypes.DATE ).to( "19.12.14" );
+		aMapper.map( TimestampTypes.SHORT_TIME ).to( "13:53" );
+		aMapper.map( TimestampTypes.LONG_TIME ).to( "13:53:23" );
+		aMapper.map( TimestampTypes.DATE_AND_TIME ).to( "19.12.2014 13:53:23" );
 	}
 
 }

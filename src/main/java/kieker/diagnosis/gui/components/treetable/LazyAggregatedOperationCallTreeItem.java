@@ -14,40 +14,32 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.components.treetable;
+package kieker.diagnosis.gui.components.treetable;
 
-import javafx.scene.control.TreeTableRow;
-import javafx.scene.control.TreeTableView;
-import javafx.util.Callback;
-import kieker.diagnosis.domain.AbstractOperationCall;
+import java.util.ArrayList;
+import java.util.List;
+
+import javafx.scene.control.TreeItem;
+import kieker.diagnosis.domain.AggregatedOperationCall;
 
 /**
  * @author Nils Christian Ehmke
  */
-public class FailedRowFactory<S> implements Callback<TreeTableView<S>, TreeTableRow<S>> {
+public final class LazyAggregatedOperationCallTreeItem extends AbstractLazyOperationCallTreeItem<AggregatedOperationCall> {
 
-	@Override
-	public TreeTableRow<S> call( final TreeTableView<S> param ) {
-		return new FailedTreeTableRow( );
+	public LazyAggregatedOperationCallTreeItem( final AggregatedOperationCall aValue ) {
+		super( aValue );
 	}
 
-	private class FailedTreeTableRow extends TreeTableRow<S> {
+	@Override
+	protected void initializeChildren( ) {
+		final List<TreeItem<AggregatedOperationCall>> result = new ArrayList<>( );
 
-		@Override
-		protected void updateItem( S item, boolean empty ) {
-			super.updateItem( item, empty );
-
-			if ( item instanceof AbstractOperationCall<?> ) {
-				final AbstractOperationCall<?> call = (AbstractOperationCall<?>) item;
-
-				getStyleClass( ).remove( "failed" );
-
-				if ( call.isFailed( ) ) {
-					getStyleClass( ).add( "failed" );
-				}
-			}
+		for ( final AggregatedOperationCall child : super.getValue( ).getChildren( ) ) {
+			result.add( new LazyAggregatedOperationCallTreeItem( child ) );
 		}
 
+		super.getChildren( ).setAll( result );
 	}
 
 }

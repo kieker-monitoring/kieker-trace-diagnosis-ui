@@ -14,25 +14,38 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.components.converter;
+package kieker.diagnosis.gui.components.treetable;
 
-import java.util.ResourceBundle;
-
-import kieker.diagnosis.model.PropertiesModel.ComponentNames;
-import kieker.diagnosis.util.Mapper;
+import javafx.scene.control.TreeTableCell;
+import javafx.scene.control.TreeTableColumn;
+import javafx.util.Callback;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class ComponentNamesStringConverter extends AbstractStringConverter<ComponentNames> {
+public abstract class AbstractTreeTableCellFactory<S, T> implements Callback<TreeTableColumn<S, T>, TreeTableCell<S, T>> {
 
 	@Override
-	protected void fillMapper( final Mapper<ComponentNames, String> aMapper, final ResourceBundle aResourceBundle ) {
-		final String shortStr = aResourceBundle.getString( "short" );
-		final String longStr = aResourceBundle.getString( "long" );
-
-		aMapper.map( ComponentNames.SHORT ).to( shortStr + " (Catalog)" );
-		aMapper.map( ComponentNames.LONG ).to( longStr + " (kieker.examples.bookstore.Catalog)" );
+	public final TreeTableCell<S, T> call( final TreeTableColumn<S, T> aTreeTableColumn ) {
+		return new FailedTableCell( );
 	}
 
+	protected abstract String getItemLabel( T aItem );
+
+	private final class FailedTableCell extends TreeTableCell<S, T> {
+
+		@Override
+		protected void updateItem( final T aItem, final boolean aEmpty ) {
+			super.updateItem( aItem, aEmpty );
+
+			if ( aEmpty || (aItem == null) ) {
+				setText( null );
+				setGraphic( null );
+			}
+			else {
+				setText( getItemLabel( aItem ) );
+			}
+		}
+
+	}
 }

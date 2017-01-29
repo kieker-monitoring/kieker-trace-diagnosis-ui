@@ -14,16 +14,19 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.components.treetable;
+package kieker.diagnosis.gui.components.treetable;
+
+import kieker.diagnosis.model.DataModel;
+import kieker.diagnosis.util.NameConverter;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class PercentTreeCellFactory<S, T> extends AbstractTreeTableCellFactory<S, T> {
+public final class TimestampTreeTableCellFactory<S, T> extends AbstractTreeTableCellFactory<S, T> {
 
 	@Override
 	protected String getItemLabel( final T aItem ) {
-		return (aItem.toString( ) + " %");
+		return NameConverter.toTimestampString( (Long) aItem, DataModel.getInstance( ).getTimeUnit( ) );
 	}
 
 }

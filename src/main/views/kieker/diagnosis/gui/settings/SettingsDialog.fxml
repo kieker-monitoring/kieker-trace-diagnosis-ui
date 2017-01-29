@@ -2,7 +2,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.cell.*?>
 <?import javafx.scene.control.CheckBox?>
-<?import kieker.diagnosis.components.converter.*?>
+<?import kieker.diagnosis.gui.components.converter.*?>
 
 <VBox fx:id="ivView" xmlns:fx="http://javafx.com/fxml">
 

@@ -14,25 +14,38 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.components.converter;
+package kieker.diagnosis.gui.components.table;
 
-import java.util.ResourceBundle;
-
-import kieker.diagnosis.model.PropertiesModel.TimestampTypes;
-import kieker.diagnosis.util.Mapper;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.util.Callback;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class TimestampTypesStringConverter extends AbstractStringConverter<TimestampTypes> {
+public abstract class AbstractTableCellFactory<S, T> implements Callback<TableColumn<S, T>, TableCell<S, T>> {
 
 	@Override
-	protected void fillMapper( final Mapper<TimestampTypes, String> aMapper, final ResourceBundle aResourceBundle ) {
-		aMapper.map( TimestampTypes.TIMESTAMP ).to( "1418993603113900610" );
-		aMapper.map( TimestampTypes.DATE ).to( "19.12.14" );
-		aMapper.map( TimestampTypes.SHORT_TIME ).to( "13:53" );
-		aMapper.map( TimestampTypes.LONG_TIME ).to( "13:53:23" );
-		aMapper.map( TimestampTypes.DATE_AND_TIME ).to( "19.12.2014 13:53:23" );
+	public final TableCell<S, T> call( final TableColumn<S, T> aTableColumn ) {
+		return new FailedTableCell( );
+	}
+
+	protected abstract String getItemLabel( T aItem );
+
+	private final class FailedTableCell extends TableCell<S, T> {
+
+		@Override
+		protected void updateItem( final T aItem, final boolean aEmpty ) {
+			super.updateItem( aItem, aEmpty );
+
+			if ( aEmpty || (aItem == null) ) {
+				setText( null );
+				setGraphic( null );
+			}
+			else {
+				setText( getItemLabel( aItem ) );
+			}
+		}
 	}
 
 }

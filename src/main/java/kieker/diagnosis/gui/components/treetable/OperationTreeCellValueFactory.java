@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.components.treetable;
+package kieker.diagnosis.gui.components.treetable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -28,7 +28,7 @@ import javafx.scene.control.TreeTableColumn.CellDataFeatures;
 import javafx.util.Callback;
 
 import kieker.diagnosis.model.PropertiesModel;
-import kieker.diagnosis.model.PropertiesModel.ComponentNames;
+import kieker.diagnosis.model.PropertiesModel.OperationNames;
 import kieker.diagnosis.util.NameConverter;
 
 import org.apache.logging.log4j.LogManager;
@@ -37,13 +37,13 @@ import org.apache.logging.log4j.Logger;
 /**
  * @author Nils Christian Ehmke
  */
-public final class ComponentTreeCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<String>> {
+public final class OperationTreeCellValueFactory implements Callback<CellDataFeatures<?, String>, ObservableValue<String>> {
 
-	private static final Logger LOGGER = LogManager.getLogger( ComponentTreeCellValueFactory.class );
+	private static final Logger LOGGER = LogManager.getLogger( DurationTreeCellValueFactory.class );
 
 	private final String ivProperty;
 
-	public ComponentTreeCellValueFactory( @NamedArg ( value = "property" ) final String aProperty ) {
+	public OperationTreeCellValueFactory( @NamedArg ( value = "property" ) final String aProperty ) {
 		this.ivProperty = aProperty.substring( 0, 1 ).toUpperCase( Locale.ROOT ) + aProperty.substring( 1 );
 	}
 
@@ -52,16 +52,16 @@ public final class ComponentTreeCellValueFactory implements Callback<CellDataFea
 		try {
 			final TreeItem<?> item = aCall.getValue( );
 			final Method getter = item.getValue( ).getClass( ).getMethod( "get" + this.ivProperty, new Class<?>[0] );
-			String componentName = (String) getter.invoke( item.getValue( ), new Object[0] );
+			String operationName = (String) getter.invoke( item.getValue( ), new Object[0] );
 
-			if ( PropertiesModel.getInstance( ).getComponentNames( ) == ComponentNames.SHORT ) {
-				componentName = NameConverter.toShortComponentName( componentName );
+			if ( PropertiesModel.getInstance( ).getOperationNames( ) == OperationNames.SHORT ) {
+				operationName = NameConverter.toShortOperationName( operationName );
 			}
 
-			return new ReadOnlyObjectWrapper<String>( componentName );
+			return new ReadOnlyObjectWrapper<String>( operationName );
 		}
 		catch ( final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex ) {
-			ComponentTreeCellValueFactory.LOGGER.warn( ex );
+			OperationTreeCellValueFactory.LOGGER.warn( ex );
 			return null;
 		}
 	}

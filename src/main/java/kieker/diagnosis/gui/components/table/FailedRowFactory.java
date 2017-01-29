@@ -14,38 +14,40 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.components.table;
+package kieker.diagnosis.gui.components.table;
 
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
 import javafx.util.Callback;
+import kieker.diagnosis.domain.AbstractOperationCall;
 
 /**
  * @author Nils Christian Ehmke
  */
-public abstract class AbstractTableCellFactory<S, T> implements Callback<TableColumn<S, T>, TableCell<S, T>> {
+public class FailedRowFactory<S> implements Callback<TableView<S>, TableRow<S>> {
 
 	@Override
-	public final TableCell<S, T> call( final TableColumn<S, T> aTableColumn ) {
-		return new FailedTableCell( );
+	public TableRow<S> call( final TableView<S> param ) {
+		return new FailedTableRow( );
 	}
 
-	protected abstract String getItemLabel( T aItem );
-
-	private final class FailedTableCell extends TableCell<S, T> {
+	private class FailedTableRow extends TableRow<S> {
 
 		@Override
-		protected void updateItem( final T aItem, final boolean aEmpty ) {
-			super.updateItem( aItem, aEmpty );
+		protected void updateItem( S item, boolean empty ) {
+			super.updateItem( item, empty );
 
-			if ( aEmpty || (aItem == null) ) {
-				setText( null );
-				setGraphic( null );
-			}
-			else {
-				setText( getItemLabel( aItem ) );
+			if ( item instanceof AbstractOperationCall<?> ) {
+				final AbstractOperationCall<?> call = (AbstractOperationCall<?>) item;
+
+				getStyleClass( ).remove( "failed" );
+
+				if ( call.isFailed( ) ) {
+					getStyleClass( ).add( "failed" );
+				}
 			}
 		}
+
 	}
 
 }
