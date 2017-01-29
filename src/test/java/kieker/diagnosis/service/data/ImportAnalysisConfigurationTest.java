@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.util;
+package kieker.diagnosis.service.data;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;

@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.domain;
+package kieker.diagnosis.service.data.domain;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;

@@ -20,6 +20,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import org.junit.Test;
+import org.testfx.framework.junit.ApplicationTest;
+
 import javafx.stage.Stage;
 import kieker.diagnosis.Main;
 import kieker.diagnosis.guitest.mainview.MainView;
@@ -28,9 +31,6 @@ import kieker.diagnosis.guitest.mainview.dialog.SettingsDialog;
 import kieker.diagnosis.guitest.mainview.subview.CallsView;
 import kieker.diagnosis.guitest.mainview.subview.TracesView;
 import kieker.diagnosis.service.data.DataService;
-
-import org.junit.Test;
-import org.testfx.framework.junit.ApplicationTest;
 
 public final class GUITest extends ApplicationTest {
 
@@ -75,7 +75,8 @@ public final class GUITest extends ApplicationTest {
 	@Test
 	public void importOfFirstExampleMonitoringLogShouldWork( ) {
 		// Unfortunately TestFX cannot handle the native file dialog of JavaFX. Therefore we have to use direct access as a workaround.
-		DataService.getInstance( ).loadMonitoringLogFromFS( new File( "example/execution monitoring log" ) );
+		final DataService dataService = new DataService( );
+		dataService.loadMonitoringLogFromFS( new File( "example/execution monitoring log" ) );
 
 		final MainView mainView = new MainView( this );
 		mainView.getCallsButton( ).click( );
@@ -92,7 +93,8 @@ public final class GUITest extends ApplicationTest {
 	@Test
 	public void importOfSecondExampleMonitoringLogShouldWork( ) {
 		// Unfortunately TestFX cannot handle the native file dialog of JavaFX. Therefore we have to use direct access as a workaround.
-		DataService.getInstance( ).loadMonitoringLogFromFS( new File( "example/event monitoring log" ) );
+		final DataService dataService = new DataService( );
+		dataService.loadMonitoringLogFromFS( new File( "example/event monitoring log" ) );
 
 		final MainView mainView = new MainView( this );
 		mainView.getCallsButton( ).click( );
@@ -109,7 +111,8 @@ public final class GUITest extends ApplicationTest {
 	@Test
 	public void testFilterForCallView( ) throws InterruptedException {
 		// Unfortunately TestFX cannot handle the native file dialog of JavaFX. Therefore we have to use direct access as a workaround.
-		DataService.getInstance( ).loadMonitoringLogFromFS( new File( "example/event monitoring log" ) );
+		final DataService dataService = new DataService( );
+		dataService.loadMonitoringLogFromFS( new File( "example/event monitoring log" ) );
 
 		final MainView mainView = new MainView( this );
 		mainView.getCallsButton( ).click( );
@@ -130,7 +133,8 @@ public final class GUITest extends ApplicationTest {
 	@Test
 	public void testFilterForTracesView( ) throws InterruptedException {
 		// Unfortunately TestFX cannot handle the native file dialog of JavaFX. Therefore we have to use direct access as a workaround.
-		DataService.getInstance( ).loadMonitoringLogFromFS( new File( "example/event monitoring log" ) );
+		final DataService dataService = new DataService( );
+		dataService.loadMonitoringLogFromFS( new File( "example/event monitoring log" ) );
 
 		final MainView mainView = new MainView( this );
 		mainView.getTracesButton( ).click( );

@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.util;
+package kieker.diagnosis.service.nameconverter;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -23,34 +23,36 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-import kieker.diagnosis.service.nameconverter.NameConverterService;
-
-public class NameConverterTest {
+public class NameServiceTest {
 
 	@Test
 	public void toShortComponentNameForCommonCaseShouldWork( ) {
-		final String result = NameConverterService.toShortComponentName( "A.B.C" );
+		final NameConverterService nameConverterService = new NameConverterService( );
+		final String result = nameConverterService.toShortComponentName( "A.B.C" );
 
 		assertThat( result, is( "C" ) );
 	}
 
 	@Test
 	public void toShortComponentNameForSingleComponentShouldWork( ) {
-		final String result = NameConverterService.toShortComponentName( "A" );
+		final NameConverterService nameConverterService = new NameConverterService( );
+		final String result = nameConverterService.toShortComponentName( "A" );
 
 		assertThat( result, is( "A" ) );
 	}
 
 	@Test
 	public void toShortOperationNameForCommonCaseShouldWork( ) {
-		final String result = NameConverterService.toShortOperationName( "public void kieker.examples.bookstore.Catalog.getBook(boolean)" );
+		final NameConverterService nameConverterService = new NameConverterService( );
+		final String result = nameConverterService.toShortOperationName( "public void kieker.examples.bookstore.Catalog.getBook(boolean)" );
 
 		assertThat( result, is( "getBook(...)" ) );
 	}
 
 	@Test
 	public void toShortOperationNameForMultipleFullQualifiedClassesShouldWork( ) {
-		final String result = NameConverterService
+		final NameConverterService nameConverterService = new NameConverterService( );
+		final String result = nameConverterService
 				.toShortOperationName( "public final kieker.examples.bookstore.CRM kieker.examples.bookstore.Catalog.getBook(boolean)" );
 
 		assertThat( result, is( "getBook(...)" ) );
@@ -58,56 +60,64 @@ public class NameConverterTest {
 
 	@Test
 	public void toShortTimeUnitForNanosecondsShouldWork( ) {
-		final String result = NameConverterService.toShortTimeUnit( TimeUnit.NANOSECONDS );
+		final NameConverterService nameConverterService = new NameConverterService( );
+		final String result = nameConverterService.toShortTimeUnit( TimeUnit.NANOSECONDS );
 
 		assertThat( result, is( "ns" ) );
 	}
 
 	@Test
 	public void toShortTimeUnitForMicrosecondsShouldWork( ) {
-		final String result = NameConverterService.toShortTimeUnit( TimeUnit.MICROSECONDS );
+		final NameConverterService nameConverterService = new NameConverterService( );
+		final String result = nameConverterService.toShortTimeUnit( TimeUnit.MICROSECONDS );
 
 		assertThat( result, is( "us" ) );
 	}
 
 	@Test
 	public void toShortTimeUnitForMillisecondsShouldWork( ) {
-		final String result = NameConverterService.toShortTimeUnit( TimeUnit.MILLISECONDS );
+		final NameConverterService nameConverterService = new NameConverterService( );
+		final String result = nameConverterService.toShortTimeUnit( TimeUnit.MILLISECONDS );
 
 		assertThat( result, is( "ms" ) );
 	}
 
 	@Test
 	public void toShortTimeUnitForSecondsShouldWork( ) {
-		final String result = NameConverterService.toShortTimeUnit( TimeUnit.SECONDS );
+		final NameConverterService nameConverterService = new NameConverterService( );
+		final String result = nameConverterService.toShortTimeUnit( TimeUnit.SECONDS );
 
 		assertThat( result, is( "s" ) );
 	}
 
 	@Test
 	public void toShortTimeUnitForMinutesShouldWork( ) {
-		final String result = NameConverterService.toShortTimeUnit( TimeUnit.MINUTES );
+		final NameConverterService nameConverterService = new NameConverterService( );
+		final String result = nameConverterService.toShortTimeUnit( TimeUnit.MINUTES );
 
 		assertThat( result, is( "m" ) );
 	}
 
 	@Test
 	public void toShortTimeUnitForHoursShouldWork( ) {
-		final String result = NameConverterService.toShortTimeUnit( TimeUnit.HOURS );
+		final NameConverterService nameConverterService = new NameConverterService( );
+		final String result = nameConverterService.toShortTimeUnit( TimeUnit.HOURS );
 
 		assertThat( result, is( "h" ) );
 	}
 
 	@Test
 	public void toShortTimeUnitForDaysShouldWork( ) {
-		final String result = NameConverterService.toShortTimeUnit( TimeUnit.DAYS );
+		final NameConverterService nameConverterService = new NameConverterService( );
+		final String result = nameConverterService.toShortTimeUnit( TimeUnit.DAYS );
 
 		assertThat( result, is( "d" ) );
 	}
 
 	@Test
 	public void toShortTimeUnitForNullShouldReturnEmptyString( ) {
-		final String result = NameConverterService.toShortTimeUnit( null );
+		final NameConverterService nameConverterService = new NameConverterService( );
+		final String result = nameConverterService.toShortTimeUnit( null );
 
 		assertThat( result, is( "" ) );
 	}

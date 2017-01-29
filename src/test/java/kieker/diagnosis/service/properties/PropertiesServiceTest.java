@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.model;
+package kieker.diagnosis.service.properties;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -25,7 +25,7 @@ import org.junit.Test;
 
 import kieker.diagnosis.service.properties.PropertiesService;
 
-public final class PropertiesModelTest {
+public final class PropertiesServiceTest {
 
 	@Test
 	public void settingShouldBePersisted( ) {

@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.util.stages;
+package kieker.diagnosis.service.data.stages;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -25,12 +25,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.diagnosis.service.data.domain.Trace;
-import kieker.diagnosis.service.data.stages.LegacyTraceReconstructor;
-
 import org.junit.Test;
 
+import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.diagnosis.service.data.domain.Trace;
 import teetime.framework.Configuration;
 import teetime.framework.Execution;
 import teetime.stage.CollectorSink;
@@ -167,7 +165,7 @@ public class LegacyTraceReconstructorTest {
 			final Dir2RecordsFilter reader = new Dir2RecordsFilter( new ClassNameRegistryRepository( ) );
 			final InstanceOfFilter<Object, OperationExecutionRecord> typeFilter = new InstanceOfFilter<>( OperationExecutionRecord.class );
 			final LegacyTraceReconstructor reconstructor = new LegacyTraceReconstructor( );
-			final CollectorSink<Trace> collector = new CollectorSink<>( this.traceCollectorList );
+			final CollectorSink<Trace> collector = new CollectorSink<>( traceCollectorList );
 
 			super.connectPorts( producer.getOutputPort( ), reader.getInputPort( ) );
 			super.connectPorts( reader.getOutputPort( ), typeFilter.getInputPort( ) );
@@ -176,7 +174,7 @@ public class LegacyTraceReconstructorTest {
 		}
 
 		public List<Trace> getOutput( ) {
-			return this.traceCollectorList;
+			return traceCollectorList;
 		}
 
 	}
