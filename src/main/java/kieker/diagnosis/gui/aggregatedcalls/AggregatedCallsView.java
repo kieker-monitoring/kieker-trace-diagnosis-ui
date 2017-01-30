@@ -4,184 +4,128 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import kieker.diagnosis.gui.AbstractView;
+import kieker.diagnosis.gui.InjectComponent;
 import kieker.diagnosis.service.data.domain.AggregatedOperationCall;
 
 public class AggregatedCallsView extends AbstractView {
 
+	@InjectComponent
 	private TableView<AggregatedOperationCall> ivTable;
 
+	@InjectComponent
 	private RadioButton ivShowAllButton;
+	@InjectComponent
 	private RadioButton ivShowJustFailedButton;
+	@InjectComponent
 	private RadioButton ivShowJustSuccessful;
 
+	@InjectComponent
 	private TextField ivFilterContainer;
+	@InjectComponent
 	private TextField ivFilterComponent;
+	@InjectComponent
 	private TextField ivFilterOperation;
+	@InjectComponent
 	private TextField ivFilterException;
 
+	@InjectComponent
 	private TextField ivMinimalDuration;
+	@InjectComponent
 	private TextField ivMaximalDuration;
+	@InjectComponent
 	private TextField ivMedianDuration;
+	@InjectComponent
 	private TextField ivTotalDuration;
+	@InjectComponent
 	private TextField ivMeanDuration;
+	@InjectComponent
 	private TextField ivContainer;
+	@InjectComponent
 	private TextField ivComponent;
+	@InjectComponent
 	private TextField ivOperation;
+	@InjectComponent
 	private TextField ivFailed;
+	@InjectComponent
 	private TextField ivCalls;
 
+	@InjectComponent
 	private TextField ivCounter;
 
 	public TableView<AggregatedOperationCall> getTable( ) {
 		return ivTable;
 	}
 
-	public void setTable( final TableView<AggregatedOperationCall> aTable ) {
-		ivTable = aTable;
-	}
-
 	public RadioButton getShowAllButton( ) {
 		return ivShowAllButton;
-	}
-
-	public void setShowAllButton( final RadioButton aShowAllButton ) {
-		ivShowAllButton = aShowAllButton;
 	}
 
 	public RadioButton getShowJustFailedButton( ) {
 		return ivShowJustFailedButton;
 	}
 
-	public void setShowJustFailedButton( final RadioButton aShowJustFailedButton ) {
-		ivShowJustFailedButton = aShowJustFailedButton;
-	}
-
 	public RadioButton getShowJustSuccessful( ) {
 		return ivShowJustSuccessful;
-	}
-
-	public void setShowJustSuccessful( final RadioButton aShowJustSuccessful ) {
-		ivShowJustSuccessful = aShowJustSuccessful;
 	}
 
 	public TextField getFilterContainer( ) {
 		return ivFilterContainer;
 	}
 
-	public void setFilterContainer( final TextField aFilterContainer ) {
-		ivFilterContainer = aFilterContainer;
-	}
-
 	public TextField getFilterComponent( ) {
 		return ivFilterComponent;
-	}
-
-	public void setFilterComponent( final TextField aFilterComponent ) {
-		ivFilterComponent = aFilterComponent;
 	}
 
 	public TextField getFilterOperation( ) {
 		return ivFilterOperation;
 	}
 
-	public void setFilterOperation( final TextField aFilterOperation ) {
-		ivFilterOperation = aFilterOperation;
-	}
-
 	public TextField getFilterException( ) {
 		return ivFilterException;
-	}
-
-	public void setFilterException( final TextField aFilterException ) {
-		ivFilterException = aFilterException;
 	}
 
 	public TextField getMinimalDuration( ) {
 		return ivMinimalDuration;
 	}
 
-	public void setMinimalDuration( final TextField aMinimalDuration ) {
-		ivMinimalDuration = aMinimalDuration;
-	}
-
 	public TextField getMaximalDuration( ) {
 		return ivMaximalDuration;
-	}
-
-	public void setMaximalDuration( final TextField aMaximalDuration ) {
-		ivMaximalDuration = aMaximalDuration;
 	}
 
 	public TextField getMedianDuration( ) {
 		return ivMedianDuration;
 	}
 
-	public void setMedianDuration( final TextField aMedianDuration ) {
-		ivMedianDuration = aMedianDuration;
-	}
-
 	public TextField getTotalDuration( ) {
 		return ivTotalDuration;
-	}
-
-	public void setTotalDuration( final TextField aTotalDuration ) {
-		ivTotalDuration = aTotalDuration;
 	}
 
 	public TextField getMeanDuration( ) {
 		return ivMeanDuration;
 	}
 
-	public void setMeanDuration( final TextField aMeanDuration ) {
-		ivMeanDuration = aMeanDuration;
-	}
-
 	public TextField getContainer( ) {
 		return ivContainer;
-	}
-
-	public void setContainer( final TextField aContainer ) {
-		ivContainer = aContainer;
 	}
 
 	public TextField getComponent( ) {
 		return ivComponent;
 	}
 
-	public void setComponent( final TextField aComponent ) {
-		ivComponent = aComponent;
-	}
-
 	public TextField getOperation( ) {
 		return ivOperation;
-	}
-
-	public void setOperation( final TextField aOperation ) {
-		ivOperation = aOperation;
 	}
 
 	public TextField getFailed( ) {
 		return ivFailed;
 	}
 
-	public void setFailed( final TextField aFailed ) {
-		ivFailed = aFailed;
-	}
-
 	public TextField getCalls( ) {
 		return ivCalls;
 	}
 
-	public void setCalls( final TextField aCalls ) {
-		ivCalls = aCalls;
-	}
-
 	public TextField getCounter( ) {
 		return ivCounter;
-	}
-
-	public void setCounter( final TextField aCounter ) {
-		ivCounter = aCounter;
 	}
 
 }

@@ -7,17 +7,26 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
 import kieker.diagnosis.gui.AbstractView;
+import kieker.diagnosis.gui.InjectComponent;
 
 public class MainView extends AbstractView {
 
+	@InjectComponent
 	private Node ivView;
+	@InjectComponent
 	private AnchorPane ivContent;
+	@InjectComponent
 	private VBox ivLeftButtonBox;
 
+	@InjectComponent
 	private Button ivTraces;
+	@InjectComponent
 	private Button ivAggregatedtraces;
+	@InjectComponent
 	private Button ivCalls;
+	@InjectComponent
 	private Button ivAggregatedcalls;
+	@InjectComponent
 	private Button ivStatistics;
 
 	public Node getView( ) {

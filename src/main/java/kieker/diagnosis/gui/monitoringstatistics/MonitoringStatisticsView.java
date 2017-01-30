@@ -2,170 +2,117 @@ package kieker.diagnosis.gui.monitoringstatistics;
 
 import javafx.scene.control.TextField;
 import kieker.diagnosis.gui.AbstractView;
+import kieker.diagnosis.gui.InjectComponent;
 
 public class MonitoringStatisticsView extends AbstractView {
 
+	@InjectComponent
 	private TextField ivMonitoringlog;
+	@InjectComponent
 	private TextField ivMonitoringsize;
+	@InjectComponent
 	private TextField ivAnalysistime;
+	@InjectComponent
 	private TextField ivBeginofmonitoring;
+	@InjectComponent
 	private TextField ivEndofmonitoring;
+	@InjectComponent
 	private TextField ivNumberofcalls;
+	@InjectComponent
 	private TextField ivNumberoffailedcalls;
+	@InjectComponent
 	private TextField ivNumberofaggcalls;
+	@InjectComponent
 	private TextField ivNumberoffailedaggcalls;
+	@InjectComponent
 	private TextField ivNumberoftraces;
+	@InjectComponent
 	private TextField ivNumberoffailedtraces;
+	@InjectComponent
 	private TextField ivNumberoffailuretraces;
+	@InjectComponent
 	private TextField ivNumberofaggtraces;
+	@InjectComponent
 	private TextField ivNumberofaggfailedtraces;
+	@InjectComponent
 	private TextField ivNumberofaggfailuretraces;
+	@InjectComponent
 	private TextField ivIncompletetraces;
+	@InjectComponent
 	private TextField ivDanglingrecords;
+	@InjectComponent
 	private TextField ivIgnoredRecords;
 
 	public TextField getMonitoringlog( ) {
 		return ivMonitoringlog;
 	}
 
-	public void setMonitoringlog( final TextField aMonitoringlog ) {
-		ivMonitoringlog = aMonitoringlog;
-	}
-
 	public TextField getMonitoringsize( ) {
 		return ivMonitoringsize;
-	}
-
-	public void setMonitoringsize( final TextField aMonitoringsize ) {
-		ivMonitoringsize = aMonitoringsize;
 	}
 
 	public TextField getAnalysistime( ) {
 		return ivAnalysistime;
 	}
 
-	public void setAnalysistime( final TextField aAnalysistime ) {
-		ivAnalysistime = aAnalysistime;
-	}
-
 	public TextField getBeginofmonitoring( ) {
 		return ivBeginofmonitoring;
-	}
-
-	public void setBeginofmonitoring( final TextField aBeginofmonitoring ) {
-		ivBeginofmonitoring = aBeginofmonitoring;
 	}
 
 	public TextField getEndofmonitoring( ) {
 		return ivEndofmonitoring;
 	}
 
-	public void setEndofmonitoring( final TextField aEndofmonitoring ) {
-		ivEndofmonitoring = aEndofmonitoring;
-	}
-
 	public TextField getNumberofcalls( ) {
 		return ivNumberofcalls;
-	}
-
-	public void setNumberofcalls( final TextField aNumberofcalls ) {
-		ivNumberofcalls = aNumberofcalls;
 	}
 
 	public TextField getNumberoffailedcalls( ) {
 		return ivNumberoffailedcalls;
 	}
 
-	public void setNumberoffailedcalls( final TextField aNumberoffailedcalls ) {
-		ivNumberoffailedcalls = aNumberoffailedcalls;
-	}
-
 	public TextField getNumberofaggcalls( ) {
 		return ivNumberofaggcalls;
-	}
-
-	public void setNumberofaggcalls( final TextField aNumberofaggcalls ) {
-		ivNumberofaggcalls = aNumberofaggcalls;
 	}
 
 	public TextField getNumberoffailedaggcalls( ) {
 		return ivNumberoffailedaggcalls;
 	}
 
-	public void setNumberoffailedaggcalls( final TextField aNumberoffailedaggcalls ) {
-		ivNumberoffailedaggcalls = aNumberoffailedaggcalls;
-	}
-
 	public TextField getNumberoftraces( ) {
 		return ivNumberoftraces;
-	}
-
-	public void setNumberoftraces( final TextField aNumberoftraces ) {
-		ivNumberoftraces = aNumberoftraces;
 	}
 
 	public TextField getNumberoffailedtraces( ) {
 		return ivNumberoffailedtraces;
 	}
 
-	public void setNumberoffailedtraces( final TextField aNumberoffailedtraces ) {
-		ivNumberoffailedtraces = aNumberoffailedtraces;
-	}
-
 	public TextField getNumberoffailuretraces( ) {
 		return ivNumberoffailuretraces;
-	}
-
-	public void setNumberoffailuretraces( final TextField aNumberoffailuretraces ) {
-		ivNumberoffailuretraces = aNumberoffailuretraces;
 	}
 
 	public TextField getNumberofaggtraces( ) {
 		return ivNumberofaggtraces;
 	}
 
-	public void setNumberofaggtraces( final TextField aNumberofaggtraces ) {
-		ivNumberofaggtraces = aNumberofaggtraces;
-	}
-
 	public TextField getNumberofaggfailedtraces( ) {
 		return ivNumberofaggfailedtraces;
-	}
-
-	public void setNumberofaggfailedtraces( final TextField aNumberofaggfailedtraces ) {
-		ivNumberofaggfailedtraces = aNumberofaggfailedtraces;
 	}
 
 	public TextField getNumberofaggfailuretraces( ) {
 		return ivNumberofaggfailuretraces;
 	}
 
-	public void setNumberofaggfailuretraces( final TextField aNumberofaggfailuretraces ) {
-		ivNumberofaggfailuretraces = aNumberofaggfailuretraces;
-	}
-
 	public TextField getIncompletetraces( ) {
 		return ivIncompletetraces;
-	}
-
-	public void setIncompletetraces( final TextField aIncompletetraces ) {
-		ivIncompletetraces = aIncompletetraces;
 	}
 
 	public TextField getDanglingrecords( ) {
 		return ivDanglingrecords;
 	}
 
-	public void setDanglingrecords( final TextField aDanglingrecords ) {
-		ivDanglingrecords = aDanglingrecords;
-	}
-
 	public TextField getIgnoredRecords( ) {
 		return ivIgnoredRecords;
-	}
-
-	public void setIgnoredRecords( final TextField aIgnoredRecords ) {
-		ivIgnoredRecords = aIgnoredRecords;
 	}
 
 }

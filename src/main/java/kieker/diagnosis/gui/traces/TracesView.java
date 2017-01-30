@@ -6,39 +6,65 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeTableView;
 import jfxtras.scene.control.CalendarTimeTextField;
 import kieker.diagnosis.gui.AbstractView;
+import kieker.diagnosis.gui.InjectComponent;
 import kieker.diagnosis.service.data.domain.OperationCall;
 
 public class TracesView extends AbstractView {
 
+	@InjectComponent
 	private TreeTableView<OperationCall> ivTreetable;
 
+	@InjectComponent
 	private RadioButton ivShowAllButton;
+	@InjectComponent
 	private RadioButton ivShowJustFailedButton;
+	@InjectComponent
 	private RadioButton ivShowJustFailureContainingButton;
+	@InjectComponent
 	private RadioButton ivShowJustSuccessful;
 
+	@InjectComponent
 	private TextField ivFilterContainer;
+	@InjectComponent
 	private TextField ivFilterComponent;
+	@InjectComponent
 	private TextField ivFilterOperation;
+	@InjectComponent
 	private TextField ivFilterTraceID;
+	@InjectComponent
 	private TextField ivFilterException;
 
+	@InjectComponent
 	private DatePicker ivFilterLowerDate;
+	@InjectComponent
 	private CalendarTimeTextField ivFilterLowerTime;
+	@InjectComponent
 	private DatePicker ivFilterUpperDate;
+	@InjectComponent
 	private CalendarTimeTextField ivFilterUpperTime;
 
+	@InjectComponent
 	private TextField ivTraceDepth;
+	@InjectComponent
 	private TextField ivTraceSize;
+	@InjectComponent
 	private TextField ivTimestamp;
+	@InjectComponent
 	private TextField ivContainer;
+	@InjectComponent
 	private TextField ivComponent;
+	@InjectComponent
 	private TextField ivOperation;
+	@InjectComponent
 	private TextField ivDuration;
+	@InjectComponent
 	private TextField ivPercent;
+	@InjectComponent
 	private TextField ivTraceID;
+	@InjectComponent
 	private TextField ivFailed;
 
+	@InjectComponent
 	private TextField ivCounter;
 
 	public TreeTableView<OperationCall> getTreetable( ) {
