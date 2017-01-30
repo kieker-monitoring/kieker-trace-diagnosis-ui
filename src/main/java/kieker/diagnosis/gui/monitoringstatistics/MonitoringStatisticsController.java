@@ -25,6 +25,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import kieker.diagnosis.gui.AbstractController;
 import kieker.diagnosis.gui.Context;
+import kieker.diagnosis.service.InjectService;
 import kieker.diagnosis.service.data.DataService;
 import kieker.diagnosis.service.data.domain.AggregatedOperationCall;
 import kieker.diagnosis.service.data.domain.AggregatedTrace;
@@ -40,6 +41,7 @@ public final class MonitoringStatisticsController extends AbstractController<Mon
 	private static final String[] UNITS = { "Bytes", "Kilobytes", "Megabytes", "Gigabytes", };
 	private static final float SIZE_OF_BYTE = 1024.0f;
 
+	@InjectService
 	private DataService ivDataService;
 
 	public MonitoringStatisticsController( final Context aContext ) {

@@ -32,6 +32,7 @@ import kieker.diagnosis.gui.Context;
 import kieker.diagnosis.gui.ContextKey;
 import kieker.diagnosis.gui.components.treetable.LazyOperationCallTreeItem;
 import kieker.diagnosis.gui.main.MainController;
+import kieker.diagnosis.service.InjectService;
 import kieker.diagnosis.service.data.DataService;
 import kieker.diagnosis.service.data.domain.OperationCall;
 import kieker.diagnosis.service.data.domain.Trace;
@@ -50,9 +51,16 @@ public final class TracesController extends AbstractController<TracesView> imple
 
 	private Predicate<OperationCall> ivPredicate = x -> true;
 
+	@InjectService
 	private NameConverterService ivNameConverterService;
+
+	@InjectService
 	private PropertiesService ivPropertiesService;
+
+	@InjectService
 	private FilterService ivFilterService;
+
+	@InjectService
 	private DataService ivDataService;
 
 	private MainController ivMainController;

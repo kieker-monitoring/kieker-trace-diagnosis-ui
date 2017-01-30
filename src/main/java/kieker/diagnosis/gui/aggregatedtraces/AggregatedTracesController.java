@@ -30,6 +30,7 @@ import kieker.diagnosis.gui.Context;
 import kieker.diagnosis.gui.ContextKey;
 import kieker.diagnosis.gui.components.treetable.LazyAggregatedOperationCallTreeItem;
 import kieker.diagnosis.gui.main.MainController;
+import kieker.diagnosis.service.InjectService;
 import kieker.diagnosis.service.data.DataService;
 import kieker.diagnosis.service.data.domain.AggregatedOperationCall;
 import kieker.diagnosis.service.data.domain.AggregatedTrace;
@@ -46,10 +47,16 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 
 	private Predicate<AggregatedOperationCall> ivPredicate = x -> true;
 
+	@InjectService
 	private NameConverterService ivNameConverterService;
+
+	@InjectService
 	private PropertiesService ivPropertiesService;
+
+	@InjectService
 	private FilterService ivFilterService;
 
+	@InjectService
 	private DataService ivDataService;
 
 	private MainController ivMainController;

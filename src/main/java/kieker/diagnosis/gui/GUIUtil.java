@@ -50,7 +50,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import javafx.util.Duration;
+import kieker.diagnosis.common.TechnicalException;
 import kieker.diagnosis.gui.main.MainController;
+import kieker.diagnosis.service.InjectService;
 import kieker.diagnosis.service.ServiceIfc;
 import kieker.diagnosis.service.ServiceUtil;
 import kieker.diagnosis.service.properties.PropertiesService;
@@ -201,16 +203,22 @@ public class GUIUtil {
 		final Field[] declaredControllerFields = aControllerClass.getDeclaredFields( );
 		for ( final Field field : declaredControllerFields ) {
 			// Inject services
-			if ( ServiceIfc.class.isAssignableFrom( field.getType( ) ) ) {
+			final Class<?> fieldType = field.getType( );
+
+			if ( field.isAnnotationPresent( InjectService.class ) ) {
 				field.setAccessible( true );
 
+				if ( !ServiceIfc.class.isAssignableFrom( fieldType ) ) {
+					throw new TechnicalException( "Type '" + fieldType + "' is not a service class." );
+				}
+
 				@SuppressWarnings ( "unchecked" )
-				final Object service = ServiceUtil.getService( (Class<? extends ServiceIfc>) field.getType( ) );
+				final Object service = ServiceUtil.getService( (Class<? extends ServiceIfc>) fieldType );
 				field.set( controller, service );
 			}
 
 			// Inject the main controller
-			if ( MainController.class.isAssignableFrom( field.getType( ) ) ) {
+			if ( MainController.class.isAssignableFrom( fieldType ) ) {
 				field.setAccessible( true );
 
 				field.set( controller, mainController );

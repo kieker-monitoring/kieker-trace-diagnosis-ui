@@ -48,6 +48,7 @@ import kieker.diagnosis.gui.calls.CallsController;
 import kieker.diagnosis.gui.monitoringstatistics.MonitoringStatisticsController;
 import kieker.diagnosis.gui.settings.SettingsDialogController;
 import kieker.diagnosis.gui.traces.TracesController;
+import kieker.diagnosis.service.InjectService;
 import kieker.diagnosis.service.data.DataService;
 import kieker.diagnosis.service.data.domain.AggregatedOperationCall;
 import kieker.diagnosis.service.data.domain.OperationCall;
@@ -74,8 +75,13 @@ public final class MainController extends AbstractController<MainView> implement
 
 	private int ivFavoritesAvailable;
 
+	@InjectService
 	private PropertiesService ivPropertiesService;
+
+	@InjectService
 	private ExportService ivExportService;
+
+	@InjectService
 	private DataService ivDataService;
 
 	public MainController( final Context aContext ) {

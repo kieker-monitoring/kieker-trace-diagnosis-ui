@@ -23,6 +23,7 @@ import java.net.URISyntaxException;
 
 import kieker.diagnosis.gui.AbstractController;
 import kieker.diagnosis.gui.Context;
+import kieker.diagnosis.service.InjectService;
 import kieker.diagnosis.service.properties.PropertiesService;
 
 /**
@@ -30,6 +31,7 @@ import kieker.diagnosis.service.properties.PropertiesService;
  */
 public final class BugReportingDialogController extends AbstractController<BugReportingDialogView> implements BugReportingDialogControllerIfc {
 
+	@InjectService
 	private PropertiesService ivPropertiesService;
 
 	public BugReportingDialogController( final Context aContext ) {

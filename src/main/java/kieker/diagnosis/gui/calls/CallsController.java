@@ -36,6 +36,7 @@ import kieker.diagnosis.gui.AbstractController;
 import kieker.diagnosis.gui.Context;
 import kieker.diagnosis.gui.ContextKey;
 import kieker.diagnosis.gui.main.MainController;
+import kieker.diagnosis.service.InjectService;
 import kieker.diagnosis.service.data.DataService;
 import kieker.diagnosis.service.data.domain.AggregatedOperationCall;
 import kieker.diagnosis.service.data.domain.OperationCall;
@@ -54,9 +55,16 @@ public final class CallsController extends AbstractController<CallsView> impleme
 
 	private FilteredList<OperationCall> ivFilteredData;
 
+	@InjectService
 	private NameConverterService ivNameConverterService;
+
+	@InjectService
 	private PropertiesService ivPropertiesService;
+
+	@InjectService
 	private FilterService ivFilterService;
+
+	@InjectService
 	private DataService ivDataService;
 
 	private MainController ivMainController;

@@ -34,6 +34,7 @@ import kieker.diagnosis.gui.AbstractController;
 import kieker.diagnosis.gui.Context;
 import kieker.diagnosis.gui.ContextKey;
 import kieker.diagnosis.gui.main.MainController;
+import kieker.diagnosis.service.InjectService;
 import kieker.diagnosis.service.data.DataService;
 import kieker.diagnosis.service.data.domain.AggregatedOperationCall;
 import kieker.diagnosis.service.export.CSVData;
@@ -51,9 +52,16 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 
 	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> ivSelection = new SimpleObjectProperty<>( Optional.empty( ) );
 
+	@InjectService
 	private NameConverterService ivNameConverterService;
+
+	@InjectService
 	private PropertiesService ivPropertiesService;
+
+	@InjectService
 	private FilterService ivFilterService;
+
+	@InjectService
 	private DataService ivDataService;
 
 	private MainController ivMainController;

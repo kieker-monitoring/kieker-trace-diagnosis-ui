@@ -57,8 +57,13 @@ public class ServiceUtil {
 			for ( final Field field : declaredFields ) {
 				// Inject only services
 				final Class<?> fieldType = field.getType( );
-				if ( ServiceIfc.class.isAssignableFrom( fieldType ) ) {
+
+				if ( field.isAnnotationPresent( InjectService.class ) ) {
 					field.setAccessible( true );
+
+					if ( !ServiceIfc.class.isAssignableFrom( fieldType ) ) {
+						throw new TechnicalException( "Type '" + fieldType + "' is not a service class." );
+					}
 
 					@SuppressWarnings ( "unchecked" )
 					final Object otherService = ServiceUtil.getService( (Class<? extends ServiceIfc>) fieldType );

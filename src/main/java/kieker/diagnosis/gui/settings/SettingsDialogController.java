@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 import javafx.collections.FXCollections;
 import kieker.diagnosis.gui.AbstractController;
 import kieker.diagnosis.gui.Context;
+import kieker.diagnosis.service.InjectService;
 import kieker.diagnosis.service.properties.PropertiesService;
 import kieker.diagnosis.service.properties.PropertiesService.ComponentNames;
 import kieker.diagnosis.service.properties.PropertiesService.OperationNames;
@@ -35,6 +36,7 @@ public final class SettingsDialogController extends AbstractController<SettingsD
 	private static final TimeUnit[] TIME_UNITS = { TimeUnit.NANOSECONDS, TimeUnit.MICROSECONDS, TimeUnit.MILLISECONDS, TimeUnit.SECONDS, TimeUnit.MINUTES,
 			TimeUnit.HOURS };
 
+	@InjectService
 	private PropertiesService ivPropertiesService;
 
 	public SettingsDialogController( final Context aContext ) {

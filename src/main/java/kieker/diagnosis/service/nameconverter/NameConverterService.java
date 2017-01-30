@@ -24,6 +24,7 @@ import java.time.format.FormatStyle;
 import java.util.concurrent.TimeUnit;
 
 import kieker.diagnosis.common.Mapper;
+import kieker.diagnosis.service.InjectService;
 import kieker.diagnosis.service.ServiceIfc;
 import kieker.diagnosis.service.properties.PropertiesService;
 import kieker.diagnosis.service.properties.PropertiesService.TimestampTypes;
@@ -35,6 +36,7 @@ public final class NameConverterService implements ServiceIfc {
 
 	private final Mapper<TimeUnit, String> ivShortTimeUnitMapper = new Mapper<>( );
 
+	@InjectService
 	private PropertiesService ivPropertiesService;
 
 	public NameConverterService( ) {
