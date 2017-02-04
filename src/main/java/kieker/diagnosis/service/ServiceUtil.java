@@ -56,11 +56,10 @@ public class ServiceUtil {
 			final Field[] declaredFields = aServiceClass.getDeclaredFields( );
 			for ( final Field field : declaredFields ) {
 				// Inject only services
-				final Class<?> fieldType = field.getType( );
-
 				if ( field.isAnnotationPresent( InjectService.class ) ) {
 					field.setAccessible( true );
 
+					final Class<?> fieldType = field.getType( );
 					if ( !ServiceIfc.class.isAssignableFrom( fieldType ) ) {
 						throw new TechnicalException( "Type '" + fieldType + "' is not a service class." );
 					}
