@@ -185,17 +185,19 @@ public class GUIUtil {
 		final Field[] declaredViewFields = viewClass.getDeclaredFields( );
 		for ( final Field field : declaredViewFields ) {
 			// Inject only JavaFX based fields
-			if ( Node.class.isAssignableFrom( field.getType( ) ) ) {
-				field.setAccessible( true );
+			if ( field.isAnnotationPresent( InjectComponent.class ) ) {
+				if ( Node.class.isAssignableFrom( field.getType( ) ) ) {
+					field.setAccessible( true );
 
-				final String fieldName = "#" + field.getName( );
-				Object fieldValue = node.lookup( fieldName );
-				if ( fieldValue == null ) {
-					// In some cases (TitledPane in dialogs which are not visible yet), the lookup does not work.
-					// We correct this for the cases we know of.
-					fieldValue = lookup( node, fieldName );
+					final String fieldName = "#" + field.getName( );
+					Object fieldValue = node.lookup( fieldName );
+					if ( fieldValue == null ) {
+						// In some cases (TitledPane in dialogs which are not visible yet), the lookup does not work.
+						// We correct this for the cases we know of.
+						fieldValue = lookup( node, fieldName );
+					}
+					field.set( view, fieldValue );
 				}
-				field.set( view, fieldValue );
 			}
 		}
 
@@ -256,8 +258,7 @@ public class GUIUtil {
 						break;
 					}
 				}
-			}
-			else if ( aNode instanceof TitledPane ) {
+			} else if ( aNode instanceof TitledPane ) {
 				final TitledPane titledPane = (TitledPane) aNode;
 				final Node content = titledPane.getContent( );
 
