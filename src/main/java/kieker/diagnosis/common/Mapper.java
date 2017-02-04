@@ -42,20 +42,37 @@ public final class Mapper<I, O> extends HashMap<I, O> {
 		return new To( );
 	}
 
+	/**
+	 * This method tries to find a value for the given key.
+	 *
+	 * @param aKey
+	 *            The key whose value should be searched.
+	 *
+	 * @return The value for the given key. If the key is not mapped, the default value of the mapping is returned.
+	 */
 	public O resolve( final I aKey ) {
 		if ( containsKey( aKey ) ) {
 			return get( aKey );
-		}
-		else {
+		} else {
 			return ivDefaultValue;
 		}
 	}
 
+	/**
+	 * This method tries to find a corresponding key to the given value.
+	 *
+	 * @param aValue
+	 *            The value whose key should be searched.
+	 *
+	 * @return The first key which is mapped to the given value. If no such key exists, {@code null} is returned.
+	 */
 	public I invertedResolve( final O aValue ) {
 		return entrySet( ).parallelStream( ).filter( entry -> aValue.equals( entry.getValue( ) ) ).map( Map.Entry::getKey ).findFirst( ).orElse( null );
 	}
 
 	/**
+	 * This is an internal helper class for the fluent API.
+	 *
 	 * @author Nils Christian Ehmke
 	 */
 	public final class To {
@@ -76,8 +93,7 @@ public final class Mapper<I, O> extends HashMap<I, O> {
 		public void to( final O aValue ) {
 			if ( ivKeyAvailable ) {
 				put( ivKey, aValue );
-			}
-			else {
+			} else {
 				ivDefaultValue = aValue;
 			}
 		}

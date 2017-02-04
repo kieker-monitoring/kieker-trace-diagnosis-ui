@@ -44,6 +44,8 @@ import kieker.diagnosis.service.nameconverter.NameConverterService;
 import kieker.diagnosis.service.properties.PropertiesService;
 
 /**
+ * The controller for the aggregated calls.
+ *
  * @author Nils Christian Ehmke
  */
 public final class AggregatedCallsController extends AbstractController<AggregatedCallsView> implements AggregatedCallsControllerIfc {
@@ -82,7 +84,7 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 		final Object filterContent = getContext( ).get( ContextKey.FILTER_CONTENT );
 		if ( filterContent instanceof FilterContent ) {
 			loadFilterContent( (FilterContent) filterContent );
-			useFilter( );
+			performUseFilter( );
 		}
 
 		ivSelection.addListener( e -> updateDetailPanel( ) );
@@ -107,8 +109,7 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 			getView( ).getMeanDuration( ).setText( ivNameConverterService.toDurationString( call.getMeanDuration( ), sourceTimeUnit, targetTimeUnit ) );
 			getView( ).getCalls( ).setText( Integer.toString( call.getCalls( ) ) );
 			getView( ).getFailed( ).setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : "N/A" );
-		}
-		else {
+		} else {
 			getView( ).getContainer( ).setText( "N/A" );
 			getView( ).getComponent( ).setText( "N/A" );
 			getView( ).getOperation( ).setText( "N/A" );
@@ -123,19 +124,17 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 	}
 
 	@Override
-	public void selectCall( final InputEvent aEvent ) throws Exception {
+	public void performSelectCall( final InputEvent aEvent ) throws Exception {
 		final int clicked;
 		if ( aEvent instanceof MouseEvent ) {
 			clicked = ((MouseEvent) aEvent).getClickCount( );
-		}
-		else {
+		} else {
 			clicked = 1;
 		}
 
 		if ( clicked == 1 ) {
 			ivSelection.set( Optional.ofNullable( getView( ).getTable( ).getSelectionModel( ).getSelectedItem( ) ) );
-		}
-		else if ( clicked == 2 ) {
+		} else if ( clicked == 2 ) {
 			jumpToCalls( );
 		}
 	}
@@ -148,7 +147,7 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 	}
 
 	@Override
-	public void useFilter( ) {
+	public void performUseFilter( ) {
 		final Predicate<AggregatedOperationCall> predicate1 = FilterService.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
 				getView( ).getShowJustFailedButton( ), AggregatedOperationCall::isFailed );
 		final Predicate<AggregatedOperationCall> predicate2 = ivFilterService.useFilter( getView( ).getFilterContainer( ),
@@ -165,12 +164,12 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 	}
 
 	@Override
-	public void exportToCSV( ) throws IOException {
+	public void performExportToCSV( ) throws IOException {
 		ivMainController.exportToCSV( new AggregatedCallsCSVDataCollector( ) );
 	}
 
 	@Override
-	public void saveAsFavorite( ) {
+	public void performSaveAsFavorite( ) {
 		ivMainController.saveAsFavorite( saveFilterContent( ), AggregatedCallsController.class );
 	}
 

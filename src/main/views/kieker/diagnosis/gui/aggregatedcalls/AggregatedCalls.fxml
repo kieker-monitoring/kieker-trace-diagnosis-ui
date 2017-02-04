@@ -4,9 +4,7 @@
 <?import kieker.diagnosis.gui.components.table.*?>
 <?import javafx.scene.control.Hyperlink?>
 
-<GridPane xmlns:fx="http://javafx.com/fxml"
-	AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0"
-	AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+<GridPane xmlns:fx="http://javafx.com/fxml">
 
 	<vgap>10</vgap>
 
@@ -21,26 +19,26 @@
 					<ToggleGroup fx:id="togglegroup" />
 				</fx:define>
 		
-				<RadioButton text="%AggregatedCallsView.btnShowAll.text" fx:id="ivShowAllButton" selected="true" toggleGroup="$togglegroup" onAction="#useFilter" />
-				<RadioButton text="%showJustSuccessful" fx:id="ivShowJustSuccessful" toggleGroup="$togglegroup" onAction="#useFilter" />
-				<RadioButton text="%AggregatedCallsView.btnShowJustFailed.text" fx:id="ivShowJustFailedButton" toggleGroup="$togglegroup" onAction="#useFilter" />
+				<RadioButton text="%AggregatedCallsView.btnShowAll.text" fx:id="ivShowAllButton" selected="true" toggleGroup="$togglegroup" onAction="#performUseFilter" />
+				<RadioButton text="%showJustSuccessful" fx:id="ivShowJustSuccessful" toggleGroup="$togglegroup" onAction="#performUseFilter" />
+				<RadioButton text="%AggregatedCallsView.btnShowJustFailed.text" fx:id="ivShowJustFailedButton" toggleGroup="$togglegroup" onAction="#performUseFilter" />
 			</HBox>
 			
 			<GridPane GridPane.rowIndex="1">
 				<hgap>5</hgap>
 				
-				<TextField promptText="%filterContainer" onAction="#useFilter" fx:id="ivFilterContainer" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS"/>
-				<TextField promptText="%filterComponent" onAction="#useFilter" fx:id="ivFilterComponent" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
-				<TextField promptText="%filterOperation" onAction="#useFilter" fx:id="ivFilterOperation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
-				<TextField promptText="%filterException" onAction="#useFilter" fx:id="ivFilterException" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterContainer" onAction="#performUseFilter" fx:id="ivFilterContainer" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterComponent" onAction="#performUseFilter" fx:id="ivFilterComponent" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterOperation" onAction="#performUseFilter" fx:id="ivFilterOperation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterException" onAction="#performUseFilter" fx:id="ivFilterException" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
 				
-				<Hyperlink text="%saveAsFavorite" onAction="#saveAsFavorite" GridPane.rowIndex="1" GridPane.columnIndex="0"  />
+				<Hyperlink text="%saveAsFavorite" onAction="#performSaveAsFavorite" GridPane.rowIndex="1" GridPane.columnIndex="0"  />
 			</GridPane>
 		</VBox>
 	</TitledPane>
 	
 	<TableView fx:id="ivTable" GridPane.hgrow="ALWAYS"
-		GridPane.vgrow="ALWAYS" GridPane.rowIndex="1" tableMenuButtonVisible="true" onMouseClicked="#selectCall" onKeyReleased="#selectCall">
+		GridPane.vgrow="ALWAYS" GridPane.rowIndex="1" tableMenuButtonVisible="true" onMouseClicked="#performSelectCall" onKeyReleased="#performSelectCall">
 		
 		<rowFactory>
 			<FailedRowFactory/>
@@ -186,6 +184,6 @@
 	<HBox fx:id="statusbar" GridPane.rowIndex="3" GridPane.hgrow="ALWAYS">
 		<TextField text="%AggregatedCallsView.lblCounter.text" fx:id="ivCounter"
 			editable="false" HBox.hgrow="ALWAYS"/>
-		<Hyperlink text="%ExportToCSV" onAction="#exportToCSV" HBox.hgrow="ALWAYS"/>	
+		<Hyperlink text="%ExportToCSV" onAction="#performExportToCSV" HBox.hgrow="ALWAYS"/>	
 	</HBox>
 </GridPane>

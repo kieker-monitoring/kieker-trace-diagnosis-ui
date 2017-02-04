@@ -20,6 +20,8 @@ import kieker.diagnosis.gui.AbstractController;
 import kieker.diagnosis.gui.Context;
 
 /**
+ * The controller for the about dialog. The about dialog shows some information about the application.
+ *
  * @author Nils Christian Ehmke
  */
 public final class AboutDialogController extends AbstractController<AboutDialogView> implements AboutDialogControllerIfc {
@@ -33,7 +35,7 @@ public final class AboutDialogController extends AbstractController<AboutDialogV
 	}
 
 	@Override
-	public void closeDialog( ) {
+	public void performCloseDialog( ) {
 		getView( ).getStage( ).hide( );
 	}
 
