@@ -82,8 +82,8 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 		getView( ).getTable( ).setItems( sortedData );
 
 		final Object filterContent = getContext( ).get( ContextKey.FILTER_CONTENT );
-		if ( filterContent instanceof FilterContent ) {
-			loadFilterContent( (FilterContent) filterContent );
+		if ( filterContent instanceof AggregatedCallsFilterContent ) {
+			updateView( (AggregatedCallsFilterContent) filterContent );
 			performUseFilter( );
 		}
 
@@ -96,30 +96,9 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 	private void updateDetailPanel( ) {
 		if ( ivSelection.get( ).isPresent( ) ) {
 			final AggregatedOperationCall call = ivSelection.get( ).get( );
-			final TimeUnit sourceTimeUnit = ivDataService.getTimeUnit( );
-			final TimeUnit targetTimeUnit = ivPropertiesService.getTimeUnit( );
-
-			getView( ).getContainer( ).setText( call.getContainer( ) );
-			getView( ).getComponent( ).setText( call.getComponent( ) );
-			getView( ).getOperation( ).setText( call.getOperation( ) );
-			getView( ).getMinimalDuration( ).setText( ivNameConverterService.toDurationString( call.getMinDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			getView( ).getMaximalDuration( ).setText( ivNameConverterService.toDurationString( call.getMaxDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			getView( ).getMedianDuration( ).setText( ivNameConverterService.toDurationString( call.getMedianDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			getView( ).getTotalDuration( ).setText( ivNameConverterService.toDurationString( call.getTotalDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			getView( ).getMeanDuration( ).setText( ivNameConverterService.toDurationString( call.getMeanDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			getView( ).getCalls( ).setText( Integer.toString( call.getCalls( ) ) );
-			getView( ).getFailed( ).setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : "N/A" );
+			updateView( call );
 		} else {
-			getView( ).getContainer( ).setText( "N/A" );
-			getView( ).getComponent( ).setText( "N/A" );
-			getView( ).getOperation( ).setText( "N/A" );
-			getView( ).getMinimalDuration( ).setText( "N/A" );
-			getView( ).getMaximalDuration( ).setText( "N/A" );
-			getView( ).getMedianDuration( ).setText( "N/A" );
-			getView( ).getTotalDuration( ).setText( "N/A" );
-			getView( ).getMeanDuration( ).setText( "N/A" );
-			getView( ).getCalls( ).setText( "N/A" );
-			getView( ).getFailed( ).setText( "N/A" );
+			updateView( (AggregatedOperationCall) null );
 		}
 	}
 
@@ -148,7 +127,7 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 
 	@Override
 	public void performUseFilter( ) {
-		final Predicate<AggregatedOperationCall> predicate1 = FilterService.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
+		final Predicate<AggregatedOperationCall> predicate1 = ivFilterService.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
 				getView( ).getShowJustFailedButton( ), AggregatedOperationCall::isFailed );
 		final Predicate<AggregatedOperationCall> predicate2 = ivFilterService.useFilter( getView( ).getFilterContainer( ),
 				AggregatedOperationCall::getContainer );
@@ -170,24 +149,40 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 
 	@Override
 	public void performSaveAsFavorite( ) {
-		ivMainController.saveAsFavorite( saveFilterContent( ), AggregatedCallsController.class );
+		final AggregatedCallsFilterContent filterContent = saveView( new AggregatedCallsFilterContent( ) );
+		ivMainController.saveAsFavorite( filterContent, AggregatedCallsController.class );
 	}
 
-	private FilterContent saveFilterContent( ) {
-		final FilterContent filterContent = new FilterContent( );
+	private void updateView( final AggregatedOperationCall aCall ) {
+		if ( aCall != null ) {
+			final TimeUnit sourceTimeUnit = ivDataService.getTimeUnit( );
+			final TimeUnit targetTimeUnit = ivPropertiesService.getTimeUnit( );
 
-		filterContent.setFilterComponent( getView( ).getFilterComponent( ).getText( ) );
-		filterContent.setFilterContainer( getView( ).getFilterContainer( ).getText( ) );
-		filterContent.setFilterException( getView( ).getFilterException( ).getText( ) );
-		filterContent.setFilterOperation( getView( ).getFilterOperation( ).getText( ) );
-		filterContent.setShowAllButton( getView( ).getShowAllButton( ).isSelected( ) );
-		filterContent.setShowJustFailedButton( getView( ).getShowJustFailedButton( ).isSelected( ) );
-		filterContent.setShowJustSuccessful( getView( ).getShowJustSuccessful( ).isSelected( ) );
-
-		return filterContent;
+			getView( ).getContainer( ).setText( aCall.getContainer( ) );
+			getView( ).getComponent( ).setText( aCall.getComponent( ) );
+			getView( ).getOperation( ).setText( aCall.getOperation( ) );
+			getView( ).getMinimalDuration( ).setText( ivNameConverterService.toDurationString( aCall.getMinDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getMaximalDuration( ).setText( ivNameConverterService.toDurationString( aCall.getMaxDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getMedianDuration( ).setText( ivNameConverterService.toDurationString( aCall.getMedianDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getTotalDuration( ).setText( ivNameConverterService.toDurationString( aCall.getTotalDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getMeanDuration( ).setText( ivNameConverterService.toDurationString( aCall.getMeanDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getCalls( ).setText( Integer.toString( aCall.getCalls( ) ) );
+			getView( ).getFailed( ).setText( aCall.getFailedCause( ) != null ? aCall.getFailedCause( ) : "N/A" );
+		} else {
+			getView( ).getContainer( ).setText( "N/A" );
+			getView( ).getComponent( ).setText( "N/A" );
+			getView( ).getOperation( ).setText( "N/A" );
+			getView( ).getMinimalDuration( ).setText( "N/A" );
+			getView( ).getMaximalDuration( ).setText( "N/A" );
+			getView( ).getMedianDuration( ).setText( "N/A" );
+			getView( ).getTotalDuration( ).setText( "N/A" );
+			getView( ).getMeanDuration( ).setText( "N/A" );
+			getView( ).getCalls( ).setText( "N/A" );
+			getView( ).getFailed( ).setText( "N/A" );
+		}
 	}
 
-	private void loadFilterContent( final FilterContent aFilterContent ) {
+	private void updateView( final AggregatedCallsFilterContent aFilterContent ) {
 		getView( ).getFilterComponent( ).setText( aFilterContent.getFilterComponent( ) );
 		getView( ).getFilterContainer( ).setText( aFilterContent.getFilterContainer( ) );
 		getView( ).getFilterException( ).setText( aFilterContent.getFilterException( ) );
@@ -197,73 +192,16 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 		getView( ).getShowJustSuccessful( ).setSelected( aFilterContent.isShowJustSuccessful( ) );
 	}
 
-	private class FilterContent {
+	private AggregatedCallsFilterContent saveView( final AggregatedCallsFilterContent aFilterContent ) {
+		aFilterContent.setFilterComponent( getView( ).getFilterComponent( ).getText( ) );
+		aFilterContent.setFilterContainer( getView( ).getFilterContainer( ).getText( ) );
+		aFilterContent.setFilterException( getView( ).getFilterException( ).getText( ) );
+		aFilterContent.setFilterOperation( getView( ).getFilterOperation( ).getText( ) );
+		aFilterContent.setShowAllButton( getView( ).getShowAllButton( ).isSelected( ) );
+		aFilterContent.setShowJustFailedButton( getView( ).getShowJustFailedButton( ).isSelected( ) );
+		aFilterContent.setShowJustSuccessful( getView( ).getShowJustSuccessful( ).isSelected( ) );
 
-		private boolean ivShowAllButton;
-		private boolean ivShowJustSuccessful;
-		private boolean ivShowJustFailedButton;
-
-		private String ivFilterContainer;
-		private String ivFilterComponent;
-		private String ivFilterOperation;
-		private String ivFilterException;
-
-		public boolean isShowAllButton( ) {
-			return ivShowAllButton;
-		}
-
-		public void setShowAllButton( final boolean showAllButton ) {
-			ivShowAllButton = showAllButton;
-		}
-
-		public boolean isShowJustSuccessful( ) {
-			return ivShowJustSuccessful;
-		}
-
-		public void setShowJustSuccessful( final boolean showJustSuccessful ) {
-			ivShowJustSuccessful = showJustSuccessful;
-		}
-
-		public boolean isShowJustFailedButton( ) {
-			return ivShowJustFailedButton;
-		}
-
-		public void setShowJustFailedButton( final boolean showJustFailedButton ) {
-			ivShowJustFailedButton = showJustFailedButton;
-		}
-
-		public String getFilterContainer( ) {
-			return ivFilterContainer;
-		}
-
-		public void setFilterContainer( final String filterContainer ) {
-			ivFilterContainer = filterContainer;
-		}
-
-		public String getFilterComponent( ) {
-			return ivFilterComponent;
-		}
-
-		public void setFilterComponent( final String filterComponent ) {
-			ivFilterComponent = filterComponent;
-		}
-
-		public String getFilterOperation( ) {
-			return ivFilterOperation;
-		}
-
-		public void setFilterOperation( final String filterOperation ) {
-			ivFilterOperation = filterOperation;
-		}
-
-		public String getFilterException( ) {
-			return ivFilterException;
-		}
-
-		public void setFilterException( final String filterException ) {
-			ivFilterException = filterException;
-		}
-
+		return aFilterContent;
 	}
 
 	private final class AggregatedCallsCSVDataCollector implements CSVDataCollector {

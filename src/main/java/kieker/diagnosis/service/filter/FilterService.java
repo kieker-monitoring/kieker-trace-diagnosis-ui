@@ -46,19 +46,16 @@ public final class FilterService implements ServiceIfc {
 
 		if ( (text == null) || text.isEmpty( ) ) {
 			return (x -> true);
-		}
-		else {
+		} else {
 			final boolean regularExpressionsActive = ivPropertiesService.isRegularExpressionsActive( );
 			if ( regularExpressionsActive ) {
 				checkRegularExpression( text );
 				return (x -> aFunction.apply( x ).matches( text ));
-			}
-			else {
+			} else {
 				final boolean caseSensitivityActive = ivPropertiesService.isCaseSensitivityActive( );
 				if ( caseSensitivityActive ) {
 					return (x -> aFunction.apply( x ).contains( text ));
-				}
-				else {
+				} else {
 					return (x -> aFunction.apply( x ).toLowerCase( ).contains( text.toLowerCase( ) ));
 				}
 			}
@@ -73,8 +70,7 @@ public final class FilterService implements ServiceIfc {
 			return x -> {
 				return checkRecursive( x, filter );
 			};
-		}
-		else {
+		} else {
 			return filter;
 		}
 	}
@@ -82,8 +78,7 @@ public final class FilterService implements ServiceIfc {
 	private <T extends AbstractOperationCall<T>> boolean checkRecursive( final T aElement, final Predicate<T> aPredicate ) {
 		if ( aPredicate.test( aElement ) ) {
 			return true;
-		}
-		else {
+		} else {
 			for ( final T child : aElement.getChildren( ) ) {
 				if ( checkRecursive( child, aPredicate ) ) {
 					return true;
@@ -115,8 +110,7 @@ public final class FilterService implements ServiceIfc {
 			final LocalDate localDate = LocalDate.from( zonedDateTime );
 			if ( aFilterBefore ) {
 				return value.isBefore( localDate ) || value.isEqual( localDate );
-			}
-			else {
+			} else {
 				return value.isAfter( localDate ) || value.isEqual( localDate );
 			}
 		};
@@ -132,8 +126,7 @@ public final class FilterService implements ServiceIfc {
 			return x -> {
 				return checkRecursive( x, filter );
 			};
-		}
-		else {
+		} else {
 			return filter;
 		}
 	}
@@ -146,8 +139,7 @@ public final class FilterService implements ServiceIfc {
 			return x -> {
 				return checkRecursive( x, filter );
 			};
-		}
-		else {
+		} else {
 			return filter;
 		}
 	}
@@ -183,8 +175,7 @@ public final class FilterService implements ServiceIfc {
 					return false;
 				}
 				return true;
-			}
-			else {
+			} else {
 				if ( hour2 > hour1 ) {
 					return true;
 				}
@@ -204,8 +195,8 @@ public final class FilterService implements ServiceIfc {
 		return result;
 	}
 
-	public static <T> Predicate<T> useFilter( final RadioButton aShowAllButton, final RadioButton aShowJustSuccessfulButton,
-			final RadioButton aShowJustFailedButton, final Function<T, Boolean> aIsFailedFunction ) {
+	public <T> Predicate<T> useFilter( final RadioButton aShowAllButton, final RadioButton aShowJustSuccessfulButton, final RadioButton aShowJustFailedButton,
+			final Function<T, Boolean> aIsFailedFunction ) {
 		if ( aShowAllButton.isSelected( ) ) {
 			return (x -> true);
 		}

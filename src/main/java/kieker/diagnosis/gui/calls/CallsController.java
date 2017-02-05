@@ -117,8 +117,7 @@ public final class CallsController extends AbstractController<CallsView> impleme
 
 		if ( aCall.getFailedCause( ) != null ) {
 			getView( ).getFilterException( ).setText( aCall.getFailedCause( ) );
-		}
-		else {
+		} else {
 			getView( ).getShowJustSuccessful( ).setSelected( true );
 		}
 
@@ -139,8 +138,7 @@ public final class CallsController extends AbstractController<CallsView> impleme
 			getView( ).getDuration( ).setText( ivNameConverterService.toDurationString( call.getDuration( ), sourceTimeUnit, targetTimeUnit ) );
 			getView( ).getTraceID( ).setText( Long.toString( call.getTraceID( ) ) );
 			getView( ).getFailed( ).setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : "N/A" );
-		}
-		else {
+		} else {
 			getView( ).getContainer( ).setText( "N/A" );
 			getView( ).getComponent( ).setText( "N/A" );
 			getView( ).getOperation( ).setText( "N/A" );
@@ -156,15 +154,13 @@ public final class CallsController extends AbstractController<CallsView> impleme
 		final int clicked;
 		if ( aEvent instanceof MouseEvent ) {
 			clicked = ((MouseEvent) aEvent).getClickCount( );
-		}
-		else {
+		} else {
 			clicked = 1;
 		}
 
 		if ( clicked == 1 ) {
 			ivSelection.set( Optional.ofNullable( getView( ).getTable( ).getSelectionModel( ).getSelectedItem( ) ) );
-		}
-		else if ( clicked == 2 ) {
+		} else if ( clicked == 2 ) {
 			jumpToTrace( );
 		}
 	}
@@ -178,7 +174,7 @@ public final class CallsController extends AbstractController<CallsView> impleme
 
 	@Override
 	public void useFilter( ) {
-		final Predicate<OperationCall> predicate1 = FilterService.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
+		final Predicate<OperationCall> predicate1 = ivFilterService.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
 				getView( ).getShowJustFailedButton( ), OperationCall::isFailed );
 		final Predicate<OperationCall> predicate2 = ivFilterService.useFilter( getView( ).getFilterContainer( ), OperationCall::getContainer );
 		final Predicate<OperationCall> predicate3 = ivFilterService.useFilter( getView( ).getFilterComponent( ), OperationCall::getComponent );
