@@ -38,7 +38,6 @@ public final class PropertiesService implements ServiceIfc {
 	private static final String KEY_TIMEUNIT = "timeunit";
 	private static final String KEY_OPERATIONS = "operations";
 	private static final String KEY_COMPONENTS = "components";
-	private static final String KEY_GRAPHVIZ_PATH = "graphvizpath";
 	private static final String KEY_ADDITIONAL_LOG_CHECKS = "additionalLogChecks";
 	private static final String KEY_REGULAR_EXPRESSIONS = "regularExpressions";
 	private static final String KEY_METHOD_CALL_AGGREGATION = "methodCallAggregationActive";
@@ -52,7 +51,6 @@ public final class PropertiesService implements ServiceIfc {
 	private static final String KEY_GITLAB_URL = "GitLabURL";
 	private static final String KEY_TRAC_URL = "TracURL";
 
-	private String ivGraphvizPath;
 	private TimeUnit ivTimeUnit;
 	private ComponentNames ivComponentNames;
 	private OperationNames ivOperationNames;
@@ -77,7 +75,6 @@ public final class PropertiesService implements ServiceIfc {
 	private void loadSettings( ) {
 		final Preferences preferences = Preferences.userNodeForPackage( PropertiesService.class );
 
-		ivGraphvizPath = preferences.get( PropertiesService.KEY_GRAPHVIZ_PATH, "." );
 		ivTimeUnit = TimeUnit.valueOf( preferences.get( PropertiesService.KEY_TIMEUNIT, TimeUnit.NANOSECONDS.name( ) ) );
 		ivComponentNames = ComponentNames.valueOf( preferences.get( PropertiesService.KEY_COMPONENTS, ComponentNames.LONG.name( ) ) );
 		ivOperationNames = OperationNames.valueOf( preferences.get( PropertiesService.KEY_OPERATIONS, OperationNames.SHORT.name( ) ) );
@@ -97,8 +94,7 @@ public final class PropertiesService implements ServiceIfc {
 			properties.load( inputStream );
 			ivGitLabURL = properties.getProperty( PropertiesService.KEY_GITLAB_URL );
 			ivTracURL = properties.getProperty( PropertiesService.KEY_TRAC_URL );
-		}
-		catch ( final IOException e ) {
+		} catch ( final IOException e ) {
 			PropertiesService.LOGGER.error( e );
 		}
 	}
@@ -106,7 +102,6 @@ public final class PropertiesService implements ServiceIfc {
 	private void saveSettings( ) {
 		final Preferences preferences = Preferences.userNodeForPackage( PropertiesService.class );
 
-		preferences.put( PropertiesService.KEY_GRAPHVIZ_PATH, ivGraphvizPath );
 		preferences.put( PropertiesService.KEY_TIMEUNIT, ivTimeUnit.name( ) );
 		preferences.put( PropertiesService.KEY_COMPONENTS, ivComponentNames.name( ) );
 		preferences.put( PropertiesService.KEY_OPERATIONS, ivOperationNames.name( ) );
@@ -122,21 +117,11 @@ public final class PropertiesService implements ServiceIfc {
 
 		try {
 			preferences.flush( );
-		}
-		catch ( final BackingStoreException e ) {
+		} catch ( final BackingStoreException e ) {
 			PropertiesService.LOGGER.error( e );
 		}
 
 		ivVersion++;
-	}
-
-	public String getGraphvizPath( ) {
-		return ivGraphvizPath;
-	}
-
-	public void setGraphvizPath( final String aGraphvizPath ) {
-		ivGraphvizPath = aGraphvizPath;
-		saveSettings( );
 	}
 
 	public TimeUnit getTimeUnit( ) {
