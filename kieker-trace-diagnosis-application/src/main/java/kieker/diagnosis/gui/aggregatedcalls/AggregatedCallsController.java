@@ -42,6 +42,7 @@ import kieker.diagnosis.service.export.CSVDataCollector;
 import kieker.diagnosis.service.filter.FilterService;
 import kieker.diagnosis.service.nameconverter.NameConverterService;
 import kieker.diagnosis.service.properties.PropertiesService;
+import kieker.diagnosis.service.properties.TimeUnitProperty;
 
 /**
  * The controller for the aggregated calls.
@@ -157,7 +158,7 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 		final String notAvailable = getView( ).getResourceBundle( ).getString( "notAvailable" );
 		if ( aCall != null ) {
 			final TimeUnit sourceTimeUnit = ivDataService.getTimeUnit( );
-			final TimeUnit targetTimeUnit = ivPropertiesService.getTimeUnit( );
+			final TimeUnit targetTimeUnit = ivPropertiesService.loadProperty( TimeUnitProperty.class );
 
 			getView( ).getContainer( ).setText( aCall.getContainer( ) );
 			getView( ).getComponent( ).setText( aCall.getComponent( ) );

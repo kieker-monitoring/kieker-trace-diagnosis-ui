@@ -14,25 +14,33 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.gui.components.converter;
+package kieker.diagnosis.service.properties;
 
-import java.util.ResourceBundle;
-
-import kieker.diagnosis.common.Mapper;
-import kieker.diagnosis.service.properties.TimestampTypes;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Nils Christian Ehmke
  */
-public final class TimestampTypesStringConverter extends AbstractStringConverter<TimestampTypes> {
+public class TimeUnitProperty implements ApplicationProperty<TimeUnit> {
 
 	@Override
-	protected void fillMapper( final Mapper<TimestampTypes, String> aMapper, final ResourceBundle aResourceBundle ) {
-		aMapper.map( TimestampTypes.TIMESTAMP ).to( "1418993603113900610" );
-		aMapper.map( TimestampTypes.DATE ).to( "19.12.14" );
-		aMapper.map( TimestampTypes.SHORT_TIME ).to( "13:53" );
-		aMapper.map( TimestampTypes.LONG_TIME ).to( "13:53:23" );
-		aMapper.map( TimestampTypes.DATE_AND_TIME ).to( "19.12.2014 13:53:23" );
+	public String getDefaultValue( ) {
+		return serialize( TimeUnit.NANOSECONDS );
+	}
+
+	@Override
+	public String getKey( ) {
+		return "timeunit";
+	}
+
+	@Override
+	public String serialize( final TimeUnit aValue ) {
+		return aValue.name( );
+	}
+
+	@Override
+	public TimeUnit deserialize( final String aString ) {
+		return TimeUnit.valueOf( aString );
 	}
 
 }

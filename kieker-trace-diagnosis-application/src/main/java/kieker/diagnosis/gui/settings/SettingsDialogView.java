@@ -25,10 +25,10 @@ import javafx.scene.control.ComboBox;
 import javafx.stage.Window;
 import kieker.diagnosis.gui.AbstractView;
 import kieker.diagnosis.gui.InjectComponent;
-import kieker.diagnosis.service.properties.PropertiesService.ComponentNames;
-import kieker.diagnosis.service.properties.PropertiesService.OperationNames;
-import kieker.diagnosis.service.properties.PropertiesService.Threshold;
-import kieker.diagnosis.service.properties.PropertiesService.TimestampTypes;
+import kieker.diagnosis.service.properties.ComponentNames;
+import kieker.diagnosis.service.properties.OperationNames;
+import kieker.diagnosis.service.properties.Threshold;
+import kieker.diagnosis.service.properties.TimestampTypes;
 
 /**
  * @author Nils Christian Ehmke

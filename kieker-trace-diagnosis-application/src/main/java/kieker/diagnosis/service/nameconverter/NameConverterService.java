@@ -27,7 +27,8 @@ import kieker.diagnosis.common.Mapper;
 import kieker.diagnosis.service.InjectService;
 import kieker.diagnosis.service.ServiceIfc;
 import kieker.diagnosis.service.properties.PropertiesService;
-import kieker.diagnosis.service.properties.PropertiesService.TimestampTypes;
+import kieker.diagnosis.service.properties.TimestampProperty;
+import kieker.diagnosis.service.properties.TimestampTypes;
 
 /**
  * @author Nils Christian Ehmke
@@ -75,7 +76,7 @@ public final class NameConverterService implements ServiceIfc {
 	}
 
 	public String toTimestampString( final long aTimestamp, final TimeUnit aSourceUnit ) {
-		final TimestampTypes timestampType = ivPropertiesService.getTimestampType( );
+		final TimestampTypes timestampType = ivPropertiesService.loadProperty( TimestampProperty.class );
 		if ( timestampType == TimestampTypes.TIMESTAMP ) {
 			return Long.toString( aTimestamp );
 		}

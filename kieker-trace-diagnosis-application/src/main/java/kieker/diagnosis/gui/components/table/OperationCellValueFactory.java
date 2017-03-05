@@ -31,8 +31,9 @@ import javafx.util.Callback;
 import kieker.diagnosis.gui.components.treetable.DurationTreeCellValueFactory;
 import kieker.diagnosis.service.ServiceUtil;
 import kieker.diagnosis.service.nameconverter.NameConverterService;
+import kieker.diagnosis.service.properties.OperationNames;
+import kieker.diagnosis.service.properties.OperationNamesProperty;
 import kieker.diagnosis.service.properties.PropertiesService;
-import kieker.diagnosis.service.properties.PropertiesService.OperationNames;
 
 /**
  * @author Nils Christian Ehmke
@@ -56,7 +57,7 @@ public final class OperationCellValueFactory implements Callback<CellDataFeature
 			final Method getter = aCall.getValue( ).getClass( ).getMethod( "get" + ivProperty, new Class<?>[0] );
 			String operationName = (String) getter.invoke( aCall.getValue( ), new Object[0] );
 
-			if ( ivPropertiesService.getOperationNames( ) == OperationNames.SHORT ) {
+			if ( ivPropertiesService.loadProperty( OperationNamesProperty.class ) == OperationNames.SHORT ) {
 				operationName = ivNameConverterService.toShortOperationName( operationName );
 			}
 

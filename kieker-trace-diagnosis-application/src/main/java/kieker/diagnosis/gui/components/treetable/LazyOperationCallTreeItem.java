@@ -26,7 +26,11 @@ import java.util.stream.Collectors;
 import javafx.scene.control.TreeItem;
 import kieker.diagnosis.service.ServiceUtil;
 import kieker.diagnosis.service.data.domain.OperationCall;
+import kieker.diagnosis.service.properties.MethodCallAggregationProperty;
+import kieker.diagnosis.service.properties.PercentCalculationProperty;
 import kieker.diagnosis.service.properties.PropertiesService;
+import kieker.diagnosis.service.properties.ShowUnmonitoredTimeProperty;
+import kieker.diagnosis.service.properties.ThresholdProperty;
 
 /**
  * @author Nils Christian Ehmke
@@ -54,8 +58,8 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 	protected void initializeChildren( ) {
 		final List<TreeItem<OperationCall>> result = new ArrayList<>( );
 
-		if ( ivPropertiesService.isShowUnmonitoredTime( ) ) {
-			double percent = ivPropertiesService.isPercentageCalculationActive( ) ? getValue( ).getPercent( ) : 100.0;
+		if ( ivPropertiesService.loadProperty( ShowUnmonitoredTimeProperty.class ) ) {
+			double percent = ivPropertiesService.loadProperty( PercentCalculationProperty.class ) ? getValue( ).getPercent( ) : 100.0;
 			long duration = getValue( ).getDuration( );
 			for ( final OperationCall child : getValue( ).getChildren( ) ) {
 				percent -= child.getPercent( );
@@ -68,8 +72,8 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 			result.add( new LazyOperationCallTreeItem( call ) );
 		}
 
-		if ( ivPropertiesService.isMethodCallAggregationActive( ) ) {
-			final float threshold = ivPropertiesService.getThreshold( ).getPercent( );
+		if ( ivPropertiesService.loadProperty( MethodCallAggregationProperty.class ) ) {
+			final float threshold = ivPropertiesService.loadProperty( ThresholdProperty.class ).getPercent( );
 			final List<OperationCall> underThreshold = new ArrayList<>( );
 			for ( final OperationCall child : getValue( ).getChildren( ) ) {
 				if ( child.getPercent( ) < threshold ) {

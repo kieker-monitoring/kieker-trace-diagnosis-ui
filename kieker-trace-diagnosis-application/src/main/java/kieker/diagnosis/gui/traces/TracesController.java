@@ -39,6 +39,8 @@ import kieker.diagnosis.service.data.domain.Trace;
 import kieker.diagnosis.service.filter.FilterService;
 import kieker.diagnosis.service.nameconverter.NameConverterService;
 import kieker.diagnosis.service.properties.PropertiesService;
+import kieker.diagnosis.service.properties.SearchInEntireTraceProperty;
+import kieker.diagnosis.service.properties.TimeUnitProperty;
 
 /**
  * The sub-controller responsible for the sub-view presenting the available traces.
@@ -144,7 +146,7 @@ public final class TracesController extends AbstractController<TracesView> imple
 		if ( ivSelection.get( ).isPresent( ) ) {
 			final OperationCall call = ivSelection.get( ).get( );
 			final TimeUnit sourceTimeUnit = ivDataService.getTimeUnit( );
-			final TimeUnit targetTimeUnit = ivPropertiesService.getTimeUnit( );
+			final TimeUnit targetTimeUnit = ivPropertiesService.loadProperty( TimeUnitProperty.class );
 
 			getView( ).getContainer( ).setText( call.getContainer( ) );
 			getView( ).getComponent( ).setText( call.getComponent( ) );
@@ -179,27 +181,29 @@ public final class TracesController extends AbstractController<TracesView> imple
 
 	@Override
 	public void useFilter( ) {
+		final boolean searchInEntireTrace = ivPropertiesService.loadPrimitiveProperty( SearchInEntireTraceProperty.class );
+
 		final Predicate<OperationCall> predicate1 = FilterService.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
 				getView( ).getShowJustFailedButton( ), getView( ).getShowJustFailureContainingButton( ), OperationCall::isFailed,
 				OperationCall::containsFailure );
 		final Predicate<OperationCall> predicate2 = ivFilterService.useFilter( getView( ).getFilterContainer( ), OperationCall::getContainer,
-				ivPropertiesService.isSearchInEntireTrace( ) );
+				searchInEntireTrace );
 		final Predicate<OperationCall> predicate3 = ivFilterService.useFilter( getView( ).getFilterComponent( ), OperationCall::getComponent,
-				ivPropertiesService.isSearchInEntireTrace( ) );
+				searchInEntireTrace );
 		final Predicate<OperationCall> predicate4 = ivFilterService.useFilter( getView( ).getFilterOperation( ), OperationCall::getOperation,
-				ivPropertiesService.isSearchInEntireTrace( ) );
+				searchInEntireTrace );
 		final Predicate<OperationCall> predicate5 = ivFilterService.useFilter( getView( ).getFilterTraceID( ), call -> Long.toString( call.getTraceID( ) ),
-				ivPropertiesService.isSearchInEntireTrace( ) );
+				searchInEntireTrace );
 		final Predicate<OperationCall> predicate6 = ivFilterService.useFilter( getView( ).getFilterLowerDate( ), OperationCall::getTimestamp, true,
-				ivPropertiesService.isSearchInEntireTrace( ) );
+				searchInEntireTrace );
 		final Predicate<OperationCall> predicate7 = ivFilterService.useFilter( getView( ).getFilterUpperDate( ), OperationCall::getTimestamp, false,
-				ivPropertiesService.isSearchInEntireTrace( ) );
+				searchInEntireTrace );
 		final Predicate<OperationCall> predicate8 = ivFilterService.useFilter( getView( ).getFilterLowerTime( ), OperationCall::getTimestamp, true,
-				ivPropertiesService.isSearchInEntireTrace( ) );
+				searchInEntireTrace );
 		final Predicate<OperationCall> predicate9 = ivFilterService.useFilter( getView( ).getFilterUpperTime( ), OperationCall::getTimestamp, false,
-				ivPropertiesService.isSearchInEntireTrace( ) );
+				searchInEntireTrace );
 		final Predicate<OperationCall> predicate10 = ivFilterService.useFilter( getView( ).getFilterException( ),
-				call -> call.isFailed( ) ? call.getFailedCause( ) : "", ivPropertiesService.isSearchInEntireTrace( ) );
+				call -> call.isFailed( ) ? call.getFailedCause( ) : "", searchInEntireTrace );
 
 		ivPredicate = predicate1.and( predicate2 ).and( predicate3 ).and( predicate4 ).and( predicate5 ).and( predicate6 ).and( predicate7 ).and( predicate8 )
 				.and( predicate9 ).and( predicate10 );

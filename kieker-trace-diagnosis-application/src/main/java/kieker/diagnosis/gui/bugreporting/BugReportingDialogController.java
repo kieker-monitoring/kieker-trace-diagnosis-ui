@@ -24,7 +24,9 @@ import java.net.URISyntaxException;
 import kieker.diagnosis.gui.AbstractController;
 import kieker.diagnosis.gui.Context;
 import kieker.diagnosis.service.InjectService;
+import kieker.diagnosis.service.properties.GitLabURLProperty;
 import kieker.diagnosis.service.properties.PropertiesService;
+import kieker.diagnosis.service.properties.TracURLProperty;
 
 /**
  * @author Nils Christian Ehmke
@@ -45,14 +47,14 @@ public final class BugReportingDialogController extends AbstractController<BugRe
 
 	@Override
 	public void visitGitLab( ) throws IOException, URISyntaxException {
-		final String gitLabURL = ivPropertiesService.getGitLabURL( );
+		final String gitLabURL = ivPropertiesService.loadSystemProperty( GitLabURLProperty.class );
 		final Desktop desktop = Desktop.getDesktop( );
 		desktop.browse( new URI( gitLabURL ) );
 	}
 
 	@Override
 	public void visitTrac( ) throws IOException, URISyntaxException {
-		final String tracURL = ivPropertiesService.getTracURL( );
+		final String tracURL = ivPropertiesService.loadSystemProperty( TracURLProperty.class );
 		final Desktop desktop = Desktop.getDesktop( );
 		desktop.browse( new URI( tracURL ) );
 	}

@@ -45,6 +45,7 @@ import kieker.diagnosis.service.export.CSVDataCollector;
 import kieker.diagnosis.service.filter.FilterService;
 import kieker.diagnosis.service.nameconverter.NameConverterService;
 import kieker.diagnosis.service.properties.PropertiesService;
+import kieker.diagnosis.service.properties.TimeUnitProperty;
 
 /**
  * @author Nils Christian Ehmke
@@ -129,7 +130,7 @@ public final class CallsController extends AbstractController<CallsView> impleme
 		if ( ivSelection.get( ).isPresent( ) ) {
 			final OperationCall call = ivSelection.get( ).get( );
 			final TimeUnit sourceTimeUnit = ivDataService.getTimeUnit( );
-			final TimeUnit targetTimeUnit = ivPropertiesService.getTimeUnit( );
+			final TimeUnit targetTimeUnit = ivPropertiesService.loadProperty( TimeUnitProperty.class );
 
 			getView( ).getContainer( ).setText( call.getContainer( ) );
 			getView( ).getComponent( ).setText( call.getComponent( ) );

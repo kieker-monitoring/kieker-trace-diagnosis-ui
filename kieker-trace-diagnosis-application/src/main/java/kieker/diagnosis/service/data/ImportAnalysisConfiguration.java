@@ -33,6 +33,7 @@ import kieker.diagnosis.service.data.stages.OperationCallHandlerComposite;
 import kieker.diagnosis.service.data.stages.ReadingComposite;
 import kieker.diagnosis.service.data.stages.TraceAggregationComposite;
 import kieker.diagnosis.service.data.stages.TraceReconstructionComposite;
+import kieker.diagnosis.service.properties.AdditionalLogChecksProperty;
 import kieker.diagnosis.service.properties.PropertiesService;
 import teetime.framework.Configuration;
 import teetime.stage.CollectorSink;
@@ -70,7 +71,7 @@ public final class ImportAnalysisConfiguration extends Configuration {
 
 		ivAllowedRecordsFilter = new AllowedRecordsFilter( );
 		ivBeginEndOfMonitoringDetector = new BeginEndOfMonitoringDetector( );
-		ivReconstruction = new TraceReconstructionComposite( ivTraces, ivPropertiesService.isAdditionalLogChecksActive( ) );
+		ivReconstruction = new TraceReconstructionComposite( ivTraces, ivPropertiesService.loadPrimitiveProperty( AdditionalLogChecksProperty.class ) );
 
 		// Connect the stages
 		connectPorts( reader.getOutputPort( ), ivAllowedRecordsFilter.getInputPort( ) );

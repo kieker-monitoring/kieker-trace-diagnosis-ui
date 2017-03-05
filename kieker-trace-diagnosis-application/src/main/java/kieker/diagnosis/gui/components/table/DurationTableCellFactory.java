@@ -19,6 +19,7 @@ package kieker.diagnosis.gui.components.table;
 import kieker.diagnosis.service.ServiceUtil;
 import kieker.diagnosis.service.nameconverter.NameConverterService;
 import kieker.diagnosis.service.properties.PropertiesService;
+import kieker.diagnosis.service.properties.TimeUnitProperty;
 
 /**
  * @author Nils Christian Ehmke
@@ -35,7 +36,7 @@ public final class DurationTableCellFactory<S, T> extends AbstractTableCellFacto
 
 	@Override
 	protected String getItemLabel( final T aItem ) {
-		return ( aItem.toString( ) + " " + ivNameConverterService.toShortTimeUnit( ivPropertiesService.getTimeUnit( ) ) );
+		return ( aItem.toString( ) + " " + ivNameConverterService.toShortTimeUnit( ivPropertiesService.loadProperty( TimeUnitProperty.class ) ) );
 	}
 
 }

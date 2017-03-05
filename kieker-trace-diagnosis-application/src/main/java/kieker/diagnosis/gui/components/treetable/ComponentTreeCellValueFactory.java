@@ -31,8 +31,9 @@ import javafx.scene.control.TreeTableColumn.CellDataFeatures;
 import javafx.util.Callback;
 import kieker.diagnosis.service.ServiceUtil;
 import kieker.diagnosis.service.nameconverter.NameConverterService;
+import kieker.diagnosis.service.properties.ComponentNames;
+import kieker.diagnosis.service.properties.ComponentNamesProperty;
 import kieker.diagnosis.service.properties.PropertiesService;
-import kieker.diagnosis.service.properties.PropertiesService.ComponentNames;
 
 /**
  * @author Nils Christian Ehmke
@@ -57,7 +58,7 @@ public final class ComponentTreeCellValueFactory implements Callback<CellDataFea
 			final Method getter = item.getValue( ).getClass( ).getMethod( "get" + ivProperty, new Class<?>[0] );
 			String componentName = (String) getter.invoke( item.getValue( ), new Object[0] );
 
-			if ( ivPropertiesService.getComponentNames( ) == ComponentNames.SHORT ) {
+			if ( ivPropertiesService.loadProperty( ComponentNamesProperty.class ) == ComponentNames.SHORT ) {
 				componentName = ivNameConverterService.toShortComponentName( componentName );
 			}
 

@@ -19,7 +19,7 @@ package kieker.diagnosis.gui.components.converter;
 import java.util.ResourceBundle;
 
 import kieker.diagnosis.common.Mapper;
-import kieker.diagnosis.service.properties.PropertiesService.ComponentNames;
+import kieker.diagnosis.service.properties.ComponentNames;
 
 /**
  * @author Nils Christian Ehmke

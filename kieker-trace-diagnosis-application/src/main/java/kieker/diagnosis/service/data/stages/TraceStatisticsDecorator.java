@@ -19,6 +19,7 @@ package kieker.diagnosis.service.data.stages;
 import kieker.diagnosis.service.ServiceUtil;
 import kieker.diagnosis.service.data.domain.OperationCall;
 import kieker.diagnosis.service.data.domain.Trace;
+import kieker.diagnosis.service.properties.PercentCalculationProperty;
 import kieker.diagnosis.service.properties.PropertiesService;
 import teetime.stage.basic.AbstractTransformation;
 
@@ -77,7 +78,7 @@ public final class TraceStatisticsDecorator extends AbstractTransformation<Trace
 		if ( aCall.getParent( ) == null ) {
 			aCall.setPercent( 100.0f );
 		} else {
-			final boolean percentCalculationsRefersToTopMost = ivPropertiesService.isPercentageCalculationActive( );
+			final boolean percentCalculationsRefersToTopMost = ivPropertiesService.loadPrimitiveProperty( PercentCalculationProperty.class );
 			if ( percentCalculationsRefersToTopMost ) {
 				aCall.setPercent( ( 100.0f * aCall.getDuration( ) ) / aRootDuration );
 			} else {

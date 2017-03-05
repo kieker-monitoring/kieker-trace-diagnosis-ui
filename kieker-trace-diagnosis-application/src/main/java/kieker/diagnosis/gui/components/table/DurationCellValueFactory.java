@@ -32,6 +32,7 @@ import javafx.util.Callback;
 import kieker.diagnosis.service.ServiceUtil;
 import kieker.diagnosis.service.data.DataService;
 import kieker.diagnosis.service.properties.PropertiesService;
+import kieker.diagnosis.service.properties.TimeUnitProperty;
 
 /**
  * @author Nils Christian Ehmke
@@ -53,7 +54,7 @@ public final class DurationCellValueFactory implements Callback<CellDataFeatures
 	public ObservableValue<Long> call( final CellDataFeatures<?, String> aCall ) {
 		try {
 			final TimeUnit srcTimeUnit = ivDataService.getTimeUnit( );
-			final TimeUnit dstTimeUnit = ivPropertiesService.getTimeUnit( );
+			final TimeUnit dstTimeUnit = ivPropertiesService.loadProperty( TimeUnitProperty.class );
 
 			final Method getter = aCall.getValue( ).getClass( ).getMethod( "get" + ivProperty, new Class<?>[0] );
 			final long duration = (long) getter.invoke( aCall.getValue( ), new Object[0] );

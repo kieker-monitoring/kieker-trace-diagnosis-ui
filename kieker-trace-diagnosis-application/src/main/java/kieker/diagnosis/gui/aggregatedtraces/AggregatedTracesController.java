@@ -37,6 +37,8 @@ import kieker.diagnosis.service.data.domain.AggregatedTrace;
 import kieker.diagnosis.service.filter.FilterService;
 import kieker.diagnosis.service.nameconverter.NameConverterService;
 import kieker.diagnosis.service.properties.PropertiesService;
+import kieker.diagnosis.service.properties.SearchInEntireTraceProperty;
+import kieker.diagnosis.service.properties.TimeUnitProperty;
 
 /**
  * @author Nils Christian Ehmke
@@ -86,7 +88,7 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 		if ( ivSelection.get( ).isPresent( ) ) {
 			final AggregatedOperationCall call = ivSelection.get( ).get( );
 			final TimeUnit sourceTimeUnit = ivDataService.getTimeUnit( );
-			final TimeUnit targetTimeUnit = ivPropertiesService.getTimeUnit( );
+			final TimeUnit targetTimeUnit = ivPropertiesService.loadProperty( TimeUnitProperty.class );
 
 			getView( ).getContainer( ).setText( call.getContainer( ) );
 			getView( ).getComponent( ).setText( call.getComponent( ) );
@@ -126,17 +128,19 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 
 	@Override
 	public void useFilter( ) {
+		final boolean searchInEntireTrace = ivPropertiesService.loadPrimitiveProperty( SearchInEntireTraceProperty.class );
+
 		final Predicate<AggregatedOperationCall> predicate1 = FilterService.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
 				getView( ).getShowJustFailedButton( ), getView( ).getShowJustFailureContainingButton( ), AggregatedOperationCall::isFailed,
 				AggregatedOperationCall::containsFailure );
 		final Predicate<AggregatedOperationCall> predicate2 = ivFilterService.useFilter( getView( ).getFilterContainer( ),
-				AggregatedOperationCall::getContainer, ivPropertiesService.isSearchInEntireTrace( ) );
+				AggregatedOperationCall::getContainer, searchInEntireTrace );
 		final Predicate<AggregatedOperationCall> predicate3 = ivFilterService.useFilter( getView( ).getFilterComponent( ),
-				AggregatedOperationCall::getComponent, ivPropertiesService.isSearchInEntireTrace( ) );
+				AggregatedOperationCall::getComponent, searchInEntireTrace );
 		final Predicate<AggregatedOperationCall> predicate4 = ivFilterService.useFilter( getView( ).getFilterOperation( ),
-				AggregatedOperationCall::getOperation, ivPropertiesService.isSearchInEntireTrace( ) );
+				AggregatedOperationCall::getOperation, searchInEntireTrace );
 		final Predicate<AggregatedOperationCall> predicate5 = ivFilterService.useFilter( getView( ).getFilterException( ),
-				call -> call.isFailed( ) ? call.getFailedCause( ) : "", ivPropertiesService.isSearchInEntireTrace( ) );
+				call -> call.isFailed( ) ? call.getFailedCause( ) : "", searchInEntireTrace );
 
 		ivPredicate = predicate1.and( predicate2 ).and( predicate3 ).and( predicate4 ).and( predicate5 );
 		reloadTreetable( );

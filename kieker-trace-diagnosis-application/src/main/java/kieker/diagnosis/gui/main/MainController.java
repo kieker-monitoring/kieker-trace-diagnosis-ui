@@ -55,6 +55,7 @@ import kieker.diagnosis.service.data.domain.OperationCall;
 import kieker.diagnosis.service.export.CSVData;
 import kieker.diagnosis.service.export.CSVDataCollector;
 import kieker.diagnosis.service.export.ExportService;
+import kieker.diagnosis.service.properties.CacheViewsProperty;
 import kieker.diagnosis.service.properties.PropertiesService;
 
 /**
@@ -113,19 +114,22 @@ public final class MainController extends AbstractController<MainView> implement
 	private void showTraces( final ContextEntry... aContextEntries ) {
 		toggleDisabledButton( getView( ).getTraces( ) );
 		ivActiveController = Optional.of( TracesController.class );
-		GUIUtil.loadView( TracesController.class, getView( ).getContent( ), getClass( ), ivPropertiesService.isCacheViews( ), aContextEntries );
+		GUIUtil.loadView( TracesController.class, getView( ).getContent( ), getClass( ), ivPropertiesService.loadProperty( CacheViewsProperty.class ),
+				aContextEntries );
 	}
 
 	private void showAggregatedTraces( final ContextEntry... aContextEntries ) {
 		toggleDisabledButton( getView( ).getAggregatedtraces( ) );
 		ivActiveController = Optional.of( AggregatedTracesController.class );
-		GUIUtil.loadView( AggregatedTracesController.class, getView( ).getContent( ), getClass( ), ivPropertiesService.isCacheViews( ), aContextEntries );
+		GUIUtil.loadView( AggregatedTracesController.class, getView( ).getContent( ), getClass( ), ivPropertiesService.loadProperty( CacheViewsProperty.class ),
+				aContextEntries );
 	}
 
 	private void showAggregatedCalls( final ContextEntry... aContextEntries ) {
 		toggleDisabledButton( getView( ).getAggregatedcalls( ) );
 		ivActiveController = Optional.of( AggregatedCallsController.class );
-		GUIUtil.loadView( AggregatedCallsController.class, getView( ).getContent( ), getClass( ), ivPropertiesService.isCacheViews( ), aContextEntries );
+		GUIUtil.loadView( AggregatedCallsController.class, getView( ).getContent( ), getClass( ), ivPropertiesService.loadProperty( CacheViewsProperty.class ),
+				aContextEntries );
 	}
 
 	@Override
@@ -141,7 +145,7 @@ public final class MainController extends AbstractController<MainView> implement
 	public void showCalls( final ContextEntry... aContextEntries ) {
 		toggleDisabledButton( getView( ).getCalls( ) );
 		ivActiveController = Optional.of( CallsController.class );
-		GUIUtil.loadView( CallsController.class, getView( ).getContent( ), getClass( ), ivPropertiesService.isCacheViews( ), aContextEntries );
+		GUIUtil.loadView( CallsController.class, getView( ).getContent( ), getClass( ), ivPropertiesService.loadProperty( CacheViewsProperty.class ), aContextEntries );
 	}
 
 	@Override
@@ -153,7 +157,7 @@ public final class MainController extends AbstractController<MainView> implement
 	public void showStatistics( ) {
 		toggleDisabledButton( getView( ).getStatistics( ) );
 		ivActiveController = Optional.of( MonitoringStatisticsController.class );
-		GUIUtil.loadView( MonitoringStatisticsController.class, getView( ).getContent( ), getClass( ), ivPropertiesService.isCacheViews( ),
+		GUIUtil.loadView( MonitoringStatisticsController.class, getView( ).getContent( ), getClass( ), ivPropertiesService.loadProperty( CacheViewsProperty.class ),
 				new ContextEntry[0] );
 	}
 
@@ -183,25 +187,26 @@ public final class MainController extends AbstractController<MainView> implement
 	@SuppressWarnings ( "unchecked" )
 	public void showSettings( ) {
 		final long propertiesVersionPre = ivPropertiesService.getVersion( );
-		GUIUtil.loadDialog( SettingsDialogController.class, getClass( ), ivPropertiesService.isCacheViews( ), getView( ).getWindow( ) );
+		GUIUtil.loadDialog( SettingsDialogController.class, getClass( ), ivPropertiesService.loadProperty( CacheViewsProperty.class ), getView( ).getWindow( ) );
 
 		if ( ivActiveController.isPresent( ) ) {
 			final long propertiesVersionPost = ivPropertiesService.getVersion( );
 			if ( propertiesVersionPre != propertiesVersionPost ) {
 				GUIUtil.clearCache( );
-				GUIUtil.loadView( ivActiveController.get( ), getView( ).getContent( ), getClass( ), ivPropertiesService.isCacheViews( ), new ContextEntry[0] );
+				GUIUtil.loadView( ivActiveController.get( ), getView( ).getContent( ), getClass( ), ivPropertiesService.loadProperty( CacheViewsProperty.class ),
+						new ContextEntry[0] );
 			}
 		}
 	}
 
 	@Override
 	public void showAbout( ) {
-		GUIUtil.loadDialog( AboutDialogController.class, getClass( ), ivPropertiesService.isCacheViews( ), getView( ).getWindow( ) );
+		GUIUtil.loadDialog( AboutDialogController.class, getClass( ), ivPropertiesService.loadProperty( CacheViewsProperty.class ), getView( ).getWindow( ) );
 	}
 
 	@Override
 	public void showBugReporting( ) {
-		GUIUtil.loadDialog( BugReportingDialogController.class, getClass( ), ivPropertiesService.isCacheViews( ), getView( ).getWindow( ) );
+		GUIUtil.loadDialog( BugReportingDialogController.class, getClass( ), ivPropertiesService.loadProperty( CacheViewsProperty.class ), getView( ).getWindow( ) );
 	}
 
 	@Override

@@ -35,7 +35,10 @@ import jfxtras.scene.control.CalendarTimeTextField;
 import kieker.diagnosis.service.InjectService;
 import kieker.diagnosis.service.ServiceIfc;
 import kieker.diagnosis.service.data.domain.AbstractOperationCall;
+import kieker.diagnosis.service.properties.CaseSensitiveProperty;
 import kieker.diagnosis.service.properties.PropertiesService;
+import kieker.diagnosis.service.properties.RegularExpressionsProperty;
+import kieker.diagnosis.service.properties.TimeUnitProperty;
 
 /**
  * @author Nils Christian Ehmke
@@ -51,12 +54,12 @@ public final class FilterService implements ServiceIfc {
 		if ( ( text == null ) || text.isEmpty( ) ) {
 			return x -> true;
 		} else {
-			final boolean regularExpressionsActive = ivPropertiesService.isRegularExpressionsActive( );
+			final boolean regularExpressionsActive = ivPropertiesService.loadPrimitiveProperty( RegularExpressionsProperty.class );
 			if ( regularExpressionsActive ) {
 				checkRegularExpression( text );
 				return x -> aFunction.apply( x ).matches( text );
 			} else {
-				final boolean caseSensitivityActive = ivPropertiesService.isCaseSensitivityActive( );
+				final boolean caseSensitivityActive = ivPropertiesService.loadPrimitiveProperty( CaseSensitiveProperty.class );
 				if ( caseSensitivityActive ) {
 					return x -> aFunction.apply( x ).contains( text );
 				} else {
@@ -108,7 +111,7 @@ public final class FilterService implements ServiceIfc {
 		}
 		final Predicate<T> result = x -> {
 			final long timestamp = aFunction.apply( x );
-			final long timestampInMS = TimeUnit.MILLISECONDS.convert( timestamp, ivPropertiesService.getTimeUnit( ) );
+			final long timestampInMS = TimeUnit.MILLISECONDS.convert( timestamp, ivPropertiesService.loadProperty( TimeUnitProperty.class ) );
 			final Instant instant = Instant.ofEpochMilli( timestampInMS );
 			final ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant( instant, ZoneId.systemDefault( ) );
 			final LocalDate localDate = LocalDate.from( zonedDateTime );
@@ -155,7 +158,7 @@ public final class FilterService implements ServiceIfc {
 		}
 		final Predicate<T> result = x -> {
 			final long timestamp = aFunction.apply( x );
-			final long timestampInMS = TimeUnit.MILLISECONDS.convert( timestamp, ivPropertiesService.getTimeUnit( ) );
+			final long timestampInMS = TimeUnit.MILLISECONDS.convert( timestamp, ivPropertiesService.loadProperty( TimeUnitProperty.class ) );
 			final Instant instant = Instant.ofEpochMilli( timestampInMS );
 			final ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant( instant, ZoneId.systemDefault( ) );
 
