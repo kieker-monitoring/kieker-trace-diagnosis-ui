@@ -47,7 +47,7 @@ public final class OperationCallAggregator extends AbstractTransformation<Operat
 	}
 
 	@Override
-	public void onTerminating( ) throws Exception {
+	public void onTerminating( ) throws Exception { // NOPMD (because the method must throw Exception)
 		for ( final List<OperationCall> aggregationList : ivAggregationMap.values( ) ) {
 			final List<Long> durations = extractDurations( aggregationList );
 			final Statistics statistics = StatisticsUtility.calculateStatistics( durations );

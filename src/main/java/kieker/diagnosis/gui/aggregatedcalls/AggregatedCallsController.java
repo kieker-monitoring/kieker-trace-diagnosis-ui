@@ -136,7 +136,7 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 		final Predicate<AggregatedOperationCall> predicate4 = ivFilterService.useFilter( getView( ).getFilterOperation( ),
 				AggregatedOperationCall::getOperation );
 		final Predicate<AggregatedOperationCall> predicate5 = ivFilterService.useFilter( getView( ).getFilterException( ),
-				( call -> call.isFailed( ) ? call.getFailedCause( ) : "" ) );
+				call -> call.isFailed( ) ? call.getFailedCause( ) : "" );
 
 		final Predicate<AggregatedOperationCall> predicate = predicate1.and( predicate2 ).and( predicate3 ).and( predicate4 ).and( predicate5 );
 		ivFilteredData.setPredicate( predicate );

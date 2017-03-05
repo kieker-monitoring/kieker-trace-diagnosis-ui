@@ -160,10 +160,6 @@ public final class GUIUtil {
 		final String viewFXMLName = baseName.replace( ".", "/" ) + ".fxml";
 		final URL viewResource = classLoader.getResource( viewFXMLName );
 
-		// Get the CSS file name
-		final String cssName = baseName.replace( ".", "/" ) + ".css";
-		final URL cssResource = classLoader.getResource( cssName );
-
 		// Get the resource bundle
 		final String bundleBaseName = baseName.toLowerCase( Locale.ROOT );
 		final ResourceBundle resourceBundle = ResourceBundle.getBundle( bundleBaseName, Locale.getDefault( ) );
@@ -198,19 +194,18 @@ public final class GUIUtil {
 		final Field[] declaredViewFields = viewClass.getDeclaredFields( );
 		for ( final Field field : declaredViewFields ) {
 			// Inject only JavaFX based fields
-			if ( field.isAnnotationPresent( InjectComponent.class ) ) {
-				if ( Node.class.isAssignableFrom( field.getType( ) ) ) {
-					field.setAccessible( true );
+			if ( field.isAnnotationPresent( InjectComponent.class ) && Node.class.isAssignableFrom( field.getType( ) ) ) {
+				field.setAccessible( true );
 
-					final String fieldName = "#" + field.getName( );
-					Object fieldValue = node.lookup( fieldName );
-					if ( fieldValue == null ) {
-						// In some cases (TitledPane in dialogs which are not visible yet), the lookup does not work.
-						// We correct this for the cases we know of.
-						fieldValue = lookup( node, fieldName );
-					}
-					field.set( view, fieldValue );
+				final String fieldName = "#" + field.getName( );
+				Object fieldValue = node.lookup( fieldName );
+				if ( fieldValue == null ) {
+					// In some cases (TitledPane in dialogs which are not visible yet), the lookup does not work.
+					// We correct this for the cases we know of.
+					fieldValue = lookup( node, fieldName );
 				}
+
+				field.set( view, fieldValue );
 			}
 		}
 
@@ -240,6 +235,10 @@ public final class GUIUtil {
 			}
 		}
 
+		// Get the CSS file name
+		final String cssName = baseName.replace( ".", "/" ) + ".css";
+		final URL cssResource = classLoader.getResource( cssName );
+
 		// Now that everything should be set, the controller can be initialized
 		controller.doInitialize( );
 
@@ -261,23 +260,26 @@ public final class GUIUtil {
 	private static Object lookup( final Node aNode, final String aFieldName ) {
 		Object element = aNode.lookup( aFieldName );
 
-		if ( element == null ) {
-			if ( aNode instanceof Pane ) {
-				final Pane pane = (Pane) aNode;
+		// Did we already found the element?
+		if ( element != null ) {
+			return element;
+		}
 
-				for ( final Node child : pane.getChildren( ) ) {
-					element = lookup( child, aFieldName );
-					if ( element != null ) {
-						break;
-					}
-				}
-			} else if ( aNode instanceof TitledPane ) {
-				final TitledPane titledPane = (TitledPane) aNode;
-				final Node content = titledPane.getContent( );
+		if ( aNode instanceof Pane ) {
+			final Pane pane = (Pane) aNode;
 
-				if ( content != null ) {
-					element = lookup( content, aFieldName );
+			for ( final Node child : pane.getChildren( ) ) {
+				element = lookup( child, aFieldName );
+				if ( element != null ) {
+					break;
 				}
+			}
+		} else if ( aNode instanceof TitledPane ) {
+			final TitledPane titledPane = (TitledPane) aNode;
+			final Node content = titledPane.getContent( );
+
+			if ( content != null ) {
+				element = lookup( content, aFieldName );
 			}
 		}
 
