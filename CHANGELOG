@@ -1,5 +1,9 @@
 1.2.0:
 	05 Mar 2017
+	Internal Improvement (#43)
+	Splitted the application into multiple projects.
+ 
+	05 Mar 2017
 	Internal Improvement (#41)
 	Added an infrastructure for services in the application.
 
