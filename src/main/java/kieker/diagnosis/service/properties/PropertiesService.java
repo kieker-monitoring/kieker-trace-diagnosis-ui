@@ -47,6 +47,7 @@ public final class PropertiesService implements ServiceIfc {
 	private static final String KEY_TIMESTAMP_TYPE = "timestampType";
 	private static final String KEY_CACHE_VIEWS = "cacheViews";
 	private static final String KEY_SEARCH_IN_ENTIRE_TRACE = "searchInEntireTrace";
+	private static final String KEY_SHOW_UNMONITORED_TIME = "showUnmonitoredTime";
 
 	private static final String KEY_GITLAB_URL = "GitLabURL";
 	private static final String KEY_TRAC_URL = "TracURL";
@@ -65,6 +66,7 @@ public final class PropertiesService implements ServiceIfc {
 	private String ivGitLabURL;
 	private String ivTracURL;
 	private boolean ivSearchInEntireTrace;
+	private boolean ivShowUnmonitoredTime;
 
 	private long ivVersion = 0L;
 
@@ -75,25 +77,26 @@ public final class PropertiesService implements ServiceIfc {
 	private void loadSettings( ) {
 		final Preferences preferences = Preferences.userNodeForPackage( PropertiesService.class );
 
-		ivTimeUnit = TimeUnit.valueOf( preferences.get( PropertiesService.KEY_TIMEUNIT, TimeUnit.NANOSECONDS.name( ) ) );
-		ivComponentNames = ComponentNames.valueOf( preferences.get( PropertiesService.KEY_COMPONENTS, ComponentNames.LONG.name( ) ) );
-		ivOperationNames = OperationNames.valueOf( preferences.get( PropertiesService.KEY_OPERATIONS, OperationNames.SHORT.name( ) ) );
-		ivAdditionalLogChecksActive = Boolean.valueOf( preferences.get( PropertiesService.KEY_ADDITIONAL_LOG_CHECKS, Boolean.FALSE.toString( ) ) );
-		ivRegularExpressionsActive = Boolean.valueOf( preferences.get( PropertiesService.KEY_REGULAR_EXPRESSIONS, Boolean.FALSE.toString( ) ) );
-		ivMethodCallAggregationActive = Boolean.valueOf( preferences.get( PropertiesService.KEY_METHOD_CALL_AGGREGATION, Boolean.FALSE.toString( ) ) );
-		ivThreshold = Threshold.valueOf( preferences.get( PropertiesService.KEY_THRESHOLD, Threshold.THRESHOLD_1.name( ) ) );
-		ivCaseSensitivityActive = Boolean.valueOf( preferences.get( PropertiesService.KEY_CASE_SENSITIVE, Boolean.FALSE.toString( ) ) );
-		ivPercentageCalculationActive = Boolean.valueOf( preferences.get( PropertiesService.KEY_PERCENTAGE_CALCULATION, Boolean.FALSE.toString( ) ) );
-		ivTimestampType = TimestampTypes.valueOf( preferences.get( PropertiesService.KEY_TIMESTAMP_TYPE, TimestampTypes.TIMESTAMP.name( ) ) );
-		ivCacheViews = Boolean.valueOf( preferences.get( PropertiesService.KEY_CACHE_VIEWS, Boolean.FALSE.toString( ) ) );
-		ivSearchInEntireTrace = Boolean.valueOf( preferences.get( PropertiesService.KEY_SEARCH_IN_ENTIRE_TRACE, Boolean.FALSE.toString( ) ) );
+		ivTimeUnit = TimeUnit.valueOf( preferences.get( KEY_TIMEUNIT, TimeUnit.NANOSECONDS.name( ) ) );
+		ivComponentNames = ComponentNames.valueOf( preferences.get( KEY_COMPONENTS, ComponentNames.LONG.name( ) ) );
+		ivOperationNames = OperationNames.valueOf( preferences.get( KEY_OPERATIONS, OperationNames.SHORT.name( ) ) );
+		ivAdditionalLogChecksActive = Boolean.valueOf( preferences.get( KEY_ADDITIONAL_LOG_CHECKS, Boolean.FALSE.toString( ) ) );
+		ivRegularExpressionsActive = Boolean.valueOf( preferences.get( KEY_REGULAR_EXPRESSIONS, Boolean.FALSE.toString( ) ) );
+		ivMethodCallAggregationActive = Boolean.valueOf( preferences.get( KEY_METHOD_CALL_AGGREGATION, Boolean.FALSE.toString( ) ) );
+		ivThreshold = Threshold.valueOf( preferences.get( KEY_THRESHOLD, Threshold.THRESHOLD_1.name( ) ) );
+		ivCaseSensitivityActive = Boolean.valueOf( preferences.get( KEY_CASE_SENSITIVE, Boolean.FALSE.toString( ) ) );
+		ivPercentageCalculationActive = Boolean.valueOf( preferences.get( KEY_PERCENTAGE_CALCULATION, Boolean.FALSE.toString( ) ) );
+		ivTimestampType = TimestampTypes.valueOf( preferences.get( KEY_TIMESTAMP_TYPE, TimestampTypes.TIMESTAMP.name( ) ) );
+		ivCacheViews = Boolean.valueOf( preferences.get( KEY_CACHE_VIEWS, Boolean.FALSE.toString( ) ) );
+		ivSearchInEntireTrace = Boolean.valueOf( preferences.get( KEY_SEARCH_IN_ENTIRE_TRACE, Boolean.FALSE.toString( ) ) );
+		ivShowUnmonitoredTime = Boolean.valueOf( preferences.get( KEY_SHOW_UNMONITORED_TIME, Boolean.FALSE.toString( ) ) );
 
 		final Properties properties = new Properties( );
 		final ClassLoader classLoader = PropertiesService.class.getClassLoader( );
 		try ( InputStream inputStream = classLoader.getResourceAsStream( "config.properties" ) ) {
 			properties.load( inputStream );
-			ivGitLabURL = properties.getProperty( PropertiesService.KEY_GITLAB_URL );
-			ivTracURL = properties.getProperty( PropertiesService.KEY_TRAC_URL );
+			ivGitLabURL = properties.getProperty( KEY_GITLAB_URL );
+			ivTracURL = properties.getProperty( KEY_TRAC_URL );
 		} catch ( final IOException e ) {
 			PropertiesService.LOGGER.error( e );
 		}
@@ -102,18 +105,19 @@ public final class PropertiesService implements ServiceIfc {
 	private void saveSettings( ) {
 		final Preferences preferences = Preferences.userNodeForPackage( PropertiesService.class );
 
-		preferences.put( PropertiesService.KEY_TIMEUNIT, ivTimeUnit.name( ) );
-		preferences.put( PropertiesService.KEY_COMPONENTS, ivComponentNames.name( ) );
-		preferences.put( PropertiesService.KEY_OPERATIONS, ivOperationNames.name( ) );
-		preferences.put( PropertiesService.KEY_ADDITIONAL_LOG_CHECKS, Boolean.toString( ivAdditionalLogChecksActive ) );
-		preferences.put( PropertiesService.KEY_REGULAR_EXPRESSIONS, Boolean.toString( ivRegularExpressionsActive ) );
-		preferences.put( PropertiesService.KEY_METHOD_CALL_AGGREGATION, Boolean.toString( ivMethodCallAggregationActive ) );
-		preferences.put( PropertiesService.KEY_THRESHOLD, ivThreshold.name( ) );
-		preferences.put( PropertiesService.KEY_CASE_SENSITIVE, Boolean.toString( ivCaseSensitivityActive ) );
-		preferences.put( PropertiesService.KEY_PERCENTAGE_CALCULATION, Boolean.toString( ivPercentageCalculationActive ) );
-		preferences.put( PropertiesService.KEY_TIMESTAMP_TYPE, ivTimestampType.name( ) );
-		preferences.put( PropertiesService.KEY_CACHE_VIEWS, Boolean.toString( ivCacheViews ) );
-		preferences.put( PropertiesService.KEY_SEARCH_IN_ENTIRE_TRACE, Boolean.toString( ivSearchInEntireTrace ) );
+		preferences.put( KEY_TIMEUNIT, ivTimeUnit.name( ) );
+		preferences.put( KEY_COMPONENTS, ivComponentNames.name( ) );
+		preferences.put( KEY_OPERATIONS, ivOperationNames.name( ) );
+		preferences.put( KEY_ADDITIONAL_LOG_CHECKS, Boolean.toString( ivAdditionalLogChecksActive ) );
+		preferences.put( KEY_REGULAR_EXPRESSIONS, Boolean.toString( ivRegularExpressionsActive ) );
+		preferences.put( KEY_METHOD_CALL_AGGREGATION, Boolean.toString( ivMethodCallAggregationActive ) );
+		preferences.put( KEY_THRESHOLD, ivThreshold.name( ) );
+		preferences.put( KEY_CASE_SENSITIVE, Boolean.toString( ivCaseSensitivityActive ) );
+		preferences.put( KEY_PERCENTAGE_CALCULATION, Boolean.toString( ivPercentageCalculationActive ) );
+		preferences.put( KEY_TIMESTAMP_TYPE, ivTimestampType.name( ) );
+		preferences.put( KEY_CACHE_VIEWS, Boolean.toString( ivCacheViews ) );
+		preferences.put( KEY_SEARCH_IN_ENTIRE_TRACE, Boolean.toString( ivSearchInEntireTrace ) );
+		preferences.put( KEY_SHOW_UNMONITORED_TIME, Boolean.toString( ivShowUnmonitoredTime ) );
 
 		try {
 			preferences.flush( );
@@ -230,8 +234,8 @@ public final class PropertiesService implements ServiceIfc {
 		return ivCacheViews;
 	}
 
-	public void setCacheViews( final boolean ivCacheViews ) {
-		this.ivCacheViews = ivCacheViews;
+	public void setCacheViews( final boolean aCacheViews ) {
+		ivCacheViews = aCacheViews;
 		saveSettings( );
 	}
 
@@ -239,8 +243,17 @@ public final class PropertiesService implements ServiceIfc {
 		return ivSearchInEntireTrace;
 	}
 
-	public void setSearchInEntireTrace( final boolean ivSearchInEntireTrace ) {
-		this.ivSearchInEntireTrace = ivSearchInEntireTrace;
+	public void setSearchInEntireTrace( final boolean aSearchInEntireTrace ) {
+		ivSearchInEntireTrace = aSearchInEntireTrace;
+		saveSettings( );
+	}
+
+	public boolean isShowUnmonitoredTime( ) {
+		return ivShowUnmonitoredTime;
+	}
+
+	public void setShowUnmonitoredTime( final boolean aShowUnmonitoredTime ) {
+		ivShowUnmonitoredTime = aShowUnmonitoredTime;
 		saveSettings( );
 	}
 

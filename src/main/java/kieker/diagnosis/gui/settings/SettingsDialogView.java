@@ -41,6 +41,8 @@ public class SettingsDialogView extends AbstractView {
 	@InjectComponent
 	private CheckBox ivSearchInEntireTrace;
 	@InjectComponent
+	private CheckBox ivShowUnmonitoredTime;
+	@InjectComponent
 	private Node ivView;
 
 	public ComboBox<OperationNames> getOperationNames( ) {
@@ -89,6 +91,10 @@ public class SettingsDialogView extends AbstractView {
 
 	public CheckBox getSearchInEntireTrace( ) {
 		return ivSearchInEntireTrace;
+	}
+
+	public CheckBox getShowUnmonitoredTime( ) {
+		return ivShowUnmonitoredTime;
 	}
 
 	public Node getView( ) {

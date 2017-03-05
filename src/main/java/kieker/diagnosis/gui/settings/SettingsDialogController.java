@@ -80,6 +80,7 @@ public final class SettingsDialogController extends AbstractController<SettingsD
 		getView( ).getTimestamps( ).getSelectionModel( ).select( ivPropertiesService.getTimestampType( ) );
 		getView( ).getCacheViews( ).setSelected( ivPropertiesService.isCacheViews( ) );
 		getView( ).getSearchInEntireTrace( ).setSelected( ivPropertiesService.isSearchInEntireTrace( ) );
+		getView( ).getShowUnmonitoredTime( ).setSelected( ivPropertiesService.isShowUnmonitoredTime( ) );
 	}
 
 	private void saveSettings( ) {
@@ -95,6 +96,7 @@ public final class SettingsDialogController extends AbstractController<SettingsD
 		ivPropertiesService.setTimestampType( getView( ).getTimestamps( ).getSelectionModel( ).getSelectedItem( ) );
 		ivPropertiesService.setCacheViews( getView( ).getCacheViews( ).isSelected( ) );
 		ivPropertiesService.setSearchInEntireTrace( getView( ).getSearchInEntireTrace( ).isSelected( ) );
+		ivPropertiesService.setShowUnmonitoredTime( getView( ).getShowUnmonitoredTime( ).isSelected( ) );
 	}
 
 }

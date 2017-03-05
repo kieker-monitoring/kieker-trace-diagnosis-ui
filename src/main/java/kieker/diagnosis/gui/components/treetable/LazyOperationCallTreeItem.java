@@ -34,6 +34,7 @@ import kieker.diagnosis.service.properties.PropertiesService;
 public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTreeItem<OperationCall> {
 
 	private static final String METHOD_CALLS_AGGREGATED;
+	private static final String UNMONITORED_TIME;
 
 	private final PropertiesService ivPropertiesService = ServiceUtil.getService( PropertiesService.class );
 
@@ -42,6 +43,7 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 		final ResourceBundle resourceBundle = ResourceBundle.getBundle( bundleBaseName, Locale.getDefault( ) );
 
 		METHOD_CALLS_AGGREGATED = resourceBundle.getString( "methodCallsAggregated" );
+		UNMONITORED_TIME = resourceBundle.getString( "unmonitoredTime" );
 	}
 
 	public LazyOperationCallTreeItem( final OperationCall aValue ) {
@@ -52,14 +54,27 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 	protected void initializeChildren( ) {
 		final List<TreeItem<OperationCall>> result = new ArrayList<>( );
 
+		if ( ivPropertiesService.isShowUnmonitoredTime( ) ) {
+			double percent = ivPropertiesService.isPercentageCalculationActive( ) ? getValue( ).getPercent( ) : 100.0;
+			long duration = getValue( ).getDuration( );
+			for ( final OperationCall child : getValue( ).getChildren( ) ) {
+				percent -= child.getPercent( );
+				duration -= child.getDuration( );
+			}
+
+			final OperationCall call = new OperationCall( "-", "-", UNMONITORED_TIME, getValue( ).getTraceID( ), getValue( ).getTimestamp( ) );
+			call.setPercent( (float) percent );
+			call.setDuration( duration );
+			result.add( new LazyOperationCallTreeItem( call ) );
+		}
+
 		if ( ivPropertiesService.isMethodCallAggregationActive( ) ) {
 			final float threshold = ivPropertiesService.getThreshold( ).getPercent( );
 			final List<OperationCall> underThreshold = new ArrayList<>( );
-			for ( final OperationCall child : super.getValue( ).getChildren( ) ) {
+			for ( final OperationCall child : getValue( ).getChildren( ) ) {
 				if ( child.getPercent( ) < threshold ) {
 					underThreshold.add( child );
-				}
-				else {
+				} else {
 					result.add( new LazyOperationCallTreeItem( child ) );
 				}
 			}
@@ -69,7 +84,7 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 				final int traceDepth = underThreshold.stream( ).map( OperationCall::getStackDepth ).max( Comparator.naturalOrder( ) ).get( );
 				final int traceSize = underThreshold.stream( ).map( OperationCall::getStackSize ).collect( Collectors.summingInt( Integer::intValue ) );
 				final OperationCall call = new OperationCall( "-", "-", underThreshold.size( ) + " " + LazyOperationCallTreeItem.METHOD_CALLS_AGGREGATED,
-						super.getValue( ).getTraceID( ), -1 );
+						getValue( ).getTraceID( ), -1 );
 				call.setPercent( (float) percent );
 				call.setDuration( duration );
 				call.setStackDepth( traceDepth );
@@ -77,9 +92,8 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 				result.add( new LazyOperationCallTreeItem( call ) );
 			}
 
-		}
-		else {
-			for ( final OperationCall child : super.getValue( ).getChildren( ) ) {
+		} else {
+			for ( final OperationCall child : getValue( ).getChildren( ) ) {
 				result.add( new LazyOperationCallTreeItem( child ) );
 			}
 		}

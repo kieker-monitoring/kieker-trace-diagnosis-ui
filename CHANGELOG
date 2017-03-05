@@ -1,4 +1,8 @@
 1.2.0:
+	05 Mar 2017
+	Feature (#42)
+	Added a new setting to display the non-monitored part of a method call duration in the trace view.
+
 	29 Jan 2017
 	Internal Improvement (#40)
 	Removed the AspectJ dependency.
