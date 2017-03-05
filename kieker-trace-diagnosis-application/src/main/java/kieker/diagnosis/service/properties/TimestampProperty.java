@@ -19,7 +19,7 @@ package kieker.diagnosis.service.properties;
 /**
  * @author Nils Christian Ehmke
  */
-public class TimestampProperty implements ApplicationProperty<TimestampTypes> {
+public final class TimestampProperty implements ApplicationProperty<TimestampTypes> {
 
 	@Override
 	public String getDefaultValue( ) {

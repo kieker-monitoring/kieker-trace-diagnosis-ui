@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author Nils Christian Ehmke
  */
-public class TimeUnitProperty implements ApplicationProperty<TimeUnit> {
+public final class TimeUnitProperty implements ApplicationProperty<TimeUnit> {
 
 	@Override
 	public String getDefaultValue( ) {

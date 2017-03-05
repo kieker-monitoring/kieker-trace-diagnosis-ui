@@ -19,7 +19,7 @@ package kieker.diagnosis.service.properties;
 /**
  * @author Nils Christian Ehmke
  */
-public class RegularExpressionsProperty extends AbstractBooleanApplicationProperty {
+public final class RegularExpressionsProperty extends AbstractBooleanApplicationProperty {
 
 	@Override
 	public String getDefaultValue( ) {

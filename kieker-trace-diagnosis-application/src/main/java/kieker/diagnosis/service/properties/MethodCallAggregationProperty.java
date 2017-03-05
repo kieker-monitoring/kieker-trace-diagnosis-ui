@@ -19,7 +19,7 @@ package kieker.diagnosis.service.properties;
 /**
  * @author Nils Christian Ehmke
  */
-public class MethodCallAggregationProperty extends AbstractBooleanApplicationProperty {
+public final class MethodCallAggregationProperty extends AbstractBooleanApplicationProperty {
 
 	@Override
 	public String getDefaultValue( ) {

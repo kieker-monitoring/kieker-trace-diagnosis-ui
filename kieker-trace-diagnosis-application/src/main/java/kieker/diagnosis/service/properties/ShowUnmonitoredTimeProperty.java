@@ -19,7 +19,7 @@ package kieker.diagnosis.service.properties;
 /**
  * @author Nils Christian Ehmke
  */
-public class ShowUnmonitoredTimeProperty extends AbstractBooleanApplicationProperty {
+public final class ShowUnmonitoredTimeProperty extends AbstractBooleanApplicationProperty {
 
 	@Override
 	public String getDefaultValue( ) {
