@@ -1,5 +1,9 @@
 1.2.0:
 	05 Mar 2017
+	Internal Improvement (#41)
+	Added an infrastructure for services in the application.
+
+	05 Mar 2017
 	Feature (#42)
 	Added a new setting to display the non-monitored part of a method call duration in the trace view.
 
