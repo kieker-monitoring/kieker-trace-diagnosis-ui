@@ -60,8 +60,7 @@ public final class DurationCellValueFactory implements Callback<CellDataFeatures
 
 			final long newDuration = dstTimeUnit.convert( duration, srcTimeUnit );
 			return new ReadOnlyObjectWrapper<>( newDuration );
-		}
-		catch ( final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex ) {
+		} catch ( final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex ) {
 			DurationCellValueFactory.LOGGER.warn( ex );
 			return null;
 		}

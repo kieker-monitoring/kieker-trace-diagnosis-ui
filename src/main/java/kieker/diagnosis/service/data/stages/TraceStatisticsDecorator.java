@@ -46,8 +46,7 @@ public final class TraceStatisticsDecorator extends AbstractTransformation<Trace
 
 		if ( aCall.getChildren( ).isEmpty( ) ) {
 			ivTraceDepth = 0;
-		}
-		else {
+		} else {
 			int maxTraceDepthOfChildren = 0;
 
 			for ( final OperationCall child : aCall.getChildren( ) ) {
@@ -77,14 +76,12 @@ public final class TraceStatisticsDecorator extends AbstractTransformation<Trace
 	private void addPercentValues( final OperationCall aCall, final long aParentDuration, final long aRootDuration ) {
 		if ( aCall.getParent( ) == null ) {
 			aCall.setPercent( 100.0f );
-		}
-		else {
+		} else {
 			final boolean percentCalculationsRefersToTopMost = ivPropertiesService.isPercentageCalculationActive( );
 			if ( percentCalculationsRefersToTopMost ) {
-				aCall.setPercent( (100.0f * aCall.getDuration( )) / aRootDuration );
-			}
-			else {
-				aCall.setPercent( (100.0f * aCall.getDuration( )) / aParentDuration );
+				aCall.setPercent( ( 100.0f * aCall.getDuration( ) ) / aRootDuration );
+			} else {
+				aCall.setPercent( ( 100.0f * aCall.getDuration( ) ) / aParentDuration );
 			}
 		}
 

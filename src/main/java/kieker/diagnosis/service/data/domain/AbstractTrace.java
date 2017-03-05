@@ -41,7 +41,7 @@ public abstract class AbstractTrace<T extends AbstractOperationCall<T>> {
 	public final int calculateHashCode( ) {
 		final int prime = 31;
 		int result = 1;
-		result = (prime * result) + ((this.ivRootOperationCall == null) ? 0 : this.ivRootOperationCall.calculateHashCode( ));
+		result = ( prime * result ) + ( ( this.ivRootOperationCall == null ) ? 0 : this.ivRootOperationCall.calculateHashCode( ) );
 		return result;
 	}
 

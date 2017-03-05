@@ -76,7 +76,7 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 		}
 
 		final DataService dataModel = ivDataService;
-		dataModel.getAggregatedTraces( ).addListener( ( final Change<? extends AggregatedTrace> ivChange ) -> reloadTreetable( ) );
+		dataModel.getAggregatedTraces( ).addListener( ( final Change<? extends AggregatedTrace> aChange ) -> reloadTreetable( ) );
 
 		ivSelection.addListener( e -> updateDetailPanel( ) );
 	}
@@ -189,6 +189,9 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 		getView( ).getShowJustFailureContainingButton( ).setSelected( aFilterContent.isShowJustFailureContainingButton( ) );
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private static class FilterContent {
 
 		private boolean ivShowAllButton;

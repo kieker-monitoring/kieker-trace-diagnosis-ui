@@ -24,21 +24,21 @@ import kieker.diagnosis.service.data.domain.AbstractOperationCall;
 /**
  * @author Nils Christian Ehmke
  */
-public class FailedRowFactory<S> implements Callback<TableView<S>, TableRow<S>> {
+public final class FailedRowFactory<S> implements Callback<TableView<S>, TableRow<S>> {
 
 	@Override
-	public TableRow<S> call( final TableView<S> param ) {
+	public TableRow<S> call( final TableView<S> aParam ) {
 		return new FailedTableRow( );
 	}
 
-	private class FailedTableRow extends TableRow<S> {
+	private final class FailedTableRow extends TableRow<S> {
 
 		@Override
-		protected void updateItem( final S item, final boolean empty ) {
-			super.updateItem( item, empty );
+		protected void updateItem( final S aItem, final boolean aEmpty ) {
+			super.updateItem( aItem, aEmpty );
 
-			if ( item instanceof AbstractOperationCall<?> ) {
-				final AbstractOperationCall<?> call = (AbstractOperationCall<?>) item;
+			if ( aItem instanceof AbstractOperationCall<?> ) {
+				final AbstractOperationCall<?> call = (AbstractOperationCall<?>) aItem;
 
 				getStyleClass( ).remove( "failed" );
 

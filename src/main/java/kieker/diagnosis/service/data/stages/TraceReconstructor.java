@@ -133,7 +133,7 @@ final class TraceReconstructor extends AbstractTransformation<IFlowRecord, Trace
 			ivHeader.setDuration( aRecord.getTimestamp( ) - beforeEvent.getTimestamp( ) );
 
 			if ( aRecord instanceof AfterOperationFailedEvent ) {
-				ivHeader.setFailedCause( ((AfterOperationFailedEvent) aRecord).getCause( ) );
+				ivHeader.setFailedCause( ( (AfterOperationFailedEvent) aRecord ).getCause( ) );
 			}
 
 			ivHeader = ivHeader.getParent( );

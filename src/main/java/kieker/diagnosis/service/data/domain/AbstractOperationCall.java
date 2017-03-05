@@ -49,7 +49,7 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 		this.ivContainer = aContainer.intern( );
 		this.ivComponent = aComponent.intern( );
 		this.ivOperation = aOperation.intern( );
-		this.ivFailedCause = (aFailedCause != null) ? aFailedCause.intern( ) : null;
+		this.ivFailedCause = ( aFailedCause != null ) ? aFailedCause.intern( ) : null;
 	}
 
 	public void addChild( final T aChild ) {
@@ -89,7 +89,7 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 	}
 
 	public final boolean isFailed( ) {
-		return (this.ivFailedCause != null);
+		return ( this.ivFailedCause != null );
 	}
 
 	public final String getFailedCause( ) {
@@ -97,7 +97,7 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 	}
 
 	public final void setFailedCause( final String aFailedCause ) {
-		this.ivFailedCause = (aFailedCause != null) ? aFailedCause.intern( ) : null;
+		this.ivFailedCause = ( aFailedCause != null ) ? aFailedCause.intern( ) : null;
 	}
 
 	public final boolean containsFailure( ) {
@@ -108,11 +108,11 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 		final int prime = 31;
 		int result = 1;
 
-		result = (prime * result) + ((this.ivChildren == null) ? 0 : this.calculateHashCodeForChildren( ));
-		result = (prime * result) + ((this.ivComponent == null) ? 0 : this.ivComponent.hashCode( ));
-		result = (prime * result) + ((this.ivContainer == null) ? 0 : this.ivContainer.hashCode( ));
-		result = (prime * result) + ((this.ivFailedCause == null) ? 0 : this.ivFailedCause.hashCode( ));
-		result = (prime * result) + ((this.ivOperation == null) ? 0 : this.ivOperation.hashCode( ));
+		result = ( prime * result ) + ( ( this.ivChildren == null ) ? 0 : this.calculateHashCodeForChildren( ) );
+		result = ( prime * result ) + ( ( this.ivComponent == null ) ? 0 : this.ivComponent.hashCode( ) );
+		result = ( prime * result ) + ( ( this.ivContainer == null ) ? 0 : this.ivContainer.hashCode( ) );
+		result = ( prime * result ) + ( ( this.ivFailedCause == null ) ? 0 : this.ivFailedCause.hashCode( ) );
+		result = ( prime * result ) + ( ( this.ivOperation == null ) ? 0 : this.ivOperation.hashCode( ) );
 
 		return result;
 	}
@@ -120,7 +120,7 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 	private final int calculateHashCodeForChildren( ) {
 		int hashCode = 1;
 		for ( final T child : this.ivChildren ) {
-			hashCode = (31 * hashCode) + (child == null ? 0 : child.calculateHashCode( ));
+			hashCode = ( 31 * hashCode ) + ( child == null ? 0 : child.calculateHashCode( ) );
 		}
 		return hashCode;
 	}

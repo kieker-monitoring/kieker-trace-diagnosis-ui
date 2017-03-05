@@ -271,10 +271,16 @@ public final class PropertiesService implements ServiceIfc {
 		SHORT, LONG
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	public enum TimestampTypes {
 		TIMESTAMP, DATE_AND_TIME, DATE, LONG_TIME, SHORT_TIME
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	public enum Threshold {
 
 		THRESHOLD_0_5( 0.5f ), THRESHOLD_1( 1f ), THRESHOLD_10( 10f ), THRESHOLD_20( 20f ), THRESHOLD_30( 30f ), THRESHOLD_40( 40f ), THRESHOLD_50( 50f );

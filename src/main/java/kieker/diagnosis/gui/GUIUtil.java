@@ -142,7 +142,7 @@ public class GUIUtil {
 		}
 
 		// If there are arguments for the controller, we have to create a new controller
-		if ( (aArguments != null) && (aArguments.length > 0) ) {
+		if ( ( aArguments != null ) && ( aArguments.length > 0 ) ) {
 			return null;
 		}
 
@@ -243,7 +243,7 @@ public class GUIUtil {
 		// Now that everything should be set, the controller can be initialized
 		controller.doInitialize( );
 
-		final String title = (resourceBundle.containsKey( "title" ) ? resourceBundle.getString( "title" ) : "");
+		final String title = ( resourceBundle.containsKey( "title" ) ? resourceBundle.getString( "title" ) : "" );
 		final LoadedView loadedView = new LoadedView( node, title, cssResource.toExternalForm( ) );
 
 		final PropertiesService propertiesService = ServiceUtil.getService( PropertiesService.class );
@@ -337,6 +337,9 @@ public class GUIUtil {
 		AnchorPane.setTopAnchor( node, 0.0 );
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private static class LoadedView {
 
 		private final Node ivNode;
@@ -363,6 +366,9 @@ public class GUIUtil {
 
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private static class ErrorHandlingInvocationHandler implements InvocationHandler {
 
 		private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle( "kieker.diagnosis.gui.util.errorhandling", Locale.getDefault( ) );
@@ -395,7 +401,7 @@ public class GUIUtil {
 		private void showAlertDialog( final Exception aEx ) {
 			final Throwable exception;
 
-			if ( (aEx instanceof InvocationTargetException) && (aEx.getCause( ) != null) ) {
+			if ( ( aEx instanceof InvocationTargetException ) && ( aEx.getCause( ) != null ) ) {
 				exception = aEx.getCause( );
 			} else {
 				exception = aEx;

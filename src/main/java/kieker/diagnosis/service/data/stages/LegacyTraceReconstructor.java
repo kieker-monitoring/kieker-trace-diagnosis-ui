@@ -82,7 +82,7 @@ final class LegacyTraceReconstructor extends AbstractTransformation<OperationExe
 		public void handleEvent( final OperationExecutionRecord aRecord ) {
 			ivRecords.add( aRecord );
 
-			if ( (aRecord.getEoi( ) == 0) && (aRecord.getEss( ) == 0) ) {
+			if ( ( aRecord.getEoi( ) == 0 ) && ( aRecord.getEss( ) == 0 ) ) {
 				ivTraceComplete = true;
 			}
 		}
@@ -102,7 +102,7 @@ final class LegacyTraceReconstructor extends AbstractTransformation<OperationExe
 				// can
 				// be hidden.
 				int currentEss = record.getEss( );
-				while ( (currentEss <= ess) && (ess != 0) ) {
+				while ( ( currentEss <= ess ) && ( ess != 0 ) ) {
 					header = header.getParent( );
 					currentEss++;
 				}
@@ -124,7 +124,7 @@ final class LegacyTraceReconstructor extends AbstractTransformation<OperationExe
 			final int firstOpeningParenthesisPos = aOperationSignature.indexOf( '(' );
 			int gapPos = aOperationSignature.indexOf( ' ' );
 			String result = aOperationSignature;
-			while ( (gapPos != -1) && (gapPos < firstOpeningParenthesisPos) ) {
+			while ( ( gapPos != -1 ) && ( gapPos < firstOpeningParenthesisPos ) ) {
 				result = result.substring( gapPos + 1 );
 				gapPos = result.indexOf( ' ' );
 			}

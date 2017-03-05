@@ -80,8 +80,7 @@ public final class DataService implements ServiceIfc {
 		if ( !metadataRecords.isEmpty( ) ) {
 			final KiekerMetadataRecord metadataRecord = metadataRecords.get( 0 );
 			ivTimeUnit = TimeUnit.valueOf( metadataRecord.getTimeUnit( ) );
-		}
-		else {
+		} else {
 			ivTimeUnit = TimeUnit.NANOSECONDS;
 		}
 

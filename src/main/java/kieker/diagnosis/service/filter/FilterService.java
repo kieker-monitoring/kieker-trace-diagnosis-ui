@@ -48,7 +48,7 @@ public final class FilterService implements ServiceIfc {
 	public <T> Predicate<T> useFilter( final TextField aFilter, final Function<T, String> aFunction ) {
 		final String text = aFilter.getText( );
 
-		if ( (text == null) || text.isEmpty( ) ) {
+		if ( ( text == null ) || text.isEmpty( ) ) {
 			return x -> true;
 		} else {
 			final boolean regularExpressionsActive = ivPropertiesService.isRegularExpressionsActive( );

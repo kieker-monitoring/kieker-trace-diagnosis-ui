@@ -32,17 +32,19 @@ public abstract class AbstractTableCellFactory<S, T> implements Callback<TableCo
 
 	protected abstract String getItemLabel( T aItem );
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private final class FailedTableCell extends TableCell<S, T> {
 
 		@Override
 		protected void updateItem( final T aItem, final boolean aEmpty ) {
 			super.updateItem( aItem, aEmpty );
 
-			if ( aEmpty || (aItem == null) ) {
+			if ( aEmpty || ( aItem == null ) ) {
 				setText( null );
 				setGraphic( null );
-			}
-			else {
+			} else {
 				setText( getItemLabel( aItem ) );
 			}
 		}

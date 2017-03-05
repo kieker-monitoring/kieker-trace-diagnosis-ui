@@ -37,39 +37,42 @@ public final class TraceAggregator extends AbstractTransformation<Trace, Aggrega
 	@Override
 	protected void execute( final Trace aTrace ) {
 		final TraceWrapper wrapper = new TraceWrapper( aTrace );
-		if ( !this.ivAggregationMap.containsKey( wrapper ) ) {
+		if ( !ivAggregationMap.containsKey( wrapper ) ) {
 			final List<Trace> aggregationList = new ArrayList<>( );
-			this.ivAggregationMap.put( wrapper, aggregationList );
+			ivAggregationMap.put( wrapper, aggregationList );
 		}
-		this.ivAggregationMap.get( wrapper ).add( aTrace );
+		ivAggregationMap.get( wrapper ).add( aTrace );
 	}
 
 	@Override
 	public void onTerminating( ) throws Exception { // NOPMD (the throws clause is forced by the framework)
-		this.ivAggregationMap.values( ).forEach( list -> super.getOutputPort( ).send( new AggregatedTrace( list ) ) );
+		ivAggregationMap.values( ).forEach( list -> super.getOutputPort( ).send( new AggregatedTrace( list ) ) );
 
 		super.onTerminating( );
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private static class TraceWrapper {
 
 		private final Trace ivTrace;
 
 		public TraceWrapper( final Trace aTrace ) {
-			this.ivTrace = aTrace;
+			ivTrace = aTrace;
 		}
 
 		@Override
 		public int hashCode( ) {
-			return this.ivTrace.calculateHashCode( );
+			return ivTrace.calculateHashCode( );
 		}
 
 		@Override
 		public boolean equals( final Object aObj ) {
-			if ( !(aObj instanceof TraceWrapper) ) {
+			if ( !( aObj instanceof TraceWrapper ) ) {
 				return false;
 			}
-			return this.ivTrace.isEqualTo( ((TraceWrapper) aObj).ivTrace );
+			return ivTrace.isEqualTo( ( (TraceWrapper) aObj ).ivTrace );
 		}
 
 	}

@@ -111,15 +111,15 @@ public final class MonitoringStatisticsController extends AbstractController<Mon
 	}
 
 	private String assembleTimeString( final Long aTimestamp ) {
-		return (aTimestamp == null) ? "N/A" : LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString( aTimestamp );
+		return ( aTimestamp == null ) ? "N/A" : LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString( aTimestamp );
 	}
 
 	private String assembleDurationString( final Long aDuration ) {
-		return (aDuration == null) ? "N/A" : aDuration + " ms";
+		return ( aDuration == null ) ? "N/A" : aDuration + " ms";
 	}
 
 	private String assemblePathString( final File aFile ) {
-		return (aFile == null) ? "N/A" : aFile.getAbsolutePath( );
+		return ( aFile == null ) ? "N/A" : aFile.getAbsolutePath( );
 	}
 
 	private String assembleSizeString( final File aFile ) {
@@ -133,8 +133,7 @@ public final class MonitoringStatisticsController extends AbstractController<Mon
 		for ( final String unit : MonitoringStatisticsController.UNITS ) {
 			if ( newSize >= MonitoringStatisticsController.SIZE_OF_BYTE ) {
 				newSize /= MonitoringStatisticsController.SIZE_OF_BYTE;
-			}
-			else {
+			} else {
 				importDirectorySizeString = String.format( "%.1f %s", newSize, unit );
 				break;
 			}
@@ -144,7 +143,7 @@ public final class MonitoringStatisticsController extends AbstractController<Mon
 	}
 
 	private static long calculateDirectorySize( final File aFile ) {
-		return (aFile.isFile( )) ? aFile.length( )
+		return ( aFile.isFile( ) ) ? aFile.length( )
 				: Arrays.stream( aFile.listFiles( ) ).mapToLong( MonitoringStatisticsController::calculateDirectorySize ).sum( );
 	}
 

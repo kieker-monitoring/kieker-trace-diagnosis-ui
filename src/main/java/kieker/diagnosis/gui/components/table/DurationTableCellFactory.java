@@ -30,7 +30,7 @@ public final class DurationTableCellFactory<S, T> extends AbstractTableCellFacto
 
 	@Override
 	protected String getItemLabel( final T aItem ) {
-		return (aItem.toString( ) + " " + ivNameConverterService.toShortTimeUnit( ivPropertiesService.getTimeUnit( ) ));
+		return ( aItem.toString( ) + " " + ivNameConverterService.toShortTimeUnit( ivPropertiesService.getTimeUnit( ) ) );
 	}
 
 }

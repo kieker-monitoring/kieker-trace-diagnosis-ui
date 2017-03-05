@@ -153,7 +153,7 @@ public final class CallsController extends AbstractController<CallsView> impleme
 	public void selectCall( final InputEvent aEvent ) {
 		final int clicked;
 		if ( aEvent instanceof MouseEvent ) {
-			clicked = ((MouseEvent) aEvent).getClickCount( );
+			clicked = ( (MouseEvent) aEvent ).getClickCount( );
 		} else {
 			clicked = 1;
 		}
@@ -236,6 +236,9 @@ public final class CallsController extends AbstractController<CallsView> impleme
 		getView( ).getShowJustSuccessful( ).setSelected( aFilterContent.isShowJustSuccessful( ) );
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private final class CallsCSVDataCollector implements CSVDataCollector {
 
 		@Override
@@ -262,6 +265,9 @@ public final class CallsController extends AbstractController<CallsView> impleme
 
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private static class FilterContent {
 
 		private String ivFilterComponent;
