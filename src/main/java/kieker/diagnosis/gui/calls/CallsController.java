@@ -257,15 +257,12 @@ public final class CallsController extends AbstractController<CallsView> impleme
 				}
 			}
 
-			final CSVData result = new CSVData( );
-			result.setHeader( header );
-			result.setRows( rows );
-			return result;
+			return new CSVData( header, rows );
 		}
 
 	}
 
-	private class FilterContent {
+	private static class FilterContent {
 
 		private String ivFilterComponent;
 		private String ivFilterContainer;

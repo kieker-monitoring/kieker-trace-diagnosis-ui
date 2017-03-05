@@ -75,8 +75,7 @@ public final class TracesController extends AbstractController<TracesView> imple
 		if ( filterContent instanceof FilterContent ) {
 			loadFilterContent( (FilterContent) filterContent );
 			useFilter( );
-		}
-		else {
+		} else {
 			reloadTreetable( );
 		}
 
@@ -156,8 +155,7 @@ public final class TracesController extends AbstractController<TracesView> imple
 			getView( ).getTraceSize( ).setText( Integer.toString( call.getStackSize( ) ) );
 			getView( ).getPercent( ).setText( call.getPercent( ) + " %" );
 			getView( ).getFailed( ).setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : "N/A" );
-		}
-		else {
+		} else {
 			getView( ).getContainer( ).setText( "N/A" );
 			getView( ).getComponent( ).setText( "N/A" );
 			getView( ).getOperation( ).setText( "N/A" );
@@ -262,7 +260,7 @@ public final class TracesController extends AbstractController<TracesView> imple
 		getView( ).getCounter( ).textProperty( ).set( rootChildren.size( ) + " " + getView( ).getResourceBundle( ).getString( "TracesView.lblCounter.text" ) );
 	}
 
-	private class FilterContent {
+	private static class FilterContent {
 
 		private String ivFilterComponent;
 		private String ivFilterContainer;

@@ -19,6 +19,7 @@ package kieker.diagnosis.gui;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.URL;
@@ -370,8 +371,7 @@ public class GUIUtil {
 		public Object invoke( final Object aProxy, final Method aMethod, final Object[] aArgs ) throws Throwable {
 			try {
 				return aMethod.invoke( ivDelegate, aArgs );
-			}
-			catch ( final Exception ex ) {
+			} catch ( final Exception ex ) {
 				logError( ex );
 				showAlertDialog( ex );
 
@@ -385,8 +385,16 @@ public class GUIUtil {
 		}
 
 		private void showAlertDialog( final Exception aEx ) {
+			final Throwable exception;
+
+			if ( (aEx instanceof InvocationTargetException) && (aEx.getCause( ) != null) ) {
+				exception = aEx.getCause( );
+			} else {
+				exception = aEx;
+			}
+
 			final Alert alert = new Alert( AlertType.ERROR );
-			alert.setContentText( aEx.toString( ) );
+			alert.setContentText( exception.toString( ) );
 			alert.setTitle( ivTitle );
 			alert.setHeaderText( ivHeader );
 

@@ -225,10 +225,7 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 				}
 			}
 
-			final CSVData result = new CSVData( );
-			result.setHeader( header );
-			result.setRows( rows );
-			return result;
+			return new CSVData( header, rows );
 		}
 
 	}

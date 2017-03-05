@@ -69,8 +69,7 @@ public class ServiceUtil {
 					field.set( service, otherService );
 				}
 			}
-		}
-		catch ( final Exception ex ) {
+		} catch ( final SecurityException | IllegalArgumentException | IllegalAccessException | InstantiationException ex ) {
 			throw new TechnicalException( String.format( "Unable to create service '%s'", aServiceClass ), ex );
 		}
 	}

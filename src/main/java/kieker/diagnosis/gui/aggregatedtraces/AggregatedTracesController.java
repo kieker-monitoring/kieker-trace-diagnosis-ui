@@ -71,8 +71,7 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 		if ( filterContent instanceof FilterContent ) {
 			loadFilterContent( (FilterContent) filterContent );
 			useFilter( );
-		}
-		else {
+		} else {
 			reloadTreetable( );
 		}
 
@@ -100,8 +99,7 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 			getView( ).getTraceDepth( ).setText( Integer.toString( call.getStackDepth( ) ) );
 			getView( ).getTraceSize( ).setText( Integer.toString( call.getStackSize( ) ) );
 			getView( ).getFailed( ).setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : "N/A" );
-		}
-		else {
+		} else {
 			getView( ).getContainer( ).setText( "N/A" );
 			getView( ).getComponent( ).setText( "N/A" );
 			getView( ).getOperation( ).setText( "N/A" );
@@ -191,7 +189,7 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 		getView( ).getShowJustFailureContainingButton( ).setSelected( aFilterContent.isShowJustFailureContainingButton( ) );
 	}
 
-	private class FilterContent {
+	private static class FilterContent {
 
 		private boolean ivShowAllButton;
 		private boolean ivShowJustSuccessful;

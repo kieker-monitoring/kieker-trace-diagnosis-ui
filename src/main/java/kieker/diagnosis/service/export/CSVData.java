@@ -16,25 +16,34 @@
 
 package kieker.diagnosis.service.export;
 
+import java.util.Arrays;
+
 public final class CSVData {
 
-	private String[] ivHeader;
-	private String[][] ivRows;
+	private final String[] ivHeader;
+	private final String[][] ivRows;
 
-	public String[] getHeader( ) {
-		return ivHeader;
+	public CSVData( final String[] aHeader, final String[][] aRows ) {
+		ivHeader = Arrays.copyOf( aHeader, aHeader.length );
+		ivRows = copyArray( aRows );
 	}
 
-	public void setHeader( final String[] aHeader ) {
-		this.ivHeader = aHeader;
+	public String[] getHeader( ) {
+		return Arrays.copyOf( ivHeader, ivHeader.length );
 	}
 
 	public String[][] getRows( ) {
-		return ivRows;
+		return copyArray( ivRows );
 	}
 
-	public void setRows( final String[][] aRows ) {
-		this.ivRows = aRows;
+	private String[][] copyArray( final String[][] aRows ) {
+		final String[][] rows = new String[aRows.length][];
+
+		for ( int i = 0; i < aRows.length; i++ ) {
+			rows[i] = Arrays.copyOf( aRows[i], aRows[i].length );
+		}
+
+		return rows;
 	}
 
 }
