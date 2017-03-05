@@ -19,18 +19,12 @@ package kieker.diagnosis.gui;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
@@ -39,8 +33,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -121,7 +113,7 @@ public final class GUIUtil {
 			scene = new Scene( parent );
 		}
 
-		scene.getStylesheets( ).add( loadedView.ivStylesheetURL );
+		scene.getStylesheets( ).add( loadedView.getStylesheetURL( ) );
 
 		final Stage dialogStage = new Stage( );
 		dialogStage.getIcons( ).add( new Image( "kieker-logo.png" ) );
@@ -188,51 +180,9 @@ public final class GUIUtil {
 		view.setResourceBundle( resourceBundle );
 		controller.setView( view );
 
-		// Now inject the fields of the view
 		node.applyCss( );
-		final Field[] declaredViewFields = viewClass.getDeclaredFields( );
-		for ( final Field field : declaredViewFields ) {
-			// Inject only JavaFX based fields
-			if ( field.isAnnotationPresent( InjectComponent.class ) && Node.class.isAssignableFrom( field.getType( ) ) ) {
-				field.setAccessible( true );
-
-				final String fieldName = "#" + field.getName( );
-				Object fieldValue = node.lookup( fieldName );
-				if ( fieldValue == null ) {
-					// In some cases (TitledPane in dialogs which are not visible yet), the lookup does not work.
-					// We correct this for the cases we know of.
-					fieldValue = lookup( node, fieldName );
-				}
-
-				field.set( view, fieldValue );
-			}
-		}
-
-		// Inject the fields of the controller
-		final Field[] declaredControllerFields = aControllerClass.getDeclaredFields( );
-		for ( final Field field : declaredControllerFields ) {
-			// Inject services
-			final Class<?> fieldType = field.getType( );
-
-			if ( field.isAnnotationPresent( InjectService.class ) ) {
-				field.setAccessible( true );
-
-				if ( !ServiceIfc.class.isAssignableFrom( fieldType ) ) {
-					throw new TechnicalException( "Type '" + fieldType + "' is not a service class." );
-				}
-
-				@SuppressWarnings ( "unchecked" )
-				final Object service = ServiceUtil.getService( (Class<? extends ServiceIfc>) fieldType );
-				field.set( controller, service );
-			}
-
-			// Inject the main controller
-			if ( aMainControllerClass.isAssignableFrom( fieldType ) ) {
-				field.setAccessible( true );
-
-				field.set( controller, cvMainController );
-			}
-		}
+		injectViewFields( node, viewClass, view );
+		injectControllerFields( aControllerClass, aMainControllerClass, controller );
 
 		// Get the CSS file name
 		final String cssName = baseName.replace( ".", "/" ) + ".css";
@@ -253,6 +203,55 @@ public final class GUIUtil {
 		}
 
 		return loadedView;
+	}
+
+	private static <T> void injectViewFields( final Node aNode, final Class<T> aViewClass, final T aView ) throws IllegalAccessException {
+		final Field[] declaredViewFields = aViewClass.getDeclaredFields( );
+
+		for ( final Field field : declaredViewFields ) {
+			// Inject only JavaFX based fields
+			if ( field.isAnnotationPresent( InjectComponent.class ) && Node.class.isAssignableFrom( field.getType( ) ) ) {
+				field.setAccessible( true );
+
+				final String fieldName = "#" + field.getName( );
+				Object fieldValue = aNode.lookup( fieldName );
+				if ( fieldValue == null ) {
+					// In some cases (TitledPane in dialogs which are not visible yet), the lookup does not work.
+					// We correct this for the cases we know of.
+					fieldValue = lookup( aNode, fieldName );
+				}
+
+				field.set( aView, fieldValue );
+			}
+		}
+	}
+
+	private static <T> void injectControllerFields( final Class<T> aControllerClass, final Class<?> aMainControllerClass, final T aController )
+			throws IllegalAccessException {
+		final Field[] declaredControllerFields = aControllerClass.getDeclaredFields( );
+		for ( final Field field : declaredControllerFields ) {
+			// Inject services
+			final Class<?> fieldType = field.getType( );
+
+			if ( field.isAnnotationPresent( InjectService.class ) ) {
+				field.setAccessible( true );
+
+				if ( !ServiceIfc.class.isAssignableFrom( fieldType ) ) {
+					throw new TechnicalException( "Type '" + fieldType + "' is not a service class." );
+				}
+
+				@SuppressWarnings ( "unchecked" )
+				final Object service = ServiceUtil.getService( (Class<? extends ServiceIfc>) fieldType );
+				field.set( aController, service );
+			}
+
+			// Inject the main controller
+			if ( aMainControllerClass.isAssignableFrom( fieldType ) ) {
+				field.setAccessible( true );
+
+				field.set( aController, cvMainController );
+			}
+		}
 	}
 
 	private static Object lookup( final Node aNode, final String aFieldName ) {
@@ -335,91 +334,5 @@ public final class GUIUtil {
 		AnchorPane.setBottomAnchor( node, 0.0 );
 		AnchorPane.setRightAnchor( node, 0.0 );
 		AnchorPane.setTopAnchor( node, 0.0 );
-	}
-
-	/**
-	 * @author Nils Christian Ehmke
-	 */
-	private static class LoadedView {
-
-		private final Node ivNode;
-		private final String ivStylesheetURL;
-		private final String ivTitle;
-
-		public LoadedView( final Node aNode, final String aTitle, final String aStylesheetURL ) {
-			ivNode = aNode;
-			ivTitle = aTitle;
-			ivStylesheetURL = aStylesheetURL;
-		}
-
-		public Node getNode( ) {
-			return ivNode;
-		}
-
-		public String getTitle( ) {
-			return ivTitle;
-		}
-
-		public String getStylesheetURL( ) {
-			return ivStylesheetURL;
-		}
-
-	}
-
-	/**
-	 * @author Nils Christian Ehmke
-	 */
-	private static class ErrorHandlingInvocationHandler implements InvocationHandler {
-
-		private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle( "kieker.diagnosis.gui.util.errorhandling", Locale.getDefault( ) );
-		private final String ivTitle = ivResourceBundle.getString( "error" );
-		private final String ivHeader = ivResourceBundle.getString( "errorHeader" );
-
-		private final Object ivDelegate;
-
-		public ErrorHandlingInvocationHandler( final Object aDelegate ) {
-			ivDelegate = aDelegate;
-		}
-
-		@Override
-		public Object invoke( final Object aProxy, final Method aMethod, final Object[] aArgs ) throws Throwable {
-			try {
-				return aMethod.invoke( ivDelegate, aArgs );
-			} catch ( final ReflectiveOperationException ex ) {
-				logError( ex );
-				showAlertDialog( ex );
-
-				return null;
-			}
-		}
-
-		private void logError( final Exception aEx ) {
-			final Logger logger = LogManager.getLogger( ivDelegate.getClass( ) );
-			logger.error( aEx.getMessage( ), aEx );
-		}
-
-		private void showAlertDialog( final Exception aEx ) {
-			final Throwable exception;
-
-			if ( ( aEx instanceof InvocationTargetException ) && ( aEx.getCause( ) != null ) ) {
-				exception = aEx.getCause( );
-			} else {
-				exception = aEx;
-			}
-
-			final Alert alert = new Alert( AlertType.ERROR );
-			alert.setContentText( exception.toString( ) );
-			alert.setTitle( ivTitle );
-			alert.setHeaderText( ivHeader );
-
-			final Window window = alert.getDialogPane( ).getScene( ).getWindow( );
-			if ( window instanceof Stage ) {
-				final Stage stage = (Stage) window;
-				stage.getIcons( ).add( new Image( "kieker-logo.png" ) );
-			}
-
-			alert.showAndWait( );
-		}
-
 	}
 }
