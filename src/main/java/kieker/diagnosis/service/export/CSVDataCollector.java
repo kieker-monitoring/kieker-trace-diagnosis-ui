@@ -16,6 +16,9 @@
 
 package kieker.diagnosis.service.export;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public interface CSVDataCollector {
 
 	public CSVData collectData( );

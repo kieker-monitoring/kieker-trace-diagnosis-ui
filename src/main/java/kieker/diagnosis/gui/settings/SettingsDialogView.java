@@ -30,7 +30,10 @@ import kieker.diagnosis.service.properties.PropertiesService.OperationNames;
 import kieker.diagnosis.service.properties.PropertiesService.Threshold;
 import kieker.diagnosis.service.properties.PropertiesService.TimestampTypes;
 
-public class SettingsDialogView extends AbstractView {
+/**
+ * @author Nils Christian Ehmke
+ */
+public final class SettingsDialogView extends AbstractView {
 
 	@InjectComponent
 	private ComboBox<OperationNames> ivOperationNames;

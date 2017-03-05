@@ -22,7 +22,10 @@ import javafx.stage.Window;
 import kieker.diagnosis.gui.AbstractView;
 import kieker.diagnosis.gui.InjectComponent;
 
-public class BugReportingDialogView extends AbstractView {
+/**
+ * @author Nils Christian Ehmke
+ */
+public final class BugReportingDialogView extends AbstractView {
 
 	@InjectComponent
 	private Node ivView;

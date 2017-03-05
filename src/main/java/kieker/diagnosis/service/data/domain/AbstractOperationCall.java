@@ -141,8 +141,7 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 			if ( other.getChildren( ) != null ) {
 				return false;
 			}
-		}
-		else {
+		} else {
 			final int length1 = this.ivChildren.size( );
 			final int length2 = other.getChildren( ).size( );
 			if ( length1 != length2 ) {
@@ -158,32 +157,28 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 			if ( other.getComponent( ) != null ) {
 				return false;
 			}
-		}
-		else if ( !this.ivComponent.equals( other.getComponent( ) ) ) {
+		} else if ( !this.ivComponent.equals( other.getComponent( ) ) ) {
 			return false;
 		}
 		if ( this.ivContainer == null ) {
 			if ( other.getContainer( ) != null ) {
 				return false;
 			}
-		}
-		else if ( !this.ivContainer.equals( other.getContainer( ) ) ) {
+		} else if ( !this.ivContainer.equals( other.getContainer( ) ) ) {
 			return false;
 		}
 		if ( this.ivFailedCause == null ) {
 			if ( other.getFailedCause( ) != null ) {
 				return false;
 			}
-		}
-		else if ( !this.ivFailedCause.equals( other.getFailedCause( ) ) ) {
+		} else if ( !this.ivFailedCause.equals( other.getFailedCause( ) ) ) {
 			return false;
 		}
 		if ( this.ivOperation == null ) {
 			if ( other.getOperation( ) != null ) {
 				return false;
 			}
-		}
-		else if ( !this.ivOperation.equals( other.getOperation( ) ) ) {
+		} else if ( !this.ivOperation.equals( other.getOperation( ) ) ) {
 			return false;
 		}
 		return true;

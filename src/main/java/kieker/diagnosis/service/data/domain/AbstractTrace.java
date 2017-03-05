@@ -61,8 +61,7 @@ public abstract class AbstractTrace<T extends AbstractOperationCall<T>> {
 			if ( other.ivRootOperationCall != null ) {
 				return false;
 			}
-		}
-		else if ( !this.ivRootOperationCall.isEqualTo( other.ivRootOperationCall ) ) {
+		} else if ( !this.ivRootOperationCall.isEqualTo( other.ivRootOperationCall ) ) {
 			return false;
 		}
 		return true;

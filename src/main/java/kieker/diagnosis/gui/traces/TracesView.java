@@ -25,7 +25,10 @@ import kieker.diagnosis.gui.AbstractView;
 import kieker.diagnosis.gui.InjectComponent;
 import kieker.diagnosis.service.data.domain.OperationCall;
 
-public class TracesView extends AbstractView {
+/**
+ * @author Nils Christian Ehmke
+ */
+public final class TracesView extends AbstractView {
 
 	@InjectComponent
 	private TreeTableView<OperationCall> ivTreetable;

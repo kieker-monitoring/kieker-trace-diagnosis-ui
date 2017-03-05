@@ -18,15 +18,18 @@ package kieker.diagnosis.gui;
 
 import java.util.ResourceBundle;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public abstract class AbstractView {
 
 	private ResourceBundle ivResourceBundle;
 
-	public ResourceBundle getResourceBundle( ) {
+	public final ResourceBundle getResourceBundle( ) {
 		return ivResourceBundle;
 	}
 
-	public void setResourceBundle( final ResourceBundle aResourceBundle ) {
+	public final void setResourceBundle( final ResourceBundle aResourceBundle ) {
 		ivResourceBundle = aResourceBundle;
 	}
 

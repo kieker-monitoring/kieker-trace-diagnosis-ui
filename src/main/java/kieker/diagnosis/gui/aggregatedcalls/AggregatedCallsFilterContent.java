@@ -16,6 +16,9 @@
 
 package kieker.diagnosis.gui.aggregatedcalls;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 class AggregatedCallsFilterContent {
 
 	private boolean ivShowAllButton;
@@ -31,56 +34,56 @@ class AggregatedCallsFilterContent {
 		return ivShowAllButton;
 	}
 
-	public void setShowAllButton( final boolean showAllButton ) {
-		ivShowAllButton = showAllButton;
+	public void setShowAllButton( final boolean aShowAllButton ) {
+		ivShowAllButton = aShowAllButton;
 	}
 
 	public boolean isShowJustSuccessful( ) {
 		return ivShowJustSuccessful;
 	}
 
-	public void setShowJustSuccessful( final boolean showJustSuccessful ) {
-		ivShowJustSuccessful = showJustSuccessful;
+	public void setShowJustSuccessful( final boolean aShowJustSuccessful ) {
+		ivShowJustSuccessful = aShowJustSuccessful;
 	}
 
 	public boolean isShowJustFailedButton( ) {
 		return ivShowJustFailedButton;
 	}
 
-	public void setShowJustFailedButton( final boolean showJustFailedButton ) {
-		ivShowJustFailedButton = showJustFailedButton;
+	public void setShowJustFailedButton( final boolean aShowJustFailedButton ) {
+		ivShowJustFailedButton = aShowJustFailedButton;
 	}
 
 	public String getFilterContainer( ) {
 		return ivFilterContainer;
 	}
 
-	public void setFilterContainer( final String filterContainer ) {
-		ivFilterContainer = filterContainer;
+	public void setFilterContainer( final String aFilterContainer ) {
+		ivFilterContainer = aFilterContainer;
 	}
 
 	public String getFilterComponent( ) {
 		return ivFilterComponent;
 	}
 
-	public void setFilterComponent( final String filterComponent ) {
-		ivFilterComponent = filterComponent;
+	public void setFilterComponent( final String aFilterComponent ) {
+		ivFilterComponent = aFilterComponent;
 	}
 
 	public String getFilterOperation( ) {
 		return ivFilterOperation;
 	}
 
-	public void setFilterOperation( final String filterOperation ) {
-		ivFilterOperation = filterOperation;
+	public void setFilterOperation( final String aFilterOperation ) {
+		ivFilterOperation = aFilterOperation;
 	}
 
 	public String getFilterException( ) {
 		return ivFilterException;
 	}
 
-	public void setFilterException( final String filterException ) {
-		ivFilterException = filterException;
+	public void setFilterException( final String aFilterException ) {
+		ivFilterException = aFilterException;
 	}
 
 }

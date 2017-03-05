@@ -281,96 +281,96 @@ public final class CallsController extends AbstractController<CallsView> impleme
 			return ivFilterComponent;
 		}
 
-		public void setFilterComponent( final String filterComponent ) {
-			ivFilterComponent = filterComponent;
+		public void setFilterComponent( final String aFilterComponent ) {
+			ivFilterComponent = aFilterComponent;
 		}
 
 		public String getFilterContainer( ) {
 			return ivFilterContainer;
 		}
 
-		public void setFilterContainer( final String filterContainer ) {
-			ivFilterContainer = filterContainer;
+		public void setFilterContainer( final String aFilterContainer ) {
+			ivFilterContainer = aFilterContainer;
 		}
 
 		public String getFilterException( ) {
 			return ivFilterException;
 		}
 
-		public void setFilterException( final String filterException ) {
-			ivFilterException = filterException;
+		public void setFilterException( final String aFilterException ) {
+			ivFilterException = aFilterException;
 		}
 
 		public String getFilterOperation( ) {
 			return ivFilterOperation;
 		}
 
-		public void setFilterOperation( final String filterOperation ) {
-			ivFilterOperation = filterOperation;
+		public void setFilterOperation( final String aFilterOperation ) {
+			ivFilterOperation = aFilterOperation;
 		}
 
 		public String getFilterTraceID( ) {
 			return ivFilterTraceID;
 		}
 
-		public void setFilterTraceID( final String filterTraceID ) {
-			ivFilterTraceID = filterTraceID;
+		public void setFilterTraceID( final String aFilterTraceID ) {
+			ivFilterTraceID = aFilterTraceID;
 		}
 
 		public LocalDate getFilterLowerDate( ) {
 			return ivFilterLowerDate;
 		}
 
-		public void setFilterLowerDate( final LocalDate filterLowerDate ) {
-			ivFilterLowerDate = filterLowerDate;
+		public void setFilterLowerDate( final LocalDate aFilterLowerDate ) {
+			ivFilterLowerDate = aFilterLowerDate;
 		}
 
 		public LocalDate getFilterUpperDate( ) {
 			return ivFilterUpperDate;
 		}
 
-		public void setFilterUpperDate( final LocalDate filterUpperDate ) {
-			ivFilterUpperDate = filterUpperDate;
+		public void setFilterUpperDate( final LocalDate aFilterUpperDate ) {
+			ivFilterUpperDate = aFilterUpperDate;
 		}
 
 		public Calendar getFilterLowerTime( ) {
 			return ivFilterLowerTime;
 		}
 
-		public void setFilterLowerTime( final Calendar filterLowerTime ) {
-			ivFilterLowerTime = filterLowerTime;
+		public void setFilterLowerTime( final Calendar aFilterLowerTime ) {
+			ivFilterLowerTime = aFilterLowerTime;
 		}
 
 		public Calendar getFilterUpperTime( ) {
 			return ivFilterUpperTime;
 		}
 
-		public void setFilterUpperTime( final Calendar filterUpperTime ) {
-			ivFilterUpperTime = filterUpperTime;
+		public void setFilterUpperTime( final Calendar aFilterUpperTime ) {
+			ivFilterUpperTime = aFilterUpperTime;
 		}
 
 		public boolean isShowAllButton( ) {
 			return ivShowAllButton;
 		}
 
-		public void setShowAllButton( final boolean showAllButton ) {
-			ivShowAllButton = showAllButton;
+		public void setShowAllButton( final boolean aShowAllButton ) {
+			ivShowAllButton = aShowAllButton;
 		}
 
 		public boolean isShowJustFailedButton( ) {
 			return ivShowJustFailedButton;
 		}
 
-		public void setShowJustFailedButton( final boolean showJustFailedButton ) {
-			ivShowJustFailedButton = showJustFailedButton;
+		public void setShowJustFailedButton( final boolean aShowJustFailedButton ) {
+			ivShowJustFailedButton = aShowJustFailedButton;
 		}
 
 		public boolean isShowJustSuccessful( ) {
 			return ivShowJustSuccessful;
 		}
 
-		public void setShowJustSuccessful( final boolean showJustSuccessful ) {
-			ivShowJustSuccessful = showJustSuccessful;
+		public void setShowJustSuccessful( final boolean aShowJustSuccessful ) {
+			ivShowJustSuccessful = aShowJustSuccessful;
 		}
 
 	}

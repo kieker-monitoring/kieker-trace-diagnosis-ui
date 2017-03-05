@@ -28,7 +28,7 @@ import kieker.diagnosis.service.data.domain.AggregatedOperationCall;
  *
  * @author Nils Christian Ehmke
  */
-public class AggregatedCallsView extends AbstractView {
+public final class AggregatedCallsView extends AbstractView {
 
 	@InjectComponent
 	private TableView<AggregatedOperationCall> ivTable;

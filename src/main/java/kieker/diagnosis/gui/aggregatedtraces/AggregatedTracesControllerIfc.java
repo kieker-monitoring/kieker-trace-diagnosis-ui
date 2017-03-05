@@ -16,6 +16,9 @@
 
 package kieker.diagnosis.gui.aggregatedtraces;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public interface AggregatedTracesControllerIfc {
 
 	void selectCall( );

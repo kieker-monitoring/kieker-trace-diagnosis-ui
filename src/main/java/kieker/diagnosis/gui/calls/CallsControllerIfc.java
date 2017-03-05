@@ -20,6 +20,9 @@ import java.io.IOException;
 
 import javafx.scene.input.InputEvent;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public interface CallsControllerIfc {
 
 	void selectCall( InputEvent aEvent );

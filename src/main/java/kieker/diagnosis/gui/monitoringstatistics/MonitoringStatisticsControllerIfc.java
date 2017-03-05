@@ -16,6 +16,9 @@
 
 package kieker.diagnosis.gui.monitoringstatistics;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public interface MonitoringStatisticsControllerIfc {
 
 }

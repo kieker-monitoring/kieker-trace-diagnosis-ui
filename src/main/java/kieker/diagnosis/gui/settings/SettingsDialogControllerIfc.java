@@ -16,6 +16,9 @@
 
 package kieker.diagnosis.gui.settings;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public interface SettingsDialogControllerIfc {
 
 	void saveAndCloseDialog( );

@@ -25,7 +25,10 @@ import kieker.diagnosis.gui.AbstractView;
 import kieker.diagnosis.gui.InjectComponent;
 import kieker.diagnosis.service.data.domain.OperationCall;
 
-public class CallsView extends AbstractView {
+/**
+ * @author Nils Christian Ehmke
+ */
+public final class CallsView extends AbstractView {
 
 	@InjectComponent
 	private TableView<OperationCall> ivTable;

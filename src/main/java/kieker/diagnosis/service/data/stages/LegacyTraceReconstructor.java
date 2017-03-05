@@ -39,7 +39,7 @@ final class LegacyTraceReconstructor extends AbstractTransformation<OperationExe
 	private final Map<Long, TraceBuffer> ivTraceBuffers = new HashMap<>( );
 
 	public int countIncompleteTraces( ) {
-		return this.ivTraceBuffers.size( );
+		return ivTraceBuffers.size( );
 	}
 
 	public int countDanglingRecords( ) {
@@ -48,20 +48,20 @@ final class LegacyTraceReconstructor extends AbstractTransformation<OperationExe
 
 	@Override
 	protected void execute( final OperationExecutionRecord aInput ) {
-		this.handleOperationExecutionRecord( aInput );
+		handleOperationExecutionRecord( aInput );
 	}
 
 	private void handleOperationExecutionRecord( final OperationExecutionRecord aInput ) {
 		final long traceID = aInput.getTraceId( );
-		if ( !this.ivTraceBuffers.containsKey( traceID ) ) {
-			this.ivTraceBuffers.put( traceID, new TraceBuffer( traceID ) );
+		if ( !ivTraceBuffers.containsKey( traceID ) ) {
+			ivTraceBuffers.put( traceID, new TraceBuffer( traceID ) );
 		}
-		final TraceBuffer traceBuffer = this.ivTraceBuffers.get( traceID );
+		final TraceBuffer traceBuffer = ivTraceBuffers.get( traceID );
 
 		traceBuffer.handleEvent( aInput );
 		if ( traceBuffer.isTraceComplete( ) ) {
 			final Trace trace = traceBuffer.reconstructTrace( );
-			this.ivTraceBuffers.remove( traceID );
+			ivTraceBuffers.remove( traceID );
 			super.getOutputPort( ).send( trace );
 		}
 	}
@@ -76,26 +76,26 @@ final class LegacyTraceReconstructor extends AbstractTransformation<OperationExe
 		private boolean ivTraceComplete = false;
 
 		public TraceBuffer( final long aTraceID ) {
-			this.ivTraceID = aTraceID;
+			ivTraceID = aTraceID;
 		}
 
 		public void handleEvent( final OperationExecutionRecord aRecord ) {
-			this.ivRecords.add( aRecord );
+			ivRecords.add( aRecord );
 
 			if ( (aRecord.getEoi( ) == 0) && (aRecord.getEss( ) == 0) ) {
-				this.ivTraceComplete = true;
+				ivTraceComplete = true;
 			}
 		}
 
 		public Trace reconstructTrace( ) {
-			Collections.sort( this.ivRecords, new EOIComparator( ) );
+			Collections.sort( ivRecords, new EOIComparator( ) );
 
 			OperationCall root = null;
 			OperationCall header = null;
 			int ess = 0;
-			for ( final OperationExecutionRecord record : this.ivRecords ) {
-				final OperationCall newCall = new OperationCall( record.getHostname( ), this.extractComponent( record.getOperationSignature( ) ),
-						record.getOperationSignature( ), this.ivTraceID, record.getLoggingTimestamp( ) );
+			for ( final OperationExecutionRecord record : ivRecords ) {
+				final OperationCall newCall = new OperationCall( record.getHostname( ), extractComponent( record.getOperationSignature( ) ),
+						record.getOperationSignature( ), ivTraceID, record.getLoggingTimestamp( ) );
 				newCall.setDuration( record.getTout( ) - record.getTin( ) );
 
 				// There can be "jumps" in the ess, as the operation execution records do not log the return jumps of methods. Therefore multiple of these jumps
@@ -109,15 +109,14 @@ final class LegacyTraceReconstructor extends AbstractTransformation<OperationExe
 
 				if ( root == null ) {
 					root = newCall;
-				}
-				else {
+				} else {
 					header.addChild( newCall );
 				}
 				header = newCall;
 				ess = record.getEss( );
 			}
 
-			return new Trace( root, this.ivTraceID );
+			return new Trace( root, ivTraceID );
 		}
 
 		private String extractComponent( final String aOperationSignature ) {
@@ -135,7 +134,7 @@ final class LegacyTraceReconstructor extends AbstractTransformation<OperationExe
 		}
 
 		public boolean isTraceComplete( ) {
-			return this.ivTraceComplete;
+			return ivTraceComplete;
 		}
 
 		/**

@@ -19,6 +19,9 @@ package kieker.diagnosis.gui.bugreporting;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public interface BugReportingDialogControllerIfc {
 
 	void visitGitLab( ) throws IOException, URISyntaxException;

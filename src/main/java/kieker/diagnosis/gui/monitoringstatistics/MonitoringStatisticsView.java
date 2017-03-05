@@ -20,7 +20,10 @@ import javafx.scene.control.TextField;
 import kieker.diagnosis.gui.AbstractView;
 import kieker.diagnosis.gui.InjectComponent;
 
-public class MonitoringStatisticsView extends AbstractView {
+/**
+ * @author Nils Christian Ehmke
+ */
+public final class MonitoringStatisticsView extends AbstractView {
 
 	@InjectComponent
 	private TextField ivMonitoringlog;

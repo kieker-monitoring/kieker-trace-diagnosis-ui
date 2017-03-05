@@ -16,6 +16,9 @@
 
 package kieker.diagnosis.gui.traces;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public interface TracesControllerIfc {
 
 	void selectCall( );

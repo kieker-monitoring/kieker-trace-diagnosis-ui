@@ -23,6 +23,9 @@ import java.io.OutputStreamWriter;
 
 import kieker.diagnosis.service.ServiceIfc;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public class ExportService implements ServiceIfc {
 
 	public void exportToCSV( final CSVData aCSVData, final File aFile ) throws IOException {

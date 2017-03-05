@@ -25,7 +25,10 @@ import javafx.stage.Window;
 import kieker.diagnosis.gui.AbstractView;
 import kieker.diagnosis.gui.InjectComponent;
 
-public class MainView extends AbstractView {
+/**
+ * @author Nils Christian Ehmke
+ */
+public final class MainView extends AbstractView {
 
 	@InjectComponent
 	private Node ivView;

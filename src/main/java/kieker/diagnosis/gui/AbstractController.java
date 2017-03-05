@@ -16,6 +16,9 @@
 
 package kieker.diagnosis.gui;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public abstract class AbstractController<T extends AbstractView> {
 
 	private final Context ivContext;

@@ -16,6 +16,9 @@
 
 package kieker.diagnosis.gui.main;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public interface MainControllerIfc {
 
 	public void doInitialize( );

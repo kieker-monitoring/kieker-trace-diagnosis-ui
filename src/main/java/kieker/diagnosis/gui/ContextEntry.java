@@ -16,22 +16,25 @@
 
 package kieker.diagnosis.gui;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public final class ContextEntry {
 
 	private final ContextKey ivKey;
 	private final Object ivValue;
 
 	public ContextEntry( final ContextKey aKey, final Object aValue ) {
-		this.ivKey = aKey;
-		this.ivValue = aValue;
+		ivKey = aKey;
+		ivValue = aValue;
 	}
 
 	public ContextKey getKey( ) {
-		return this.ivKey;
+		return ivKey;
 	}
 
 	public Object getValue( ) {
-		return this.ivValue;
+		return ivValue;
 	}
 
 }

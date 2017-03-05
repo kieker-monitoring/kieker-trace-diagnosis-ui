@@ -18,6 +18,9 @@ package kieker.diagnosis.service.export;
 
 import java.util.Arrays;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public final class CSVData {
 
 	private final String[] ivHeader;

@@ -16,6 +16,9 @@
 
 package kieker.diagnosis.gui;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public enum ContextKey {
 
 	OPERATION_CALL, AGGREGATED_OPERATION_CALL, FILTER_CONTENT

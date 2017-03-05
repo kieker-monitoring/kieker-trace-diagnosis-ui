@@ -27,7 +27,7 @@ import kieker.diagnosis.gui.InjectComponent;
  *
  * @author Nils Christian Ehmke
  */
-public class AboutDialogView extends AbstractView {
+public final class AboutDialogView extends AbstractView {
 
 	@InjectComponent
 	private Node ivView;

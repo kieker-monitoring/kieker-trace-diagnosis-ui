@@ -37,6 +37,9 @@ import kieker.diagnosis.service.ServiceIfc;
 import kieker.diagnosis.service.data.domain.AbstractOperationCall;
 import kieker.diagnosis.service.properties.PropertiesService;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public final class FilterService implements ServiceIfc {
 
 	@InjectService

@@ -23,7 +23,10 @@ import kieker.diagnosis.gui.AbstractView;
 import kieker.diagnosis.gui.InjectComponent;
 import kieker.diagnosis.service.data.domain.AggregatedOperationCall;
 
-public class AggregatedTracesView extends AbstractView {
+/**
+ * @author Nils Christian Ehmke
+ */
+public final class AggregatedTracesView extends AbstractView {
 
 	@InjectComponent
 	private TreeTableView<AggregatedOperationCall> ivTreetable;

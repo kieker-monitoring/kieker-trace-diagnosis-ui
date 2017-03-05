@@ -18,6 +18,9 @@ package kieker.diagnosis.gui;
 
 import java.util.EnumMap;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public class Context extends EnumMap<ContextKey, Object> {
 
 	private static final long serialVersionUID = 1L;
