@@ -1,226 +1,42 @@
-apply plugin: 'application'
-apply plugin: 'eclipse'
-
-jar.baseName = 'kieker-trace-diagnosis'
-mainClassName = 'kieker.diagnosis.Main'
-version = '1.2.0-SNAPSHOT'
-
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
-
-repositories {
-	mavenCentral()
-	jcenter()
-	maven { url 'https://jitpack.io' }
-}
-
-dependencies {
-	runtime 'org.apache.logging.log4j:log4j-core:2.4'
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'eclipse'
 	
-	compile 'org.jfxtras:jfxtras-controls:8.0-r4'
-	compile 'net.sourceforge.teetime:teetime:2.0'
-	compile 'net.sourceforge.teetime-stages:teetime-stages:2.0'
-	compile 'net.kieker-monitoring:kieker:1.12'
-	compile 'org.apache.logging.log4j:log4j-api:2.4'
+	version = '1.2.0-SNAPSHOT'
 	
-	testCompile 'org.testfx:testfx-core:4.0.1-alpha'
-    testCompile 'org.testfx:testfx-junit:4.0.1-alpha'
-
-	testCompile 'org.hamcrest:hamcrest-core:1.3'
-	testCompile 'org.hamcrest:hamcrest-library:1.3'
-	testCompile 'junit:junit:4.12'
-}
-sourceSets {
-	main {
-		resources {
-			srcDirs += 'src/main/views'
-		}
+	repositories {
+		mavenCentral()
+		jcenter()
+		maven { url 'https://jitpack.io' }
 	}
+
+	sourceCompatibility = '1.8'
+	targetCompatibility = '1.8'
 	
-	guitest {
-		java {
-			srcDir 'guitest' 
+	apply plugin: 'pmd'
+	pmd { 
+		ignoreFailures = true
 
-			compileClasspath += main.output + test.output
-			runtimeClasspath += main.output + test.output
-		}
+		ruleSets = []
+		ruleSetFiles = files('../kieker-trace-diagnosis-release-engineering/config/pmd/ruleset.xml')
+		
+		toolVersion = '5.3.3'
 	}
-}
 
-configurations {
-	guitestCompile.extendsFrom testRuntime
-	guitestRuntime.extendsFrom testCompile
-}
-
-task testGUI(type: Test) {
-	testClassesDir = project.sourceSets.guitest.output.classesDir
-	classpath = project.sourceSets.guitest.runtimeClasspath
-	reports.html.destination = file("$buildDir/reports/testsGUI")
-	jvmArgs = ['-Dglass.platform=Monocle', '-Dmonocle.platform=Headless', '-Dprism.order=sw', '-Dprism.text=t2k', '-Dtestfx.robot=glass'] 
-}
-
-apply plugin: 'pmd'
-pmd { 
-	ignoreFailures = true
-
-	ruleSets = []
-	ruleSetFiles = files('config/pmd/ruleset.xml')
-	
-	toolVersion = '5.3.3'
-}
-
-apply plugin: 'checkstyle'
-checkstyle {
-	ignoreFailures = true
-	showViolations = false
-}
-	
-apply plugin: 'findbugs'
-findbugs { 
-	ignoreFailures = true 
-	effort = "max"
-	reportLevel = "low"
-}
-
-task createStartScript(type: CreateStartScripts) {
-	mainClassName = project.mainClassName
-	applicationName = 'start' 
-	outputDir = new File(project.buildDir, 'scripts')
-	classpath = jar.outputs.files + project.configurations.runtime 
-}
-
-def commonDistBinConfiguration = {
-	into('lib') {
-		from configurations.runtime
-		from jar.archivePath 
-		from 'licenses'
+	apply plugin: 'checkstyle'
+	checkstyle {
+		configFile = file('../kieker-trace-diagnosis-release-engineering/config/checkstyle/checkstyle.xml')
+		
+		ignoreFailures = true
+		showViolations = false
 	}
-	
-	into ('example') { from 'example' }
-	into ('manual') { from 'manual/Manual_DE.pdf' }
-	into ('manual') { from 'manual/Manual_EN.pdf' }
-	
-	into('.') {
-		from 'LICENSE'
-		from 'CHANGELOG'
+		
+	apply plugin: 'findbugs'
+	findbugs { 
+		ignoreFailures = true 
+		effort = "max"
+		reportLevel = "low"
 	}
-}
-
-task latexRunDE1(type: Exec) {
-	workingDir 'manual'
-	commandLine 'pdflatex', 'Manual_DE'
-}
-
-task latexRunDE2(type: Exec) {
-	workingDir 'manual'
-	commandLine 'pdflatex', 'Manual_DE'
-}
-
-task latexRunEN1(type: Exec) {
-	workingDir 'manual'
-	commandLine 'pdflatex', 'Manual_EN'
-}
-
-task latexRunEN2(type: Exec) {
-	workingDir 'manual'
-	commandLine 'pdflatex', 'Manual_EN'
-}
-
-task buildUserManualDE() {
-  
-	inputs.files fileTree('manual') {
-		include 'Manual_DE.tex'
-	}
-	outputs.file file('manual/Manual_DE.pdf')
-  
-	doLast {
-		tasks.latexRunDE1.execute()
-		tasks.latexRunDE2.execute()
-	}
-}
-
-task buildUserManualEN() {
-  
-	inputs.files fileTree('manual') {
-		include 'Manual_EN.tex'
-	}
-	outputs.file file('manual/Manual_EN.pdf')
-  
-	doLast {
-		tasks.latexRunEN1.execute()
-		tasks.latexRunEN2.execute()
-	}
-}
-
-task distBinWinWithoutDocumentation(type: Zip, dependsOn: [jar, createStartScript]) {
-	description = 'Bundles the project as a JVM application with OS specific libs and script for Windows.'
-	classifier = 'windows'
-
-	configure commonDistBinConfiguration
-
-	into ('bin') {
-		from createStartScript.getWindowsScript()
-	}
-}
-
-task distBinWin(dependsOn: [buildUserManualDE, buildUserManualEN, distBinWinWithoutDocumentation]) {
-	description = 'Bundles the project as a JVM application with OS specific libs and script for Windows.'
-}
-
-task distBinLinuxWithoutDocumentation(type: Tar, dependsOn: [jar, createStartScript]) {
-	description = 'Bundles the project as a JVM application with OS specific libs and script for Linux.'
-	classifier = 'linux'
-	compression = Compression.GZIP
-
-	configure commonDistBinConfiguration
-
-	into ('bin') {
-		from createStartScript.getUnixScript()
-	}
-}
-
-task distBinLinux(dependsOn: [buildUserManualDE, buildUserManualEN, distBinLinuxWithoutDocumentation]) {
-	description = 'Bundles the project as a JVM application with OS specific libs and script for Linux.'
-}
-
-task distAllBin(dependsOn: [distBinWin, distBinLinux]) {
-	description = 'Bundles the project as a JVM application with OS specific libs and scripts for all platforms.'
-}
-
-task distAllBinWithoutDocumentation(dependsOn: [distBinWinWithoutDocumentation, distBinLinuxWithoutDocumentation]) {
-	description = 'Bundles the project as a JVM application with OS specific libs and scripts for all platforms.'
-}
-
-def commonDistSrcConfiguration = {
-	classifier 'src'
-
-	into ('src') { from 'src' }
-	into ('config') { from 'config' }
-	into ('example') { from 'example' }
-	into ('licenses') { from 'licenses' }
-	
-	into ('manual') { from 'manual/Manual_DE.tex' }
-	into ('manual') { from 'manual/Manual_EN.tex' }
-	
-	from ('.') {
-		include 'CHANGELOG'
-		include 'LICENSE'
-		include 'README'
-		include 'build.gradle'
-	}
-}
-
-task distSrcZip(type: Zip) {
-	configure commonDistSrcConfiguration
-}
-
-task distSrcTar(type: Tar) {
-	configure commonDistSrcConfiguration
-	compression = Compression.GZIP
-}
-
-task distAllSrc(dependsOn: [distSrcZip, distSrcTar]) {
-	description = 'Bundles the source files of the project.'
 }
 
 def regexpReplaceInFile(File file, String searchExp, String replaceExp) {

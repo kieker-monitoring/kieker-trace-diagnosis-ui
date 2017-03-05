@@ -1,0 +1,161 @@
+apply plugin: 'application'
+
+jar.baseName = 'kieker-trace-diagnosis'
+mainClassName = 'kieker.diagnosis.Main'
+
+
+dependencies {
+	compile project(':kieker-trace-diagnosis-application')
+}
+
+task createStartScript(type: CreateStartScripts) {
+	mainClassName = project.mainClassName
+	applicationName = 'start' 
+	outputDir = new File(project.buildDir, 'scripts')
+	classpath = jar.outputs.files + project.configurations.runtime 
+}
+
+task latexRunDE1(type: Exec) {
+	workingDir 'manual'
+	commandLine 'pdflatex', 'Manual_DE'
+}
+
+task latexRunDE2(type: Exec) {
+	workingDir 'manual'
+	commandLine 'pdflatex', 'Manual_DE'
+}
+
+task latexRunEN1(type: Exec) {
+	workingDir 'manual'
+	commandLine 'pdflatex', 'Manual_EN'
+}
+
+task latexRunEN2(type: Exec) {
+	workingDir 'manual'
+	commandLine 'pdflatex', 'Manual_EN'
+}
+
+task buildUserManualDE() {
+  
+	inputs.files fileTree('manual') {
+		include 'Manual_DE.tex'
+	}
+	outputs.file file('manual/Manual_DE.pdf')
+  
+	doLast {
+		tasks.latexRunDE1.execute()
+		tasks.latexRunDE2.execute()
+	}
+}
+
+task buildUserManualEN() {
+  
+	inputs.files fileTree('manual') {
+		include 'Manual_EN.tex'
+	}
+	outputs.file file('manual/Manual_EN.pdf')
+  
+	doLast {
+		tasks.latexRunEN1.execute()
+		tasks.latexRunEN2.execute()
+	}
+}
+
+def commonDistBinConfiguration = {
+	into('lib') {
+		from configurations.runtime
+		from jar.archivePath 
+		from 'licenses'
+	}
+	
+	into ('example') { from 'example' }
+	into ('manual') { from 'manual/Manual_DE.pdf' }
+	into ('manual') { from 'manual/Manual_EN.pdf' }
+	
+	into('.') {
+		from '../LICENSE'
+		from '../CHANGELOG'
+	}
+}
+
+task distBinWinWithoutDocumentation(type: Zip, dependsOn: [jar, createStartScript]) {
+	description = 'Bundles the project as a JVM application with OS specific libs and script for Windows.'
+	classifier = 'windows'
+	archiveName = "${project.rootProject.name}-${version}-${classifier}.${extension}"
+	
+	configure commonDistBinConfiguration
+
+	into ('bin') {
+		from createStartScript.getWindowsScript()
+	}
+}
+
+task distBinWin(dependsOn: [buildUserManualDE, buildUserManualEN, distBinWinWithoutDocumentation]) {
+	description = 'Bundles the project as a JVM application with OS specific libs and script for Windows.'
+}
+
+task distBinLinuxWithoutDocumentation(type: Tar, dependsOn: [jar, createStartScript]) {
+	description = 'Bundles the project as a JVM application with OS specific libs and script for Linux.'
+	classifier = 'linux'
+	compression = Compression.GZIP
+	archiveName = "${project.rootProject.name}-${version}-${classifier}.${extension}"
+
+	configure commonDistBinConfiguration
+
+	into ('bin') {
+		from createStartScript.getUnixScript()
+	}
+}
+
+task distBinLinux(dependsOn: [buildUserManualDE, buildUserManualEN, distBinLinuxWithoutDocumentation]) {
+	description = 'Bundles the project as a JVM application with OS specific libs and script for Linux.'
+}
+
+task distAllBin(dependsOn: [distBinWin, distBinLinux]) {
+	description = 'Bundles the project as a JVM application with OS specific libs and scripts for all platforms.'
+}
+
+task distAllBinWithoutDocumentation(dependsOn: [distBinWinWithoutDocumentation, distBinLinuxWithoutDocumentation]) {
+	description = 'Bundles the project as a JVM application with OS specific libs and scripts for all platforms.'
+}
+
+def commonDistSrcConfiguration = {
+	classifier 'src'
+
+	into ('kieker-trace-diagnosis-application/src') { from '../kieker-trace-diagnosis-application/src' }
+	into ('kieker-trace-diagnosis-application') { from '../kieker-trace-diagnosis-application/build.gradle' }
+	
+	into ('kieker-trace-diagnosis-architecture/src') { from '../kieker-trace-diagnosis-architecture/src' }
+	into ('kieker-trace-diagnosis-architecture') { from '../kieker-trace-diagnosis-architecture/build.gradle' }
+	
+	into ('kieker-trace-diagnosis-release-engineering') { from '../kieker-trace-diagnosis-release-engineering/build.gradle' }
+	into ('kieker-trace-diagnosis-release-engineering/config') { from '../kieker-trace-diagnosis-release-engineering/config' }
+	into ('kieker-trace-diagnosis-release-engineering/example') { from '../kieker-trace-diagnosis-release-engineering/example' }
+	into ('kieker-trace-diagnosis-release-engineering/licenses') { from '../kieker-trace-diagnosis-release-engineering/licenses' }
+	into ('kieker-trace-diagnosis-release-engineering/manual') { from '../kieker-trace-diagnosis-release-engineering/manual/Manual_DE.tex' }
+	into ('kieker-trace-diagnosis-release-engineering/manual/img_DE') { from '../kieker-trace-diagnosis-release-engineering/manual/img_DE' }
+	into ('kieker-trace-diagnosis-release-engineering/manual') { from '../kieker-trace-diagnosis-release-engineering/manual/Manual_EN.tex' }
+	
+	from ('..') {
+		include 'CHANGELOG'
+		include 'LICENSE'
+		include 'README'
+		include 'build.gradle'
+		include 'settings.gradle'
+	}
+}
+
+task distSrcZip(type: Zip) {
+	configure commonDistSrcConfiguration
+	archiveName = "${project.rootProject.name}-${version}-${classifier}.${extension}"
+}
+
+task distSrcTar(type: Tar) {
+	configure commonDistSrcConfiguration
+	compression = Compression.GZIP
+	archiveName = "${project.rootProject.name}-${version}-${classifier}.${extension}"
+}
+
+task distAllSrc(dependsOn: [distSrcZip, distSrcTar]) {
+	description = 'Bundles the source files of the project.'
+}
