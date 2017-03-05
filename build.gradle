@@ -80,8 +80,6 @@ findbugs {
 	ignoreFailures = true 
 	effort = "max"
 	reportLevel = "low"
-
-	excludeFilter = file('config/findbugs/excludeFilter.xml')
 }
 
 task createStartScript(type: CreateStartScripts) {
