@@ -34,7 +34,7 @@ public class FailedRowFactory<S> implements Callback<TableView<S>, TableRow<S>> 
 	private class FailedTableRow extends TableRow<S> {
 
 		@Override
-		protected void updateItem( S item, boolean empty ) {
+		protected void updateItem( final S item, final boolean empty ) {
 			super.updateItem( item, empty );
 
 			if ( item instanceof AbstractOperationCall<?> ) {

@@ -90,70 +90,67 @@ public final class MainController extends AbstractController<MainView> implement
 
 	@Override
 	public void doInitialize( ) {
-
+		// Nothing to initialize
 	}
 
 	@Override
-	public void showTraces( ) throws Exception {
-		this.showTraces( new ContextEntry[0] );
+	public void showTraces( ) {
+		showTraces( new ContextEntry[0] );
 	}
 
-	private <T extends AbstractController<?>> void showCorrespondingView( final Class<T> aController, final ContextEntry... aContextEntries ) throws Exception {
+	private <T extends AbstractController<?>> void showCorrespondingView( final Class<T> aController, final ContextEntry... aContextEntries ) {
 		if ( aController == TracesController.class ) {
 			showTraces( aContextEntries );
-		}
-		else if ( aController == AggregatedTracesController.class ) {
+		} else if ( aController == AggregatedTracesController.class ) {
 			showAggregatedTraces( aContextEntries );
-		}
-		else if ( aController == CallsController.class ) {
+		} else if ( aController == CallsController.class ) {
 			showCalls( aContextEntries );
-		}
-		else if ( aController == AggregatedCallsController.class ) {
+		} else if ( aController == AggregatedCallsController.class ) {
 			showAggregatedCalls( aContextEntries );
 		}
 	}
 
-	private void showTraces( final ContextEntry... aContextEntries ) throws Exception {
+	private void showTraces( final ContextEntry... aContextEntries ) {
 		toggleDisabledButton( getView( ).getTraces( ) );
 		ivActiveController = Optional.of( TracesController.class );
 		GUIUtil.loadView( TracesController.class, getView( ).getContent( ), aContextEntries );
 	}
 
-	private void showAggregatedTraces( final ContextEntry... aContextEntries ) throws Exception {
+	private void showAggregatedTraces( final ContextEntry... aContextEntries ) {
 		toggleDisabledButton( getView( ).getAggregatedtraces( ) );
 		ivActiveController = Optional.of( AggregatedTracesController.class );
 		GUIUtil.loadView( AggregatedTracesController.class, getView( ).getContent( ), aContextEntries );
 	}
 
-	private void showAggregatedCalls( final ContextEntry... aContextEntries ) throws Exception {
+	private void showAggregatedCalls( final ContextEntry... aContextEntries ) {
 		toggleDisabledButton( getView( ).getAggregatedcalls( ) );
 		ivActiveController = Optional.of( AggregatedCallsController.class );
 		GUIUtil.loadView( AggregatedCallsController.class, getView( ).getContent( ), aContextEntries );
 	}
 
 	@Override
-	public void showAggregatedTraces( ) throws Exception {
-		this.showAggregatedTraces( new ContextEntry[0] );
+	public void showAggregatedTraces( ) {
+		showAggregatedTraces( new ContextEntry[0] );
 	}
 
 	@Override
-	public void showCalls( ) throws Exception {
-		this.showCalls( new ContextEntry[0] );
+	public void showCalls( ) {
+		showCalls( new ContextEntry[0] );
 	}
 
-	public void showCalls( final ContextEntry... aContextEntries ) throws Exception {
+	public void showCalls( final ContextEntry... aContextEntries ) {
 		toggleDisabledButton( getView( ).getCalls( ) );
 		ivActiveController = Optional.of( CallsController.class );
 		GUIUtil.loadView( CallsController.class, getView( ).getContent( ), aContextEntries );
 	}
 
 	@Override
-	public void showAggregatedCalls( ) throws Exception {
-		this.showAggregatedCalls( new ContextEntry[0] );
+	public void showAggregatedCalls( ) {
+		showAggregatedCalls( new ContextEntry[0] );
 	}
 
 	@Override
-	public void showStatistics( ) throws Exception {
+	public void showStatistics( ) {
 		toggleDisabledButton( getView( ).getStatistics( ) );
 		ivActiveController = Optional.of( MonitoringStatisticsController.class );
 		GUIUtil.loadView( MonitoringStatisticsController.class, getView( ).getContent( ), new ContextEntry[0] );
@@ -175,8 +172,7 @@ public final class MainController extends AbstractController<MainView> implement
 			preferences.put( MainController.KEY_LAST_IMPORT_PATH, selectedDirectory.getAbsolutePath( ) );
 			try {
 				preferences.flush( );
-			}
-			catch ( final BackingStoreException ex ) {
+			} catch ( final BackingStoreException ex ) {
 				MainController.LOGGER.error( ex );
 			}
 		}
@@ -184,7 +180,7 @@ public final class MainController extends AbstractController<MainView> implement
 
 	@Override
 	@SuppressWarnings ( "unchecked" )
-	public void showSettings( ) throws Exception {
+	public void showSettings( ) {
 		final long propertiesVersionPre = ivPropertiesService.getVersion( );
 		GUIUtil.loadDialog( SettingsDialogController.class, getView( ).getWindow( ) );
 
@@ -198,12 +194,12 @@ public final class MainController extends AbstractController<MainView> implement
 	}
 
 	@Override
-	public void showAbout( ) throws Exception {
+	public void showAbout( ) {
 		GUIUtil.loadDialog( AboutDialogController.class, getView( ).getWindow( ) );
 	}
 
 	@Override
-	public void showBugReporting( ) throws Exception {
+	public void showBugReporting( ) {
 		GUIUtil.loadDialog( BugReportingDialogController.class, getView( ).getWindow( ) );
 	}
 
@@ -219,12 +215,12 @@ public final class MainController extends AbstractController<MainView> implement
 		aDisabledButton.setDisable( true );
 	}
 
-	public void jumpToTrace( final OperationCall aCall ) throws Exception {
-		this.showTraces( new ContextEntry( ContextKey.OPERATION_CALL, aCall ) );
+	public void jumpToTrace( final OperationCall aCall ) {
+		showTraces( new ContextEntry( ContextKey.OPERATION_CALL, aCall ) );
 	}
 
-	public void jumpToCalls( final AggregatedOperationCall aCall ) throws Exception {
-		this.showCalls( new ContextEntry( ContextKey.AGGREGATED_OPERATION_CALL, aCall ) );
+	public void jumpToCalls( final AggregatedOperationCall aCall ) {
+		showCalls( new ContextEntry( ContextKey.AGGREGATED_OPERATION_CALL, aCall ) );
 	}
 
 	public void exportToCSV( final CSVDataCollector aDataCollector ) throws IOException {
@@ -244,8 +240,7 @@ public final class MainController extends AbstractController<MainView> implement
 			preferences.put( MainController.KEY_LAST_EXPORT_PATH, selectedFile.getParent( ) );
 			try {
 				preferences.flush( );
-			}
-			catch ( final BackingStoreException ex ) {
+			} catch ( final BackingStoreException ex ) {
 				MainController.LOGGER.error( ex );
 			}
 		}
@@ -299,18 +294,8 @@ public final class MainController extends AbstractController<MainView> implement
 	}
 
 	private <T extends AbstractController<?>> void loadFavorite( final Object aFilterContent, final Class<T> aFilterLoader ) {
-		try {
-			final ContextEntry contextEntry = new ContextEntry( ContextKey.FILTER_CONTENT, aFilterContent );
-			showCorrespondingView( aFilterLoader, contextEntry );
-		}
-		catch ( final Exception ex ) {
-			silentRethrow( ex );
-		}
-	}
-
-	@SuppressWarnings ( "unchecked" )
-	private static <T extends Throwable> RuntimeException silentRethrow( final Throwable aThrowable ) throws T {
-		throw (T) aThrowable;
+		final ContextEntry contextEntry = new ContextEntry( ContextKey.FILTER_CONTENT, aFilterContent );
+		showCorrespondingView( aFilterLoader, contextEntry );
 	}
 
 }

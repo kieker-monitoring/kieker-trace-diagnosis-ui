@@ -103,7 +103,7 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 	}
 
 	@Override
-	public void performSelectCall( final InputEvent aEvent ) throws Exception {
+	public void performSelectCall( final InputEvent aEvent ) {
 		final int clicked;
 		if ( aEvent instanceof MouseEvent ) {
 			clicked = ((MouseEvent) aEvent).getClickCount( );
@@ -118,7 +118,7 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 		}
 	}
 
-	private void jumpToCalls( ) throws Exception {
+	private void jumpToCalls( ) {
 		if ( ivSelection.get( ).isPresent( ) ) {
 			final AggregatedOperationCall call = ivSelection.get( ).get( );
 			ivMainController.jumpToCalls( call );

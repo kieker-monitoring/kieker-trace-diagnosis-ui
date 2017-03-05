@@ -47,24 +47,23 @@ final class TraceReconstructor extends AbstractTransformation<IFlowRecord, Trace
 	private int ivDanglingRecords;
 
 	public TraceReconstructor( final boolean aActivateAdditionalLogChecks ) {
-		this.ivActivateAdditionalLogChecks = aActivateAdditionalLogChecks;
+		ivActivateAdditionalLogChecks = aActivateAdditionalLogChecks;
 	}
 
 	public int countIncompleteTraces( ) {
-		return this.ivTraceBuffers.size( ) + this.ivFaultyTraceBuffers.size( );
+		return ivTraceBuffers.size( ) + ivFaultyTraceBuffers.size( );
 	}
 
 	public int countDanglingRecords( ) {
-		return this.ivDanglingRecords - this.ivFaultyTraceBuffers.size( );
+		return ivDanglingRecords - ivFaultyTraceBuffers.size( );
 	}
 
 	@Override
 	protected void execute( final IFlowRecord aInput ) {
 		if ( aInput instanceof TraceMetadata ) {
-			this.handleMetadataRecord( (TraceMetadata) aInput );
-		}
-		else if ( aInput instanceof AbstractOperationEvent ) {
-			this.handleOperationEventRecord( (AbstractOperationEvent) aInput );
+			handleMetadataRecord( (TraceMetadata) aInput );
+		} else if ( aInput instanceof AbstractOperationEvent ) {
+			handleOperationEventRecord( (AbstractOperationEvent) aInput );
 		}
 	}
 
@@ -72,23 +71,22 @@ final class TraceReconstructor extends AbstractTransformation<IFlowRecord, Trace
 		final long traceID = aRecord.getTraceId( );
 		final TraceBuffer newTraceBuffer = new TraceBuffer( aRecord );
 
-		this.ivTraceBuffers.put( traceID, newTraceBuffer );
+		ivTraceBuffers.put( traceID, newTraceBuffer );
 	}
 
 	private void handleOperationEventRecord( final AbstractOperationEvent aInput ) {
 		final long traceID = aInput.getTraceId( );
-		final TraceBuffer traceBuffer = this.ivTraceBuffers.get( traceID );
+		final TraceBuffer traceBuffer = ivTraceBuffers.get( traceID );
 
 		if ( traceBuffer != null ) {
 			traceBuffer.handleEvent( aInput );
 			if ( traceBuffer.isTraceComplete( ) ) {
 				final Trace trace = traceBuffer.reconstructTrace( );
-				this.ivTraceBuffers.remove( traceID );
+				ivTraceBuffers.remove( traceID );
 				super.getOutputPort( ).send( trace );
 			}
-		}
-		else {
-			this.ivDanglingRecords++;
+		} else {
+			ivDanglingRecords++;
 		}
 	}
 
@@ -104,58 +102,54 @@ final class TraceReconstructor extends AbstractTransformation<IFlowRecord, Trace
 		private final long ivTraceID;
 
 		public TraceBuffer( final TraceMetadata aTraceMetadata ) {
-			this.ivHostname = aTraceMetadata.getHostname( );
-			this.ivTraceID = aTraceMetadata.getTraceId( );
+			ivHostname = aTraceMetadata.getHostname( );
+			ivTraceID = aTraceMetadata.getTraceId( );
 		}
 
 		public void handleEvent( final AbstractOperationEvent aRecord ) {
 			if ( aRecord instanceof BeforeOperationEvent ) {
-				this.handleBeforeOperationEventRecord( (BeforeOperationEvent) aRecord );
-			}
-			else if ( aRecord instanceof AfterOperationEvent ) {
-				this.handleAfterOperationEventRecord( (AfterOperationEvent) aRecord );
+				handleBeforeOperationEventRecord( (BeforeOperationEvent) aRecord );
+			} else if ( aRecord instanceof AfterOperationEvent ) {
+				handleAfterOperationEventRecord( (AfterOperationEvent) aRecord );
 			}
 		}
 
 		private void handleBeforeOperationEventRecord( final BeforeOperationEvent aRecord ) {
-			this.ivStack.push( aRecord );
+			ivStack.push( aRecord );
 
-			final OperationCall newCall = new OperationCall( this.ivHostname, aRecord.getClassSignature( ), aRecord.getOperationSignature( ), this.ivTraceID,
+			final OperationCall newCall = new OperationCall( ivHostname, aRecord.getClassSignature( ), aRecord.getOperationSignature( ), ivTraceID,
 					aRecord.getLoggingTimestamp( ) );
-			if ( this.ivRoot == null ) {
-				this.ivRoot = newCall;
+			if ( ivRoot == null ) {
+				ivRoot = newCall;
+			} else {
+				ivHeader.addChild( newCall );
 			}
-			else {
-				this.ivHeader.addChild( newCall );
-			}
-			this.ivHeader = newCall;
+			ivHeader = newCall;
 		}
 
 		private void handleAfterOperationEventRecord( final AfterOperationEvent aRecord ) {
-			final BeforeOperationEvent beforeEvent = this.ivStack.pop( );
+			final BeforeOperationEvent beforeEvent = ivStack.pop( );
 
-			this.ivHeader.setDuration( aRecord.getTimestamp( ) - beforeEvent.getTimestamp( ) );
+			ivHeader.setDuration( aRecord.getTimestamp( ) - beforeEvent.getTimestamp( ) );
 
 			if ( aRecord instanceof AfterOperationFailedEvent ) {
-				this.ivHeader.setFailedCause( ((AfterOperationFailedEvent) aRecord).getCause( ) );
+				ivHeader.setFailedCause( ((AfterOperationFailedEvent) aRecord).getCause( ) );
 			}
 
-			this.ivHeader = this.ivHeader.getParent( );
+			ivHeader = ivHeader.getParent( );
 
-			if ( TraceReconstructor.this.ivActivateAdditionalLogChecks ) {
-				if ( !beforeEvent.getOperationSignature( ).equals( aRecord.getOperationSignature( ) ) ) {
-					TraceReconstructor.this.ivFaultyTraceBuffers.add( this );
-					TraceReconstructor.this.ivTraceBuffers.remove( this.ivTraceID );
-				}
+			if ( ivActivateAdditionalLogChecks && !beforeEvent.getOperationSignature( ).equals( aRecord.getOperationSignature( ) ) ) {
+				ivFaultyTraceBuffers.add( this );
+				ivTraceBuffers.remove( ivTraceID );
 			}
 		}
 
 		public Trace reconstructTrace( ) {
-			return new Trace( this.ivRoot, this.ivTraceID );
+			return new Trace( ivRoot, ivTraceID );
 		}
 
 		public boolean isTraceComplete( ) {
-			return this.ivStack.isEmpty( );
+			return ivStack.isEmpty( );
 		}
 
 	}

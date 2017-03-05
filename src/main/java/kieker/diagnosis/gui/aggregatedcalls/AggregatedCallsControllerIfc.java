@@ -27,7 +27,7 @@ import javafx.scene.input.InputEvent;
  */
 public interface AggregatedCallsControllerIfc {
 
-	void performSelectCall( InputEvent aEvent ) throws Exception;
+	void performSelectCall( InputEvent aEvent );
 
 	void performUseFilter( );
 

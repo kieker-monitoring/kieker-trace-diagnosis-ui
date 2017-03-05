@@ -32,20 +32,18 @@ import teetime.stage.CollectorSink;
 public final class TraceAggregationComposite extends AbstractCompositeStage {
 
 	private final TraceAggregator ivAggregator;
-	private final CollectorSink<AggregatedTrace> ivTracesCollector;
-	private final AggregatedTraceStatisticsDecorator ivStatisticsDecorator;
 
 	public TraceAggregationComposite( final List<AggregatedTrace> aTraces ) {
-		this.ivAggregator = new TraceAggregator( );
-		this.ivStatisticsDecorator = new AggregatedTraceStatisticsDecorator( );
-		this.ivTracesCollector = new CollectorSink<>( aTraces );
+		ivAggregator = new TraceAggregator( );
+		final AggregatedTraceStatisticsDecorator statisticsDecorator = new AggregatedTraceStatisticsDecorator( );
+		final CollectorSink<AggregatedTrace> tracesCollector = new CollectorSink<>( aTraces );
 
-		super.connectPorts( this.ivAggregator.getOutputPort( ), this.ivStatisticsDecorator.getInputPort( ) );
-		super.connectPorts( this.ivStatisticsDecorator.getOutputPort( ), this.ivTracesCollector.getInputPort( ) );
+		connectPorts( ivAggregator.getOutputPort( ), statisticsDecorator.getInputPort( ) );
+		connectPorts( statisticsDecorator.getOutputPort( ), tracesCollector.getInputPort( ) );
 	}
 
 	public InputPort<Trace> getInputPort( ) {
-		return this.ivAggregator.getInputPort( );
+		return ivAggregator.getInputPort( );
 	}
 
 }

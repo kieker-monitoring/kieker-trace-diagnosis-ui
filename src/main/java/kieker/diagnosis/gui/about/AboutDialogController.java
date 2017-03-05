@@ -32,6 +32,7 @@ public final class AboutDialogController extends AbstractController<AboutDialogV
 
 	@Override
 	public void doInitialize( ) {
+		// Nothing to initialize
 	}
 
 	@Override

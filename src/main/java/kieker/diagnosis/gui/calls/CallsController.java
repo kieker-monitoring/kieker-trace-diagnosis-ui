@@ -150,7 +150,7 @@ public final class CallsController extends AbstractController<CallsView> impleme
 	}
 
 	@Override
-	public void selectCall( final InputEvent aEvent ) throws Exception {
+	public void selectCall( final InputEvent aEvent ) {
 		final int clicked;
 		if ( aEvent instanceof MouseEvent ) {
 			clicked = ((MouseEvent) aEvent).getClickCount( );
@@ -165,7 +165,7 @@ public final class CallsController extends AbstractController<CallsView> impleme
 		}
 	}
 
-	private void jumpToTrace( ) throws Exception {
+	private void jumpToTrace( ) {
 		if ( ivSelection.get( ).isPresent( ) ) {
 			final OperationCall call = ivSelection.get( ).get( );
 			ivMainController.jumpToTrace( call );
@@ -179,13 +179,13 @@ public final class CallsController extends AbstractController<CallsView> impleme
 		final Predicate<OperationCall> predicate2 = ivFilterService.useFilter( getView( ).getFilterContainer( ), OperationCall::getContainer );
 		final Predicate<OperationCall> predicate3 = ivFilterService.useFilter( getView( ).getFilterComponent( ), OperationCall::getComponent );
 		final Predicate<OperationCall> predicate4 = ivFilterService.useFilter( getView( ).getFilterOperation( ), OperationCall::getOperation );
-		final Predicate<OperationCall> predicate5 = ivFilterService.useFilter( getView( ).getFilterTraceID( ), (call -> Long.toString( call.getTraceID( ) )) );
+		final Predicate<OperationCall> predicate5 = ivFilterService.useFilter( getView( ).getFilterTraceID( ), call -> Long.toString( call.getTraceID( ) ) );
 		final Predicate<OperationCall> predicate6 = ivFilterService.useFilter( getView( ).getFilterLowerDate( ), OperationCall::getTimestamp, true );
 		final Predicate<OperationCall> predicate7 = ivFilterService.useFilter( getView( ).getFilterUpperDate( ), OperationCall::getTimestamp, false );
 		final Predicate<OperationCall> predicate8 = ivFilterService.useFilter( getView( ).getFilterLowerTime( ), OperationCall::getTimestamp, true );
 		final Predicate<OperationCall> predicate9 = ivFilterService.useFilter( getView( ).getFilterUpperTime( ), OperationCall::getTimestamp, false );
 		final Predicate<OperationCall> predicate10 = ivFilterService.useFilter( getView( ).getFilterException( ),
-				(call -> call.isFailed( ) ? call.getFailedCause( ) : "") );
+				call -> call.isFailed( ) ? call.getFailedCause( ) : "" );
 
 		final Predicate<OperationCall> predicate = predicate1.and( predicate2 ).and( predicate3 ).and( predicate4 ).and( predicate5 ).and( predicate6 )
 				.and( predicate7 ).and( predicate8 ).and( predicate9 ).and( predicate10 );

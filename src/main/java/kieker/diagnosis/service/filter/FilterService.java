@@ -22,6 +22,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -45,18 +46,18 @@ public final class FilterService implements ServiceIfc {
 		final String text = aFilter.getText( );
 
 		if ( (text == null) || text.isEmpty( ) ) {
-			return (x -> true);
+			return x -> true;
 		} else {
 			final boolean regularExpressionsActive = ivPropertiesService.isRegularExpressionsActive( );
 			if ( regularExpressionsActive ) {
 				checkRegularExpression( text );
-				return (x -> aFunction.apply( x ).matches( text ));
+				return x -> aFunction.apply( x ).matches( text );
 			} else {
 				final boolean caseSensitivityActive = ivPropertiesService.isCaseSensitivityActive( );
 				if ( caseSensitivityActive ) {
-					return (x -> aFunction.apply( x ).contains( text ));
+					return x -> aFunction.apply( x ).contains( text );
 				} else {
-					return (x -> aFunction.apply( x ).toLowerCase( ).contains( text.toLowerCase( ) ));
+					return x -> aFunction.apply( x ).toLowerCase( ).contains( text.toLowerCase( Locale.getDefault( ) ) );
 				}
 			}
 		}
@@ -90,7 +91,7 @@ public final class FilterService implements ServiceIfc {
 	}
 
 	public <T> Predicate<T> alwaysTrue( ) {
-		return (x -> true);
+		return x -> true;
 	}
 
 	private void checkRegularExpression( final String aText ) {
@@ -198,9 +199,9 @@ public final class FilterService implements ServiceIfc {
 	public <T> Predicate<T> useFilter( final RadioButton aShowAllButton, final RadioButton aShowJustSuccessfulButton, final RadioButton aShowJustFailedButton,
 			final Function<T, Boolean> aIsFailedFunction ) {
 		if ( aShowAllButton.isSelected( ) ) {
-			return (x -> true);
+			return x -> true;
 		}
-		Predicate<T> predicate = (x -> aIsFailedFunction.apply( x ));
+		Predicate<T> predicate = x -> aIsFailedFunction.apply( x );
 		if ( aShowJustSuccessfulButton.isSelected( ) ) {
 			predicate = predicate.negate( );
 		}
@@ -211,12 +212,12 @@ public final class FilterService implements ServiceIfc {
 			final RadioButton aShowJustFailedButton, final RadioButton aShowJustFailureContainingButton, final Function<T, Boolean> aIsFailedFunction,
 			final Function<T, Boolean> aContainsFailureFunction ) {
 		if ( aShowAllButton.isSelected( ) ) {
-			return (x -> true);
+			return x -> true;
 		}
 		if ( aShowJustFailureContainingButton.isSelected( ) ) {
-			return (x -> aContainsFailureFunction.apply( x ));
+			return x -> aContainsFailureFunction.apply( x );
 		}
-		Predicate<T> predicate = (x -> aIsFailedFunction.apply( x ));
+		Predicate<T> predicate = x -> aIsFailedFunction.apply( x );
 		if ( aShowJustSuccessfulButton.isSelected( ) ) {
 			predicate = predicate.negate( );
 		}

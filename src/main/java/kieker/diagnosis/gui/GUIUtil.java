@@ -16,6 +16,7 @@
 
 package kieker.diagnosis.gui;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
@@ -27,7 +28,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.function.Supplier;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -74,33 +74,45 @@ public class GUIUtil {
 	}
 
 	public static <V extends AbstractView, C extends AbstractController<V>> void loadView( final Class<C> aControllerClass, final Stage aRootStage )
-			throws Exception {
+			throws TechnicalException {
 		LoadedView loadedView = getLoadedViewFromCache( aControllerClass, new ContextEntry[0] );
 
 		if ( loadedView == null ) {
-			loadedView = createLoadedView( aControllerClass, new ContextEntry[0] );
+			try {
+				loadedView = createLoadedView( aControllerClass, new ContextEntry[0] );
+			} catch ( final ReflectiveOperationException | IOException ex ) {
+				throw new TechnicalException( ex );
+			}
 		}
 
 		applyLoadedView( loadedView, aRootStage );
 	}
 
 	public static <V extends AbstractView, C extends AbstractController<V>> void loadView( final Class<C> aControllerClass, final AnchorPane aRootStage,
-			final ContextEntry[] aArguments ) throws Exception {
+			final ContextEntry[] aArguments ) throws TechnicalException {
 		LoadedView loadedView = getLoadedViewFromCache( aControllerClass, aArguments );
 
 		if ( loadedView == null ) {
-			loadedView = createLoadedView( aControllerClass, aArguments );
+			try {
+				loadedView = createLoadedView( aControllerClass, aArguments );
+			} catch ( final ReflectiveOperationException | IOException ex ) {
+				throw new TechnicalException( ex );
+			}
 		}
 
 		applyLoadedView( loadedView, aRootStage );
 	}
 
 	public static <V extends AbstractView, C extends AbstractController<V>> void loadDialog( final Class<C> aControllerClass, final Window aOwner )
-			throws Exception {
+			throws TechnicalException {
 		LoadedView loadedView = getLoadedViewFromCache( aControllerClass, new ContextEntry[0] );
 
 		if ( loadedView == null ) {
-			loadedView = createLoadedView( aControllerClass, new ContextEntry[0] );
+			try {
+				loadedView = createLoadedView( aControllerClass, new ContextEntry[0] );
+			} catch ( final ReflectiveOperationException | IOException ex ) {
+				throw new TechnicalException( ex );
+			}
 		}
 
 		// We have to reuse the scene if necessary. Otherwise we get problems when we used the cache views.
@@ -122,7 +134,7 @@ public class GUIUtil {
 		dialogStage.showAndWait( );
 	}
 
-	private static LoadedView getLoadedViewFromCache( final Class<?> aControllerClass, final ContextEntry[] aArguments ) throws Exception {
+	private static LoadedView getLoadedViewFromCache( final Class<?> aControllerClass, final ContextEntry[] aArguments ) {
 		// If we should not cache the views, we do not access the cache
 		final PropertiesService propertiesService = ServiceUtil.getService( PropertiesService.class );
 		if ( !propertiesService.isCacheViews( ) ) {
@@ -139,7 +151,7 @@ public class GUIUtil {
 	}
 
 	private static <V extends AbstractView, C extends AbstractController<V>> LoadedView createLoadedView( final Class<C> aControllerClass,
-			final ContextEntry[] aArguments ) throws Exception {
+			final ContextEntry[] aArguments ) throws ReflectiveOperationException, IOException {
 		final ClassLoader classLoader = GUIUtil.class.getClassLoader( );
 
 		final String baseName = aControllerClass.getCanonicalName( ).replace( "Controller", "" );
@@ -232,7 +244,7 @@ public class GUIUtil {
 		controller.doInitialize( );
 
 		final String title = (resourceBundle.containsKey( "title" ) ? resourceBundle.getString( "title" ) : "");
-		final LoadedView loadedView = new LoadedView( node, title, cssResource.toExternalForm( ), null );
+		final LoadedView loadedView = new LoadedView( node, title, cssResource.toExternalForm( ) );
 
 		final PropertiesService propertiesService = ServiceUtil.getService( PropertiesService.class );
 		if ( propertiesService.isCacheViews( ) ) {
@@ -331,11 +343,10 @@ public class GUIUtil {
 		private final String ivStylesheetURL;
 		private final String ivTitle;
 
-		public LoadedView( final Node aNode, final String aTitle, final String aStylesheetURL, final Supplier<Void> aInitializer ) {
+		public LoadedView( final Node aNode, final String aTitle, final String aStylesheetURL ) {
 			ivNode = aNode;
 			ivTitle = aTitle;
 			ivStylesheetURL = aStylesheetURL;
-			setInitializer( aInitializer );
 		}
 
 		public Node getNode( ) {
@@ -348,9 +359,6 @@ public class GUIUtil {
 
 		public String getStylesheetURL( ) {
 			return ivStylesheetURL;
-		}
-
-		public void setInitializer( final Supplier<Void> aInitializer ) {
 		}
 
 	}
@@ -371,7 +379,7 @@ public class GUIUtil {
 		public Object invoke( final Object aProxy, final Method aMethod, final Object[] aArgs ) throws Throwable {
 			try {
 				return aMethod.invoke( ivDelegate, aArgs );
-			} catch ( final Exception ex ) {
+			} catch ( final ReflectiveOperationException ex ) {
 				logError( ex );
 				showAlertDialog( ex );
 

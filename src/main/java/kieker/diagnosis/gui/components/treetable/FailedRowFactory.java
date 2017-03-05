@@ -34,7 +34,7 @@ public class FailedRowFactory<S> implements Callback<TreeTableView<S>, TreeTable
 	private class FailedTreeTableRow extends TreeTableRow<S> {
 
 		@Override
-		protected void updateItem( S item, boolean empty ) {
+		protected void updateItem( final S item, final boolean empty ) {
 			super.updateItem( item, empty );
 
 			if ( item instanceof AbstractOperationCall<?> ) {

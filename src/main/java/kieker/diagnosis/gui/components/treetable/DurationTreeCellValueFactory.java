@@ -56,14 +56,13 @@ public final class DurationTreeCellValueFactory implements Callback<CellDataFeat
 			final TimeUnit srcTimeUnit = ivDataService.getTimeUnit( );
 			final TimeUnit dstTimeUnit = ivPropertiesService.getTimeUnit( );
 
-			final TreeItem<?> item = (aCall.getValue( ));
+			final TreeItem<?> item = aCall.getValue( );
 			final Method getter = item.getValue( ).getClass( ).getMethod( "get" + ivProperty, new Class<?>[0] );
 			final long duration = (long) getter.invoke( item.getValue( ), new Object[0] );
 
 			final long newDuration = dstTimeUnit.convert( duration, srcTimeUnit );
 			return new ReadOnlyObjectWrapper<>( newDuration );
-		}
-		catch ( final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex ) {
+		} catch ( final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex ) {
 			DurationTreeCellValueFactory.LOGGER.warn( ex );
 			return null;
 		}

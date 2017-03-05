@@ -30,7 +30,7 @@ public final class TimestampTableCellFactory<S, T> extends AbstractTableCellFact
 
 	@Override
 	protected String getItemLabel( final T aItem ) {
-		return (ivNameConverterService.toTimestampString( (Long) aItem, ivDataService.getTimeUnit( ) ));
+		return ivNameConverterService.toTimestampString( (Long) aItem, ivDataService.getTimeUnit( ) );
 	}
 
 }

@@ -40,6 +40,7 @@ public final class BugReportingDialogController extends AbstractController<BugRe
 
 	@Override
 	public void doInitialize( ) {
+		// Nothing to initialize
 	}
 
 	@Override

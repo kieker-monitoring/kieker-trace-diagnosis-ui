@@ -6,7 +6,7 @@ import javafx.scene.input.InputEvent;
 
 public interface CallsControllerIfc {
 
-	void selectCall( InputEvent aEvent ) throws Exception;
+	void selectCall( InputEvent aEvent );
 
 	void useFilter( );
 

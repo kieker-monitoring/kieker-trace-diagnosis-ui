@@ -4,23 +4,23 @@ public interface MainControllerIfc {
 
 	public void doInitialize( );
 
-	public void showTraces( ) throws Exception;
+	public void showTraces( );
 
-	public void showAggregatedTraces( ) throws Exception;
+	public void showAggregatedTraces( );
 
-	public void showCalls( ) throws Exception;
+	public void showCalls( );
 
-	public void showAggregatedCalls( ) throws Exception;
+	public void showAggregatedCalls( );
 
-	public void showStatistics( ) throws Exception;
+	public void showStatistics( );
 
 	public void showImportDialog( );
 
-	public void showSettings( ) throws Exception;
+	public void showSettings( );
 
-	public void showAbout( ) throws Exception;
+	public void showAbout( );
 
-	public void showBugReporting( ) throws Exception;
+	public void showBugReporting( );
 
 	public void close( );
 

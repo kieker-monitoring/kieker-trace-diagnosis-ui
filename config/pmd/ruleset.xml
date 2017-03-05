@@ -11,6 +11,7 @@
   <rule ref="rulesets/java/codesize.xml">
     <exclude name="TooManyFields"/>
     <exclude name="ExcessiveMethodLength"/>
+	<exclude name="TooManyMethods"/>
   </rule>
   <rule ref="rulesets/java/controversial.xml">
     <exclude name="OnlyOneReturn"/>

@@ -27,10 +27,15 @@ import kieker.diagnosis.common.TechnicalException;
  *
  * @author Nils Christian Ehmke
  */
-public class ServiceUtil {
+public final class ServiceUtil {
 
 	private static final Map<Class<? extends ServiceIfc>, ServiceIfc> cvServiceMap = new HashMap<>( );
 
+	private ServiceUtil( ) {
+		// Avoid instantiation
+	}
+
+	@SuppressWarnings ( "unchecked" )
 	public static <T extends ServiceIfc> T getService( final Class<T> aServiceClass ) {
 		if ( !cvServiceMap.containsKey( aServiceClass ) ) {
 			createService( aServiceClass );
@@ -41,9 +46,7 @@ public class ServiceUtil {
 			throw new TechnicalException( String.format( "Invalid service class (requested: '%s', actually: '%s')", aServiceClass, service ) );
 		}
 
-		@SuppressWarnings ( "unchecked" )
-		final T convertedService = (T) service;
-		return convertedService;
+		return (T) service;
 	}
 
 	private static <T extends ServiceIfc> void createService( final Class<T> aServiceClass ) {

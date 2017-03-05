@@ -135,7 +135,7 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 		final Predicate<AggregatedOperationCall> predicate4 = ivFilterService.useFilter( getView( ).getFilterOperation( ),
 				AggregatedOperationCall::getOperation, ivPropertiesService.isSearchInEntireTrace( ) );
 		final Predicate<AggregatedOperationCall> predicate5 = ivFilterService.useFilter( getView( ).getFilterException( ),
-				(call -> call.isFailed( ) ? call.getFailedCause( ) : ""), ivPropertiesService.isSearchInEntireTrace( ) );
+				call -> call.isFailed( ) ? call.getFailedCause( ) : "", ivPropertiesService.isSearchInEntireTrace( ) );
 
 		ivPredicate = predicate1.and( predicate2 ).and( predicate3 ).and( predicate4 ).and( predicate5 );
 		reloadTreetable( );
