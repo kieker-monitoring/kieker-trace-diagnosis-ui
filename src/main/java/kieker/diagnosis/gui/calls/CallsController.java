@@ -125,6 +125,7 @@ public final class CallsController extends AbstractController<CallsView> impleme
 	}
 
 	private void updateDetailPanel( ) {
+		final String notAvailable = getView( ).getResourceBundle( ).getString( "notAvailable" );
 		if ( ivSelection.get( ).isPresent( ) ) {
 			final OperationCall call = ivSelection.get( ).get( );
 			final TimeUnit sourceTimeUnit = ivDataService.getTimeUnit( );
@@ -137,15 +138,15 @@ public final class CallsController extends AbstractController<CallsView> impleme
 					.setText( ivNameConverterService.toTimestampString( call.getTimestamp( ), sourceTimeUnit ) + " (" + call.getTimestamp( ) + ")" );
 			getView( ).getDuration( ).setText( ivNameConverterService.toDurationString( call.getDuration( ), sourceTimeUnit, targetTimeUnit ) );
 			getView( ).getTraceID( ).setText( Long.toString( call.getTraceID( ) ) );
-			getView( ).getFailed( ).setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : "N/A" );
+			getView( ).getFailed( ).setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : notAvailable );
 		} else {
-			getView( ).getContainer( ).setText( "N/A" );
-			getView( ).getComponent( ).setText( "N/A" );
-			getView( ).getOperation( ).setText( "N/A" );
-			getView( ).getTimestamp( ).setText( "N/A" );
-			getView( ).getDuration( ).setText( "N/A" );
-			getView( ).getTraceID( ).setText( "N/A" );
-			getView( ).getFailed( ).setText( "N/A" );
+			getView( ).getContainer( ).setText( notAvailable );
+			getView( ).getComponent( ).setText( notAvailable );
+			getView( ).getOperation( ).setText( notAvailable );
+			getView( ).getTimestamp( ).setText( notAvailable );
+			getView( ).getDuration( ).setText( notAvailable );
+			getView( ).getTraceID( ).setText( notAvailable );
+			getView( ).getFailed( ).setText( notAvailable );
 		}
 	}
 

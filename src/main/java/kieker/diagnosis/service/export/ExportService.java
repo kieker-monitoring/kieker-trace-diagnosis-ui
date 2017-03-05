@@ -28,6 +28,10 @@ import kieker.diagnosis.service.ServiceIfc;
  */
 public final class ExportService implements ServiceIfc {
 
+	private static final char COMMENT_LINES_PREFIX = '#';
+	private static final char COLUMN_SEPARATOR = ';';
+	private static final String cvLineSeparator = System.getProperty( "line.separator" );
+
 	public void exportToCSV( final CSVData aCSVData, final File aFile ) throws IOException {
 		final boolean fileCreated = aFile.createNewFile( );
 
@@ -36,22 +40,23 @@ public final class ExportService implements ServiceIfc {
 		}
 
 		try ( final OutputStreamWriter writer = new OutputStreamWriter( new FileOutputStream( aFile ), "UTF-8" ) ) {
-			writer.write( "#" );
+			writer.write( COMMENT_LINES_PREFIX );
 
 			for ( final String header : aCSVData.getHeader( ) ) {
 				writer.write( header );
-				writer.write( ";" );
+				writer.write( COLUMN_SEPARATOR );
 			}
-			writer.write( "\n" );
+
+			writer.write( cvLineSeparator );
 
 			for ( final String[] row : aCSVData.getRows( ) ) {
 				for ( final String column : row ) {
 					if ( column != null ) {
 						writer.write( column );
 					}
-					writer.write( ";" );
+					writer.write( COLUMN_SEPARATOR );
 				}
-				writer.write( "\n" );
+				writer.write( cvLineSeparator );
 			}
 		}
 	}

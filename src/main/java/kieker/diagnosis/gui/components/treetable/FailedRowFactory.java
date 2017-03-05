@@ -31,6 +31,9 @@ public final class FailedRowFactory<S> implements Callback<TreeTableView<S>, Tre
 		return new FailedTreeTableRow( );
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private final class FailedTreeTableRow extends TreeTableRow<S> {
 
 		@Override

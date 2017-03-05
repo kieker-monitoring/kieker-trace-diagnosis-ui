@@ -23,7 +23,7 @@ public final class PercentTreeCellFactory<S, T> extends AbstractTreeTableCellFac
 
 	@Override
 	protected String getItemLabel( final T aItem ) {
-		return (aItem.toString( ) + " %");
+		return ( aItem.toString( ) + " %" );
 	}
 
 }

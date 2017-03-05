@@ -53,75 +53,77 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 	}
 
 	public void addChild( final T aChild ) {
-		this.ivChildren.add( aChild );
+		ivChildren.add( aChild );
 	}
 
 	public final List<T> getChildren( ) {
-		return this.ivChildren;
+		return ivChildren;
 	}
 
 	public final String getContainer( ) {
-		return this.ivContainer;
+		return ivContainer;
 	}
 
 	public final String getComponent( ) {
-		return this.ivComponent;
+		return ivComponent;
 	}
 
 	public final String getOperation( ) {
-		return this.ivOperation;
+		return ivOperation;
 	}
 
 	public final int getStackDepth( ) {
-		return this.ivStackDepth;
+		return ivStackDepth;
 	}
 
 	public final void setStackDepth( final int aStackDepth ) {
-		this.ivStackDepth = aStackDepth;
+		ivStackDepth = aStackDepth;
 	}
 
 	public final int getStackSize( ) {
-		return this.ivStackSize;
+		return ivStackSize;
 	}
 
 	public final void setStackSize( final int aStackSize ) {
-		this.ivStackSize = aStackSize;
+		ivStackSize = aStackSize;
 	}
 
 	public final boolean isFailed( ) {
-		return ( this.ivFailedCause != null );
+		return ( ivFailedCause != null );
 	}
 
 	public final String getFailedCause( ) {
-		return this.ivFailedCause;
+		return ivFailedCause;
 	}
 
 	public final void setFailedCause( final String aFailedCause ) {
-		this.ivFailedCause = ( aFailedCause != null ) ? aFailedCause.intern( ) : null;
+		ivFailedCause = ( aFailedCause != null ) ? aFailedCause.intern( ) : null;
 	}
 
 	public final boolean containsFailure( ) {
-		return this.isFailed( ) || this.ivChildren.parallelStream( ).anyMatch( T::containsFailure );
+		return isFailed( ) || ivChildren.parallelStream( ).anyMatch( T::containsFailure );
 	}
 
 	public final int calculateHashCode( ) {
 		final int prime = 31;
 		int result = 1;
 
-		result = ( prime * result ) + ( ( this.ivChildren == null ) ? 0 : this.calculateHashCodeForChildren( ) );
-		result = ( prime * result ) + ( ( this.ivComponent == null ) ? 0 : this.ivComponent.hashCode( ) );
-		result = ( prime * result ) + ( ( this.ivContainer == null ) ? 0 : this.ivContainer.hashCode( ) );
-		result = ( prime * result ) + ( ( this.ivFailedCause == null ) ? 0 : this.ivFailedCause.hashCode( ) );
-		result = ( prime * result ) + ( ( this.ivOperation == null ) ? 0 : this.ivOperation.hashCode( ) );
+		result = ( prime * result ) + ( ( ivChildren == null ) ? 0 : calculateHashCodeForChildren( ) );
+		result = ( prime * result ) + ( ( ivComponent == null ) ? 0 : ivComponent.hashCode( ) );
+		result = ( prime * result ) + ( ( ivContainer == null ) ? 0 : ivContainer.hashCode( ) );
+		result = ( prime * result ) + ( ( ivFailedCause == null ) ? 0 : ivFailedCause.hashCode( ) );
+		result = ( prime * result ) + ( ( ivOperation == null ) ? 0 : ivOperation.hashCode( ) );
 
 		return result;
 	}
 
 	private final int calculateHashCodeForChildren( ) {
 		int hashCode = 1;
-		for ( final T child : this.ivChildren ) {
+
+		for ( final T child : ivChildren ) {
 			hashCode = ( 31 * hashCode ) + ( child == null ? 0 : child.calculateHashCode( ) );
 		}
+
 		return hashCode;
 	}
 

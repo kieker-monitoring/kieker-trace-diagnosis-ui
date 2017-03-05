@@ -31,6 +31,9 @@ public final class FailedRowFactory<S> implements Callback<TableView<S>, TableRo
 		return new FailedTableRow( );
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private final class FailedTableRow extends TableRow<S> {
 
 		@Override

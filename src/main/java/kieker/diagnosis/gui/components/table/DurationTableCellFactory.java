@@ -22,6 +22,11 @@ import kieker.diagnosis.service.properties.PropertiesService;
 
 /**
  * @author Nils Christian Ehmke
+ *
+ * @param <S>
+ *            The type of the table view generic type.
+ * @param <T>
+ *            The type of the content in all cells in the table colums created by this factory.
  */
 public final class DurationTableCellFactory<S, T> extends AbstractTableCellFactory<S, T> {
 

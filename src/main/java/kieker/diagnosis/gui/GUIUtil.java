@@ -61,10 +61,10 @@ import kieker.diagnosis.service.properties.PropertiesService;
 /**
  * @author Nils Christian Ehmke
  */
-public class GUIUtil {
+public final class GUIUtil {
 
 	private static final Map<Class<?>, LoadedView> cvLoadedViewCache = new HashMap<>( );
-	private static MainController mainController;
+	private static MainController cvMainController;
 
 	private GUIUtil( ) {
 	}
@@ -236,7 +236,7 @@ public class GUIUtil {
 			if ( MainController.class.isAssignableFrom( fieldType ) ) {
 				field.setAccessible( true );
 
-				field.set( controller, mainController );
+				field.set( controller, cvMainController );
 			}
 		}
 
@@ -252,7 +252,7 @@ public class GUIUtil {
 		}
 
 		if ( aControllerClass == MainController.class ) {
-			mainController = (MainController) controller;
+			cvMainController = (MainController) controller;
 		}
 
 		return loadedView;

@@ -111,19 +111,20 @@ public final class MonitoringStatisticsController extends AbstractController<Mon
 	}
 
 	private String assembleTimeString( final Long aTimestamp ) {
-		return ( aTimestamp == null ) ? "N/A" : LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString( aTimestamp );
+		return ( aTimestamp == null ) ? getNotAvailableString( ) : LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString( aTimestamp );
 	}
 
 	private String assembleDurationString( final Long aDuration ) {
-		return ( aDuration == null ) ? "N/A" : aDuration + " ms";
+		return ( aDuration == null ) ? getNotAvailableString( ) : aDuration + " ms";
 	}
 
 	private String assemblePathString( final File aFile ) {
-		return ( aFile == null ) ? "N/A" : aFile.getAbsolutePath( );
+		return ( aFile == null ) ? getNotAvailableString( ) : aFile.getAbsolutePath( );
 	}
 
 	private String assembleSizeString( final File aFile ) {
-		String importDirectorySizeString = "N/A";
+		String importDirectorySizeString = getNotAvailableString( );
+
 		if ( aFile == null ) {
 			return importDirectorySizeString;
 		}
@@ -140,6 +141,10 @@ public final class MonitoringStatisticsController extends AbstractController<Mon
 		}
 
 		return importDirectorySizeString;
+	}
+
+	private String getNotAvailableString( ) {
+		return getView( ).getResourceBundle( ).getString( "notAvailable" );
 	}
 
 	private static long calculateDirectorySize( final File aFile ) {

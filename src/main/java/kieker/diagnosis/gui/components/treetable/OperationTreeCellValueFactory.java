@@ -62,8 +62,7 @@ public final class OperationTreeCellValueFactory implements Callback<CellDataFea
 			}
 
 			return new ReadOnlyObjectWrapper<>( operationName );
-		}
-		catch ( final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex ) {
+		} catch ( final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex ) {
 			OperationTreeCellValueFactory.LOGGER.warn( ex );
 			return null;
 		}

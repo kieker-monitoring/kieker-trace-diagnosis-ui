@@ -82,6 +82,7 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 	}
 
 	private void updateDetailPanel( ) {
+		final String notAvailable = getView( ).getResourceBundle( ).getString( "notAvailable" );
 		if ( ivSelection.get( ).isPresent( ) ) {
 			final AggregatedOperationCall call = ivSelection.get( ).get( );
 			final TimeUnit sourceTimeUnit = ivDataService.getTimeUnit( );
@@ -98,20 +99,20 @@ public final class AggregatedTracesController extends AbstractController<Aggrega
 			getView( ).getCalls( ).setText( Integer.toString( call.getCalls( ) ) );
 			getView( ).getTraceDepth( ).setText( Integer.toString( call.getStackDepth( ) ) );
 			getView( ).getTraceSize( ).setText( Integer.toString( call.getStackSize( ) ) );
-			getView( ).getFailed( ).setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : "N/A" );
+			getView( ).getFailed( ).setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : notAvailable );
 		} else {
-			getView( ).getContainer( ).setText( "N/A" );
-			getView( ).getComponent( ).setText( "N/A" );
-			getView( ).getOperation( ).setText( "N/A" );
-			getView( ).getMinDuration( ).setText( "N/A" );
-			getView( ).getMaxDuration( ).setText( "N/A" );
-			getView( ).getMedianDuration( ).setText( "N/A" );
-			getView( ).getTotalDuration( ).setText( "N/A" );
-			getView( ).getAvgDuration( ).setText( "N/A" );
-			getView( ).getCalls( ).setText( "N/A" );
-			getView( ).getTraceDepth( ).setText( "N/A" );
-			getView( ).getTraceSize( ).setText( "N/A" );
-			getView( ).getFailed( ).setText( "N/A" );
+			getView( ).getContainer( ).setText( notAvailable );
+			getView( ).getComponent( ).setText( notAvailable );
+			getView( ).getOperation( ).setText( notAvailable );
+			getView( ).getMinDuration( ).setText( notAvailable );
+			getView( ).getMaxDuration( ).setText( notAvailable );
+			getView( ).getMedianDuration( ).setText( notAvailable );
+			getView( ).getTotalDuration( ).setText( notAvailable );
+			getView( ).getAvgDuration( ).setText( notAvailable );
+			getView( ).getCalls( ).setText( notAvailable );
+			getView( ).getTraceDepth( ).setText( notAvailable );
+			getView( ).getTraceSize( ).setText( notAvailable );
+			getView( ).getFailed( ).setText( notAvailable );
 		}
 	}
 

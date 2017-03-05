@@ -62,8 +62,7 @@ public final class ComponentTreeCellValueFactory implements Callback<CellDataFea
 			}
 
 			return new ReadOnlyObjectWrapper<>( componentName );
-		}
-		catch ( final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex ) {
+		} catch ( final NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex ) {
 			ComponentTreeCellValueFactory.LOGGER.warn( ex );
 			return null;
 		}

@@ -22,6 +22,11 @@ import kieker.diagnosis.service.nameconverter.NameConverterService;
 
 /**
  * @author Nils Christian Ehmke
+ *
+ * @param <S>
+ *            The type of the table view generic type.
+ * @param <T>
+ *            The type of the content in all cells in the table colums created by this factory.
  */
 public final class TimestampTableCellFactory<S, T> extends AbstractTableCellFactory<S, T> {
 

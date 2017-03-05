@@ -139,6 +139,8 @@ public final class TracesController extends AbstractController<TracesView> imple
 	}
 
 	private void updateDetailPanel( ) {
+		final String notAvailable = getView( ).getResourceBundle( ).getString( "notAvailable" );
+
 		if ( ivSelection.get( ).isPresent( ) ) {
 			final OperationCall call = ivSelection.get( ).get( );
 			final TimeUnit sourceTimeUnit = ivDataService.getTimeUnit( );
@@ -154,16 +156,16 @@ public final class TracesController extends AbstractController<TracesView> imple
 			getView( ).getTraceDepth( ).setText( Integer.toString( call.getStackDepth( ) ) );
 			getView( ).getTraceSize( ).setText( Integer.toString( call.getStackSize( ) ) );
 			getView( ).getPercent( ).setText( call.getPercent( ) + " %" );
-			getView( ).getFailed( ).setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : "N/A" );
+			getView( ).getFailed( ).setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : notAvailable );
 		} else {
-			getView( ).getContainer( ).setText( "N/A" );
-			getView( ).getComponent( ).setText( "N/A" );
-			getView( ).getOperation( ).setText( "N/A" );
-			getView( ).getTimestamp( ).setText( "N/A" );
-			getView( ).getDuration( ).setText( "N/A" );
-			getView( ).getTraceID( ).setText( "N/A" );
-			getView( ).getPercent( ).setText( "N/A" );
-			getView( ).getFailed( ).setText( "N/A" );
+			getView( ).getContainer( ).setText( notAvailable );
+			getView( ).getComponent( ).setText( notAvailable );
+			getView( ).getOperation( ).setText( notAvailable );
+			getView( ).getTimestamp( ).setText( notAvailable );
+			getView( ).getDuration( ).setText( notAvailable );
+			getView( ).getTraceID( ).setText( notAvailable );
+			getView( ).getPercent( ).setText( notAvailable );
+			getView( ).getFailed( ).setText( notAvailable );
 		}
 	}
 
@@ -260,6 +262,9 @@ public final class TracesController extends AbstractController<TracesView> imple
 		getView( ).getCounter( ).textProperty( ).set( rootChildren.size( ) + " " + getView( ).getResourceBundle( ).getString( "TracesView.lblCounter.text" ) );
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private static class FilterContent {
 
 		private String ivFilterComponent;

@@ -21,10 +21,11 @@
     <module name="HideUtilityClassConstructor"/>
     <module name="DesignForExtension"/>
     <module name="MutableException"/>
-    <module name="ThrowsCount"/>
+    <module name="ThrowsCount">
+		<property name="max" value="3"/>
+	</module>
     <module name="InnerTypeLast"/>
-    
-    <module name="ArrayTrailingComma"/>
+
     <module name="CovariantEquals"/>
     <module name="EmptyStatement"/>
     <module name="EqualsAvoidNull"/>

@@ -154,6 +154,7 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 	}
 
 	private void updateView( final AggregatedOperationCall aCall ) {
+		final String notAvailable = getView( ).getResourceBundle( ).getString( "notAvailable" );
 		if ( aCall != null ) {
 			final TimeUnit sourceTimeUnit = ivDataService.getTimeUnit( );
 			final TimeUnit targetTimeUnit = ivPropertiesService.getTimeUnit( );
@@ -167,18 +168,18 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 			getView( ).getTotalDuration( ).setText( ivNameConverterService.toDurationString( aCall.getTotalDuration( ), sourceTimeUnit, targetTimeUnit ) );
 			getView( ).getMeanDuration( ).setText( ivNameConverterService.toDurationString( aCall.getMeanDuration( ), sourceTimeUnit, targetTimeUnit ) );
 			getView( ).getCalls( ).setText( Integer.toString( aCall.getCalls( ) ) );
-			getView( ).getFailed( ).setText( aCall.getFailedCause( ) != null ? aCall.getFailedCause( ) : "N/A" );
+			getView( ).getFailed( ).setText( aCall.getFailedCause( ) != null ? aCall.getFailedCause( ) : notAvailable );
 		} else {
-			getView( ).getContainer( ).setText( "N/A" );
-			getView( ).getComponent( ).setText( "N/A" );
-			getView( ).getOperation( ).setText( "N/A" );
-			getView( ).getMinimalDuration( ).setText( "N/A" );
-			getView( ).getMaximalDuration( ).setText( "N/A" );
-			getView( ).getMedianDuration( ).setText( "N/A" );
-			getView( ).getTotalDuration( ).setText( "N/A" );
-			getView( ).getMeanDuration( ).setText( "N/A" );
-			getView( ).getCalls( ).setText( "N/A" );
-			getView( ).getFailed( ).setText( "N/A" );
+			getView( ).getContainer( ).setText( notAvailable );
+			getView( ).getComponent( ).setText( notAvailable );
+			getView( ).getOperation( ).setText( notAvailable );
+			getView( ).getMinimalDuration( ).setText( notAvailable );
+			getView( ).getMaximalDuration( ).setText( notAvailable );
+			getView( ).getMedianDuration( ).setText( notAvailable );
+			getView( ).getTotalDuration( ).setText( notAvailable );
+			getView( ).getMeanDuration( ).setText( notAvailable );
+			getView( ).getCalls( ).setText( notAvailable );
+			getView( ).getFailed( ).setText( notAvailable );
 		}
 	}
 
@@ -204,6 +205,9 @@ public final class AggregatedCallsController extends AbstractController<Aggregat
 		return aFilterContent;
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private final class AggregatedCallsCSVDataCollector implements CSVDataCollector {
 
 		@Override

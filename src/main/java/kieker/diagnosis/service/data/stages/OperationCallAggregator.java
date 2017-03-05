@@ -30,23 +30,26 @@ import teetime.stage.basic.AbstractTransformation;
  */
 public final class OperationCallAggregator extends AbstractTransformation<OperationCall, AggregatedOperationCall> {
 
+	private static final String KEY_SEPARATOR = ",";
+
 	private final Map<String, List<OperationCall>> ivAggregationMap = new HashMap<>( );
 
 	@Override
 	protected void execute( final OperationCall aCall ) {
-		final String key = aCall.getContainer( ) + "," + aCall.getComponent( ) + "," + aCall.getOperation( ) + ", " + aCall.getFailedCause( );
+		final String key = aCall.getContainer( ) + KEY_SEPARATOR + aCall.getComponent( ) + KEY_SEPARATOR + aCall.getOperation( ) + ", "
+				+ aCall.getFailedCause( );
 
-		if ( !this.ivAggregationMap.containsKey( key ) ) {
+		if ( !ivAggregationMap.containsKey( key ) ) {
 			final List<OperationCall> aggregationList = new ArrayList<>( );
-			this.ivAggregationMap.put( key, aggregationList );
+			ivAggregationMap.put( key, aggregationList );
 		}
-		this.ivAggregationMap.get( key ).add( aCall );
+		ivAggregationMap.get( key ).add( aCall );
 	}
 
 	@Override
 	public void onTerminating( ) throws Exception {
-		for ( final List<OperationCall> aggregationList : this.ivAggregationMap.values( ) ) {
-			final List<Long> durations = this.extractDurations( aggregationList );
+		for ( final List<OperationCall> aggregationList : ivAggregationMap.values( ) ) {
+			final List<Long> durations = extractDurations( aggregationList );
 			final Statistics statistics = StatisticsUtility.calculateStatistics( durations );
 			super.getOutputPort( ).send( new AggregatedOperationCall( aggregationList.get( 0 ).getContainer( ), aggregationList.get( 0 ).getComponent( ),
 					aggregationList.get( 0 ).getOperation( ), aggregationList.get( 0 ).getFailedCause( ), statistics.getTotalDuration( ),
