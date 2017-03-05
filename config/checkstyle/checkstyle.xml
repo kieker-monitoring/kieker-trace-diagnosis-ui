@@ -54,7 +54,6 @@
     <module name="FallThrough"/>
     <module name="MultipleStringLiterals"/>
     <module name="MultipleVariableDeclarations"/>
-    <module name="RequireThis"/>
     <module name="OneStatementPerLine"/>
     
     <module name="AvoidStarImport"/>
@@ -114,7 +113,9 @@
     <module name="EmptyForIteratorPad"/>
     <module name="MethodParamPad"/>
     <module name="OperatorWrap"/>
-    <module name="ParenPad"/>
+    <module name="ParenPad">
+		<property name="option" value="space"/>
+	</module>
     <module name="TypecastParenPad"/>
     
     <property name="tabWidth" value="4"/>
