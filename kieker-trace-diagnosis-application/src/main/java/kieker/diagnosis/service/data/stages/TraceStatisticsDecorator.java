@@ -21,6 +21,7 @@ import kieker.diagnosis.service.data.domain.OperationCall;
 import kieker.diagnosis.service.data.domain.Trace;
 import kieker.diagnosis.service.properties.PercentCalculationProperty;
 import kieker.diagnosis.service.properties.PropertiesService;
+
 import teetime.stage.basic.AbstractTransformation;
 
 /**

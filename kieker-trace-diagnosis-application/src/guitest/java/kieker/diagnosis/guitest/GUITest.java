@@ -20,10 +20,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import javafx.stage.Stage;
+
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
-import javafx.stage.Stage;
 import kieker.diagnosis.Main;
 import kieker.diagnosis.guitest.mainview.MainView;
 import kieker.diagnosis.guitest.mainview.dialog.AboutDialog;

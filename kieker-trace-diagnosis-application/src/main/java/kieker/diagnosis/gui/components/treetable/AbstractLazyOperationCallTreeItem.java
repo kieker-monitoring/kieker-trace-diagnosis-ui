@@ -18,6 +18,7 @@ package kieker.diagnosis.gui.components.treetable;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
+
 import kieker.diagnosis.service.data.domain.AbstractOperationCall;
 
 /**

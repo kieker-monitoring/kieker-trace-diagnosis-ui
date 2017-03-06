@@ -43,6 +43,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import javafx.util.Duration;
+
 import kieker.diagnosis.common.TechnicalException;
 import kieker.diagnosis.service.InjectService;
 import kieker.diagnosis.service.ServiceIfc;

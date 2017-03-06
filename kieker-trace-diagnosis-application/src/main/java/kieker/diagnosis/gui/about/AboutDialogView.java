@@ -19,6 +19,7 @@ package kieker.diagnosis.gui.about;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Window;
+
 import kieker.diagnosis.gui.AbstractView;
 import kieker.diagnosis.gui.InjectComponent;
 

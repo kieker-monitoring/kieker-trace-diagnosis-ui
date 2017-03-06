@@ -20,7 +20,9 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+
 import jfxtras.scene.control.CalendarTimeTextField;
+
 import kieker.diagnosis.gui.AbstractView;
 import kieker.diagnosis.gui.InjectComponent;
 import kieker.diagnosis.service.data.domain.OperationCall;

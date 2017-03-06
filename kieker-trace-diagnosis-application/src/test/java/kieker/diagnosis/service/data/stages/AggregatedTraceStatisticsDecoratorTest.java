@@ -24,12 +24,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Test;
+
 import kieker.diagnosis.service.data.domain.AggregatedTrace;
 import kieker.diagnosis.service.data.domain.OperationCall;
 import kieker.diagnosis.service.data.domain.Trace;
-import kieker.diagnosis.service.data.stages.AggregatedTraceStatisticsDecorator;
-
-import org.junit.Test;
 
 public final class AggregatedTraceStatisticsDecoratorTest {
 

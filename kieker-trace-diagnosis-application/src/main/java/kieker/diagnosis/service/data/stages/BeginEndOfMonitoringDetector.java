@@ -17,6 +17,7 @@
 package kieker.diagnosis.service.data.stages;
 
 import kieker.common.record.IMonitoringRecord;
+
 import teetime.stage.basic.AbstractTransformation;
 
 /**

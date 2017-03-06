@@ -32,6 +32,7 @@ import javafx.collections.transformation.SortedList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.MouseEvent;
+
 import kieker.diagnosis.gui.AbstractController;
 import kieker.diagnosis.gui.Context;
 import kieker.diagnosis.gui.ContextKey;

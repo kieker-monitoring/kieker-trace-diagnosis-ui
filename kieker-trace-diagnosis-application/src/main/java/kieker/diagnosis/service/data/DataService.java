@@ -24,12 +24,14 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.diagnosis.service.ServiceIfc;
 import kieker.diagnosis.service.data.domain.AggregatedOperationCall;
 import kieker.diagnosis.service.data.domain.AggregatedTrace;
 import kieker.diagnosis.service.data.domain.OperationCall;
 import kieker.diagnosis.service.data.domain.Trace;
+
 import teetime.framework.Execution;
 
 /**

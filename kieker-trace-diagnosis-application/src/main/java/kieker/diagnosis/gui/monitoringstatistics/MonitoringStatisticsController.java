@@ -23,6 +23,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+
 import kieker.diagnosis.gui.AbstractController;
 import kieker.diagnosis.gui.Context;
 import kieker.diagnosis.service.InjectService;

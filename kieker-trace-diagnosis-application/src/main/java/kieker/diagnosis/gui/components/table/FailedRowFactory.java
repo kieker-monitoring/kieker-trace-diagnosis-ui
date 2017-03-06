@@ -19,6 +19,7 @@ package kieker.diagnosis.gui.components.table;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.util.Callback;
+
 import kieker.diagnosis.service.data.domain.AbstractOperationCall;
 
 /**

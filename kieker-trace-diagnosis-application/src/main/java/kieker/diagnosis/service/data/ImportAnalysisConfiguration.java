@@ -35,6 +35,7 @@ import kieker.diagnosis.service.data.stages.TraceAggregationComposite;
 import kieker.diagnosis.service.data.stages.TraceReconstructionComposite;
 import kieker.diagnosis.service.properties.AdditionalLogChecksProperty;
 import kieker.diagnosis.service.properties.PropertiesService;
+
 import teetime.framework.Configuration;
 import teetime.stage.CollectorSink;
 import teetime.stage.MultipleInstanceOfFilter;

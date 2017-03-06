@@ -23,6 +23,7 @@ import kieker.diagnosis.service.data.domain.AggregatedOperationCall;
 import kieker.diagnosis.service.data.domain.AggregatedTrace;
 import kieker.diagnosis.service.data.domain.OperationCall;
 import kieker.diagnosis.service.data.domain.Trace;
+
 import teetime.stage.basic.AbstractTransformation;
 
 /**

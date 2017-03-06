@@ -29,6 +29,7 @@ import org.junit.Test;
 
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.diagnosis.service.data.domain.Trace;
+
 import teetime.framework.Configuration;
 import teetime.framework.Execution;
 import teetime.stage.CollectorSink;

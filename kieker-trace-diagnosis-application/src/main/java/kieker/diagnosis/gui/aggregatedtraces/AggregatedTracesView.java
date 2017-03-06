@@ -19,6 +19,7 @@ package kieker.diagnosis.gui.aggregatedtraces;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeTableView;
+
 import kieker.diagnosis.gui.AbstractView;
 import kieker.diagnosis.gui.InjectComponent;
 import kieker.diagnosis.service.data.domain.AggregatedOperationCall;

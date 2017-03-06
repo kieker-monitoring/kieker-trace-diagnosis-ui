@@ -18,6 +18,9 @@ package kieker.diagnosis.gui;
 
 /**
  * @author Nils Christian Ehmke
+ *
+ * @param <T>
+ *            The view class which is controlled by this controller.
  */
 public abstract class AbstractController<T extends AbstractView> {
 

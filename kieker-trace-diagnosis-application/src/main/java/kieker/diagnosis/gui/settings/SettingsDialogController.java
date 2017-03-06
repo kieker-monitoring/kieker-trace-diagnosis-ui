@@ -19,6 +19,7 @@ package kieker.diagnosis.gui.settings;
 import java.util.concurrent.TimeUnit;
 
 import javafx.collections.FXCollections;
+
 import kieker.diagnosis.gui.AbstractController;
 import kieker.diagnosis.gui.Context;
 import kieker.diagnosis.service.InjectService;

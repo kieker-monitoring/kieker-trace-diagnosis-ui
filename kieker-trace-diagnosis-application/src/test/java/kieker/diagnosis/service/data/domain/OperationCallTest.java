@@ -22,8 +22,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import kieker.diagnosis.service.data.domain.OperationCall;
-
 public final class OperationCallTest extends AbstractOperationCallTest<OperationCall> {
 
 	@Test

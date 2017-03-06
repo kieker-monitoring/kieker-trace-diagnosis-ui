@@ -23,6 +23,7 @@ import java.util.Map;
 
 import kieker.diagnosis.service.data.domain.AggregatedTrace;
 import kieker.diagnosis.service.data.domain.Trace;
+
 import teetime.stage.basic.AbstractTransformation;
 
 /**

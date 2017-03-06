@@ -19,6 +19,7 @@ package kieker.diagnosis.gui.components.treetable;
 import javafx.scene.control.TreeTableRow;
 import javafx.scene.control.TreeTableView;
 import javafx.util.Callback;
+
 import kieker.diagnosis.service.data.domain.AbstractOperationCall;
 
 /**

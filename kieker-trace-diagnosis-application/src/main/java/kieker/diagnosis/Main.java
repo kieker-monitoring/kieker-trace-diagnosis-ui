@@ -18,6 +18,7 @@ package kieker.diagnosis;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+
 import kieker.diagnosis.common.TechnicalException;
 import kieker.diagnosis.gui.GUIUtil;
 import kieker.diagnosis.gui.main.MainController;

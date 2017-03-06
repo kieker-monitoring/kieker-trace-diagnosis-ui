@@ -24,6 +24,7 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import javafx.scene.control.TreeItem;
+
 import kieker.diagnosis.service.ServiceUtil;
 import kieker.diagnosis.service.data.domain.OperationCall;
 import kieker.diagnosis.service.properties.MethodCallAggregationProperty;

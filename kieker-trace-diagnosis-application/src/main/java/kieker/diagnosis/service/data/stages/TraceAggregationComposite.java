@@ -20,6 +20,7 @@ import java.util.List;
 
 import kieker.diagnosis.service.data.domain.AggregatedTrace;
 import kieker.diagnosis.service.data.domain.Trace;
+
 import teetime.framework.AbstractCompositeStage;
 import teetime.framework.InputPort;
 import teetime.stage.CollectorSink;

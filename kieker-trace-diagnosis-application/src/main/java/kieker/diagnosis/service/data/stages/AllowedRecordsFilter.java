@@ -22,6 +22,7 @@ import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.misc.KiekerMetadataRecord;
+
 import teetime.stage.basic.AbstractTransformation;
 
 /**

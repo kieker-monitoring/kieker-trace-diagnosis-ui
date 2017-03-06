@@ -21,9 +21,6 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import kieker.diagnosis.service.data.domain.AggregatedOperationCall;
-import kieker.diagnosis.service.data.domain.OperationCall;
-
 public final class AggregatedOperationCallTest extends AbstractOperationCallTest<AggregatedOperationCall> {
 
 	@Test

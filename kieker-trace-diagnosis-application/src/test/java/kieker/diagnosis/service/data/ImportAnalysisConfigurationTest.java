@@ -25,7 +25,6 @@ import java.io.File;
 
 import org.junit.Test;
 
-import kieker.diagnosis.service.data.ImportAnalysisConfiguration;
 import teetime.framework.Execution;
 
 public final class ImportAnalysisConfigurationTest {

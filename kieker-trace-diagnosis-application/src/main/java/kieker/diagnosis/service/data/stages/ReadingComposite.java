@@ -19,6 +19,7 @@ package kieker.diagnosis.service.data.stages;
 import java.io.File;
 
 import kieker.common.record.IMonitoringRecord;
+
 import teetime.framework.AbstractCompositeStage;
 import teetime.framework.OutputPort;
 import teetime.stage.InitialElementProducer;

@@ -62,8 +62,7 @@
     <module name="IllegalImport"/>
     <module name="RedundantImport"/>
     <module name="UnusedImports"/>
-    <module name="ImportOrder"/>
-    
+
     <module name="JavadocType"><property name="severity" value="info"/></module>
     <module name="JavadocStyle"/>
     
@@ -120,6 +119,13 @@
     <module name="TypecastParenPad"/>
     
     <property name="tabWidth" value="4"/>
+	
+	<module name="CustomImportOrder">
+		<property name="customImportOrderRules" value="SAME_PACKAGE(2)###STATIC###STANDARD_JAVA_PACKAGE###SPECIAL_IMPORTS###THIRD_PARTY_PACKAGE"/>
+		<property name="standardPackageRegExp" value="^(java|javax|javafx)\."/>
+		<property name="specialImportsRegExp" value="^(org|jfxtras)\."/>
+		<property name="thirdPartyPackageRegExp" value="^(kieker)\."/>
+	</module>
   </module>
   
    <module name="Header">
@@ -137,4 +143,5 @@
     <module name="SuppressionFilter">
       <property name="file" value="kieker-trace-diagnosis-release-engineering/config/checkstyle/suppressions.xml"/>
     </module>
+			
 </module>

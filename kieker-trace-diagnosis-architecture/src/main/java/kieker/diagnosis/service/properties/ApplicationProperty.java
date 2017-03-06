@@ -18,6 +18,9 @@ package kieker.diagnosis.service.properties;
 
 /**
  * @author Nils Christian Ehmke
+ *
+ * @param <T>
+ *            The type of the property.
  */
 public interface ApplicationProperty<T> {
 

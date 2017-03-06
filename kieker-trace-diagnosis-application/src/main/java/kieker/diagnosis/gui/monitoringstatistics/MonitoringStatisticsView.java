@@ -17,6 +17,7 @@
 package kieker.diagnosis.gui.monitoringstatistics;
 
 import javafx.scene.control.TextField;
+
 import kieker.diagnosis.gui.AbstractView;
 import kieker.diagnosis.gui.InjectComponent;
 
