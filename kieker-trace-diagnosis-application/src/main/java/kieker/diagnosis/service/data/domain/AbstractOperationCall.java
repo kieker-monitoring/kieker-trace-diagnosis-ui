@@ -104,7 +104,7 @@ public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> 
 		return isFailed( ) || ivChildren.parallelStream( ).anyMatch( T::containsFailure );
 	}
 
-	public final int calculateHashCode( ) {
+	public final int calculateHashCode( ) { // NOPMD (this method violates some metrics)
 		final int prime = 31;
 		int result = 1;
 

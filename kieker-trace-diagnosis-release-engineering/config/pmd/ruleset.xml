@@ -21,6 +21,8 @@
     <exclude name="AvoidFinalLocalVariable"/>
 	<exclude name="AtLeastOneConstructor"/>
 	<exclude name="DefaultPackage"/>
+	<exclude name="NullAssignment"/>
+	<exclude name="AvoidLiteralsInIfCondition"/>
   </rule>
   <rule ref="rulesets/java/coupling.xml">
     <exclude name="LoosePackageCoupling"/>
