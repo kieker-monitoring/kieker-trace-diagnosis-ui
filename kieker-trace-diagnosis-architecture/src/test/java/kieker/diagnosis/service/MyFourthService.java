@@ -14,25 +14,12 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.service.properties;
+package kieker.diagnosis.service;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+class MyFourthService implements ServiceIfc {
 
-import java.util.concurrent.TimeUnit;
+	public MyFourthService( final int aParameter ) {
 
-import org.junit.Test;
-
-public final class PropertiesServiceTest {
-
-	@Test
-	public void settingShouldBePersisted( ) {
-		final PropertiesService fstModel = new PropertiesService( );
-		fstModel.saveProperty( TimeUnitProperty.class, TimeUnit.NANOSECONDS );
-		fstModel.saveProperty( TimeUnitProperty.class, TimeUnit.MICROSECONDS );
-
-		final PropertiesService sndModel = new PropertiesService( );
-		assertThat( sndModel.loadProperty( TimeUnitProperty.class ), is( TimeUnit.MICROSECONDS ) );
 	}
 
 }

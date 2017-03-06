@@ -21,9 +21,16 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
+import kieker.diagnosis.common.TechnicalException;
 
 public class ServiceUtilTest {
+
+	@Rule
+	public final ExpectedException expectedException = ExpectedException.none( );
 
 	@Test
 	public void returnedInstanceShouldBeOfCorrectType( ) {
@@ -59,4 +66,17 @@ public class ServiceUtilTest {
 		assertThat( mySecondService.getMyFirstService( ), is( ServiceUtil.getService( MyFirstService.class ) ) );
 		assertThat( myFirstService.getMySecondService( ), is( ServiceUtil.getService( MySecondService.class ) ) );
 	}
+
+	@Test
+	public void serviceInjectionShouldOnlyWorkForServices( ) {
+		expectedException.expect( TechnicalException.class );
+		ServiceUtil.getService( MyThirdService.class );
+	}
+
+	@Test
+	public void instantiationExceptionShouldBeHandled( ) {
+		expectedException.expect( TechnicalException.class );
+		ServiceUtil.getService( MyFourthService.class );
+	}
+
 }
