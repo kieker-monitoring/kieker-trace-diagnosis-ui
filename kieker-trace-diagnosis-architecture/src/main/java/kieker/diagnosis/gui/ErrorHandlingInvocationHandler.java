@@ -47,7 +47,7 @@ class ErrorHandlingInvocationHandler implements InvocationHandler {
 	}
 
 	@Override
-	public Object invoke( final Object aProxy, final Method aMethod, final Object[] aArgs ) throws Throwable {
+	public Object invoke( final Object aProxy, final Method aMethod, final Object[] aArgs ) {
 		try {
 			return aMethod.invoke( ivDelegate, aArgs );
 		} catch ( final ReflectiveOperationException ex ) {

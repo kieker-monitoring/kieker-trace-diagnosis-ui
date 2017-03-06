@@ -37,6 +37,8 @@ public final class FailedRowFactory<S> implements Callback<TableView<S>, TableRo
 	 */
 	private final class FailedTableRow extends TableRow<S> {
 
+		private static final String STYLECLASS_FAILED = "failed";
+
 		@Override
 		protected void updateItem( final S aItem, final boolean aEmpty ) {
 			super.updateItem( aItem, aEmpty );
@@ -44,10 +46,10 @@ public final class FailedRowFactory<S> implements Callback<TableView<S>, TableRo
 			if ( aItem instanceof AbstractOperationCall<?> ) {
 				final AbstractOperationCall<?> call = (AbstractOperationCall<?>) aItem;
 
-				getStyleClass( ).remove( "failed" );
+				getStyleClass( ).remove( STYLECLASS_FAILED );
 
 				if ( call.isFailed( ) ) {
-					getStyleClass( ).add( "failed" );
+					getStyleClass( ).add( STYLECLASS_FAILED );
 				}
 			}
 		}
