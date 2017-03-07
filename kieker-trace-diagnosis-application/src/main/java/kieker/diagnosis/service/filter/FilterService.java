@@ -65,7 +65,7 @@ public final class FilterService implements ServiceIfc {
 				if ( caseSensitivityActive ) {
 					return x -> aFunction.apply( x ).contains( text );
 				} else {
-					return x -> aFunction.apply( x ).toLowerCase( ).contains( text.toLowerCase( Locale.getDefault( ) ) );
+					return x -> aFunction.apply( x ).toLowerCase( Locale.getDefault( ) ).contains( text.toLowerCase( Locale.getDefault( ) ) );
 				}
 			}
 		}
@@ -111,7 +111,8 @@ public final class FilterService implements ServiceIfc {
 		if ( value == null ) {
 			return x -> true;
 		}
-		final Predicate<T> result = x -> {
+
+		return x -> {
 			final long timestamp = aFunction.apply( x );
 			final long timestampInMS = TimeUnit.MILLISECONDS.convert( timestamp, ivPropertiesService.loadProperty( TimeUnitProperty.class ) );
 			final Instant instant = Instant.ofEpochMilli( timestampInMS );
@@ -123,8 +124,6 @@ public final class FilterService implements ServiceIfc {
 				return value.isAfter( localDate ) || value.isEqual( localDate );
 			}
 		};
-
-		return result;
 	}
 
 	public <T extends AbstractOperationCall<T>> Predicate<T> useFilter( final DatePicker aDatePicker, final Function<T, Long> aFunction,
@@ -158,7 +157,7 @@ public final class FilterService implements ServiceIfc {
 		if ( value == null ) {
 			return x -> true;
 		}
-		final Predicate<T> result = x -> {
+		return x -> {
 			final long timestamp = aFunction.apply( x );
 			final long timestampInMS = TimeUnit.MILLISECONDS.convert( timestamp, ivPropertiesService.loadProperty( TimeUnitProperty.class ) );
 			final Instant instant = Instant.ofEpochMilli( timestampInMS );
@@ -200,8 +199,6 @@ public final class FilterService implements ServiceIfc {
 				return true;
 			}
 		};
-
-		return result;
 	}
 
 	public <T> Predicate<T> useFilter( final RadioButton aShowAllButton, final RadioButton aShowJustSuccessfulButton, final RadioButton aShowJustFailedButton,

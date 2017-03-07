@@ -70,6 +70,10 @@ public final class Mapper<I, O> extends HashMap<I, O> {
 		return entrySet( ).parallelStream( ).filter( entry -> aValue.equals( entry.getValue( ) ) ).map( Map.Entry::getKey ).findFirst( ).orElse( null );
 	}
 
+	protected void setDefaultValue( final O aDefaultValue ) {
+		ivDefaultValue = aDefaultValue;
+	}
+
 	/**
 	 * This is an internal helper class for the fluent API.
 	 *
@@ -94,7 +98,7 @@ public final class Mapper<I, O> extends HashMap<I, O> {
 			if ( ivKeyAvailable ) {
 				put( ivKey, aValue );
 			} else {
-				ivDefaultValue = aValue;
+				setDefaultValue( aValue );
 			}
 		}
 

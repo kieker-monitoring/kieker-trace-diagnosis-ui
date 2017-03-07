@@ -20,7 +20,7 @@ subprojects {
 		ruleSets = []
 		ruleSetFiles = files('../kieker-trace-diagnosis-release-engineering/config/pmd/ruleset.xml')
 		
-		toolVersion = '5.3.3'
+		toolVersion = '5.5.4'
 	}
 
 	apply plugin: 'checkstyle'

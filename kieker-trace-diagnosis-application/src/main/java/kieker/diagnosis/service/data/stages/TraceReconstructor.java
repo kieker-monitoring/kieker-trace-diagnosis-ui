@@ -91,6 +91,18 @@ final class TraceReconstructor extends AbstractTransformation<IFlowRecord, Trace
 		}
 	}
 
+	protected boolean isActivateAdditionalLogChecks( ) {
+		return ivActivateAdditionalLogChecks;
+	}
+
+	protected Map<Long, TraceBuffer> getTraceBuffers( ) {
+		return ivTraceBuffers;
+	}
+
+	protected List<TraceBuffer> getFaultyTraceBuffers( ) {
+		return ivFaultyTraceBuffers;
+	}
+
 	/**
 	 * @author Nils Christian Ehmke
 	 */
@@ -139,9 +151,9 @@ final class TraceReconstructor extends AbstractTransformation<IFlowRecord, Trace
 
 			ivHeader = ivHeader.getParent( );
 
-			if ( ivActivateAdditionalLogChecks && !beforeEvent.getOperationSignature( ).equals( aRecord.getOperationSignature( ) ) ) {
-				ivFaultyTraceBuffers.add( this );
-				ivTraceBuffers.remove( ivTraceID );
+			if ( isActivateAdditionalLogChecks( ) && !beforeEvent.getOperationSignature( ).equals( aRecord.getOperationSignature( ) ) ) {
+				getFaultyTraceBuffers( ).add( this );
+				getTraceBuffers( ).remove( ivTraceID );
 			}
 		}
 
