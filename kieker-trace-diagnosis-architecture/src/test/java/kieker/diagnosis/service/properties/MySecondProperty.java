@@ -1,6 +1,6 @@
 package kieker.diagnosis.service.properties;
 
-public class MySecondProperty extends AbstractBooleanApplicationProperty {
+class MySecondProperty extends AbstractBooleanApplicationProperty {
 
 	@Override
 	public String getDefaultValue( ) {

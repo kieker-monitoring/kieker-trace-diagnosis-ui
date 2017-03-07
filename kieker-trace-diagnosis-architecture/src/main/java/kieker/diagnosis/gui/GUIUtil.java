@@ -48,6 +48,10 @@ import kieker.diagnosis.common.TechnicalException;
 import kieker.diagnosis.service.InjectService;
 import kieker.diagnosis.service.ServiceIfc;
 import kieker.diagnosis.service.ServiceUtil;
+import kieker.diagnosis.service.properties.LogoProperty;
+import kieker.diagnosis.service.properties.PropertiesService;
+import kieker.diagnosis.service.properties.SplashscreenProperty;
+import kieker.diagnosis.service.properties.TitleProperty;
 
 /**
  * @author Nils Christian Ehmke
@@ -116,8 +120,11 @@ public final class GUIUtil {
 
 		scene.getStylesheets( ).add( loadedView.getStylesheetURL( ) );
 
+		final PropertiesService propertiesService = ServiceUtil.getService( PropertiesService.class );
+		final String logo = propertiesService.loadSystemProperty( LogoProperty.class );
+
 		final Stage dialogStage = new Stage( );
-		dialogStage.getIcons( ).add( new Image( "kieker-logo.png" ) );
+		dialogStage.getIcons( ).add( new Image( logo ) );
 		dialogStage.setTitle( loadedView.getTitle( ) );
 		dialogStage.setResizable( false );
 		dialogStage.initModality( Modality.WINDOW_MODAL );
@@ -288,8 +295,12 @@ public final class GUIUtil {
 		final Scene scene = new Scene( (Parent) aLoadedView.getNode( ) );
 		aRootStage.setScene( scene );
 
-		aRootStage.getIcons( ).add( new Image( "kieker-logo.png" ) );
-		aRootStage.setTitle( "Kieker Trace Diagnosis - 1.2.0-SNAPSHOT" );
+		final PropertiesService propertiesService = ServiceUtil.getService( PropertiesService.class );
+		final String logo = propertiesService.loadSystemProperty( LogoProperty.class );
+		final String title = propertiesService.loadSystemProperty( TitleProperty.class );
+
+		aRootStage.getIcons( ).add( new Image( logo ) );
+		aRootStage.setTitle( title );
 		aRootStage.setMaximized( true );
 
 		showSplashScreen( scene );
@@ -298,7 +309,10 @@ public final class GUIUtil {
 	}
 
 	private static void showSplashScreen( final Scene aRoot ) {
-		final ImageView imageView = new ImageView( "splashscreen.png" );
+		final PropertiesService propertiesService = ServiceUtil.getService( PropertiesService.class );
+		final String splashscreen = propertiesService.loadSystemProperty( SplashscreenProperty.class );
+
+		final ImageView imageView = new ImageView( splashscreen );
 		final Pane parent = new Pane( imageView );
 		final Scene scene = new Scene( parent );
 

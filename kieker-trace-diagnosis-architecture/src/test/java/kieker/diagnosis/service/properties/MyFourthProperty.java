@@ -1,6 +1,6 @@
 package kieker.diagnosis.service.properties;
 
-public class MyFourthProperty implements SystemProperty<Integer> {
+class MyFourthProperty implements SystemProperty<Integer> {
 
 	@Override
 	public String getKey( ) {

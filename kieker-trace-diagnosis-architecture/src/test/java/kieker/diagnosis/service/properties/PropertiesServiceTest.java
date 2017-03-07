@@ -77,4 +77,11 @@ public class PropertiesServiceTest {
 		assertThat( value, is( 42 ) );
 	}
 
+	@Test
+	public void abstractStringSystemPropertiesShouldWork( ) {
+		final PropertiesService service = new PropertiesService( );
+		final String value = service.loadSystemProperty( MyFifthProperty.class );
+		assertThat( value, is( "test" ) );
+	}
+
 }

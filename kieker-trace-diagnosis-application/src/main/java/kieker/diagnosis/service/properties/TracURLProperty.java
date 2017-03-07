@@ -19,16 +19,11 @@ package kieker.diagnosis.service.properties;
 /**
  * @author Nils Christian Ehmke
  */
-public final class TracURLProperty implements SystemProperty<String> {
+public final class TracURLProperty extends AbstractStringSystemProperty {
 
 	@Override
 	public String getKey( ) {
 		return "TracURL";
-	}
-
-	@Override
-	public String deserialize( final String aString ) {
-		return aString;
 	}
 
 }

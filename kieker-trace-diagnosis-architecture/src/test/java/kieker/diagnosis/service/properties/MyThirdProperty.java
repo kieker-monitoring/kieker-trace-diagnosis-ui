@@ -1,6 +1,6 @@
 package kieker.diagnosis.service.properties;
 
-public class MyThirdProperty extends AbstractBooleanApplicationProperty {
+class MyThirdProperty extends AbstractBooleanApplicationProperty {
 
 	public MyThirdProperty( final int aParameter ) {
 	}

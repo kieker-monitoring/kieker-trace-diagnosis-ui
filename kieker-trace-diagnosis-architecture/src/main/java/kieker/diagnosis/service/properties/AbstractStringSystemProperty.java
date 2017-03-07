@@ -19,11 +19,11 @@ package kieker.diagnosis.service.properties;
 /**
  * @author Nils Christian Ehmke
  */
-public final class GitLabURLProperty extends AbstractStringSystemProperty {
+public abstract class AbstractStringSystemProperty implements SystemProperty<String> {
 
 	@Override
-	public String getKey( ) {
-		return "GitLabURL";
+	public final String deserialize( final String aString ) {
+		return aString;
 	}
 
 }
