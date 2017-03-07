@@ -29,7 +29,7 @@ import java.util.List;
  * @param <T>
  *            The precise type of the children. This should usually be the implementing class itself.
  */
-public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> {
+public abstract class AbstractOperationCall<T extends AbstractOperationCall<T>> { // NOPMD (this class violates metrics due to the hashcode and equals methods)
 
 	private final List<T> ivChildren = new ArrayList<>( );
 

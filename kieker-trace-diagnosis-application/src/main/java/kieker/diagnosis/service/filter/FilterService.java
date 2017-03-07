@@ -20,7 +20,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoField;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -36,11 +35,11 @@ import jfxtras.scene.control.CalendarTimeTextField;
 
 import kieker.diagnosis.service.InjectService;
 import kieker.diagnosis.service.ServiceIfc;
+import kieker.diagnosis.service.data.DataService;
 import kieker.diagnosis.service.data.domain.AbstractOperationCall;
 import kieker.diagnosis.service.properties.CaseSensitiveProperty;
 import kieker.diagnosis.service.properties.PropertiesService;
 import kieker.diagnosis.service.properties.RegularExpressionsProperty;
-import kieker.diagnosis.service.properties.TimeUnitProperty;
 
 /**
  * @author Nils Christian Ehmke
@@ -49,6 +48,9 @@ public final class FilterService implements ServiceIfc {
 
 	@InjectService
 	private PropertiesService ivPropertiesService;
+
+	@InjectService
+	private DataService ivDataService;
 
 	public <T> Predicate<T> useFilter( final TextField aFilter, final Function<T, String> aFunction ) {
 		final String text = aFilter.getText( );
@@ -114,7 +116,7 @@ public final class FilterService implements ServiceIfc {
 
 		return x -> {
 			final long timestamp = aFunction.apply( x );
-			final long timestampInMS = TimeUnit.MILLISECONDS.convert( timestamp, ivPropertiesService.loadProperty( TimeUnitProperty.class ) );
+			final long timestampInMS = TimeUnit.MILLISECONDS.convert( timestamp, ivDataService.getTimeUnit( ) );
 			final Instant instant = Instant.ofEpochMilli( timestampInMS );
 			final ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant( instant, ZoneId.systemDefault( ) );
 			final LocalDate localDate = LocalDate.from( zonedDateTime );
@@ -153,52 +155,19 @@ public final class FilterService implements ServiceIfc {
 	}
 
 	public <T> Predicate<T> useFilter( final CalendarTimeTextField aTimeTextField, final Function<T, Long> aFunction, final boolean aFilterBefore ) {
-		final Calendar value = aTimeTextField.getCalendar( );
-		if ( value == null ) {
+		final Calendar calendar = aTimeTextField.getCalendar( );
+
+		if ( calendar == null ) {
 			return x -> true;
 		}
-		return x -> {
-			final long timestamp = aFunction.apply( x );
-			final long timestampInMS = TimeUnit.MILLISECONDS.convert( timestamp, ivPropertiesService.loadProperty( TimeUnitProperty.class ) );
-			final Instant instant = Instant.ofEpochMilli( timestampInMS );
-			final ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant( instant, ZoneId.systemDefault( ) );
 
-			final int hour1 = zonedDateTime.get( ChronoField.HOUR_OF_DAY );
-			final int minute1 = zonedDateTime.get( ChronoField.MINUTE_OF_HOUR );
+		final TimeUnit destinationTimeUnit = ivDataService.getTimeUnit( );
 
-			final int hour2 = value.get( Calendar.HOUR_OF_DAY );
-			final int minute2 = value.get( Calendar.MINUTE );
-
-			if ( aFilterBefore ) {
-				if ( hour2 < hour1 ) {
-					return true;
-				}
-				if ( hour2 > hour1 ) {
-					return false;
-				}
-				if ( minute2 < minute1 ) {
-					return true;
-				}
-				if ( minute2 > minute1 ) {
-					return false;
-				}
-				return true;
-			} else {
-				if ( hour2 > hour1 ) {
-					return true;
-				}
-				if ( hour2 < hour1 ) {
-					return false;
-				}
-				if ( minute2 > minute1 ) {
-					return true;
-				}
-				if ( minute2 < minute1 ) {
-					return false;
-				}
-				return true;
-			}
-		};
+		if ( aFilterBefore ) {
+			return new BeforeTimeFilter<>( calendar, aFunction, destinationTimeUnit );
+		} else {
+			return new AfterTimeFilter<>( calendar, aFunction, destinationTimeUnit );
+		}
 	}
 
 	public <T> Predicate<T> useFilter( final RadioButton aShowAllButton, final RadioButton aShowJustSuccessfulButton, final RadioButton aShowJustFailedButton,
