@@ -31,18 +31,20 @@ final class AfterTimeFilter<T> extends AbstractTimeFilter<T> {
 
 	@Override
 	protected boolean doFilter( final int aHour1, final int aHour2, final int aMinute1, final int aMinute2 ) {
+		final boolean result;
+
 		if ( aHour2 > aHour1 ) {
-			return true;
+			result = true;
+		} else if ( aHour2 < aHour1 ) {
+			result = false;
+		} else if ( aMinute2 > aMinute1 ) {
+			result = true;
+		} else if ( aMinute2 < aMinute1 ) {
+			result = false;
+		} else {
+			result = true;
 		}
-		if ( aHour2 < aHour1 ) {
-			return false;
-		}
-		if ( aMinute2 > aMinute1 ) {
-			return true;
-		}
-		if ( aMinute2 < aMinute1 ) {
-			return false;
-		}
-		return true;
+
+		return result;
 	}
 }
