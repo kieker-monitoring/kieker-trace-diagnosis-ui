@@ -19,7 +19,7 @@ package kieker.diagnosis.service.properties;
 /**
  * @author Nils Christian Ehmke
  */
-public class SplashscreenProperty extends AbstractStringSystemProperty {
+public final class SplashscreenProperty extends AbstractStringSystemProperty {
 
 	@Override
 	public String getKey( ) {

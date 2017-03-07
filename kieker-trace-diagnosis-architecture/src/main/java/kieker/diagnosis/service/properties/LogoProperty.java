@@ -19,7 +19,7 @@ package kieker.diagnosis.service.properties;
 /**
  * @author Nils Christian Ehmke
  */
-public class LogoProperty extends AbstractStringSystemProperty {
+public final class LogoProperty extends AbstractStringSystemProperty {
 
 	@Override
 	public String getKey( ) {

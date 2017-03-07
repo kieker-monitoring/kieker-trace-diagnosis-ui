@@ -19,7 +19,7 @@ package kieker.diagnosis.service.properties;
 /**
  * @author Nils Christian Ehmke
  */
-public class TitleProperty extends AbstractStringSystemProperty {
+public final class TitleProperty extends AbstractStringSystemProperty {
 
 	@Override
 	public String getKey( ) {
