@@ -1,5 +1,9 @@
 1.2.0:
 	08 Mar 2017
+	Internal Improvement (#46)
+	Refactored the GUI test architecture.
+
+	08 Mar 2017
 	Feature (#45)
 	Added the possibility to import a directory containing multiple monitoring log directories.
 

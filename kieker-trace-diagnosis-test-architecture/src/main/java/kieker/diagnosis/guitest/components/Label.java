@@ -17,21 +17,31 @@
 package kieker.diagnosis.guitest.components;
 
 import javafx.scene.Node;
+import javafx.scene.control.Labeled;
 
-import org.testfx.framework.junit.ApplicationTest;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-public final class Label {
+import com.google.common.base.Predicate;
 
-	private final String id;
-	private final ApplicationTest applicationTest;
+/**
+ * @author Nils Christian Ehmke
+ */
+@Component
+@Scope ( ConfigurableListableBeanFactory.SCOPE_PROTOTYPE )
+public final class Label extends AbstractGuiComponent {
 
-	public Label( final ApplicationTest applicationTest, final String id ) {
-		this.applicationTest = applicationTest;
-		this.id = id;
+	public Label( final Predicate<Node> aMatcher ) {
+		super( aMatcher );
+	}
+
+	public Label( final String aId ) {
+		super( aId );
 	}
 
 	public String getText( ) {
-		final Node node = this.applicationTest.lookup( this.id ).queryFirst( );
-		return ((javafx.scene.control.Label) node).getText( );
+		return ( (Labeled) getNode( ) ).getText( );
 	}
+
 }

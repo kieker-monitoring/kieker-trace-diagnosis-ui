@@ -14,58 +14,53 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.guitest.mainview;
+package kieker.diagnosis.guitest.views;
 
-import org.testfx.framework.junit.ApplicationTest;
+import org.springframework.stereotype.Component;
 
 import kieker.diagnosis.guitest.components.Button;
 
-public final class MainView {
-
-	private final ApplicationTest applicationTest;
-
-	public MainView( final ApplicationTest applicationTest ) {
-		this.applicationTest = applicationTest;
-	}
+@Component
+public final class MainView extends AbstractView {
 
 	public Button getTracesButton( ) {
-		return new Button( this.applicationTest, "#ivTraces" );
+		return getComponent( Button.class, "ivTraces" );
 	}
 
 	public Button getAggregatedTracesButton( ) {
-		return new Button( this.applicationTest, "#ivAggregatedtraces" );
+		return getComponent( Button.class, "ivAggregatedtraces" );
 	}
 
 	public Button getCallsButton( ) {
-		return new Button( this.applicationTest, "#ivCalls" );
+		return getComponent( Button.class, "ivCalls" );
 	}
 
 	public Button getAggregatedCallsButton( ) {
-		return new Button( this.applicationTest, "#ivAggregatedcalls" );
+		return getComponent( Button.class, "ivAggregatedcalls" );
 	}
 
 	public Button getStatisticsButton( ) {
-		return new Button( this.applicationTest, "#ivStatistics" );
+		return getComponent( Button.class, "ivStatistics" );
 	}
 
 	public Button getHelpButton( ) {
-		return new Button( this.applicationTest, "#ivHelp" );
+		return getComponent( Button.class, "ivHelp" );
 	}
 
 	public Button getAboutButton( ) {
-		return new Button( this.applicationTest, "#ivAbout" );
+		return getComponent( Button.class, "ivAbout" );
 	}
 
 	public Button getFileButton( ) {
-		return new Button( this.applicationTest, "#ivFile" );
+		return getComponent( Button.class, "ivFile" );
 	}
 
 	public Button getSettingsButton( ) {
-		return new Button( this.applicationTest, "#ivSettings" );
+		return getComponent( Button.class, "ivSettings" );
 	}
 
 	public Button getOpenMonitoringLogButton( ) {
-		return new Button( this.applicationTest, "#ivOpenMonitoringLog" );
+		return getComponent( Button.class, "ivOpenMonitoringLog" );
 	}
 
 }

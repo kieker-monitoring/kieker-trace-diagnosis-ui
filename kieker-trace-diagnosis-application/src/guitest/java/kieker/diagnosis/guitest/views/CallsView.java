@@ -14,38 +14,33 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.guitest.mainview.subview;
+package kieker.diagnosis.guitest.views;
 
-import org.testfx.framework.junit.ApplicationTest;
+import org.springframework.stereotype.Component;
 
 import kieker.diagnosis.guitest.components.TextField;
 
-public final class CallsView {
-
-	private final ApplicationTest applicationTest;
-
-	public CallsView( final ApplicationTest applicationTest ) {
-		this.applicationTest = applicationTest;
-	}
+@Component
+public final class CallsView extends AbstractView {
 
 	public TextField getCounterTextField( ) {
-		return new TextField( this.applicationTest, "#ivCounter" );
+		return getComponent( TextField.class, "ivCounter" );
 	}
 
 	public TextField getFilterContainerTextField( ) {
-		return new TextField( this.applicationTest, "#ivFilterContainer" );
+		return getComponent( TextField.class, "ivFilterContainer" );
 	}
 
 	public TextField getFilterComponentTextField( ) {
-		return new TextField( this.applicationTest, "#ivFilterComponent" );
+		return getComponent( TextField.class, "ivFilterComponent" );
 	}
 
 	public TextField getFilterOperationTextField( ) {
-		return new TextField( this.applicationTest, "#ivFilterOperation" );
+		return getComponent( TextField.class, "ivFilterOperation" );
 	}
 
 	public TextField getFilterTraceIDTextField( ) {
-		return new TextField( this.applicationTest, "#ivFilterTraceID" );
+		return getComponent( TextField.class, "ivFilterTraceID" );
 	}
 
 }

@@ -14,34 +14,31 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.guitest.components;
+package kieker.diagnosis.guitest.views;
 
 import javafx.scene.Node;
-import javafx.scene.input.KeyCode;
 
-import org.testfx.framework.junit.ApplicationTest;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public final class TextField {
+import com.google.common.base.Predicate;
 
-	private final String id;
-	private final ApplicationTest applicationTest;
+import kieker.diagnosis.guitest.components.AbstractGuiComponent;
 
-	public TextField( final ApplicationTest applicationTest, final String id ) {
-		this.applicationTest = applicationTest;
-		this.id = id;
+/**
+ * @author Nils Christian Ehmke
+ */
+public abstract class AbstractView {
+
+	@Autowired
+	private BeanFactory ivBeanFactory;
+
+	protected final <T extends AbstractGuiComponent> T getComponent( final Class<T> aComponentClass, final String aId ) {
+		return ivBeanFactory.getBean( aComponentClass, aId );
 	}
 
-	public String getText( ) {
-		final Node node = this.applicationTest.lookup( this.id ).queryFirst( );
-		return ((javafx.scene.control.TextField) node).getText( );
-	}
-
-	public void setText( final String text ) {
-		this.applicationTest.clickOn( this.id ).write( text );
-	}
-
-	public void pushEnter( ) {
-		this.applicationTest.clickOn( this.id ).push( KeyCode.ENTER );
+	protected final <T extends AbstractGuiComponent> T getComponent( final Class<T> aComponentClass, final Predicate<Node> aPredicate ) {
+		return ivBeanFactory.getBean( aComponentClass, aPredicate );
 	}
 
 }

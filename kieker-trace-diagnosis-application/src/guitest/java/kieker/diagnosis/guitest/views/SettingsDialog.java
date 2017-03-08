@@ -14,27 +14,21 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.guitest.mainview.dialog;
+package kieker.diagnosis.guitest.views;
 
-import org.testfx.framework.junit.ApplicationTest;
+import org.springframework.stereotype.Component;
 
 import kieker.diagnosis.guitest.components.Button;
-import kieker.diagnosis.guitest.components.Label;
 
-public final class AboutDialog {
+@Component
+public final class SettingsDialog extends AbstractView {
 
-	private final ApplicationTest applicationTest;
-
-	public AboutDialog( final ApplicationTest applicationTest ) {
-		this.applicationTest = applicationTest;
+	public Button getCancelButton( ) {
+		return getComponent( Button.class, "ivCancel" );
 	}
 
 	public Button getOkayButton( ) {
-		return new Button( this.applicationTest, "#ivOkay" );
-	}
-
-	public Label getDescriptionLabel( ) {
-		return new Label( this.applicationTest, "#ivDescription" );
+		return getComponent( Button.class, "ivOkay" );
 	}
 
 }
