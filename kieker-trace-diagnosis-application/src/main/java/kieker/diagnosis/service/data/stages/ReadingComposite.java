@@ -17,6 +17,9 @@
 package kieker.diagnosis.service.data.stages;
 
 import java.io.File;
+import java.util.List;
+
+import com.google.common.io.Files;
 
 import kieker.common.record.IMonitoringRecord;
 
@@ -36,10 +39,15 @@ public final class ReadingComposite extends AbstractCompositeStage {
 	private final Dir2RecordsFilter ivReader;
 
 	public ReadingComposite( final File aImportDirectory ) {
-		final InitialElementProducer<File> producer = new InitialElementProducer<>( aImportDirectory );
+		final List<File> directories = getAllDirectories( aImportDirectory );
+		final InitialElementProducer<File> producer = new InitialElementProducer<>( directories );
 		ivReader = new Dir2RecordsFilter( new ClassNameRegistryRepository( ) );
 
 		super.connectPorts( producer.getOutputPort( ), ivReader.getInputPort( ) );
+	}
+
+	private List<File> getAllDirectories( final File aImportDirectory ) {
+		return Files.fileTreeTraverser( ).breadthFirstTraversal( aImportDirectory ).filter( File::isDirectory ).toList( );
 	}
 
 	public OutputPort<IMonitoringRecord> getOutputPort( ) {

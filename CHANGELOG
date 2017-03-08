@@ -1,4 +1,8 @@
 1.2.0:
+	08 Mar 2017
+	Feature (#45)
+	Added the possibility to import a directory containing multiple monitoring log directories.
+
 	05 Mar 2017
 	Internal Improvement (#44)
 	Implemented an architectural solution to save and load properties.
