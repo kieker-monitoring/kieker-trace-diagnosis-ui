@@ -1,4 +1,8 @@
 1.2.0:
+	10 Mar 2017
+	Bug (#47))
+	The reference to the Trac URL has been removed. Instead a link to the Kieker mailing list is available in the bug reporting dialog.
+
 	08 Mar 2017
 	Internal Improvement (#46)
 	Refactored the GUI test architecture.

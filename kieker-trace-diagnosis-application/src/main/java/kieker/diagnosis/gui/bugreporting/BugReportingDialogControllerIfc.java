@@ -26,7 +26,7 @@ public interface BugReportingDialogControllerIfc {
 
 	void visitGitLab( ) throws IOException, URISyntaxException;
 
-	void visitTrac( ) throws IOException, URISyntaxException;
+	void visitMailingList( ) throws IOException, URISyntaxException;
 
 	void closeDialog( );
 

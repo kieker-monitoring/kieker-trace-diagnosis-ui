@@ -23,7 +23,7 @@
 		</VBox.margin>
 	
 		<Label text="%description2"/>
-		<Hyperlink text="%here" onAction="#visitTrac"/>
+		<Hyperlink text="%here" onAction="#visitMailingList"/>
     </TextFlow>
         
 	<Separator/>

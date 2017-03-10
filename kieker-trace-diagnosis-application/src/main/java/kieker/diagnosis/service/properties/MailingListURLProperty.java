@@ -19,11 +19,11 @@ package kieker.diagnosis.service.properties;
 /**
  * @author Nils Christian Ehmke
  */
-public final class TracURLProperty extends AbstractStringSystemProperty {
+public final class MailingListURLProperty extends AbstractStringSystemProperty {
 
 	@Override
 	public String getKey( ) {
-		return "TracURL";
+		return "MailingListURL";
 	}
 
 }

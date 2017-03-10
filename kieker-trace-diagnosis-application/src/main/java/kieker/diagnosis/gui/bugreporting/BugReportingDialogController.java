@@ -26,7 +26,7 @@ import kieker.diagnosis.gui.Context;
 import kieker.diagnosis.service.InjectService;
 import kieker.diagnosis.service.properties.GitLabURLProperty;
 import kieker.diagnosis.service.properties.PropertiesService;
-import kieker.diagnosis.service.properties.TracURLProperty;
+import kieker.diagnosis.service.properties.MailingListURLProperty;
 
 /**
  * @author Nils Christian Ehmke
@@ -53,8 +53,8 @@ public final class BugReportingDialogController extends AbstractController<BugRe
 	}
 
 	@Override
-	public void visitTrac( ) throws IOException, URISyntaxException {
-		final String tracURL = ivPropertiesService.loadSystemProperty( TracURLProperty.class );
+	public void visitMailingList( ) throws IOException, URISyntaxException {
+		final String tracURL = ivPropertiesService.loadSystemProperty( MailingListURLProperty.class );
 		final Desktop desktop = Desktop.getDesktop( );
 		desktop.browse( new URI( tracURL ) );
 	}
