@@ -37,8 +37,8 @@ public class Main extends Application {
 
 	private DataService ivDataService;
 
-	public static void main( final String[] args ) {
-		Application.launch( args );
+	public static void main( final String[] aArgs ) {
+		Application.launch( aArgs );
 	}
 
 	@Override
