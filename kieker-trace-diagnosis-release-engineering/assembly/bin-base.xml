@@ -9,6 +9,11 @@
 		</fileSet>
 
 		<fileSet>
+			<directory>licenses</directory>
+			<outputDirectory>lib</outputDirectory>
+		</fileSet>
+
+		<fileSet>
 			<directory>example</directory>
 		</fileSet>
 		
