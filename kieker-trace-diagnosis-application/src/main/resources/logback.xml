@@ -3,15 +3,34 @@
 
 	<statusListener class="ch.qos.logback.core.status.NopStatusListener" />
 
-	<appender name="TeeTimeFile" class="ch.qos.logback.core.FileAppender">
+	<appender name="TeeTimeFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>logs/TeeTime.log</file>
 		<encoder>
 			<pattern>%d %p %C [%t] %m%n</pattern>
 		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<maxHistory>10</maxHistory>
+			<fileNamePattern>logs/TeeTime-%d{yyyy-MM-dd}.log</fileNamePattern>
+		</rollingPolicy>
+	</appender>
+	
+	<appender name="KiekerTraceDiagnosisFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>logs/Kieker Trace Diagnosis.log</file>
+		<encoder>
+			<pattern>%d %p %C [%t] %m%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<maxHistory>10</maxHistory>
+			<fileNamePattern>logs/Kieker Trace Diagnosis-%d{yyyy-MM-dd}.log</fileNamePattern>
+		</rollingPolicy>
 	</appender>
 
 	<root level="warn">
-		<appender-ref ref="TeeTimeFile" />
+		<appender-ref ref="KiekerTraceDiagnosisFile" />
 	</root>
+	
+	<logger name="teetime" level="warn">
+		<appender-ref ref="TeeTimeFile"/>
+	</logger>
 
 </configuration> 

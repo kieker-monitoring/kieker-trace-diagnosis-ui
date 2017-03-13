@@ -1,10 +1,8 @@
+target
+.settings
 .project
 .classpath
-bin
-build
 logs
-*.log
-.settings
-.gradle
-*.aux
-*.pdf
+/kieker-trace-diagnosis-release-engineering/manual/*.log
+/kieker-trace-diagnosis-release-engineering/manual/*.pdf
+/kieker-trace-diagnosis-release-engineering/manual/*.aux

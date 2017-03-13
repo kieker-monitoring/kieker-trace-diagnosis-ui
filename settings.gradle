@@ -1,1 +1,0 @@
-include 'kieker-trace-diagnosis-application', 'kieker-trace-diagnosis-architecture', 'kieker-trace-diagnosis-test-architecture', 'kieker-trace-diagnosis-release-engineering'

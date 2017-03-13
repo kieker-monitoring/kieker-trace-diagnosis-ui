@@ -1,0 +1,23 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>net.kieker-monitoring</groupId>
+	<artifactId>kieker-trace-diagnosis</artifactId>
+	<version>1.2.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Kieker Trace Diagnosis</name>
+
+	<modules>
+		<module>kieker-trace-diagnosis-application</module>
+		<module>kieker-trace-diagnosis-architecture</module>
+		<module>kieker-trace-diagnosis-dependencies</module>
+		<module>kieker-trace-diagnosis-guitest</module>
+		<module>kieker-trace-diagnosis-guitest-architecture</module>
+		<module>kieker-trace-diagnosis-parent</module>
+		<module>kieker-trace-diagnosis-release-engineering</module>
+	</modules>
+
+</project>

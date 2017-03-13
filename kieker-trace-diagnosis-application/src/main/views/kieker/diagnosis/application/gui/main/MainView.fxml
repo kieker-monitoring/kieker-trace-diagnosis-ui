@@ -1,0 +1,64 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+
+<VBox fx:id="ivView" xmlns:fx="http://javafx.com/fxml">
+
+	<MenuBar>
+		<Menu text="%file" id="ivFile">
+			<MenuItem text="%openMonitoringLog" onAction="#performOpenMonitoringLog" id="openMonitoringLog"/>
+			<SeparatorMenuItem />
+			<MenuItem text="%settings" onAction="#performShowSettings" id="ivSettings" />
+			<SeparatorMenuItem />
+			<MenuItem text="%exit" onAction="#performClose"/>
+		</Menu>
+		<Menu text="%help" id="ivHelp">
+			<MenuItem text="%reportBugsAndFeatures" onAction="#performShowBugReporting"/>
+			<SeparatorMenuItem />
+			<MenuItem text="%aboutKiekerTraceDiagnosis" onAction="#performShowAbout" id="ivAbout"/>
+		</Menu>
+	</MenuBar>
+
+	<HBox VBox.vgrow="ALWAYS">
+		<VBox fx:id="ivLeftButtonBox">
+			<Button text="%traces" fx:id="ivTraces" wrapText="true" prefWidth="180" onAction="#performShowTraces">
+				<VBox.margin>
+					<javafx.geometry.Insets left="10" top="10" />
+				</VBox.margin>
+			</Button>
+			<Button text="%aggregatedTraces" fx:id="ivAggregatedtraces" prefWidth="180" onAction="#performShowAggregatedTraces">
+				<VBox.margin>
+					<javafx.geometry.Insets left="10" top="10" />
+				</VBox.margin>
+			</Button>
+			<Button text="%operationCalls" fx:id="ivCalls" prefWidth="180" onAction="#performShowCalls">
+				<VBox.margin>
+					<javafx.geometry.Insets left="10" top="10" />
+				</VBox.margin>
+			</Button>
+			<Button text="%aggregatedOperationCalls" fx:id="ivAggregatedcalls" prefWidth="180" onAction="#performShowAggregatedCalls">
+				<VBox.margin>
+					<javafx.geometry.Insets left="10" top="10" />
+				</VBox.margin>
+			</Button>
+			<Button text="%monitoringLogStatistics" fx:id="ivStatistics" prefWidth="180" onAction="#performShowStatistics">
+				<VBox.margin>
+					<javafx.geometry.Insets left="10" top="10" />
+				</VBox.margin>
+			</Button>
+		</VBox>
+
+		<AnchorPane fx:id="ivContent" HBox.hgrow="ALWAYS">
+			<HBox.margin>
+				<javafx.geometry.Insets left="10" top="10" bottom="10" right="10" />
+			</HBox.margin>
+		</AnchorPane>
+		
+	</HBox>
+
+</VBox>
