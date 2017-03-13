@@ -93,8 +93,10 @@
 						<id>validate</id>
 						<phase>validate</phase>
 						<configuration>
+							<xmlOutput>true</xmlOutput>
 							<failOnError>false</failOnError>
 							<effort>max</effort>
+							<threshold>low</threshold>
 						</configuration>
 						<goals>
 							<goal>findbugs</goal>
