@@ -42,6 +42,3 @@ public final class JavaFXInitializer implements ApplicationListener<ContextRefre
 	}
 
 }
-/**
- * @author Nils Christian Ehmke
- */

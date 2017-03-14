@@ -60,7 +60,7 @@
 		</placeholder>
 		
 		<columns>
-			<TableColumn text="%CallsView.tblclmnExecutionContainer.text">
+			<TableColumn text="%executionContainer">
 				<cellValueFactory>
 					<PropertyValueFactory property="container" />
 				</cellValueFactory>
@@ -72,13 +72,13 @@
 				</cellValueFactory>
 			</TableColumn>
 
-			<TableColumn text="%CallsView.tblclmnOperation.text">
+			<TableColumn text="%operation">
 				<cellValueFactory>
 					<OperationCellValueFactory property="operation" />
 				</cellValueFactory>
 			</TableColumn>
 
-			<TableColumn text="%CallsView.tblclmnDuration.text">
+			<TableColumn text="%duration">
 				<cellValueFactory>
 					<DurationCellValueFactory property="duration" />
 				</cellValueFactory>
@@ -104,7 +104,7 @@
 
         <TitledPane GridPane.rowIndex="2" text="%properties">
 	<GridPane fx:id="detailpanel" >
-		<TextField text="%CallsView.tblclmnExecutionContainer.text"
+		<TextField text="%executionContainer"
 			editable="false" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="1" GridPane.columnIndex="2" fx:id="ivContainer" GridPane.hgrow="ALWAYS" />
