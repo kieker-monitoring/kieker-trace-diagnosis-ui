@@ -27,6 +27,9 @@ import javafx.scene.control.TextField;
 
 import jfxtras.scene.control.CalendarTimeTextField;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public interface FilterService {
 
 	public <T> Predicate<T> useFilter( TextField aFilter, Function<T, String> aFunction );

@@ -40,6 +40,9 @@ import kieker.common.record.misc.KiekerMetadataRecord;
 
 import teetime.framework.Execution;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 @Component
 final class DataServiceImpl implements DataService {
 

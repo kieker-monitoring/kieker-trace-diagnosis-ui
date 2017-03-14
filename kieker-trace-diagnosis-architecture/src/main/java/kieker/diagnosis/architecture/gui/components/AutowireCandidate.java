@@ -16,6 +16,9 @@
 
 package kieker.diagnosis.architecture.gui.components;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public interface AutowireCandidate {
 
 }

@@ -55,6 +55,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 @Component
 public class MainController extends AbstractController<MainView> {
 

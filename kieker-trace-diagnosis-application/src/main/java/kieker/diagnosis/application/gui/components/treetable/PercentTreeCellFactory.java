@@ -18,6 +18,11 @@ package kieker.diagnosis.application.gui.components.treetable;
 
 /**
  * @author Nils Christian Ehmke
+ *
+ * @param <S>
+ *            The type of the table.
+ * @param <T>
+ *            The type of the content in all cells in the table columns.
  */
 public final class PercentTreeCellFactory<S, T> extends AbstractTreeTableCellFactory<S, T> {
 

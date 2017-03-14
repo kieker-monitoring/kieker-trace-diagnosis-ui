@@ -29,6 +29,9 @@ import org.springframework.stereotype.Component;
 
 import jfxtras.scene.control.CalendarTimeTextField;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 @Component
 final class CallsView extends AbstractView {
 

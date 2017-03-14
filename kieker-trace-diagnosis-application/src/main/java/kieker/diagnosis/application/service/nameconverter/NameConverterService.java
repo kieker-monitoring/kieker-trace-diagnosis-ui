@@ -18,6 +18,9 @@ package kieker.diagnosis.application.service.nameconverter;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public interface NameConverterService {
 
 	public String toShortTimeUnit( TimeUnit aTimeUnit );

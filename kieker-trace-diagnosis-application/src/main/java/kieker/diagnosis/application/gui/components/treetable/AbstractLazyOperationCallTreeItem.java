@@ -26,6 +26,9 @@ import javafx.scene.control.TreeItem;
  * lazy loading out of the box.
  *
  * @author Nils Christian Ehmke
+ *
+ * @param <T>
+ *            The precise type of the operation call.
  */
 public abstract class AbstractLazyOperationCallTreeItem<T extends AbstractOperationCall<T>> extends TreeItem<T> {
 

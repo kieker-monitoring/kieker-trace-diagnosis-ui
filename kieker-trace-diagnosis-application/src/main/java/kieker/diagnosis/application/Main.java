@@ -32,11 +32,22 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import com.google.common.collect.Iterables;
 
+/**
+ * This class contains the main method of this application.
+ *
+ * @author Nils Christian Ehmke
+ */
 @SpringBootApplication
 public class Main extends Application {
 
 	private DataService ivDataService;
 
+	/**
+	 * The main method of this application.
+	 *
+	 * @param aArgs
+	 *            The command line arguments. They are currently not intended to be used.
+	 */
 	public static void main( final String[] aArgs ) {
 		Application.launch( aArgs );
 	}

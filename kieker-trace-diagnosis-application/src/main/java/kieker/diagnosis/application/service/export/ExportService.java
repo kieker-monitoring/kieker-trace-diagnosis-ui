@@ -18,6 +18,9 @@ package kieker.diagnosis.application.service.export;
 
 import java.io.File;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public interface ExportService {
 
 	public void exportToCSV( CSVData aCSVData, File aFile );

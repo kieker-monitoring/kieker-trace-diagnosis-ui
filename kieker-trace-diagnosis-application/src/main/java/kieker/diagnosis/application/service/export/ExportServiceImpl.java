@@ -25,6 +25,9 @@ import java.io.OutputStreamWriter;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 @Component
 class ExportServiceImpl implements ExportService {
 

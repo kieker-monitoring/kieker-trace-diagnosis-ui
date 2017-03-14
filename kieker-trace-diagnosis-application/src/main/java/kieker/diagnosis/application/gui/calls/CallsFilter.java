@@ -19,6 +19,9 @@ package kieker.diagnosis.application.gui.calls;
 import java.time.LocalDate;
 import java.util.Calendar;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 final class CallsFilter {
 
 	private String ivFilterComponent;

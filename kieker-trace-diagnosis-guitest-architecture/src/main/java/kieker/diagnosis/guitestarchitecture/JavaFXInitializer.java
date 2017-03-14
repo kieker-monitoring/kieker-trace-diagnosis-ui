@@ -23,6 +23,9 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.testfx.api.FxToolkit;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 @Component
 public final class JavaFXInitializer implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -39,3 +42,6 @@ public final class JavaFXInitializer implements ApplicationListener<ContextRefre
 	}
 
 }
+/**
+ * @author Nils Christian Ehmke
+ */

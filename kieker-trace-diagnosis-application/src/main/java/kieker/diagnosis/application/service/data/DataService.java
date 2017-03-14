@@ -27,6 +27,9 @@ import java.util.concurrent.TimeUnit;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 public interface DataService {
 
 	public void loadMonitoringLogFromFS( File aImportDirectory );

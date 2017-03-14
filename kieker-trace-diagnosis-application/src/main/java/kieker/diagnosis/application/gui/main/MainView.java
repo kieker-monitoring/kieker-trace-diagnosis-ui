@@ -28,6 +28,9 @@ import javafx.stage.Window;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 @Component
 class MainView extends AbstractView {
 

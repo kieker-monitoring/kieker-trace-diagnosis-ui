@@ -24,6 +24,9 @@ import javafx.util.Callback;
 
 /**
  * @author Nils Christian Ehmke
+ *
+ * @param <S>
+ *            The type of the table.
  */
 public final class FailedRowFactory<S> implements Callback<TreeTableView<S>, TreeTableRow<S>> {
 

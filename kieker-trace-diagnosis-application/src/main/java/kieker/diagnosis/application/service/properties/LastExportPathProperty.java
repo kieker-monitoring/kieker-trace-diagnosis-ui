@@ -20,6 +20,9 @@ import kieker.diagnosis.architecture.service.properties.AbstractStringApplicatio
 
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Nils Christian Ehmke
+ */
 @Component
 public final class LastExportPathProperty extends AbstractStringApplicationProperty {
 

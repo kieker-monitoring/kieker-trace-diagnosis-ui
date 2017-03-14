@@ -24,6 +24,11 @@ import javafx.util.Callback;
 
 /**
  * @author Nils Christian Ehmke
+ *
+ * @param <S>
+ *            The type of the table.
+ * @param <T>
+ *            The type of the content in all cells in the table columns.
  */
 public abstract class AbstractTreeTableCellFactory<S, T> implements Callback<TreeTableColumn<S, T>, TreeTableCell<S, T>>, AutowireCandidate {
 
