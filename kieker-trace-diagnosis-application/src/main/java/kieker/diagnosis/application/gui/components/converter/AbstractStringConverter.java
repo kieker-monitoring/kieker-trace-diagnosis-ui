@@ -37,19 +37,19 @@ public abstract class AbstractStringConverter<T> extends StringConverter<T> {
 		final String bundleBaseName = "kieker.diagnosis.application.gui.components.components";
 		final ResourceBundle resourceBundle = ResourceBundle.getBundle( bundleBaseName, Locale.getDefault( ) );
 
-		this.fillMapper( ivMapper, resourceBundle );
+		fillMapper( ivMapper, resourceBundle );
 	}
 
 	protected abstract void fillMapper( final Mapper<T, String> aMapper, final ResourceBundle aResourceBundle );
 
 	@Override
 	public final T fromString( final String aString ) {
-		return this.ivMapper.invertedResolve( aString );
+		return ivMapper.invertedResolve( aString );
 	}
 
 	@Override
 	public final String toString( final T aObject ) {
-		return this.ivMapper.resolve( aObject );
+		return ivMapper.resolve( aObject );
 	}
 
 }

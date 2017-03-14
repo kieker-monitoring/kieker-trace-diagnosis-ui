@@ -17,11 +17,7 @@
 package kieker.diagnosis.application.gui.components.treetable;
 
 import kieker.diagnosis.application.service.data.domain.OperationCall;
-import kieker.diagnosis.application.service.properties.MethodCallAggregationProperty;
-import kieker.diagnosis.application.service.properties.PercentCalculationProperty;
-import kieker.diagnosis.application.service.properties.ShowUnmonitoredTimeProperty;
-import kieker.diagnosis.application.service.properties.ThresholdProperty;
-import kieker.diagnosis.architecture.service.properties.PropertiesService;
+import kieker.diagnosis.application.service.properties.Threshold;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -32,8 +28,6 @@ import java.util.stream.Collectors;
 
 import javafx.scene.control.TreeItem;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 /**
  * @author Nils Christian Ehmke
  */
@@ -43,8 +37,10 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 	private static final String METHOD_CALLS_AGGREGATED;
 	private static final String UNMONITORED_TIME;
 
-	@Autowired
-	private PropertiesService ivPropertiesService;
+	private final boolean ivShowUnmonitoredTime;
+	private final boolean ivPercentCalculation;
+	private final boolean ivMethodCallAggregation;
+	private final Threshold ivThreshold;
 
 	static {
 		final String bundleBaseName = "kieker.diagnosis.application.gui.components.components";
@@ -54,16 +50,21 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 		UNMONITORED_TIME = resourceBundle.getString( "unmonitoredTime" );
 	}
 
-	public LazyOperationCallTreeItem( final OperationCall aValue ) {
+	public LazyOperationCallTreeItem( final OperationCall aValue, final boolean aShowUnmonitoredTime, final boolean aPercentCalculation,
+			final boolean aMethodCallAggregation, final Threshold aThreshold ) {
 		super( aValue );
+		ivShowUnmonitoredTime = aShowUnmonitoredTime;
+		ivPercentCalculation = aPercentCalculation;
+		ivMethodCallAggregation = aMethodCallAggregation;
+		ivThreshold = aThreshold;
 	}
 
 	@Override
 	protected void initializeChildren( ) {
 		final List<TreeItem<OperationCall>> result = new ArrayList<>( );
 
-		if ( ivPropertiesService.loadApplicationProperty( ShowUnmonitoredTimeProperty.class ) ) {
-			double percent = ivPropertiesService.loadApplicationProperty( PercentCalculationProperty.class ) ? getValue( ).getPercent( ) : 100.0;
+		if ( ivShowUnmonitoredTime ) {
+			double percent = ivPercentCalculation ? getValue( ).getPercent( ) : 100.0;
 			long duration = getValue( ).getDuration( );
 			for ( final OperationCall child : getValue( ).getChildren( ) ) {
 				percent -= child.getPercent( );
@@ -73,17 +74,17 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 			final OperationCall call = new OperationCall( BLANK, BLANK, UNMONITORED_TIME, getValue( ).getTraceID( ), getValue( ).getTimestamp( ) );
 			call.setPercent( (float) percent );
 			call.setDuration( duration );
-			result.add( new LazyOperationCallTreeItem( call ) );
+			result.add( new LazyOperationCallTreeItem( call, ivShowUnmonitoredTime, ivPercentCalculation, ivMethodCallAggregation, ivThreshold ) );
 		}
 
-		if ( ivPropertiesService.loadApplicationProperty( MethodCallAggregationProperty.class ) ) {
-			final float threshold = ivPropertiesService.loadApplicationProperty( ThresholdProperty.class ).getPercent( );
+		if ( ivMethodCallAggregation ) {
+			final float threshold = ivThreshold.getPercent( );
 			final List<OperationCall> underThreshold = new ArrayList<>( );
 			for ( final OperationCall child : getValue( ).getChildren( ) ) {
 				if ( child.getPercent( ) < threshold ) {
 					underThreshold.add( child );
 				} else {
-					result.add( new LazyOperationCallTreeItem( child ) );
+					result.add( new LazyOperationCallTreeItem( child, ivShowUnmonitoredTime, ivPercentCalculation, ivMethodCallAggregation, ivThreshold ) );
 				}
 			}
 			if ( !underThreshold.isEmpty( ) ) {
@@ -97,12 +98,12 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 				call.setDuration( duration );
 				call.setStackDepth( traceDepth );
 				call.setStackSize( traceSize );
-				result.add( new LazyOperationCallTreeItem( call ) );
+				result.add( new LazyOperationCallTreeItem( call, ivShowUnmonitoredTime, ivPercentCalculation, ivMethodCallAggregation, ivThreshold ) );
 			}
 
 		} else {
 			for ( final OperationCall child : getValue( ).getChildren( ) ) {
-				result.add( new LazyOperationCallTreeItem( child ) );
+				result.add( new LazyOperationCallTreeItem( child, ivShowUnmonitoredTime, ivPercentCalculation, ivMethodCallAggregation, ivThreshold ) );
 			}
 		}
 

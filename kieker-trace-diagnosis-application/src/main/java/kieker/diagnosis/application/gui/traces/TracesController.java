@@ -23,7 +23,12 @@ import kieker.diagnosis.application.service.data.domain.OperationCall;
 import kieker.diagnosis.application.service.data.domain.Trace;
 import kieker.diagnosis.application.service.filter.FilterService;
 import kieker.diagnosis.application.service.nameconverter.NameConverterService;
+import kieker.diagnosis.application.service.properties.MethodCallAggregationProperty;
+import kieker.diagnosis.application.service.properties.PercentCalculationProperty;
 import kieker.diagnosis.application.service.properties.SearchInEntireTraceProperty;
+import kieker.diagnosis.application.service.properties.ShowUnmonitoredTimeProperty;
+import kieker.diagnosis.application.service.properties.Threshold;
+import kieker.diagnosis.application.service.properties.ThresholdProperty;
 import kieker.diagnosis.application.service.properties.TimeUnitProperty;
 import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.gui.AbstractController;
@@ -263,8 +268,13 @@ public class TracesController extends AbstractController<TracesView> {
 		getView( ).getTreetable( ).setRoot( root );
 		getView( ).getTreetable( ).setShowRoot( false );
 
-		traces.stream( ).map( trace -> trace.getRootOperationCall( ) ).filter( ivPredicate )
-				.forEach( call -> rootChildren.add( new LazyOperationCallTreeItem( call ) ) );
+		final boolean showUnmonitoredTime = ivPropertiesService.loadBooleanApplicationProperty( ShowUnmonitoredTimeProperty.class );
+		final boolean percentCalculation = ivPropertiesService.loadBooleanApplicationProperty( PercentCalculationProperty.class );
+		final boolean methodCallAggregation = ivPropertiesService.loadBooleanApplicationProperty( MethodCallAggregationProperty.class );
+		final Threshold threshold = ivPropertiesService.loadApplicationProperty( ThresholdProperty.class );
+
+		traces.stream( ).map( trace -> trace.getRootOperationCall( ) ).filter( ivPredicate ).forEach(
+				call -> rootChildren.add( new LazyOperationCallTreeItem( call, showUnmonitoredTime, percentCalculation, methodCallAggregation, threshold ) ) );
 
 		getView( ).getCounter( ).textProperty( ).set( rootChildren.size( ) + " " + getResourceBundle( ).getString( "TracesView.lblCounter.text" ) );
 	}
