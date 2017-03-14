@@ -41,6 +41,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -211,15 +212,12 @@ public class MainController extends AbstractController<MainView> {
 			final Button removeButton = new Button( "-" );
 			removeButton.setPrefWidth( 20 );
 			removeButton.setOnAction( event -> {
-				getView( ).getLeftButtonBox( ).getChildren( ).remove( hbox );
+				final ObservableList<Node> children = getView( ).getLeftButtonBox( ).getChildren( );
+				children.remove( hbox );
 				ivFavoritesAvailable--;
 
 				if ( ivFavoritesAvailable == 0 ) {
-					final Optional<Node> first = getView( ).getLeftButtonBox( ).getChildren( ).stream( ).filter( node -> node instanceof Separator )
-							.findFirst( );
-					if ( first.isPresent( ) ) {
-						getView( ).getLeftButtonBox( ).getChildren( ).remove( first.get( ) );
-					}
+					children.stream( ).filter( node -> node instanceof Separator ).findFirst( ).ifPresent( children::remove );
 				}
 			} );
 			hbox.getChildren( ).add( removeButton );

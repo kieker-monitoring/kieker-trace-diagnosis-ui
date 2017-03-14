@@ -39,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTreeItem<OperationCall> {
 
+	private static final String BLANK = "-";
 	private static final String METHOD_CALLS_AGGREGATED;
 	private static final String UNMONITORED_TIME;
 
@@ -69,7 +70,7 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 				duration -= child.getDuration( );
 			}
 
-			final OperationCall call = new OperationCall( "-", "-", UNMONITORED_TIME, getValue( ).getTraceID( ), getValue( ).getTimestamp( ) );
+			final OperationCall call = new OperationCall( BLANK, BLANK, UNMONITORED_TIME, getValue( ).getTraceID( ), getValue( ).getTimestamp( ) );
 			call.setPercent( (float) percent );
 			call.setDuration( duration );
 			result.add( new LazyOperationCallTreeItem( call ) );
@@ -90,8 +91,8 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 				final long duration = underThreshold.stream( ).map( OperationCall::getDuration ).collect( Collectors.summingLong( Long::longValue ) );
 				final int traceDepth = underThreshold.stream( ).map( OperationCall::getStackDepth ).max( Comparator.naturalOrder( ) ).get( );
 				final int traceSize = underThreshold.stream( ).map( OperationCall::getStackSize ).collect( Collectors.summingInt( Integer::intValue ) );
-				final OperationCall call = new OperationCall( "-", "-", underThreshold.size( ) + " " + LazyOperationCallTreeItem.METHOD_CALLS_AGGREGATED,
-						getValue( ).getTraceID( ), -1 );
+				final OperationCall call = new OperationCall( BLANK, BLANK, underThreshold.size( ) + " " + METHOD_CALLS_AGGREGATED, getValue( ).getTraceID( ),
+						-1 );
 				call.setPercent( (float) percent );
 				call.setDuration( duration );
 				call.setStackDepth( traceDepth );
