@@ -138,5 +138,9 @@
     <module name="UniqueProperties"/>
      
     <module name="FileLength"/>
-    
+	
+     <module name="SuppressionFilter">
+      <property name="file" value="kieker-trace-diagnosis-parent/config/checkstyle/suppressions.xml"/>
+    </module>
+	
 </module>
