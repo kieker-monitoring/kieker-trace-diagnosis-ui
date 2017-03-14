@@ -87,7 +87,7 @@ public class MainController extends AbstractController<MainView> {
 
 	@Override
 	public void doRefresh( ) {
-
+		// Nothing to refresh
 	}
 
 	public void performOpenMonitoringLog( ) {

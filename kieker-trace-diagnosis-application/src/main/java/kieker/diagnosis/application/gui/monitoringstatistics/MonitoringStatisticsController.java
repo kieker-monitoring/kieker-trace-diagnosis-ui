@@ -116,6 +116,7 @@ public class MonitoringStatisticsController extends AbstractController<Monitorin
 
 	@Override
 	public void doRefresh( ) {
+		// Nothing to refresh
 	}
 
 	private String assembleTimeString( final Long aTimestamp ) {

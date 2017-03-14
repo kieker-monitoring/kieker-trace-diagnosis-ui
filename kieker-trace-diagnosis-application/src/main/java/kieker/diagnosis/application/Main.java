@@ -53,7 +53,7 @@ public class Main extends Application {
 	}
 
 	@Override
-	public void start( final Stage aPrimaryStage ) throws Exception {
+	public void start( final Stage aPrimaryStage ) {
 		// Load the Spring context
 		final SpringApplicationBuilder springApplicationBuilder = new SpringApplicationBuilder( getClass( ) );
 		final ConfigurableApplicationContext context = springApplicationBuilder.bannerMode( Mode.OFF ).logStartupInfo( false ).run( getArguments( ) );
@@ -62,7 +62,7 @@ public class Main extends Application {
 		final GuiLoader guiLoader = context.getBean( GuiLoader.class );
 		guiLoader.loadAsMainView( MainController.class, aPrimaryStage );
 
-		// Load the dataservice. This is just for the GUI test as the dialogs can not be handled by test fx
+		// Load the dataservice. This is just for the GUI test as the dialogs can not be handled by TestFX
 		ivDataService = context.getBean( DataService.class );
 	}
 

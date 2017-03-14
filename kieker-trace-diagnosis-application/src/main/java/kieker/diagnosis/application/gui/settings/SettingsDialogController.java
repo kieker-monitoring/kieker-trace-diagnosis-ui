@@ -72,6 +72,7 @@ public class SettingsDialogController extends AbstractController<SettingsDialogV
 
 	@Override
 	public void doRefresh( ) {
+		// Nothing to refresh
 	}
 
 	public void saveAndCloseDialog( ) {

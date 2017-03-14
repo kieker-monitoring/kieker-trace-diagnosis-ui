@@ -46,6 +46,7 @@ public class BugReportingDialogController extends AbstractController<BugReportin
 
 	@Override
 	public void doRefresh( ) {
+		// Nothing to refresh
 	}
 
 	public void performVisitGitLab( ) throws IOException, URISyntaxException {

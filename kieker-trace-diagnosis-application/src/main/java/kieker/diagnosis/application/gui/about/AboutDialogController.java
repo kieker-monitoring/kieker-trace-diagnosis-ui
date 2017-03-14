@@ -37,6 +37,7 @@ public class AboutDialogController extends AbstractController<AboutDialogView> {
 
 	@Override
 	public void doRefresh( ) {
+		// Nothing to refresh
 	}
 
 	public void performCloseDialog( ) {

@@ -37,9 +37,8 @@
 			<ComboBox fx:id="ivThresholds" GridPane.columnIndex="2" GridPane.rowIndex="5" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
 				<converter><ThresholdStringConverter/></converter>
 			</ComboBox>
-			
-			<CheckBox fx:id="ivCacheViews" text="%cacheViews" GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.columnSpan="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
-			<CheckBox fx:id="ivShowUnmonitoredTime" text="%showUnmonitoredTime" GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.columnSpan="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
+
+			<CheckBox fx:id="ivShowUnmonitoredTime" text="%showUnmonitoredTime" GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.columnSpan="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
 		</GridPane>
 	</TitledPane>
 	

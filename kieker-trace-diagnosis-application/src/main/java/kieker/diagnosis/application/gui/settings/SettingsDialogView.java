@@ -60,8 +60,6 @@ final class SettingsDialogView extends AbstractView {
 	@AutowiredElement
 	private CheckBox ivPercentageCalculation;
 	@AutowiredElement
-	private CheckBox ivCacheViews;
-	@AutowiredElement
 	private CheckBox ivSearchInEntireTrace;
 	@AutowiredElement
 	private CheckBox ivShowUnmonitoredTime;
