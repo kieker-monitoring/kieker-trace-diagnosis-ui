@@ -19,9 +19,9 @@ package kieker.diagnosis.application.service.data.stages;
 import java.io.File;
 import java.util.List;
 
-import com.google.common.io.Files;
-
 import kieker.common.record.IMonitoringRecord;
+
+import com.google.common.io.Files;
 
 import teetime.framework.AbstractCompositeStage;
 import teetime.framework.OutputPort;
