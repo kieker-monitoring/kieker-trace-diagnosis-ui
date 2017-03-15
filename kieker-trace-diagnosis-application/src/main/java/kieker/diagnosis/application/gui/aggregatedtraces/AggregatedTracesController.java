@@ -70,6 +70,8 @@ public class AggregatedTracesController extends AbstractController<AggregatedTra
 	@Override
 	protected void doInitialize( final boolean aFirstInitialization, final Optional<?> aParameter ) {
 		if ( aFirstInitialization ) {
+			reloadTreetable( );
+
 			final DataService dataModel = ivDataService;
 			dataModel.getAggregatedTraces( ).addListener( ( final Change<? extends AggregatedTrace> aChange ) -> reloadTreetable( ) );
 
