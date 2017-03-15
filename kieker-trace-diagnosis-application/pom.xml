@@ -10,6 +10,10 @@
 		<relativePath>../kieker-trace-diagnosis-parent</relativePath>
 	</parent>
 
+	<properties>
+		<project.build.sourceEncoding>ISO8859_1</project.build.sourceEncoding>
+	</properties>
+
 	<artifactId>kieker-trace-diagnosis-application</artifactId>
 
 	<name>Kieker Trace Diagnosis Application</name>
@@ -94,12 +98,12 @@
 	<build>
 		<resources>
 			<resource>
-				<directory>
-				src/main/resources</directory>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
 			</resource>
 			<resource>
-				<directory>
-				src/main/views</directory>
+				<directory>src/main/views</directory>
+				<filtering>true</filtering>
 			</resource>
 		</resources>
 	</build>
