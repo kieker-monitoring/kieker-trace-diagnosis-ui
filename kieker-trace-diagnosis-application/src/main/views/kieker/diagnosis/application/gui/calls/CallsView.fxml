@@ -79,6 +79,9 @@
 			</TableColumn>
 
 			<TableColumn text="%duration">
+				<cellFactory>
+					<DurationTableCellFactory />
+				</cellFactory>
 				<cellValueFactory>
 					<DurationCellValueFactory property="duration" />
 				</cellValueFactory>
