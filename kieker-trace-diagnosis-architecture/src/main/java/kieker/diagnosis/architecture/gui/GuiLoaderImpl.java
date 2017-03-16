@@ -18,25 +18,17 @@ package kieker.diagnosis.architecture.gui;
 
 import kieker.diagnosis.architecture.service.properties.LogoProperty;
 import kieker.diagnosis.architecture.service.properties.PropertiesService;
-import kieker.diagnosis.architecture.service.properties.SplashscreenProperty;
 import kieker.diagnosis.architecture.service.properties.TitleProperty;
 
 import java.util.Optional;
 
-import javafx.animation.FadeTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.Window;
-import javafx.util.Duration;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,8 +59,6 @@ final class GuiLoaderImpl implements GuiLoader {
 		aPrimaryStage.setTitle( title );
 		aPrimaryStage.setMaximized( true );
 
-		showSplashScreen( scene );
-
 		loadInPane( aControllerClass, rootPane, aParameter );
 
 		aPrimaryStage.show( );
@@ -77,30 +67,6 @@ final class GuiLoaderImpl implements GuiLoader {
 	@Override
 	public <C extends AbstractController<?>> void loadAsMainView( final Class<C> aControllerClass, final Stage aPrimaryStage ) {
 		loadAsMainView( aControllerClass, aPrimaryStage, Optional.empty( ) );
-	}
-
-	private void showSplashScreen( final Scene aRoot ) {
-		final String splashscreen = ivPropertiesService.loadSystemProperty( SplashscreenProperty.class );
-
-		final ImageView imageView = new ImageView( splashscreen );
-		final Pane parent = new Pane( imageView );
-		final Scene scene = new Scene( parent );
-
-		final Stage stage = new Stage( );
-		stage.setResizable( false );
-		stage.initStyle( StageStyle.UNDECORATED );
-		stage.initModality( Modality.WINDOW_MODAL );
-		stage.initOwner( aRoot.getWindow( ) );
-		stage.setScene( scene );
-
-		final FadeTransition transition = new FadeTransition( Duration.millis( 3000 ), stage.getScene( ).getRoot( ) );
-		transition.setFromValue( 1.0 );
-		transition.setToValue( 0.0 );
-		final EventHandler<ActionEvent> handler = t -> stage.hide( );
-		transition.setOnFinished( handler );
-		transition.play( );
-
-		stage.showAndWait( );
 	}
 
 	@Override
