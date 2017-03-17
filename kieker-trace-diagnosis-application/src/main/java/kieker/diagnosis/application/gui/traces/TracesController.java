@@ -113,7 +113,7 @@ public class TracesController extends AbstractController<TracesView> {
 		getView( ).getFilterLowerTime( ).setCalendar( null );
 		getView( ).getFilterUpperDate( ).setValue( null );
 		getView( ).getFilterUpperTime( ).setCalendar( null );
-		getView( ).getFilterTraceID( ).setText( null );
+		getView( ).getFilterTraceID( ).setText( Long.toString( aCall.getTraceID( ) ) );
 		getView( ).getFilterException( ).setText( null );
 		getView( ).getShowAllButton( ).setSelected( true );
 		useFilter( );
