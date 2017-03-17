@@ -4,10 +4,11 @@
 \usepackage[english]{babel}
 \usepackage[parfill]{parskip}
 \usepackage{graphicx}
+\usepackage{hyperref}
 
 \begin{document}
 
-  \newcommand{\version}[0]{1.2.0-SNAPSHOT}
+  \newcommand{\version}[0]{2.0.0-SNAPSHOT}
   \newcommand{\KiekerTraceDiagnosis}[0]{\texttt{Kieker Trace Diagnosis}}
   \newcommand{\file}[1]{\textit{#1}}
 
@@ -21,7 +22,7 @@
   Die folgenden Anforderungen sind notwendig, um \KiekerTraceDiagnosis{} verwenden zu können.
   \begin{itemize}
     \item Windows oder Linux
-    \item Java Runtime Environment 8
+    \item Java Runtime Environment 8 Update 40 oder höher
   \end{itemize}
   Für die Verwendung des Werkzeuges wird das Oracle JDK empfohlen. Die Problembehandlung bei Verwendung des OpenJDK findet sich in Abschnitt~\ref{OpenJDK}.\\
 
@@ -29,16 +30,21 @@
   Die Anwendung kann anschließend über das Startscript \file{start.sh}, beziehungsweise \file{start.bat}, im Ordner \file{bin} gestartet werden.
   Die Anwendung sollte in dem Verzeichnis, aus welchem das Startscript heraus aufgerufen wird, Schreibrechte besitzen.
 
+  \section{Lizenz}
+
+  \KiekerTraceDiagnosis{} ist unter der Apache License Version 2.0 lizenziert.
+  Der vollständige Lizenztext lässt sich der mitgelieferten Datei \file{LICENSE} entnehmen.
+  Die Lizenzen der verwendeten Blibliotheken lässt sich den \file{.LICENSE}-Dateien im \file{lib}-Ordner entnehmen.
+
   \section{Ansichten}
 
+  \subsection{Öffne Monitoring Log}
+  Mit einem Klick auf diesen Menüpunkt öffnet sich ein Dialog, mit welchem das zu öffnende Monitoring Log ausgewählt wird.
+  Die Analyse beginnt direkt nach Auswahl des Logs.
+  Dabei werden alle Monitoring Daten in dem Verzeichnis, sowie in allen Unterverzeichnissen analysiert.
+
   \subsection{Einstellungen}
-
   Das Fenster \textit{Einstellungen} ermöglicht die Konfiguration des Werkzeuges.
-
-  \begin{figure}[h]
-    \centering
-    \includegraphics[width=0.8\textwidth]{img_DE/Einstellungen.jpg}
-  \end{figure}
 
   \paragraph{Zeiteinheit}
   Hier kann eingestellt werden, in welcher Zeiteinheit die Dauer von Methodenaufrufen und ähnlichem angezeigt werden.
@@ -61,6 +67,10 @@
   Das is beispielsweise dann sinnvoll, wenn Traces mit einigen tausend Methodenaufrufen betrachtet werden, von denen die meisten sehr schnell abgearbeitet wurden und uninteressant sind.  
   Methoden unterhalb des gegebenen Schwellwertes werden zusammengefasst, sodass nur die signifikanteren und länger andauernden Methoden noch sichtbar sind.
 
+  \paragraph{Nicht gemonitorte Zeit anzeigen}
+  Hier kann eingestellt werden, ob die Zeiten innerhalb eines Traces, die nicht weiter durch Monitoring-Daten bestimmt werden können, dargestellt werden.
+  Angezeigt wird dann die Zeit, welche entweder in der Methode selbst verbraucht wird oder in weiteren Methoden, die nicht gemonitort worden sind. 
+
   \paragraph{Erlaube reguläre Ausdrücke (Java-Standard)}
   Mit dieser Einstellungen können in den Filtermasken reguläre Ausdrücke nach Java-Standard eingegeben werden.
   Wenn diese Option deaktiviert ist, findet eine Volltextsuche des eingegebenen Textes für das jeweilige Element statt.
@@ -68,18 +78,48 @@
   \paragraph{Groß-/Kleinschreibung beachten}
   Hier kann eingestellt werden, ob Groß- und Kleinschreibung in den Filtermasken beachtet wird oder nicht.
 
+  \paragraph{Im gesamten Trace suchen} 
+  Standardmäßig werden die Filter für die Trace-Ansichten nur auf den obersten Methodenaufruf angewendet.
+  Wenn diese Option aktiv ist, beziehen sich die Filter auf die Methoden in dem gesamten Trace.
+
   \paragraph{Aktiviere weitere Überprüfungen während der Trace Rekonstruktion}
+  Wenn diese Option aktiv ist, werden bei der Trace Rekonstruktion weitere Prüfungen ausgeüfhrt.
+  So wird zusätzlich geprüft, ob die Monitoring-Daten konsistent sind.
+  Unter Umständen werden so weitere Traces als ungültig markiert und nicht in die weitere Analyse mit aufgenommen.
 
   \paragraph{Prozentuale Berechnung auf den obersten Methodenaufruf beziehen}
+  Standardmäßig bezieht sich die prozentuale Berechnung in den Traces auf den übergeordneten Knoten.
+  Wenn diese Option aktiv ist, so bezieht sich die prozentuale Berechnung stattdessen auf den obersten Knoten des Traces, also auf die Einstiegsmethode.
 
   \subsection{Traces}
-  \subsection{Aggregierte Traces}
-  \subsection{Methodenaufrufe}
-  \subsection{Aggregierte Methodenaufrufe}
-  \subsection{Monitoring Log Statistiken}
+  Die Ansicht \textit{Traces} zeigt alle gültigen Traces einzeln an.
+  Nicht rekonstruierbare Traces werden nicht angezeigt.
 
-  \section{Lizenz}
-  \KiekerTraceDiagnosis{} ist unter der Apache License Version 2.0 lizenziert. Der vollständige Lizenztext lässt sich der mitgelieferten Datei \file{LICENSE} entnehmen.
+  \subsection{Aggregierte Traces}
+  Die Ansicht \textit{Aggregierte Traces} zeigt alle gültigen Traces in ignorierter Form an.
+  Nicht rekonstruierbare Traces werden nicht angezeigt.
+  Aggregiert werden alle Traces, bei denen der Ausführungspfad identisch ist und die jeweiligen Methoden (im Bezug auf den Ausführungscontainer, die Komponente, die Operation und - falls vorhanden - die Ausnahme) identisch sind.
+
+
+  \subsection{Methodenaufrufe}
+  Die Ansicht \textit{Methodenaufrufe} zeigt alle Methodenaufrufe von gültigen Traces einzeln an.
+  Ignorierte und verwaiste Records, sowie Records, die zu nicht rekonstruierbaren Traces gehören, werden nicht angezeigt (siehe auch Abschnitt~\ref{MonitoringLogStatistiken}).
+  Ein Doppelklick auf einen Methodenaufruf zeigt den Methodenaufruf in dem zugehörigen Trace an.
+
+  \subsection{Aggregierte Methodenaufrufe}
+  Die Ansicht \textit{Aggregierte Methodenaufrufe} zeigt alle Methodenaufrufe von gültigen Traces in aggregierter Form an.
+  Ignorierte und verwaiste Records, sowie Records, die zu nicht rekonstruierbaren Traces gehören, werden nicht angezeigt (siehe auch Abschnitt~\ref{MonitoringLogStatistiken}).
+  Aggregiert werden alle Methodenaufrufe, bei denen der Ausführungscontainer, die Komponente, die Operation und - falls vorhanden - die Ausnahme identisch sind.
+  Ein Doppelklick auf einen aggregierten Methodenaufruf zeigt die aggregierten Methodenaufrufe einzeln an.
+  
+  \subsection{Monitoring Log Statistiken}\label{MonitoringLogStatistiken}
+  Die Ansicht \textit{Monitoring Log Statistiken} zeigt Informationen zu den aktuell geladenen Monitoring-Daten an.
+  So lässt sich dort etwa die Dateigröße und Analysedauer entnehmen.
+  Ebenso listet die Ansicht allgemeine Statistiken auf, wie etwa die Anzahl der Methodenaufrufe.\\
+
+  Die Zeile \textit{Verwaiste Records} zeigt an, wieviele Records gefunden wurden, die keinem Trace zugeordnet werden konnten.
+  Die Zeile \textit{Ignorierte Records} zeigt an, wieviele Records für die Analyse ignoriert wurden.
+  Dies sind üblicherweise Records, die für \KiekerTraceDiagnosis{} irrelevant sind, wie beispielsweise Records zum Speicherverbrauch.
 
   \section{Fehlerbehebung}
 
@@ -89,5 +129,10 @@
   \subsection{Unable to create file logs/Kieker Trace Diagnosis.log}\label{LogSchreibrechte}
   Kommt es beim Start zu dieser Fehlermeldung, so hat \KiekerTraceDiagnosis{} vermutlich in dem aktuellen Arbeitsverzeichnis keine Schreibrechte.
   Die Anwendung kann dann keine Log-Dateien schreiben, kann aber wie gehabt verwendet werden.
+
+  \section{Bugs und Featurewünsche}
+  Wenn es zu Problemen kommt, die durch dieses Handbuch nicht abgedeckt sind, Sie Bugs finden oder einen Feature-Wunsch haben, können Sie in unserem GitLab \href{http://build.se.informatik.uni-kiel.de/gitlab/kieker/kieker-trace-diagnosis/issues/}{hier} ein Ticket anlegen.
+  Falls Sie keinen solchen Account haben, senden Sie gerne eine Mail an die Kieker Mailingliste \href{https://lists.sourceforge.net/lists/listinfo/kieker-users}{hier}.
+  
 
 \end{document}
