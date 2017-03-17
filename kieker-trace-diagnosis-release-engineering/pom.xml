@@ -103,6 +103,11 @@
 								<program>
 									<mainClass>kieker.diagnosis.application.Main</mainClass>
 									<name>start</name>
+									<jvmSettings>
+										<extraArgument>-Djava.awt.headless=false</extraArgument>
+										<initialMemorySize>500M</initialMemorySize>
+										<maxMemorySize>3G</maxMemorySize>
+									</jvmSettings>
 								</program>
 							</programs>
 							<repositoryLayout>flat</repositoryLayout>
