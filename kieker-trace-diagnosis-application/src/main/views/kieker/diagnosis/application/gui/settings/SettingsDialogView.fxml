@@ -8,22 +8,22 @@
 
 	<spacing>10</spacing>
 
-	<TitledPane text="%SettingsDialog.grpAppearance.text" collapsible="false" >
+	<TitledPane text="%appearance" collapsible="false" >
 		<GridPane>
 			<hgap>10</hgap>
 			<vgap>10</vgap>
 
-			<Label text="%SettingsDialog.lblTimeUnit.text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+			<Label text="%timeUnit" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 			<ComboBox fx:id="ivTimeunits" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
 				<converter><TimeUnitStringConverter/></converter>
 			</ComboBox>
 
-			<Label text="%SettingsDialog.lblOperationNames.text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+			<Label text="%operationNames" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 			<ComboBox fx:id="ivOperationNames" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity" >
 				<converter><OperationNamesStringConverter/></converter>
 			</ComboBox>
 			
-			<Label text="%SettingsDialog.lblComponentNames.text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+			<Label text="%componentNames" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 			<ComboBox fx:id="ivComponentNames" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
 				<converter><ComponentNamesStringConverter/></converter>
 			</ComboBox>
@@ -68,8 +68,8 @@
 			<javafx.geometry.Insets right="10" />
 		</VBox.margin>
 		<buttons>
-			<Button text="%SettingsDialog.btnOkay.text" onAction="#saveAndCloseDialog" id="ivOkay" />
-			<Button text="%SettingsDialog.btnCancel.text" onAction="#closeDialog" id="ivCancel" />
+			<Button text="%ok" onAction="#saveAndCloseDialog" id="ivOkay" />
+			<Button text="%cancel" onAction="#closeDialog" id="ivCancel" />
 		</buttons>
 	</ButtonBar>
 

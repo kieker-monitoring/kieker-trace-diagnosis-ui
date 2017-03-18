@@ -182,7 +182,7 @@
 	</GridPane>
 </TitledPane>
 	<HBox fx:id="statusbar" GridPane.rowIndex="3" GridPane.hgrow="ALWAYS">
-		<TextField text="" fx:id="ivCounter" editable="false" HBox.hgrow="ALWAYS"/>
+		<TextField text="%counter" fx:id="ivCounter" editable="false" HBox.hgrow="ALWAYS"/>
 		<Hyperlink text="%ExportToCSV" onAction="#performExportToCSV" HBox.hgrow="ALWAYS"/>	
 	</HBox>
 </GridPane>

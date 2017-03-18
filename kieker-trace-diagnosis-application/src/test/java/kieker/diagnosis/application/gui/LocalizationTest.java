@@ -1,13 +1,15 @@
 package kieker.diagnosis.application.gui;
 
+import static org.hamcrest.collection.IsIn.isIn;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -72,7 +74,52 @@ public class LocalizationTest {
 		viewShouldBeFullyLocalized( "kieker.diagnosis.application.gui.traces.TracesView" );
 	}
 
-	private void viewShouldBeFullyLocalized( final String baseName ) throws FileNotFoundException, ParserConfigurationException, SAXException, IOException {
+	@Test
+	public void aboutDialogViewShouldContainNoUnnecessaryLocalization( ) throws ParserConfigurationException, SAXException, IOException {
+		viewShouldContainNoUnnecessaryLocalization( "kieker.diagnosis.application.gui.about.AboutDialogView" );
+	}
+
+	@Test
+	public void aggregatedCallsViewShouldContainNoUnnecessaryLocalization( ) throws ParserConfigurationException, SAXException, IOException {
+		viewShouldContainNoUnnecessaryLocalization( "kieker.diagnosis.application.gui.aggregatedcalls.AggregatedCallsView" );
+	}
+
+	@Test
+	public void aggregatedTracesViewShouldContainNoUnnecessaryLocalization( ) throws ParserConfigurationException, SAXException, IOException {
+		viewShouldContainNoUnnecessaryLocalization( "kieker.diagnosis.application.gui.aggregatedtraces.AggregatedTracesView" );
+	}
+
+	@Test
+	public void bugReportingDialogViewShouldContainNoUnnecessaryLocalization( ) throws ParserConfigurationException, SAXException, IOException {
+		viewShouldContainNoUnnecessaryLocalization( "kieker.diagnosis.application.gui.bugreporting.BugReportingDialogView" );
+	}
+
+	@Test
+	public void callsViewShouldContainNoUnnecessaryLocalization( ) throws ParserConfigurationException, SAXException, IOException {
+		viewShouldContainNoUnnecessaryLocalization( "kieker.diagnosis.application.gui.calls.CallsView" );
+	}
+
+	@Test
+	public void mainViewShouldContainNoUnnecessaryLocalization( ) throws ParserConfigurationException, SAXException, IOException {
+		viewShouldContainNoUnnecessaryLocalization( "kieker.diagnosis.application.gui.main.MainView" );
+	}
+
+	@Test
+	public void monitoringStatisticsViewShouldContainNoUnnecessaryLocalization( ) throws ParserConfigurationException, SAXException, IOException {
+		viewShouldContainNoUnnecessaryLocalization( "kieker.diagnosis.application.gui.monitoringstatistics.MonitoringStatisticsView" );
+	}
+
+	@Test
+	public void settingsDialogViewShouldContainNoUnnecessaryLocalization( ) throws ParserConfigurationException, SAXException, IOException {
+		viewShouldContainNoUnnecessaryLocalization( "kieker.diagnosis.application.gui.settings.SettingsDialogView" );
+	}
+
+	@Test
+	public void tracesViewShouldContainNoUnnecessaryLocalization( ) throws ParserConfigurationException, SAXException, IOException {
+		viewShouldContainNoUnnecessaryLocalization( "kieker.diagnosis.application.gui.traces.TracesView" );
+	}
+
+	private void viewShouldBeFullyLocalized( final String baseName ) throws ParserConfigurationException, SAXException, IOException {
 		final ResourceBundle germanResourceBundle = ResourceBundle.getBundle( baseName, Locale.GERMAN );
 		final ResourceBundle rootResourceBundle = ResourceBundle.getBundle( baseName, Locale.ROOT );
 
@@ -84,6 +131,36 @@ public class LocalizationTest {
 		for ( final String string : externalizedStrings ) {
 			assertThat( germanResourceBundle.getString( string ), not( isEmptyOrNullString( ) ) );
 			assertThat( rootResourceBundle.getString( string ), not( isEmptyOrNullString( ) ) );
+		}
+	}
+
+	private void viewShouldContainNoUnnecessaryLocalization( final String baseName ) throws SAXException, IOException, ParserConfigurationException {
+		final List<String> exceptions = Arrays.asList( "notAvailable", "title", "errorEmptyFilterName", "newFilterFavorite", "newFilterFavoriteName" );
+
+		final ResourceBundle germanResourceBundle = ResourceBundle.getBundle( baseName, Locale.GERMAN );
+		final ResourceBundle rootResourceBundle = ResourceBundle.getBundle( baseName, Locale.ROOT );
+
+		final String viewFileName = ResourceUtils.CLASSPATH_URL_PREFIX + baseName.replace( '.', '/' ) + ".fxml";
+		final File viewFile = ResourceUtils.getFile( viewFileName );
+
+		final List<String> externalizedStrings = getAllExternalizedStrings( viewFile );
+
+		final Enumeration<String> germanKeys = germanResourceBundle.getKeys( );
+		while ( germanKeys.hasMoreElements( ) ) {
+			final String key = germanKeys.nextElement( );
+
+			if ( !exceptions.contains( key ) ) {
+				assertThat( key, isIn( externalizedStrings ) );
+			}
+		}
+
+		final Enumeration<String> rootKeys = rootResourceBundle.getKeys( );
+		while ( rootKeys.hasMoreElements( ) ) {
+			final String key = rootKeys.nextElement( );
+
+			if ( !exceptions.contains( key ) ) {
+				assertThat( key, isIn( externalizedStrings ) );
+			}
 		}
 	}
 
@@ -102,7 +179,11 @@ public class LocalizationTest {
 
 		final NamedNodeMap attributes = aElement.getAttributes( );
 		if ( attributes != null ) {
-			final Node textAttribute = attributes.getNamedItem( "text" );
+			Node textAttribute = attributes.getNamedItem( "text" );
+			if ( textAttribute == null ) {
+				textAttribute = attributes.getNamedItem( "promptText" );
+			}
+
 			if ( textAttribute != null ) {
 				final String text = textAttribute.getNodeValue( );
 				if ( text.startsWith( "%" ) ) {
