@@ -19,9 +19,9 @@
 					<ToggleGroup fx:id="togglegroup" />
 				</fx:define>
 		
-				<RadioButton text="%AggregatedCallsView.btnShowAll.text" fx:id="ivShowAllButton" selected="true" toggleGroup="$togglegroup" onAction="#performUseFilter" />
+				<RadioButton text="%showAll" fx:id="ivShowAllButton" selected="true" toggleGroup="$togglegroup" onAction="#performUseFilter" />
 				<RadioButton text="%showJustSuccessful" fx:id="ivShowJustSuccessful" toggleGroup="$togglegroup" onAction="#performUseFilter" />
-				<RadioButton text="%AggregatedCallsView.btnShowJustFailed.text" fx:id="ivShowJustFailedButton" toggleGroup="$togglegroup" onAction="#performUseFilter" />
+				<RadioButton text="%showJustFailed" fx:id="ivShowJustFailedButton" toggleGroup="$togglegroup" onAction="#performUseFilter" />
 			</HBox>
 			
 			<GridPane GridPane.rowIndex="1">
@@ -49,31 +49,31 @@
 		</placeholder>
 		
 		<columns>
-			<TableColumn text="%AggregatedCallsView.tblclmnExecutionContainer.text">
+			<TableColumn text="%executionContainer">
 				<cellValueFactory>
 					<PropertyValueFactory property="container" />
 				</cellValueFactory>
 			</TableColumn>
 
-			<TableColumn text="%AggregatedCallsView.tblclmnComponent.text">
+			<TableColumn text="%component">
 				<cellValueFactory>
 					<ComponentCellValueFactory property="component" />
 				</cellValueFactory>
 			</TableColumn>
 
-			<TableColumn text="%AggregatedCallsView.tblclmnOperation.text">
+			<TableColumn text="%operation">
 				<cellValueFactory>
 					<OperationCellValueFactory property="operation" />
 				</cellValueFactory>
 			</TableColumn>
 
-			<TableColumn text="%AggregatedCallsView.tblclmnNumberOfCalls.text">
+			<TableColumn text="%numberOfCalls">
 				<cellValueFactory>
 					<PropertyValueFactory property="calls" />
 				</cellValueFactory>
 			</TableColumn>
 
-			<TableColumn text="%AggregatedCallsView.tblclmnMinimalDuration.text">
+			<TableColumn text="%minimalDuration">
 				<cellFactory>
 					<DurationTableCellFactory />
 				</cellFactory>
@@ -83,7 +83,7 @@
 				</cellValueFactory>
 			</TableColumn>
 
-			<TableColumn text="%AggregatedCallsView.tblclmnMeanDuration.text">
+			<TableColumn text="%meanDuration">
 				<cellFactory>
 					<DurationTableCellFactory />
 				</cellFactory>
@@ -93,7 +93,7 @@
 				</cellValueFactory>
 			</TableColumn>
 
-			<TableColumn text="%AggregatedCallsView.tblclmnMedianDuration.text">
+			<TableColumn text="%medianDuration">
 				<cellFactory>
 					<DurationTableCellFactory />
 				</cellFactory>
@@ -103,7 +103,7 @@
 				</cellValueFactory>
 			</TableColumn>
 
-			<TableColumn text="%AggregatedCallsView.tblclmnMaximalDuration.text">
+			<TableColumn text="%maximalDuration">
 				<cellFactory>
 					<DurationTableCellFactory />
 				</cellFactory>
@@ -113,7 +113,7 @@
 				</cellValueFactory>
 			</TableColumn>
 
-			<TableColumn text="%AggregatedCallsView.tblclmnTotalDuration.text">
+			<TableColumn text="%totalDuration">
 				<cellFactory>
 					<DurationTableCellFactory />
 				</cellFactory>
@@ -128,52 +128,52 @@
 
 	 <TitledPane GridPane.rowIndex="2" text="%properties">
 	<GridPane fx:id="ivDetailpanel" >
-		<TextField text="%AggregatedCallsView.tblclmnExecutionContainer.text"
+		<TextField text="%executionContainer"
 			editable="false" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="1" GridPane.columnIndex="2" fx:id="ivContainer" GridPane.hgrow="ALWAYS" />
 
-		<TextField text="%AggregatedCallsView.tblclmnComponent.text"
+		<TextField text="%component"
 			editable="false" GridPane.rowIndex="2" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="2" GridPane.columnIndex="2" fx:id="ivComponent" />
 
-		<TextField text="%AggregatedCallsView.tblclmnOperation.text"
+		<TextField text="%operation"
 			editable="false" GridPane.rowIndex="3" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="3" GridPane.columnIndex="2" fx:id="ivOperation" />
 
-		<TextField text="%AggregatedCallsView.lblFailed.text"
+		<TextField text="%failed"
 			editable="false" GridPane.rowIndex="4" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="4" GridPane.columnIndex="2" fx:id="ivFailed" />
 
-		<TextField text="%AggregatedCallsView.tblclmnNumberOfCalls.text"
+		<TextField text="%numberOfCalls"
 			editable="false" GridPane.rowIndex="5" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="5" GridPane.columnIndex="2" fx:id="ivCalls" />
 
-		<TextField text="%AggregatedCallsView.tblclmnMinimalDuration.text"
+		<TextField text="%minimalDuration"
 			editable="false" GridPane.rowIndex="6" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="6" GridPane.columnIndex="2" fx:id="ivMinimalDuration" />
 
-		<TextField text="%AggregatedCallsView.tblclmnMeanDuration.text"
+		<TextField text="%meanDuration"
 			editable="false" GridPane.rowIndex="7" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="7" GridPane.columnIndex="2" fx:id="ivMeanDuration" />
 
-		<TextField text="%AggregatedCallsView.tblclmnMedianDuration.text"
+		<TextField text="%medianDuration"
 			editable="false" GridPane.rowIndex="8" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="8" GridPane.columnIndex="2" fx:id="ivMedianDuration"/>
 
-		<TextField text="%AggregatedCallsView.tblclmnMaximalDuration.text"
+		<TextField text="%maximalDuration"
 			editable="false" GridPane.rowIndex="9" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="9" GridPane.columnIndex="2" fx:id="ivMaximalDuration" />
 
-		<TextField text="%AggregatedCallsView.tblclmnTotalDuration.text"
+		<TextField text="%totalDuration"
 			editable="false" GridPane.rowIndex="10" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
 			GridPane.rowIndex="10" GridPane.columnIndex="2" fx:id="ivTotalDuration"/>

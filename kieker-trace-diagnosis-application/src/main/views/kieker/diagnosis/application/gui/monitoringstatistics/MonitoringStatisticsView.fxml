@@ -3,65 +3,65 @@
 
 <GridPane fx:id="ivView" xmlns:fx="http://javafx.com/fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
 
-	<Label text="%MonitoringStatisticsView.lblMonitoringLog.text" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+	<Label text="%monitoringLog" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="ivMonitoringlog" GridPane.rowIndex="1" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" />
 
-	<Label text="%MonitoringStatisticsView.lblMonitoringLogSize.text" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+	<Label text="%monitoringLogSize" GridPane.rowIndex="2" GridPane.columnIndex="1" />
 	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="ivMonitoringsize"  GridPane.rowIndex="2" GridPane.columnIndex="2" />
 
 	<Separator GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="2" />
 
-	<Label text="%MonitoringStatisticsView.lblAnalysisTime.text" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+	<Label text="%analysisTime" GridPane.rowIndex="4" GridPane.columnIndex="1" />
 	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="ivAnalysistime" GridPane.rowIndex="4" GridPane.columnIndex="2" />
 
  	<Separator GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.columnSpan="2"  />
 
-	<Label text="%MonitoringStatisticsView.lblBeginOfMonitoring.text" GridPane.rowIndex="6" GridPane.columnIndex="1" />
+	<Label text="%beginOfMonitoring" GridPane.rowIndex="6" GridPane.columnIndex="1" />
 	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="ivBeginofmonitoring"  GridPane.rowIndex="6" GridPane.columnIndex="2" />
 
-	<Label text="%MonitoringStatisticsView.lblEndOfMonitoring.text" GridPane.rowIndex="7" GridPane.columnIndex="1" />
+	<Label text="%endOfMonitoring" GridPane.rowIndex="7" GridPane.columnIndex="1" />
 	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="ivEndofmonitoring"  GridPane.rowIndex="7" GridPane.columnIndex="2" />
 
 	<Separator GridPane.rowIndex="8" GridPane.columnIndex="1" GridPane.columnSpan="2" />
 
-	<Label text="%MonitoringStatisticsView.lblNumberOfCalls.text" GridPane.rowIndex="9" GridPane.columnIndex="1" />
+	<Label text="%methodCalls" GridPane.rowIndex="9" GridPane.columnIndex="1" />
 	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="ivNumberofcalls" GridPane.rowIndex="9" GridPane.columnIndex="2" />
 
-	<Label text="%MonitoringStatisticsView.lblNumberOfFailed.text" GridPane.rowIndex="10" GridPane.columnIndex="1" />
+	<Label text="%failedMethodCalls" GridPane.rowIndex="10" GridPane.columnIndex="1" />
 	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="ivNumberoffailedcalls" GridPane.rowIndex="10" GridPane.columnIndex="2" />
 
-	<Label text="%MonitoringStatisticsView.lblNumberOfAggregated.text" GridPane.rowIndex="11" GridPane.columnIndex="1" />
+	<Label text="%aggregatedCalls" GridPane.rowIndex="11" GridPane.columnIndex="1" />
 	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="ivNumberofaggcalls" GridPane.rowIndex="11" GridPane.columnIndex="2" />
 
-	<Label text="%MonitoringStatisticsView.lblNumberOfAggregated_1.text" GridPane.rowIndex="12" GridPane.columnIndex="1" />
+	<Label text="%failedAggregatedCalls" GridPane.rowIndex="12" GridPane.columnIndex="1" />
 	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="ivNumberoffailedaggcalls" GridPane.rowIndex="12" GridPane.columnIndex="2" />
 
 	<Separator GridPane.rowIndex="13" GridPane.columnIndex="1" GridPane.columnSpan="2" />
 
-	<Label text="%MonitoringStatisticsView.lblNumberOfReconstructed.text" GridPane.rowIndex="14" GridPane.columnIndex="1" />
+	<Label text="%traces" GridPane.rowIndex="14" GridPane.columnIndex="1" />
 	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="ivNumberoftraces" GridPane.rowIndex="14" GridPane.columnIndex="2" />
 
-	<Label text="%MonitoringStatisticsView.lblNumberOfReconstructed_2.text" GridPane.rowIndex="15" GridPane.columnIndex="1" />
+	<Label text="%failedTraces" GridPane.rowIndex="15" GridPane.columnIndex="1" />
 	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="ivNumberoffailedtraces" GridPane.rowIndex="15" GridPane.columnIndex="2" />
 
-	<Label text="%MonitoringStatisticsView.lblNumberOfReconstructed_3.text" GridPane.rowIndex="16" GridPane.columnIndex="1" />
+	<Label text="%failureContainingTraces" GridPane.rowIndex="16" GridPane.columnIndex="1" />
 	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="ivNumberoffailuretraces" GridPane.rowIndex="16" GridPane.columnIndex="2" />
 
-	<Label text="%MonitoringStatisticsView.lblNumberOfReconstructed_1.text"  GridPane.rowIndex="17" GridPane.columnIndex="1" />
+	<Label text="%aggregatedTraces"  GridPane.rowIndex="17" GridPane.columnIndex="1" />
 	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="ivNumberofaggtraces" GridPane.rowIndex="17" GridPane.columnIndex="2" />
 
-	<Label text="%MonitoringStatisticsView.lblNumberOfReconstructed_4.text"	GridPane.rowIndex="18" GridPane.columnIndex="1" />
+	<Label text="%failedAggregatedTraces"	GridPane.rowIndex="18" GridPane.columnIndex="1" />
 	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="ivNumberofaggfailedtraces" GridPane.rowIndex="18" GridPane.columnIndex="2" />
 
-	<Label text="%MonitoringStatisticsView.lblNumberOfReconstructed_5.text" GridPane.rowIndex="19" GridPane.columnIndex="1" />
+	<Label text="%failureContainingAggregatedTraces" GridPane.rowIndex="19" GridPane.columnIndex="1" />
 	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="ivNumberofaggfailuretraces" GridPane.rowIndex="19" GridPane.columnIndex="2" />
 
 	<Separator GridPane.rowIndex="20" GridPane.columnIndex="1" GridPane.columnSpan="2" />
 
-	<Label text="%MonitoringStatisticsView.lblNonreconstructableTraces.text" GridPane.rowIndex="21" GridPane.columnIndex="1" />
+	<Label text="%NonReconstructableTraces" GridPane.rowIndex="21" GridPane.columnIndex="1" />
 	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="ivIncompletetraces" GridPane.rowIndex="21" GridPane.columnIndex="2" />
 	
-	<Label text="%MonitoringStatisticsView.lbldanglingRecords.text" GridPane.rowIndex="22" GridPane.columnIndex="1" />
+	<Label text="%danglingRecords" GridPane.rowIndex="22" GridPane.columnIndex="1" />
 	<TextField text="N/A" GridPane.fillWidth="true" editable="false" fx:id="ivDanglingrecords" GridPane.rowIndex="22" GridPane.columnIndex="2" />
 	
 	<Label text="%ignoredRecords" GridPane.rowIndex="23" GridPane.columnIndex="1" />

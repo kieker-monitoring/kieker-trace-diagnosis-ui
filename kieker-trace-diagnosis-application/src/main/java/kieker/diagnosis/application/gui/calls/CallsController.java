@@ -83,8 +83,8 @@ public class CallsController extends AbstractController<CallsView> {
 
 			ivSelection.addListener( e -> updateDetailPanel( ) );
 
-			getView( ).getCounter( ).textProperty( )
-					.bind( Bindings.createStringBinding( ( ) -> sortedData.size( ) + " " + getResourceBundle( ).getString( "counter" ), sortedData ) );
+			final String label = getResourceBundle( ).getString( "counter" );
+			getView( ).getCounter( ).textProperty( ).bind( Bindings.createStringBinding( ( ) -> sortedData.size( ) + " " + label, sortedData ) );
 		}
 
 		if ( aParameter.isPresent( ) ) {
