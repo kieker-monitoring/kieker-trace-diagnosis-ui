@@ -20,27 +20,27 @@
 					<ToggleGroup fx:id="togglegroup" />
 				</fx:define>
 			
-				<RadioButton text="%AggregatedTracesView.btnShowAll.text" fx:id="ivShowAllButton" selected="true" toggleGroup="$togglegroup" onAction="#useFilter" />
-				<RadioButton text="%showJustSuccessful" fx:id="ivShowJustSuccessful" toggleGroup="$togglegroup" onAction="#useFilter" />
-				<RadioButton text="%AggregatedTracesView.btnShowJustFailed.text" fx:id="ivShowJustFailedButton" toggleGroup="$togglegroup" onAction="#useFilter" />	
-				<RadioButton text="%AggregatedTracesView.btnShowJustFailureContaining.text" fx:id="ivShowJustFailureContainingButton"  toggleGroup="$togglegroup" onAction="#useFilter" />	
+				<RadioButton text="%AggregatedTracesView.btnShowAll.text" fx:id="ivShowAllButton" selected="true" toggleGroup="$togglegroup" onAction="#performUseFilter" />
+				<RadioButton text="%showJustSuccessful" fx:id="ivShowJustSuccessful" toggleGroup="$togglegroup" onAction="#performUseFilter" />
+				<RadioButton text="%AggregatedTracesView.btnShowJustFailed.text" fx:id="ivShowJustFailedButton" toggleGroup="$togglegroup" onAction="#performUseFilter" />	
+				<RadioButton text="%AggregatedTracesView.btnShowJustFailureContaining.text" fx:id="ivShowJustFailureContainingButton"  toggleGroup="$togglegroup" onAction="#performUseFilter" />	
 			</HBox>
 			
 			<GridPane GridPane.rowIndex="1">
 				<hgap>5</hgap>
 				
-				<TextField promptText="%filterContainer" onAction="#useFilter" fx:id="ivFilterContainer" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS"/>
-				<TextField promptText="%filterComponent" onAction="#useFilter" fx:id="ivFilterComponent" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
-				<TextField promptText="%filterOperation" onAction="#useFilter" fx:id="ivFilterOperation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
-				<TextField promptText="%filterException" onAction="#useFilter" fx:id="ivFilterException" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterContainer" onAction="#performUseFilter" fx:id="ivFilterContainer" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterComponent" onAction="#performUseFilter" fx:id="ivFilterComponent" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterOperation" onAction="#performUseFilter" fx:id="ivFilterOperation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS"/>
+				<TextField promptText="%filterException" onAction="#performUseFilter" fx:id="ivFilterException" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
 			
-				<Hyperlink text="%saveAsFavorite" onAction="#saveAsFavorite" GridPane.rowIndex="1" GridPane.columnIndex="0"  />
+				<Hyperlink text="%saveAsFavorite" onAction="#performSaveAsFavorite" GridPane.rowIndex="1" GridPane.columnIndex="0"  />
 			</GridPane>
 		</VBox>
 	</TitledPane>
 
 	<TreeTableView fx:id="ivTreetable" GridPane.hgrow="ALWAYS"
-		GridPane.vgrow="ALWAYS" GridPane.rowIndex="1" tableMenuButtonVisible="true"  onMouseClicked="#selectCall" onKeyReleased="#selectCall">
+		GridPane.vgrow="ALWAYS" GridPane.rowIndex="1" tableMenuButtonVisible="true"  onMouseClicked="#performSelectCall" onKeyReleased="#performSelectCall">
 		
 		<rowFactory>
 			<FailedRowFactory/>
@@ -204,7 +204,7 @@
 	</GridPane>
 </TitledPane>
 	<HBox fx:id="ivStatusbar" GridPane.rowIndex="3">
-		<TextField text="%AggregatedTracesView.lblCounter.text" editable="false" fx:id="ivCounter" />
+		<TextField text="%counter" editable="false" fx:id="ivCounter" />
 	</HBox>
 	
 </GridPane>

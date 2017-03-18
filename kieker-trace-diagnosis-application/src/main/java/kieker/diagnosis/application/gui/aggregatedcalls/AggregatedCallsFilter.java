@@ -17,6 +17,8 @@
 package kieker.diagnosis.application.gui.aggregatedcalls;
 
 /**
+ * This container holds the content of the filters in the aggregated calls view.
+ *
  * @author Nils Christian Ehmke
  */
 class AggregatedCallsFilter {

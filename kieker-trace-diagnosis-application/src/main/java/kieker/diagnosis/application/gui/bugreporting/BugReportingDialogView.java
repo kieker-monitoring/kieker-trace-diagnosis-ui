@@ -26,6 +26,8 @@ import javafx.stage.Window;
 import org.springframework.stereotype.Component;
 
 /**
+ * The view for the bug reporting dialog.
+ *
  * @author Nils Christian Ehmke
  */
 @Component

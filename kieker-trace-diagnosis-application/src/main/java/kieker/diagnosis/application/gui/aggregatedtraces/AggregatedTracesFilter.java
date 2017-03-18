@@ -17,6 +17,8 @@
 package kieker.diagnosis.application.gui.aggregatedtraces;
 
 /**
+ * This container holds the content of the filters in the aggregated traces view.
+ *
  * @author Nils Christian Ehmke
  */
 class AggregatedTracesFilter {

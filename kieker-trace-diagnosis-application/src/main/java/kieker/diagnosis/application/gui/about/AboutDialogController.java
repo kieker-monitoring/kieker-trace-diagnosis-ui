@@ -23,7 +23,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 /**
- * The controller for the about dialog. The about dialog shows some information about the application.
+ * The controller for the about dialog. The about dialog shows some information about the application, like the version number and the copyright information.
  *
  * @author Nils Christian Ehmke
  */
@@ -40,6 +40,9 @@ public class AboutDialogController extends AbstractController<AboutDialogView> {
 		// Nothing to refresh
 	}
 
+	/**
+	 * The action which is performed when the user clicks the {@code ok} button.
+	 */
 	public void performCloseDialog( ) {
 		getView( ).getStage( ).hide( );
 	}

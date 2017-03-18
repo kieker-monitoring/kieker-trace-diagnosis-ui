@@ -28,7 +28,6 @@ import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.gui.AbstractController;
 import kieker.diagnosis.architecture.service.properties.PropertiesService;
 
-import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
@@ -54,9 +53,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class AggregatedCallsController extends AbstractController<AggregatedCallsView> {
 
-	private FilteredList<AggregatedOperationCall> ivFilteredData;
-
 	private final SimpleObjectProperty<Optional<AggregatedOperationCall>> ivSelection = new SimpleObjectProperty<>( Optional.empty( ) );
+
+	private FilteredList<AggregatedOperationCall> ivFilteredData;
 
 	@Autowired
 	private NameConverterService ivNameConverterService;
@@ -76,19 +75,24 @@ public class AggregatedCallsController extends AbstractController<AggregatedCall
 	@Override
 	protected void doInitialize( final boolean aFirstInitialization, final Optional<?> aParameter ) {
 		if ( aFirstInitialization ) {
+			// The list can be filtered in other methods
 			ivFilteredData = new FilteredList<>( ivDataService.getAggregatedOperationCalls( ) );
 			ivFilteredData.addListener( (ListChangeListener<AggregatedOperationCall>) change -> ivSelection.set( Optional.empty( ) ) );
 
+			// The data can be sorted by clicking on the columns of the table
 			final SortedList<AggregatedOperationCall> sortedData = new SortedList<>( ivFilteredData );
 			sortedData.comparatorProperty( ).bind( getView( ).getTable( ).comparatorProperty( ) );
 			getView( ).getTable( ).setItems( sortedData );
 
+			// If the current selection changes, we want to show information about the selection
 			ivSelection.addListener( e -> updateDetailPanel( ) );
 
-			getView( ).getCounter( ).textProperty( ).bind( Bindings.createStringBinding(
-					( ) -> sortedData.size( ) + " " + getResourceBundle( ).getString( "AggregatedCallsView.lblCounter.text" ), sortedData ) );
+			// If the data changes, we have to change the counter label in the bottom of the view
+			final String label = getResourceBundle( ).getString( "counter" );
+			getView( ).getCounter( ).textProperty( ).bind( Bindings.createStringBinding( ( ) -> sortedData.size( ) + " " + label, sortedData ) );
 		}
 
+		// If we get a filter as parameter, we have to update our view accordingly
 		if ( aParameter.isPresent( ) && ( aParameter.get( ) instanceof AggregatedCallsFilter ) ) {
 			final AggregatedCallsFilter aggregatedCallsFilter = (AggregatedCallsFilter) aParameter.get( );
 			updateView( aggregatedCallsFilter );
@@ -102,14 +106,18 @@ public class AggregatedCallsController extends AbstractController<AggregatedCall
 	}
 
 	private void updateDetailPanel( ) {
-		if ( ivSelection.get( ).isPresent( ) ) {
-			final AggregatedOperationCall call = ivSelection.get( ).get( );
-			updateView( call );
-		} else {
-			updateView( (AggregatedOperationCall) null );
-		}
+		// If we have a selection, we have to update the detail view with it. If we do not have a selection, we still have to update the detail view, because it
+		// will show otherwise outdated information. The update method can handle a null value.
+		final Optional<AggregatedOperationCall> selection = ivSelection.get( );
+		updateView( selection.orElse( null ) );
 	}
 
+	/**
+	 * This action which is performed when the user changes the currently selected call. Either by clicking on it or by using the arrow keys.
+	 *
+	 * @param aEvent
+	 *            The input event. It can be either a mouse event or a key event.
+	 */
 	public void performSelectCall( final InputEvent aEvent ) {
 		final int clicked;
 
@@ -120,16 +128,12 @@ public class AggregatedCallsController extends AbstractController<AggregatedCall
 		}
 
 		if ( clicked == 1 ) {
+			// A single click changes the currently selected call
 			ivSelection.set( Optional.ofNullable( getView( ).getTable( ).getSelectionModel( ).getSelectedItem( ) ) );
 		} else if ( clicked == 2 ) {
-			jumpToCalls( );
-		}
-	}
-
-	private void jumpToCalls( ) {
-		if ( ivSelection.get( ).isPresent( ) ) {
-			final AggregatedOperationCall call = ivSelection.get( ).get( );
-			ivMainController.jumpToCalls( call );
+			// A double click jumps to the calls view
+			final Optional<AggregatedOperationCall> selection = ivSelection.get( );
+			selection.ifPresent( ivMainController::jumpToCalls );
 		}
 	}
 
@@ -149,10 +153,19 @@ public class AggregatedCallsController extends AbstractController<AggregatedCall
 		ivFilteredData.setPredicate( predicate );
 	}
 
-	public void performExportToCSV( ) throws IOException {
+	/**
+	 * The action which is performed, when the user click on the {@code Export to CSV} link in the bottom of the view.
+	 */
+	public void performExportToCSV( ) {
 		ivMainController.exportToCSV( new AggregatedCallsCSVDataCollector( ) );
 	}
 
+	/**
+	 * The action which is performed, when the user clicks on the {@code Save as favorite} link in the filter part of the view.
+	 *
+	 * @throws BusinessException
+	 *             If the name, entered by the user during this method call, is not valid.
+	 */
 	public void performSaveAsFavorite( ) throws BusinessException {
 		final AggregatedCallsFilter filterContent = saveView( new AggregatedCallsFilter( ) );
 		ivMainController.saveAsFavorite( filterContent, AggregatedCallsController.class );
@@ -162,6 +175,7 @@ public class AggregatedCallsController extends AbstractController<AggregatedCall
 		final String notAvailable = getResourceBundle( ).getString( "notAvailable" );
 
 		if ( aCall != null ) {
+			// If there is a call given, we update the fields with its content
 			final TimeUnit sourceTimeUnit = ivDataService.getTimeUnit( );
 			final TimeUnit targetTimeUnit = ivPropertiesService.loadApplicationProperty( TimeUnitProperty.class );
 
@@ -176,6 +190,7 @@ public class AggregatedCallsController extends AbstractController<AggregatedCall
 			getView( ).getCalls( ).setText( Integer.toString( aCall.getCalls( ) ) );
 			getView( ).getFailed( ).setText( aCall.getFailedCause( ) != null ? aCall.getFailedCause( ) : notAvailable );
 		} else {
+			// If there is no call given, we clear all fields
 			getView( ).getContainer( ).setText( notAvailable );
 			getView( ).getComponent( ).setText( notAvailable );
 			getView( ).getOperation( ).setText( notAvailable );

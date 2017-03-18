@@ -26,7 +26,7 @@ import javafx.stage.Window;
 import org.springframework.stereotype.Component;
 
 /**
- * The view for the about dialog. The about dialog shows some information about the application.
+ * The view for the about dialog. The about dialog shows some information about the application, like the version number and the copyright information.
  *
  * @author Nils Christian Ehmke
  */
@@ -35,10 +35,6 @@ final class AboutDialogView extends AbstractView {
 
 	@AutowiredElement
 	private Node ivView;
-
-	public Node getView( ) {
-		return ivView;
-	}
 
 	Window getStage( ) {
 		final Scene scene = ivView.getScene( );

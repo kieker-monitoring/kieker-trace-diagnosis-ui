@@ -97,12 +97,19 @@ public class Main extends Application {
 
 		final ExecutorService executorService = Executors.newSingleThreadExecutor( );
 		final Future<ConfigurableApplicationContext> springInitializer = executorService.submit( ( ) -> {
-			Platform.runLater( ( ) -> progressText.setText( "Initializing Spring..." ) );
-			final SpringApplicationBuilder springApplicationBuilder = new SpringApplicationBuilder( getClass( ) );
-			final ConfigurableApplicationContext context = springApplicationBuilder.bannerMode( Mode.OFF ).logStartupInfo( false ).run( getArguments( ) );
 
-			Platform.runLater( ( ) -> stage.hide( ) );
-			return context;
+			try {
+				Platform.runLater( ( ) -> progressText.setText( "Initializing Spring..." ) );
+				final SpringApplicationBuilder springApplicationBuilder = new SpringApplicationBuilder( getClass( ) );
+				final ConfigurableApplicationContext context = springApplicationBuilder.bannerMode( Mode.OFF ).logStartupInfo( false ).run( getArguments( ) );
+
+				Platform.runLater( ( ) -> stage.hide( ) );
+				return context;
+			} catch ( final RuntimeException ex ) {
+				Platform.runLater( ( ) -> progressText.setText( "Critical error" ) );
+				Platform.exit( );
+				return null;
+			}
 		} );
 
 		stage.showAndWait( );

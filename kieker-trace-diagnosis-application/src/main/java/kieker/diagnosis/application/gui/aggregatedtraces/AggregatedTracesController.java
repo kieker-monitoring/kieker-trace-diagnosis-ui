@@ -43,6 +43,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
+ * The controller for the aggregated traces.
+ *
  * @author Nils Christian Ehmke
  */
 @Component
@@ -72,16 +74,18 @@ public class AggregatedTracesController extends AbstractController<AggregatedTra
 		if ( aFirstInitialization ) {
 			reloadTreetable( );
 
-			final DataService dataModel = ivDataService;
-			dataModel.getAggregatedTraces( ).addListener( ( final Change<? extends AggregatedTrace> aChange ) -> reloadTreetable( ) );
+			// If the data changes, we have to reload the whole treetable
+			ivDataService.getAggregatedTraces( ).addListener( ( final Change<? extends AggregatedTrace> aChange ) -> reloadTreetable( ) );
 
+			// If the current selection changes, we want to show information about the selection
 			ivSelection.addListener( e -> updateDetailPanel( ) );
 		}
 
+		// If we get a filter as parameter, we have to update our view accordingly
 		if ( aParameter.isPresent( ) && ( aParameter.get( ) instanceof AggregatedTracesFilter ) ) {
 			final AggregatedTracesFilter aggregatedTracesFilter = (AggregatedTracesFilter) aParameter.get( );
-			loadFilterContent( aggregatedTracesFilter );
-			useFilter( );
+			updateView( aggregatedTracesFilter );
+			performUseFilter( );
 		}
 	}
 
@@ -90,49 +94,36 @@ public class AggregatedTracesController extends AbstractController<AggregatedTra
 		reloadTreetable( );
 	}
 
-	private void updateDetailPanel( ) {
-		final String notAvailable = getResourceBundle( ).getString( "notAvailable" );
-		if ( ivSelection.get( ).isPresent( ) ) {
-			final AggregatedOperationCall call = ivSelection.get( ).get( );
-			final TimeUnit sourceTimeUnit = ivDataService.getTimeUnit( );
-			final TimeUnit targetTimeUnit = ivPropertiesService.loadApplicationProperty( TimeUnitProperty.class );
+	private void reloadTreetable( ) {
+		ivSelection.set( Optional.empty( ) );
 
-			getView( ).getContainer( ).setText( call.getContainer( ) );
-			getView( ).getComponent( ).setText( call.getComponent( ) );
-			getView( ).getOperation( ).setText( call.getOperation( ) );
-			getView( ).getMinDuration( ).setText( ivNameConverterService.toDurationString( call.getMinDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			getView( ).getMaxDuration( ).setText( ivNameConverterService.toDurationString( call.getMaxDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			getView( ).getMedianDuration( ).setText( ivNameConverterService.toDurationString( call.getMedianDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			getView( ).getTotalDuration( ).setText( ivNameConverterService.toDurationString( call.getTotalDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			getView( ).getAvgDuration( ).setText( ivNameConverterService.toDurationString( call.getMeanDuration( ), sourceTimeUnit, targetTimeUnit ) );
-			getView( ).getCalls( ).setText( Integer.toString( call.getCalls( ) ) );
-			getView( ).getTraceDepth( ).setText( Integer.toString( call.getStackDepth( ) ) );
-			getView( ).getTraceSize( ).setText( Integer.toString( call.getStackSize( ) ) );
-			getView( ).getFailed( ).setText( call.getFailedCause( ) != null ? call.getFailedCause( ) : notAvailable );
-		} else {
-			getView( ).getContainer( ).setText( notAvailable );
-			getView( ).getComponent( ).setText( notAvailable );
-			getView( ).getOperation( ).setText( notAvailable );
-			getView( ).getMinDuration( ).setText( notAvailable );
-			getView( ).getMaxDuration( ).setText( notAvailable );
-			getView( ).getMedianDuration( ).setText( notAvailable );
-			getView( ).getTotalDuration( ).setText( notAvailable );
-			getView( ).getAvgDuration( ).setText( notAvailable );
-			getView( ).getCalls( ).setText( notAvailable );
-			getView( ).getTraceDepth( ).setText( notAvailable );
-			getView( ).getTraceSize( ).setText( notAvailable );
-			getView( ).getFailed( ).setText( notAvailable );
-		}
+		final List<AggregatedTrace> traces = ivDataService.getAggregatedTraces( );
+		final TreeItem<AggregatedOperationCall> root = new TreeItem<>( );
+		final ObservableList<TreeItem<AggregatedOperationCall>> rootChildren = root.getChildren( );
+		getView( ).getTreetable( ).setRoot( root );
+		getView( ).getTreetable( ).setShowRoot( false );
+
+		traces.stream( ).map( trace -> trace.getRootOperationCall( ) ).filter( ivPredicate )
+				.forEach( call -> rootChildren.add( new LazyAggregatedOperationCallTreeItem( call ) ) );
+
+		getView( ).getCounter( ).textProperty( ).set( rootChildren.size( ) + " " + getResourceBundle( ).getString( "counter" ) );
 	}
 
-	public void selectCall( ) {
+	private void updateDetailPanel( ) {
+		// If we have a selection, we have to update the detail view with it. If we do not have a selection, we still have to update the detail view, because it
+		// will show otherwise outdated information. The update method can handle a null value.
+		final Optional<AggregatedOperationCall> selection = ivSelection.get( );
+		updateView( selection.orElse( null ) );
+	}
+
+	public void performSelectCall( ) {
 		final TreeItem<AggregatedOperationCall> selectedItem = getView( ).getTreetable( ).getSelectionModel( ).getSelectedItem( );
 		if ( selectedItem != null ) {
 			ivSelection.set( Optional.ofNullable( selectedItem.getValue( ) ) );
 		}
 	}
 
-	public void useFilter( ) {
+	public void performUseFilter( ) {
 		final boolean searchInEntireTrace = ivPropertiesService.loadBooleanApplicationProperty( SearchInEntireTraceProperty.class );
 
 		final Predicate<AggregatedOperationCall> predicate1 = ivFilterService.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
@@ -151,42 +142,48 @@ public class AggregatedTracesController extends AbstractController<AggregatedTra
 		reloadTreetable( );
 	}
 
-	private void reloadTreetable( ) {
-		ivSelection.set( Optional.empty( ) );
-
-		final DataService dataModel = ivDataService;
-		final List<AggregatedTrace> traces = dataModel.getAggregatedTraces( );
-		final TreeItem<AggregatedOperationCall> root = new TreeItem<>( );
-		final ObservableList<TreeItem<AggregatedOperationCall>> rootChildren = root.getChildren( );
-		getView( ).getTreetable( ).setRoot( root );
-		getView( ).getTreetable( ).setShowRoot( false );
-
-		traces.stream( ).map( trace -> trace.getRootOperationCall( ) ).filter( ivPredicate )
-				.forEach( call -> rootChildren.add( new LazyAggregatedOperationCallTreeItem( call ) ) );
-
-		getView( ).getCounter( ).textProperty( ).set( rootChildren.size( ) + " " + getResourceBundle( ).getString( "AggregatedTracesView.lblCounter.text" ) );
+	public void performSaveAsFavorite( ) throws BusinessException {
+		ivMainController.saveAsFavorite( saveView( new AggregatedTracesFilter( ) ), AggregatedTracesController.class );
 	}
 
-	public void saveAsFavorite( ) throws BusinessException {
-		ivMainController.saveAsFavorite( saveFilterContent( ), AggregatedTracesController.class );
+	private void updateView( final AggregatedOperationCall aCall ) {
+		final String notAvailable = getResourceBundle( ).getString( "notAvailable" );
+
+		if ( aCall != null ) {
+			// If there is a call given, we update the fields with its content
+			final TimeUnit sourceTimeUnit = ivDataService.getTimeUnit( );
+			final TimeUnit targetTimeUnit = ivPropertiesService.loadApplicationProperty( TimeUnitProperty.class );
+
+			getView( ).getContainer( ).setText( aCall.getContainer( ) );
+			getView( ).getComponent( ).setText( aCall.getComponent( ) );
+			getView( ).getOperation( ).setText( aCall.getOperation( ) );
+			getView( ).getMinDuration( ).setText( ivNameConverterService.toDurationString( aCall.getMinDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getMaxDuration( ).setText( ivNameConverterService.toDurationString( aCall.getMaxDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getMedianDuration( ).setText( ivNameConverterService.toDurationString( aCall.getMedianDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getTotalDuration( ).setText( ivNameConverterService.toDurationString( aCall.getTotalDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getAvgDuration( ).setText( ivNameConverterService.toDurationString( aCall.getMeanDuration( ), sourceTimeUnit, targetTimeUnit ) );
+			getView( ).getCalls( ).setText( Integer.toString( aCall.getCalls( ) ) );
+			getView( ).getTraceDepth( ).setText( Integer.toString( aCall.getStackDepth( ) ) );
+			getView( ).getTraceSize( ).setText( Integer.toString( aCall.getStackSize( ) ) );
+			getView( ).getFailed( ).setText( aCall.getFailedCause( ) != null ? aCall.getFailedCause( ) : notAvailable );
+		} else {
+			// If there is no call given, we clear all fields
+			getView( ).getContainer( ).setText( notAvailable );
+			getView( ).getComponent( ).setText( notAvailable );
+			getView( ).getOperation( ).setText( notAvailable );
+			getView( ).getMinDuration( ).setText( notAvailable );
+			getView( ).getMaxDuration( ).setText( notAvailable );
+			getView( ).getMedianDuration( ).setText( notAvailable );
+			getView( ).getTotalDuration( ).setText( notAvailable );
+			getView( ).getAvgDuration( ).setText( notAvailable );
+			getView( ).getCalls( ).setText( notAvailable );
+			getView( ).getTraceDepth( ).setText( notAvailable );
+			getView( ).getTraceSize( ).setText( notAvailable );
+			getView( ).getFailed( ).setText( notAvailable );
+		}
 	}
 
-	private AggregatedTracesFilter saveFilterContent( ) {
-		final AggregatedTracesFilter filterContent = new AggregatedTracesFilter( );
-
-		filterContent.setFilterComponent( getView( ).getFilterComponent( ).getText( ) );
-		filterContent.setFilterContainer( getView( ).getFilterContainer( ).getText( ) );
-		filterContent.setFilterException( getView( ).getFilterException( ).getText( ) );
-		filterContent.setFilterOperation( getView( ).getFilterOperation( ).getText( ) );
-		filterContent.setShowAllButton( getView( ).getShowAllButton( ).isSelected( ) );
-		filterContent.setShowJustFailedButton( getView( ).getShowJustFailedButton( ).isSelected( ) );
-		filterContent.setShowJustSuccessful( getView( ).getShowJustSuccessful( ).isSelected( ) );
-		filterContent.setShowJustFailureContainingButton( getView( ).getShowJustFailureContainingButton( ).isSelected( ) );
-
-		return filterContent;
-	}
-
-	private void loadFilterContent( final AggregatedTracesFilter aFilterContent ) {
+	private void updateView( final AggregatedTracesFilter aFilterContent ) {
 		getView( ).getFilterComponent( ).setText( aFilterContent.getFilterComponent( ) );
 		getView( ).getFilterContainer( ).setText( aFilterContent.getFilterContainer( ) );
 		getView( ).getFilterException( ).setText( aFilterContent.getFilterException( ) );
@@ -195,6 +192,19 @@ public class AggregatedTracesController extends AbstractController<AggregatedTra
 		getView( ).getShowJustFailedButton( ).setSelected( aFilterContent.isShowJustFailedButton( ) );
 		getView( ).getShowJustSuccessful( ).setSelected( aFilterContent.isShowJustSuccessful( ) );
 		getView( ).getShowJustFailureContainingButton( ).setSelected( aFilterContent.isShowJustFailureContainingButton( ) );
+	}
+
+	private AggregatedTracesFilter saveView( final AggregatedTracesFilter aFilterContent ) {
+		aFilterContent.setFilterComponent( getView( ).getFilterComponent( ).getText( ) );
+		aFilterContent.setFilterContainer( getView( ).getFilterContainer( ).getText( ) );
+		aFilterContent.setFilterException( getView( ).getFilterException( ).getText( ) );
+		aFilterContent.setFilterOperation( getView( ).getFilterOperation( ).getText( ) );
+		aFilterContent.setShowAllButton( getView( ).getShowAllButton( ).isSelected( ) );
+		aFilterContent.setShowJustFailedButton( getView( ).getShowJustFailedButton( ).isSelected( ) );
+		aFilterContent.setShowJustSuccessful( getView( ).getShowJustSuccessful( ).isSelected( ) );
+		aFilterContent.setShowJustFailureContainingButton( getView( ).getShowJustFailureContainingButton( ).isSelected( ) );
+
+		return aFilterContent;
 	}
 
 }

@@ -27,6 +27,8 @@ import javafx.scene.control.TreeTableView;
 import org.springframework.stereotype.Component;
 
 /**
+ * The view for the aggregated traces.
+ *
  * @author Nils Christian Ehmke
  */
 @Component
