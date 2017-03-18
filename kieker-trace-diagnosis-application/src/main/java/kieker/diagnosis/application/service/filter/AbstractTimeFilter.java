@@ -27,6 +27,9 @@ import java.util.function.Predicate;
 
 /**
  * @author Nils Christian Ehmke
+ *
+ * @param <T>
+ *            The type of the object on which the element is applied to get the timestamp.
  */
 abstract class AbstractTimeFilter<T> implements Predicate<T> {
 

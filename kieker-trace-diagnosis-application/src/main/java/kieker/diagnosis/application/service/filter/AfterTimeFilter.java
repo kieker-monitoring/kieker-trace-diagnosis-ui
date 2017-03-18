@@ -22,6 +22,9 @@ import java.util.function.Function;
 
 /**
  * @author Nils Christian Ehmke
+ *
+ * @param <T>
+ *            The type of the object on which the element is applied to get the timestamp.
  */
 final class AfterTimeFilter<T> extends AbstractTimeFilter<T> {
 

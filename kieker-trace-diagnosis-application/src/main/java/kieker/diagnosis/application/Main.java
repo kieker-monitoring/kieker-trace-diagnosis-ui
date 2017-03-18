@@ -42,6 +42,7 @@ import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.NestedRuntimeException;
 
 import com.google.common.collect.Iterables;
 
@@ -105,7 +106,7 @@ public class Main extends Application {
 
 				Platform.runLater( ( ) -> stage.hide( ) );
 				return context;
-			} catch ( final RuntimeException ex ) {
+			} catch ( final NestedRuntimeException ex ) {
 				Platform.runLater( ( ) -> progressText.setText( "Critical error" ) );
 				Platform.exit( );
 				return null;
