@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
@@ -111,7 +112,9 @@ public class LocalizationTest {
 
 	@Test
 	public void settingsDialogViewShouldContainNoUnnecessaryLocalization( ) throws ParserConfigurationException, SAXException, IOException {
-		viewShouldContainNoUnnecessaryLocalization( "kieker.diagnosis.application.gui.settings.SettingsDialogView" );
+		final List<String> exceptions = Arrays.asList( "errorThresholdRange", "errorNotAValidFloatingNumber", "errorMaxNumberOfMethodCallsRange", "errorNotAValidInteger" );
+
+		viewShouldContainNoUnnecessaryLocalization( "kieker.diagnosis.application.gui.settings.SettingsDialogView", exceptions );
 	}
 
 	@Test
@@ -135,7 +138,12 @@ public class LocalizationTest {
 	}
 
 	private void viewShouldContainNoUnnecessaryLocalization( final String baseName ) throws SAXException, IOException, ParserConfigurationException {
-		final List<String> exceptions = Arrays.asList( "notAvailable", "title", "errorEmptyFilterName", "newFilterFavorite", "newFilterFavoriteName" );
+		viewShouldContainNoUnnecessaryLocalization( baseName, Collections.emptyList( ) );
+	}
+
+	private void viewShouldContainNoUnnecessaryLocalization( final String baseName, final List<String> aAdditionalExceptions ) throws SAXException, IOException, ParserConfigurationException {
+		final List<String> exceptions = new ArrayList<>( Arrays.asList( "notAvailable", "title", "errorEmptyFilterName", "newFilterFavorite", "newFilterFavoriteName" ));
+		exceptions.addAll( aAdditionalExceptions );
 
 		final ResourceBundle germanResourceBundle = ResourceBundle.getBundle( baseName, Locale.GERMAN );
 		final ResourceBundle rootResourceBundle = ResourceBundle.getBundle( baseName, Locale.ROOT );

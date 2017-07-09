@@ -16,7 +16,7 @@
 
 package kieker.diagnosis.application.service.properties;
 
-import kieker.diagnosis.architecture.service.properties.AbstractEnumApplicationProperty;
+import kieker.diagnosis.architecture.service.properties.AbstractIntegerApplicationProperty;
 
 import org.springframework.stereotype.Component;
 
@@ -24,20 +24,16 @@ import org.springframework.stereotype.Component;
  * @author Nils Christian Ehmke
  */
 @Component
-public final class ThresholdProperty extends AbstractEnumApplicationProperty<Threshold> {
-
-	public ThresholdProperty( ) {
-		super( Threshold.class );
-	}
-
-	@Override
-	public Threshold getDefaultValue( ) {
-		return Threshold.THRESHOLD_1;
-	}
+public class MaxNumberOfMethodCallsProperty extends AbstractIntegerApplicationProperty {
 
 	@Override
 	public String getKey( ) {
-		return "threshold";
+		return "maxNumberOfMethodCallsProperty";
+	}
+
+	@Override
+	public Integer getDefaultValue( ) {
+		return 1000;
 	}
 
 }

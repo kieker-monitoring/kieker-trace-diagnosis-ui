@@ -16,7 +16,7 @@
 
 package kieker.diagnosis.application.service.properties;
 
-import kieker.diagnosis.architecture.service.properties.AbstractEnumApplicationProperty;
+import kieker.diagnosis.architecture.service.properties.AbstractFloatApplicationProperty;
 
 import org.springframework.stereotype.Component;
 
@@ -24,20 +24,16 @@ import org.springframework.stereotype.Component;
  * @author Nils Christian Ehmke
  */
 @Component
-public final class MethodCallAggregationProperty extends AbstractEnumApplicationProperty<MethodCallAggregation> {
-
-	public MethodCallAggregationProperty( ) {
-		super( MethodCallAggregation.class );
-	}
-
-	@Override
-	public MethodCallAggregation getDefaultValue( ) {
-		return MethodCallAggregation.NONE;
-	}
+public class MethodCallThresholdProperty extends AbstractFloatApplicationProperty {
 
 	@Override
 	public String getKey( ) {
-		return "methodCallAggregation";
+		return "methodCallThreshold";
+	}
+
+	@Override
+	public Float getDefaultValue( ) {
+		return 10.0f;
 	}
 
 }

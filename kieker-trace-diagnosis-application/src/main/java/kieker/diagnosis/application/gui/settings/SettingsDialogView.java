@@ -17,8 +17,8 @@
 package kieker.diagnosis.application.gui.settings;
 
 import kieker.diagnosis.application.service.properties.ComponentNames;
+import kieker.diagnosis.application.service.properties.MethodCallAggregation;
 import kieker.diagnosis.application.service.properties.OperationNames;
-import kieker.diagnosis.application.service.properties.Threshold;
 import kieker.diagnosis.application.service.properties.TimestampTypes;
 import kieker.diagnosis.architecture.gui.AbstractView;
 import kieker.diagnosis.architecture.gui.AutowiredElement;
@@ -29,6 +29,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Window;
 
 import org.springframework.stereotype.Component;
@@ -44,8 +46,6 @@ final class SettingsDialogView extends AbstractView {
 	@AutowiredElement
 	private ComboBox<ComponentNames> ivComponentNames;
 	@AutowiredElement
-	private ComboBox<Threshold> ivThresholds;
-	@AutowiredElement
 	private ComboBox<TimeUnit> ivTimeunits;
 	@AutowiredElement
 	private ComboBox<TimestampTypes> ivTimestamps;
@@ -53,8 +53,6 @@ final class SettingsDialogView extends AbstractView {
 	private CheckBox ivAdditionalLogChecks;
 	@AutowiredElement
 	private CheckBox ivActivateRegularExpressions;
-	@AutowiredElement
-	private CheckBox ivAggregateMethodCalls;
 	@AutowiredElement
 	private CheckBox ivCaseSensitive;
 	@AutowiredElement
@@ -64,6 +62,16 @@ final class SettingsDialogView extends AbstractView {
 	@AutowiredElement
 	private CheckBox ivShowUnmonitoredTime;
 	@AutowiredElement
+	private ComboBox<MethodCallAggregation> ivTypeOfMethodAggregation;
+	@AutowiredElement
+	private Label ivMaxNumberOfMethodCallsLabel;
+	@AutowiredElement
+	private TextField ivMaxNumberOfMethodCallsTextField;
+	@AutowiredElement
+	private Label ivThresholdLabel;
+	@AutowiredElement
+	private TextField ivThresholdTextField;
+	@AutowiredElement
 	private Node ivView;
 
 	public ComboBox<OperationNames> getOperationNames( ) {
@@ -72,10 +80,6 @@ final class SettingsDialogView extends AbstractView {
 
 	public ComboBox<ComponentNames> getComponentNames( ) {
 		return ivComponentNames;
-	}
-
-	public ComboBox<Threshold> getThresholds( ) {
-		return ivThresholds;
 	}
 
 	public ComboBox<TimeUnit> getTimeunits( ) {
@@ -94,10 +98,6 @@ final class SettingsDialogView extends AbstractView {
 		return ivActivateRegularExpressions;
 	}
 
-	public CheckBox getAggregateMethodCalls( ) {
-		return ivAggregateMethodCalls;
-	}
-
 	public CheckBox getCaseSensitive( ) {
 		return ivCaseSensitive;
 	}
@@ -112,6 +112,26 @@ final class SettingsDialogView extends AbstractView {
 
 	public CheckBox getShowUnmonitoredTime( ) {
 		return ivShowUnmonitoredTime;
+	}
+
+	public ComboBox<MethodCallAggregation> getTypeOfMethodAggregation( ) {
+		return ivTypeOfMethodAggregation;
+	}
+
+	public Label getMaxNumberOfMethodCallsLabel( ) {
+		return ivMaxNumberOfMethodCallsLabel;
+	}
+
+	public TextField getMaxNumberOfMethodCallsTextField( ) {
+		return ivMaxNumberOfMethodCallsTextField;
+	}
+
+	public Label getThresholdLabel( ) {
+		return ivThresholdLabel;
+	}
+
+	public TextField getThresholdTextField( ) {
+		return ivThresholdTextField;
 	}
 
 	public Node getView( ) {

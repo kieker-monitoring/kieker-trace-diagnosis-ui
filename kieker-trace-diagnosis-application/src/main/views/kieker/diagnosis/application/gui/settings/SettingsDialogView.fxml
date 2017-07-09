@@ -2,6 +2,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.cell.*?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.TextField?>
 <?import kieker.diagnosis.application.gui.components.converter.*?>
 
 <VBox fx:id="ivView" xmlns:fx="http://javafx.com/fxml">
@@ -32,13 +33,26 @@
 			<ComboBox fx:id="ivTimestamps" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
 				<converter><TimestampTypesStringConverter/></converter>
 			</ComboBox>
-			
- 			<CheckBox text="%aggregateMethodCalls" fx:id="ivAggregateMethodCalls" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
-			<ComboBox fx:id="ivThresholds" GridPane.columnIndex="2" GridPane.rowIndex="5" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
-				<converter><ThresholdStringConverter/></converter>
-			</ComboBox>
 
-			<CheckBox fx:id="ivShowUnmonitoredTime" text="%showUnmonitoredTime" GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.columnSpan="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
+			<CheckBox fx:id="ivShowUnmonitoredTime" text="%showUnmonitoredTime" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.columnSpan="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
+		</GridPane>
+	</TitledPane>
+	
+	<TitledPane text="%aggregateMethodCalls" collapsible="false" >
+		<GridPane>
+			<hgap>10</hgap>
+			<vgap>10</vgap>
+			
+			<Label text="%typeOfAggregation" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+			<ComboBox fx:id="ivTypeOfMethodAggregation" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
+				<converter><MethodCallAggregationStringConverter/></converter>
+			</ComboBox>
+			
+			<Label fx:id="ivMaxNumberOfMethodCallsLabel" text="%maxNumberOfMethodCalls" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+			<TextField fx:id="ivMaxNumberOfMethodCallsTextField" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
+			
+			<Label fx:id="ivThresholdLabel" text="%thresholdInPercent" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+			<TextField fx:id="ivThresholdTextField" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.fillWidth="true" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
 		</GridPane>
 	</TitledPane>
 	

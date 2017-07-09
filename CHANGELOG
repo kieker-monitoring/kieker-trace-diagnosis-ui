@@ -1,6 +1,10 @@
-1.2.0:
+2.0.0:
+	09 July 2017
+	Feature (#48)
+	Added more fine grained possibilites to aggregate method calls in traces.
+	
 	10 Mar 2017
-	Bug (#47))
+	Bug (#47)
 	The reference to the Trac URL has been removed. Instead a link to the Kieker mailing list is available in the bug reporting dialog.
 
 	08 Mar 2017

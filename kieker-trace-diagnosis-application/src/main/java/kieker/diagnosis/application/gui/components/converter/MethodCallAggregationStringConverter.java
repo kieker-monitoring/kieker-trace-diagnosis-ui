@@ -16,7 +16,7 @@
 
 package kieker.diagnosis.application.gui.components.converter;
 
-import kieker.diagnosis.application.service.properties.Threshold;
+import kieker.diagnosis.application.service.properties.MethodCallAggregation;
 import kieker.diagnosis.architecture.util.Mapper;
 
 import java.util.ResourceBundle;
@@ -24,19 +24,15 @@ import java.util.ResourceBundle;
 /**
  * @author Nils Christian Ehmke
  */
-public final class ThresholdStringConverter extends AbstractStringConverter<Threshold> {
+public final class MethodCallAggregationStringConverter extends AbstractStringConverter<MethodCallAggregation> {
 
 	@Override
-	protected void fillMapper( final Mapper<Threshold, String> aMapper, final ResourceBundle aResourceBundle ) {
-		final String threshold = aResourceBundle.getString( "threshold" );
-
-		aMapper.map( Threshold.THRESHOLD_0_5 ).to( threshold + " < 0.5 %" );
-		aMapper.map( Threshold.THRESHOLD_1 ).to( threshold + " < 1 %" );
-		aMapper.map( Threshold.THRESHOLD_10 ).to( threshold + " < 10 %" );
-		aMapper.map( Threshold.THRESHOLD_20 ).to( threshold + " < 20 %" );
-		aMapper.map( Threshold.THRESHOLD_30 ).to( threshold + " < 30 %" );
-		aMapper.map( Threshold.THRESHOLD_40 ).to( threshold + " < 40 %" );
-		aMapper.map( Threshold.THRESHOLD_50 ).to( threshold + " < 50 %" );
+	protected void fillMapper( final Mapper<MethodCallAggregation, String> aMapper, final ResourceBundle aResourceBundle ) {
+		aMapper.map( MethodCallAggregation.NONE ).to( aResourceBundle.getString( "methodCallAggregationNone" ) );
+		aMapper.map( MethodCallAggregation.BY_DURATION ).to( aResourceBundle.getString( "methodCallAggregationDuration" ) );
+		aMapper.map( MethodCallAggregation.BY_THRESHOLD ).to( aResourceBundle.getString( "methodCallAggregationThreshold" ) );
+		aMapper.map( MethodCallAggregation.BY_TRACE_DEPTH ).to( aResourceBundle.getString( "methodCallAggregationTraceDepth" ) );
+		aMapper.map( MethodCallAggregation.BY_TRACE_SIZE ).to( aResourceBundle.getString( "methodCallAggregationTraceSize" ) );
 	}
 
 }

@@ -23,12 +23,13 @@ import kieker.diagnosis.application.service.data.domain.OperationCall;
 import kieker.diagnosis.application.service.data.domain.Trace;
 import kieker.diagnosis.application.service.filter.FilterService;
 import kieker.diagnosis.application.service.nameconverter.NameConverterService;
+import kieker.diagnosis.application.service.properties.MaxNumberOfMethodCallsProperty;
+import kieker.diagnosis.application.service.properties.MethodCallAggregation;
 import kieker.diagnosis.application.service.properties.MethodCallAggregationProperty;
+import kieker.diagnosis.application.service.properties.MethodCallThresholdProperty;
 import kieker.diagnosis.application.service.properties.PercentCalculationProperty;
 import kieker.diagnosis.application.service.properties.SearchInEntireTraceProperty;
 import kieker.diagnosis.application.service.properties.ShowUnmonitoredTimeProperty;
-import kieker.diagnosis.application.service.properties.Threshold;
-import kieker.diagnosis.application.service.properties.ThresholdProperty;
 import kieker.diagnosis.application.service.properties.TimeUnitProperty;
 import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.gui.AbstractController;
@@ -162,8 +163,7 @@ public class TracesController extends AbstractController<TracesView> {
 			getView( ).getContainer( ).setText( call.getContainer( ) );
 			getView( ).getComponent( ).setText( call.getComponent( ) );
 			getView( ).getOperation( ).setText( call.getOperation( ) );
-			getView( ).getTimestamp( )
-					.setText( ivNameConverterService.toTimestampString( call.getTimestamp( ), sourceTimeUnit ) + " (" + call.getTimestamp( ) + ")" );
+			getView( ).getTimestamp( ).setText( ivNameConverterService.toTimestampString( call.getTimestamp( ), sourceTimeUnit ) + " (" + call.getTimestamp( ) + ")" );
 			getView( ).getDuration( ).setText( ivNameConverterService.toDurationString( call.getDuration( ), sourceTimeUnit, targetTimeUnit ) );
 			getView( ).getTraceID( ).setText( Long.toString( call.getTraceID( ) ) );
 			getView( ).getTraceDepth( ).setText( Integer.toString( call.getStackDepth( ) ) );
@@ -193,29 +193,20 @@ public class TracesController extends AbstractController<TracesView> {
 		final boolean searchInEntireTrace = ivPropertiesService.loadBooleanApplicationProperty( SearchInEntireTraceProperty.class );
 
 		final Predicate<OperationCall> predicate1 = ivFilterService.useFilter( getView( ).getShowAllButton( ), getView( ).getShowJustSuccessful( ),
-				getView( ).getShowJustFailedButton( ), getView( ).getShowJustFailureContainingButton( ), OperationCall::isFailed,
-				OperationCall::containsFailure );
-		final Predicate<OperationCall> predicate2 = ivFilterService.useFilter( getView( ).getFilterContainer( ), OperationCall::getContainer,
+				getView( ).getShowJustFailedButton( ), getView( ).getShowJustFailureContainingButton( ), OperationCall::isFailed, OperationCall::containsFailure );
+		final Predicate<OperationCall> predicate2 = ivFilterService.useFilter( getView( ).getFilterContainer( ), OperationCall::getContainer, searchInEntireTrace );
+		final Predicate<OperationCall> predicate3 = ivFilterService.useFilter( getView( ).getFilterComponent( ), OperationCall::getComponent, searchInEntireTrace );
+		final Predicate<OperationCall> predicate4 = ivFilterService.useFilter( getView( ).getFilterOperation( ), OperationCall::getOperation, searchInEntireTrace );
+		final Predicate<OperationCall> predicate5 = ivFilterService.useFilter( getView( ).getFilterTraceID( ), call -> Long.toString( call.getTraceID( ) ), searchInEntireTrace );
+		final Predicate<OperationCall> predicate6 = ivFilterService.useFilter( getView( ).getFilterLowerDate( ), OperationCall::getTimestamp, true, searchInEntireTrace );
+		final Predicate<OperationCall> predicate7 = ivFilterService.useFilter( getView( ).getFilterUpperDate( ), OperationCall::getTimestamp, false, searchInEntireTrace );
+		final Predicate<OperationCall> predicate8 = ivFilterService.useFilter( getView( ).getFilterLowerTime( ), OperationCall::getTimestamp, true, searchInEntireTrace );
+		final Predicate<OperationCall> predicate9 = ivFilterService.useFilter( getView( ).getFilterUpperTime( ), OperationCall::getTimestamp, false, searchInEntireTrace );
+		final Predicate<OperationCall> predicate10 = ivFilterService.useFilter( getView( ).getFilterException( ), call -> call.isFailed( ) ? call.getFailedCause( ) : "",
 				searchInEntireTrace );
-		final Predicate<OperationCall> predicate3 = ivFilterService.useFilter( getView( ).getFilterComponent( ), OperationCall::getComponent,
-				searchInEntireTrace );
-		final Predicate<OperationCall> predicate4 = ivFilterService.useFilter( getView( ).getFilterOperation( ), OperationCall::getOperation,
-				searchInEntireTrace );
-		final Predicate<OperationCall> predicate5 = ivFilterService.useFilter( getView( ).getFilterTraceID( ), call -> Long.toString( call.getTraceID( ) ),
-				searchInEntireTrace );
-		final Predicate<OperationCall> predicate6 = ivFilterService.useFilter( getView( ).getFilterLowerDate( ), OperationCall::getTimestamp, true,
-				searchInEntireTrace );
-		final Predicate<OperationCall> predicate7 = ivFilterService.useFilter( getView( ).getFilterUpperDate( ), OperationCall::getTimestamp, false,
-				searchInEntireTrace );
-		final Predicate<OperationCall> predicate8 = ivFilterService.useFilter( getView( ).getFilterLowerTime( ), OperationCall::getTimestamp, true,
-				searchInEntireTrace );
-		final Predicate<OperationCall> predicate9 = ivFilterService.useFilter( getView( ).getFilterUpperTime( ), OperationCall::getTimestamp, false,
-				searchInEntireTrace );
-		final Predicate<OperationCall> predicate10 = ivFilterService.useFilter( getView( ).getFilterException( ),
-				call -> call.isFailed( ) ? call.getFailedCause( ) : "", searchInEntireTrace );
 
-		ivPredicate = predicate1.and( predicate2 ).and( predicate3 ).and( predicate4 ).and( predicate5 ).and( predicate6 ).and( predicate7 ).and( predicate8 )
-				.and( predicate9 ).and( predicate10 );
+		ivPredicate = predicate1.and( predicate2 ).and( predicate3 ).and( predicate4 ).and( predicate5 ).and( predicate6 ).and( predicate7 ).and( predicate8 ).and( predicate9 )
+				.and( predicate10 );
 		reloadTreetable( );
 	}
 
@@ -270,11 +261,12 @@ public class TracesController extends AbstractController<TracesView> {
 
 		final boolean showUnmonitoredTime = ivPropertiesService.loadBooleanApplicationProperty( ShowUnmonitoredTimeProperty.class );
 		final boolean percentCalculation = ivPropertiesService.loadBooleanApplicationProperty( PercentCalculationProperty.class );
-		final boolean methodCallAggregation = ivPropertiesService.loadBooleanApplicationProperty( MethodCallAggregationProperty.class );
-		final Threshold threshold = ivPropertiesService.loadApplicationProperty( ThresholdProperty.class );
+		final MethodCallAggregation methodCallAggregation = ivPropertiesService.loadApplicationProperty( MethodCallAggregationProperty.class );
+		final float threshold = ivPropertiesService.loadApplicationProperty( MethodCallThresholdProperty.class );
+		final int maxCalls = ivPropertiesService.loadApplicationProperty( MaxNumberOfMethodCallsProperty.class );
 
-		traces.stream( ).map( trace -> trace.getRootOperationCall( ) ).filter( ivPredicate ).forEach(
-				call -> rootChildren.add( new LazyOperationCallTreeItem( call, showUnmonitoredTime, percentCalculation, methodCallAggregation, threshold ) ) );
+		traces.stream( ).map( trace -> trace.getRootOperationCall( ) ).filter( ivPredicate )
+				.forEach( call -> rootChildren.add( new LazyOperationCallTreeItem( call, showUnmonitoredTime, percentCalculation, methodCallAggregation, threshold, maxCalls ) ) );
 
 		getView( ).getCounter( ).textProperty( ).set( rootChildren.size( ) + " " + getResourceBundle( ).getString( "TracesView.lblCounter.text" ) );
 	}
