@@ -2,7 +2,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.cell.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:id="ivView">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:id="ivView" onKeyPressed="#performOnKeyPressed">
 
 	<spacing>10</spacing>
 

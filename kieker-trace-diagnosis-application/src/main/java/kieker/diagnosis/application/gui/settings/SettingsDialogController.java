@@ -43,6 +43,8 @@ import java.util.concurrent.TimeUnit;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -150,6 +152,15 @@ public class SettingsDialogController extends AbstractController<SettingsDialogV
 			}
 		} catch ( final NumberFormatException ex ) {
 			throw new BusinessException( String.format( getResourceBundle( ).getString( "errorNotAValidInteger" ), thresholdText ), ex );
+		}
+	}
+
+	/**
+	 * The action which is performed when the user presses a key.
+	 */
+	public void performOnKeyPressed( final KeyEvent aKeyEvent ) {
+		if ( aKeyEvent.getCode( ) == KeyCode.ESCAPE ) {
+			closeDialog( );
 		}
 	}
 

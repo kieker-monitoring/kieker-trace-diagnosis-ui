@@ -27,6 +27,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -65,6 +68,15 @@ public class BugReportingDialogController extends AbstractController<BugReportin
 
 	public void performCloseDialog( ) {
 		getView( ).getStage( ).hide( );
+	}
+
+	/**
+	 * The action which is performed when the user presses a key.
+	 */
+	public void performOnKeyPressed( final KeyEvent aKeyEvent ) {
+		if ( aKeyEvent.getCode( ) == KeyCode.ESCAPE ) {
+			performCloseDialog( );
+		}
 	}
 
 }

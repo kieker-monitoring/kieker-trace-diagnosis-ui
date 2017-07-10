@@ -1,5 +1,9 @@
 2.0.0:
-	09 July 2017
+	10 Jul 2017
+	Feature (#49)
+	Dialogs can now be closed by using the escape button.
+
+	09 Jul 2017
 	Feature (#48)
 	Added more fine grained possibilites to aggregate method calls in traces.
 	
