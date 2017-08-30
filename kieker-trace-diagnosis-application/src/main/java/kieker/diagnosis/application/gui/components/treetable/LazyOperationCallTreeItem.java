@@ -16,9 +16,6 @@
 
 package kieker.diagnosis.application.gui.components.treetable;
 
-import kieker.diagnosis.application.service.data.domain.OperationCall;
-import kieker.diagnosis.application.service.properties.MethodCallAggregation;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -28,6 +25,8 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import javafx.scene.control.TreeItem;
+import kieker.diagnosis.application.service.data.domain.OperationCall;
+import kieker.diagnosis.application.service.properties.MethodCallAggregation;
 
 /**
  * @author Nils Christian Ehmke
@@ -66,10 +65,19 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 	protected void initializeChildren( ) {
 		final List<TreeItem<OperationCall>> result = new ArrayList<>( );
 
+		final List<OperationCall> childrenOperationCalls = getValue( ).getChildren( );
+
+		// Don't initialize, if our list is empty. Otherwise we will run into an infinite loop with
+		// some methods calling getChildren on the aggregation pseudo-node.
+		if ( childrenOperationCalls.isEmpty( ) ) {
+			return;
+		}
+
 		if ( ivShowUnmonitoredTime ) {
 			double percent = ivPercentCalculation ? getValue( ).getPercent( ) : 100.0;
 			long duration = getValue( ).getDuration( );
-			for ( final OperationCall child : getValue( ).getChildren( ) ) {
+
+			for ( final OperationCall child : childrenOperationCalls ) {
 				percent -= child.getPercent( );
 				duration -= child.getDuration( );
 			}
@@ -83,22 +91,23 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 		switch ( ivMethodCallAggregation ) {
 			case BY_DURATION:
 				aggregateByDuration( result );
-				break;
+			break;
 			case BY_THRESHOLD:
 				aggregateByThreshold( result );
-				break;
+			break;
 			case BY_TRACE_DEPTH:
 				aggregateByDepth( result );
-				break;
+			break;
 			case BY_TRACE_SIZE:
 				aggregateBySize( result );
-				break;
+			break;
 			case NONE:
 			default:
-				for ( final OperationCall child : getValue( ).getChildren( ) ) {
-					result.add( new LazyOperationCallTreeItem( child, ivShowUnmonitoredTime, ivPercentCalculation, ivMethodCallAggregation, ivThreshold, ivMaxCalls ) );
+				for ( final OperationCall child : childrenOperationCalls ) {
+					result.add( new LazyOperationCallTreeItem( child, ivShowUnmonitoredTime, ivPercentCalculation, ivMethodCallAggregation, ivThreshold,
+							ivMaxCalls ) );
 				}
-				break;
+			break;
 
 		}
 
@@ -111,7 +120,8 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 			if ( child.getPercent( ) < ivThreshold ) {
 				underThreshold.add( child );
 			} else {
-				aResult.add( new LazyOperationCallTreeItem( child, ivShowUnmonitoredTime, ivPercentCalculation, ivMethodCallAggregation, ivThreshold, ivMaxCalls ) );
+				aResult.add(
+						new LazyOperationCallTreeItem( child, ivShowUnmonitoredTime, ivPercentCalculation, ivMethodCallAggregation, ivThreshold, ivMaxCalls ) );
 			}
 		}
 		aggregate( aResult, underThreshold );
@@ -132,8 +142,9 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 	private void aggregateByProperty( final List<TreeItem<OperationCall>> aResult, final Comparator<OperationCall> aComparator ) {
 		final Iterator<OperationCall> iterator = getValue( ).getChildren( ).stream( ).sorted( aComparator ).iterator( );
 		int maxCalls = ivMaxCalls;
-		while ( ( maxCalls > 0 ) && iterator.hasNext( ) ) {
-			aResult.add( new LazyOperationCallTreeItem( iterator.next( ), ivShowUnmonitoredTime, ivPercentCalculation, ivMethodCallAggregation, ivThreshold, ivMaxCalls ) );
+		while ( maxCalls > 0 && iterator.hasNext( ) ) {
+			aResult.add( new LazyOperationCallTreeItem( iterator.next( ), ivShowUnmonitoredTime, ivPercentCalculation, ivMethodCallAggregation, ivThreshold,
+					ivMaxCalls ) );
 			maxCalls--;
 		}
 
@@ -151,7 +162,8 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 			final long duration = aToBeAggregated.stream( ).map( OperationCall::getDuration ).collect( Collectors.summingLong( Long::longValue ) );
 			final int traceDepth = aToBeAggregated.stream( ).map( OperationCall::getStackDepth ).max( Comparator.naturalOrder( ) ).get( );
 			final int traceSize = aToBeAggregated.stream( ).map( OperationCall::getStackSize ).collect( Collectors.summingInt( Integer::intValue ) );
-			final OperationCall call = new OperationCall( BLANK, BLANK, aToBeAggregated.size( ) + " " + METHOD_CALLS_AGGREGATED, getValue( ).getTraceID( ), -1 );
+			final OperationCall call = new OperationCall( BLANK, BLANK, aToBeAggregated.size( ) + " " + METHOD_CALLS_AGGREGATED, getValue( ).getTraceID( ),
+					-1 );
 			call.setPercent( (float) percent );
 			call.setDuration( duration );
 			call.setStackDepth( traceDepth );

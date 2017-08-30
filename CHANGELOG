@@ -1,4 +1,12 @@
 2.0.0:
+	30 Aug 2017
+	Bug (#51)
+	The jump from calls to traces leads no longer to an error in case that unmonitored time or method call aggregation is active.
+	
+	30 Aug 2017
+	Internal Improvement (#50)
+	The jump from calls to traces no longer uses a recursive algorithm which might lead to a stack overflow in large traces.
+
 	10 Jul 2017
 	Feature (#49)
 	Dialogs can now be closed by using the escape button.
