@@ -110,6 +110,7 @@
 									</jvmSettings>
 								</program>
 							</programs>
+							<useWildcardClassPath>true</useWildcardClassPath>
 							<repositoryLayout>flat</repositoryLayout>
 							<repositoryName>lib</repositoryName>
 						</configuration>

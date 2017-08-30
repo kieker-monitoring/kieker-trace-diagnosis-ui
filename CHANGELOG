@@ -1,5 +1,9 @@
 2.0.0:
 	30 Aug 2017
+	Internal Improvement (#52)
+	The classpath for the start script is now assembled with wildcards for the libraries.
+
+	30 Aug 2017
 	Bug (#51)
 	The jump from calls to traces leads no longer to an error in case that unmonitored time or method call aggregation is active.
 	
