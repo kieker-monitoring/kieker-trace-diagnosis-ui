@@ -16,6 +16,19 @@
 
 package kieker.diagnosis.application.gui.aggregatedtraces;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ListChangeListener.Change;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TreeItem;
 import kieker.diagnosis.application.gui.components.treetable.LazyAggregatedOperationCallTreeItem;
 import kieker.diagnosis.application.gui.main.MainController;
 import kieker.diagnosis.application.service.data.DataService;
@@ -28,19 +41,6 @@ import kieker.diagnosis.application.service.properties.TimeUnitProperty;
 import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.gui.AbstractController;
 import kieker.diagnosis.architecture.service.properties.PropertiesService;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
-
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ListChangeListener.Change;
-import javafx.collections.ObservableList;
-import javafx.scene.control.TreeItem;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * The controller for the aggregated traces.
@@ -82,7 +82,7 @@ public class AggregatedTracesController extends AbstractController<AggregatedTra
 		}
 
 		// If we get a filter as parameter, we have to update our view accordingly
-		if ( aParameter.isPresent( ) && ( aParameter.get( ) instanceof AggregatedTracesFilter ) ) {
+		if ( aParameter.isPresent( ) && aParameter.get( ) instanceof AggregatedTracesFilter ) {
 			final AggregatedTracesFilter aggregatedTracesFilter = (AggregatedTracesFilter) aParameter.get( );
 			updateView( aggregatedTracesFilter );
 			performUseFilter( );
@@ -100,12 +100,15 @@ public class AggregatedTracesController extends AbstractController<AggregatedTra
 		final List<AggregatedTrace> traces = ivDataService.getAggregatedTraces( );
 		final TreeItem<AggregatedOperationCall> root = new TreeItem<>( );
 		final ObservableList<TreeItem<AggregatedOperationCall>> rootChildren = root.getChildren( );
+
+		// The addAll-operation has to be performed sequentially or we will raise a concurrent modification exception.
+		final List<LazyAggregatedOperationCallTreeItem> filteredChildren = traces.parallelStream( ).map( trace -> trace.getRootOperationCall( ) )
+				.filter( ivPredicate ).map( call -> new LazyAggregatedOperationCallTreeItem( call ) ).collect( Collectors.toList( ) );
+		rootChildren.addAll( filteredChildren );
+
+		// Set the root after everything is prepared, or the whole GUI will be busy updating for each single element.
 		getView( ).getTreetable( ).setRoot( root );
 		getView( ).getTreetable( ).setShowRoot( false );
-
-		traces.stream( ).map( trace -> trace.getRootOperationCall( ) ).filter( ivPredicate )
-				.forEach( call -> rootChildren.add( new LazyAggregatedOperationCallTreeItem( call ) ) );
-
 		getView( ).getCounter( ).textProperty( ).set( rootChildren.size( ) + " " + getResourceBundle( ).getString( "counter" ) );
 	}
 

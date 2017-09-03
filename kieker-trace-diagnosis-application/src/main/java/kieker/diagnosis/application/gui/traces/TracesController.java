@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -278,8 +279,6 @@ public class TracesController extends AbstractController<TracesView> {
 		final List<Trace> traces = ivDataService.getTraces( );
 		final TreeItem<OperationCall> root = new TreeItem<>( );
 		final ObservableList<TreeItem<OperationCall>> rootChildren = root.getChildren( );
-		getView( ).getTreetable( ).setRoot( root );
-		getView( ).getTreetable( ).setShowRoot( false );
 
 		final boolean showUnmonitoredTime = ivPropertiesService.loadBooleanApplicationProperty( ShowUnmonitoredTimeProperty.class );
 		final boolean percentCalculation = ivPropertiesService.loadBooleanApplicationProperty( PercentCalculationProperty.class );
@@ -287,9 +286,15 @@ public class TracesController extends AbstractController<TracesView> {
 		final float threshold = ivPropertiesService.loadApplicationProperty( MethodCallThresholdProperty.class );
 		final int maxCalls = ivPropertiesService.loadApplicationProperty( MaxNumberOfMethodCallsProperty.class );
 
-		traces.stream( ).map( trace -> trace.getRootOperationCall( ) ).filter( ivPredicate ).forEach( call -> rootChildren
-				.add( new LazyOperationCallTreeItem( call, showUnmonitoredTime, percentCalculation, methodCallAggregation, threshold, maxCalls ) ) );
+		// The addAll-operation has to be performed sequentially or we will raise a concurrent modification exception.
+		final List<LazyOperationCallTreeItem> filteredChildren = traces.parallelStream( ).map( trace -> trace.getRootOperationCall( ) ).filter( ivPredicate )
+				.map( call -> new LazyOperationCallTreeItem( call, showUnmonitoredTime, percentCalculation, methodCallAggregation, threshold, maxCalls ) )
+				.collect( Collectors.toList( ) );
+		rootChildren.addAll( filteredChildren );
 
+		// Set the root after everything is prepared, or the whole GUI will be busy updating for each single element.
+		getView( ).getTreetable( ).setRoot( root );
+		getView( ).getTreetable( ).setShowRoot( false );
 		getView( ).getCounter( ).textProperty( ).set( rootChildren.size( ) + " " + getResourceBundle( ).getString( "TracesView.lblCounter.text" ) );
 	}
 

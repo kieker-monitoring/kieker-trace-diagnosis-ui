@@ -158,10 +158,10 @@ public final class LazyOperationCallTreeItem extends AbstractLazyOperationCallTr
 
 	private void aggregate( final List<TreeItem<OperationCall>> aResult, final List<OperationCall> aToBeAggregated ) {
 		if ( !aToBeAggregated.isEmpty( ) ) {
-			final double percent = aToBeAggregated.stream( ).map( OperationCall::getPercent ).collect( Collectors.summingDouble( Float::doubleValue ) );
-			final long duration = aToBeAggregated.stream( ).map( OperationCall::getDuration ).collect( Collectors.summingLong( Long::longValue ) );
-			final int traceDepth = aToBeAggregated.stream( ).map( OperationCall::getStackDepth ).max( Comparator.naturalOrder( ) ).get( );
-			final int traceSize = aToBeAggregated.stream( ).map( OperationCall::getStackSize ).collect( Collectors.summingInt( Integer::intValue ) );
+			final double percent = aToBeAggregated.parallelStream( ).map( OperationCall::getPercent ).collect( Collectors.summingDouble( Float::doubleValue ) );
+			final long duration = aToBeAggregated.parallelStream( ).map( OperationCall::getDuration ).collect( Collectors.summingLong( Long::longValue ) );
+			final int traceDepth = aToBeAggregated.parallelStream( ).map( OperationCall::getStackDepth ).max( Comparator.naturalOrder( ) ).get( );
+			final int traceSize = aToBeAggregated.parallelStream( ).map( OperationCall::getStackSize ).collect( Collectors.summingInt( Integer::intValue ) );
 			final OperationCall call = new OperationCall( BLANK, BLANK, aToBeAggregated.size( ) + " " + METHOD_CALLS_AGGREGATED, getValue( ).getTraceID( ),
 					-1 );
 			call.setPercent( (float) percent );

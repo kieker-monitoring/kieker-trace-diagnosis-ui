@@ -1,4 +1,8 @@
 2.0.0:
+	03 Sep 2017
+	Internal Improvement (#53)
+	Performed various performance improvements. Especially the traces view should now be loaded much faster.
+
 	30 Aug 2017
 	Internal Improvement (#52)
 	The classpath for the start script is now assembled with wildcards for the libraries.
