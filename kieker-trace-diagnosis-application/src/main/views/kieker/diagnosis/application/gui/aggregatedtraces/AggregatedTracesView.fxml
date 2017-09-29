@@ -149,57 +149,57 @@
 		<TextField text="%component" editable="false"
 			GridPane.rowIndex="2" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="2" GridPane.columnIndex="2" fx:id="ivComponent" />
+			GridPane.rowIndex="2" GridPane.columnIndex="2" fx:id="ivComponent" GridPane.hgrow="ALWAYS" />
 
 		<TextField text="%operation" editable="false"
 			GridPane.rowIndex="3" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="3" GridPane.columnIndex="2" fx:id="ivOperation" />
+			GridPane.rowIndex="3" GridPane.columnIndex="2" fx:id="ivOperation" GridPane.hgrow="ALWAYS" />
 
 		<TextField text="%failed" editable="false"
 			GridPane.rowIndex="4" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="4" GridPane.columnIndex="2" fx:id="ivFailed" />
+			GridPane.rowIndex="4" GridPane.columnIndex="2" fx:id="ivFailed" GridPane.hgrow="ALWAYS" />
 	
 		<TextField text="%numberOfCalls" editable="false"
 			GridPane.rowIndex="5" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="5" GridPane.columnIndex="2" fx:id="ivCalls" />
+			GridPane.rowIndex="5" GridPane.columnIndex="2" fx:id="ivCalls" GridPane.hgrow="ALWAYS" />
 			
 		<TextField text="%traceDepth" editable="false"
 			GridPane.rowIndex="6" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="6" GridPane.columnIndex="2" fx:id="ivTraceDepth" />
+			GridPane.rowIndex="6" GridPane.columnIndex="2" fx:id="ivTraceDepth" GridPane.hgrow="ALWAYS" />
 			
 		<TextField text="%traceSize" editable="false"
-			GridPane.rowIndex="7" GridPane.columnIndex="1" />
+			GridPane.rowIndex="1" GridPane.columnIndex="3" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="7" GridPane.columnIndex="2" fx:id="ivTraceSize" />
+			GridPane.rowIndex="1" GridPane.columnIndex="4" fx:id="ivTraceSize" GridPane.hgrow="ALWAYS" />
 			
 		<TextField text="%minimalDuration" editable="false"
-			GridPane.rowIndex="8" GridPane.columnIndex="1" />
+			GridPane.rowIndex="2" GridPane.columnIndex="3" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="8" GridPane.columnIndex="2" fx:id="ivMinDuration" />
+			GridPane.rowIndex="2" GridPane.columnIndex="4" fx:id="ivMinDuration" GridPane.hgrow="ALWAYS" />
 			
 		<TextField text="%meanDuration" editable="false"
-			GridPane.rowIndex="9" GridPane.columnIndex="1" />
+			GridPane.rowIndex="3" GridPane.columnIndex="3" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="9" GridPane.columnIndex="2" fx:id="ivAvgDuration" />
+			GridPane.rowIndex="3" GridPane.columnIndex="4" fx:id="ivAvgDuration" GridPane.hgrow="ALWAYS" />
 			
 		<TextField text="%medianDuration" editable="false"
-			GridPane.rowIndex="10" GridPane.columnIndex="1" />
+			GridPane.rowIndex="4" GridPane.columnIndex="3" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="10" GridPane.columnIndex="2" fx:id="ivMedianDuration" />
+			GridPane.rowIndex="4" GridPane.columnIndex="4" fx:id="ivMedianDuration" GridPane.hgrow="ALWAYS" />
 			
 		<TextField text="%maximalDuration" editable="false"
-			GridPane.rowIndex="11" GridPane.columnIndex="1" />
+			GridPane.rowIndex="5" GridPane.columnIndex="3" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="11" GridPane.columnIndex="2" fx:id="ivMaxDuration" />
+			GridPane.rowIndex="5" GridPane.columnIndex="4" fx:id="ivMaxDuration" GridPane.hgrow="ALWAYS" />
 			
 		<TextField text="%totalDuration" editable="false"
-			GridPane.rowIndex="12" GridPane.columnIndex="1" />
+			GridPane.rowIndex="6" GridPane.columnIndex="3" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="12" GridPane.columnIndex="2" fx:id="ivTotalDuration" />
+			GridPane.rowIndex="6" GridPane.columnIndex="4" fx:id="ivTotalDuration" GridPane.hgrow="ALWAYS" />
 			
 	</GridPane>
 </TitledPane>

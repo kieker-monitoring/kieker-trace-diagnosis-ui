@@ -115,32 +115,32 @@
 		<TextField text="%component" editable="false"
 			GridPane.rowIndex="2" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="2" GridPane.columnIndex="2" fx:id="ivComponent" />
+			GridPane.rowIndex="2" GridPane.columnIndex="2" fx:id="ivComponent" GridPane.hgrow="ALWAYS" />
 
 		<TextField text="%operation" editable="false"
 			GridPane.rowIndex="3" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="3" GridPane.columnIndex="2" fx:id="ivOperation" />
+			GridPane.rowIndex="3" GridPane.columnIndex="2" fx:id="ivOperation" GridPane.hgrow="ALWAYS" />
 
 		<TextField text="%failed" editable="false"
 			GridPane.rowIndex="4" GridPane.columnIndex="1" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="4" GridPane.columnIndex="2" fx:id="ivFailed" />
+			GridPane.rowIndex="4" GridPane.columnIndex="2" fx:id="ivFailed" GridPane.hgrow="ALWAYS" />
 
 		<TextField text="%duration" editable="false"
-			GridPane.rowIndex="5" GridPane.columnIndex="1" />
+			GridPane.rowIndex="1" GridPane.columnIndex="3" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="5" GridPane.columnIndex="2" fx:id="ivDuration" />
+			GridPane.rowIndex="1" GridPane.columnIndex="4" fx:id="ivDuration" GridPane.hgrow="ALWAYS" />
 
 		<TextField text="%traceId" editable="false"
-			GridPane.rowIndex="6" GridPane.columnIndex="1" />
+			GridPane.rowIndex="2" GridPane.columnIndex="3" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="6" GridPane.columnIndex="2" fx:id="ivTraceID" />
+			GridPane.rowIndex="2" GridPane.columnIndex="4" fx:id="ivTraceID" GridPane.hgrow="ALWAYS" />
 
 		<TextField text="%timestamp" editable="false"
-			GridPane.rowIndex="7" GridPane.columnIndex="1" />
+			GridPane.rowIndex="3" GridPane.columnIndex="3" />
 		<TextField text="N/A" GridPane.fillWidth="true" editable="false"
-			GridPane.rowIndex="7" GridPane.columnIndex="2" fx:id="ivTimestamp" />
+			GridPane.rowIndex="3" GridPane.columnIndex="4" fx:id="ivTimestamp" GridPane.hgrow="ALWAYS" />
 			
 	</GridPane>
         </TitledPane>
