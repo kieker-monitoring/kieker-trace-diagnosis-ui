@@ -16,6 +16,15 @@
 
 package kieker.diagnosis.application.gui.settings;
 
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.ObjectProperty;
+import javafx.collections.FXCollections;
 import kieker.diagnosis.application.service.properties.AdditionalLogChecksProperty;
 import kieker.diagnosis.application.service.properties.CaseSensitiveProperty;
 import kieker.diagnosis.application.service.properties.ComponentNames;
@@ -37,25 +46,14 @@ import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.gui.AbstractController;
 import kieker.diagnosis.architecture.service.properties.PropertiesService;
 
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.ObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 /**
  * @author Nils Christian Ehmke
  */
 @Component
 public class SettingsDialogController extends AbstractController<SettingsDialogView> {
 
-	private static final TimeUnit [] TIME_UNITS = { TimeUnit.NANOSECONDS, TimeUnit.MICROSECONDS, TimeUnit.MILLISECONDS, TimeUnit.SECONDS, TimeUnit.MINUTES, TimeUnit.HOURS };
+	private static final TimeUnit[] TIME_UNITS = { TimeUnit.NANOSECONDS, TimeUnit.MICROSECONDS, TimeUnit.MILLISECONDS, TimeUnit.SECONDS, TimeUnit.MINUTES,
+			TimeUnit.HOURS };
 
 	@Autowired
 	private PropertiesService ivPropertiesService;
@@ -104,9 +102,11 @@ public class SettingsDialogController extends AbstractController<SettingsDialogV
 		getView( ).getTimeunits( ).getSelectionModel( ).select( ivPropertiesService.loadApplicationProperty( TimeUnitProperty.class ) );
 		getView( ).getAdditionalLogChecks( ).setSelected( ivPropertiesService.loadApplicationProperty( AdditionalLogChecksProperty.class ) );
 		getView( ).getActivateRegularExpressions( ).setSelected( ivPropertiesService.loadApplicationProperty( RegularExpressionsProperty.class ) );
-		getView( ).getTypeOfMethodAggregation( ).getSelectionModel( ).select( ivPropertiesService.loadApplicationProperty( MethodCallAggregationProperty.class ) );
+		getView( ).getTypeOfMethodAggregation( ).getSelectionModel( )
+				.select( ivPropertiesService.loadApplicationProperty( MethodCallAggregationProperty.class ) );
 		getView( ).getThresholdTextField( ).setText( Float.toString( ivPropertiesService.loadApplicationProperty( MethodCallThresholdProperty.class ) ) );
-		getView( ).getMaxNumberOfMethodCallsTextField( ).setText( Integer.toString( ivPropertiesService.loadApplicationProperty( MaxNumberOfMethodCallsProperty.class ) ) );
+		getView( ).getMaxNumberOfMethodCallsTextField( )
+				.setText( Integer.toString( ivPropertiesService.loadApplicationProperty( MaxNumberOfMethodCallsProperty.class ) ) );
 		getView( ).getCaseSensitive( ).setSelected( ivPropertiesService.loadApplicationProperty( CaseSensitiveProperty.class ) );
 		getView( ).getPercentageCalculation( ).setSelected( ivPropertiesService.loadApplicationProperty( PercentCalculationProperty.class ) );
 		getView( ).getTimestamps( ).getSelectionModel( ).select( ivPropertiesService.loadApplicationProperty( TimestampProperty.class ) );
@@ -123,7 +123,8 @@ public class SettingsDialogController extends AbstractController<SettingsDialogV
 		ivPropertiesService.saveApplicationProperty( MethodCallAggregationProperty.class, getView( ).getTypeOfMethodAggregation( ).getValue( ) );
 
 		ivPropertiesService.saveApplicationProperty( MethodCallThresholdProperty.class, Float.parseFloat( getView( ).getThresholdTextField( ).getText( ) ) );
-		ivPropertiesService.saveApplicationProperty( MaxNumberOfMethodCallsProperty.class, Integer.parseInt( getView( ).getMaxNumberOfMethodCallsTextField( ).getText( ) ) );
+		ivPropertiesService.saveApplicationProperty( MaxNumberOfMethodCallsProperty.class,
+				Integer.parseInt( getView( ).getMaxNumberOfMethodCallsTextField( ).getText( ) ) );
 
 		ivPropertiesService.saveApplicationProperty( CaseSensitiveProperty.class, getView( ).getCaseSensitive( ).isSelected( ) );
 		ivPropertiesService.saveApplicationProperty( PercentCalculationProperty.class, getView( ).getPercentageCalculation( ).isSelected( ) );
@@ -152,15 +153,6 @@ public class SettingsDialogController extends AbstractController<SettingsDialogV
 			}
 		} catch ( final NumberFormatException ex ) {
 			throw new BusinessException( String.format( getResourceBundle( ).getString( "errorNotAValidInteger" ), thresholdText ), ex );
-		}
-	}
-
-	/**
-	 * The action which is performed when the user presses a key.
-	 */
-	public void performOnKeyPressed( final KeyEvent aKeyEvent ) {
-		if ( aKeyEvent.getCode( ) == KeyCode.ESCAPE ) {
-			closeDialog( );
 		}
 	}
 

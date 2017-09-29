@@ -16,26 +16,27 @@
 
 package kieker.diagnosis.architecture.gui;
 
-import kieker.diagnosis.architecture.gui.components.AutowireCandidate;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javafx.scene.Node;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TitledPane;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableView;
-import javafx.scene.layout.Pane;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Component;
+
+import javafx.scene.Node;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TitledPane;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableView;
+import javafx.scene.layout.Pane;
+import kieker.diagnosis.architecture.gui.components.AutowireCandidate;
 
 /**
  * @author Nils Christian Ehmke
@@ -95,6 +96,10 @@ final class ViewInitializer {
 			for ( final TreeTableColumn<?, ?> tableColumn : ( (TreeTableView<?>) aNode ).getColumns( ) ) {
 				candidates.add( tableColumn.getCellFactory( ) );
 				candidates.add( tableColumn.getCellValueFactory( ) );
+			}
+		} else if ( aNode instanceof TabPane ) {
+			for ( final Tab tab : ( (TabPane) aNode ).getTabs( ) ) {
+				candidates.add( findAutowireCandidates( tab.getContent( ) ) );
 			}
 		}
 

@@ -16,22 +16,19 @@
 
 package kieker.diagnosis.application.gui.bugreporting;
 
-import kieker.diagnosis.application.service.properties.GitLabURLProperty;
-import kieker.diagnosis.application.service.properties.MailingListURLProperty;
-import kieker.diagnosis.architecture.gui.AbstractController;
-import kieker.diagnosis.architecture.service.properties.PropertiesService;
-
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import kieker.diagnosis.application.service.properties.GitLabURLProperty;
+import kieker.diagnosis.application.service.properties.MailingListURLProperty;
+import kieker.diagnosis.architecture.gui.AbstractController;
+import kieker.diagnosis.architecture.service.properties.PropertiesService;
 
 /**
  * The controller for the bug reporting dialog.
@@ -68,15 +65,6 @@ public class BugReportingDialogController extends AbstractController<BugReportin
 
 	public void performCloseDialog( ) {
 		getView( ).getStage( ).hide( );
-	}
-
-	/**
-	 * The action which is performed when the user presses a key.
-	 */
-	public void performOnKeyPressed( final KeyEvent aKeyEvent ) {
-		if ( aKeyEvent.getCode( ) == KeyCode.ESCAPE ) {
-			performCloseDialog( );
-		}
 	}
 
 }

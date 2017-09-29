@@ -16,14 +16,11 @@
 
 package kieker.diagnosis.application.gui.about;
 
-import kieker.diagnosis.architecture.gui.AbstractController;
-
 import java.util.Optional;
 
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-
 import org.springframework.stereotype.Component;
+
+import kieker.diagnosis.architecture.gui.AbstractController;
 
 /**
  * The controller for the about dialog. The about dialog shows some information about the application, like the version number and the copyright information.
@@ -48,15 +45,6 @@ public class AboutDialogController extends AbstractController<AboutDialogView> {
 	 */
 	public void performCloseDialog( ) {
 		getView( ).getStage( ).hide( );
-	}
-
-	/**
-	 * The action which is performed when the user presses a key.
-	 */
-	public void performOnKeyPressed( final KeyEvent aKeyEvent ) {
-		if ( aKeyEvent.getCode( ) == KeyCode.ESCAPE ) {
-			performCloseDialog( );
-		}
 	}
 
 }

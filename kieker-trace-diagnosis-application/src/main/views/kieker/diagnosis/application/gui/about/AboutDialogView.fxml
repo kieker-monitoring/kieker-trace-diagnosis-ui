@@ -2,7 +2,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.cell.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:id="ivView" onKeyPressed="#performOnKeyPressed">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:id="ivView">
 
 	<spacing>10</spacing>
 
@@ -19,7 +19,7 @@
 			<javafx.geometry.Insets right="10" />
 		</VBox.margin>
 		<buttons>
-			<Button text="%ok" onAction="#performCloseDialog" id="ivOkay" />
+			<Button text="%ok" onAction="#performCloseDialog" id="ivOkay" defaultButton="true" cancelButton="true" />
 		</buttons>
 	</ButtonBar>
 

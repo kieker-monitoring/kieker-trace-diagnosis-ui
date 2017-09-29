@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import kieker.diagnosis.application.gui.components.converter.*?>
 
-<VBox fx:id="ivView" xmlns:fx="http://javafx.com/fxml" onKeyPressed="#performOnKeyPressed">
+<VBox fx:id="ivView" xmlns:fx="http://javafx.com/fxml">
 
 	<spacing>10</spacing>
 
@@ -82,8 +82,8 @@
 			<javafx.geometry.Insets right="10" />
 		</VBox.margin>
 		<buttons>
-			<Button text="%ok" onAction="#saveAndCloseDialog" id="ivOkay" />
-			<Button text="%cancel" onAction="#closeDialog" id="ivCancel" />
+			<Button text="%ok" onAction="#saveAndCloseDialog" id="ivOkay" defaultButton="true" />
+			<Button text="%cancel" onAction="#closeDialog" id="ivCancel" cancelButton="true" />
 		</buttons>
 	</ButtonBar>
 
