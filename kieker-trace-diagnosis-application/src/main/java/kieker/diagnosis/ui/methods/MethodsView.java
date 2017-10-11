@@ -19,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import jfxtras.scene.control.CalendarTimeTextField;
@@ -511,9 +512,27 @@ public class MethodsView extends ViewBase<MethodsController> {
 
 		// Status bar
 		{
-			ivStatusLabel = new Label( );
-			VBox.setMargin( ivStatusLabel, new Insets( 5 ) );
-			getChildren( ).add( ivStatusLabel );
+			final HBox hBox = new HBox( );
+			VBox.setMargin( hBox, new Insets( 5 ) );
+
+			{
+				ivStatusLabel = new Label( );
+				ivStatusLabel.setMaxWidth( Double.POSITIVE_INFINITY );
+				HBox.setHgrow( ivStatusLabel, Priority.ALWAYS );
+				HBox.setMargin( ivStatusLabel, new Insets( 5, 0, 0, 0 ) );
+
+				hBox.getChildren( ).add( ivStatusLabel );
+			}
+
+			{
+				final Hyperlink hyperlink = new Hyperlink( );
+				hyperlink.setText( getLocalizedString( "exportToCSV" ) );
+				hyperlink.setOnAction( e -> getController( ).performExportToCSV( ) );
+
+				hBox.getChildren( ).add( hyperlink );
+			}
+
+			getChildren( ).add( hBox );
 		}
 
 	}

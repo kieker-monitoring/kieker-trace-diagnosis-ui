@@ -10,6 +10,7 @@ import kieker.diagnosis.architecture.ui.ControllerBase;
 import kieker.diagnosis.service.aggregatedmethods.AggregatedMethodsFilter;
 import kieker.diagnosis.service.aggregatedmethods.AggregatedMethodsService;
 import kieker.diagnosis.service.data.AggregatedMethodCall;
+import kieker.diagnosis.service.export.CSVData;
 import kieker.diagnosis.service.settings.SettingsService;
 import kieker.diagnosis.ui.main.MainController;
 
@@ -103,6 +104,11 @@ class AggregatedMethodsController extends ControllerBase<AggregatedMethodsViewMo
 		if ( methodCall != null ) {
 			getController( MainController.class ).performJumpToMethods( methodCall );
 		}
+	}
+
+	public void performExportToCSV( ) {
+		final CSVData csvData = getViewModel( ).savePresentationAsCSV( );
+		getController( MainController.class ).performExportToCSV( csvData );
 	}
 
 }

@@ -9,6 +9,7 @@ import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
 import kieker.diagnosis.architecture.ui.ControllerBase;
 import kieker.diagnosis.service.data.AggregatedMethodCall;
 import kieker.diagnosis.service.data.MethodCall;
+import kieker.diagnosis.service.export.CSVData;
 import kieker.diagnosis.service.methods.MethodsFilter;
 import kieker.diagnosis.service.methods.MethodsService;
 import kieker.diagnosis.service.methods.SearchType;
@@ -124,6 +125,11 @@ class MethodsController extends ControllerBase<MethodsViewModel> {
 
 			performSearch( );
 		}
+	}
+
+	public void performExportToCSV( ) {
+		final CSVData csvData = getViewModel( ).savePresentationAsCSV( );
+		getController( MainController.class ).performExportToCSV( csvData );
 	}
 
 }

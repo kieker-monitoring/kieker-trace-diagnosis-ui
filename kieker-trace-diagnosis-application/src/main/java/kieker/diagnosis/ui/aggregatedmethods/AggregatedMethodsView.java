@@ -17,6 +17,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import kieker.diagnosis.architecture.ui.EnumStringConverter;
@@ -541,10 +542,29 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 
 		// Status bar
 		{
-			ivStatusLabel = new Label( );
-			VBox.setMargin( ivStatusLabel, new Insets( 5 ) );
-			getChildren( ).add( ivStatusLabel );
+			final HBox hBox = new HBox( );
+			VBox.setMargin( hBox, new Insets( 5 ) );
+
+			{
+				ivStatusLabel = new Label( );
+				ivStatusLabel.setMaxWidth( Double.POSITIVE_INFINITY );
+				HBox.setHgrow( ivStatusLabel, Priority.ALWAYS );
+				HBox.setMargin( ivStatusLabel, new Insets( 5, 0, 0, 0 ) );
+
+				hBox.getChildren( ).add( ivStatusLabel );
+			}
+
+			{
+				final Hyperlink hyperlink = new Hyperlink( );
+				hyperlink.setText( getLocalizedString( "exportToCSV" ) );
+				hyperlink.setOnAction( e -> getController( ).performExportToCSV( ) );
+
+				hBox.getChildren( ).add( hyperlink );
+			}
+
+			getChildren( ).add( hBox );
 		}
+
 	}
 
 	TextField getFilterHost( ) {

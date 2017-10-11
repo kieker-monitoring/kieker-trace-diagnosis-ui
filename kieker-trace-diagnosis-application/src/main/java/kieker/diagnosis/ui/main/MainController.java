@@ -14,6 +14,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
@@ -24,6 +25,8 @@ import kieker.diagnosis.architecture.ui.ViewBase;
 import kieker.diagnosis.service.data.AggregatedMethodCall;
 import kieker.diagnosis.service.data.MethodCall;
 import kieker.diagnosis.service.data.MonitoringLogService;
+import kieker.diagnosis.service.export.CSVData;
+import kieker.diagnosis.service.export.ExportService;
 import kieker.diagnosis.ui.main.properties.LastImportPathProperty;
 import kieker.diagnosis.ui.methods.MethodsView;
 import kieker.diagnosis.ui.progress.ProgressDialog;
@@ -172,6 +175,21 @@ public class MainController extends ControllerBase<MainViewModel> {
 
 				// Now we can add the favorite to the menu
 				getViewModel( ).addFavorite( ( ) -> getViewModel( ).showTab( aClass, aFilter ), text );
+			}
+		} catch ( final BusinessException ex ) {
+			throw new BusinessRuntimeException( ex );
+		}
+	}
+
+	public void performExportToCSV( final CSVData aCsvData ) {
+		try {
+			final FileChooser fileChooser = new FileChooser( );
+			fileChooser.setTitle( getLocalizedString( "titleExportToCSV" ) );
+
+			final File file = fileChooser.showSaveDialog( getViewModel( ).getWindow( ) );
+			if ( file != null ) {
+				final ExportService exportService = getService( ExportService.class );
+				exportService.exportToCSV( file, aCsvData );
 			}
 		} catch ( final BusinessException ex ) {
 			throw new BusinessRuntimeException( ex );

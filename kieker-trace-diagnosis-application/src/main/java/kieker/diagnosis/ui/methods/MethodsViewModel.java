@@ -7,9 +7,13 @@ import java.util.List;
 import com.google.inject.Singleton;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.ui.ViewModelBase;
 import kieker.diagnosis.service.data.MethodCall;
+import kieker.diagnosis.service.export.CSVData;
 import kieker.diagnosis.service.methods.MethodsFilter;
 import kieker.diagnosis.service.pattern.PatternService;
 
@@ -114,6 +118,32 @@ class MethodsViewModel extends ViewModelBase<MethodsView> {
 
 	public MethodCall getSelected( ) {
 		return getView( ).getTableView( ).getSelectionModel( ).getSelectedItem( );
+	}
+
+	public CSVData savePresentationAsCSV( ) {
+		final TableView<MethodCall> tableView = getView( ).getTableView( );
+		final ObservableList<TableColumn<MethodCall, ?>> visibleColumns = tableView.getVisibleLeafColumns( );
+
+		final int columnSize = visibleColumns.size( );
+		final int itemsSize = tableView.getItems( ).size( );
+
+		final String[] headers = new String[columnSize];
+		for ( int columnIndex = 0; columnIndex < columnSize; columnIndex++ ) {
+			headers[columnIndex] = visibleColumns.get( columnIndex ).getText( );
+		}
+
+		final String[][] values = new String[columnSize][itemsSize];
+		for ( int rowIndex = 0; rowIndex < itemsSize; rowIndex++ ) {
+			for ( int columnIndex = 0; columnIndex < columnSize; columnIndex++ ) {
+				final Object cellData = visibleColumns.get( columnIndex ).getCellData( rowIndex );
+				values[columnIndex][rowIndex] = cellData.toString( );
+			}
+		}
+
+		final CSVData csvData = new CSVData( );
+		csvData.setHeader( headers );
+		csvData.setValues( values );
+		return csvData;
 	}
 
 }
