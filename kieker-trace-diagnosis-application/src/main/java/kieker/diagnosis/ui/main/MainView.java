@@ -94,6 +94,21 @@ public class MainView extends ViewBase<MainController> {
 				menuBar.getMenus( ).add( ivFavorites );
 			}
 
+			{
+				final Menu menu = new Menu( );
+				menu.setText( getLocalizedString( "help" ) );
+
+				{
+					final MenuItem menuItem = new MenuItem( );
+					menuItem.setText( getLocalizedString( "about" ) );
+					menuItem.setOnAction( e -> getController( ).performAbout( ) );
+
+					menu.getItems( ).add( menuItem );
+				}
+
+				menuBar.getMenus( ).add( menu );
+			}
+
 			getChildren( ).add( menuBar );
 		}
 
