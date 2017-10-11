@@ -14,8 +14,6 @@
 		<module>kieker-trace-diagnosis-application</module>
 		<module>kieker-trace-diagnosis-architecture</module>
 		<module>kieker-trace-diagnosis-dependencies</module>
-		<module>kieker-trace-diagnosis-guitest</module>
-		<module>kieker-trace-diagnosis-guitest-architecture</module>
 		<module>kieker-trace-diagnosis-parent</module>
 		<module>kieker-trace-diagnosis-release-engineering</module>
 	</modules>
