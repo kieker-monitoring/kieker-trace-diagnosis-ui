@@ -1,0 +1,16 @@
+.status {
+	-fx-background-color: transparent;
+	-fx-background-insets: 0px;
+}
+
+.noMonitoringStarted {
+	-fx-text-background-color: orange;
+}
+
+.monitoringTerminated {
+	-fx-text-background-color: red;
+}
+
+.monitoringRunning {
+	-fx-text-background-color: green;
+}

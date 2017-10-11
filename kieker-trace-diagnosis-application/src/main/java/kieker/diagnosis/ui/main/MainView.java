@@ -55,6 +55,14 @@ public class MainView extends ViewBase<MainController> {
 
 				{
 					final MenuItem menuItem = new MenuItem( );
+					menuItem.setText( getLocalizedString( "monitoring" ) );
+					menuItem.setOnAction( e -> getController( ).performMonitoring( ) );
+
+					menu.getItems( ).add( menuItem );
+				}
+
+				{
+					final MenuItem menuItem = new MenuItem( );
 					menuItem.setText( getLocalizedString( "settings" ) );
 					menuItem.setOnAction( ( e ) -> getController( ).performSettings( ) );
 

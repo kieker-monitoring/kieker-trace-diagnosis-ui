@@ -30,6 +30,7 @@ import kieker.diagnosis.service.export.ExportService;
 import kieker.diagnosis.ui.about.AboutDialogView;
 import kieker.diagnosis.ui.main.properties.LastImportPathProperty;
 import kieker.diagnosis.ui.methods.MethodsView;
+import kieker.diagnosis.ui.monitoring.MonitoringDialogView;
 import kieker.diagnosis.ui.progress.ProgressDialog;
 import kieker.diagnosis.ui.settings.SettingsDialogView;
 import kieker.diagnosis.ui.traces.TracesView;
@@ -42,6 +43,9 @@ public class MainController extends ControllerBase<MainViewModel> {
 
 	@Inject
 	AboutDialogView ivAboutDialogView;
+
+	@Inject
+	MonitoringDialogView ivMonitoringDialogView;
 
 	/**
 	 * This action is performed, when the user wants to import a monitoring log.
@@ -202,6 +206,10 @@ public class MainController extends ControllerBase<MainViewModel> {
 		} catch ( final BusinessException ex ) {
 			throw new BusinessRuntimeException( ex );
 		}
+	}
+
+	public void performMonitoring( ) {
+		ivMonitoringDialogView.open( getViewModel( ).getWindow( ) );
 	}
 
 }
