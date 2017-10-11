@@ -14,12 +14,20 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>kieker-trace-diagnosis-application</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.testfx</groupId>
 			<artifactId>testfx-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
 		</dependency>
 	</dependencies>
 

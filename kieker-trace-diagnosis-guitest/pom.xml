@@ -15,17 +15,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>net.kieker-monitoring</groupId>
-			<artifactId>kieker-trace-diagnosis-application</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.kieker-monitoring</groupId>
 			<artifactId>kieker-trace-diagnosis-guitest-architecture</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -36,7 +26,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<argLine>-Dglass.platform=Monocle -Dmonocle.platform=Headless -Dprism.order=sw -Dprism.text=t2k -Dtestfx.robot=glass</argLine>
+					<argLine>-Duser.country=US -Duser.language=us</argLine>
 				</configuration>
 			</plugin>
 		</plugins>
