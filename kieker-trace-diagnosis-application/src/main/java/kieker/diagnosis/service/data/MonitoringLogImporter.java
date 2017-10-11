@@ -293,7 +293,7 @@ final class MonitoringLogImporter {
 
 		// Make sure that the timestamp is always in milliseconds
 		if ( DESTINATION_TIMESTAMP_TIME_UNIT != ivSourceTimeUnit ) {
-			final long newTimestamp = DESTINATION_TIMESTAMP_TIME_UNIT.convert( timestamp, ivSourceTimeUnit );
+			final long newTimestamp = DESTINATION_TIMESTAMP_TIME_UNIT.convert( lastMethodCall.getTimestamp( ), ivSourceTimeUnit );
 			lastMethodCall.setTimestamp( newTimestamp );
 		}
 
@@ -354,18 +354,18 @@ final class MonitoringLogImporter {
 			try {
 				final Class<?> recordClass = Class.forName( recordName );
 				final Field sizeField = recordClass.getDeclaredField( "SIZE" );
-				size = (byte) sizeField.get( null );
+				size = (byte) (int) sizeField.get( null );
 
 				ivIgnoredRecordsSizeMap.put( aRecordKey, size );
-				ivIgnoredRecords++;
 			} catch ( final Exception ex ) {
 				// We have no chance. We cannot skip the record, as we don't know its size.
-				throw new RuntimeException( String.format( ivResourceBundle.getString( "errorMessageUnknownRecord" ), recordName ) );
+				throw new RuntimeException( String.format( ivResourceBundle.getString( "errorMessageUnknownRecord" ), recordName ), ex );
 			}
 		} else {
 			size = ivIgnoredRecordsSizeMap.get( aRecordKey );
 		}
 
+		ivIgnoredRecords++;
 		skipBytes( size, aByteBuffer );
 	}
 
@@ -496,33 +496,44 @@ final class MonitoringLogImporter {
 
 		@Override
 		public boolean equals( final Object obj ) {
-			if ( this == obj )
+			if ( this == obj ) {
 				return true;
-			if ( obj == null )
+			}
+			if ( obj == null ) {
 				return false;
-			if ( getClass( ) != obj.getClass( ) )
+			}
+			if ( getClass( ) != obj.getClass( ) ) {
 				return false;
+			}
 			final AggregationKey other = (AggregationKey) obj;
 			if ( ivClass == null ) {
-				if ( other.ivClass != null )
+				if ( other.ivClass != null ) {
 					return false;
-			} else if ( !ivClass.equals( other.ivClass ) )
+				}
+			} else if ( !ivClass.equals( other.ivClass ) ) {
 				return false;
+			}
 			if ( ivException == null ) {
-				if ( other.ivException != null )
+				if ( other.ivException != null ) {
 					return false;
-			} else if ( !ivException.equals( other.ivException ) )
+				}
+			} else if ( !ivException.equals( other.ivException ) ) {
 				return false;
+			}
 			if ( ivHost == null ) {
-				if ( other.ivHost != null )
+				if ( other.ivHost != null ) {
 					return false;
-			} else if ( !ivHost.equals( other.ivHost ) )
+				}
+			} else if ( !ivHost.equals( other.ivHost ) ) {
 				return false;
+			}
 			if ( ivMethod == null ) {
-				if ( other.ivMethod != null )
+				if ( other.ivMethod != null ) {
 					return false;
-			} else if ( !ivMethod.equals( other.ivMethod ) )
+				}
+			} else if ( !ivMethod.equals( other.ivMethod ) ) {
 				return false;
+			}
 			return true;
 		}
 
