@@ -31,6 +31,9 @@ public class MonitoringDialogViewModel extends ViewModelBase<MonitoringDialogVie
 		}
 
 		getView( ).getStatus( ).setText( status );
+		getView( ).getStatus( ).getStyleClass( ).remove( "monitoringRunning" );
+		getView( ).getStatus( ).getStyleClass( ).remove( "monitoringTerminated" );
+		getView( ).getStatus( ).getStyleClass( ).remove( "noMonitoringStarted" );
 		getView( ).getStatus( ).getStyleClass( ).add( style );
 	}
 
