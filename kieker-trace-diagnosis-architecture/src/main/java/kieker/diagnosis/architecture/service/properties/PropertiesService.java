@@ -1,76 +1,66 @@
-/***************************************************************************
- * Copyright 2015-2017 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.diagnosis.architecture.service.properties;
 
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
-/**
- * This service is responsible for handling system and application properties.
- *
- * @author Nils Christian Ehmke
- *
- * @see ApplicationProperty
- * @see SystemProperty
- */
-public interface PropertiesService {
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.google.inject.Singleton;
 
-	/**
-	 * Loads the application property.
-	 *
-	 * @param aPropertyClass
-	 *            The class of the property.
-	 *
-	 * @return The value of the property.
-	 */
-	@Cacheable ( "applicationProperties" )
-	public <T> T loadApplicationProperty( Class<? extends ApplicationProperty<T>> aPropertyClass );
+import kieker.diagnosis.architecture.service.ServiceBase;
+import kieker.diagnosis.architecture.service.cache.InvalidateCache;
+import kieker.diagnosis.architecture.service.cache.UseCache;
 
-	@Cacheable ( "applicationProperties" )
-	public boolean loadBooleanApplicationProperty( Class<? extends ApplicationProperty<Boolean>> aPropertyClass );
+@Singleton
+public class PropertiesService extends ServiceBase {
 
-	/**
-	 * Loads the system property.
-	 *
-	 * @param aPropertyClass
-	 *            The class of the property.
-	 *
-	 * @return The value of the property.
-	 */
-	@Cacheable ( "systemProperties" )
-	public <T> T loadSystemProperty( Class<? extends SystemProperty<T>> aPropertyClass );
+	@Inject
+	private Injector ivInjector;
 
-	/**
-	 * Changes and saves the application property.
-	 *
-	 * @param aPropertyClass
-	 *            The class of the property.
-	 * @param aValue
-	 *            The new value of the property.
-	 */
-	@CacheEvict ( cacheNames = "applicationProperties", key = "#root.args[0]" )
-	public <T> void saveApplicationProperty( Class<? extends ApplicationProperty<T>> aPropertyClass, T aValue );
+	public PropertiesService( ) {
+		super( false );
+	}
 
-	/**
-	 * Delivers the current version number of the application properties. Each call to {@link #saveApplicationProperty(Class, Object)} increments the version
-	 * number.
-	 *
-	 * @return The current version number.
-	 */
-	public long getVersion( );
+	@UseCache ( cacheName = "applicationProperties" )
+	public <T> T loadApplicationProperty( final Class<? extends ApplicationProperty<T>> aPropertyClass ) {
+		final ApplicationProperty<T> property = getProperty( aPropertyClass );
+		final String key = property.getKey( );
+
+		final Preferences preferences = Preferences.userNodeForPackage( PropertiesService.class );
+		final String defaultValue = property.serialize( property.getDefaultValue( ) );
+		final String serializedValue = preferences.get( key, defaultValue );
+
+		return property.deserialize( serializedValue );
+	}
+
+	@InvalidateCache ( cacheName = "applicationProperties", keyParameter = 0 )
+	public <T> void saveApplicationProperty( final Class<? extends ApplicationProperty<T>> aPropertyClass, final T aValue ) {
+		final ApplicationProperty<T> property = getProperty( aPropertyClass );
+		final String key = property.getKey( );
+		final String serializedValue = property.serialize( aValue );
+
+		final Preferences preferences = Preferences.userNodeForPackage( PropertiesService.class );
+
+		preferences.put( key, serializedValue );
+
+		try {
+			preferences.flush( );
+		} catch ( final BackingStoreException ex ) {
+			getLogger( ).error( getLocalizedString( "errorMessage" ), ex );
+		}
+	}
+
+	private <T> T getProperty( final Class<? extends T> aPropertyClass ) {
+		return ivInjector.getInstance( aPropertyClass );
+	}
+
+	@UseCache ( cacheName = "systemProperties" )
+	public <T> T loadSystemProperty( final Class<? extends SystemProperty<T>> aPropertyClass ) {
+		final SystemProperty<T> property = getProperty( aPropertyClass );
+		final String key = property.getKey( );
+
+		final String serializedValue = System.getProperty( key );
+		return property.deserialize( serializedValue );
+	}
 
 }

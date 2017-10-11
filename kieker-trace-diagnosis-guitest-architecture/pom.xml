@@ -12,44 +12,15 @@
 
 	<artifactId>kieker-trace-diagnosis-guitest-architecture</artifactId>
 
-	<name>Kieker Trace Diagnosis GUI Test Architecture</name>
-
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.testfx</groupId>
 			<artifactId>testfx-core</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-core</artifactId>
-		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-
-				<configuration>
-					<ignoredUnusedDeclaredDependencies>
-						<ignoredDependency>org.hamcrest:hamcrest-core:*:*</ignoredDependency>
-					</ignoredUnusedDeclaredDependencies>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 
 </project>

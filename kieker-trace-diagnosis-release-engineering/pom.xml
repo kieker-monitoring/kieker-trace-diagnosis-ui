@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -12,8 +12,6 @@
 
 	<artifactId>kieker-trace-diagnosis-release-engineering</artifactId>
 
-	<name>Kieker Trace Diagnosis Release Engineering</name>
-
 	<dependencies>
 		<dependency>
 			<groupId>net.kieker-monitoring</groupId>
@@ -24,69 +22,6 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>latexRunDE1</id>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<phase>prepare-package</phase>
-
-						<configuration>
-							<arguments>
-								<argument>Manual_DE</argument>
-							</arguments>
-						</configuration>
-					</execution>
-					<execution>
-						<id>latexRunDE2</id>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<phase>prepare-package</phase>
-
-						<configuration>
-							<arguments>
-								<argument>Manual_DE</argument>
-							</arguments>
-						</configuration>
-					</execution>
-					<execution>
-						<id>latexRunEN1</id>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<phase>prepare-package</phase>
-
-						<configuration>
-							<arguments>
-								<argument>Manual_EN</argument>
-							</arguments>
-						</configuration>
-					</execution>
-					<execution>
-						<id>latexRunEN2</id>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<phase>prepare-package</phase>
-
-						<configuration>
-							<arguments>
-								<argument>Manual_EN</argument>
-							</arguments>
-						</configuration>
-					</execution>
-				</executions>
-				<configuration>
-					<executable>pdflatex</executable>
-					<workingDirectory>manual</workingDirectory>
-				</configuration>
-			</plugin>
-
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>appassembler-maven-plugin</artifactId>
@@ -101,7 +36,7 @@
 						<configuration>
 							<programs>
 								<program>
-									<mainClass>kieker.diagnosis.application.Main</mainClass>
+									<mainClass>kieker.diagnosis.KiekerTraceDiagnosis</mainClass>
 									<name>start</name>
 									<jvmSettings>
 										<extraArgument>-Djava.awt.headless=false</extraArgument>
@@ -126,7 +61,7 @@
 						<descriptor>assembly/bin-linux.xml</descriptor>
 						<descriptor>assembly/src.xml</descriptor>
 					</descriptors>
-					<finalName>Kieker Trace Diagnosis-${project.version}</finalName>
+					<finalName>Kieker-Trace-Diagnosis-${project.version}</finalName>
 				</configuration>
 
 				<executions>

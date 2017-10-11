@@ -16,9 +16,9 @@
 			<outputDirectory>bin</outputDirectory>
 		</file>
 	</files>
-	
+
 	<componentDescriptors>
-		<componentDescriptor>bin-base.xml</componentDescriptor>
+		<componentDescriptor>assembly/bin-base.xml</componentDescriptor>
 	</componentDescriptors>
-	
+
 </assembly>

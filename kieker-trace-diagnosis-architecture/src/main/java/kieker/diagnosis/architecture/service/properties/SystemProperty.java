@@ -17,8 +17,8 @@
 package kieker.diagnosis.architecture.service.properties;
 
 /**
- * Classes implementing this interface can be considered system properties. They are loaded from the application's configuration file and can not be modified
- * during runtime. Classes implementing this interface should be annotated with {@link org.springframework.stereotype.Component}.
+ * Classes implementing this interface can be considered system properties. They are loaded via {@link System#getProperty(String) and can not be modified during
+ * runtime. Classes implementing this interface should be annotated with {@link Property}.
  *
  * @author Nils Christian Ehmke
  *

@@ -3,8 +3,3 @@ target
 .project
 .classpath
 logs
-/kieker-trace-diagnosis-release-engineering/manual/*.log
-/kieker-trace-diagnosis-release-engineering/manual/*.pdf
-/kieker-trace-diagnosis-release-engineering/manual/*.aux
-/kieker-trace-diagnosis-release-engineering/manual/Manual_DE.out
-/kieker-trace-diagnosis-release-engineering/manual/Manual_EN.out
