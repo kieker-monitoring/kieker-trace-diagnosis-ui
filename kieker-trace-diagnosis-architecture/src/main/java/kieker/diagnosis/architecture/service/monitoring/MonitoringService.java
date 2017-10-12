@@ -17,9 +17,19 @@ import kieker.monitoring.timer.SystemNanoTimer;
 import kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter;
 import kieker.monitoring.writer.filesystem.AsyncBinaryNFsWriter;
 
+/**
+ * This service can be used to control the monitoring within the application (and from within the application).
+ *
+ * @author Nils Christian Ehmke
+ */
 @Singleton
 public class MonitoringService extends ServiceBase {
 
+	/**
+	 * Delivers the current status of the monitoring.
+	 *
+	 * @return The monitoring status.
+	 */
 	public Status getCurrentStatus( ) {
 		final IMonitoringController monitoringController = MonitoringControllerHolder.getMonitoringController( );
 
@@ -34,6 +44,11 @@ public class MonitoringService extends ServiceBase {
 		}
 	}
 
+	/**
+	 * Delivers the current configuration of the monitoring. If there is no such configuration, a suitable default configuration is returned.
+	 *
+	 * @return The monitoring configuration.
+	 */
 	public MonitoringConfiguration getCurrentConfiguration( ) {
 		MonitoringConfiguration currentConfiguration = MonitoringControllerHolder.getCurrentConfiguration( );
 
@@ -52,6 +67,12 @@ public class MonitoringService extends ServiceBase {
 		return currentConfiguration;
 	}
 
+	/**
+	 * Configures the application. That means, that the old monitoring is terminated and a new monitoring is started.
+	 *
+	 * @param aConfiguration
+	 *            The monitoring configuration.
+	 */
 	public void configureMonitoring( final MonitoringConfiguration aConfiguration ) {
 		// Terminate the old monitoring controller
 		IMonitoringController monitoringController = MonitoringControllerHolder.clearMonitoringController( );
@@ -102,6 +123,7 @@ public class MonitoringService extends ServiceBase {
 			configuration.setProperty( ConfigurationFactory.CONTROLLER_NAME, "Kieker-Trace-Diagnosis" );
 			configuration.setProperty( ConfigurationFactory.EXPERIMENT_ID, "0" );
 			configuration.setProperty( ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE, "0" );
+			// Never use a shutdown hook here. This will lead to a memory leak.
 			configuration.setProperty( ConfigurationFactory.USE_SHUTDOWN_HOOK, "false" );
 			configuration.setProperty( ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP, "true" );
 			configuration.setProperty( ConfigurationFactory.MONITORING_ENABLED, "true" );

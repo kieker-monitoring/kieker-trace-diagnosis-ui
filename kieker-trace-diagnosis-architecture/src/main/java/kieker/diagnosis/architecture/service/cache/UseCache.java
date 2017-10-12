@@ -10,6 +10,8 @@ import java.lang.annotation.Target;
  * This annotation can be used at service methods and makes sure that the results of the method call is cached. It is assumed that the method has exactly one
  * parameter which provides the key to the cache. Entries can be invalidated by using the {@link InvalidateCache} annotation.
  *
+ * @see InvalidateCache
+ *
  * @author Nils Christian Ehmke
  */
 @Retention ( RUNTIME )
