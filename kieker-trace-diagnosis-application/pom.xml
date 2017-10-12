@@ -26,8 +26,34 @@
 			<artifactId>jfxtras-controls</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.jfxtras</groupId>
+			<artifactId>jfxtras-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>kieker</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-core</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -36,7 +62,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
- 
+
 	<build>
 		<resources>
 			<resource>

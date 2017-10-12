@@ -17,6 +17,9 @@
 		<jfxtras.version>8.0-r5</jfxtras.version>
 		<junit.version>4.12</junit.version>
 		<hamcrest.version>1.3</hamcrest.version>
+		<dependency.plugin.version>3.0.2</dependency.plugin.version>
+		<aopalliance.version>1.0</aopalliance.version>
+		<guava.version>19.0</guava.version>
 	</properties>
 
 	<dependencyManagement>
@@ -47,6 +50,11 @@
 				<version>${guice.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>com.carrotsearch</groupId>
 				<artifactId>hppc</artifactId>
 				<version>${hppc.version}</version>
@@ -67,6 +75,11 @@
 				<version>${jfxtras.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.jfxtras</groupId>
+				<artifactId>jfxtras-common</artifactId>
+				<version>${jfxtras.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>${junit.version}</version>
@@ -75,6 +88,16 @@
 				<groupId>org.hamcrest</groupId>
 				<artifactId>hamcrest-all</artifactId>
 				<version>${hamcrest.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest-core</artifactId>
+				<version>${hamcrest.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>aopalliance</groupId>
+				<artifactId>aopalliance</artifactId>
+				<version>${aopalliance.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -86,6 +109,11 @@
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>appassembler-maven-plugin</artifactId>
 					<version>${appassembler.plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>${dependency.plugin.version}</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
