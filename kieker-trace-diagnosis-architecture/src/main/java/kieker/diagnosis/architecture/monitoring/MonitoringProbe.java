@@ -18,7 +18,6 @@ import kieker.monitoring.core.registry.TraceRegistry;
 public final class MonitoringProbe {
 
 	private final IMonitoringController ivMonitoringController;
-	private static final ThreadLocal<TraceMetadata> cvTrace = new ThreadLocal<>( );
 
 	private final Class<?> ivClass;
 	private final String ivMethod;
@@ -47,13 +46,11 @@ public final class MonitoringProbe {
 		}
 
 		// Get the current trace or start a new one
-		TraceMetadata trace = cvTrace.get( );
+		TraceMetadata trace = TraceRegistry.INSTANCE.getTrace( );
 		if ( trace == null ) {
 			// We have to remember that this is the start of a trace, as the trace has to be deregistered at the end.
 			ivNewTrace = true;
-
 			trace = TraceRegistry.INSTANCE.registerTrace( );
-			cvTrace.set( trace );
 
 			// Write a record for the new trace
 			ivMonitoringController.newMonitoringRecord( trace );
@@ -73,7 +70,7 @@ public final class MonitoringProbe {
 			return;
 		}
 
-		final TraceMetadata trace = cvTrace.get( );
+		final TraceMetadata trace = TraceRegistry.INSTANCE.getTrace( );
 		final String className = ClassUtil.getRealName( ivClass );
 
 		// Create the correct event depending on whether this method call failed or not
@@ -88,7 +85,7 @@ public final class MonitoringProbe {
 
 		// If this probe started the trace, it has to close it. Otherwise we could create a memory leak (and faulty monitoring behaviour).
 		if ( ivNewTrace ) {
-			cvTrace.set( null );
+			TraceRegistry.INSTANCE.unregisterTrace( );
 		}
 	}
 
