@@ -9,7 +9,8 @@ import kieker.diagnosis.architecture.common.ClassUtil;
 import kieker.diagnosis.architecture.service.ServiceBase;
 
 /**
- * This is the abstract base for a controller.
+ * This is the abstract base for a controller. It provides convenient methods, like retrieving a service or localizing a string. For each class extending this
+ * base, a resource bundle has to be available in the classpath with the name of the implementing class.
  *
  * @param <VM>
  *            The type of the view model.
@@ -31,6 +32,11 @@ public abstract class ControllerBase<VM extends ViewModelBase<?>> {
 		ClassUtil.assertSingletonAnnotation( getClass( ) );
 	}
 
+	/**
+	 * Gets the view model for this controller.
+	 *
+	 * @return The view model.
+	 */
 	protected final VM getViewModel( ) {
 		return ivViewModel;
 	}
@@ -47,6 +53,14 @@ public abstract class ControllerBase<VM extends ViewModelBase<?>> {
 		return ivInjector.getInstance( aServiceClass );
 	}
 
+	/**
+	 * Gets a controller of the given type. Use this method with care, as it can lead to incomprehensible execution flow.
+	 *
+	 * @param aControllerClass
+	 *            The type of the controller.
+	 *
+	 * @return The controller.
+	 */
 	protected final <C extends ControllerBase<?>> C getController( final Class<C> aControllerClass ) {
 		return ivInjector.getInstance( aControllerClass );
 	}

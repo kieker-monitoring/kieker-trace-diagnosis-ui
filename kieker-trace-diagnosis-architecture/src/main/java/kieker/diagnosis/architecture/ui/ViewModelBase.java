@@ -11,7 +11,8 @@ import kieker.diagnosis.architecture.common.ClassUtil;
 import kieker.diagnosis.architecture.service.ServiceBase;
 
 /**
- * This is the abstract base for a view model.
+ * This is the abstract base for a view model. It provides convenient methods, like retrieving a service or localizing a string. For each class extending this
+ * base, a resource bundle has to be available in the classpath with the name of the implementing class.
  *
  * @param <V>
  *            The type of the view.
@@ -33,6 +34,11 @@ public abstract class ViewModelBase<V extends ViewBase<?>> {
 		ClassUtil.assertSingletonAnnotation( getClass( ) );
 	}
 
+	/**
+	 * Gets the view for this view model.
+	 *
+	 * @return The view.
+	 */
 	protected final V getView( ) {
 		return ivView;
 	}
@@ -50,7 +56,7 @@ public abstract class ViewModelBase<V extends ViewBase<?>> {
 	}
 
 	/**
-	 * Gets a service of the given type.
+	 * Gets a service of the given type. Use this method with care, as view models should use services only in very rare cases.
 	 *
 	 * @param aServiceClass
 	 *            The type of the service.
@@ -62,7 +68,7 @@ public abstract class ViewModelBase<V extends ViewBase<?>> {
 	}
 
 	/**
-	 * Closes the corresponding window of the view.
+	 * Closes the corresponding window of the view. If the view is a dialog, this closes the dialog. Otherwise the whole application window will be closed.
 	 */
 	public final void close( ) {
 		final Scene scene = getView( ).getScene( );
@@ -70,6 +76,14 @@ public abstract class ViewModelBase<V extends ViewBase<?>> {
 		window.hide( );
 	}
 
+	/**
+	 * A convenient helper method to trim a user input.
+	 *
+	 * @param aString
+	 *            The string to trim. Can be {@code null}.
+	 *
+	 * @return The trimmed string. If the string becomes empty, {@code null} will be returned.
+	 */
 	protected final String trimToNull( final String aString ) {
 		if ( aString == null ) {
 			return aString;

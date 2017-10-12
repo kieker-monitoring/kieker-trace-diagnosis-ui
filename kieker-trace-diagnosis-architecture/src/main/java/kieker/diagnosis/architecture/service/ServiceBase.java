@@ -14,7 +14,8 @@ import kieker.diagnosis.architecture.common.ClassUtil;
 import kieker.diagnosis.architecture.exception.TechnicalException;
 
 /**
- * This is the abstract base for a service.
+ * This is the abstract base for a service. It provides convenient methods, like retrieving a service or localizing a string. For each class extending this
+ * base, a resource bundle has to be available in the classpath with the name of the implementing class.
  *
  * @author Nils Christian Ehmke
  */
@@ -27,6 +28,12 @@ public abstract class ServiceBase {
 	@Inject
 	private Injector ivInjector;
 
+	/**
+	 * This constructor can be used if the implementing service has non-static fields. Use this with care, as services should usually have no state.
+	 *
+	 * @param aCheckFields
+	 *            true if and only if the field check should be enabled.
+	 */
 	protected ServiceBase( final boolean aCheckFields ) {
 		// Make sure that the singleton annotation is present
 		ClassUtil.assertSingletonAnnotation( getClass( ) );
@@ -43,6 +50,9 @@ public abstract class ServiceBase {
 		}
 	}
 
+	/**
+	 * The default constructor. It checks whether the service has any non-static fields.
+	 */
 	protected ServiceBase( ) {
 		this( true );
 	}

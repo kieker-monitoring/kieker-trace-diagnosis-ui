@@ -18,8 +18,16 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
+import kieker.diagnosis.architecture.common.ClassUtil;
 import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
 
+/**
+ * This is an interceptor which handles all kind of {@link Throwable Throwables}. It is usually used around controller actions. If an exception occurs, the
+ * interceptor logs the exception, shows an error dialog, and returns {@code null}. If the exception is a {@link BusinessRuntimeException}, the error is not
+ * logged and the error dialog indicates that the error is a business error.
+ *
+ * @author Nils Christian Ehmke
+ */
 public final class ErrorHandlingInterceptor implements MethodInterceptor {
 
 	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle( getClass( ).getName( ) );
@@ -34,18 +42,21 @@ public final class ErrorHandlingInterceptor implements MethodInterceptor {
 		}
 	}
 
-	private void handleException( final Throwable aThrowable, final Object aController ) {
+	private void handleException( final Throwable aThrowable, final Object aObject ) {
 		showExceptionDialog( aThrowable );
-		logException( aThrowable, aController );
+		logException( aThrowable, aObject );
 	}
 
 	private void showExceptionDialog( final Throwable aThrowable ) {
-		// Prepare the dialog
+		// Find out whether this is a business exception or not
 		final boolean isBusinessException = aThrowable instanceof BusinessRuntimeException;
 		final Throwable exception = isBusinessException ? aThrowable.getCause( ) : aThrowable;
 		final AlertType alertType = isBusinessException ? AlertType.WARNING : AlertType.ERROR;
 
+		// Keep in mind that some controllers start a new thread. As this might also lead to exceptions, the whole dialog showing has to be performed in the
+		// JavaFX application thread.
 		final Runnable runnable = ( ) -> {
+			// Prepare the dialog
 			final Alert alert = new Alert( alertType );
 			alert.setTitle( ivResourceBundle.getString( "errorTitle" ) );
 			alert.setHeaderText( ivResourceBundle.getString( "errorMessage" ) );
@@ -88,6 +99,7 @@ public final class ErrorHandlingInterceptor implements MethodInterceptor {
 			alert.showAndWait( );
 		};
 
+		// Now decide whether we need to execute this in the JavaFX thread or whether we are already in this thread.
 		if ( Platform.isFxApplicationThread( ) ) {
 			runnable.run( );
 		} else {
@@ -95,10 +107,9 @@ public final class ErrorHandlingInterceptor implements MethodInterceptor {
 		}
 	}
 
-	private void logException( final Throwable aThrowable, final Object aController ) {
+	private void logException( final Throwable aThrowable, final Object aObject ) {
 		if ( !( aThrowable instanceof BusinessRuntimeException ) ) {
-			// We have to use getSuperclass as all controllers are enhanced by Guice with an interceptor.
-			final Class<?> controllerClass = aController.getClass( ).getSuperclass( );
+			final Class<?> controllerClass = ClassUtil.getRealClass( aObject.getClass( ) );
 			LogManager.getLogger( controllerClass ).error( ivResourceBundle.getString( "errorMessage" ), aThrowable );
 		}
 	}
