@@ -91,4 +91,9 @@ class StatisticsViewModel extends ViewModelBase<StatisticsView> {
 		}
 	}
 
+	public void updatePresentationMemoryUsage( final long aCurrentMegaByte, final long aTotalMegaByte ) {
+		getView( ).getProgressBar( ).setProgress( 1.0 * aCurrentMegaByte / aTotalMegaByte );
+		getView( ).getProgressText( ).setText( String.format( "%d / %d [MB]", aCurrentMegaByte, aTotalMegaByte ) );
+	}
+
 }

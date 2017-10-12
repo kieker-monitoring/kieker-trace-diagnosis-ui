@@ -4,10 +4,15 @@ import com.google.inject.Singleton;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import kieker.diagnosis.architecture.ui.ViewBase;
 
 @Singleton
@@ -26,8 +31,12 @@ public class StatisticsView extends ViewBase<StatisticsController> {
 	private final TextField ivEndOfMonitoring;
 	private final TextField ivDirectory;
 
+	private final ProgressBar ivProgressBar;
+	private final Text ivProgressText;
+
 	public StatisticsView( ) {
 		final GridPane gridPane = new GridPane( );
+		VBox.setVgrow( gridPane, Priority.ALWAYS );
 		gridPane.setPadding( new Insets( 5 ) );
 
 		int rowIndex = 0;
@@ -312,6 +321,36 @@ public class StatisticsView extends ViewBase<StatisticsController> {
 		}
 
 		getChildren( ).add( gridPane );
+
+		// Status bar
+		{
+			final TitledPane titledPane = new TitledPane( );
+			titledPane.setText( getLocalizedString( "memoryUsage" ) );
+			titledPane.setCollapsible( false );
+
+			{
+				final StackPane stackPane = new StackPane( );
+				VBox.setMargin( stackPane, new Insets( 2 ) );
+
+				{
+					ivProgressBar = new ProgressBar( );
+					ivProgressBar.setMaxWidth( Double.POSITIVE_INFINITY );
+					ivProgressBar.setPrefHeight( 30 );
+
+					stackPane.getChildren( ).add( ivProgressBar );
+				}
+
+				{
+					ivProgressText = new Text( );
+
+					stackPane.getChildren( ).add( ivProgressText );
+				}
+
+				titledPane.setContent( stackPane );
+			}
+
+			getChildren( ).add( titledPane );
+		}
 	}
 
 	TextField getProcessedBytes( ) {
@@ -360,6 +399,14 @@ public class StatisticsView extends ViewBase<StatisticsController> {
 
 	TextField getDirectory( ) {
 		return ivDirectory;
+	}
+
+	ProgressBar getProgressBar( ) {
+		return ivProgressBar;
+	}
+
+	Text getProgressText( ) {
+		return ivProgressText;
 	}
 
 	@Override

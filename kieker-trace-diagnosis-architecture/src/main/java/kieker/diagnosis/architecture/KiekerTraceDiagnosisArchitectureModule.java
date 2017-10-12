@@ -13,6 +13,7 @@ import kieker.diagnosis.architecture.service.cache.InvalidateCache;
 import kieker.diagnosis.architecture.service.cache.UseCache;
 import kieker.diagnosis.architecture.ui.ControllerBase;
 import kieker.diagnosis.architecture.ui.ErrorHandlingInterceptor;
+import kieker.diagnosis.architecture.ui.ViewModelBase;
 
 /**
  * This is the Guice module for the architecture.
@@ -31,6 +32,7 @@ public class KiekerTraceDiagnosisArchitectureModule extends AbstractModule {
 		// UI
 		bindInterceptor( Matchers.subclassesOf( ControllerBase.class ), Matchers.any( ), errorHandlingInterceptor );
 		bindInterceptor( Matchers.subclassesOf( ControllerBase.class ), Matchers.not( new SyntheticMethodMatcher( ) ), monitoringInterceptor );
+		bindInterceptor( Matchers.subclassesOf( ViewModelBase.class ), Matchers.not( new SyntheticMethodMatcher( ) ), monitoringInterceptor );
 
 		// Service
 		bindInterceptor( Matchers.subclassesOf( ServiceBase.class ), Matchers.annotatedWith( UseCache.class ).or( Matchers.annotatedWith( InvalidateCache.class ) ),
