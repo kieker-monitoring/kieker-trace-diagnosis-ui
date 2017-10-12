@@ -14,25 +14,30 @@ public enum MethodAppearance {
 
 	private static final Pattern cvMethodPattern = Pattern.compile( "(.*)\\(.*\\)" );
 
-	public String convert( final String aClass ) {
-		String clazz = aClass;
+	public String convert( final String aMethod ) {
+		String method = aMethod;
+
+		// This can only happen when the records contains null values. Ugly but possible.
+		if ( method == null ) {
+			return null;
+		}
 
 		if ( this == SHORT ) {
-			final Matcher matcher = cvMethodPattern.matcher( clazz );
+			final Matcher matcher = cvMethodPattern.matcher( method );
 			if ( matcher.find( ) ) {
 				// Replace the parenthesis
-				clazz = matcher.group( 1 );
-				clazz = clazz + "(...)";
+				method = matcher.group( 1 );
+				method = method + "(...)";
 
 				// Remove the class part
-				final int lastPointPos = clazz.lastIndexOf( '.', clazz.length( ) - 5 );
+				final int lastPointPos = method.lastIndexOf( '.', method.length( ) - 5 );
 				if ( lastPointPos != -1 ) {
-					clazz = clazz.substring( lastPointPos + 1 );
+					method = method.substring( lastPointPos + 1 );
 				}
 			}
 		}
 
-		return clazz.intern( );
+		return method.intern( );
 	}
 
 }

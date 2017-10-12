@@ -2,6 +2,8 @@ package kieker.diagnosis.ui.monitoring;
 
 import com.google.inject.Singleton;
 
+import kieker.diagnosis.architecture.exception.BusinessException;
+import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
 import kieker.diagnosis.architecture.monitoring.MonitoringConfiguration;
 import kieker.diagnosis.architecture.monitoring.Status;
 import kieker.diagnosis.architecture.service.monitoring.MonitoringService;
@@ -27,14 +29,18 @@ public class MonitoringDialogController extends ControllerBase<MonitoringDialogV
 	 * @return
 	 */
 	public void performSaveAndClose( ) {
-		// Get the configuration...
-		final MonitoringConfiguration configuration = getViewModel( ).savePresentationConfiguration( );
+		try {
+			// Get the configuration...
+			final MonitoringConfiguration configuration = getViewModel( ).savePresentationConfiguration( );
 
-		// ...and apply it
-		final MonitoringService monitoringService = getService( MonitoringService.class );
-		monitoringService.configureMonitoring( configuration );
+			// ...and apply it
+			final MonitoringService monitoringService = getService( MonitoringService.class );
+			monitoringService.configureMonitoring( configuration );
 
-		getViewModel( ).close( );
+			getViewModel( ).close( );
+		} catch ( final BusinessException ex ) {
+			throw new BusinessRuntimeException( ex );
+		}
 	}
 
 	public void performClose( ) {

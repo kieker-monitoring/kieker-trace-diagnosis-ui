@@ -20,6 +20,11 @@ public enum ClassAppearance {
 	public String convert( final String aClass ) {
 		String clazz = aClass;
 
+		// This can only happen when the records contains null values. Ugly but possible.
+		if ( clazz == null ) {
+			return null;
+		}
+
 		if ( this == SHORT ) {
 			final int lastPoint = clazz.lastIndexOf( '.' );
 			if ( lastPoint != -1 ) {

@@ -2,6 +2,7 @@ package kieker.diagnosis.ui.monitoring;
 
 import com.google.inject.Singleton;
 
+import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.monitoring.MonitoringConfiguration;
 import kieker.diagnosis.architecture.monitoring.Status;
 import kieker.diagnosis.architecture.ui.ViewModelBase;
@@ -47,16 +48,34 @@ public class MonitoringDialogViewModel extends ViewModelBase<MonitoringDialogVie
 		getView( ).getBuffer( ).setText( Integer.toString( aConfiguration.getBuffer( ) ) );
 	}
 
-	public MonitoringConfiguration savePresentationConfiguration( ) {
+	public MonitoringConfiguration savePresentationConfiguration( ) throws BusinessException {
 		final MonitoringConfiguration configuration = new MonitoringConfiguration( );
 
 		configuration.setActive( getView( ).getActive( ).isSelected( ) );
 		configuration.setOutputDirectory( getView( ).getOutputDirectory( ).getText( ) );
 		configuration.setTimer( getView( ).getTimer( ).getValue( ) );
 		configuration.setWriter( getView( ).getWriter( ).getValue( ) );
-		configuration.setMaxEntriesPerFile( Integer.parseInt( getView( ).getMaxEntriesPerFile( ).getText( ) ) );
-		configuration.setQueueSize( Integer.parseInt( getView( ).getQueueSize( ).getText( ) ) );
-		configuration.setBuffer( Integer.parseInt( getView( ).getBuffer( ).getText( ) ) );
+
+		final String maxEntriesPerFile = getView( ).getMaxEntriesPerFile( ).getText( );
+		try {
+			configuration.setMaxEntriesPerFile( Integer.parseInt( maxEntriesPerFile ) );
+		} catch ( final NumberFormatException ex ) {
+			throw new BusinessException( getLocalizedString( "errorNotAValidInteger" ), maxEntriesPerFile );
+		}
+
+		final String queueSize = getView( ).getQueueSize( ).getText( );
+		try {
+			configuration.setQueueSize( Integer.parseInt( queueSize ) );
+		} catch ( final NumberFormatException ex ) {
+			throw new BusinessException( getLocalizedString( "errorNotAValidInteger" ), queueSize );
+		}
+
+		final String buffer = getView( ).getBuffer( ).getText( );
+		try {
+			configuration.setBuffer( Integer.parseInt( buffer ) );
+		} catch ( final NumberFormatException ex ) {
+			throw new BusinessException( getLocalizedString( "errorNotAValidInteger" ), buffer );
+		}
 
 		return configuration;
 	}
