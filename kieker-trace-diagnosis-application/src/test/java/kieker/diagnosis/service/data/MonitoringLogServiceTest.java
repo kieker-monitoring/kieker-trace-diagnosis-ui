@@ -3,6 +3,8 @@ package kieker.diagnosis.service.data;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.nullValue;
+import static org.hamcrest.number.IsCloseTo.closeTo;
 import static org.hamcrest.number.OrderingComparison.greaterThan;
 import static org.junit.Assert.assertThat;
 
@@ -281,6 +283,55 @@ public class MonitoringLogServiceTest {
 		// Import the directory
 		final File directory = ivTemporaryFolder.getRoot( );
 		ivService.importMonitoringLog( directory );
+	}
+
+	@Test
+	public void testTraceInDetail( ) throws Exception {
+		// Prepare the data
+		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
+		writeRecord( new BeforeOperationEvent( 1000000L, 1L, 0, "op1", "class1" ) );
+		writeRecord( new BeforeOperationEvent( 2000000L, 1L, 0, "op2", "class2" ) );
+		writeRecord( new AfterOperationEvent( 2500000L, 1L, 0, "op2", "class2" ) );
+		writeRecord( new AfterOperationFailedEvent( 4000000L, 1L, 0, "op1", "class1", "cause" ) );
+		writeMappingFile( );
+		finishWriting( );
+
+		// Import the directory
+		final File directory = ivTemporaryFolder.getRoot( );
+		ivService.importMonitoringLog( directory );
+
+		// Make sure that the import worked as intended
+		assertThat( ivService.getMethods( ), hasSize( 2 ) );
+		assertThat( ivService.getAggreatedMethods( ), hasSize( 2 ) );
+		assertThat( ivService.getTraceRoots( ), hasSize( 1 ) );
+		assertThat( ivService.getProcessedBytes( ), is( greaterThan( 0L ) ) );
+
+		// Now some advanced checks
+		final MethodCall firstMethod = ivService.getMethods( ).get( 0 );
+		assertThat( firstMethod.getHost( ), is( "host" ) );
+		assertThat( firstMethod.getClazz( ), is( "class1" ) );
+		assertThat( firstMethod.getMethod( ), is( "op1" ) );
+		assertThat( firstMethod.getException( ), is( "cause" ) );
+		assertThat( firstMethod.getTimestamp( ), is( 1L ) );
+		assertThat( firstMethod.getDuration( ), is( 3000000L ) );
+		assertThat( (double) firstMethod.getPercent( ), is( closeTo( 100.0, 0.01 ) ) );
+		assertThat( firstMethod.getTraceDepth( ), is( 2 ) );
+		assertThat( firstMethod.getTraceId( ), is( 1L ) );
+		assertThat( firstMethod.getTraceSize( ), is( 2 ) );
+
+		final MethodCall secondMethod = ivService.getMethods( ).get( 1 );
+		assertThat( secondMethod.getHost( ), is( "host" ) );
+		assertThat( secondMethod.getClazz( ), is( "class2" ) );
+		assertThat( secondMethod.getMethod( ), is( "op2" ) );
+		assertThat( secondMethod.getException( ), is( nullValue( ) ) );
+		assertThat( secondMethod.getTimestamp( ), is( 2L ) );
+		assertThat( secondMethod.getDuration( ), is( 500000L ) );
+		assertThat( (double) secondMethod.getPercent( ), is( closeTo( 16.66, 0.01 ) ) );
+		assertThat( secondMethod.getTraceDepth( ), is( 1 ) );
+		assertThat( secondMethod.getTraceId( ), is( 1L ) );
+		assertThat( secondMethod.getTraceSize( ), is( 1 ) );
+
+		assertThat( ivService.getTraceRoots( ).get( 0 ), is( firstMethod ) );
 	}
 
 	private void writeRecord( final AbstractMonitoringRecord aRecord ) {
