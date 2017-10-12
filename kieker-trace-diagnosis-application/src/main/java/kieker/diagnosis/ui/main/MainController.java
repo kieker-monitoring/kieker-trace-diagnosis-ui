@@ -134,6 +134,7 @@ public class MainController extends ControllerBase<MainViewModel> {
 
 		public ImportThread( final File aDirectory ) {
 			ivDirectory = aDirectory;
+			setName( "Monitoring Import Thread" );
 		}
 
 		@Override

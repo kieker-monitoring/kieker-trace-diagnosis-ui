@@ -35,6 +35,7 @@ class StatisticsController extends ControllerBase<StatisticsViewModel> {
 			}
 		} );
 		thread.setDaemon( true );
+		thread.setName( "Statistics Memory Refresh Thread" );
 		thread.start( );
 	}
 
