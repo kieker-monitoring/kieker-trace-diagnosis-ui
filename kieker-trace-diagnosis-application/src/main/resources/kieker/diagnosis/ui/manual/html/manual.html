@@ -57,10 +57,9 @@
 		<h3>Aggregated Method Calls</h3>
 			This tab shows the method calls of the monitoring logs in aggregated form.
 			Methods with identical host, class, method, and exception are combined to a single aggregated method call.
-			
-			Ignorierte Methoden und Methoden nicht rekonstruierter Traces werden hier nicht angezeigt.
-			Die Ansicht ermöglicht die Suche nach diversen Parametern.
-			Ist die Checkbox "Mit regulären Ausdrücken suchen" aktiv, so kann in den Filtermasken "Host", "Klasse", "Methode" und "Exception" ein regulärer Ausdruck nach Standard-Java-Syntax verwendet werden.
+			Ignored methods and methods of incomplete traces are not shown.
+			This view allows to search for various parameters.
+			If the checkbox "Search with regular expressions" is active, the filter masks "host", "class", "method", and "exceptions" can be filled with regular expressions with the default Java syntax.
 	
 		<h3>Statistics</h3>
 			This tab shows various statistics for the imported monitoring logs and the application.
@@ -95,8 +94,8 @@
   			In this case the application can not write any log files, but can be used as usual.
 
 		<h3>OutOfMemoryError</h3>
-			Kommt es bei der Verwendung des Werkzeugs zu einem <i>OutOfMemoryError</i>, so ist das Monitoring Log zu groß, um von <i>Kieker Trace Diagnosis</i> geladen zu werden.
-			In diesem Fall sollte der Parameter <i>-Xmx</i> in dem Startscript auf einen höheren Wert gesetzt werden.
+			If an <i>OutOfMemoryError</i> is raised while using the tool, the monitoring logs are to big to be loaded by <i>Kieker Trace Diagnosis</i>.
+			In this case the parameter <i>-Xmx</i> in the start script should be set to a higher value.
 			
 
 	<h2 id="bugs">Bugs und Featurewishes</h2>

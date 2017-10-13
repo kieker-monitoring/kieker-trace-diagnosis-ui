@@ -6,11 +6,13 @@ import com.google.inject.Singleton;
 
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Priority;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
+import jfxtras.scene.layout.VBox;
 import kieker.diagnosis.architecture.ui.ViewBase;
 
 @Singleton
@@ -20,6 +22,7 @@ public class ManualDialogView extends ViewBase<ManualDialogController> {
 
 	public ManualDialogView( ) {
 		ivWebView = new WebView( );
+		VBox.setVgrow( ivWebView, Priority.ALWAYS );
 
 		getChildren( ).add( ivWebView );
 	}

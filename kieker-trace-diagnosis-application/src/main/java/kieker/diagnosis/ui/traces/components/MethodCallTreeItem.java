@@ -65,7 +65,8 @@ public final class MethodCallTreeItem extends TreeItem<MethodCall> {
 			methodCall.setPercent( 100.0f - percent );
 			methodCall.setDuration( getValue( ).getDuration( ) - duration );
 
-			result.add( new MethodCallTreeItem( methodCall, ivShowUnmonitoredTime, ivAggregator ) );
+			// Make sure that the new node does not try to create further nodes
+			result.add( new MethodCallTreeItem( methodCall, false, ivAggregator ) );
 		}
 
 		for ( final MethodCall child : children ) {

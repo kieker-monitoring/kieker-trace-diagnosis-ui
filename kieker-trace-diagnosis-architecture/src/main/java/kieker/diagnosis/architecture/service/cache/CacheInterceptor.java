@@ -35,6 +35,12 @@ public final class CacheInterceptor implements MethodInterceptor {
 
 			// Get the method result
 			final Object key = aMethodInvocation.getArguments( )[0];
+
+			// Null values are not allowed as key though
+			if ( key == null ) {
+				return aMethodInvocation.proceed( );
+			}
+
 			final Object value = cache.get( key, ( ) -> {
 				try {
 					return aMethodInvocation.proceed( );
