@@ -1,4 +1,7 @@
 2.0.0:
+	13 Oct 2017  (#54)
+	Major refactoring
+	
 	03 Sep 2017
 	Internal Improvement (#53)
 	Performed various performance improvements. Especially the traces view should now be loaded much faster.
