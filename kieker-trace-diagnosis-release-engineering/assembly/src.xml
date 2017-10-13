@@ -20,10 +20,6 @@
 				<exclude>**/.classpath</exclude>
 				<exclude>**/target/**</exclude>
 				<exclude>**/logs/**</exclude>
-				<exclude>**/img_DE/**</exclude>
-				<exclude>**/*.aux</exclude>
-				<exclude>**/*.log</exclude>
-				<exclude>**/*.pdf</exclude>
 			</excludes>
 		</fileSet>
 	</fileSets>

@@ -108,6 +108,20 @@ public class MainView extends ViewBase<MainController> {
 
 				{
 					final MenuItem menuItem = new MenuItem( );
+					menuItem.setText( getLocalizedString( "documentation" ) );
+					menuItem.setOnAction( e -> getController( ).performDocumentation( ) );
+
+					menu.getItems( ).add( menuItem );
+				}
+
+				{
+					final SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem( );
+
+					menu.getItems( ).add( separatorMenuItem );
+				}
+
+				{
+					final MenuItem menuItem = new MenuItem( );
 					menuItem.setText( getLocalizedString( "about" ) );
 					menuItem.setOnAction( e -> getController( ).performAbout( ) );
 

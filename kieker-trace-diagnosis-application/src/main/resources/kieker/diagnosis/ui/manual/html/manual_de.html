@@ -1,0 +1,102 @@
+<h1>Kieker Trace Diagnosis - Benutzerhandbuch - ${version}</h1>
+	
+	 <ul>
+	  	<li><a href="#introduction">Einleitung</a></li>
+	    <li><a href="#requirementsAndInstallation">Anforderungen und Installation</a></li>
+		<li><a href="#license">Lizenz</a></li>
+		<li><a href="#views">Ansichten</a></li>
+		<li><a href="#settings">Einstellungen</a></li>
+		<li><a href="#monitoringSettings">Monitoring Einstellungen</a></li>
+		<li><a href="#troubleshooting">Problembehandlung</a></li>
+		<li><a href="#bugs">Bugs und Featurewünsche</a></li>
+	</ul> 
+	
+	<h2 id="introduction">Einleitung</h2>
+	
+	<i>Kieker Trace Diagnosis</i> ist eine Anwendung, die entwickelt wurde, um <i>Kieker</i> Monitoring Logs tabellarisch aufzubereiten und durchsuchbar zu machen. 
+	Hierbei wurde ein Fokus auf Speicherverbrauch und Performance gelegt, sodass auch größere Logs im Bereich von einigen Millionen Methodenaufrufen noch geöffnet werden können. 
+	
+	<h2 id="requirementsAndInstallation">Anforderungen und Installation</h2>
+	
+		Die folgenden Anforderungen sind notwendig, um <i>Kieker Trace Diagnosis</i> verwenden zu können.
+		<ul>
+			<li>Windows oder Linux</li>
+			<li>Java Runtime Environment 8 Update 60 oder höher</li>
+		</ul>
+		
+		Für die Verwendung des Werkzeuges wird das Oracle JDK empfohlen. Die Problembehandlung bei Verwendung des OpenJDK findet sich in Abschnitt <a href="#OpenJDK">OpenJDK</a>.
+		Der Speicherbedarf des Werkzeuges hängt von der Größe der Monitoring Logs ab.
+		Als Richtlinie wird etwa das Zweifache der Größe des Monitoring Logs empfohlen.</br></br>
+	
+		Zur Installation muss lediglich das Archiv <i>Kieker Trace Diagnosis-${version}-linux.tgz</i>, beziehungsweise <i>Kieker Trace Diagnosis-${version}-windows.zip</i>, in einen beliebigen Ordner entpackt werden. 
+		Die Anwendung kann anschließend über das Startscript <i>start.sh</i>, beziehungsweise <i>start.bat</i>, im Ordner <i>bin</i> gestartet werden.
+		Die Anwendung sollte in dem Verzeichnis, aus welchem das Startscript heraus aufgerufen wird, Schreibrechte besitzen.
+	  
+	<h2 id="license">Lizenz</h2>
+		<i>Kieker Trace Diagnosis</i> ist unter der Apache License Version 2.0 lizenziert.
+		Der vollständige Lizenztext lässt sich der mitgelieferten Datei <i>LICENSE</i> entnehmen.
+	  	Die Lizenzen der verwendeten Blibliotheken lässt sich den <i>.license</i>-Dateien im <i>lib</i>-Ordner entnehmen.
+	  		
+	<h2 id="views">Ansichten</h2>
+
+		<h3>Traces</h3>
+			Dieser Tab zeigt die Traces des Monitoring Logs einzeln an.
+			Nicht rekonstruierbare Traces werden hier nicht angezeigt.
+			Die Ansicht ermöglicht die Suche nach diversen Parametern, wobei der Filter standardmäßig nur innerhalb des obersten Methodenaufrufs sucht, d.h. in dem Wurzelknoten des Traces.
+			Bei Bedarf kann mittels der Checkbox "Im gesamten Trace suchen" die Suche auf den gesamten Trace ausgeweitet werden.
+			Ist die Checkbox "Mit regulären Ausdrücken suchen" aktiv, so kann in den Filtermasken "Host", "Klasse", "Methode" und "Exception" ein regulärer Ausdruck nach Standard-Java-Syntax verwendet werden.
+			
+		<h3>Methodenaufrufe</h3>
+			Dieser Tab zeigt die Methodenaufrufe des Monitoring Logs einzeln an.
+			Ignorierte Methoden und Methoden nicht rekonstruierter Traces werden hier nicht angezeigt.
+			Die Ansicht ermöglicht die Suche nach diversen Parametern.
+			Ist die Checkbox "Mit regulären Ausdrücken suchen" aktiv, so kann in den Filtermasken "Host", "Klasse", "Methode" und "Exception" ein regulärer Ausdruck nach Standard-Java-Syntax verwendet werden.
+			
+		<h3>Aggregierte Methodenaufrufe</h3>
+			Dieser Tab zeigt die Methodenaufrufe des Monitoring Logs in aggregierter Form an.
+			Aggregiert wird nach Host, Klasse, Methode und Exception, das heißt Methoden, bei denen alle vier Werte übereinstimmen werden zu einem aggregierten Methodenaufruf zusammengefasst.
+			Ignorierte Methoden und Methoden nicht rekonstruierter Traces werden hier nicht angezeigt.
+			Die Ansicht ermöglicht die Suche nach diversen Parametern.
+			Ist die Checkbox "Mit regulären Ausdrücken suchen" aktiv, so kann in den Filtermasken "Host", "Klasse", "Methode" und "Exception" ein regulärer Ausdruck nach Standard-Java-Syntax verwendet werden.
+	
+		<h3>Statistiken</h3>
+			Dieser Tab zeigt diverse Statistiken über den importierten Monitoring Log und die Anwendung an.
+			Auch der aktuelle (Heap) Speicherbedarf der Anwendung kann hier abgelesen werden.
+			
+	<h2 id="settings">Einstellungen</h2>
+	
+			Die Einstellungen erlauben die Konfiguration des Werkzeugs.
+			</br></br>
+			Unter dem Überpunkt "Darstellung" lassen sich Einstellungen vornehmen, die sich direkt auf die visuelle Repräsentation der Daten auswirkt.
+			So kann die gewünschte Zeiteinheit oder die Darstellung von Methoden verändert werden.
+			Die Checkbox "Nicht gemonitorte Zeit anzeigen" blendet zusätzlich im Trace die Zeit ein, welche in dem Methodenaufruf verbraucht wurde, aber aufgrund eines nicht vorhandenen Monitorings nicht genauer aufgeschlüsselt werden kann.
+			</br></br>
+			Mittels des Überpunktes "Methodenaufrufe in Traces zusammenfassen" lassen sich Methodenaufrufe in Traces zusammenfassen.
+			Das ist dann nützlich, wenn ein Trace einige tausend Methodenaufrufe unter sich hat, von denen aber beispielsweise nur diejenigen interessant sind, welche die meiste Zeit verbraucht haben.
+			Zur Auswahl stehen mehrere Aggregationsarten.
+	
+	<h2 id="monitoringSettings">Monitoring Einstellungen</h2>
+	
+			In den Monitoring Einstellungen kann das Monitoring für <i>Kieker Trace Diagnosis</i> eingeschaltet und konfiguriert werden.
+			Das Monitoring ist im Allgemeinen nur für die Entwicklung von <i>Kieker Trace Diagnosis</i> oder für Leerzwecke erforderlich.
+			Die dabei entstehenden Logs können von dem Werkzeug ebenfalls eingelesen werden.
+	
+	<h2 id="troubleshooting">Problembehandlung</h2>
+	  
+		<h3 id="OpenJDK">Verwendung von OpenJDK</h2>
+			Die Verwendung von OpenJDK anstelle des Oracle JDKs ist grundsätzlich möglich.
+			Es kann allerdings notwendig sein, OpenJFX explizit zu installieren.
+
+		<h3>Unable to create file logs/Kieker Trace Diagnosis.log</h3>
+			Kommt es beim Start zu dieser Fehlermeldung, so hat <i>Kieker Trace Diagnosis</i> vermutlich in dem aktuellen Arbeitsverzeichnis keine Schreibrechte.
+			Die Anwendung kann dann keine Log-Dateien schreiben, kann aber wie gehabt verwendet werden.
+
+		<h3>OutOfMemoryError</h3>
+			Kommt es bei der Verwendung des Werkzeugs zu einem <i>OutOfMemoryError</i>, so ist das Monitoring Log zu groß, um von <i>Kieker Trace Diagnosis</i> geladen zu werden.
+			In diesem Fall sollte der Parameter <i>-Xmx</i> in dem Startscript auf einen höheren Wert gesetzt werden.
+			
+
+	<h2 id="bugs">Bugs und Featurewünsche</h2>
+		Wenn es zu Problemen kommt, die durch dieses Handbuch nicht abgedeckt sind, Sie Bugs finden oder einen Feature-Wunsch haben, können Sie in unserem GitLab unter <a href="http://build.se.informatik.uni-kiel.de/gitlab/kieker/kieker-trace-diagnosis/issues/">http://build.se.informatik.uni-kiel.de/gitlab/kieker/kieker-trace-diagnosis/issues/<a> ein Ticket anlegen.
+		Falls Sie keinen solchen Account haben, senden Sie gerne eine Mail an die Kieker Mailingliste unter <a href="https://lists.sourceforge.net/lists/listinfo/kieker-users">https://lists.sourceforge.net/lists/listinfo/kieker-users</a>.
+  

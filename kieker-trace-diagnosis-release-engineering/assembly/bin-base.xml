@@ -14,13 +14,11 @@
 		</fileSet>
 
 		<fileSet>
-			<directory>example</directory>
-		</fileSet>
-		
-		<fileSet>
-			<directory>manual</directory>
+			<directory>..\kieker-trace-diagnosis-application\src\main\resources\kieker\diagnosis\ui\manual\html</directory>
+			<outputDirectory>manual</outputDirectory>
+			<filtered>true</filtered>
 			<includes>
-				<include>*.pdf</include>
+				<include>*.html</include>
 			</includes>
 		</fileSet>
 	</fileSets>
