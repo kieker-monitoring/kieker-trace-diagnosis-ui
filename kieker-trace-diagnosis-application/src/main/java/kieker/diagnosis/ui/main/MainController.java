@@ -154,8 +154,14 @@ public class MainController extends ControllerBase<MainViewModel> {
 
 			// Load the monitoring log
 			try {
+				BusinessException exception = null;
 				final MonitoringLogService monitoringLogService = getService( MonitoringLogService.class );
-				monitoringLogService.importMonitoringLog( ivDirectory );
+				try {
+					monitoringLogService.importMonitoringLog( ivDirectory );
+				} catch ( final BusinessException ex ) {
+					// If a business exception occurs, we still want to refresh, but we also want to display the exception.
+					exception = ex;
+				}
 
 				// Now refresh everything
 				Platform.runLater( ( ) -> {
@@ -167,6 +173,10 @@ public class MainController extends ControllerBase<MainViewModel> {
 				Platform.runLater( ( ) -> {
 					getViewModel( ).performRefresh( );
 				} );
+
+				if ( exception != null ) {
+					ExceptionUtil.handleException( exception, getLogger( ).getName( ) );
+				}
 			} catch ( final Exception ex ) {
 				// At this point we have no exception handling. We have to perform this ourselves.
 				ExceptionUtil.handleException( ex, getLogger( ).getName( ) );

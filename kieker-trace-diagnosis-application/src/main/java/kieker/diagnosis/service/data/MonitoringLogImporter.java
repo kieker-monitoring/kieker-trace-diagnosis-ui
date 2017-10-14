@@ -3,6 +3,7 @@ package kieker.diagnosis.service.data;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
@@ -35,6 +36,7 @@ import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.misc.KiekerMetadataRecord;
+import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.monitoring.MonitoringProbe;
 
 final class MonitoringLogImporter {
@@ -49,6 +51,8 @@ final class MonitoringLogImporter {
 	private final LongObjectMap<List<MethodCall>> ivReconstructionMap = new LongObjectHashMap<>( );
 	private final IntObjectMap<String> ivStringMapping = new IntObjectHashMap<>( );
 	private final IntByteMap ivIgnoredRecordsSizeMap = new IntByteHashMap( );
+	private boolean ivStreamCorrupt = false;
+	private Exception ivException = null;
 	private MonitoringLogService ivMonitoringLogService;
 
 	private int ivBeforeOperationEventKey;
@@ -61,7 +65,7 @@ final class MonitoringLogImporter {
 
 	private TimeUnit ivSourceTimeUnit;
 
-	public void importMonitoringLog( final File aDirectory, final MonitoringLogService aMonitoringLogService ) throws IOException {
+	public void importMonitoringLog( final File aDirectory, final MonitoringLogService aMonitoringLogService ) throws IOException, BusinessException {
 		ivMonitoringLogService = aMonitoringLogService;
 
 		final long tin = System.currentTimeMillis( );
@@ -90,6 +94,10 @@ final class MonitoringLogImporter {
 		ivMonitoringLogService.setIgnoredRecords( ivIgnoredRecords );
 		ivMonitoringLogService.setDanglingRecords( ivDanglingRecords );
 		ivMonitoringLogService.setIncompleteTraces( ivReconstructionMap.size( ) );
+
+		if ( ivStreamCorrupt ) {
+			throw new BusinessException( ivResourceBundle.getString( "errorMessageStreamCorrupt" ), ivException );
+		}
 	}
 
 	private void clearFields( ) {
@@ -197,24 +205,30 @@ final class MonitoringLogImporter {
 			final byte[] binaryContent = Files.readAllBytes( aBinaryFile );
 			final ByteBuffer byteBuffer = ByteBuffer.wrap( binaryContent );
 
-			while ( byteBuffer.hasRemaining( ) ) {
-				final int recordKey = byteBuffer.getInt( );
-				skipBytes( (byte) 8, byteBuffer ); // Ignore the logging timestamp
+			try {
+				while ( byteBuffer.hasRemaining( ) ) {
+					final int recordKey = byteBuffer.getInt( );
+					skipBytes( (byte) 8, byteBuffer ); // Ignore the logging timestamp
 
-				if ( recordKey == ivBeforeOperationEventKey ) {
-					readBeforeOperationEvent( byteBuffer );
-				} else if ( recordKey == ivAfterOperationEventKey ) {
-					readAfterOperationEvent( byteBuffer );
-				} else if ( recordKey == ivAfterOperationFailedEventKey ) {
-					readAfterOperationFailedEvent( byteBuffer );
-				} else if ( recordKey == ivTraceMetadataKey ) {
-					readTraceMetadata( byteBuffer );
-				} else if ( recordKey == ivKiekerMetadataRecordKey ) {
-					readKiekerMetadataRecord( byteBuffer );
-				} else {
-					// Expensive case. We have to find out which record we are dealing with and skip it
-					readUnknownRecord( byteBuffer, recordKey );
+					if ( recordKey == ivBeforeOperationEventKey ) {
+						readBeforeOperationEvent( byteBuffer );
+					} else if ( recordKey == ivAfterOperationEventKey ) {
+						readAfterOperationEvent( byteBuffer );
+					} else if ( recordKey == ivAfterOperationFailedEventKey ) {
+						readAfterOperationFailedEvent( byteBuffer );
+					} else if ( recordKey == ivTraceMetadataKey ) {
+						readTraceMetadata( byteBuffer );
+					} else if ( recordKey == ivKiekerMetadataRecordKey ) {
+						readKiekerMetadataRecord( byteBuffer );
+					} else {
+						// Expensive case. We have to find out which record we are dealing with and skip it
+						readUnknownRecord( byteBuffer, recordKey );
+					}
 				}
+			} catch ( final BufferUnderflowException ex ) {
+				// The stream is incomplete. We still want to terminate the whole import in a useful manner.
+				ivStreamCorrupt = true;
+				ivException = ex;
 			}
 
 			return binaryContent.length;

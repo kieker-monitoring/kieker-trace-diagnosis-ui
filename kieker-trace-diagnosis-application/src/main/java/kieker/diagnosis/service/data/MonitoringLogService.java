@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.google.inject.Singleton;
 
+import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.exception.TechnicalException;
 import kieker.diagnosis.architecture.service.ServiceBase;
 
@@ -29,7 +30,7 @@ public class MonitoringLogService extends ServiceBase {
 		super( false );
 	}
 
-	public void importMonitoringLog( final File aDirectory ) {
+	public void importMonitoringLog( final File aDirectory ) throws BusinessException {
 		try {
 			clear( );
 
@@ -37,11 +38,20 @@ public class MonitoringLogService extends ServiceBase {
 			final MonitoringLogImporter importer = new MonitoringLogImporter( );
 			importer.importMonitoringLog( aDirectory, this );
 
-			ivDirectory = aDirectory.getAbsolutePath( );
-			dataAvailable = true;
+			setDataAvailable( aDirectory );
+		} catch ( final BusinessException ex ) {
+			// A technical exception means, that something went wrong, but that the data is partially available
+			setDataAvailable( aDirectory );
+
+			throw ex;
 		} catch ( final Exception ex ) {
 			throw new TechnicalException( getLocalizedString( "errorMessageImportFailed" ), ex );
 		}
+	}
+
+	private void setDataAvailable( final File aDirectory ) {
+		ivDirectory = aDirectory.getAbsolutePath( );
+		dataAvailable = true;
 	}
 
 	private void clear( ) {

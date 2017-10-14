@@ -37,6 +37,7 @@ import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 import kieker.diagnosis.KiekerTraceDiagnosisModule;
+import kieker.diagnosis.architecture.exception.BusinessException;
 
 /**
  * Test class for the {@link MonitoringLogService}.
@@ -65,7 +66,7 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	public void testEmptyDirectory( ) {
+	public void testEmptyDirectory( ) throws BusinessException {
 		// Import the directory
 		final File directory = ivTemporaryFolder.getRoot( );
 		ivService.importMonitoringLog( directory );
