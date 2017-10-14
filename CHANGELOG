@@ -1,3 +1,8 @@
+3.0.0
+	14 Oct 2017
+	Internal Improvement (#55)
+	The tool now uses and requires Java 9
+
 2.0.0:
 	13 Oct 2017  
 	Major refactoring (#54)

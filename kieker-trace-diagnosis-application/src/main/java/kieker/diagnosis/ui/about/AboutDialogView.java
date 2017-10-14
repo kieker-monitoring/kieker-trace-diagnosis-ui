@@ -40,7 +40,7 @@ public class AboutDialogView extends ViewBase<AboutDialogController> {
 
 		{
 			final ButtonBar buttonBar = new ButtonBar( );
-			VBox.setMargin( buttonBar, new Insets( 0, 10, 0, 0 ) );
+			VBox.setMargin( buttonBar, new Insets( 10 ) );
 
 			{
 				final Button button = new Button( );
