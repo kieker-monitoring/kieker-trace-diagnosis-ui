@@ -74,6 +74,10 @@ public class FilterService extends ServiceBase {
 				// Compare the date
 				if ( aLowerDate != null ) {
 					final LocalDate localDate = LocalDate.from( zonedDateTime );
+					if ( localDate.isAfter( aLowerDate ) ) {
+						// We don't have to check the time. It is another day.
+						return true;
+					}
 					if ( localDate.isBefore( aLowerDate ) ) {
 						return false;
 					}
@@ -125,6 +129,10 @@ public class FilterService extends ServiceBase {
 				// Compare the date
 				if ( aUpperDate != null ) {
 					final LocalDate localDate = LocalDate.from( zonedDateTime );
+					if ( localDate.isBefore( aUpperDate ) ) {
+						// We don't have to check the time. It is another day.
+						return true;
+					}
 					if ( localDate.isAfter( aUpperDate ) ) {
 						return false;
 					}

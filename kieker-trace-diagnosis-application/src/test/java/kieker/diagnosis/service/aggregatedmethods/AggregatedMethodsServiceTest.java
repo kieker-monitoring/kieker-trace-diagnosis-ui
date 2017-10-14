@@ -56,6 +56,32 @@ public class AggregatedMethodsServiceTest {
 	}
 
 	@Test
+	public void testSearchWithRegularExpressions( ) {
+		// Prepare some data for the search
+		createMethodCall( "host1", "class1", "op1", "cause1" );
+		createMethodCall( "host1", "class2", "op1", "cause1" );
+		createMethodCall( "host1", "class1", "op3", "cause1" );
+		createMethodCall( "host1", "class1", "op3", "cause4" );
+
+		assertThat( ivMethodsService.countMethods( ), is( 4 ) );
+
+		// Now search with a filter
+		final AggregatedMethodsFilter methodsFilter = new AggregatedMethodsFilter( );
+		methodsFilter.setUseRegExpr( true );
+		methodsFilter.setHost( ".*host1.*" );
+		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+
+		methodsFilter.setClazz( ".*class1.*" );
+		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+
+		methodsFilter.setMethod( ".*op3.*" );
+		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
+
+		methodsFilter.setException( ".*cause4.*" );
+		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+	}
+
+	@Test
 	public void testSearchTypeFilter( ) {
 		// Prepare some data for the search
 		createMethodCall( "host1", "class1", "op1", "cause1" );
