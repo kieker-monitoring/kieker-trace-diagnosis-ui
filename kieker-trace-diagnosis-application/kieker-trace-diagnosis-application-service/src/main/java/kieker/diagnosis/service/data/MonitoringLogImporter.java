@@ -9,14 +9,14 @@ import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.ResourceBundle;
 import java.util.Stack;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,7 +27,6 @@ import com.carrotsearch.hppc.IntByteMap;
 import com.carrotsearch.hppc.IntObjectHashMap;
 import com.carrotsearch.hppc.IntObjectMap;
 import com.carrotsearch.hppc.LongArrayList;
-import com.carrotsearch.hppc.LongIndexedContainer;
 import com.carrotsearch.hppc.LongObjectHashMap;
 import com.carrotsearch.hppc.LongObjectMap;
 
@@ -431,44 +430,56 @@ final class MonitoringLogImporter {
 		final MonitoringProbe probe = new MonitoringProbe( getClass( ), "aggregateMethods()" );
 
 		try {
-			final ConcurrentMap<AggregationKey, Queue<MethodCall>> aggregationMap = new ConcurrentHashMap<>( );
+			final Map<AggregationKey, MethodCall> aggregationMapWithExemplaricMethodCall = new HashMap<>( );
+			final Map<AggregationKey, LongArrayList> aggregationMapWithDuration = new HashMap<>( );
 
-			// Aggregate the methods in parallel
-			ivMonitoringLogService.getMethods( ).parallelStream( ).forEach( method -> {
-				final AggregationKey key = new AggregationKey( method.getHost( ), method.getClazz( ), method.getMethod( ), method.getException( ) );
-				Queue<MethodCall> list = aggregationMap.get( key );
+			// Aggregate the methods. We perform only the key calculation in parallel, as the put into the aggregation maps would be slower due to
+			// synchronization.
+			final List<MethodCall> methodCalls = ivMonitoringLogService.getMethods( );
+			methodCalls.parallelStream( ).map( method -> new AggregationKey( method.getHost( ), method.getClazz( ), method.getMethod( ), method.getException( ), method ) )
+					.sequential( ).forEach( key -> {
+						LongArrayList durationlist = aggregationMapWithDuration.get( key );
 
-				if ( list == null ) {
-					list = aggregationMap.putIfAbsent( key, new ConcurrentLinkedQueue<>( ) );
-					list = aggregationMap.get( key );
+						if ( durationlist == null ) {
+							durationlist = new LongArrayList( );
+
+							aggregationMapWithDuration.put( key, durationlist );
+							aggregationMapWithExemplaricMethodCall.put( key, key.getMethodCall( ) );
+						}
+
+						durationlist.add( key.getMethodCall( ).getDuration( ) );
+					} );
+
+			// As we need the median, we have to have sorted lists. The sorting can be performed in parallel.
+			aggregationMapWithDuration.values( ).parallelStream( ).forEach( list -> Arrays.sort( list.buffer, 0, list.size( ) ) );
+
+			// Now we can calculate the aggregated methods based on the aggregation maps. As we have no "complex" put-if-absent-part here (as above), we do this
+			// in parallel.
+			final Queue<AggregatedMethodCall> aggregatedMethodCalls = new ConcurrentLinkedQueue<>( );
+			aggregationMapWithExemplaricMethodCall.keySet( ).parallelStream( ).forEach( key -> {
+				final MethodCall exemplaricMethodCall = aggregationMapWithExemplaricMethodCall.get( key );
+				final LongArrayList durationList = aggregationMapWithDuration.get( key );
+
+				// We need the sum of the durations
+				long durationSum = 0;
+				final int size = durationList.size( );
+				final long[] array = durationList.buffer;
+				for ( int index = 0; index < size; index++ ) {
+					durationSum += array[index];
 				}
 
-				list.add( method );
-			} );
-
-			final Queue<AggregatedMethodCall> aggregatedMethodCalls = new ConcurrentLinkedQueue<>( );
-
-			// Now we can calculate the aggregated methods based on the aggregation map
-			final Collection<Queue<MethodCall>> aggregationLists = aggregationMap.values( );
-			aggregationLists.parallelStream( ).forEach( aggregationList -> {
-				// Get all durations
-				final LongIndexedContainer durations = new LongArrayList( );
-				aggregationList.stream( ).map( method -> method.getDuration( ) ).sorted( ).forEach( durations::add );
-				final long durationSum = aggregationList.stream( ).collect( Collectors.summarizingLong( MethodCall::getDuration ) ).getSum( );
-
-				final MethodCall someMethod = aggregationList.peek( );
-
+				// Now assemble the aggregated method call
 				final AggregatedMethodCall aggregatedMethodCall = new AggregatedMethodCall( );
-				aggregatedMethodCall.setAvgDuration( durationSum / durations.size( ) );
+				aggregatedMethodCall.setAvgDuration( durationSum / size );
 				aggregatedMethodCall.setTotalDuration( durationSum );
-				aggregatedMethodCall.setHost( someMethod.getHost( ) );
-				aggregatedMethodCall.setClazz( someMethod.getClazz( ) );
-				aggregatedMethodCall.setMethod( someMethod.getMethod( ) );
-				aggregatedMethodCall.setException( someMethod.getException( ) );
-				aggregatedMethodCall.setCount( aggregationList.size( ) );
-				aggregatedMethodCall.setMedianDuration( durations.get( durations.size( ) / 2 ) );
-				aggregatedMethodCall.setMinDuration( durations.get( 0 ) );
-				aggregatedMethodCall.setMaxDuration( durations.get( durations.size( ) - 1 ) );
+				aggregatedMethodCall.setHost( exemplaricMethodCall.getHost( ) );
+				aggregatedMethodCall.setClazz( exemplaricMethodCall.getClazz( ) );
+				aggregatedMethodCall.setMethod( exemplaricMethodCall.getMethod( ) );
+				aggregatedMethodCall.setException( exemplaricMethodCall.getException( ) );
+				aggregatedMethodCall.setCount( size );
+				aggregatedMethodCall.setMedianDuration( array[size / 2] );
+				aggregatedMethodCall.setMinDuration( array[0] );
+				aggregatedMethodCall.setMaxDuration( array[size - 1] );
 
 				aggregatedMethodCalls.add( aggregatedMethodCall );
 			} );
@@ -489,23 +500,35 @@ final class MonitoringLogImporter {
 		private final String ivClass;
 		private final String ivMethod;
 		private final String ivException;
+		private final MethodCall ivMethodCall;
+		private int ivHash;
 
-		public AggregationKey( final String aHost, final String aClass, final String aMethod, final String aException ) {
+		public AggregationKey( final String aHost, final String aClass, final String aMethod, final String aException, final MethodCall aMethodCall ) {
 			ivHost = aHost;
 			ivClass = aClass;
 			ivMethod = aMethod;
 			ivException = aException;
+			ivMethodCall = aMethodCall;
+
+			calculateHash( );
 		}
 
-		@Override
-		public int hashCode( ) {
+		private void calculateHash( ) {
 			final int prime = 31;
+
 			int result = 1;
 			result = prime * result + ( ivClass == null ? 0 : ivClass.hashCode( ) );
 			result = prime * result + ( ivException == null ? 0 : ivException.hashCode( ) );
 			result = prime * result + ( ivHost == null ? 0 : ivHost.hashCode( ) );
 			result = prime * result + ( ivMethod == null ? 0 : ivMethod.hashCode( ) );
-			return result;
+
+			// We calculate the hash eagerly and only once.
+			ivHash = result;
+		}
+
+		@Override
+		public int hashCode( ) {
+			return ivHash;
 		}
 
 		@Override
@@ -549,6 +572,10 @@ final class MonitoringLogImporter {
 				return false;
 			}
 			return true;
+		}
+
+		public MethodCall getMethodCall( ) {
+			return ivMethodCall;
 		}
 
 	}

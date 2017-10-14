@@ -14,6 +14,7 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Before;
@@ -173,6 +174,86 @@ public class MonitoringLogServiceTest {
 		assertThat( ivService.getAggreatedMethods( ), hasSize( 3 ) );
 		assertThat( ivService.getTraceRoots( ), hasSize( 1 ) );
 		assertThat( ivService.getProcessedBytes( ), is( greaterThan( 0L ) ) );
+	}
+
+	@Test
+	public void testMethodAggregationValues1( ) throws Exception {
+		// Prepare the data
+		writeRecord( new TraceMetadata( 3L, 0L, "0", "host", 0L, 0 ) );
+		writeRecord( new BeforeOperationEvent( 1, 3L, 0, "op1", "class1" ) );
+		writeRecord( new AfterOperationEvent( 10, 3L, 0, "op1", "class1" ) );
+
+		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
+		writeRecord( new BeforeOperationEvent( 1, 1L, 0, "op1", "class1" ) );
+		writeRecord( new AfterOperationEvent( 2, 1L, 0, "op1", "class1" ) );
+
+		writeRecord( new TraceMetadata( 2L, 0L, "0", "host", 0L, 0 ) );
+		writeRecord( new BeforeOperationEvent( 1, 2L, 0, "op1", "class1" ) );
+		writeRecord( new AfterOperationEvent( 3, 2L, 0, "op1", "class1" ) );
+
+		writeMappingFile( );
+		finishWriting( );
+
+		// Import the directory
+		final File directory = ivTemporaryFolder.getRoot( );
+		ivService.importMonitoringLog( directory );
+
+		// Make sure that the import worked as intended
+		final List<AggregatedMethodCall> aggreatedMethods = ivService.getAggreatedMethods( );
+		assertThat( aggreatedMethods, hasSize( 1 ) );
+
+		final AggregatedMethodCall aggregatedMethodCall = aggreatedMethods.get( 0 );
+		assertThat( aggregatedMethodCall.getCount( ), is( 3 ) );
+		assertThat( aggregatedMethodCall.getHost( ), is( "host" ) );
+		assertThat( aggregatedMethodCall.getClazz( ), is( "class1" ) );
+		assertThat( aggregatedMethodCall.getMethod( ), is( "op1" ) );
+		assertThat( aggregatedMethodCall.getMinDuration( ), is( 1L ) );
+		assertThat( aggregatedMethodCall.getMaxDuration( ), is( 9L ) );
+		assertThat( aggregatedMethodCall.getAvgDuration( ), is( 4L ) );
+		assertThat( aggregatedMethodCall.getMedianDuration( ), is( 2L ) );
+		assertThat( aggregatedMethodCall.getTotalDuration( ), is( 12L ) );
+	}
+
+	@Test
+	public void testMethodAggregationValues2( ) throws Exception {
+		// Prepare the data
+		writeRecord( new TraceMetadata( 2L, 0L, "0", "host", 0L, 0 ) );
+		writeRecord( new BeforeOperationEvent( 1, 2L, 0, "op1", "class1" ) );
+		writeRecord( new AfterOperationEvent( 3, 2L, 0, "op1", "class1" ) );
+
+		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
+		writeRecord( new BeforeOperationEvent( 1, 1L, 0, "op1", "class1" ) );
+		writeRecord( new AfterOperationEvent( 2, 1L, 0, "op1", "class1" ) );
+
+		writeRecord( new TraceMetadata( 3L, 0L, "0", "host", 0L, 0 ) );
+		writeRecord( new BeforeOperationEvent( 1, 3L, 0, "op1", "class1" ) );
+		writeRecord( new AfterOperationEvent( 10, 3L, 0, "op1", "class1" ) );
+
+		writeRecord( new TraceMetadata( 2L, 0L, "0", "host", 0L, 0 ) );
+		writeRecord( new BeforeOperationEvent( 5, 2L, 0, "op1", "class1" ) );
+		writeRecord( new AfterOperationEvent( 25, 2L, 0, "op1", "class1" ) );
+
+		writeMappingFile( );
+		finishWriting( );
+
+		// Import the directory
+		final File directory = ivTemporaryFolder.getRoot( );
+		ivService.importMonitoringLog( directory );
+
+		// Make sure that the import worked as intended
+		final List<AggregatedMethodCall> aggreatedMethods = ivService.getAggreatedMethods( );
+		assertThat( aggreatedMethods, hasSize( 1 ) );
+
+		final AggregatedMethodCall aggregatedMethodCall = aggreatedMethods.get( 0 );
+		assertThat( aggregatedMethodCall.getCount( ), is( 4 ) );
+		assertThat( aggregatedMethodCall.getHost( ), is( "host" ) );
+		assertThat( aggregatedMethodCall.getClazz( ), is( "class1" ) );
+		assertThat( aggregatedMethodCall.getMethod( ), is( "op1" ) );
+		assertThat( aggregatedMethodCall.getMinDuration( ), is( 1L ) );
+		assertThat( aggregatedMethodCall.getMaxDuration( ), is( 20L ) );
+		assertThat( aggregatedMethodCall.getAvgDuration( ), is( 8L ) );
+		assertThat( aggregatedMethodCall.getMedianDuration( ), is( 9L ) );
+		assertThat( aggregatedMethodCall.getTotalDuration( ), is( 32L ) );
 	}
 
 	@Test
