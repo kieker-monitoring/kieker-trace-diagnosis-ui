@@ -6,6 +6,11 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
+/**
+ * Test class for {@link EnumStringConverter}.
+ *
+ * @author Nils Christian Ehmke
+ */
 public class EnumStringConverterTest {
 
 	private final EnumStringConverter<TestEnum> ivConverter = new EnumStringConverter<>( TestEnum.class );

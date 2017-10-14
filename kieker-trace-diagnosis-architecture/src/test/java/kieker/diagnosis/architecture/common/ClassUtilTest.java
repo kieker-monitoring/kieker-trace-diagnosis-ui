@@ -16,6 +16,11 @@ import com.google.inject.matcher.Matchers;
 
 import kieker.diagnosis.architecture.exception.TechnicalException;
 
+/**
+ * Test class for {@link ClassUtil}.
+ *
+ * @author Nils Christian Ehmke
+ */
 public class ClassUtilTest {
 
 	@Rule
