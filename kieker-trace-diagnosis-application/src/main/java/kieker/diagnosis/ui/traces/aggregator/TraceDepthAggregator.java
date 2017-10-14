@@ -4,6 +4,12 @@ import java.util.Comparator;
 
 import kieker.diagnosis.service.data.MethodCall;
 
+/**
+ * This aggregator aggregates method calls by trace depth. That means that method calls in a trace with lower trace depth are aggregated into a single method
+ * call.
+ *
+ * @author Nils Christian Ehmke
+ */
 public final class TraceDepthAggregator extends PropertyAggregator {
 
 	public TraceDepthAggregator( final int aMaxCalls ) {

@@ -13,6 +13,11 @@ import kieker.diagnosis.service.traces.TracesFilter;
 import kieker.diagnosis.service.traces.TracesService;
 import kieker.diagnosis.ui.main.MainController;
 
+/**
+ * The controller of the traces tab.
+ *
+ * @author Nils Christian Ehmke
+ */
 @Singleton
 class TracesController extends ControllerBase<TracesViewModel> {
 
@@ -29,18 +34,23 @@ class TracesController extends ControllerBase<TracesViewModel> {
 		getViewModel( ).updatePresentationFilter( new TracesFilter( ) );
 	}
 
+	/**
+	 * This action is performed when settings or data are changed and the view has to be refreshed. The actual refresh is only performed when
+	 * {@link #performRefresh()} is called. This method prepares only the refresh.
+	 */
 	public void performPrepareRefresh( ) {
 		// Find the trace roots to display
 		final TracesService tracesService = getService( TracesService.class );
 		ivTraceRoots = tracesService.searchTraces( new TracesFilter( ) );
 		ivTotalTraces = tracesService.countTraces( );
 
+		// Get the duration suffix
 		final SettingsService settingsService = getService( SettingsService.class );
 		ivDurationSuffix = settingsService.getCurrentDurationSuffix( );
 	}
 
 	/**
-	 * This action is performed, when a refresh of the view is required
+	 * This action is performed, when a refresh of the view is required. The preparation of the refresh is performed in {@link #performPrepareRefresh()}.
 	 */
 	public void performRefresh( ) {
 		// Reset the filter
@@ -56,13 +66,16 @@ class TracesController extends ControllerBase<TracesViewModel> {
 	}
 
 	/**
-	 * This action is performed, when the selection of the table changes
+	 * This action is performed, when the selection of the table changes.
 	 */
 	public void performSelectionChange( ) {
 		final MethodCall methodCall = getViewModel( ).getSelected( );
 		getViewModel( ).updatePresentationDetails( methodCall );
 	}
 
+	/**
+	 * This action is performed, when the user wants to perform a search.
+	 */
 	public void performSearch( ) {
 		try {
 			// Get the filter input from the user
@@ -71,7 +84,6 @@ class TracesController extends ControllerBase<TracesViewModel> {
 			// Find the trace roots to display
 			final TracesService tracesService = getService( TracesService.class );
 			final List<MethodCall> traceRoots = tracesService.searchTraces( filter );
-
 			final int totalTraces = tracesService.countTraces( );
 
 			// Update the view
@@ -83,6 +95,14 @@ class TracesController extends ControllerBase<TracesViewModel> {
 
 	}
 
+	/**
+	 * This action is performed, when someone requested a jump into the traces tab. The real action is determined based on the type of the parameter. If the
+	 * parameter is a {@link TracesFilter}, the filter is simply applied. If the parameter is a {@link MethodCall}, the trace for the method call is shown and
+	 * the view tries to navigate directly to the method call. If the method call is not visible, the trace is still shown.
+	 *
+	 * @param aParameter
+	 *            The parameter.
+	 */
 	public void performSetParameter( final Object aParameter ) {
 		if ( aParameter instanceof MethodCall ) {
 			final MethodCall methodCall = (MethodCall) aParameter;
@@ -105,8 +125,12 @@ class TracesController extends ControllerBase<TracesViewModel> {
 		}
 	}
 
+	/**
+	 * This action is performed, when the user wants to save the current filter as a filter favorite.
+	 */
 	public void performSaveAsFavorite( ) {
 		try {
+			// We simply save the filter's content and delegate to the main controller.
 			final TracesFilter filter = getViewModel( ).savePresentationFilter( );
 			getController( MainController.class ).performSaveAsFavorite( TracesView.class, filter );
 		} catch ( final BusinessException ex ) {

@@ -13,6 +13,12 @@ import kieker.diagnosis.architecture.service.properties.PropertiesService;
 import kieker.diagnosis.service.data.MethodCall;
 import kieker.diagnosis.service.settings.properties.TimeUnitProperty;
 
+/**
+ * This is a cell factory for a tree table which shows the duration of a method call in the configured manner. It has to be in the CDI context, as it has to
+ * have access to the application properties.
+ *
+ * @author Nils Christian Ehmke
+ */
 @Singleton
 public class DurationCellValueFactory implements Callback<CellDataFeatures<MethodCall, Long>, ObservableValue<Long>> {
 

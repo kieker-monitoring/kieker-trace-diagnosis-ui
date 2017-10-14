@@ -5,6 +5,11 @@ import java.util.List;
 
 import kieker.diagnosis.service.data.MethodCall;
 
+/**
+ * This aggregator aggregates method calls by a given threshold. That means that method calls below this threshold are aggregated into a single method call.
+ *
+ * @author Nils Christian Ehmke
+ */
 public final class ThresholdAggregator extends Aggregator {
 
 	private final float ivThreshold;
@@ -18,6 +23,7 @@ public final class ThresholdAggregator extends Aggregator {
 		final List<MethodCall> underThreshold = new ArrayList<>( );
 		final List<MethodCall> overThreshold = new ArrayList<>( );
 
+		// Separate the method calls with the threshold.
 		for ( final MethodCall call : calls ) {
 			if ( call.getPercent( ) < ivThreshold ) {
 				underThreshold.add( call );
@@ -27,10 +33,11 @@ public final class ThresholdAggregator extends Aggregator {
 		}
 
 		if ( underThreshold.size( ) > 1 ) {
+			// If there are multiple method calls below the threshold, we want to aggregate them
 			final MethodCall methodCall = aggregateToSingleCall( underThreshold );
 			overThreshold.add( methodCall );
 		} else {
-			// if the list is empty or contains only a single method call, we do not want to aggregate
+			// If the list is empty or contains only a single method call, we do not want to aggregate
 			overThreshold.addAll( underThreshold );
 		}
 

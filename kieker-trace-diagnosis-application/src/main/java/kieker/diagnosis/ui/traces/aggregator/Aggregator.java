@@ -7,12 +7,33 @@ import java.util.stream.Collectors;
 
 import kieker.diagnosis.service.data.MethodCall;
 
+/**
+ * Implementation of this class are responsible for aggregating method calls in a trace by various parameters.
+ *
+ * @author Nils Christian Ehmke
+ */
 public abstract class Aggregator {
 
 	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle( Aggregator.class.getName( ) );
 
+	/**
+	 * Aggregates the given list of method calls. This means that the resulting list should contain real method calls and (aggregated) pseudo method calls.
+	 *
+	 * @param aCalls
+	 *            The method calls to aggregate.
+	 *
+	 * @return The aggregated list.
+	 */
 	public abstract List<MethodCall> aggregate( List<MethodCall> aCalls );
 
+	/**
+	 * This is a helper method to aggregate a list of method calls into a single pseudo method call.
+	 *
+	 * @param aList
+	 *            The methods to be aggregated.
+	 *
+	 * @return A single pseudo method call.
+	 */
 	protected final MethodCall aggregateToSingleCall( final List<MethodCall> aList ) {
 		final double percent = aList.parallelStream( ).map( MethodCall::getPercent ).collect( Collectors.summingDouble( Float::doubleValue ) );
 		final long duration = aList.parallelStream( ).map( MethodCall::getDuration ).collect( Collectors.summingLong( Long::longValue ) );

@@ -32,6 +32,11 @@ import kieker.diagnosis.ui.traces.components.MethodCellValueFactory;
 import kieker.diagnosis.ui.traces.components.StyledRow;
 import kieker.diagnosis.ui.traces.components.TimestampCellValueFactory;
 
+/**
+ * The view of the traces tab.
+ *
+ * @author Nils Christian Ehmke
+ */
 @Singleton
 public class TracesView extends ViewBase<TracesController> {
 

@@ -27,6 +27,11 @@ import kieker.diagnosis.ui.traces.aggregator.TraceDepthAggregator;
 import kieker.diagnosis.ui.traces.aggregator.TraceSizeAggregator;
 import kieker.diagnosis.ui.traces.components.MethodCallTreeItem;
 
+/**
+ * The view model of the traces tab.
+ *
+ * @author Nils Christian Ehmke
+ */
 @Singleton
 class TracesViewModel extends ViewModelBase<TracesView> {
 

@@ -12,6 +12,12 @@ import kieker.diagnosis.service.data.MethodCall;
 import kieker.diagnosis.service.settings.MethodAppearance;
 import kieker.diagnosis.service.settings.properties.MethodAppearanceProperty;
 
+/**
+ * This is a cell factory for a tree table which shows the method of a method call in the configured manner. It has to be in the CDI context, as it has to have
+ * access to the application properties.
+ *
+ * @author Nils Christian Ehmke
+ */
 @Singleton
 public class MethodCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>> {
 
