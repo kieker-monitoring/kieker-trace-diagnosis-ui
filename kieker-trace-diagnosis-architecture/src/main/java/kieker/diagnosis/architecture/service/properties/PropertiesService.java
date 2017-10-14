@@ -11,6 +11,11 @@ import kieker.diagnosis.architecture.service.ServiceBase;
 import kieker.diagnosis.architecture.service.cache.InvalidateCache;
 import kieker.diagnosis.architecture.service.cache.UseCache;
 
+/**
+ * This service is responsible for loading and saving properties within the application.
+ *
+ * @author Nils Christian Ehmke
+ */
 @Singleton
 public class PropertiesService extends ServiceBase {
 
@@ -21,6 +26,14 @@ public class PropertiesService extends ServiceBase {
 		super( false );
 	}
 
+	/**
+	 * Delivers the value of the given application property or its default value, if the property has not been set yet. This method is cached.
+	 *
+	 * @param aPropertyClass
+	 *            The property.
+	 *
+	 * @return The value of the given property.
+	 */
 	@UseCache ( cacheName = "applicationProperties" )
 	public <T> T loadApplicationProperty( final Class<? extends ApplicationProperty<T>> aPropertyClass ) {
 		final ApplicationProperty<T> property = getProperty( aPropertyClass );
@@ -33,6 +46,14 @@ public class PropertiesService extends ServiceBase {
 		return property.deserialize( serializedValue );
 	}
 
+	/**
+	 * Saves the given application property.
+	 *
+	 * @param aPropertyClass
+	 *            The property.
+	 * @param aValue
+	 *            The new value of the property.
+	 */
 	@InvalidateCache ( cacheName = "applicationProperties", keyParameter = 0 )
 	public <T> void saveApplicationProperty( final Class<? extends ApplicationProperty<T>> aPropertyClass, final T aValue ) {
 		final ApplicationProperty<T> property = getProperty( aPropertyClass );
@@ -54,6 +75,14 @@ public class PropertiesService extends ServiceBase {
 		return ivInjector.getInstance( aPropertyClass );
 	}
 
+	/**
+	 * Delivers the value of the given system property. This method is cached.
+	 *
+	 * @param aPropertyClass
+	 *            The property.
+	 *
+	 * @return The value of the given property.
+	 */
 	@UseCache ( cacheName = "systemProperties" )
 	public <T> T loadSystemProperty( final Class<? extends SystemProperty<T>> aPropertyClass ) {
 		final SystemProperty<T> property = getProperty( aPropertyClass );

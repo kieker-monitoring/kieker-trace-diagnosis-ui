@@ -1,5 +1,10 @@
 package kieker.diagnosis.architecture.monitoring;
 
+/**
+ * This DTO contains the configuration for the monitoring within the application.
+ *
+ * @author Nils Christian Ehmke
+ */
 public final class MonitoringConfiguration {
 
 	private String ivOutputDirectory;

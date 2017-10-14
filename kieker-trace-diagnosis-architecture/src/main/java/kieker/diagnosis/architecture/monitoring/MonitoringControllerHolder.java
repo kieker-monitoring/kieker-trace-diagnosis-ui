@@ -2,6 +2,12 @@ package kieker.diagnosis.architecture.monitoring;
 
 import kieker.monitoring.core.controller.IMonitoringController;
 
+/**
+ * This is a holder for the current monitoring configuration and the monitoring controller. This is necessary, as the monitoring probe is not in the CDI context
+ * and because the monitoring controller can be exchanged during runtime.
+ *
+ * @author Nils Christian Ehmke
+ */
 public final class MonitoringControllerHolder {
 
 	private static volatile IMonitoringController cvMonitoringController;
