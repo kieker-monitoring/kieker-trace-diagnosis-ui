@@ -9,7 +9,7 @@ import org.junit.Test;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import kieker.diagnosis.KiekerTraceDiagnosisModule;
+import kieker.diagnosis.service.KiekerTraceDiagnosisServiceModule;
 
 /**
  * Test class for the {@link PatternService}.
@@ -22,7 +22,7 @@ public class PatternServiceTest {
 
 	@Before
 	public void setUp( ) {
-		final Injector injector = Guice.createInjector( new KiekerTraceDiagnosisModule( ) );
+		final Injector injector = Guice.createInjector( new KiekerTraceDiagnosisServiceModule( ) );
 		ivPatternService = injector.getInstance( PatternService.class );
 	}
 

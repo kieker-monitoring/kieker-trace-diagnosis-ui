@@ -36,8 +36,8 @@ import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
-import kieker.diagnosis.KiekerTraceDiagnosisModule;
 import kieker.diagnosis.architecture.exception.BusinessException;
+import kieker.diagnosis.service.KiekerTraceDiagnosisServiceModule;
 
 /**
  * Test class for the {@link MonitoringLogService}.
@@ -61,7 +61,7 @@ public class MonitoringLogServiceTest {
 		ivByteList = new ByteArrayList( );
 		ivStringRegistry = new Registry<>( );
 
-		final Injector injector = Guice.createInjector( new KiekerTraceDiagnosisModule( ) );
+		final Injector injector = Guice.createInjector( new KiekerTraceDiagnosisServiceModule( ) );
 		ivService = injector.getInstance( MonitoringLogService.class );
 	}
 

@@ -9,7 +9,7 @@ import org.junit.Test;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import kieker.diagnosis.KiekerTraceDiagnosisModule;
+import kieker.diagnosis.service.KiekerTraceDiagnosisServiceModule;
 import kieker.diagnosis.service.data.AggregatedMethodCall;
 import kieker.diagnosis.service.data.MonitoringLogService;
 
@@ -25,7 +25,7 @@ public class AggregatedMethodsServiceTest {
 
 	@Before
 	public void setUp( ) {
-		final Injector injector = Guice.createInjector( new KiekerTraceDiagnosisModule( ) );
+		final Injector injector = Guice.createInjector( new KiekerTraceDiagnosisServiceModule( ) );
 		ivMethodsService = injector.getInstance( AggregatedMethodsService.class );
 		ivDataService = injector.getInstance( MonitoringLogService.class );
 	}

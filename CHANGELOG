@@ -1,5 +1,9 @@
 3.0.0
 	14 Oct 2017
+	Internal Improvement (#56)
+	The application module is now separated into two modules.
+	
+	14 Oct 2017
 	Internal Improvement (#55)
 	The tool now uses and requires Java 9
 
