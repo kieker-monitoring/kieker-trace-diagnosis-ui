@@ -16,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import kieker.diagnosis.architecture.common.ExceptionUtil;
 import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
 import kieker.diagnosis.architecture.service.properties.DevelopmentModeProperty;
@@ -166,6 +167,9 @@ public class MainController extends ControllerBase<MainViewModel> {
 				Platform.runLater( ( ) -> {
 					getViewModel( ).performRefresh( );
 				} );
+			} catch ( final Exception ex ) {
+				// At this point we have no exception handling. We have to perform this ourselves.
+				ExceptionUtil.handleException( ex, getLogger( ).getName( ) );
 			} finally {
 				Platform.runLater( ( ) -> {
 					importerDialogView.close( );

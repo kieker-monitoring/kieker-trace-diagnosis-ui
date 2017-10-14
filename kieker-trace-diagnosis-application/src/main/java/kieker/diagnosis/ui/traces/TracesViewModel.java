@@ -155,19 +155,19 @@ class TracesViewModel extends ViewModelBase<TracesView> {
 		if ( filter.isUseRegExpr( ) ) {
 			final PatternService patternService = getService( PatternService.class );
 
-			if ( !patternService.isValidPattern( filter.getHost( ) ) ) {
+			if ( !( patternService.isValidPattern( filter.getHost( ) ) || filter.getHost( ) == null ) ) {
 				throw new BusinessException( String.format( getLocalizedString( "errorMessageRegExpr" ), filter.getHost( ) ) );
 			}
 
-			if ( !patternService.isValidPattern( filter.getClazz( ) ) ) {
+			if ( !( patternService.isValidPattern( filter.getClazz( ) ) || filter.getClazz( ) == null ) ) {
 				throw new BusinessException( String.format( getLocalizedString( "errorMessageRegExpr" ), filter.getClazz( ) ) );
 			}
 
-			if ( !patternService.isValidPattern( filter.getMethod( ) ) ) {
+			if ( !( patternService.isValidPattern( filter.getMethod( ) ) || filter.getMethod( ) == null ) ) {
 				throw new BusinessException( String.format( getLocalizedString( "errorMessageRegExpr" ), filter.getMethod( ) ) );
 			}
 
-			if ( !patternService.isValidPattern( filter.getException( ) ) ) {
+			if ( !( patternService.isValidPattern( filter.getException( ) ) || filter.getException( ) == null ) ) {
 				throw new BusinessException( String.format( getLocalizedString( "errorMessageRegExpr" ), filter.getException( ) ) );
 			}
 		}

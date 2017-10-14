@@ -2,6 +2,9 @@ package kieker.diagnosis.architecture.ui;
 
 import java.util.ResourceBundle;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
@@ -20,6 +23,8 @@ import kieker.diagnosis.architecture.service.ServiceBase;
 public abstract class ControllerBase<VM extends ViewModelBase<?>> {
 
 	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle( ClassUtil.getRealName( getClass( ) ) );
+
+	private static Logger cvLogger;
 
 	@Inject
 	private VM ivViewModel;
@@ -51,6 +56,19 @@ public abstract class ControllerBase<VM extends ViewModelBase<?>> {
 	 */
 	protected final <S extends ServiceBase> S getService( final Class<S> aServiceClass ) {
 		return ivInjector.getInstance( aServiceClass );
+	}
+
+	/**
+	 * Returns the logger for the current class.
+	 *
+	 * @return The logger.
+	 */
+	protected final Logger getLogger( ) {
+		if ( cvLogger == null ) {
+			cvLogger = LogManager.getLogger( ClassUtil.getRealClass( getClass( ) ) );
+		}
+
+		return cvLogger;
 	}
 
 	/**

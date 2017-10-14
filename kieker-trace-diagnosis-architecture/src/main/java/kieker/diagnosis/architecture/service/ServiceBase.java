@@ -76,7 +76,7 @@ public abstract class ServiceBase {
 	 */
 	protected final Logger getLogger( ) {
 		if ( cvLogger == null ) {
-			cvLogger = LogManager.getLogger( getClass( ) );
+			cvLogger = LogManager.getLogger( ClassUtil.getRealClass( getClass( ) ) );
 		}
 
 		return cvLogger;

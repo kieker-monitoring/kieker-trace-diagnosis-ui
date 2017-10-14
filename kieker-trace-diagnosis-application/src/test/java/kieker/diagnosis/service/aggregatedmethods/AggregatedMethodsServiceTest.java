@@ -1,4 +1,4 @@
-package kieker.diagnosis.service.methods;
+package kieker.diagnosis.service.aggregatedmethods;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -10,23 +10,23 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import kieker.diagnosis.KiekerTraceDiagnosisModule;
-import kieker.diagnosis.service.data.MethodCall;
+import kieker.diagnosis.service.data.AggregatedMethodCall;
 import kieker.diagnosis.service.data.MonitoringLogService;
 
 /**
- * Test class for the {@link MethodsService}.
+ * Test class for the {@link AggregatedMethodsService}.
  *
  * @author Nils Christian Ehmke
  */
-public class MethodsServiceTest {
+public class AggregatedMethodsServiceTest {
 
-	private MethodsService ivMethodsService;
+	private AggregatedMethodsService ivMethodsService;
 	private MonitoringLogService ivDataService;
 
 	@Before
 	public void setUp( ) {
 		final Injector injector = Guice.createInjector( new KiekerTraceDiagnosisModule( ) );
-		ivMethodsService = injector.getInstance( MethodsService.class );
+		ivMethodsService = injector.getInstance( AggregatedMethodsService.class );
 		ivDataService = injector.getInstance( MonitoringLogService.class );
 	}
 
@@ -41,7 +41,7 @@ public class MethodsServiceTest {
 		assertThat( ivMethodsService.countMethods( ), is( 4 ) );
 
 		// Now search with a filter
-		final MethodsFilter methodsFilter = new MethodsFilter( );
+		final AggregatedMethodsFilter methodsFilter = new AggregatedMethodsFilter( );
 		methodsFilter.setHost( "host1" );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
@@ -66,7 +66,7 @@ public class MethodsServiceTest {
 		assertThat( ivMethodsService.countMethods( ), is( 4 ) );
 
 		// Now search with a filter
-		final MethodsFilter methodsFilter = new MethodsFilter( );
+		final AggregatedMethodsFilter methodsFilter = new AggregatedMethodsFilter( );
 		methodsFilter.setSearchType( SearchType.ALL );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
@@ -78,13 +78,13 @@ public class MethodsServiceTest {
 	}
 
 	private void createMethodCall( final String aHost, final String aClazz, final String aMethod, final String aException ) {
-		final MethodCall methodCall = new MethodCall( );
+		final AggregatedMethodCall methodCall = new AggregatedMethodCall( );
 		methodCall.setHost( aHost );
 		methodCall.setClazz( aClazz );
 		methodCall.setMethod( aMethod );
 		methodCall.setException( aException );
 
-		ivDataService.getMethods( ).add( methodCall );
+		ivDataService.getAggreatedMethods( ).add( methodCall );
 	}
 
 }

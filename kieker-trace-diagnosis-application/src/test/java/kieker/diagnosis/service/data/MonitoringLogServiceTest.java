@@ -38,6 +38,11 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 import kieker.diagnosis.KiekerTraceDiagnosisModule;
 
+/**
+ * Test class for the {@link MonitoringLogService}.
+ *
+ * @author Nils Christian Ehmke
+ */
 public class MonitoringLogServiceTest {
 
 	@Rule
