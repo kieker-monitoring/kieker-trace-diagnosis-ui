@@ -27,6 +27,7 @@ import kieker.diagnosis.architecture.monitoring.Timer;
 import kieker.diagnosis.architecture.monitoring.Writer;
 import kieker.diagnosis.architecture.ui.EnumStringConverter;
 import kieker.diagnosis.architecture.ui.ViewBase;
+import kieker.diagnosis.architecture.ui.components.IntegerTextField;
 
 @Singleton
 public class MonitoringDialogView extends ViewBase<MonitoringDialogController> {
@@ -36,9 +37,9 @@ public class MonitoringDialogView extends ViewBase<MonitoringDialogController> {
 	private TextField ivOutputDirectory;
 	private ComboBox<Timer> ivTimer;
 	private ComboBox<Writer> ivWriter;
-	private TextField ivMaxEntriesPerFile;
-	private TextField ivQueueSize;
-	private TextField ivBuffer;
+	private IntegerTextField ivMaxEntriesPerFile;
+	private IntegerTextField ivQueueSize;
+	private IntegerTextField ivBuffer;
 
 	public MonitoringDialogView( ) {
 
@@ -169,7 +170,7 @@ public class MonitoringDialogView extends ViewBase<MonitoringDialogController> {
 			}
 
 			{
-				ivMaxEntriesPerFile = new TextField( );
+				ivMaxEntriesPerFile = new IntegerTextField( );
 				ivMaxEntriesPerFile.setMaxWidth( Double.POSITIVE_INFINITY );
 
 				GridPane.setRowIndex( ivMaxEntriesPerFile, rowIndex++ );
@@ -189,7 +190,7 @@ public class MonitoringDialogView extends ViewBase<MonitoringDialogController> {
 			}
 
 			{
-				ivQueueSize = new TextField( );
+				ivQueueSize = new IntegerTextField( );
 				ivQueueSize.setMaxWidth( Double.POSITIVE_INFINITY );
 
 				GridPane.setRowIndex( ivQueueSize, rowIndex++ );
@@ -209,7 +210,7 @@ public class MonitoringDialogView extends ViewBase<MonitoringDialogController> {
 			}
 
 			{
-				ivBuffer = new TextField( );
+				ivBuffer = new IntegerTextField( );
 				ivBuffer.setMaxWidth( Double.POSITIVE_INFINITY );
 
 				GridPane.setRowIndex( ivBuffer, rowIndex++ );
@@ -305,15 +306,15 @@ public class MonitoringDialogView extends ViewBase<MonitoringDialogController> {
 		return ivWriter;
 	}
 
-	TextField getMaxEntriesPerFile( ) {
+	IntegerTextField getMaxEntriesPerFile( ) {
 		return ivMaxEntriesPerFile;
 	}
 
-	TextField getQueueSize( ) {
+	IntegerTextField getQueueSize( ) {
 		return ivQueueSize;
 	}
 
-	TextField getBuffer( ) {
+	IntegerTextField getBuffer( ) {
 		return ivBuffer;
 	}
 

@@ -56,26 +56,23 @@ public class MonitoringDialogViewModel extends ViewModelBase<MonitoringDialogVie
 		configuration.setTimer( getView( ).getTimer( ).getValue( ) );
 		configuration.setWriter( getView( ).getWriter( ).getValue( ) );
 
-		final String maxEntriesPerFile = getView( ).getMaxEntriesPerFile( ).getText( );
-		try {
-			configuration.setMaxEntriesPerFile( Integer.parseInt( maxEntriesPerFile ) );
-		} catch ( final NumberFormatException ex ) {
-			throw new BusinessException( getLocalizedString( "errorNotAValidInteger" ), maxEntriesPerFile );
+		final Integer maxEntriesPerFile = getView( ).getMaxEntriesPerFile( ).getValue( );
+		if ( maxEntriesPerFile == null || maxEntriesPerFile <= 0 ) {
+			throw new BusinessException( getLocalizedString( "errorRange" ) );
 		}
+		configuration.setMaxEntriesPerFile( maxEntriesPerFile );
 
-		final String queueSize = getView( ).getQueueSize( ).getText( );
-		try {
-			configuration.setQueueSize( Integer.parseInt( queueSize ) );
-		} catch ( final NumberFormatException ex ) {
-			throw new BusinessException( getLocalizedString( "errorNotAValidInteger" ), queueSize );
+		final Integer queueSize = getView( ).getQueueSize( ).getValue( );
+		if ( queueSize == null || queueSize <= 0 ) {
+			throw new BusinessException( getLocalizedString( "errorRange" ) );
 		}
+		configuration.setQueueSize( queueSize );
 
-		final String buffer = getView( ).getBuffer( ).getText( );
-		try {
-			configuration.setBuffer( Integer.parseInt( buffer ) );
-		} catch ( final NumberFormatException ex ) {
-			throw new BusinessException( getLocalizedString( "errorNotAValidInteger" ), buffer );
+		final Integer buffer = getView( ).getBuffer( ).getValue( );
+		if ( buffer == null || buffer <= 0 ) {
+			throw new BusinessException( getLocalizedString( "errorRange" ) );
 		}
+		configuration.setBuffer( buffer );
 
 		return configuration;
 	}

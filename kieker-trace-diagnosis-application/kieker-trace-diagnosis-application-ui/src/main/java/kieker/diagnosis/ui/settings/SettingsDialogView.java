@@ -14,7 +14,6 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
@@ -26,6 +25,8 @@ import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import kieker.diagnosis.architecture.ui.EnumStringConverter;
 import kieker.diagnosis.architecture.ui.ViewBase;
+import kieker.diagnosis.architecture.ui.components.FloatTextField;
+import kieker.diagnosis.architecture.ui.components.IntegerTextField;
 import kieker.diagnosis.service.settings.ClassAppearance;
 import kieker.diagnosis.service.settings.MethodAppearance;
 import kieker.diagnosis.service.settings.MethodCallAggregation;
@@ -40,8 +41,8 @@ public class SettingsDialogView extends ViewBase<SettingsDialogController> {
 	private final ComboBox<MethodAppearance> ivMethodsComboBox;
 	private final CheckBox ivShowUnmonitoredTime;
 	private final ComboBox<MethodCallAggregation> ivMethodCallAggregation;
-	private final TextField ivMaxNumberOfCalls;
-	private final TextField ivMethodCallThreshold;
+	private final IntegerTextField ivMaxNumberOfCalls;
+	private final FloatTextField ivMethodCallThreshold;
 
 	private boolean ivSettingsChanged = false;
 
@@ -219,7 +220,7 @@ public class SettingsDialogView extends ViewBase<SettingsDialogController> {
 				}
 
 				{
-					ivMaxNumberOfCalls = new TextField( );
+					ivMaxNumberOfCalls = new IntegerTextField( );
 
 					final ReadOnlyObjectProperty<MethodCallAggregation> property = ivMethodCallAggregation.getSelectionModel( ).selectedItemProperty( );
 					ivMaxNumberOfCalls.disableProperty( ).bind( property.isEqualTo( MethodCallAggregation.NONE ).or( property.isEqualTo( MethodCallAggregation.BY_THRESHOLD ) ) );
@@ -241,7 +242,7 @@ public class SettingsDialogView extends ViewBase<SettingsDialogController> {
 				}
 
 				{
-					ivMethodCallThreshold = new TextField( );
+					ivMethodCallThreshold = new FloatTextField( );
 
 					final ReadOnlyObjectProperty<MethodCallAggregation> selectedItemProperty = ivMethodCallAggregation.getSelectionModel( ).selectedItemProperty( );
 					ivMethodCallThreshold.disableProperty( ).bind( selectedItemProperty.isEqualTo( MethodCallAggregation.BY_THRESHOLD ).not( ) );
@@ -344,11 +345,11 @@ public class SettingsDialogView extends ViewBase<SettingsDialogController> {
 		return ivMethodCallAggregation;
 	}
 
-	TextField getMaxNumberOfMethodCalls( ) {
+	IntegerTextField getMaxNumberOfMethodCalls( ) {
 		return ivMaxNumberOfCalls;
 	}
 
-	TextField getMethodCallThreshold( ) {
+	FloatTextField getMethodCallThreshold( ) {
 		return ivMethodCallThreshold;
 	}
 

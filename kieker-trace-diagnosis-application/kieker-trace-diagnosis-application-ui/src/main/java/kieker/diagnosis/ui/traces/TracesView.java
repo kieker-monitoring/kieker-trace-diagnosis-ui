@@ -24,6 +24,7 @@ import javafx.scene.layout.VBox;
 import jfxtras.scene.control.CalendarTimeTextField;
 import kieker.diagnosis.architecture.ui.EnumStringConverter;
 import kieker.diagnosis.architecture.ui.ViewBase;
+import kieker.diagnosis.architecture.ui.components.LongTextField;
 import kieker.diagnosis.service.data.MethodCall;
 import kieker.diagnosis.service.traces.SearchType;
 import kieker.diagnosis.ui.traces.components.ClassCellValueFactory;
@@ -45,7 +46,7 @@ public class TracesView extends ViewBase<TracesController> {
 	private final TextField ivFilterClass;
 	private final TextField ivFilterMethod;
 	private final TextField ivFilterException;
-	private final TextField ivFilterTraceId;
+	private final LongTextField ivFilterTraceId;
 	private final CheckBox ivFilterUseRegExpr;
 
 	private final DatePicker ivFilterLowerDate;
@@ -132,7 +133,7 @@ public class TracesView extends ViewBase<TracesController> {
 				}
 
 				{
-					ivFilterTraceId = new TextField( );
+					ivFilterTraceId = new LongTextField( );
 					ivFilterTraceId.setPromptText( getLocalizedString( "filterByTraceId" ) );
 					GridPane.setColumnIndex( ivFilterTraceId, columnIndex++ );
 					GridPane.setRowIndex( ivFilterTraceId, rowIndex );
@@ -628,7 +629,7 @@ public class TracesView extends ViewBase<TracesController> {
 		return ivFilterException;
 	}
 
-	TextField getFilterTraceId( ) {
+	LongTextField getFilterTraceId( ) {
 		return ivFilterTraceId;
 	}
 

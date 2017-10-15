@@ -30,35 +30,19 @@ class SettingsDialogViewModel extends ViewModelBase<SettingsDialogView> {
 		settings.setShowUnmonitoredTimeProperty( getView( ).getShowUnmonitoredTime( ).isSelected( ) );
 		settings.setMethodCallAggregation( getView( ).getMethodCallAggregation( ).getValue( ) );
 
-		// Try to convert
-		final String methodCallThresholdText = getView( ).getMethodCallThreshold( ).getText( );
-		try {
-			final float methodCallThreshold = Float.parseFloat( methodCallThresholdText );
-
-			// Check the range
-			if ( methodCallThreshold <= 0.0f || methodCallThreshold >= 100.0 ) {
-				throw new BusinessException( getLocalizedString( "errorThresholdRange" ) );
-			}
-
-			settings.setMethodCallThreshold( methodCallThreshold );
-		} catch ( final NumberFormatException ex ) {
-			throw new BusinessException( getLocalizedString( "errorNotAValidFloatingNumber" ), methodCallThresholdText );
+		// Check the range
+		final Float methodCallThreshold = getView( ).getMethodCallThreshold( ).getValue( );
+		if ( methodCallThreshold == null || methodCallThreshold <= 0.0f || methodCallThreshold >= 100.0 ) {
+			throw new BusinessException( getLocalizedString( "errorThresholdRange" ) );
 		}
+		settings.setMethodCallThreshold( methodCallThreshold );
 
-		// Try to convert
-		final String maxNumberOfMethodCallsText = getView( ).getMaxNumberOfMethodCalls( ).getText( );
-		try {
-			final int maxNumberOfMethodCalls = Integer.parseInt( maxNumberOfMethodCallsText );
-
-			// Check the range
-			if ( maxNumberOfMethodCalls <= 0 ) {
-				throw new BusinessException( getLocalizedString( "errorMaxNumberOfMethodCallsRange" ) );
-			}
-
-			settings.setMaxNumberOfMethodCalls( maxNumberOfMethodCalls );
-		} catch ( final NumberFormatException ex ) {
-			throw new BusinessException( getLocalizedString( "errorNotAValidInteger" ), maxNumberOfMethodCallsText );
+		// Check the range
+		final Integer maxNumberOfMethodCalls = getView( ).getMaxNumberOfMethodCalls( ).getValue( );
+		if ( maxNumberOfMethodCalls == null || maxNumberOfMethodCalls <= 0 ) {
+			throw new BusinessException( getLocalizedString( "errorMaxNumberOfMethodCallsRange" ) );
 		}
+		settings.setMaxNumberOfMethodCalls( maxNumberOfMethodCalls );
 
 		return settings;
 	}

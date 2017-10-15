@@ -84,13 +84,7 @@ class MethodsViewModel extends ViewModelBase<MethodsView> {
 		filter.setLowerTime( getView( ).getFilterLowerTime( ).getCalendar( ) );
 		filter.setUpperDate( getView( ).getFilterUpperDate( ).getValue( ) );
 		filter.setUpperTime( getView( ).getFilterUpperTime( ).getCalendar( ) );
-
-		try {
-			final String traceId = trimToNull( getView( ).getFilterTraceId( ).getText( ) );
-			filter.setTraceId( traceId != null ? Long.valueOf( traceId ) : null );
-		} catch ( final NumberFormatException ex ) {
-			throw new BusinessException( getLocalizedString( "errorMessageTraceId" ) );
-		}
+		filter.setTraceId( getView( ).getFilterTraceId( ).getValue( ) );
 
 		// If we are using regular expressions, we should check them
 		if ( filter.isUseRegExpr( ) ) {

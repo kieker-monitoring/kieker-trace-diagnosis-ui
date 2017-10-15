@@ -148,13 +148,7 @@ class TracesViewModel extends ViewModelBase<TracesView> {
 		filter.setUpperDate( getView( ).getFilterUpperDate( ).getValue( ) );
 		filter.setUpperTime( getView( ).getFilterUpperTime( ).getCalendar( ) );
 		filter.setSearchType( getView( ).getFilterSearchType( ).getValue( ) );
-
-		try {
-			final String traceId = trimToNull( getView( ).getFilterTraceId( ).getText( ) );
-			filter.setTraceId( traceId != null ? Long.valueOf( traceId ) : null );
-		} catch ( final NumberFormatException ex ) {
-			throw new BusinessException( getLocalizedString( "errorMessageTraceId" ) );
-		}
+		filter.setTraceId( getView( ).getFilterTraceId( ).getValue( ) );
 
 		// If we are using regular expressions, we should check them
 		if ( filter.isUseRegExpr( ) ) {

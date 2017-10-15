@@ -1,4 +1,8 @@
 3.0.0
+	15 Oct 2017
+	Internal Improvement (#58)
+	Added own implementations for numeric text fields.
+	
 	14 Oct 2017
 	Internal Improvement (#57)
 	The method aggregation has been accelerated, which leads to a faster import.
