@@ -30,13 +30,13 @@ public final class LongTextField extends TextField {
 
 	/**
 	 * Delivers the current value of the text field.
-	 * 
+	 *
 	 * @return The current value.
 	 */
 	public Long getValue( ) {
 		// We still have to consider the case of an empty text
 		final String text = getText( );
-		if ( !text.isEmpty( ) ) {
+		if ( text != null && !text.isEmpty( ) ) {
 			return Long.parseLong( text );
 		} else {
 			return null;

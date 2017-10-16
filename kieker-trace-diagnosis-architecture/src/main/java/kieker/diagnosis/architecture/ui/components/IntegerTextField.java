@@ -36,7 +36,7 @@ public final class IntegerTextField extends TextField {
 	public Integer getValue( ) {
 		// We still have to consider the case of an empty text
 		final String text = getText( );
-		if ( !text.isEmpty( ) ) {
+		if ( text != null && !text.isEmpty( ) ) {
 			return Integer.parseInt( text );
 		} else {
 			return null;

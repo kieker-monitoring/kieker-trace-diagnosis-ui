@@ -36,7 +36,7 @@ public final class FloatTextField extends TextField {
 	public Float getValue( ) {
 		// We still have to consider the case of an empty text
 		final String text = getText( );
-		if ( !text.isEmpty( ) ) {
+		if ( text != null && !text.isEmpty( ) ) {
 			return Float.parseFloat( text );
 		} else {
 			return null;
