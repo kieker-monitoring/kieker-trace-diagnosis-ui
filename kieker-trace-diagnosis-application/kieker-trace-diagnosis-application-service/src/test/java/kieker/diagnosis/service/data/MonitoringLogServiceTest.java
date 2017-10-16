@@ -11,7 +11,6 @@ import static org.junit.Assert.assertThat;
 import java.io.File;
 import java.io.IOException;
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -33,6 +32,8 @@ import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.common.record.io.DefaultValueSerializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.common.util.registry.IRegistry;
@@ -421,6 +422,7 @@ public class MonitoringLogServiceTest {
 		assertThat( ivService.getTraceRoots( ).get( 0 ), is( firstMethod ) );
 	}
 
+	@SuppressWarnings ( "deprecation" )
 	private void writeRecord( final AbstractMonitoringRecord aRecord ) {
 		// Register the record name
 		final int recordKey = ivStringRegistry.get( aRecord.getClass( ).getName( ) );
@@ -433,7 +435,7 @@ public class MonitoringLogServiceTest {
 		final ByteBuffer byteBuffer = ByteBuffer.wrap( byteArray );
 		byteBuffer.putInt( recordKey );
 		byteBuffer.putLong( System.currentTimeMillis( ) );
-		aRecord.writeBytes( byteBuffer, ivStringRegistry );
+		aRecord.serialize( DefaultValueSerializer.create( byteBuffer, ivStringRegistry ) );
 		byteBuffer.flip( );
 
 		ivByteList.add( byteArray );
@@ -470,11 +472,16 @@ public class MonitoringLogServiceTest {
 		}
 
 		@Override
-		public void writeBytes( final ByteBuffer aBuffer, final IRegistry<String> aStringRegistry ) throws BufferOverflowException {
+		public void registerStrings( final IRegistry<String> aStringRegistry ) {
 		}
 
 		@Override
-		public void initFromBytes( final ByteBuffer aBuffer, final IRegistry<String> aStringRegistry ) throws BufferUnderflowException {
+		public void serialize( final IValueSerializer aSerializer ) throws BufferOverflowException {
+		}
+
+		@Override
+		public String[] getValueNames( ) {
+			return null;
 		}
 
 		@Override

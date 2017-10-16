@@ -1,4 +1,8 @@
 3.0.0
+	16 Oct 2017
+	Internal Improvement (#59)
+	The internal monitoring uses now Kieker 1.13.
+
 	15 Oct 2017
 	Internal Improvement (#58)
 	Added own implementations for numeric text fields.

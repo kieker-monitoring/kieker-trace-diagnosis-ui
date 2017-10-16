@@ -1,5 +1,7 @@
 package kieker.diagnosis.architecture.service.monitoring;
 
+import java.util.concurrent.LinkedBlockingQueue;
+
 import com.google.inject.Singleton;
 
 import kieker.common.configuration.Configuration;
@@ -12,10 +14,10 @@ import kieker.diagnosis.architecture.service.ServiceBase;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.timer.SystemMilliTimer;
 import kieker.monitoring.timer.SystemNanoTimer;
-import kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter;
-import kieker.monitoring.writer.filesystem.AsyncBinaryNFsWriter;
+import kieker.monitoring.writer.filesystem.BinaryFileWriter;
 
 /**
  * This service can be used to control the monitoring within the application (and from within the application).
@@ -61,7 +63,7 @@ public class MonitoringService extends ServiceBase {
 			currentConfiguration.setOutputDirectory( System.getProperty( "java.io.tmpdir" ) );
 			currentConfiguration.setQueueSize( 100000 );
 			currentConfiguration.setTimer( Timer.NANO );
-			currentConfiguration.setWriter( Writer.BINARY_FS );
+			currentConfiguration.setWriter( Writer.BINARY_WRITER );
 		}
 
 		return currentConfiguration;
@@ -105,18 +107,14 @@ public class MonitoringService extends ServiceBase {
 			final String queueSize = Integer.toString( aConfiguration.getQueueSize( ) );
 			final String bufferSize = Integer.toString( aConfiguration.getBuffer( ) );
 
-			if ( aConfiguration.getWriter( ) == Writer.BINARY_FS ) {
-				configuration.setProperty( ConfigurationFactory.WRITER_CLASSNAME, AsyncBinaryFsWriter.class.getName( ) );
-				configuration.setProperty( AsyncBinaryFsWriter.class.getName( ) + "." + AsyncBinaryFsWriter.CONFIG_PATH, aConfiguration.getOutputDirectory( ) );
-				configuration.setProperty( AsyncBinaryFsWriter.class.getName( ) + "." + AsyncBinaryFsWriter.CONFIG_MAXENTRIESINFILE, maxEntriesPerFile );
-				configuration.setProperty( AsyncBinaryFsWriter.class.getName( ) + "." + AsyncBinaryFsWriter.CONFIG_QUEUESIZE, queueSize );
-				configuration.setProperty( AsyncBinaryFsWriter.CONFIG_BUFFER, bufferSize );
-			} else {
-				configuration.setProperty( ConfigurationFactory.WRITER_CLASSNAME, AsyncBinaryNFsWriter.class.getName( ) );
-				configuration.setProperty( AsyncBinaryNFsWriter.class.getName( ) + "." + AsyncBinaryFsWriter.CONFIG_PATH, aConfiguration.getOutputDirectory( ) );
-				configuration.setProperty( AsyncBinaryNFsWriter.class.getName( ) + "." + AsyncBinaryFsWriter.CONFIG_MAXENTRIESINFILE, maxEntriesPerFile );
-				configuration.setProperty( AsyncBinaryNFsWriter.class.getName( ) + "." + AsyncBinaryFsWriter.CONFIG_QUEUESIZE, queueSize );
-				configuration.setProperty( AsyncBinaryNFsWriter.CONFIG_BUFFER, bufferSize );
+			if ( aConfiguration.getWriter( ) == Writer.BINARY_WRITER ) {
+				configuration.setProperty( ConfigurationFactory.WRITER_CLASSNAME, BinaryFileWriter.class.getName( ) );
+				configuration.setProperty( BinaryFileWriter.CONFIG_PATH, aConfiguration.getOutputDirectory( ) );
+				configuration.setProperty( BinaryFileWriter.CONFIG_MAXENTRIESINFILE, maxEntriesPerFile );
+				configuration.setProperty( BinaryFileWriter.CONFIG_BUFFERSIZE, bufferSize );
+				configuration.setProperty( WriterController.PREFIX + WriterController.RECORD_QUEUE_SIZE, queueSize );
+				configuration.setProperty( WriterController.PREFIX + WriterController.RECORD_QUEUE_FQN, LinkedBlockingQueue.class.getName( ) );
+				configuration.setProperty( BinaryFileWriter.CONFIG_FLUSH_MAPFILE, "true" );
 			}
 
 			// Controller
