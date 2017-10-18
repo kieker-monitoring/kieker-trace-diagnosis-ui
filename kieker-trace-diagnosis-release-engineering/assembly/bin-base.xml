@@ -4,7 +4,7 @@
 
 	<fileSets>
 		<fileSet>
-			<directory>${project.build.directory}/appassembleri/lib</directory>
+			<directory>${project.build.directory}/appassembler/lib</directory>
 			<outputDirectory>lib</outputDirectory>
 		</fileSet>
 
