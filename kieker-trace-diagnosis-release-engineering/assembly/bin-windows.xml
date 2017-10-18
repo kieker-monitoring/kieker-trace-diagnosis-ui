@@ -12,7 +12,7 @@
 
 	<files>
 		<file>
-			<source>${project.build.directory}\appassembler\bin\start.bat</source>
+			<source>${project.build.directory}/appassembler/bin/start.bat</source>
 			<outputDirectory>bin</outputDirectory>
 		</file>
 	</files>
