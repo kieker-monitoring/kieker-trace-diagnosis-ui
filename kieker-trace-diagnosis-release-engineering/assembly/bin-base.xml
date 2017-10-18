@@ -4,7 +4,7 @@
 
 	<fileSets>
 		<fileSet>
-			<directory>${project.build.directory}\appassembler\lib</directory>
+			<directory>${project.build.directory}/appassembleri/lib</directory>
 			<outputDirectory>lib</outputDirectory>
 		</fileSet>
 
@@ -14,7 +14,7 @@
 		</fileSet>
 
 		<fileSet>
-			<directory>..\kieker-trace-diagnosis-application\src\main\resources\kieker\diagnosis\ui\manual\html</directory>
+			<directory>../kieker-trace-diagnosis-application/src/main/resources/kieker/diagnosis/ui/manual/html</directory>
 			<outputDirectory>manual</outputDirectory>
 			<filtered>true</filtered>
 			<includes>
@@ -25,10 +25,10 @@
 
 	<files>
 		<file>
-			<source>..\CHANGELOG</source>
+			<source>../CHANGELOG</source>
 		</file>
 		<file>
-			<source>..\LICENSE</source>
+			<source>../LICENSE</source>
 		</file>
 	</files>
 
