@@ -15,6 +15,14 @@ import kieker.diagnosis.service.filter.FilterService;
 @Singleton
 public class MethodsService extends ServiceBase {
 
+	/**
+	 * This method searches, based on the given filter, for method calls within the imported monitoring log.
+	 *
+	 * @param aFilter
+	 *            The filter to apply to the method calls.
+	 *
+	 * @return A new list containing all available method calls matching the filter.
+	 */
 	public List<MethodCall> searchMethods( final MethodsFilter aFilter ) {
 		// Prepare the predicates
 		final FilterService filterService = getService( FilterService.class );

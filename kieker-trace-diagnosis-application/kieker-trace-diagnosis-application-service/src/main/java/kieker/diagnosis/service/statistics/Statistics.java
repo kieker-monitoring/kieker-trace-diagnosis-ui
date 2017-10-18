@@ -1,5 +1,10 @@
 package kieker.diagnosis.service.statistics;
 
+/**
+ * This is a data transfer object holding the statistics for the statistics service.
+ *
+ * @author Nils Christian Ehmke
+ */
 public final class Statistics {
 
 	private long ivProcessedBytes;

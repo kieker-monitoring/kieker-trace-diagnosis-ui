@@ -3,6 +3,11 @@ package kieker.diagnosis.service.methods;
 import java.time.LocalDate;
 import java.util.Calendar;
 
+/**
+ * This is a data transfer object holding the filter for the methods service.
+ *
+ * @author Nils Christian Ehmke
+ */
 public final class MethodsFilter {
 
 	private String ivHost;

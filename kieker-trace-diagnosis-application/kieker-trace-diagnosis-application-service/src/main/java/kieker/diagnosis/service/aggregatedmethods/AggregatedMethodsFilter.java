@@ -1,5 +1,10 @@
 package kieker.diagnosis.service.aggregatedmethods;
 
+/**
+ * This is a data transfer object holding the filter for the aggregated methods service.
+ *
+ * @author Nils Christian Ehmke
+ */
 public final class AggregatedMethodsFilter {
 
 	private String ivHost;

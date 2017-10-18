@@ -16,6 +16,14 @@ import kieker.diagnosis.service.filter.FilterService;
 @Singleton
 public class TracesService extends ServiceBase {
 
+	/**
+	 * This method searches, based on the given filter, for traces within the imported monitoring log.
+	 *
+	 * @param aFilter
+	 *            The filter to apply to the traces.
+	 *
+	 * @return A new list containing all available traces matching the filter. Only the root method calls of the traces are returned.
+	 */
 	public List<MethodCall> searchTraces( final TracesFilter aFilter ) {
 		// Prepare the predicates
 		final FilterService filterService = getService( FilterService.class );

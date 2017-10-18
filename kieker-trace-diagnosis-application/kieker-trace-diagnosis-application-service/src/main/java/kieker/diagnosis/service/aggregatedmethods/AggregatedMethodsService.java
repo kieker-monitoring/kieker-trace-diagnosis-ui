@@ -15,6 +15,14 @@ import kieker.diagnosis.service.filter.FilterService;
 @Singleton
 public class AggregatedMethodsService extends ServiceBase {
 
+	/**
+	 * This method searches, based on the given filter, for aggregated method calls within the imported monitoring log.
+	 *
+	 * @param aFilter
+	 *            The filter to apply to the method calls.
+	 *
+	 * @return A new list containing all available aggregated method calls matching the filter.
+	 */
 	public List<AggregatedMethodCall> searchMethods( final AggregatedMethodsFilter aFilter ) {
 		// Prepare the predicates
 		final FilterService filterService = getService( FilterService.class );

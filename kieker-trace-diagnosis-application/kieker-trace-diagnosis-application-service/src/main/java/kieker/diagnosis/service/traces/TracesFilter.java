@@ -3,6 +3,11 @@ package kieker.diagnosis.service.traces;
 import java.time.LocalDate;
 import java.util.Calendar;
 
+/**
+ * This is a data transfer object holding the filter for the traces service.
+ *
+ * @author Nils Christian Ehmke
+ */
 public final class TracesFilter {
 
 	private String ivHost;
