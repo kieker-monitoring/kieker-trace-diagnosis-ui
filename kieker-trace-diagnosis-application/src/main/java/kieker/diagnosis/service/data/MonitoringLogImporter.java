@@ -79,7 +79,7 @@ final class MonitoringLogImporter {
 				clearFields( );
 
 				loadMappingFile( mappingFileContainingDirectory );
-				processedBytes = loadBinaryFiles( mappingFileContainingDirectory );
+				processedBytes += loadBinaryFiles( mappingFileContainingDirectory );
 			}
 
 			calculatePercentAndCollectMethods( );
