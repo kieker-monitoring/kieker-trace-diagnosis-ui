@@ -21,16 +21,16 @@ import com.google.inject.Singleton;
 import kieker.diagnosis.architecture.service.properties.StringApplicationProperty;
 
 /**
- * This property represents the last used import path.
+ * This property represents the last used export path.
  *
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class LastImportPathProperty extends StringApplicationProperty {
+public class LastExportPathProperty extends StringApplicationProperty {
 
 	@Override
 	public String getKey( ) {
-		return "lastImportPath";
+		return "lastExportPath";
 	}
 
 	@Override

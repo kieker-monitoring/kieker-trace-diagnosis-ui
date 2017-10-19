@@ -1,4 +1,8 @@
 3.0.0
+	19 Oct 2017
+	Feature (Github Issue #3)
+	The application saves now the last used path for the CSV export.
+
 	16 Oct 2017
 	Internal Improvement (#59)
 	The internal monitoring uses now Kieker 1.13.

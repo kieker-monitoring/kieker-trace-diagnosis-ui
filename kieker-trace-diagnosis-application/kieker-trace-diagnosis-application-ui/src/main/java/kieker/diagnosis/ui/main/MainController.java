@@ -1,17 +1,17 @@
-/*************************************************************************** 
- * Copyright 2015-2017 Kieker Project (http://kieker-monitoring.net)         
- *                                                                           
- * Licensed under the Apache License, Version 2.0 (the "License");           
- * you may not use this file except in compliance with the License.          
- * You may obtain a copy of the License at                                   
- *                                                                           
- *     http://www.apache.org/licenses/LICENSE-2.0                            
- *                                                                           
- * Unless required by applicable law or agreed to in writing, software       
- * distributed under the License is distributed on an "AS IS" BASIS,         
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  
- * See the License for the specific language governing permissions and       
- * limitations under the License.                                            
+/***************************************************************************
+ * Copyright 2015-2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  ***************************************************************************/
 
 package kieker.diagnosis.ui.main;
@@ -45,6 +45,7 @@ import kieker.diagnosis.service.data.MonitoringLogService;
 import kieker.diagnosis.service.export.CSVData;
 import kieker.diagnosis.service.export.ExportService;
 import kieker.diagnosis.ui.about.AboutDialogView;
+import kieker.diagnosis.ui.main.properties.LastExportPathProperty;
 import kieker.diagnosis.ui.main.properties.LastImportPathProperty;
 import kieker.diagnosis.ui.manual.ManualDialogView;
 import kieker.diagnosis.ui.methods.MethodsView;
@@ -79,7 +80,7 @@ public class MainController extends ControllerBase<MainViewModel> {
 		final PropertiesService propertiesService = getService( PropertiesService.class );
 		final String lastImportPath = propertiesService.loadApplicationProperty( LastImportPathProperty.class );
 		final File lastImportDirectory = new File( lastImportPath );
-		if ( lastImportDirectory.exists( ) ) {
+		if ( lastImportDirectory.isDirectory( ) ) {
 			directoryChooser.setInitialDirectory( lastImportDirectory );
 		}
 
@@ -230,11 +231,26 @@ public class MainController extends ControllerBase<MainViewModel> {
 
 	public void performExportToCSV( final CSVData aCsvData ) {
 		try {
+
 			final FileChooser fileChooser = new FileChooser( );
 			fileChooser.setTitle( getLocalizedString( "titleExportToCSV" ) );
 
+			// Set an initial directory if possible
+			final PropertiesService propertiesService = getService( PropertiesService.class );
+			final String lastExportPath = propertiesService.loadApplicationProperty( LastExportPathProperty.class );
+			final File lastExportDirectory = new File( lastExportPath );
+			if ( lastExportDirectory.isDirectory( ) ) {
+				fileChooser.setInitialDirectory( lastExportDirectory );
+			}
+
 			final File file = fileChooser.showSaveDialog( getViewModel( ).getWindow( ) );
 			if ( file != null ) {
+				// Remember the directory as initial directory for the next time
+				final File directory = file.getParentFile( );
+				if ( !lastExportDirectory.equals( directory ) ) {
+					propertiesService.saveApplicationProperty( LastExportPathProperty.class, directory.getAbsolutePath( ) );
+				}
+
 				final ExportService exportService = getService( ExportService.class );
 				exportService.exportToCSV( file, aCsvData );
 			}
