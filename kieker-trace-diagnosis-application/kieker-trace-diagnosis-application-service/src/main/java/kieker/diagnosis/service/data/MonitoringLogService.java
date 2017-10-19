@@ -1,17 +1,17 @@
-/*************************************************************************** 
- * Copyright 2015-2017 Kieker Project (http://kieker-monitoring.net)         
- *                                                                           
- * Licensed under the Apache License, Version 2.0 (the "License");           
- * you may not use this file except in compliance with the License.          
- * You may obtain a copy of the License at                                   
- *                                                                           
- *     http://www.apache.org/licenses/LICENSE-2.0                            
- *                                                                           
- * Unless required by applicable law or agreed to in writing, software       
- * distributed under the License is distributed on an "AS IS" BASIS,         
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  
- * See the License for the specific language governing permissions and       
- * limitations under the License.                                            
+/***************************************************************************
+ * Copyright 2015-2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  ***************************************************************************/
 
 package kieker.diagnosis.service.data;
@@ -26,6 +26,10 @@ import com.google.inject.Singleton;
 import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.exception.TechnicalException;
 import kieker.diagnosis.architecture.service.ServiceBase;
+import kieker.diagnosis.service.data.reader.AsciiFileReader;
+import kieker.diagnosis.service.data.reader.BinaryFileReader;
+import kieker.diagnosis.service.data.reader.Reader;
+import kieker.diagnosis.service.data.reader.TemporaryRepository;
 
 @Singleton
 public class MonitoringLogService extends ServiceBase {
@@ -47,17 +51,30 @@ public class MonitoringLogService extends ServiceBase {
 	}
 
 	public void importMonitoringLog( final File aDirectory ) throws BusinessException {
+		final long tin = System.currentTimeMillis( );
+
 		try {
 			clear( );
 
-			// We use a helper class to avoid having temporary fields in the service
-			final MonitoringLogImporter importer = new MonitoringLogImporter( );
-			importer.importMonitoringLog( aDirectory, this );
+			// We use some helper classes to avoid having temporary fields in the service
+			final TemporaryRepository temporaryRepository = new TemporaryRepository( this );
 
-			setDataAvailable( aDirectory );
+			final List<Reader> readerList = new ArrayList<>( );
+			readerList.add( new BinaryFileReader( temporaryRepository ) );
+			readerList.add( new AsciiFileReader( temporaryRepository ) );
+
+			for ( final Reader reader : readerList ) {
+				if ( reader.shouldBeExecuted( aDirectory ) ) {
+					reader.readFromDirectory( aDirectory );
+				}
+			}
+
+			temporaryRepository.finish( );
+
+			setDataAvailable( aDirectory, tin );
 		} catch ( final BusinessException ex ) {
 			// A technical exception means, that something went wrong, but that the data is partially available
-			setDataAvailable( aDirectory );
+			setDataAvailable( aDirectory, tin );
 
 			throw ex;
 		} catch ( final Exception ex ) {
@@ -65,9 +82,13 @@ public class MonitoringLogService extends ServiceBase {
 		}
 	}
 
-	private void setDataAvailable( final File aDirectory ) {
+	private void setDataAvailable( final File aDirectory, final long aTin ) {
 		ivDirectory = aDirectory.getAbsolutePath( );
 		dataAvailable = true;
+
+		final long tout = System.currentTimeMillis( );
+		final long duration = tout - aTin;
+		ivProcessDuration = duration;
 	}
 
 	private void clear( ) {
@@ -77,23 +98,19 @@ public class MonitoringLogService extends ServiceBase {
 		ivMethods.clear( );
 	}
 
-	void addTraceRoot( final MethodCall aTraceRoot ) {
+	public void addTraceRoot( final MethodCall aTraceRoot ) {
 		ivTraceRoots.add( aTraceRoot );
 	}
 
-	void addAggregatedMethods( final Collection<AggregatedMethodCall> aAggregatedMethodCalls ) {
+	public void addAggregatedMethods( final Collection<AggregatedMethodCall> aAggregatedMethodCalls ) {
 		ivAggreatedMethods.addAll( aAggregatedMethodCalls );
 	}
 
-	void addMethods( final Collection<MethodCall> aMethodCalls ) {
+	public void addMethods( final Collection<MethodCall> aMethodCalls ) {
 		ivMethods.addAll( aMethodCalls );
 	}
 
-	void setProcessDuration( final long aProcessDuration ) {
-		ivProcessDuration = aProcessDuration;
-	}
-
-	void setProcessedBytes( final long aProcessedBytes ) {
+	public void setProcessedBytes( final long aProcessedBytes ) {
 		ivProcessedBytes = aProcessedBytes;
 	}
 
@@ -125,7 +142,7 @@ public class MonitoringLogService extends ServiceBase {
 		return ivIgnoredRecords;
 	}
 
-	void setIgnoredRecords( final int aIgnoredRecords ) {
+	public void setIgnoredRecords( final int aIgnoredRecords ) {
 		ivIgnoredRecords = aIgnoredRecords;
 	}
 
@@ -133,7 +150,7 @@ public class MonitoringLogService extends ServiceBase {
 		return ivDanglingRecords;
 	}
 
-	void setDanglingRecords( final int aDanglingRecords ) {
+	public void setDanglingRecords( final int aDanglingRecords ) {
 		ivDanglingRecords = aDanglingRecords;
 	}
 
@@ -141,11 +158,11 @@ public class MonitoringLogService extends ServiceBase {
 		return ivIncompleteTraces;
 	}
 
-	void setIncompleteTraces( final int aIncompleteTraces ) {
+	public void setIncompleteTraces( final int aIncompleteTraces ) {
 		ivIncompleteTraces = aIncompleteTraces;
 	}
 
-	void setDataAvailable( final boolean aDataAvailable ) {
+	public void setDataAvailable( final boolean aDataAvailable ) {
 		dataAvailable = aDataAvailable;
 	}
 
