@@ -31,6 +31,11 @@ import kieker.diagnosis.service.data.reader.BinaryFileReader;
 import kieker.diagnosis.service.data.reader.Reader;
 import kieker.diagnosis.service.data.reader.TemporaryRepository;
 
+/**
+ * This is the service responsible for importing monitoring logs and holding the necessary data from the import.
+ *
+ * @author Nils Christian Ehmke
+ */
 @Singleton
 public class MonitoringLogService extends ServiceBase {
 
@@ -73,7 +78,7 @@ public class MonitoringLogService extends ServiceBase {
 
 			setDataAvailable( aDirectory, tin );
 		} catch ( final BusinessException ex ) {
-			// A technical exception means, that something went wrong, but that the data is partially available
+			// A business exception means, that something went wrong, but that the data is partially available
 			setDataAvailable( aDirectory, tin );
 
 			throw ex;

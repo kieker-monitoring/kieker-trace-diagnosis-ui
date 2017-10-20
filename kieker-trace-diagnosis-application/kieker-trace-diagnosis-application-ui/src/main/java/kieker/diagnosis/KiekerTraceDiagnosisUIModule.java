@@ -14,27 +14,25 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.ui.aggregatedmethods.components;
+package kieker.diagnosis;
 
-import javafx.scene.control.TableRow;
-import kieker.diagnosis.service.data.AggregatedMethodCall;
+import com.google.inject.AbstractModule;
+
+import kieker.diagnosis.architecture.KiekerTraceDiagnosisArchitectureModule;
+import kieker.diagnosis.service.KiekerTraceDiagnosisServiceModule;
 
 /**
- * This is a row for a table which is aware of a method call being failed. If the method call has an exception, it is styled accordingly.
+ * This is the Guice module for the UI.
  *
  * @author Nils Christian Ehmke
  */
-public final class StyledRow extends TableRow<AggregatedMethodCall> {
+public class KiekerTraceDiagnosisUIModule extends AbstractModule {
 
 	@Override
-	protected void updateItem( final AggregatedMethodCall aItem, final boolean aEmpty ) {
-		super.updateItem( aItem, aEmpty );
-
-		getStyleClass( ).remove( "failed" );
-
-		if ( aItem != null && aItem.getException( ) != null ) {
-			getStyleClass( ).add( "failed" );
-		}
+	protected void configure( ) {
+		// We need to make sure that the Guice module from the service and the architecture sub-projects are installed
+		install( new KiekerTraceDiagnosisServiceModule( ) );
+		install( new KiekerTraceDiagnosisArchitectureModule( ) );
 	}
 
 }

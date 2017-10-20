@@ -23,6 +23,11 @@ import kieker.diagnosis.service.data.MethodCall;
 import kieker.diagnosis.service.data.MonitoringLogService;
 import kieker.diagnosis.service.settings.TimestampAppearance;
 
+/**
+ * This service is responsible for loading statistics for the imported log.
+ *
+ * @author Nils Christian Ehmke
+ */
 @Singleton
 public class StatisticsService extends ServiceBase {
 

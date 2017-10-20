@@ -43,7 +43,7 @@ public class KiekerTraceDiagnosis extends Application {
 	@Override
 	public void start( final Stage aPrimaryStage ) throws Exception {
 		// Load the CDI container
-		final KiekerTraceDiagnosisModule module = new KiekerTraceDiagnosisModule( );
+		final KiekerTraceDiagnosisUIModule module = new KiekerTraceDiagnosisUIModule( );
 		final Injector injector = Guice.createInjector( com.google.inject.Stage.PRODUCTION, module );
 		final MainView mainView = injector.getInstance( MainView.class );
 		final MainController mainController = injector.getInstance( MainController.class );
