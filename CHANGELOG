@@ -1,4 +1,8 @@
 3.0.0
+	20 Oct 2017
+	Feature (TRACEUI-3)
+	The tool supports now the writing and reading of ascii monitoring logs.
+
 	19 Oct 2017
 	Feature (Github Issue #3)
 	The application saves now the last used path for the CSV export.
