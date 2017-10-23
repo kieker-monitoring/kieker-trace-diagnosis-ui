@@ -31,7 +31,7 @@ import kieker.diagnosis.architecture.ui.ControllerBase;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class MonitoringDialogController extends ControllerBase<MonitoringDialogViewModel> {
+class MonitoringDialogController extends ControllerBase<MonitoringDialogViewModel> {
 
 	public void performRefresh( ) {
 		// Get the current configuration and status...

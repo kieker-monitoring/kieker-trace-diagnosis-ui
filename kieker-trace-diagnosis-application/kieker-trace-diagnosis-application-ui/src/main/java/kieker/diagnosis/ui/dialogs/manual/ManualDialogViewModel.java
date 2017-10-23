@@ -30,7 +30,7 @@ import kieker.diagnosis.architecture.ui.ViewModelBase;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class ManualDialogViewModel extends ViewModelBase<ManualDialogView> {
+class ManualDialogViewModel extends ViewModelBase<ManualDialogView> {
 
 	public void updatePresentation( final URL aUrl ) {
 		final WebView webView = getView( ).getWebView( );

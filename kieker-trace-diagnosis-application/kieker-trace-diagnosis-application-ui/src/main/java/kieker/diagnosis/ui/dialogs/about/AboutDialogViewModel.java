@@ -26,6 +26,6 @@ import kieker.diagnosis.architecture.ui.ViewModelBase;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class AboutDialogViewModel extends ViewModelBase<AboutDialogView> {
+class AboutDialogViewModel extends ViewModelBase<AboutDialogView> {
 
 }

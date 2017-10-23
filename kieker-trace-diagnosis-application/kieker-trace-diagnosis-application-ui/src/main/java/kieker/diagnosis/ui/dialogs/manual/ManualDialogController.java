@@ -29,7 +29,7 @@ import kieker.diagnosis.architecture.ui.ControllerBase;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class ManualDialogController extends ControllerBase<ManualDialogViewModel> {
+class ManualDialogController extends ControllerBase<ManualDialogViewModel> {
 
 	public void performRefresh( ) {
 		final Locale locale = Locale.getDefault( );

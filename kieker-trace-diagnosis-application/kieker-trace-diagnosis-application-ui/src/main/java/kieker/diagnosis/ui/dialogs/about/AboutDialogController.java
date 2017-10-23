@@ -26,7 +26,7 @@ import kieker.diagnosis.architecture.ui.ControllerBase;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class AboutDialogController extends ControllerBase<AboutDialogViewModel> {
+class AboutDialogController extends ControllerBase<AboutDialogViewModel> {
 
 	/**
 	 * This action is performed, when the user wants to close the about dialog.

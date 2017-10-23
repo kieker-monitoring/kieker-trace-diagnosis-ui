@@ -29,7 +29,7 @@ import kieker.diagnosis.architecture.ui.ViewModelBase;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class MonitoringDialogViewModel extends ViewModelBase<MonitoringDialogView> {
+class MonitoringDialogViewModel extends ViewModelBase<MonitoringDialogView> {
 
 	public void updatePresentationStatus( final Status aStatus ) {
 		String status;
