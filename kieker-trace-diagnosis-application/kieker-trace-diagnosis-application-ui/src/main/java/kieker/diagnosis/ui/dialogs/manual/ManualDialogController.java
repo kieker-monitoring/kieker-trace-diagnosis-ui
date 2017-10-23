@@ -34,7 +34,7 @@ class ManualDialogController extends ControllerBase<ManualDialogViewModel> {
 	public void performRefresh( ) {
 		final Locale locale = Locale.getDefault( );
 		final String suffix = locale == Locale.GERMAN || locale == Locale.GERMANY ? "_de" : "";
-		final URL documentation = getClass( ).getClassLoader( ).getResource( "kieker/diagnosis/ui/manual/html/manual" + suffix + ".html" );
+		final URL documentation = getClass( ).getClassLoader( ).getResource( "kieker/diagnosis/ui/dialogs/manual/html/manual" + suffix + ".html" );
 
 		getViewModel( ).updatePresentation( documentation );
 	}
