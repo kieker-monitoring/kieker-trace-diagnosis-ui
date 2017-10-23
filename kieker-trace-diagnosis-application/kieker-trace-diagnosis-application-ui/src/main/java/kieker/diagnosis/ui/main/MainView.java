@@ -29,10 +29,10 @@ import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import kieker.diagnosis.architecture.ui.ViewBase;
-import kieker.diagnosis.ui.aggregatedmethods.AggregatedMethodsView;
-import kieker.diagnosis.ui.methods.MethodsView;
-import kieker.diagnosis.ui.statistics.StatisticsView;
-import kieker.diagnosis.ui.traces.TracesView;
+import kieker.diagnosis.ui.tabs.aggregatedmethods.AggregatedMethodsView;
+import kieker.diagnosis.ui.tabs.methods.MethodsView;
+import kieker.diagnosis.ui.tabs.statistics.StatisticsView;
+import kieker.diagnosis.ui.tabs.traces.TracesView;
 
 @Singleton
 public class MainView extends ViewBase<MainController> {

@@ -44,15 +44,15 @@ import kieker.diagnosis.service.data.MethodCall;
 import kieker.diagnosis.service.data.MonitoringLogService;
 import kieker.diagnosis.service.export.CSVData;
 import kieker.diagnosis.service.export.ExportService;
-import kieker.diagnosis.ui.about.AboutDialogView;
+import kieker.diagnosis.ui.dialogs.about.AboutDialogView;
+import kieker.diagnosis.ui.dialogs.manual.ManualDialogView;
+import kieker.diagnosis.ui.dialogs.monitoring.MonitoringDialogView;
+import kieker.diagnosis.ui.dialogs.progress.ProgressDialog;
+import kieker.diagnosis.ui.dialogs.settings.SettingsDialogView;
 import kieker.diagnosis.ui.main.properties.LastExportPathProperty;
 import kieker.diagnosis.ui.main.properties.LastImportPathProperty;
-import kieker.diagnosis.ui.manual.ManualDialogView;
-import kieker.diagnosis.ui.methods.MethodsView;
-import kieker.diagnosis.ui.monitoring.MonitoringDialogView;
-import kieker.diagnosis.ui.progress.ProgressDialog;
-import kieker.diagnosis.ui.settings.SettingsDialogView;
-import kieker.diagnosis.ui.traces.TracesView;
+import kieker.diagnosis.ui.tabs.methods.MethodsView;
+import kieker.diagnosis.ui.tabs.traces.TracesView;
 
 @Singleton
 public class MainController extends ControllerBase<MainViewModel> {
