@@ -16,13 +16,10 @@
 
 package kieker.diagnosis.ui.dialogs.monitoring;
 
-import java.io.InputStream;
-
 import com.google.inject.Singleton;
 
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.CheckBox;
@@ -31,18 +28,15 @@ import javafx.scene.control.ComboBoxBase;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.Window;
 import kieker.diagnosis.architecture.monitoring.Timer;
 import kieker.diagnosis.architecture.monitoring.Writer;
+import kieker.diagnosis.architecture.ui.DialogViewBase;
 import kieker.diagnosis.architecture.ui.EnumStringConverter;
-import kieker.diagnosis.architecture.ui.ViewBase;
 import kieker.diagnosis.architecture.ui.components.IntegerTextField;
 
 /**
@@ -51,7 +45,7 @@ import kieker.diagnosis.architecture.ui.components.IntegerTextField;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class MonitoringDialogView extends ViewBase<MonitoringDialogController> {
+public class MonitoringDialogView extends DialogViewBase<MonitoringDialogController, Void> {
 
 	private Label ivStatus;
 	private CheckBox ivActive;
@@ -63,6 +57,7 @@ public class MonitoringDialogView extends ViewBase<MonitoringDialogController> {
 	private IntegerTextField ivBuffer;
 
 	public MonitoringDialogView( ) {
+		super( Modality.WINDOW_MODAL, StageStyle.DECORATED, MonitoringDialogController::performRefresh, true );
 
 		setSpacing( 10 );
 
@@ -278,33 +273,6 @@ public class MonitoringDialogView extends ViewBase<MonitoringDialogController> {
 
 	@Override
 	public void setParameter( final Object aParameter ) {
-	}
-
-	public void open( final Window aParent ) {
-		// Create a scene if necessary
-		Scene scene = getScene( );
-		if ( scene == null ) {
-			scene = new Scene( this );
-		}
-
-		// Load the icon
-		final String iconPath = getLocalizedString( "icon" );
-		final InputStream iconStream = getClass( ).getClassLoader( ).getResourceAsStream( iconPath );
-		final Image icon = new Image( iconStream );
-
-		// Prepare and show the stage
-		final Stage stage = new Stage( );
-		stage.setResizable( false );
-		stage.initModality( Modality.WINDOW_MODAL );
-		stage.initStyle( StageStyle.DECORATED );
-		stage.initOwner( aParent );
-		stage.getIcons( ).add( icon );
-		stage.setTitle( getLocalizedString( "title" ) );
-		stage.setScene( scene );
-
-		getController( ).performRefresh( );
-
-		stage.showAndWait( );
 	}
 
 	Label getStatus( ) {

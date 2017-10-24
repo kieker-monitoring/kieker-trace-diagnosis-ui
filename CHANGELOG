@@ -1,4 +1,8 @@
 3.0.0
+	27 Oct 2017
+	Internal Improvement (TRACEUI-5)
+	Dialog views share now a common (architectural) base.
+
 	20 Oct 2017
 	Feature (TRACEUI-3)
 	The tool supports now the writing and reading of ascii monitoring logs.

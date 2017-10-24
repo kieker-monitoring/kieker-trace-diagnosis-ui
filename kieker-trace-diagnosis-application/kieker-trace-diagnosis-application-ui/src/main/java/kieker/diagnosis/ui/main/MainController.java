@@ -100,7 +100,7 @@ public class MainController extends ControllerBase<MainViewModel> {
 	 * This action is performed, when the user wants to configure the settings.
 	 */
 	public void performSettings( ) {
-		final boolean settingsChanged = ivSettingsDialogView.open( getViewModel( ).getWindow( ) );
+		final boolean settingsChanged = Boolean.TRUE.equals( ivSettingsDialogView.open( getViewModel( ).getWindow( ) ) );
 
 		// Now refresh everything - if necessary
 		if ( settingsChanged ) {
