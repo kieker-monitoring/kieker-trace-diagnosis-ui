@@ -293,6 +293,8 @@ public class SettingsDialogView extends ViewBase<SettingsDialogController> {
 			scene = new Scene( this );
 		}
 
+		ivSettingsChanged = false;
+
 		// Load the icon
 		final String iconPath = getLocalizedString( "icon" );
 		final InputStream iconStream = getClass( ).getClassLoader( ).getResourceAsStream( iconPath );
