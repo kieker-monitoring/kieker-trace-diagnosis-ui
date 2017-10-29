@@ -16,13 +16,13 @@
 
 package kieker.diagnosis.ui.tabs.methods.components;
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.util.Callback;
+import kieker.diagnosis.architecture.service.ServiceFactory;
 import kieker.diagnosis.architecture.service.properties.PropertiesService;
 import kieker.diagnosis.service.data.MethodCall;
 import kieker.diagnosis.service.settings.ClassAppearance;
@@ -37,8 +37,7 @@ import kieker.diagnosis.service.settings.properties.ClassAppearanceProperty;
 @Singleton
 public class ClassCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>> {
 
-	@Inject
-	private PropertiesService ivPropertiesService;
+	private final PropertiesService ivPropertiesService = ServiceFactory.getService( PropertiesService.class );
 
 	@Override
 	public ObservableValue<String> call( final CellDataFeatures<MethodCall, String> aParam ) {

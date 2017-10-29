@@ -19,12 +19,11 @@ package kieker.diagnosis.ui.tabs.aggregatedmethods.components;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-import com.google.inject.Inject;
-
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.util.Callback;
+import kieker.diagnosis.architecture.service.ServiceFactory;
 import kieker.diagnosis.architecture.service.properties.PropertiesService;
 import kieker.diagnosis.service.data.AggregatedMethodCall;
 import kieker.diagnosis.service.settings.properties.TimeUnitProperty;
@@ -37,8 +36,7 @@ import kieker.diagnosis.service.settings.properties.TimeUnitProperty;
  */
 public class DurationCellValueFactory implements Callback<CellDataFeatures<AggregatedMethodCall, Long>, ObservableValue<Long>> {
 
-	@Inject
-	private PropertiesService ivPropertiesService;
+	private final PropertiesService ivPropertiesService = ServiceFactory.getService( PropertiesService.class );
 
 	private Function<AggregatedMethodCall, Long> ivGetter;
 

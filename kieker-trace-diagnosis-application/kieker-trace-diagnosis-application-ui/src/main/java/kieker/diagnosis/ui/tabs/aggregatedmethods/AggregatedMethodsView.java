@@ -17,7 +17,6 @@
 package kieker.diagnosis.ui.tabs.aggregatedmethods;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.google.inject.Singleton;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -92,7 +91,7 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 	}
 
 	@Inject
-	public AggregatedMethodsView( final Injector aInjector ) {
+	public AggregatedMethodsView( ) {
 
 		// Filter
 		{
@@ -230,7 +229,7 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 
 			{
 				final TableColumn<AggregatedMethodCall, String> column = new TableColumn<>( );
-				column.setCellValueFactory( aInjector.getInstance( ClassCellValueFactory.class ) );
+				column.setCellValueFactory( new ClassCellValueFactory( ) );
 				column.setText( getLocalizedString( "columnClass" ) );
 				column.setPrefWidth( 200 );
 
@@ -239,7 +238,7 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 
 			{
 				final TableColumn<AggregatedMethodCall, String> column = new TableColumn<>( );
-				column.setCellValueFactory( aInjector.getInstance( MethodCellValueFactory.class ) );
+				column.setCellValueFactory( new MethodCellValueFactory( ) );
 				column.setText( getLocalizedString( "columnMethod" ) );
 				column.setPrefWidth( 400 );
 
@@ -247,7 +246,7 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 			}
 
 			{
-				final DurationCellValueFactory cellValueFactory = aInjector.getInstance( DurationCellValueFactory.class );
+				final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( );
 				cellValueFactory.setGetter( AggregatedMethodCall::getMinDuration );
 
 				ivColumnMinDuration = new TableColumn<>( );
@@ -259,7 +258,7 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 			}
 
 			{
-				final DurationCellValueFactory cellValueFactory = aInjector.getInstance( DurationCellValueFactory.class );
+				final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( );
 				cellValueFactory.setGetter( AggregatedMethodCall::getAvgDuration );
 
 				ivColumnAvgDuration = new TableColumn<>( );
@@ -271,7 +270,7 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 			}
 
 			{
-				final DurationCellValueFactory cellValueFactory = aInjector.getInstance( DurationCellValueFactory.class );
+				final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( );
 				cellValueFactory.setGetter( AggregatedMethodCall::getMedianDuration );
 
 				ivColumnMedianDuration = new TableColumn<>( );
@@ -283,7 +282,7 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 			}
 
 			{
-				final DurationCellValueFactory cellValueFactory = aInjector.getInstance( DurationCellValueFactory.class );
+				final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( );
 				cellValueFactory.setGetter( AggregatedMethodCall::getMaxDuration );
 
 				ivColumnMaxDuration = new TableColumn<>( );
@@ -295,7 +294,7 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 			}
 
 			{
-				final DurationCellValueFactory cellValueFactory = aInjector.getInstance( DurationCellValueFactory.class );
+				final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( );
 				cellValueFactory.setGetter( AggregatedMethodCall::getTotalDuration );
 
 				ivColumnTotalDuration = new TableColumn<>( );

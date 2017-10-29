@@ -16,29 +16,24 @@
 
 package kieker.diagnosis.ui.tabs.methods.components;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.util.Callback;
+import kieker.diagnosis.architecture.service.ServiceFactory;
 import kieker.diagnosis.architecture.service.properties.PropertiesService;
 import kieker.diagnosis.service.data.MethodCall;
 import kieker.diagnosis.service.settings.MethodAppearance;
 import kieker.diagnosis.service.settings.properties.MethodAppearanceProperty;
 
 /**
- * This is a cell factory for a table which shows the method of a method call in the configured manner. It has to be in the CDI context, as it has to have
- * access to the application properties.
+ * This is a cell factory for a table which shows the method of a method call in the configured manner.
  *
  * @author Nils Christian Ehmke
  */
-@Singleton
 public class MethodCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>> {
 
-	@Inject
-	private PropertiesService ivPropertiesService;
+	private final PropertiesService ivPropertiesService = ServiceFactory.getService( PropertiesService.class );
 
 	@Override
 	public ObservableValue<String> call( final CellDataFeatures<MethodCall, String> aParam ) {

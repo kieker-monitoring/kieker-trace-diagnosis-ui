@@ -1,4 +1,8 @@
 3.0.0
+	29 Oct 2017
+	Internal Improvement (TRACEUI-7)
+	A service factory can now be used to access the CDI context from a static context.
+	
 	27 Oct 2017
 	Internal Improvement (TRACEUI-5)
 	Dialog views share now a common (architectural) base.

@@ -16,8 +16,6 @@
 
 package kieker.diagnosis.ui.tabs.methods;
 
-import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.google.inject.Singleton;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -94,8 +92,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 		getController( ).performInitialize( );
 	}
 
-	@Inject
-	public MethodsView( final Injector aInjector ) {
+	public MethodsView( ) {
 
 		// Filter
 		{
@@ -300,7 +297,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 
 			{
 				final TableColumn<MethodCall, String> column = new TableColumn<>( );
-				column.setCellValueFactory( aInjector.getInstance( ClassCellValueFactory.class ) );
+				column.setCellValueFactory( new ClassCellValueFactory( ) );
 				column.setText( getLocalizedString( "columnClass" ) );
 				column.setPrefWidth( 200 );
 
@@ -309,7 +306,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 
 			{
 				final TableColumn<MethodCall, String> column = new TableColumn<>( );
-				column.setCellValueFactory( aInjector.getInstance( MethodCellValueFactory.class ) );
+				column.setCellValueFactory( new MethodCellValueFactory( ) );
 				column.setText( getLocalizedString( "columnMethod" ) );
 				column.setPrefWidth( 400 );
 
@@ -318,7 +315,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 
 			{
 				ivDurationColumn = new TableColumn<>( );
-				ivDurationColumn.setCellValueFactory( aInjector.getInstance( DurationCellValueFactory.class ) );
+				ivDurationColumn.setCellValueFactory( new DurationCellValueFactory( ) );
 				ivDurationColumn.setText( getLocalizedString( "columnDuration" ) );
 				ivDurationColumn.setPrefWidth( 150 );
 
@@ -327,7 +324,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 
 			{
 				final TableColumn<MethodCall, String> column = new TableColumn<>( );
-				column.setCellValueFactory( aInjector.getInstance( TimestampCellValueFactory.class ) );
+				column.setCellValueFactory( new TimestampCellValueFactory( ) );
 				column.setText( getLocalizedString( "columnTimestamp" ) );
 				column.setPrefWidth( 150 );
 
