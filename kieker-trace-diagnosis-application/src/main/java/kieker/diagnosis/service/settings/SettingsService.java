@@ -82,7 +82,7 @@ public class SettingsService extends ServiceBase {
 				suffix = "[h]";
 			break;
 			case MICROSECONDS:
-				suffix = "[µs]";
+				suffix = "[Âµs]";
 			break;
 			case MILLISECONDS:
 				suffix = "[ms]";
