@@ -1,4 +1,8 @@
 2.0.0:
+	03 Nov 2017
+	Bug (TRACEUI-8)
+	Corrected the encoding of the localization under Linux.
+	
 	27 Oct 2017
 	Bug (TRACEUI-6)
 	The settings dialog does no longer report the settings as changed, when the cancel button is used.
