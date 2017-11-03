@@ -20,6 +20,7 @@
 		<dependency.plugin.version>3.0.2</dependency.plugin.version>
 		<aopalliance.version>1.0</aopalliance.version>
 		<guava.version>19.0</guava.version>
+		<resources.plugin.version>3.0.2</resources.plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -114,6 +115,11 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>
 					<version>${dependency.plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>${resources.plugin.version}</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
