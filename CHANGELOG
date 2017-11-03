@@ -36,6 +36,18 @@
 	The tool now uses and requires Java 9
 
 2.0.0:
+	03 Nov 2017
+	Bug (TRACEUI-8)
+	Corrected the encoding of the localization under Linux.
+	
+	27 Oct 2017
+	Bug (TRACEUI-6)
+	The settings dialog does no longer report the settings as changed, when the cancel button is used.
+	
+	20 Oct 2017
+	Bug (TRACEUI-2)
+	The number of processed bytes is now correctly calculated, when mutiple monitoring log directories are loaded.
+
 	13 Oct 2017  
 	Major refactoring (#54)
 	
