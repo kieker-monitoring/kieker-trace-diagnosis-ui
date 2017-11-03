@@ -62,6 +62,7 @@
 						<descriptor>assembly/src.xml</descriptor>
 					</descriptors>
 					<finalName>Kieker-Trace-Diagnosis-${project.version}</finalName>
+					<tarLongFileMode>gnu</tarLongFileMode>
 				</configuration>
 
 				<executions>
