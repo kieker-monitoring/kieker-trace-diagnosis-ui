@@ -1,4 +1,8 @@
 3.0.0
+	04 Nov 2017
+	Internal Improvement (TRACEUI-9)
+	Removed the source archive from the release engineering build, as the sources can be downloaded from Github.
+	
 	29 Oct 2017
 	Internal Improvement (TRACEUI-7)
 	A service factory can now be used to access the CDI context from a static context.

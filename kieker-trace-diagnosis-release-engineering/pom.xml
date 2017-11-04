@@ -59,7 +59,6 @@
 					<descriptors>
 						<descriptor>assembly/bin-windows.xml</descriptor>
 						<descriptor>assembly/bin-linux.xml</descriptor>
-						<descriptor>assembly/src.xml</descriptor>
 					</descriptors>
 					<finalName>Kieker-Trace-Diagnosis-${project.version}</finalName>
 					<tarLongFileMode>gnu</tarLongFileMode>
