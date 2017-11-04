@@ -1,0 +1,310 @@
+/***************************************************************************
+ * Copyright 2015-2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
+package kieker.diagnosis.ui.dialogs.monitoring;
+
+import com.google.inject.Singleton;
+
+import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ComboBoxBase;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.StageStyle;
+import kieker.diagnosis.architecture.monitoring.Timer;
+import kieker.diagnosis.architecture.monitoring.Writer;
+import kieker.diagnosis.architecture.ui.DialogViewBase;
+import kieker.diagnosis.architecture.ui.EnumStringConverter;
+import kieker.diagnosis.architecture.ui.components.IntegerTextField;
+
+/**
+ * The view of the monitoring dialog.
+ *
+ * @author Nils Christian Ehmke
+ */
+@Singleton
+public class MonitoringDialogView extends DialogViewBase<MonitoringDialogController, Void> {
+
+	private Label ivStatus;
+	private CheckBox ivActive;
+	private TextField ivOutputDirectory;
+	private ComboBox<Timer> ivTimer;
+	private ComboBox<Writer> ivWriter;
+	private IntegerTextField ivMaxEntriesPerFile;
+	private IntegerTextField ivQueueSize;
+	private IntegerTextField ivBuffer;
+
+	public MonitoringDialogView( ) {
+		super( Modality.WINDOW_MODAL, StageStyle.DECORATED, MonitoringDialogController::performRefresh, true );
+
+		setSpacing( 10 );
+
+		{
+			final GridPane gridPane = new GridPane( );
+			VBox.setMargin( gridPane, new Insets( 10, 10, 0, 10 ) );
+			gridPane.setVgap( 5 );
+			gridPane.setHgap( 5 );
+
+			int rowIndex = 0;
+
+			{
+				final Label label = new Label( );
+				label.setText( getLocalizedString( "status" ) );
+
+				GridPane.setRowIndex( label, rowIndex );
+				GridPane.setColumnIndex( label, 1 );
+
+				gridPane.getChildren( ).add( label );
+			}
+
+			{
+				ivStatus = new Label( );
+				ivStatus.setMaxWidth( Double.POSITIVE_INFINITY );
+				ivStatus.getStyleClass( ).add( "status" );
+
+				GridPane.setRowIndex( ivStatus, rowIndex++ );
+				GridPane.setColumnIndex( ivStatus, 2 );
+				GridPane.setHgrow( ivStatus, Priority.ALWAYS );
+
+				gridPane.getChildren( ).add( ivStatus );
+			}
+
+			{
+				final Label label = new Label( );
+				label.setText( getLocalizedString( "active" ) );
+
+				GridPane.setRowIndex( label, rowIndex );
+				GridPane.setColumnIndex( label, 1 );
+
+				gridPane.getChildren( ).add( label );
+			}
+
+			{
+				ivActive = new CheckBox( );
+				ivActive.setMaxWidth( Double.POSITIVE_INFINITY );
+
+				GridPane.setRowIndex( ivActive, rowIndex++ );
+				GridPane.setColumnIndex( ivActive, 2 );
+
+				gridPane.getChildren( ).add( ivActive );
+			}
+
+			{
+				final Label label = new Label( );
+				label.setText( getLocalizedString( "outputDirectory" ) );
+
+				GridPane.setRowIndex( label, rowIndex );
+				GridPane.setColumnIndex( label, 1 );
+
+				gridPane.getChildren( ).add( label );
+			}
+
+			{
+				ivOutputDirectory = new TextField( );
+				ivOutputDirectory.setMaxWidth( Double.POSITIVE_INFINITY );
+
+				GridPane.setRowIndex( ivOutputDirectory, rowIndex++ );
+				GridPane.setColumnIndex( ivOutputDirectory, 2 );
+
+				gridPane.getChildren( ).add( ivOutputDirectory );
+			}
+
+			{
+				final Label label = new Label( );
+				label.setText( getLocalizedString( "timer" ) );
+
+				GridPane.setRowIndex( label, rowIndex );
+				GridPane.setColumnIndex( label, 1 );
+
+				gridPane.getChildren( ).add( label );
+			}
+
+			{
+				ivTimer = new ComboBox<>( );
+				ivTimer.setMaxWidth( Double.POSITIVE_INFINITY );
+				ivTimer.setConverter( new EnumStringConverter<>( Timer.class ) );
+				ivTimer.setItems( FXCollections.observableArrayList( Timer.values( ) ) );
+
+				GridPane.setRowIndex( ivTimer, rowIndex++ );
+				GridPane.setColumnIndex( ivTimer, 2 );
+
+				gridPane.getChildren( ).add( ivTimer );
+			}
+
+			{
+				final Label label = new Label( );
+				label.setText( getLocalizedString( "writer" ) );
+
+				GridPane.setRowIndex( label, rowIndex );
+				GridPane.setColumnIndex( label, 1 );
+
+				gridPane.getChildren( ).add( label );
+			}
+
+			{
+				ivWriter = new ComboBox<>( );
+				ivWriter.setMaxWidth( Double.POSITIVE_INFINITY );
+				ivWriter.setConverter( new EnumStringConverter<>( Writer.class ) );
+				ivWriter.setItems( FXCollections.observableArrayList( Writer.values( ) ) );
+
+				GridPane.setRowIndex( ivWriter, rowIndex++ );
+				GridPane.setColumnIndex( ivWriter, 2 );
+
+				gridPane.getChildren( ).add( ivWriter );
+			}
+
+			{
+				final Label label = new Label( );
+				label.setText( getLocalizedString( "maxEntriesPerFile" ) );
+
+				GridPane.setRowIndex( label, rowIndex );
+				GridPane.setColumnIndex( label, 1 );
+
+				gridPane.getChildren( ).add( label );
+			}
+
+			{
+				ivMaxEntriesPerFile = new IntegerTextField( );
+				ivMaxEntriesPerFile.setMaxWidth( Double.POSITIVE_INFINITY );
+
+				GridPane.setRowIndex( ivMaxEntriesPerFile, rowIndex++ );
+				GridPane.setColumnIndex( ivMaxEntriesPerFile, 2 );
+
+				gridPane.getChildren( ).add( ivMaxEntriesPerFile );
+			}
+
+			{
+				final Label label = new Label( );
+				label.setText( getLocalizedString( "queueSize" ) );
+
+				GridPane.setRowIndex( label, rowIndex );
+				GridPane.setColumnIndex( label, 1 );
+
+				gridPane.getChildren( ).add( label );
+			}
+
+			{
+				ivQueueSize = new IntegerTextField( );
+				ivQueueSize.setMaxWidth( Double.POSITIVE_INFINITY );
+
+				GridPane.setRowIndex( ivQueueSize, rowIndex++ );
+				GridPane.setColumnIndex( ivQueueSize, 2 );
+
+				gridPane.getChildren( ).add( ivQueueSize );
+			}
+
+			{
+				final Label label = new Label( );
+				label.setText( getLocalizedString( "buffer" ) );
+
+				GridPane.setRowIndex( label, rowIndex );
+				GridPane.setColumnIndex( label, 1 );
+
+				gridPane.getChildren( ).add( label );
+			}
+
+			{
+				ivBuffer = new IntegerTextField( );
+				ivBuffer.setMaxWidth( Double.POSITIVE_INFINITY );
+
+				GridPane.setRowIndex( ivBuffer, rowIndex++ );
+				GridPane.setColumnIndex( ivBuffer, 2 );
+
+				gridPane.getChildren( ).add( ivBuffer );
+			}
+
+			getChildren( ).add( gridPane );
+		}
+
+		{
+			final Separator separator = new Separator( );
+
+			getChildren( ).add( separator );
+		}
+
+		{
+			final ButtonBar buttonBar = new ButtonBar( );
+			VBox.setMargin( buttonBar, new Insets( 10 ) );
+
+			{
+				final Button button = new Button( );
+				button.setText( getLocalizedString( "cancel" ) );
+				button.setCancelButton( true );
+				button.setOnAction( e -> getController( ).performClose( ) );
+
+				buttonBar.getButtons( ).add( button );
+			}
+			{
+				final Button button = new Button( );
+				button.setText( getLocalizedString( "ok" ) );
+				button.setDefaultButton( true );
+				button.setOnAction( e -> {
+					getController( ).performSaveAndClose( );
+				} );
+
+				buttonBar.getButtons( ).add( button );
+			}
+
+			getChildren( ).add( buttonBar );
+		}
+	}
+
+	@Override
+	public void setParameter( final Object aParameter ) {
+	}
+
+	Label getStatus( ) {
+		return ivStatus;
+	}
+
+	CheckBox getActive( ) {
+		return ivActive;
+	}
+
+	TextField getOutputDirectory( ) {
+		return ivOutputDirectory;
+	}
+
+	ComboBoxBase<Timer> getTimer( ) {
+		return ivTimer;
+	}
+
+	ComboBoxBase<Writer> getWriter( ) {
+		return ivWriter;
+	}
+
+	IntegerTextField getMaxEntriesPerFile( ) {
+		return ivMaxEntriesPerFile;
+	}
+
+	IntegerTextField getQueueSize( ) {
+		return ivQueueSize;
+	}
+
+	IntegerTextField getBuffer( ) {
+		return ivBuffer;
+	}
+
+}

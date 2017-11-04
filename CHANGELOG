@@ -1,3 +1,44 @@
+3.0.0
+	04 Nov 2017
+	Internal Improvement (TRACEUI-9)
+	Removed the source archive from the release engineering build, as the sources can be downloaded from Github.
+	
+	29 Oct 2017
+	Internal Improvement (TRACEUI-7)
+	A service factory can now be used to access the CDI context from a static context.
+	
+	27 Oct 2017
+	Internal Improvement (TRACEUI-5)
+	Dialog views share now a common (architectural) base.
+
+	20 Oct 2017
+	Feature (TRACEUI-3)
+	The tool supports now the writing and reading of ascii monitoring logs.
+
+	19 Oct 2017
+	Feature (Github Issue #3)
+	The application saves now the last used path for the CSV export.
+
+	16 Oct 2017
+	Internal Improvement (#59)
+	The internal monitoring uses now Kieker 1.13.
+
+	15 Oct 2017
+	Internal Improvement (#58)
+	Added own implementations for numeric text fields.
+	
+	14 Oct 2017
+	Internal Improvement (#57)
+	The method aggregation has been accelerated, which leads to a faster import.
+	
+	14 Oct 2017
+	Internal Improvement (#56)
+	The application module is now separated into two modules.
+	
+	14 Oct 2017
+	Internal Improvement (#55)
+	The tool now uses and requires Java 9
+
 2.0.0:
 	03 Nov 2017
 	Bug (TRACEUI-8)

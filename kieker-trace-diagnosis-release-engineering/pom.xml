@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>net.kieker-monitoring</groupId>
 		<artifactId>kieker-trace-diagnosis-parent</artifactId>
-		<version>2.0.0</version>
+		<version>3.0.0-SNAPSHOT</version>
 		<relativePath>../kieker-trace-diagnosis-parent</relativePath>
 	</parent>
 
@@ -15,7 +15,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>net.kieker-monitoring</groupId>
-			<artifactId>kieker-trace-diagnosis-application</artifactId>
+			<artifactId>kieker-trace-diagnosis-application-ui</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
@@ -59,7 +59,6 @@
 					<descriptors>
 						<descriptor>assembly/bin-windows.xml</descriptor>
 						<descriptor>assembly/bin-linux.xml</descriptor>
-						<descriptor>assembly/src.xml</descriptor>
 					</descriptors>
 					<finalName>Kieker-Trace-Diagnosis-${project.version}</finalName>
 					<tarLongFileMode>gnu</tarLongFileMode>

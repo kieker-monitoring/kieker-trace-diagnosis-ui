@@ -5,12 +5,12 @@
 
 	<groupId>net.kieker-monitoring</groupId>
 	<artifactId>kieker-trace-diagnosis-dependencies</artifactId>
-	<version>2.0.0</version>
+	<version>3.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<properties>
 		<appassembler.plugin.version>2.0.0</appassembler.plugin.version>
-		<kieker.version>1.12</kieker.version>
+		<kieker.version>1.13</kieker.version>
 		<guice.version>4.1.0</guice.version>
 		<hppc.version>0.7.2</hppc.version>
 		<log4j.version>2.9.1</log4j.version>
@@ -20,6 +20,7 @@
 		<dependency.plugin.version>3.0.2</dependency.plugin.version>
 		<aopalliance.version>1.0</aopalliance.version>
 		<guava.version>19.0</guava.version>
+		<maven.compiler.version>3.7.0</maven.compiler.version>
 		<resources.plugin.version>3.0.2</resources.plugin.version>
 	</properties>
 
@@ -28,17 +29,17 @@
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>kieker-trace-diagnosis-architecture</artifactId>
-				<version>2.0.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
-				<artifactId>kieker-trace-diagnosis-application</artifactId>
-				<version>2.0.0</version>
+				<artifactId>kieker-trace-diagnosis-application-ui</artifactId>
+				<version>3.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
-				<artifactId>kieker-trace-diagnosis-guitest-architecture</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<artifactId>kieker-trace-diagnosis-application-service</artifactId>
+				<version>3.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
@@ -107,6 +108,11 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven.compiler.version}</version>
+				</plugin>
+				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>appassembler-maven-plugin</artifactId>
 					<version>${appassembler.plugin.version}</version>
@@ -115,6 +121,15 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>
 					<version>${dependency.plugin.version}</version>
+
+					<!-- This is currently necessary for Java 9 -->
+					<dependencies>
+						<dependency>
+							<groupId>org.ow2.asm</groupId>
+							<artifactId>asm</artifactId>
+							<version>6.0</version>
+						</dependency>
+					</dependencies>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

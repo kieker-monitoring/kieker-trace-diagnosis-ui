@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2015-2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.diagnosis.architecture.service;
 
 import java.lang.reflect.Field;
@@ -6,9 +22,6 @@ import java.util.ResourceBundle;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import com.google.inject.Inject;
-import com.google.inject.Injector;
 
 import kieker.diagnosis.architecture.common.ClassUtil;
 import kieker.diagnosis.architecture.exception.TechnicalException;
@@ -24,9 +37,6 @@ public abstract class ServiceBase {
 	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle( ClassUtil.getRealName( getClass( ) ) );
 
 	private static Logger cvLogger;
-
-	@Inject
-	private Injector ivInjector;
 
 	/**
 	 * This constructor can be used if the implementing service has non-static fields. Use this with care, as services should usually have no state.
@@ -66,7 +76,7 @@ public abstract class ServiceBase {
 	 * @return The service.
 	 */
 	protected final <S extends ServiceBase> S getService( final Class<S> aServiceClass ) {
-		return ivInjector.getInstance( aServiceClass );
+		return ServiceFactory.getService( aServiceClass );
 	}
 
 	/**

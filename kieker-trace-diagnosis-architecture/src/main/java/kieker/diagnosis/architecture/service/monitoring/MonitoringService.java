@@ -1,4 +1,22 @@
+/***************************************************************************
+ * Copyright 2015-2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.diagnosis.architecture.service.monitoring;
+
+import java.util.concurrent.LinkedBlockingQueue;
 
 import com.google.inject.Singleton;
 
@@ -12,10 +30,11 @@ import kieker.diagnosis.architecture.service.ServiceBase;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.timer.SystemMilliTimer;
 import kieker.monitoring.timer.SystemNanoTimer;
-import kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter;
-import kieker.monitoring.writer.filesystem.AsyncBinaryNFsWriter;
+import kieker.monitoring.writer.filesystem.AsciiFileWriter;
+import kieker.monitoring.writer.filesystem.BinaryFileWriter;
 
 /**
  * This service can be used to control the monitoring within the application (and from within the application).
@@ -61,7 +80,7 @@ public class MonitoringService extends ServiceBase {
 			currentConfiguration.setOutputDirectory( System.getProperty( "java.io.tmpdir" ) );
 			currentConfiguration.setQueueSize( 100000 );
 			currentConfiguration.setTimer( Timer.NANO );
-			currentConfiguration.setWriter( Writer.BINARY_FS );
+			currentConfiguration.setWriter( Writer.BINARY_WRITER );
 		}
 
 		return currentConfiguration;
@@ -104,19 +123,27 @@ public class MonitoringService extends ServiceBase {
 			final String maxEntriesPerFile = Integer.toString( aConfiguration.getMaxEntriesPerFile( ) );
 			final String queueSize = Integer.toString( aConfiguration.getQueueSize( ) );
 			final String bufferSize = Integer.toString( aConfiguration.getBuffer( ) );
+			configuration.setProperty( WriterController.PREFIX + WriterController.RECORD_QUEUE_SIZE, queueSize );
+			configuration.setProperty( WriterController.PREFIX + WriterController.RECORD_QUEUE_FQN, LinkedBlockingQueue.class.getName( ) );
 
-			if ( aConfiguration.getWriter( ) == Writer.BINARY_FS ) {
-				configuration.setProperty( ConfigurationFactory.WRITER_CLASSNAME, AsyncBinaryFsWriter.class.getName( ) );
-				configuration.setProperty( AsyncBinaryFsWriter.class.getName( ) + "." + AsyncBinaryFsWriter.CONFIG_PATH, aConfiguration.getOutputDirectory( ) );
-				configuration.setProperty( AsyncBinaryFsWriter.class.getName( ) + "." + AsyncBinaryFsWriter.CONFIG_MAXENTRIESINFILE, maxEntriesPerFile );
-				configuration.setProperty( AsyncBinaryFsWriter.class.getName( ) + "." + AsyncBinaryFsWriter.CONFIG_QUEUESIZE, queueSize );
-				configuration.setProperty( AsyncBinaryFsWriter.CONFIG_BUFFER, bufferSize );
-			} else {
-				configuration.setProperty( ConfigurationFactory.WRITER_CLASSNAME, AsyncBinaryNFsWriter.class.getName( ) );
-				configuration.setProperty( AsyncBinaryNFsWriter.class.getName( ) + "." + AsyncBinaryFsWriter.CONFIG_PATH, aConfiguration.getOutputDirectory( ) );
-				configuration.setProperty( AsyncBinaryNFsWriter.class.getName( ) + "." + AsyncBinaryFsWriter.CONFIG_MAXENTRIESINFILE, maxEntriesPerFile );
-				configuration.setProperty( AsyncBinaryNFsWriter.class.getName( ) + "." + AsyncBinaryFsWriter.CONFIG_QUEUESIZE, queueSize );
-				configuration.setProperty( AsyncBinaryNFsWriter.CONFIG_BUFFER, bufferSize );
+			switch ( aConfiguration.getWriter( ) ) {
+				case ASCII_WRITER:
+					configuration.setProperty( ConfigurationFactory.WRITER_CLASSNAME, AsciiFileWriter.class.getName( ) );
+					configuration.setProperty( AsciiFileWriter.CONFIG_PATH, aConfiguration.getOutputDirectory( ) );
+					configuration.setProperty( AsciiFileWriter.CONFIG_MAXENTRIESINFILE, maxEntriesPerFile );
+					configuration.setProperty( AsciiFileWriter.CONFIG_CHARSET_NAME, "UTF-8" );
+					configuration.setProperty( AsciiFileWriter.CONFIG_FLUSH_MAPFILE, "true" );
+				break;
+				case BINARY_WRITER:
+					configuration.setProperty( ConfigurationFactory.WRITER_CLASSNAME, BinaryFileWriter.class.getName( ) );
+					configuration.setProperty( BinaryFileWriter.CONFIG_PATH, aConfiguration.getOutputDirectory( ) );
+					configuration.setProperty( BinaryFileWriter.CONFIG_MAXENTRIESINFILE, maxEntriesPerFile );
+					configuration.setProperty( BinaryFileWriter.CONFIG_BUFFERSIZE, bufferSize );
+					configuration.setProperty( BinaryFileWriter.CONFIG_FLUSH_MAPFILE, "true" );
+				break;
+				default:
+				break;
+
 			}
 
 			// Controller
