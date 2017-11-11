@@ -1,4 +1,8 @@
 3.0.0
+	11 Nov 2017
+	Bug (TRACEUI-10)
+	Fixed a bug where the tool encountered a division by zero, when the process duration was zero milliseconds.
+	
 	04 Nov 2017
 	Internal Improvement (TRACEUI-9)
 	Removed the source archive from the release engineering build, as the sources can be downloaded from Github.

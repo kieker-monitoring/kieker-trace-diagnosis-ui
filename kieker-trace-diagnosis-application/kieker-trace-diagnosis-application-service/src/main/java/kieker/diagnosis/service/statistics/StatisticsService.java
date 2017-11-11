@@ -42,7 +42,13 @@ public class StatisticsService extends ServiceBase {
 
 			statistics.setProcessDuration( monitoringLogService.getProcessDuration( ) );
 			statistics.setProcessedBytes( monitoringLogService.getProcessedBytes( ) );
-			statistics.setProcessSpeed( statistics.getProcessedBytes( ) / statistics.getProcessDuration( ) );
+
+			// TRACEUI-10 [Occasional division by zero]
+			final long processDuration = statistics.getProcessDuration( );
+			if ( processDuration != 0L ) {
+				statistics.setProcessSpeed( statistics.getProcessedBytes( ) / processDuration );
+			}
+
 			statistics.setIgnoredRecords( monitoringLogService.getIgnoredRecords( ) );
 			statistics.setDanglingRecords( monitoringLogService.getDanglingRecords( ) );
 			statistics.setIncompleteTraces( monitoringLogService.getIncompleteTraces( ) );
