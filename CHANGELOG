@@ -1,4 +1,8 @@
 3.0.0
+	20 Dec 2017
+	Feature (TRACEUI-11)
+	If none of the readers can read the monitoring log, an information dialog is shown to the user.
+	
 	11 Nov 2017
 	Bug (TRACEUI-10)
 	Fixed a bug where the tool encountered a division by zero, when the process duration was zero milliseconds.

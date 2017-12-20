@@ -24,6 +24,7 @@ import java.util.List;
 import com.google.inject.Singleton;
 
 import kieker.diagnosis.architecture.exception.BusinessException;
+import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
 import kieker.diagnosis.architecture.exception.TechnicalException;
 import kieker.diagnosis.architecture.service.ServiceBase;
 import kieker.diagnosis.service.data.reader.AsciiFileReader;
@@ -68,20 +69,28 @@ public class MonitoringLogService extends ServiceBase {
 			readerList.add( new BinaryFileReader( temporaryRepository ) );
 			readerList.add( new AsciiFileReader( temporaryRepository ) );
 
+			boolean directoryImported = false;
+
 			for ( final Reader reader : readerList ) {
 				if ( reader.shouldBeExecuted( aDirectory ) ) {
 					reader.readFromDirectory( aDirectory );
+					directoryImported = true;
 				}
 			}
 
 			temporaryRepository.finish( );
+
+			if ( !directoryImported ) {
+				// No reader felt responsible for the import directory. We inform the user.
+				throw new BusinessException( getLocalizedString( "errorMessageUnknownMonitoringLog" ) );
+			}
 
 			setDataAvailable( aDirectory, tin );
 		} catch ( final BusinessException ex ) {
 			// A business exception means, that something went wrong, but that the data is partially available
 			setDataAvailable( aDirectory, tin );
 
-			throw ex;
+			throw new BusinessRuntimeException( ex );
 		} catch ( final Exception ex ) {
 			throw new TechnicalException( getLocalizedString( "errorMessageImportFailed" ), ex );
 		}
