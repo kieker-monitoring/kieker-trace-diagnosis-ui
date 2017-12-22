@@ -85,6 +85,12 @@ public class MonitoringLogService extends ServiceBase {
 				throw new BusinessException( getLocalizedString( "errorMessageUnknownMonitoringLog" ) );
 			}
 
+			if ( ivIgnoredRecords > 0 && ivTraceRoots.size( ) == 0 ) {
+				// No traces have been reconstructed and records have been ignored. We inform the user.
+				final String msg = String.format( getLocalizedString( "errorMessageNoTraceAndRecordsIgnored" ), ivIgnoredRecords );
+				throw new BusinessException( msg );
+			}
+
 			setDataAvailable( aDirectory, tin );
 		} catch ( final BusinessException ex ) {
 			// A business exception means, that something went wrong, but that the data is partially available

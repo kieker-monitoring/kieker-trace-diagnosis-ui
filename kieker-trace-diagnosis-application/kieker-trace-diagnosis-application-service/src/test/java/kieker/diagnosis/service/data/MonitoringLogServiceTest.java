@@ -353,9 +353,13 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	public void testIgnoreRecord( ) throws Exception {
+	public void testIgnoreRecordWithOtherTraces( ) throws Exception {
 		// Prepare the data
 		writeRecord( new CPUUtilizationRecord( 0L, "", "", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) );
+		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
+		writeRecord( new KiekerMetadataRecord( "0", "0", "0", 0, false, 0L, TimeUnit.SECONDS.name( ), 0 ) );
+		writeRecord( new BeforeOperationEvent( 10, 1L, 0, "op1", "class1" ) );
+		writeRecord( new AfterOperationFailedEvent( 20, 1L, 0, "op1", "class1", "cause" ) );
 		writeRecord( new CPUUtilizationRecord( 1L, "", "", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) );
 
 		writeMappingFile( );
@@ -366,8 +370,24 @@ public class MonitoringLogServiceTest {
 		ivService.importMonitoringLog( directory );
 
 		// Make sure that the import worked as intended
-		assertThat( ivService.getMethods( ), hasSize( 0 ) );
+		assertThat( ivService.getTraceRoots( ), hasSize( 1 ) );
 		assertThat( ivService.getIgnoredRecords( ), is( 2 ) );
+	}
+
+	@Test
+	public void testIgnoreRecord( ) throws Exception {
+		// Prepare the data
+		writeRecord( new CPUUtilizationRecord( 0L, "", "", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) );
+		writeRecord( new CPUUtilizationRecord( 1L, "", "", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) );
+
+		writeMappingFile( );
+		finishWriting( );
+
+		// Import the directory and make sure that a business exception occurs (because records
+		// where ignored, but no traces were reconstructed)
+		final File directory = ivTemporaryFolder.getRoot( );
+		ivExpectedException.expect( BusinessRuntimeException.class );
+		ivService.importMonitoringLog( directory );
 	}
 
 	@Test

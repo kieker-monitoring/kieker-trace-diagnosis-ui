@@ -1,4 +1,8 @@
 3.0.0
+	22 Dec 2017
+	Feature (TRACEUI-12)
+	If no trace can be reconstructed, but records are ignored, an information dialog is shown to the user.
+
 	20 Dec 2017
 	Feature (TRACEUI-11)
 	If none of the readers can read the monitoring log, an information dialog is shown to the user.
