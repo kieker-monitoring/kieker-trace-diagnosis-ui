@@ -49,6 +49,7 @@ import kieker.diagnosis.ui.dialogs.manual.ManualDialogView;
 import kieker.diagnosis.ui.dialogs.monitoring.MonitoringDialogView;
 import kieker.diagnosis.ui.dialogs.progress.ProgressDialog;
 import kieker.diagnosis.ui.dialogs.settings.SettingsDialogView;
+import kieker.diagnosis.ui.main.properties.CloseWithoutPromptProperty;
 import kieker.diagnosis.ui.main.properties.LastExportPathProperty;
 import kieker.diagnosis.ui.main.properties.LastImportPathProperty;
 import kieker.diagnosis.ui.tabs.methods.MethodsView;
@@ -118,7 +119,9 @@ public class MainController extends ControllerBase<MainViewModel> {
 	public void performClose( ) {
 		final PropertiesService propertiesService = getService( PropertiesService.class );
 		final boolean developmentMode = propertiesService.loadSystemProperty( DevelopmentModeProperty.class );
-		if ( developmentMode ) {
+		final boolean closeWithoutPrompt = propertiesService.loadApplicationProperty( CloseWithoutPromptProperty.class );
+
+		if ( developmentMode || closeWithoutPrompt ) {
 			// Just close the dialog
 			getViewModel( ).close( );
 		} else {
@@ -126,6 +129,13 @@ public class MainController extends ControllerBase<MainViewModel> {
 			final Alert alert = new Alert( AlertType.CONFIRMATION );
 			alert.setTitle( getLocalizedString( "titleReallyClose" ) );
 			alert.setHeaderText( getLocalizedString( "headerReallyClose" ) );
+
+			// Modify the buttons a little bit
+			alert.getButtonTypes( ).remove( ButtonType.OK );
+			alert.getButtonTypes( ).add( ButtonType.YES );
+
+			final ButtonType alwaysYesButtonType = new ButtonType( getLocalizedString( "buttonAlwaysYes" ) );
+			alert.getButtonTypes( ).add( alwaysYesButtonType );
 
 			// Add the logo
 			final String iconPath = getLocalizedString( "iconReallyClose" );
@@ -136,7 +146,11 @@ public class MainController extends ControllerBase<MainViewModel> {
 
 			// If the user clicked ok, we close the window
 			final Optional<ButtonType> result = alert.showAndWait( );
-			if ( result.isPresent( ) && result.get( ) == ButtonType.OK ) {
+			if ( result.isPresent( ) && ( result.get( ) == ButtonType.YES || result.get( ) == alwaysYesButtonType ) ) {
+				if ( result.get( ) == alwaysYesButtonType ) {
+					propertiesService.saveApplicationProperty( CloseWithoutPromptProperty.class, Boolean.TRUE );
+				}
+
 				getViewModel( ).close( );
 			}
 		}

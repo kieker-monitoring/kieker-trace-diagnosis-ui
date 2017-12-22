@@ -1,5 +1,9 @@
 3.0.0
 	22 Dec 2017
+	Feature (TRACEUI-14)
+	The user can now choose that the close prompt dialog is no longer shown.
+
+	22 Dec 2017
 	Feature (TRACEUI-12)
 	If no trace can be reconstructed, but records are ignored, an information dialog is shown to the user.
 
