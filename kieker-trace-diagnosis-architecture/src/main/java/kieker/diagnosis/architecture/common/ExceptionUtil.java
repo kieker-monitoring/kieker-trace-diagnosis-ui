@@ -1,17 +1,17 @@
-/*************************************************************************** 
- * Copyright 2015-2017 Kieker Project (http://kieker-monitoring.net)         
- *                                                                           
- * Licensed under the Apache License, Version 2.0 (the "License");           
- * you may not use this file except in compliance with the License.          
- * You may obtain a copy of the License at                                   
- *                                                                           
- *     http://www.apache.org/licenses/LICENSE-2.0                            
- *                                                                           
- * Unless required by applicable law or agreed to in writing, software       
- * distributed under the License is distributed on an "AS IS" BASIS,         
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  
- * See the License for the specific language governing permissions and       
- * limitations under the License.                                            
+/***************************************************************************
+ * Copyright 2015-2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  ***************************************************************************/
 
 package kieker.diagnosis.architecture.common;
@@ -31,6 +31,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
 
@@ -75,6 +76,9 @@ public class ExceptionUtil {
 			alert.setTitle( cvResourceBundle.getString( "errorTitle" ) );
 			alert.setHeaderText( cvResourceBundle.getString( "errorMessage" ) );
 			alert.setContentText( exception.getMessage( ) );
+
+			// Make sure that the alert dialog resizes to the required height (usually just necessary for Linux systems)
+			alert.getDialogPane( ).setMinHeight( Region.USE_PREF_SIZE );
 
 			if ( !isBusinessException ) {
 				// Convert the throwable into a string

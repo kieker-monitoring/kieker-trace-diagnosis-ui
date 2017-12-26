@@ -1,4 +1,8 @@
 3.0.0
+	25 Dec 2017
+	Bug (TRACEUI-15)
+	Fixed a bug where error dialogs on Linux systems did not show the full error message.
+
 	22 Dec 2017
 	Feature (TRACEUI-14)
 	The user can now choose that the close prompt dialog is no longer shown.
