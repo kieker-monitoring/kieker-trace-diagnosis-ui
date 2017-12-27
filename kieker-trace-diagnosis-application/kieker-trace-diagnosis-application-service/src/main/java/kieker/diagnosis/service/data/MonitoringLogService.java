@@ -56,7 +56,7 @@ public class MonitoringLogService extends ServiceBase {
 		super( false );
 	}
 
-	public void importMonitoringLog( final File aDirectory ) throws BusinessException {
+	public void importMonitoringLog( final File aDirectory ) {
 		final long tin = System.currentTimeMillis( );
 
 		try {

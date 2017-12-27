@@ -157,7 +157,7 @@ public final class BinaryFileReader extends Reader {
 						readUnknownRecord( byteBuffer, recordKey );
 					}
 				}
-			} catch ( final BufferUnderflowException ex ) {
+			} catch ( final BufferUnderflowException | IllegalArgumentException ex ) {
 				// The stream is incomplete. We still want to terminate the whole import in a useful manner.
 				ivTemporaryRepository.processException( ex );
 			}

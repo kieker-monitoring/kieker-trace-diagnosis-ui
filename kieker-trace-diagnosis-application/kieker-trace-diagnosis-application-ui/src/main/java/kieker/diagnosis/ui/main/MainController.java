@@ -185,11 +185,11 @@ public class MainController extends ControllerBase<MainViewModel> {
 
 			// Load the monitoring log
 			try {
-				BusinessException exception = null;
+				BusinessRuntimeException exception = null;
 				final MonitoringLogService monitoringLogService = getService( MonitoringLogService.class );
 				try {
 					monitoringLogService.importMonitoringLog( ivDirectory );
-				} catch ( final BusinessException ex ) {
+				} catch ( final BusinessRuntimeException ex ) {
 					// If a business exception occurs, we still want to refresh, but we also want to display the exception.
 					exception = ex;
 				}
