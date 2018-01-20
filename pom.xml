@@ -5,7 +5,7 @@
 
 	<groupId>net.kieker-monitoring</groupId>
 	<artifactId>kieker-trace-diagnosis</artifactId>
-	<version>3.0.0.RC3-SNAPSHOT</version>
+	<version>3.0.0</version>
 	<packaging>pom</packaging>
 
 	<name>Kieker Trace Diagnosis</name>
