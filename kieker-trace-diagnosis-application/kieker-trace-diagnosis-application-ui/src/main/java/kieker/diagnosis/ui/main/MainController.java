@@ -40,6 +40,7 @@ import kieker.diagnosis.architecture.service.properties.PropertiesService;
 import kieker.diagnosis.architecture.ui.ControllerBase;
 import kieker.diagnosis.architecture.ui.ViewBase;
 import kieker.diagnosis.service.data.AggregatedMethodCall;
+import kieker.diagnosis.service.data.ImportType;
 import kieker.diagnosis.service.data.MethodCall;
 import kieker.diagnosis.service.data.MonitoringLogService;
 import kieker.diagnosis.service.export.CSVData;
@@ -77,10 +78,7 @@ public class MainController extends ControllerBase<MainViewModel> {
 		final DirectoryChooser directoryChooser = new DirectoryChooser( );
 		directoryChooser.setTitle( getLocalizedString( "titleImportLog" ) );
 
-		// Set an initial directory if possible
-		final PropertiesService propertiesService = getService( PropertiesService.class );
-		final String lastImportPath = propertiesService.loadApplicationProperty( LastImportPathProperty.class );
-		final File lastImportDirectory = new File( lastImportPath );
+		final File lastImportDirectory = getInitialDirectory( );
 		if ( lastImportDirectory.isDirectory( ) ) {
 			directoryChooser.setInitialDirectory( lastImportDirectory );
 		}
@@ -88,12 +86,46 @@ public class MainController extends ControllerBase<MainViewModel> {
 		final File directory = directoryChooser.showDialog( getViewModel( ).getWindow( ) );
 		if ( directory != null ) {
 			// Remember the directory as initial directory for the next time
-			if ( !directory.equals( lastImportDirectory ) ) {
-				propertiesService.saveApplicationProperty( LastImportPathProperty.class, directory.getAbsolutePath( ) );
-			}
+			setNewInitialDirectory( lastImportDirectory, directory );
 
-			final ImportThread importThread = new ImportThread( directory );
+			final ImportThread importThread = new ImportThread( directory, ImportType.DIRECTORY );
 			importThread.start( );
+		}
+	}
+
+	/**
+	 * This action is performed, when the user wants to import a monitoring log from a ZIP file.
+	 */
+	public void performImportLogFromZip( ) {
+		final FileChooser fileChooser = new FileChooser( );
+		fileChooser.setTitle( getLocalizedString( "titleImportLog" ) );
+
+		final File lastImportDirectory = getInitialDirectory( );
+		if ( lastImportDirectory.isDirectory( ) ) {
+			fileChooser.setInitialDirectory( lastImportDirectory );
+		}
+
+		final File file = fileChooser.showOpenDialog( getViewModel( ).getWindow( ) );
+		if ( file != null ) {
+			// Remember the directory as initial directory for the next time
+			final File directory = file.getParentFile( );
+			setNewInitialDirectory( lastImportDirectory, directory );
+
+			final ImportThread importThread = new ImportThread( file, ImportType.ZIP_FILE );
+			importThread.start( );
+		}
+	}
+
+	private File getInitialDirectory( ) {
+		final PropertiesService propertiesService = getService( PropertiesService.class );
+		final String lastImportPath = propertiesService.loadApplicationProperty( LastImportPathProperty.class );
+		return new File( lastImportPath );
+	}
+
+	private void setNewInitialDirectory( final File lastImportDirectory, final File directory ) {
+		final PropertiesService propertiesService = getService( PropertiesService.class );
+		if ( !directory.equals( lastImportDirectory ) ) {
+			propertiesService.saveApplicationProperty( LastImportPathProperty.class, directory.getAbsolutePath( ) );
 		}
 	}
 
@@ -166,10 +198,12 @@ public class MainController extends ControllerBase<MainViewModel> {
 
 	private class ImportThread extends Thread {
 
-		private final File ivDirectory;
+		private final File ivDirectoryOrFile;
+		private final ImportType ivType;
 
-		public ImportThread( final File aDirectory ) {
-			ivDirectory = aDirectory;
+		public ImportThread( final File aDirectoryOrFile, final ImportType aType ) {
+			ivDirectoryOrFile = aDirectoryOrFile;
+			ivType = aType;
 			setName( "Monitoring Import Thread" );
 		}
 
@@ -183,12 +217,12 @@ public class MainController extends ControllerBase<MainViewModel> {
 				importerDialogView.open( getViewModel( ).getWindow( ) );
 			} );
 
-			// Load the monitoring log
 			try {
+				// Load the monitoring log
 				BusinessRuntimeException exception = null;
 				final MonitoringLogService monitoringLogService = getService( MonitoringLogService.class );
 				try {
-					monitoringLogService.importMonitoringLog( ivDirectory );
+					monitoringLogService.importMonitoringLog( ivDirectoryOrFile, ivType );
 				} catch ( final BusinessRuntimeException ex ) {
 					// If a business exception occurs, we still want to refresh, but we also want to display the exception.
 					exception = ex;

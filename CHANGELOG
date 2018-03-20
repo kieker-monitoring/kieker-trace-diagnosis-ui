@@ -1,3 +1,8 @@
+3.1.0
+	20 Mar 2018
+	Feature (TRACEUI-16)
+	Monitoring logs can now be read directly from a ZIP file.
+
 3.0.0
 	25 Dec 2017
 	Bug (TRACEUI-15)

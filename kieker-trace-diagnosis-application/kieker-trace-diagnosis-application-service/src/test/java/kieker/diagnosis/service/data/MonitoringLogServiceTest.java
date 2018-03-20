@@ -90,7 +90,7 @@ public class MonitoringLogServiceTest {
 
 		// Make sure that an exception occurs
 		ivExpectedException.expect( BusinessRuntimeException.class );
-		ivService.importMonitoringLog( directory );
+		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 	}
 
 	@Test
@@ -106,7 +106,7 @@ public class MonitoringLogServiceTest {
 
 		// Import the directory
 		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory );
+		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( ivService.getMethods( ), hasSize( 2 ) );
@@ -133,7 +133,7 @@ public class MonitoringLogServiceTest {
 
 		// Import the directory
 		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory );
+		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( ivService.getMethods( ), hasSize( 4 ) );
@@ -155,7 +155,7 @@ public class MonitoringLogServiceTest {
 
 		// Import the directory
 		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory );
+		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( ivService.getMethods( ), hasSize( 2 ) );
@@ -181,7 +181,7 @@ public class MonitoringLogServiceTest {
 
 		// Import the directory
 		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory );
+		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( ivService.getMethods( ), hasSize( 4 ) );
@@ -210,7 +210,7 @@ public class MonitoringLogServiceTest {
 
 		// Import the directory
 		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory );
+		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		final List<AggregatedMethodCall> aggreatedMethods = ivService.getAggreatedMethods( );
@@ -252,7 +252,7 @@ public class MonitoringLogServiceTest {
 
 		// Import the directory
 		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory );
+		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		final List<AggregatedMethodCall> aggreatedMethods = ivService.getAggreatedMethods( );
@@ -282,7 +282,7 @@ public class MonitoringLogServiceTest {
 
 		// Import the directory
 		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory );
+		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( ivService.getMethods( ), hasSize( 0 ) );
@@ -304,7 +304,7 @@ public class MonitoringLogServiceTest {
 
 		// Import the directory
 		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory );
+		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( ivService.getMethods( ), hasSize( 0 ) );
@@ -326,7 +326,7 @@ public class MonitoringLogServiceTest {
 
 		// Import the directory
 		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory );
+		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		final MethodCall methodCall = ivService.getMethods( ).get( 0 );
@@ -345,7 +345,7 @@ public class MonitoringLogServiceTest {
 
 		// Import the directory
 		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory );
+		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		final MethodCall methodCall = ivService.getMethods( ).get( 0 );
@@ -367,7 +367,7 @@ public class MonitoringLogServiceTest {
 
 		// Import the directory
 		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory );
+		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( ivService.getTraceRoots( ), hasSize( 1 ) );
@@ -387,7 +387,7 @@ public class MonitoringLogServiceTest {
 		// where ignored, but no traces were reconstructed)
 		final File directory = ivTemporaryFolder.getRoot( );
 		ivExpectedException.expect( BusinessRuntimeException.class );
-		ivService.importMonitoringLog( directory );
+		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 	}
 
 	@Test
@@ -403,7 +403,7 @@ public class MonitoringLogServiceTest {
 
 		// Import the directory
 		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory );
+		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 	}
 
 	@Test
@@ -419,7 +419,7 @@ public class MonitoringLogServiceTest {
 
 		// Import the directory
 		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory );
+		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( ivService.getMethods( ), hasSize( 2 ) );
