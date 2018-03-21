@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>net.kieker-monitoring</groupId>
 		<artifactId>kieker-trace-diagnosis-parent</artifactId>
-		<version>3.1.0-SNAPSHOT</version>
+		<version>3.1.0.RC1</version>
 		<relativePath>../../kieker-trace-diagnosis-parent</relativePath>
 	</parent>
 
