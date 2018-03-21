@@ -65,7 +65,7 @@ public final class TemporaryRepository {
 		ivMonitoringLogService = aMonitoringLogService;
 	}
 
-	void processBeforeOperationEvent( final long timestamp, final long traceId, final String methodName, final String clazz ) {
+	void processBeforeOperationEvent( final long timestamp, final long traceId ) {
 		final List<MethodCall> methodList = ivReconstructionMap.get( traceId );
 
 		if ( methodList == null ) {
@@ -76,8 +76,6 @@ public final class TemporaryRepository {
 			final MethodCall methodCall = new MethodCall( );
 			final String host = ivHostMap.get( traceId );
 			methodCall.setHost( host );
-			methodCall.setClazz( clazz );
-			methodCall.setMethod( methodName );
 
 			methodCall.setTraceId( traceId );
 			methodCall.setTraceDepth( 1 );
@@ -95,7 +93,7 @@ public final class TemporaryRepository {
 		}
 	}
 
-	MethodCall processAfterOperationEvent( final long timestamp, final long traceId ) {
+	MethodCall processAfterOperationEvent( final long timestamp, final long traceId, final String methodName, final String clazz ) {
 		final List<MethodCall> methodList = ivReconstructionMap.get( traceId );
 
 		if ( methodList == null ) {
@@ -115,6 +113,8 @@ public final class TemporaryRepository {
 			duration = DESTINATION_DURATION_TIME_UNIT.convert( duration, ivSourceTimeUnit );
 		}
 		lastMethodCall.setDuration( duration );
+		lastMethodCall.setClazz( clazz );
+		lastMethodCall.setMethod( methodName );
 
 		// Make sure that the timestamp is always in milliseconds
 		if ( DESTINATION_TIMESTAMP_TIME_UNIT != ivSourceTimeUnit ) {

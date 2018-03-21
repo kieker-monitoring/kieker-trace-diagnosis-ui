@@ -178,19 +178,19 @@ public final class BinaryFileReader extends Reader {
 	private void readBeforeOperationEvent( final ByteBuffer aByteBuffer ) {
 		final long timestamp = aByteBuffer.getLong( ); // Timestamp
 		final long traceId = aByteBuffer.getLong( ); // Trace Id
-		skipBytes( (byte) 4, aByteBuffer ); // Ignore order index
-		final String methodName = ivStringMapping.get( aByteBuffer.getInt( ) ); // Method name
-		final String clazz = ivStringMapping.get( aByteBuffer.getInt( ) ); // Class name
+		skipBytes( (byte) ( 3 * 4 ), aByteBuffer ); // Ignore order index, method name and class name
 
-		ivTemporaryRepository.processBeforeOperationEvent( timestamp, traceId, methodName, clazz );
+		ivTemporaryRepository.processBeforeOperationEvent( timestamp, traceId );
 	}
 
 	private MethodCall readAfterOperationEvent( final ByteBuffer aByteBuffer ) {
 		final long timestamp = aByteBuffer.getLong( ); // Timestamp
 		final long traceId = aByteBuffer.getLong( ); // Trace Id
-		skipBytes( (byte) ( 3 * 4 ), aByteBuffer ); // Ignore order index, method name and class name
+		skipBytes( (byte) 4, aByteBuffer ); // Ignore order index
+		final String methodName = ivStringMapping.get( aByteBuffer.getInt( ) ); // Method name
+		final String clazz = ivStringMapping.get( aByteBuffer.getInt( ) ); // Class name
 
-		return ivTemporaryRepository.processAfterOperationEvent( timestamp, traceId );
+		return ivTemporaryRepository.processAfterOperationEvent( timestamp, traceId, methodName, clazz );
 	}
 
 	private void readAfterOperationFailedEvent( final ByteBuffer aByteBuffer ) {

@@ -46,9 +46,9 @@ import kieker.diagnosis.service.data.MethodCall;
 public final class AsciiFileReader extends Reader {
 
 	private static final Pattern cvAsciiFileEntryPattern = Pattern.compile( "\\$(\\d*);\\d*;(.*)" );
-	private static final Pattern cvAsciiFileBeforeOperationEventPattern = Pattern.compile( "(\\d*);(-?\\d*);\\d*;([^;]*);([^;]*)" );
-	private static final Pattern cvAsciiFileAfterOperationEventPattern = Pattern.compile( "(\\d*);(-?\\d*).*" );
-	private static final Pattern cvAsciiFileAfterOperationFailedEventPattern = Pattern.compile( "(\\d*);(-?\\d*);\\d*;[^;]*;[^;]*;(.*)" );
+	private static final Pattern cvAsciiFileBeforeOperationEventPattern = Pattern.compile( "(\\d*);(-?\\d*).*" );
+	private static final Pattern cvAsciiFileAfterOperationEventPattern = Pattern.compile( "(\\d*);(-?\\d*);\\d*;([^;]*);([^;]*)" );
+	private static final Pattern cvAsciiFileAfterOperationFailedEventPattern = Pattern.compile( "(\\d*);(-?\\d*);\\d*;([^;]*);([^;]*);(.*)" );
 	private static final Pattern cvAsciiFileTraceMetadataPattern = Pattern.compile( "(-?\\d*);\\d*;[^;]*;([^;]*).*" );
 	private static final Pattern cvAsciiFileKiekerMetadataRecordPattern = Pattern.compile( "[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;([^;]*).*" );
 
@@ -175,11 +175,9 @@ public final class AsciiFileReader extends Reader {
 		if ( matcher.matches( ) ) {
 			final long timestamp = Long.parseLong( matcher.group( 1 ) ); // Timestamp
 			final long traceId = Long.parseLong( matcher.group( 2 ) ); // Trace Id
-			// Order index is ignored
-			final String methodName = matcher.group( 3 ); // Method name
-			final String clazz = matcher.group( 4 ); // Class name
+			// The rest is ignored
 
-			ivTemporaryRepository.processBeforeOperationEvent( timestamp, traceId, methodName, clazz );
+			ivTemporaryRepository.processBeforeOperationEvent( timestamp, traceId );
 		}
 	}
 
@@ -189,9 +187,12 @@ public final class AsciiFileReader extends Reader {
 			// Logging timestamp is ignored
 			final long timestamp = Long.parseLong( matcher.group( 1 ) ); // Timestamp
 			final long traceId = Long.parseLong( matcher.group( 2 ) ); // Trace Id
-			// The rest is ignored
 
-			ivTemporaryRepository.processAfterOperationEvent( timestamp, traceId );
+			// Order index is ignored
+			final String methodName = matcher.group( 3 ); // Method name
+			final String clazz = matcher.group( 4 ); // Class name
+
+			ivTemporaryRepository.processAfterOperationEvent( timestamp, traceId, methodName, clazz );
 		}
 	}
 
@@ -201,10 +202,13 @@ public final class AsciiFileReader extends Reader {
 			// Logging timestamp is ignored
 			final long timestamp = Long.parseLong( matcher.group( 1 ) ); // Timestamp
 			final long traceId = Long.parseLong( matcher.group( 2 ) ); // Trace Id
-			final String exception = matcher.group( 3 );
-			// The rest is ignored
 
-			final MethodCall methodCall = ivTemporaryRepository.processAfterOperationEvent( timestamp, traceId );
+			// Order index is ignored
+			final String methodName = matcher.group( 3 ); // Method name
+			final String clazz = matcher.group( 4 ); // Class name
+			final String exception = matcher.group( 5 );
+
+			final MethodCall methodCall = ivTemporaryRepository.processAfterOperationEvent( timestamp, traceId, methodName, clazz );
 			if ( methodCall != null ) {
 				methodCall.setException( exception );
 			}

@@ -1,4 +1,9 @@
 3.1.0
+	21 Mar 2018
+	Feature (TRACEUI-17)
+	The signatures of method calls is now taken from the after operation events rather than from the before operation events. For most users this is not important. However, some applications take the methods' results into account for the records,
+	which means that their after operation events have an enriched method signature compared to their before operation events.
+
 	20 Mar 2018
 	Feature (TRACEUI-16)
 	Monitoring logs can now be read directly from a ZIP file.
