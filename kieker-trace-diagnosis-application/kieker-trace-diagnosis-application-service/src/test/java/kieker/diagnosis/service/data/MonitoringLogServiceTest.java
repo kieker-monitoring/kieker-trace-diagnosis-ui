@@ -486,7 +486,7 @@ public class MonitoringLogServiceTest {
 
 		// Write the mapping file
 		final File mappingFile = new File( ivTemporaryFolder.getRoot( ), "kieker.map" );
-		Files.write( stringBuilder.toString( ), mappingFile, Charset.forName( "UTF-8" ) );
+		Files.asCharSink( mappingFile, Charset.forName( "UTF-8" ) ).write( stringBuilder );
 	}
 
 	private void finishWriting( ) throws IOException {

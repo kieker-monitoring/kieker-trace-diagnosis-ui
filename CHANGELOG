@@ -1,5 +1,9 @@
 3.1.0
 	30 Mar 2018
+	Task (TRACEUI-21)
+	Updated all libraries within the application.
+
+	30 Mar 2018
 	Bug (TRACEUI-20)
 	Fixed a broken link in the internal documentation.
 
