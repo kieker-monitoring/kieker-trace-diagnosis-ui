@@ -1,4 +1,8 @@
 3.1.0
+	30 Mar 2018
+	Bug (TRACEUI-18)
+	Internal controller classes are now using the correct logger.
+	
 	21 Mar 2018
 	Feature (TRACEUI-17)
 	The signatures of method calls is now taken from the after operation events rather than from the before operation events. For most users this is not important. However, some applications take the methods' results into account for the records,
