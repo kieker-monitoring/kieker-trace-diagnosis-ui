@@ -16,8 +16,6 @@
 
 package kieker.diagnosis.ui.dialogs.manual;
 
-import java.net.URL;
-
 import com.google.inject.Singleton;
 
 import javafx.scene.web.WebEngine;
@@ -32,11 +30,10 @@ import kieker.diagnosis.architecture.ui.ViewModelBase;
 @Singleton
 class ManualDialogViewModel extends ViewModelBase<ManualDialogView> {
 
-	public void updatePresentation( final URL aUrl ) {
+	public void updatePresentation( final String aContent ) {
 		final WebView webView = getView( ).getWebView( );
 		final WebEngine engine = webView.getEngine( );
-		engine.load( aUrl.toExternalForm( ) );
-
+		engine.loadContent( aContent );
 	}
 
 }

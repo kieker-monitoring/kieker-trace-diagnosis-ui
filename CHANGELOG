@@ -1,5 +1,9 @@
 3.1.0
 	30 Mar 2018
+	Feature (TRACEUI-19)
+	Improved the internal documentation by using Bootstrap.
+
+	30 Mar 2018
 	Bug (TRACEUI-18)
 	Internal controller classes are now using the correct logger.
 	
