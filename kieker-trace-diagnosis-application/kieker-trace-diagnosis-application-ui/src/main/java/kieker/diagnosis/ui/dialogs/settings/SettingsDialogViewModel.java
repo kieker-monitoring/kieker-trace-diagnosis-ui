@@ -16,11 +16,24 @@
 
 package kieker.diagnosis.ui.dialogs.settings;
 
+import java.util.concurrent.TimeUnit;
+
 import com.google.inject.Singleton;
 
+import de.saxsys.mvvmfx.ViewModel;
+import de.saxsys.mvvmfx.utils.commands.Command;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.ui.ViewModelBase;
+import kieker.diagnosis.service.settings.ClassAppearance;
+import kieker.diagnosis.service.settings.MethodAppearance;
+import kieker.diagnosis.service.settings.MethodCallAggregation;
 import kieker.diagnosis.service.settings.Settings;
+import kieker.diagnosis.service.settings.SettingsService;
+import kieker.diagnosis.service.settings.TimestampAppearance;
 
 /**
  * The view model of the settings dialog.
@@ -28,44 +41,130 @@ import kieker.diagnosis.service.settings.Settings;
  * @author Nils Christian Ehmke
  */
 @Singleton
-class SettingsDialogViewModel extends ViewModelBase<SettingsDialogView> {
+public class SettingsDialogViewModel extends ViewModelBase<SettingsDialogView> implements ViewModel {
 
-	public void updatePresentation( final Settings aSettings ) {
-		getView( ).getTimestampAppearanceComboBox( ).setValue( aSettings.getTimestampAppearance( ) );
-		getView( ).getTimeUnitComboBox( ).setValue( aSettings.getTimeUnit( ) );
-		getView( ).getClassesComboBox( ).setValue( aSettings.getClassAppearance( ) );
-		getView( ).getMethodsComboBox( ).setValue( aSettings.getMethodAppearance( ) );
-		getView( ).getShowUnmonitoredTime( ).setSelected( aSettings.isShowUnmonitoredTimeProperty( ) );
-		getView( ).getMethodCallAggregation( ).setValue( aSettings.getMethodCallAggregation( ) );
-		getView( ).getMethodCallThreshold( ).setText( Float.toString( aSettings.getMethodCallThreshold( ) ) );
-		getView( ).getMaxNumberOfMethodCalls( ).setText( Integer.toString( aSettings.getMaxNumberOfMethodCalls( ) ) );
+	public static final String EVENT_CLOSE_DIALOG = "EVENT_CLOSE_DIALOG";
+
+	private final Command ivSaveAndCloseCommand = createCommand( this::performSaveAndClose );
+	private final Command ivCloseCommand = createCommand( this::performClose );
+
+	private final ObjectProperty<TimestampAppearance> ivTimestampAppearanceProperty = new SimpleObjectProperty<>( );
+	private final ObjectProperty<TimeUnit> ivTimeUnitProperty = new SimpleObjectProperty<>( );
+	private final ObjectProperty<ClassAppearance> ivClassesProperty = new SimpleObjectProperty<>( );
+	private final ObjectProperty<MethodAppearance> ivMethodsProperty = new SimpleObjectProperty<>( );
+	private final BooleanProperty ivShowUnmonitoredTimeProperty = new SimpleBooleanProperty( );
+	private final ObjectProperty<MethodCallAggregation> ivMethodCallAggregationProperty = new SimpleObjectProperty<>( );
+	private final ObjectProperty<Integer> ivMaxNumberOfCallsProperty = new SimpleObjectProperty<>( );
+	private final ObjectProperty<Float> ivMethodCallThresholdProperty = new SimpleObjectProperty<>( );
+	private final ObjectProperty<Integer> ivMaxNumberOfMethodCallsProperty = new SimpleObjectProperty<>( );
+
+	public void initialize( ) {
+		// Get the current settings...
+		final SettingsService settingsService = getService( SettingsService.class );
+		final Settings settings = settingsService.loadSettings( );
+
+		// ...and display them.
+		updatePresentation( settings );
 	}
 
-	public Settings savePresentation( ) throws BusinessException {
+	Command getSaveAndCloseCommand( ) {
+		return ivSaveAndCloseCommand;
+	}
+
+	/**
+	 * This action is performed, when the user wants to save and close the dialog.
+	 */
+	private void performSaveAndClose( ) throws BusinessException {
+		// Get the settings...
+		final Settings settings = savePresentation( );
+
+		// ...and save them
+		final SettingsService settingsService = getService( SettingsService.class );
+		settingsService.saveSettings( settings );
+
+		performClose( );
+	}
+
+	Command getCloseCommand( ) {
+		return ivCloseCommand;
+	}
+
+	public void performClose( ) {
+		publish( EVENT_CLOSE_DIALOG );
+	}
+
+	private void updatePresentation( final Settings aSettings ) {
+		ivTimestampAppearanceProperty.setValue( aSettings.getTimestampAppearance( ) );
+		ivTimeUnitProperty.setValue( aSettings.getTimeUnit( ) );
+		ivClassesProperty.setValue( aSettings.getClassAppearance( ) );
+		ivMethodsProperty.setValue( aSettings.getMethodAppearance( ) );
+		ivShowUnmonitoredTimeProperty.set( aSettings.isShowUnmonitoredTimeProperty( ) );
+		ivMethodCallAggregationProperty.setValue( aSettings.getMethodCallAggregation( ) );
+		ivMethodCallThresholdProperty.setValue( Float.valueOf( aSettings.getMethodCallThreshold( ) ) );
+		ivMaxNumberOfMethodCallsProperty.setValue( Integer.valueOf( aSettings.getMaxNumberOfMethodCalls( ) ) );
+	}
+
+	private Settings savePresentation( ) throws BusinessException {
 		final Settings settings = new Settings( );
 
-		settings.setTimestampAppearance( getView( ).getTimestampAppearanceComboBox( ).getValue( ) );
-		settings.setTimeUnit( getView( ).getTimeUnitComboBox( ).getValue( ) );
-		settings.setClassAppearance( getView( ).getClassesComboBox( ).getValue( ) );
-		settings.setMethodAppearance( getView( ).getMethodsComboBox( ).getValue( ) );
-		settings.setShowUnmonitoredTimeProperty( getView( ).getShowUnmonitoredTime( ).isSelected( ) );
-		settings.setMethodCallAggregation( getView( ).getMethodCallAggregation( ).getValue( ) );
+		settings.setTimestampAppearance( ivTimestampAppearanceProperty.getValue( ) );
+		settings.setTimeUnit( ivTimeUnitProperty.getValue( ) );
+		settings.setClassAppearance( ivClassesProperty.getValue( ) );
+		settings.setMethodAppearance( ivMethodsProperty.getValue( ) );
+		settings.setShowUnmonitoredTimeProperty( ivShowUnmonitoredTimeProperty.get( ) );
+		settings.setMethodCallAggregation( ivMethodCallAggregationProperty.getValue( ) );
 
 		// Check the range
-		final Float methodCallThreshold = getView( ).getMethodCallThreshold( ).getValue( );
+		final Float methodCallThreshold = ivMethodCallThresholdProperty.getValue( );
 		if ( methodCallThreshold == null || methodCallThreshold <= 0.0f || methodCallThreshold >= 100.0 ) {
 			throw new BusinessException( getLocalizedString( "errorThresholdRange" ) );
 		}
 		settings.setMethodCallThreshold( methodCallThreshold );
 
 		// Check the range
-		final Integer maxNumberOfMethodCalls = getView( ).getMaxNumberOfMethodCalls( ).getValue( );
+		final Integer maxNumberOfMethodCalls = ivMaxNumberOfMethodCallsProperty.getValue( );
 		if ( maxNumberOfMethodCalls == null || maxNumberOfMethodCalls <= 0 ) {
 			throw new BusinessException( getLocalizedString( "errorMaxNumberOfMethodCallsRange" ) );
 		}
 		settings.setMaxNumberOfMethodCalls( maxNumberOfMethodCalls );
 
 		return settings;
+	}
+
+	ObjectProperty<TimestampAppearance> getTimestampAppearanceProperty( ) {
+		return ivTimestampAppearanceProperty;
+	}
+
+	ObjectProperty<TimeUnit> getTimeUnitProperty( ) {
+		return ivTimeUnitProperty;
+	}
+
+	ObjectProperty<ClassAppearance> getClassesProperty( ) {
+		return ivClassesProperty;
+	}
+
+	ObjectProperty<MethodAppearance> getMethodsProperty( ) {
+		return ivMethodsProperty;
+	}
+
+	BooleanProperty getShowUnmonitoredTimeProperty( ) {
+		return ivShowUnmonitoredTimeProperty;
+	}
+
+	ObjectProperty<MethodCallAggregation> getMethodCallAggregationProperty( ) {
+		return ivMethodCallAggregationProperty;
+	}
+
+	ObjectProperty<Integer> getMaxNumberOfCallsProperty( ) {
+		return ivMaxNumberOfCallsProperty;
+	}
+
+	ObjectProperty<Float> getMethodCallThresholdProperty( ) {
+		return ivMethodCallThresholdProperty;
+	}
+
+	ObjectProperty<Integer> getMaxNumberOfMethodCallsProperty( ) {
+		return ivMaxNumberOfMethodCallsProperty;
 	}
 
 }

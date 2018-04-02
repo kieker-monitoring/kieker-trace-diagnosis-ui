@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Optional;
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import de.saxsys.mvvmfx.FluentViewLoader;
@@ -55,6 +54,7 @@ import kieker.diagnosis.ui.dialogs.monitoring.MonitoringDialogView;
 import kieker.diagnosis.ui.dialogs.monitoring.MonitoringDialogViewModel;
 import kieker.diagnosis.ui.dialogs.progress.ProgressDialog;
 import kieker.diagnosis.ui.dialogs.settings.SettingsDialogView;
+import kieker.diagnosis.ui.dialogs.settings.SettingsDialogViewModel;
 import kieker.diagnosis.ui.main.properties.CloseWithoutPromptProperty;
 import kieker.diagnosis.ui.main.properties.LastExportPathProperty;
 import kieker.diagnosis.ui.main.properties.LastImportPathProperty;
@@ -63,9 +63,6 @@ import kieker.diagnosis.ui.tabs.traces.TracesView;
 
 @Singleton
 public class MainController extends ControllerBase<MainViewModel> {
-
-	@Inject
-	SettingsDialogView ivSettingsDialogView;
 
 	/**
 	 * This action is performed, when the user wants to import a monitoring log.
@@ -129,7 +126,8 @@ public class MainController extends ControllerBase<MainViewModel> {
 	 * This action is performed, when the user wants to configure the settings.
 	 */
 	public void performSettings( ) {
-		final boolean settingsChanged = Boolean.TRUE.equals( ivSettingsDialogView.open( getViewModel( ).getWindow( ) ) );
+		final ViewTuple<SettingsDialogView, SettingsDialogViewModel> tuple = FluentViewLoader.javaView( SettingsDialogView.class ).load( );
+		final boolean settingsChanged = tuple.getCodeBehind( ).open( getViewModel( ).getWindow( ) );
 
 		// Now refresh everything - if necessary
 		if ( settingsChanged ) {

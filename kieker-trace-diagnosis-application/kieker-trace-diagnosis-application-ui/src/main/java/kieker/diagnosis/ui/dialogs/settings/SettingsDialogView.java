@@ -16,12 +16,17 @@
 
 package kieker.diagnosis.ui.dialogs.settings;
 
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
 import com.google.inject.Singleton;
 
+import de.saxsys.mvvmfx.InjectViewModel;
+import de.saxsys.mvvmfx.JavaView;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -42,6 +47,7 @@ import kieker.diagnosis.service.settings.ClassAppearance;
 import kieker.diagnosis.service.settings.MethodAppearance;
 import kieker.diagnosis.service.settings.MethodCallAggregation;
 import kieker.diagnosis.service.settings.TimestampAppearance;
+import kieker.diagnosis.ui.dialogs.monitoring.MonitoringDialogViewModel;
 
 /**
  * The view of the settings dialog.
@@ -49,7 +55,10 @@ import kieker.diagnosis.service.settings.TimestampAppearance;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class SettingsDialogView extends DialogViewBase<SettingsDialogController, Boolean> {
+public class SettingsDialogView extends DialogViewBase<SettingsDialogController, Boolean> implements JavaView<SettingsDialogViewModel>, Initializable {
+
+	@InjectViewModel
+	private SettingsDialogViewModel ivViewModel;
 
 	private final ComboBox<TimestampAppearance> ivTimestampAppearanceComboBox;
 	private final ComboBox<TimeUnit> ivTimeUnitComboBox;
@@ -61,7 +70,7 @@ public class SettingsDialogView extends DialogViewBase<SettingsDialogController,
 	private final FloatTextField ivMethodCallThreshold;
 
 	public SettingsDialogView( ) {
-		super( Modality.WINDOW_MODAL, StageStyle.DECORATED, SettingsDialogController::performRefresh, true );
+		super( Modality.WINDOW_MODAL, StageStyle.DECORATED, true );
 
 		{
 			final TitledPane titledPane = new TitledPane( );
@@ -283,7 +292,7 @@ public class SettingsDialogView extends DialogViewBase<SettingsDialogController,
 				final Button button = new Button( );
 				button.setText( getLocalizedString( "cancel" ) );
 				button.setCancelButton( true );
-				button.setOnAction( e -> getController( ).performClose( ) );
+				button.setOnAction( e -> ivViewModel.getCloseCommand( ).execute( ) );
 
 				buttonBar.getButtons( ).add( button );
 			}
@@ -293,7 +302,7 @@ public class SettingsDialogView extends DialogViewBase<SettingsDialogController,
 				button.setDefaultButton( true );
 				button.setOnAction( e -> {
 					setResult( Boolean.TRUE );
-					getController( ).performSaveAndClose( );
+					ivViewModel.getSaveAndCloseCommand( ).execute( );
 				} );
 
 				buttonBar.getButtons( ).add( button );
@@ -308,36 +317,19 @@ public class SettingsDialogView extends DialogViewBase<SettingsDialogController,
 
 	}
 
-	ComboBox<TimestampAppearance> getTimestampAppearanceComboBox( ) {
-		return ivTimestampAppearanceComboBox;
-	}
+	@Override
+	public void initialize( final URL aURL, final ResourceBundle aResourceBundle ) {
+		ivViewModel.subscribe( MonitoringDialogViewModel.EVENT_CLOSE_DIALOG, ( aKey, aPayload ) -> close( ) );
 
-	ComboBox<TimeUnit> getTimeUnitComboBox( ) {
-		return ivTimeUnitComboBox;
-	}
+		ivTimestampAppearanceComboBox.valueProperty( ).bindBidirectional( ivViewModel.getTimestampAppearanceProperty( ) );
+		ivTimeUnitComboBox.valueProperty( ).bindBidirectional( ivViewModel.getTimeUnitProperty( ) );
+		ivClassesComboBox.valueProperty( ).bindBidirectional( ivViewModel.getClassesProperty( ) );
+		ivMethodsComboBox.valueProperty( ).bindBidirectional( ivViewModel.getMethodsProperty( ) );
+		ivShowUnmonitoredTime.selectedProperty( ).bindBidirectional( ivViewModel.getShowUnmonitoredTimeProperty( ) );
+		ivMethodCallAggregation.valueProperty( ).bindBidirectional( ivViewModel.getMethodCallAggregationProperty( ) );
+		ivMaxNumberOfCalls.valueProperty( ).bindBidirectional( ivViewModel.getMaxNumberOfCallsProperty( ) );
+		ivMethodCallThreshold.valueProperty( ).bindBidirectional( ivViewModel.getMethodCallThresholdProperty( ) );
 
-	ComboBox<ClassAppearance> getClassesComboBox( ) {
-		return ivClassesComboBox;
-	}
-
-	ComboBox<MethodAppearance> getMethodsComboBox( ) {
-		return ivMethodsComboBox;
-	}
-
-	CheckBox getShowUnmonitoredTime( ) {
-		return ivShowUnmonitoredTime;
-	}
-
-	ComboBox<MethodCallAggregation> getMethodCallAggregation( ) {
-		return ivMethodCallAggregation;
-	}
-
-	IntegerTextField getMaxNumberOfMethodCalls( ) {
-		return ivMaxNumberOfCalls;
-	}
-
-	FloatTextField getMethodCallThreshold( ) {
-		return ivMethodCallThreshold;
 	}
 
 }

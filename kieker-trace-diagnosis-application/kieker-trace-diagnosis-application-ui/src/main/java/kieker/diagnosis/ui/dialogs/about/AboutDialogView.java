@@ -30,7 +30,6 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import jfxtras.scene.layout.VBox;
 import kieker.diagnosis.architecture.ui.DialogViewBase;
@@ -90,7 +89,7 @@ public class AboutDialogView extends DialogViewBase<AboutDialogController, Void>
 
 	@Override
 	public void initialize( final URL aURL, final ResourceBundle aResourceBundle ) {
-		ivViewModel.subscribe( AboutDialogViewModel.EVENT_CLOSE_DIALOG, ( aKey, aPayload ) -> ( (Stage) getScene( ).getWindow( ) ).close( ) );
+		ivViewModel.subscribe( AboutDialogViewModel.EVENT_CLOSE_DIALOG, ( aKey, aPayload ) -> close( ) );
 	}
 
 }

@@ -81,6 +81,10 @@ public abstract class DialogViewBase<C extends ControllerBase<?>, R> extends Vie
 		return ivResult;
 	}
 
+	protected final void close( ) {
+		( (Stage) getScene( ).getWindow( ) ).close( );
+	}
+
 	@FunctionalInterface
 	public static interface RefreshFunction {
 

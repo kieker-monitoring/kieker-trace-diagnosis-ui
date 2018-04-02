@@ -38,7 +38,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import kieker.diagnosis.architecture.monitoring.Timer;
 import kieker.diagnosis.architecture.monitoring.Writer;
@@ -285,7 +284,7 @@ public class MonitoringDialogView extends DialogViewBase<MonitoringDialogControl
 
 	@Override
 	public void initialize( final URL aURL, final ResourceBundle aResourceBundle ) {
-		ivViewModel.subscribe( MonitoringDialogViewModel.EVENT_CLOSE_DIALOG, ( aKey, aPayload ) -> ( (Stage) getScene( ).getWindow( ) ).close( ) );
+		ivViewModel.subscribe( MonitoringDialogViewModel.EVENT_CLOSE_DIALOG, ( aKey, aPayload ) -> close( ) );
 
 		ivStatus.textProperty( ).bindBidirectional( ivViewModel.getStatusProperty( ) );
 		ivActive.selectedProperty( ).bindBidirectional( ivViewModel.getActiveProperty( ) );
