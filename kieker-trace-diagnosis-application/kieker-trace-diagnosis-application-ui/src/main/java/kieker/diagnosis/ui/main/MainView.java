@@ -34,6 +34,7 @@ import kieker.diagnosis.architecture.ui.ViewBase;
 import kieker.diagnosis.ui.scopes.MainScope;
 import kieker.diagnosis.ui.tabs.aggregatedmethods.AggregatedMethodsView;
 import kieker.diagnosis.ui.tabs.methods.MethodsView;
+import kieker.diagnosis.ui.tabs.methods.MethodsViewModel;
 import kieker.diagnosis.ui.tabs.statistics.StatisticsView;
 import kieker.diagnosis.ui.tabs.statistics.StatisticsViewModel;
 import kieker.diagnosis.ui.tabs.traces.TracesView;
@@ -44,13 +45,12 @@ public class MainView extends ViewBase<MainController> {
 
 	private final MainScope ivMainScope = new MainScope( );
 
-	private final MethodsView ivMethodsView;
 	private final AggregatedMethodsView ivAggregatedMethodsView;
 	private final TabPane ivTabPane;
 	private final Menu ivFavorites;
 
 	@Inject
-	public MainView( final MethodsView aMethodsView, final AggregatedMethodsView aAggregatedMethodsView ) {
+	public MainView( final AggregatedMethodsView aAggregatedMethodsView ) {
 		// Main menu
 		{
 			final MenuBar menuBar = new MenuBar( );
@@ -185,18 +185,16 @@ public class MainView extends ViewBase<MainController> {
 			}
 
 			{
-				ivMethodsView = aMethodsView;
-				ivMethodsView.initialize( );
-
+				final ViewTuple<MethodsView, MethodsViewModel> tuple = FluentViewLoader.javaView( MethodsView.class ).providedScopes( ivMainScope ).load( );
 				final Tab tab = new Tab( );
 
 				tab.setText( getLocalizedString( "methods" ) );
-				tab.setContent( aMethodsView );
+				tab.setContent( tuple.getView( ) );
 
 				ivTabPane.getTabs( ).add( tab );
 				// Only one default button is allowed - even if the other buttons are not visible. Therefore we have to set the default button property only for
 				// the current tab.
-				ivMethodsView.getSearchButton( ).defaultButtonProperty( ).bind( ivTabPane.getSelectionModel( ).selectedItemProperty( ).isEqualTo( tab ) );
+				tuple.getCodeBehind( ).getSearchButton( ).defaultButtonProperty( ).bind( ivTabPane.getSelectionModel( ).selectedItemProperty( ).isEqualTo( tab ) );
 			}
 
 			{
@@ -242,14 +240,12 @@ public class MainView extends ViewBase<MainController> {
 	public void prepareRefresh( ) {
 		ivMainScope.publish( MainScope.EVENT_PREPARE_REFRESH );
 
-		ivMethodsView.prepareRefresh( );
 		ivAggregatedMethodsView.prepareRefresh( );
 	}
 
 	public void performRefresh( ) {
 		ivMainScope.publish( MainScope.EVENT_REFRESH );
 
-		ivMethodsView.performRefresh( );
 		ivAggregatedMethodsView.performRefresh( );
 	}
 

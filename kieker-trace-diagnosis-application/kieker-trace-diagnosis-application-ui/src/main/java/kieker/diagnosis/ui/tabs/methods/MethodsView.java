@@ -16,10 +16,17 @@
 
 package kieker.diagnosis.ui.tabs.methods;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import com.google.inject.Singleton;
 
+import de.saxsys.mvvmfx.InjectViewModel;
+import de.saxsys.mvvmfx.JavaView;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -37,6 +44,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import jfxtras.scene.control.CalendarTimeTextField;
+import kieker.diagnosis.architecture.exception.BusinessException;
+import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
 import kieker.diagnosis.architecture.ui.EnumStringConverter;
 import kieker.diagnosis.architecture.ui.ViewBase;
 import kieker.diagnosis.architecture.ui.components.LongTextField;
@@ -54,7 +63,10 @@ import kieker.diagnosis.ui.tabs.methods.components.TimestampCellValueFactory;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class MethodsView extends ViewBase<MethodsController> {
+public class MethodsView extends ViewBase<MethodsController> implements JavaView<MethodsViewModel>, Initializable {
+
+	@InjectViewModel
+	private MethodsViewModel ivViewModel;
 
 	// Filter
 	private final TextField ivFilterHost;
@@ -87,10 +99,6 @@ public class MethodsView extends ViewBase<MethodsController> {
 
 	// Status bar
 	private final Label ivStatusLabel;
-
-	public void initialize( ) {
-		getController( ).performInitialize( );
-	}
 
 	public MethodsView( ) {
 
@@ -189,7 +197,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 					// The CalendarTimeTextField doesn't recognize the default button
 					ivFilterLowerTime.setOnKeyReleased( e -> {
 						if ( e.getCode( ) == KeyCode.ENTER ) {
-							getController( ).performSearch( );
+							ivViewModel.getSearchCommand( ).execute( );
 						}
 					} );
 
@@ -219,7 +227,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 					// The CalendarTimeTextField doesn't recognize the default button
 					ivFilterUpperTime.setOnKeyReleased( e -> {
 						if ( e.getCode( ) == KeyCode.ENTER ) {
-							getController( ).performSearch( );
+							ivViewModel.getSearchCommand( ).execute( );
 						}
 					} );
 
@@ -246,7 +254,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 				{
 					final Hyperlink hyperlink = new Hyperlink( );
 					hyperlink.setText( getLocalizedString( "saveAsFavorite" ) );
-					hyperlink.setOnAction( e -> getController( ).performSaveAsFavorite( ) );
+					hyperlink.setOnAction( e -> ivViewModel.getSaveAsFavoriteCommand( ).execute( ) );
 
 					GridPane.setColumnIndex( hyperlink, 0 );
 					GridPane.setRowIndex( hyperlink, rowIndex );
@@ -259,7 +267,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 					ivSearchButton.setText( getLocalizedString( "search" ) );
 					ivSearchButton.setMinWidth( 140 );
 					ivSearchButton.setMaxWidth( Double.POSITIVE_INFINITY );
-					ivSearchButton.setOnAction( e -> getController( ).performSearch( ) );
+					ivSearchButton.setOnAction( e -> ivViewModel.getSearchCommand( ).execute( ) );
 
 					GridPane.setColumnIndex( ivSearchButton, columnIndex++ );
 					GridPane.setRowIndex( ivSearchButton, rowIndex );
@@ -278,7 +286,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 			ivTableView = new TableView<>( );
 			ivTableView.setTableMenuButtonVisible( true );
 			ivTableView.setRowFactory( aParam -> new StyledRow( ) );
-			ivTableView.getSelectionModel( ).selectedItemProperty( ).addListener( ( aObservable, aOldValue, aNewValue ) -> getController( ).performSelectionChange( ) );
+			ivTableView.getSelectionModel( ).selectedItemProperty( ).addListener( ( aObservable, aOldValue, aNewValue ) -> ivViewModel.getSelectionChangeCommand( ).execute( ) );
 
 			final Label placeholder = new Label( );
 			placeholder.setText( getLocalizedString( "noDataAvailable" ) );
@@ -444,7 +452,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 				{
 					final Hyperlink hyperlink = new Hyperlink( );
 					hyperlink.setText( getLocalizedString( "jumpToTrace" ) );
-					hyperlink.setOnAction( e -> getController( ).performJumpToTrace( ) );
+					hyperlink.setOnAction( e -> ivViewModel.getJumpToTraceCommand( ).execute( ) );
 
 					GridPane.setColumnIndex( hyperlink, 0 );
 					GridPane.setColumnSpan( hyperlink, 2 );
@@ -546,7 +554,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 			{
 				final Hyperlink hyperlink = new Hyperlink( );
 				hyperlink.setText( getLocalizedString( "exportToCSV" ) );
-				hyperlink.setOnAction( e -> getController( ).performExportToCSV( ) );
+				hyperlink.setOnAction( e -> ivViewModel.getExportToCSVCommand( ).execute( ) );
 
 				hBox.getChildren( ).add( hyperlink );
 			}
@@ -556,105 +564,49 @@ public class MethodsView extends ViewBase<MethodsController> {
 
 	}
 
-	public void prepareRefresh( ) {
-		getController( ).performPrepareRefresh( );
-	}
-
-	TableView<MethodCall> getTableView( ) {
-		return ivTableView;
-	}
-
-	TableColumn<MethodCall, Long> getDurationColumn( ) {
-		return ivDurationColumn;
-	}
-
-	TextField getFilterHost( ) {
-		return ivFilterHost;
-	}
-
-	TextField getFilterClass( ) {
-		return ivFilterClass;
-	}
-
-	TextField getFilterMethod( ) {
-		return ivFilterMethod;
-	}
-
-	TextField getFilterException( ) {
-		return ivFilterException;
-	}
-
-	LongTextField getFilterTraceId( ) {
-		return ivFilterTraceId;
-	}
-
-	CheckBox getFilterUseRegExpr( ) {
-		return ivFilterUseRegExpr;
-	}
-
-	ComboBox<SearchType> getFilterSearchType( ) {
-		return ivFilterSearchType;
-	}
-
-	DatePicker getFilterLowerDate( ) {
-		return ivFilterLowerDate;
-	}
-
-	CalendarTimeTextField getFilterLowerTime( ) {
-		return ivFilterLowerTime;
-	}
-
-	DatePicker getFilterUpperDate( ) {
-		return ivFilterUpperDate;
-	}
-
-	CalendarTimeTextField getFilterUpperTime( ) {
-		return ivFilterUpperTime;
-	}
-
-	Label getStatusLabel( ) {
-		return ivStatusLabel;
-	}
-
-	TextField getDetailsHost( ) {
-		return ivDetailsHost;
-	}
-
-	TextField getDetailsClass( ) {
-		return ivDetailsClass;
-	}
-
-	TextField getDetailsMethod( ) {
-		return ivDetailsMethod;
-	}
-
-	TextField getDetailsException( ) {
-		return ivDetailsException;
-	}
-
-	TextField getDetailsDuration( ) {
-		return ivDetailsDuration;
-	}
-
-	TextField getDetailsTimestamp( ) {
-		return ivDetailsTimestamp;
-	}
-
-	TextField getDetailsTraceId( ) {
-		return ivDetailsTraceId;
-	}
-
 	@Override
 	public void setParameter( final Object aParameter ) {
-		getController( ).performSetParameter( aParameter );
+		// This should rather be performed with a scope or a command
+		try {
+			ivViewModel.performSetParameter( aParameter );
+		} catch ( final BusinessException ex ) {
+			throw new BusinessRuntimeException( ex );
+		}
 	}
 
 	public Button getSearchButton( ) {
 		return ivSearchButton;
 	}
 
-	public void performRefresh( ) {
-		getController( ).performRefresh( );
+	@Override
+	public void initialize( final URL aURL, final ResourceBundle aResourceBundle ) {
+		ivFilterHost.textProperty( ).bindBidirectional( ivViewModel.getFilterHostProperty( ) );
+		ivFilterClass.textProperty( ).bindBidirectional( ivViewModel.getFilterClassProperty( ) );
+		ivFilterMethod.textProperty( ).bindBidirectional( ivViewModel.getFilterMethodProperty( ) );
+		ivFilterException.textProperty( ).bindBidirectional( ivViewModel.getFilterExceptionProperty( ) );
+		ivFilterTraceId.valueProperty( ).bindBidirectional( ivViewModel.getFilterTraceIdProperty( ) );
+		ivFilterUseRegExpr.selectedProperty( ).bindBidirectional( ivViewModel.getFilterUseRegExprProperty( ) );
+
+		ivFilterLowerDate.valueProperty( ).bindBidirectional( ivViewModel.getFilterLowerDateProperty( ) );
+		ivFilterLowerTime.calendarProperty( ).bindBidirectional( ivViewModel.getFilterLowerTimeProperty( ) );
+		ivFilterUpperDate.valueProperty( ).bindBidirectional( ivViewModel.getFilterUpperDateProperty( ) );
+		ivFilterUpperTime.calendarProperty( ).bindBidirectional( ivViewModel.getFilterUpperTimeProperty( ) );
+		ivFilterSearchType.valueProperty( ).bindBidirectional( ivViewModel.getFilterSearchTypeProperty( ) );
+
+		ivTableView.itemsProperty( ).bindBidirectional( ivViewModel.getMethodsProperty( ) );
+		Bindings.bindContent( ivViewModel.getVisibleColumnsProperty( ), ivTableView.getVisibleLeafColumns( ) );
+		ivViewModel.getSelectedMethodCallProperty( ).bind( ivTableView.getSelectionModel( ).selectedItemProperty( ) );
+		ivDurationColumn.textProperty( ).bindBidirectional( ivViewModel.getDurationColumnHeaderProperty( ) );
+
+		ivDetailsHost.textProperty( ).bindBidirectional( ivViewModel.getDetailsHostProperty( ) );
+		ivDetailsClass.textProperty( ).bindBidirectional( ivViewModel.getDetailsClassProperty( ) );
+		ivDetailsMethod.textProperty( ).bindBidirectional( ivViewModel.getDetailsMethodProperty( ) );
+		ivDetailsException.textProperty( ).bindBidirectional( ivViewModel.getDetailsExceptionProperty( ) );
+		ivDetailsDuration.textProperty( ).bindBidirectional( ivViewModel.getDetailsDurationProperty( ) );
+		ivDetailsTimestamp.textProperty( ).bindBidirectional( ivViewModel.getDetailsTimestampProperty( ) );
+		ivDetailsTraceId.textProperty( ).bindBidirectional( ivViewModel.getDetailsTraceIdProperty( ) );
+
+		ivStatusLabel.textProperty( ).bindBidirectional( ivViewModel.getStatusLabelProperty( ) );
 	}
 
 }
