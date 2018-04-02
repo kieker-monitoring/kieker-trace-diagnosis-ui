@@ -39,7 +39,7 @@
 									<mainClass>kieker.diagnosis.KiekerTraceDiagnosis</mainClass>
 									<name>start</name>
 									<jvmSettings>
-										<extraArgument>-Djava.awt.headless=false</extraArgument>
+										<extraArgument>-Djava.awt.headless=false --add-modules java.xml.ws.annotation</extraArgument>
 										<initialMemorySize>500M</initialMemorySize>
 										<maxMemorySize>3G</maxMemorySize>
 									</jvmSettings>

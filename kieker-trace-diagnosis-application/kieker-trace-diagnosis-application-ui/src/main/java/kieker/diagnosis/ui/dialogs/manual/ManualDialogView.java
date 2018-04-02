@@ -16,9 +16,17 @@
 
 package kieker.diagnosis.ui.dialogs.manual;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import com.google.inject.Singleton;
 
+import de.saxsys.mvvmfx.InjectViewModel;
+import de.saxsys.mvvmfx.JavaView;
+import javafx.beans.value.ChangeListener;
+import javafx.fxml.Initializable;
 import javafx.scene.layout.Priority;
+import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
@@ -31,12 +39,15 @@ import kieker.diagnosis.architecture.ui.DialogViewBase;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class ManualDialogView extends DialogViewBase<ManualDialogController, Void> {
+public class ManualDialogView extends DialogViewBase<ManualDialogController, Void> implements JavaView<ManualDialogViewModel>, Initializable {
+
+	@InjectViewModel
+	private ManualDialogViewModel ivViewModel;
 
 	private final WebView ivWebView;
 
 	public ManualDialogView( ) {
-		super( Modality.NONE, StageStyle.DECORATED, c -> c.performRefresh( ), false );
+		super( Modality.NONE, StageStyle.DECORATED, false );
 
 		ivWebView = new WebView( );
 		VBox.setVgrow( ivWebView, Priority.ALWAYS );
@@ -50,6 +61,20 @@ public class ManualDialogView extends DialogViewBase<ManualDialogController, Voi
 
 	WebView getWebView( ) {
 		return ivWebView;
+	}
+
+	@Override
+	public void initialize( final URL aURL, final ResourceBundle aResourceBundle ) {
+		ivViewModel.getDocumentationProperty( ).addListener( (ChangeListener<String>) ( aObservableValue, aOldValue, aNewValue ) -> {
+			loadContentInWebEngine( aNewValue );
+		} );
+		// As the view model is currently initialized before the view, and we are only registered for changes, we have to update at this point manually.
+		loadContentInWebEngine( ivViewModel.getDocumentationProperty( ).get( ) );
+	}
+
+	private void loadContentInWebEngine( final String aNewValue ) {
+		final WebEngine webEngine = ivWebView.getEngine( );
+		webEngine.loadContent( aNewValue );
 	}
 
 }

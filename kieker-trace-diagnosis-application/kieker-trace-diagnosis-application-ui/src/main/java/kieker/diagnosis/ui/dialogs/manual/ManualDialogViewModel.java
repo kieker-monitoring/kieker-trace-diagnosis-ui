@@ -16,10 +16,17 @@
 
 package kieker.diagnosis.ui.dialogs.manual;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.Locale;
+
 import com.google.inject.Singleton;
 
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
+import de.saxsys.mvvmfx.ViewModel;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import kieker.diagnosis.architecture.exception.TechnicalException;
 import kieker.diagnosis.architecture.ui.ViewModelBase;
 
 /**
@@ -28,12 +35,46 @@ import kieker.diagnosis.architecture.ui.ViewModelBase;
  * @author Nils Christian Ehmke
  */
 @Singleton
-class ManualDialogViewModel extends ViewModelBase<ManualDialogView> {
+public class ManualDialogViewModel extends ViewModelBase<ManualDialogView> implements ViewModel {
 
-	public void updatePresentation( final String aContent ) {
-		final WebView webView = getView( ).getWebView( );
-		final WebEngine engine = webView.getEngine( );
-		engine.loadContent( aContent );
+	private final StringProperty ivDocumentationProperty = new SimpleStringProperty( );
+
+	public StringProperty getDocumentationProperty( ) {
+		return ivDocumentationProperty;
+	}
+
+	public void initialize( ) {
+		final StringBuilder documentation = new StringBuilder( );
+		documentation.append( "<html><body><div class=\"container\">" );
+
+		documentation.append( "<head><style>" );
+		appendBootstrapCSS( documentation );
+		documentation.append( "</head></style>" );
+		appendDocumentationContent( documentation );
+		documentation.append( "</div></body></html>" );
+
+		ivDocumentationProperty.set( documentation.toString( ) );
+	}
+
+	private void appendBootstrapCSS( final StringBuilder documentation ) {
+		try ( final InputStream cssStream = getClass( ).getClassLoader( ).getResourceAsStream( "kieker/diagnosis/ui/dialogs/manual/html/css/bootstrap.min.css" ) ) {
+			final byte[] allBytes = cssStream.readAllBytes( );
+			documentation.append( new String( allBytes, Charset.forName( "UTF-8" ) ) );
+		} catch ( final IOException ex ) {
+			throw new TechnicalException( ex );
+		}
+	}
+
+	private void appendDocumentationContent( final StringBuilder documentation ) {
+		final Locale locale = Locale.getDefault( );
+		final String suffix = locale == Locale.GERMAN || locale == Locale.GERMANY ? "_de" : "";
+
+		try ( final InputStream documentationStream = getClass( ).getClassLoader( ).getResourceAsStream( "kieker/diagnosis/ui/dialogs/manual/html/manual" + suffix + ".html" ) ) {
+			final byte[] allBytes = documentationStream.readAllBytes( );
+			documentation.append( new String( allBytes, Charset.forName( "ISO-8859-1" ) ) );
+		} catch ( final IOException ex ) {
+			throw new TechnicalException( ex );
+		}
 	}
 
 }
