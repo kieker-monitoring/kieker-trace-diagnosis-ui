@@ -35,6 +35,7 @@ import kieker.diagnosis.ui.scopes.MainScope;
 import kieker.diagnosis.ui.tabs.aggregatedmethods.AggregatedMethodsView;
 import kieker.diagnosis.ui.tabs.methods.MethodsView;
 import kieker.diagnosis.ui.tabs.statistics.StatisticsView;
+import kieker.diagnosis.ui.tabs.statistics.StatisticsViewModel;
 import kieker.diagnosis.ui.tabs.traces.TracesView;
 import kieker.diagnosis.ui.tabs.traces.TracesViewModel;
 
@@ -45,12 +46,11 @@ public class MainView extends ViewBase<MainController> {
 
 	private final MethodsView ivMethodsView;
 	private final AggregatedMethodsView ivAggregatedMethodsView;
-	private final StatisticsView ivStatisticsView;
 	private final TabPane ivTabPane;
 	private final Menu ivFavorites;
 
 	@Inject
-	public MainView( final MethodsView aMethodsView, final AggregatedMethodsView aAggregatedMethodsView, final StatisticsView aStatisticsView ) {
+	public MainView( final MethodsView aMethodsView, final AggregatedMethodsView aAggregatedMethodsView ) {
 		// Main menu
 		{
 			final MenuBar menuBar = new MenuBar( );
@@ -217,14 +217,11 @@ public class MainView extends ViewBase<MainController> {
 			}
 
 			{
-
-				ivStatisticsView = aStatisticsView;
-				ivStatisticsView.initialize( );
-
+				final ViewTuple<StatisticsView, StatisticsViewModel> tuple = FluentViewLoader.javaView( StatisticsView.class ).providedScopes( ivMainScope ).load( );
 				final Tab tab = new Tab( );
 
 				tab.setText( getLocalizedString( "statistics" ) );
-				tab.setContent( aStatisticsView );
+				tab.setContent( tuple.getView( ) );
 
 				ivTabPane.getTabs( ).add( tab );
 			}
@@ -247,7 +244,6 @@ public class MainView extends ViewBase<MainController> {
 
 		ivMethodsView.prepareRefresh( );
 		ivAggregatedMethodsView.prepareRefresh( );
-		ivStatisticsView.prepareRefresh( );
 	}
 
 	public void performRefresh( ) {
@@ -255,7 +251,6 @@ public class MainView extends ViewBase<MainController> {
 
 		ivMethodsView.performRefresh( );
 		ivAggregatedMethodsView.performRefresh( );
-		ivStatisticsView.performRefresh( );
 	}
 
 	TabPane getTabPane( ) {

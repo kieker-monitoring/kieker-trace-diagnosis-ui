@@ -16,13 +16,25 @@
 
 package kieker.diagnosis.ui.tabs.statistics;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import com.google.inject.Singleton;
 
+import de.saxsys.mvvmfx.InjectScope;
+import de.saxsys.mvvmfx.ViewModel;
+import de.saxsys.mvvmfx.utils.commands.Command;
+import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import kieker.diagnosis.architecture.ui.ViewModelBase;
 import kieker.diagnosis.service.statistics.Statistics;
+import kieker.diagnosis.service.statistics.StatisticsService;
+import kieker.diagnosis.ui.scopes.MainScope;
 
 /**
  * The view model of the statistics tab.
@@ -30,37 +42,109 @@ import kieker.diagnosis.service.statistics.Statistics;
  * @author Nils Christian Ehmke
  */
 @Singleton
-class StatisticsViewModel extends ViewModelBase<StatisticsView> {
+public class StatisticsViewModel extends ViewModelBase<StatisticsView> implements ViewModel {
 
-	public void updatePresentation( final Statistics aStatistics ) {
+	@InjectScope
+	private MainScope ivMainScope;
+
+	private final Command ivRefreshCommand = createCommand( this::performRefresh );
+	private final Command ivPrepareRefreshCommand = createCommand( this::performPrepareRefresh );
+
+	private final StringProperty ivProcessedBytesProperty = new SimpleStringProperty( );
+	private final StringProperty ivProcessDurationProperty = new SimpleStringProperty( );
+	private final StringProperty ivProcessSpeedProperty = new SimpleStringProperty( );
+	private final StringProperty ivMethodsProperty = new SimpleStringProperty( );
+	private final StringProperty ivAggregatedMethodsProperty = new SimpleStringProperty( );
+	private final StringProperty ivTracesProperty = new SimpleStringProperty( );
+	private final StringProperty ivIgnoredRecordsProperty = new SimpleStringProperty( );
+	private final StringProperty ivDanglingRecordsProperty = new SimpleStringProperty( );
+	private final StringProperty ivIncompleteTracesProperty = new SimpleStringProperty( );
+	private final StringProperty ivBeginnOfMonitoringProperty = new SimpleStringProperty( );
+	private final StringProperty ivEndOfMonitoringProperty = new SimpleStringProperty( );
+	private final StringProperty ivDirectoryProperty = new SimpleStringProperty( );
+
+	private final DoubleProperty ivProgressProperty = new SimpleDoubleProperty( );
+	private final StringProperty ivProgressTextProperty = new SimpleStringProperty( );
+
+	private Statistics ivStatistics;
+
+	public StatisticsViewModel( ) {
+		// Start a thread to update the memory usage regularly
+		final Thread thread = new Thread( ( ) -> {
+			while ( true ) {
+				final MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean( );
+				final long usedHeap = memoryMXBean.getHeapMemoryUsage( ).getUsed( ) / 1024 / 1024;
+				final long committedHeap = memoryMXBean.getHeapMemoryUsage( ).getCommitted( ) / 1024 / 1024;
+
+				Platform.runLater( ( ) -> {
+					updatePresentationMemoryUsage( usedHeap, committedHeap );
+				} );
+
+				try {
+					Thread.sleep( 2500 );
+				} catch ( final InterruptedException ex ) {
+					// Can be ignored
+				}
+			}
+		} );
+		thread.setDaemon( true );
+		thread.setName( "Statistics Memory Refresh Thread" );
+		thread.start( );
+	}
+
+	/**
+	 * This action is performed once during the application's start.
+	 */
+	public void initialize( ) {
+		updatePresentation( null );
+
+		ivMainScope.subscribe( MainScope.EVENT_REFRESH, ( aKey, aPayload ) -> ivRefreshCommand.execute( ) );
+		ivMainScope.subscribe( MainScope.EVENT_PREPARE_REFRESH, ( aKey, aPayload ) -> ivPrepareRefreshCommand.execute( ) );
+	}
+
+	/**
+	 * This action is performed, when a refresh of the view is required
+	 */
+	public void performRefresh( ) {
+		// Show the data on the view
+		updatePresentation( ivStatistics );
+	}
+
+	public void performPrepareRefresh( ) {
+		// Get the current data
+		final StatisticsService statisticsService = getService( StatisticsService.class );
+		ivStatistics = statisticsService.getStatistics( );
+	}
+
+	private void updatePresentation( final Statistics aStatistics ) {
 		if ( aStatistics != null ) {
 			final NumberFormat decimalFormat = DecimalFormat.getInstance( );
 
-			getView( ).getProcessedBytes( ).setText( convertToByteString( aStatistics.getProcessedBytes( ) ) );
-			getView( ).getProcessDuration( ).setText( convertToDurationString( aStatistics.getProcessDuration( ) ) );
-			getView( ).getProcessSpeed( ).setText( convertToSpeedString( aStatistics.getProcessSpeed( ) ) );
-			getView( ).getMethods( ).setText( decimalFormat.format( aStatistics.getMethods( ) ) );
-			getView( ).getAggregatedMethods( ).setText( decimalFormat.format( aStatistics.getAggregatedMethods( ) ) );
-			getView( ).getTraces( ).setText( decimalFormat.format( aStatistics.getTraces( ) ) );
-			getView( ).getIgnoredRecords( ).setText( decimalFormat.format( aStatistics.getIgnoredRecords( ) ) );
-			getView( ).getDanglingRecords( ).setText( decimalFormat.format( aStatistics.getDanglingRecords( ) ) );
-			getView( ).getIncompleteTraces( ).setText( decimalFormat.format( aStatistics.getIncompleteTraces( ) ) );
-			getView( ).getBeginnOfMonitoring( ).setText( aStatistics.getBeginnOfMonitoring( ) );
-			getView( ).getEndOfMonitoring( ).setText( aStatistics.getEndOfMonitoring( ) );
-			getView( ).getDirectory( ).setText( aStatistics.getDirectory( ) );
+			ivProcessedBytesProperty.set( convertToByteString( aStatistics.getProcessedBytes( ) ) );
+			ivProcessDurationProperty.set( convertToDurationString( aStatistics.getProcessDuration( ) ) );
+			ivProcessSpeedProperty.set( convertToSpeedString( aStatistics.getProcessSpeed( ) ) );
+			ivMethodsProperty.set( decimalFormat.format( aStatistics.getMethods( ) ) );
+			ivAggregatedMethodsProperty.set( decimalFormat.format( aStatistics.getAggregatedMethods( ) ) );
+			ivTracesProperty.set( decimalFormat.format( aStatistics.getTraces( ) ) );
+			ivIgnoredRecordsProperty.set( decimalFormat.format( aStatistics.getIgnoredRecords( ) ) );
+			ivDanglingRecordsProperty.set( decimalFormat.format( aStatistics.getDanglingRecords( ) ) );
+			ivIncompleteTracesProperty.set( decimalFormat.format( aStatistics.getIncompleteTraces( ) ) );
+			ivBeginnOfMonitoringProperty.set( aStatistics.getBeginnOfMonitoring( ) );
+			ivEndOfMonitoringProperty.set( aStatistics.getEndOfMonitoring( ) );
+			ivDirectoryProperty.set( aStatistics.getDirectory( ) );
 		} else {
-			getView( ).getProcessedBytes( ).setText( getLocalizedString( "noDataAvailable" ) );
-			getView( ).getProcessDuration( ).setText( getLocalizedString( "noDataAvailable" ) );
-			getView( ).getProcessSpeed( ).setText( getLocalizedString( "noDataAvailable" ) );
-			getView( ).getMethods( ).setText( getLocalizedString( "noDataAvailable" ) );
-			getView( ).getAggregatedMethods( ).setText( getLocalizedString( "noDataAvailable" ) );
-			getView( ).getTraces( ).setText( getLocalizedString( "noDataAvailable" ) );
-			getView( ).getIgnoredRecords( ).setText( getLocalizedString( "noDataAvailable" ) );
-			getView( ).getDanglingRecords( ).setText( getLocalizedString( "noDataAvailable" ) );
-			getView( ).getIncompleteTraces( ).setText( getLocalizedString( "noDataAvailable" ) );
-			getView( ).getBeginnOfMonitoring( ).setText( getLocalizedString( "noDataAvailable" ) );
-			getView( ).getEndOfMonitoring( ).setText( getLocalizedString( "noDataAvailable" ) );
-			getView( ).getDirectory( ).setText( getLocalizedString( "noDataAvailable" ) );
+			ivProcessedBytesProperty.set( getLocalizedString( "noDataAvailable" ) );
+			ivProcessDurationProperty.set( getLocalizedString( "noDataAvailable" ) );
+			ivProcessSpeedProperty.set( getLocalizedString( "noDataAvailable" ) );
+			ivMethodsProperty.set( getLocalizedString( "noDataAvailable" ) );
+			ivAggregatedMethodsProperty.set( getLocalizedString( "noDataAvailable" ) );
+			ivTracesProperty.set( getLocalizedString( "noDataAvailable" ) );
+			ivIgnoredRecordsProperty.set( getLocalizedString( "noDataAvailable" ) );
+			ivDanglingRecordsProperty.set( getLocalizedString( "noDataAvailable" ) );
+			ivIncompleteTracesProperty.set( getLocalizedString( "noDataAvailable" ) );
+			ivBeginnOfMonitoringProperty.set( getLocalizedString( "noDataAvailable" ) );
+			ivEndOfMonitoringProperty.set( getLocalizedString( "noDataAvailable" ) );
+			ivDirectoryProperty.set( getLocalizedString( "noDataAvailable" ) );
 		}
 	}
 
@@ -112,9 +196,65 @@ class StatisticsViewModel extends ViewModelBase<StatisticsView> {
 		}
 	}
 
-	public void updatePresentationMemoryUsage( final long aCurrentMegaByte, final long aTotalMegaByte ) {
-		getView( ).getProgressBar( ).setProgress( 1.0 * aCurrentMegaByte / aTotalMegaByte );
-		getView( ).getProgressText( ).setText( String.format( "%d / %d [MB]", aCurrentMegaByte, aTotalMegaByte ) );
+	private void updatePresentationMemoryUsage( final long aCurrentMegaByte, final long aTotalMegaByte ) {
+		ivProgressProperty.set( 1.0 * aCurrentMegaByte / aTotalMegaByte );
+		ivProgressTextProperty.set( String.format( "%d / %d [MB]", aCurrentMegaByte, aTotalMegaByte ) );
+	}
+
+	StringProperty getProcessedBytesProperty( ) {
+		return ivProcessedBytesProperty;
+	}
+
+	StringProperty getProcessDurationProperty( ) {
+		return ivProcessDurationProperty;
+	}
+
+	StringProperty getProcessSpeedProperty( ) {
+		return ivProcessSpeedProperty;
+	}
+
+	StringProperty getMethodsProperty( ) {
+		return ivMethodsProperty;
+	}
+
+	StringProperty getAggregatedMethodsProperty( ) {
+		return ivAggregatedMethodsProperty;
+	}
+
+	StringProperty getTracesProperty( ) {
+		return ivTracesProperty;
+	}
+
+	StringProperty getIgnoredRecordsProperty( ) {
+		return ivIgnoredRecordsProperty;
+	}
+
+	StringProperty getDanglingRecordsProperty( ) {
+		return ivDanglingRecordsProperty;
+	}
+
+	StringProperty getIncompleteTracesProperty( ) {
+		return ivIncompleteTracesProperty;
+	}
+
+	StringProperty getBeginnOfMonitoringProperty( ) {
+		return ivBeginnOfMonitoringProperty;
+	}
+
+	StringProperty getEndOfMonitoringProperty( ) {
+		return ivEndOfMonitoringProperty;
+	}
+
+	StringProperty getDirectoryProperty( ) {
+		return ivDirectoryProperty;
+	}
+
+	DoubleProperty getProgressProperty( ) {
+		return ivProgressProperty;
+	}
+
+	StringProperty getProgressTextProperty( ) {
+		return ivProgressTextProperty;
 	}
 
 }

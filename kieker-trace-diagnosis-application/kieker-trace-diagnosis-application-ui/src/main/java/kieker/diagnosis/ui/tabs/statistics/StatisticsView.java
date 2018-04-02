@@ -16,8 +16,14 @@
 
 package kieker.diagnosis.ui.tabs.statistics;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import com.google.inject.Singleton;
 
+import de.saxsys.mvvmfx.InjectViewModel;
+import de.saxsys.mvvmfx.JavaView;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -37,7 +43,10 @@ import kieker.diagnosis.architecture.ui.ViewBase;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class StatisticsView extends ViewBase<StatisticsController> {
+public class StatisticsView extends ViewBase<StatisticsController> implements JavaView<StatisticsViewModel>, Initializable {
+
+	@InjectViewModel
+	private StatisticsViewModel ivViewModel;
 
 	private final TextField ivProcessedBytes;
 	private final TextField ivProcessDuration;
@@ -374,76 +383,27 @@ public class StatisticsView extends ViewBase<StatisticsController> {
 		}
 	}
 
-	TextField getProcessedBytes( ) {
-		return ivProcessedBytes;
-	}
-
-	TextField getProcessDuration( ) {
-		return ivProcessDuration;
-	}
-
-	TextField getProcessSpeed( ) {
-		return ivProcessSpeed;
-	}
-
-	TextField getIgnoredRecords( ) {
-		return ivIgnoredRecords;
-	}
-
-	TextField getDanglingRecords( ) {
-		return ivDanglingRecords;
-	}
-
-	TextField getIncompleteTraces( ) {
-		return ivIncompleteTraces;
-	}
-
-	TextField getMethods( ) {
-		return ivMethods;
-	}
-
-	TextField getAggregatedMethods( ) {
-		return ivAggregatedMethods;
-	}
-
-	TextField getTraces( ) {
-		return ivTraces;
-	}
-
-	TextField getBeginnOfMonitoring( ) {
-		return ivBeginnOfMonitoring;
-	}
-
-	TextField getEndOfMonitoring( ) {
-		return ivEndOfMonitoring;
-	}
-
-	TextField getDirectory( ) {
-		return ivDirectory;
-	}
-
-	ProgressBar getProgressBar( ) {
-		return ivProgressBar;
-	}
-
-	Text getProgressText( ) {
-		return ivProgressText;
-	}
-
 	@Override
 	public void setParameter( final Object aParameter ) {
 	}
 
-	public void initialize( ) {
-		getController( ).performInitialize( );
-	}
+	@Override
+	public void initialize( final URL aUrl, final ResourceBundle aResourceBundle ) {
+		ivProcessedBytes.textProperty( ).bindBidirectional( ivViewModel.getProcessedBytesProperty( ) );
+		ivProcessDuration.textProperty( ).bindBidirectional( ivViewModel.getProcessDurationProperty( ) );
+		ivProcessSpeed.textProperty( ).bindBidirectional( ivViewModel.getProcessSpeedProperty( ) );
+		ivIgnoredRecords.textProperty( ).bindBidirectional( ivViewModel.getIgnoredRecordsProperty( ) );
+		ivDanglingRecords.textProperty( ).bindBidirectional( ivViewModel.getDanglingRecordsProperty( ) );
+		ivIncompleteTraces.textProperty( ).bindBidirectional( ivViewModel.getIncompleteTracesProperty( ) );
+		ivMethods.textProperty( ).bindBidirectional( ivViewModel.getMethodsProperty( ) );
+		ivAggregatedMethods.textProperty( ).bindBidirectional( ivViewModel.getAggregatedMethodsProperty( ) );
+		ivTraces.textProperty( ).bindBidirectional( ivViewModel.getTracesProperty( ) );
+		ivBeginnOfMonitoring.textProperty( ).bindBidirectional( ivViewModel.getBeginnOfMonitoringProperty( ) );
+		ivEndOfMonitoring.textProperty( ).bindBidirectional( ivViewModel.getEndOfMonitoringProperty( ) );
+		ivDirectory.textProperty( ).bindBidirectional( ivViewModel.getDirectoryProperty( ) );
 
-	public void prepareRefresh( ) {
-		getController( ).performPrepareRefresh( );
-	}
-
-	public void performRefresh( ) {
-		getController( ).performRefresh( );
+		ivProgressBar.progressProperty( ).bindBidirectional( ivViewModel.getProgressProperty( ) );
+		ivProgressText.textProperty( ).bindBidirectional( ivViewModel.getProgressTextProperty( ) );
 	}
 
 }
