@@ -16,11 +16,17 @@
 
 package kieker.diagnosis.ui.tabs.traces;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import de.saxsys.mvvmfx.InjectViewModel;
+import de.saxsys.mvvmfx.JavaView;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -30,6 +36,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.input.KeyCode;
@@ -54,7 +61,10 @@ import kieker.diagnosis.ui.tabs.traces.components.TimestampCellValueFactory;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class TracesView extends ViewBase<TracesController> {
+public class TracesView extends ViewBase<TracesController> implements JavaView<TracesViewModel>, Initializable {
+
+	@InjectViewModel
+	private TracesViewModel ivViewModel;
 
 	// Filter
 	private final TextField ivFilterHost;
@@ -189,7 +199,7 @@ public class TracesView extends ViewBase<TracesController> {
 					// The CalendarTimeTextField doesn't recognize the default button
 					ivFilterLowerTime.setOnKeyReleased( e -> {
 						if ( e.getCode( ) == KeyCode.ENTER ) {
-							getController( ).performSearch( );
+							ivViewModel.getSearchCommand( ).execute( );
 						}
 					} );
 
@@ -219,7 +229,7 @@ public class TracesView extends ViewBase<TracesController> {
 					// The CalendarTimeTextField doesn't recognize the default button
 					ivFilterUpperTime.setOnKeyReleased( e -> {
 						if ( e.getCode( ) == KeyCode.ENTER ) {
-							getController( ).performSearch( );
+							ivViewModel.getSearchCommand( ).execute( );
 						}
 					} );
 
@@ -256,7 +266,7 @@ public class TracesView extends ViewBase<TracesController> {
 				{
 					final Hyperlink hyperlink = new Hyperlink( );
 					hyperlink.setText( getLocalizedString( "saveAsFavorite" ) );
-					hyperlink.setOnAction( e -> getController( ).performSaveAsFavorite( ) );
+					hyperlink.setOnAction( e -> ivViewModel.getSaveAsFavoriteCommand( ).execute( ) );
 
 					GridPane.setColumnIndex( hyperlink, 0 );
 					GridPane.setRowIndex( hyperlink, rowIndex );
@@ -269,7 +279,7 @@ public class TracesView extends ViewBase<TracesController> {
 					ivSearchButton.setText( getLocalizedString( "search" ) );
 					ivSearchButton.setMinWidth( 140 );
 					ivSearchButton.setMaxWidth( Double.POSITIVE_INFINITY );
-					ivSearchButton.setOnAction( e -> getController( ).performSearch( ) );
+					ivSearchButton.setOnAction( e -> ivViewModel.getSearchCommand( ).execute( ) );
 
 					GridPane.setColumnIndex( ivSearchButton, columnIndex++ );
 					GridPane.setRowIndex( ivSearchButton, rowIndex );
@@ -288,7 +298,8 @@ public class TracesView extends ViewBase<TracesController> {
 			ivTreeTableView = new TreeTableView<>( );
 			ivTreeTableView.setShowRoot( false );
 			ivTreeTableView.setTableMenuButtonVisible( true );
-			ivTreeTableView.getSelectionModel( ).selectedItemProperty( ).addListener( ( aObservable, aOldValue, aNewValue ) -> getController( ).performSelectionChange( ) );
+			ivTreeTableView.getSelectionModel( ).selectedItemProperty( )
+					.addListener( ( aObservable, aOldValue, aNewValue ) -> ivViewModel.getSelectionChangeCommand( ).execute( ) );
 			ivTreeTableView.setRowFactory( aParam -> new StyledRow( ) );
 
 			final Label placeholder = new Label( );
@@ -730,23 +741,57 @@ public class TracesView extends ViewBase<TracesController> {
 
 	@Override
 	public void setParameter( final Object aParameter ) {
-		getController( ).performSetParameter( aParameter );
+		// This should rather be performed with a scope or a command
+		ivViewModel.performSetParameter( aParameter );
 	}
 
 	public Button getSearchButton( ) {
 		return ivSearchButton;
 	}
 
-	public void prepareRefresh( ) {
-		getController( ).performPrepareRefresh( );
-	}
+	@Override
+	public void initialize( final URL aURL, final ResourceBundle aResourceBundle ) {
+		// Filter
+		ivFilterHost.textProperty( ).bindBidirectional( ivViewModel.getFilterHostProperty( ) );
+		ivFilterClass.textProperty( ).bindBidirectional( ivViewModel.getFilterClassProperty( ) );
+		ivFilterMethod.textProperty( ).bindBidirectional( ivViewModel.getFilterMethodProperty( ) );
+		ivFilterException.textProperty( ).bindBidirectional( ivViewModel.getFilterExceptionProperty( ) );
+		ivFilterTraceId.valueProperty( ).bindBidirectional( ivViewModel.getFilterTraceIdProperty( ) );
+		ivFilterUseRegExpr.selectedProperty( ).bindBidirectional( ivViewModel.getFilterUseRegExprProperty( ) );
 
-	public void initialize( ) {
-		getController( ).performInitialize( );
-	}
+		ivFilterLowerDate.valueProperty( ).bindBidirectional( ivViewModel.getFilterLowerDateProperty( ) );
+		ivFilterLowerTime.calendarProperty( ).bindBidirectional( ivViewModel.getFilterLowerTimeProperty( ) );
+		ivFilterUpperDate.valueProperty( ).bindBidirectional( ivViewModel.getFilterUpperDateProperty( ) );
+		ivFilterUpperTime.calendarProperty( ).bindBidirectional( ivViewModel.getFilterUpperTimeProperty( ) );
+		ivFilterSearchWholeTrace.selectedProperty( ).bindBidirectional( ivViewModel.getFilterSearchWholeTraceProperty( ) );
+		ivFilterSearchType.valueProperty( ).bindBidirectional( ivViewModel.getFilterSearchTypeProperty( ) );
 
-	public void performRefresh( ) {
-		getController( ).performRefresh( );
+		// Table
+		ivTreeTableView.rootProperty( ).bindBidirectional( ivViewModel.getRootMethodCallProperty( ) );
+		ivViewModel.getSelectedMethodCallProperty( ).bind( ivTreeTableView.getSelectionModel( ).selectedItemProperty( ) );
+
+		// Details
+		ivDetailsHost.textProperty( ).bindBidirectional( ivViewModel.getDetailsHostProperty( ) );
+		ivDetailsClass.textProperty( ).bindBidirectional( ivViewModel.getDetailsClassProperty( ) );
+		ivDetailsMethod.textProperty( ).bindBidirectional( ivViewModel.getDetailsMethodProperty( ) );
+		ivDetailsException.textProperty( ).bindBidirectional( ivViewModel.getDetailsExceptionProperty( ) );
+		ivDetailsTraceDepth.textProperty( ).bindBidirectional( ivViewModel.getDetailsTraceDepthProperty( ) );
+		ivDetailsTraceSize.textProperty( ).bindBidirectional( ivViewModel.getDetailsTraceSizeProperty( ) );
+		ivDetailsDuration.textProperty( ).bindBidirectional( ivViewModel.getDetailsDurationProperty( ) );
+		ivDetailsPercent.textProperty( ).bindBidirectional( ivViewModel.getDetailsPercentProperty( ) );
+		ivDetailsTimestamp.textProperty( ).bindBidirectional( ivViewModel.getDetailsTimestampProperty( ) );
+		ivDetailsTraceId.textProperty( ).bindBidirectional( ivViewModel.getDetailsTraceIdProperty( ) );
+
+		ivStatusLabel.textProperty( ).bindBidirectional( ivViewModel.getStatusLabelProperty( ) );
+
+		// Subscription to events
+		ivViewModel.subscribe( TracesViewModel.EVENT_SELECT_TREE_ITEM, ( aKey, aPayload ) -> {
+			if ( aPayload.length == 1 ) {
+				@SuppressWarnings ( "unchecked" )
+				final TreeItem<MethodCall> methodCall = (TreeItem<MethodCall>) aPayload[0];
+				ivTreeTableView.getSelectionModel( ).select( methodCall );
+			}
+		} );
 	}
 
 }

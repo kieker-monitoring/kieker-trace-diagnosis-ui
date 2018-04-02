@@ -1,40 +1,55 @@
-/*************************************************************************** 
- * Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)         
- *                                                                           
- * Licensed under the Apache License, Version 2.0 (the "License");           
- * you may not use this file except in compliance with the License.          
- * You may obtain a copy of the License at                                   
- *                                                                           
- *     http://www.apache.org/licenses/LICENSE-2.0                            
- *                                                                           
- * Unless required by applicable law or agreed to in writing, software       
- * distributed under the License is distributed on an "AS IS" BASIS,         
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  
- * See the License for the specific language governing permissions and       
- * limitations under the License.                                            
+/***************************************************************************
+ * Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  ***************************************************************************/
 
 package kieker.diagnosis.ui.tabs.traces;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Stack;
 
 import com.google.inject.Singleton;
 
+import de.saxsys.mvvmfx.ViewModel;
+import de.saxsys.mvvmfx.utils.commands.Command;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.control.TreeItem;
 import kieker.diagnosis.architecture.exception.BusinessException;
+import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
 import kieker.diagnosis.architecture.service.properties.PropertiesService;
 import kieker.diagnosis.architecture.ui.ViewModelBase;
 import kieker.diagnosis.service.data.MethodCall;
 import kieker.diagnosis.service.pattern.PatternService;
 import kieker.diagnosis.service.settings.MethodCallAggregation;
+import kieker.diagnosis.service.settings.SettingsService;
 import kieker.diagnosis.service.settings.properties.MaxNumberOfMethodCallsProperty;
 import kieker.diagnosis.service.settings.properties.MethodCallAggregationProperty;
 import kieker.diagnosis.service.settings.properties.MethodCallThresholdProperty;
 import kieker.diagnosis.service.settings.properties.ShowUnmonitoredTimeProperty;
+import kieker.diagnosis.service.traces.SearchType;
 import kieker.diagnosis.service.traces.TracesFilter;
+import kieker.diagnosis.service.traces.TracesService;
+import kieker.diagnosis.ui.main.MainController;
 import kieker.diagnosis.ui.tabs.traces.aggregator.Aggregator;
 import kieker.diagnosis.ui.tabs.traces.aggregator.DurationAggregator;
 import kieker.diagnosis.ui.tabs.traces.aggregator.IdentityAggregator;
@@ -49,9 +64,190 @@ import kieker.diagnosis.ui.tabs.traces.components.MethodCallTreeItem;
  * @author Nils Christian Ehmke
  */
 @Singleton
-class TracesViewModel extends ViewModelBase<TracesView> {
+public class TracesViewModel extends ViewModelBase<TracesView> implements ViewModel {
 
-	public void updatePresentationTraces( final List<MethodCall> aTraceRoots ) {
+	public static final String EVENT_SELECT_TREE_ITEM = "EVENT_SELECT_TREE_ITEM";
+
+	private final Command searchCommand = createCommand( this::performSearch );
+	private final Command saveAsFavoriteCommand = createCommand( this::performSaveAsFavorite );
+	private final Command selectionChangeCommand = createCommand( this::performSelectionChange );
+	private final Command refreshCommand = createCommand( this::performRefresh );
+	private final Command prepareRefreshCommand = createCommand( this::performPrepareRefresh );
+
+	// Filter
+	private final StringProperty ivFilterHostProperty = new SimpleStringProperty( );
+	private final StringProperty ivFilterClassProperty = new SimpleStringProperty( );
+	private final StringProperty ivFilterMethodProperty = new SimpleStringProperty( );
+	private final StringProperty ivFilterExceptionProperty = new SimpleStringProperty( );
+	private final ObjectProperty<Long> ivFilterTraceIdProperty = new SimpleObjectProperty<>( );
+	private final BooleanProperty ivFilterUseRegExprProperty = new SimpleBooleanProperty( );
+
+	private final ObjectProperty<LocalDate> ivFilterLowerDateProperty = new SimpleObjectProperty<>( );
+	private final ObjectProperty<Calendar> ivFilterLowerTimeProperty = new SimpleObjectProperty<>( );
+	private final ObjectProperty<LocalDate> ivFilterUpperDateProperty = new SimpleObjectProperty<>( );
+	private final ObjectProperty<Calendar> ivFilterUpperTimeProperty = new SimpleObjectProperty<>( );
+	private final BooleanProperty ivFilterSearchWholeTraceProperty = new SimpleBooleanProperty( );
+	private final ObjectProperty<SearchType> ivFilterSearchTypeProperty = new SimpleObjectProperty<>( );
+
+	// Table
+	private final ObjectProperty<TreeItem<MethodCall>> ivRootMethodCallProperty = new SimpleObjectProperty<>( );
+	private final ObjectProperty<TreeItem<MethodCall>> ivSelectedMethodCallProperty = new SimpleObjectProperty<>( );
+	private final StringProperty ivDurationColumnHeaderProperty = new SimpleStringProperty( );
+
+	// Details
+	private final StringProperty ivDetailsHostProperty = new SimpleStringProperty( );
+	private final StringProperty ivDetailsClassProperty = new SimpleStringProperty( );
+	private final StringProperty ivDetailsMethodProperty = new SimpleStringProperty( );
+	private final StringProperty ivDetailsExceptionProperty = new SimpleStringProperty( );
+	private final StringProperty ivDetailsTraceDepthProperty = new SimpleStringProperty( );
+	private final StringProperty ivDetailsTraceSizeProperty = new SimpleStringProperty( );
+	private final StringProperty ivDetailsDurationProperty = new SimpleStringProperty( );
+	private final StringProperty ivDetailsPercentProperty = new SimpleStringProperty( );
+	private final StringProperty ivDetailsTimestampProperty = new SimpleStringProperty( );
+	private final StringProperty ivDetailsTraceIdProperty = new SimpleStringProperty( );
+
+	private final StringProperty ivStatusLabelProperty = new SimpleStringProperty( );
+
+	// Temporary variables
+	private List<MethodCall> ivTraceRoots;
+	private int ivTotalTraces;
+	private String ivDurationSuffix;
+
+	/**
+	 * This action is performed once during the application's start.
+	 */
+	public void initialize( ) {
+		updatePresentationDetails( null );
+		updatePresentationStatus( 0, 0 );
+		updatePresentationFilter( new TracesFilter( ) );
+	}
+
+	public Command getPrepareRefreshCommand( ) {
+		return prepareRefreshCommand;
+	}
+
+	/**
+	 * This action is performed when settings or data are changed and the view has to be refreshed. The actual refresh is only performed when
+	 * {@link #performRefresh()} is called. This method prepares only the refresh.
+	 */
+	public void performPrepareRefresh( ) {
+		// Find the trace roots to display
+		final TracesService tracesService = getService( TracesService.class );
+		ivTraceRoots = tracesService.searchTraces( new TracesFilter( ) );
+		ivTotalTraces = tracesService.countTraces( );
+
+		// Get the duration suffix
+		final SettingsService settingsService = getService( SettingsService.class );
+		ivDurationSuffix = settingsService.getCurrentDurationSuffix( );
+	}
+
+	public Command getRefreshCommand( ) {
+		return refreshCommand;
+	}
+
+	/**
+	 * This action is performed, when a refresh of the view is required. The preparation of the refresh is performed in {@link #performPrepareRefresh()}.
+	 */
+	public void performRefresh( ) {
+		// Reset the filter
+		final TracesFilter filter = new TracesFilter( );
+		updatePresentationFilter( filter );
+
+		// Update the view
+		updatePresentationTraces( ivTraceRoots );
+		updatePresentationStatus( ivTraceRoots.size( ), ivTotalTraces );
+
+		// Update the column header of the table
+		updatePresentationDurationColumnHeader( ivDurationSuffix );
+	}
+
+	Command getSelectionChangeCommand( ) {
+		return selectionChangeCommand;
+	}
+
+	/**
+	 * This action is performed, when the selection of the table changes.
+	 */
+	public void performSelectionChange( ) {
+		final MethodCall methodCall = getSelected( );
+		updatePresentationDetails( methodCall );
+	}
+
+	Command getSearchCommand( ) {
+		return searchCommand;
+	}
+
+	/**
+	 * This action is performed, when the user wants to perform a search.
+	 */
+	public void performSearch( ) {
+		try {
+			// Get the filter input from the user
+			final TracesFilter filter = savePresentationFilter( );
+
+			// Find the trace roots to display
+			final TracesService tracesService = getService( TracesService.class );
+			final List<MethodCall> traceRoots = tracesService.searchTraces( filter );
+			final int totalTraces = tracesService.countTraces( );
+
+			// Update the view
+			updatePresentationTraces( traceRoots );
+			updatePresentationStatus( traceRoots.size( ), totalTraces );
+		} catch ( final BusinessException ex ) {
+			throw new BusinessRuntimeException( ex );
+		}
+
+	}
+
+	/**
+	 * This action is performed, when someone requested a jump into the traces tab. The real action is determined based on the type of the parameter. If the
+	 * parameter is a {@link TracesFilter}, the filter is simply applied. If the parameter is a {@link MethodCall}, the trace for the method call is shown and
+	 * the view tries to navigate directly to the method call. If the method call is not visible, the trace is still shown.
+	 *
+	 * @param aParameter
+	 *            The parameter.
+	 */
+	public void performSetParameter( final Object aParameter ) {
+		if ( aParameter instanceof MethodCall ) {
+			final MethodCall methodCall = (MethodCall) aParameter;
+
+			// We are supposed to jump to the method call
+			final TracesFilter filter = new TracesFilter( );
+			filter.setTraceId( methodCall.getTraceId( ) );
+			updatePresentationFilter( filter );
+			performSearch( );
+
+			// Now let us see, whether we can find the method call
+			select( methodCall );
+		}
+
+		if ( aParameter instanceof TracesFilter ) {
+			final TracesFilter filter = (TracesFilter) aParameter;
+			updatePresentationFilter( filter );
+
+			performSearch( );
+		}
+	}
+
+	Command getSaveAsFavoriteCommand( ) {
+		return saveAsFavoriteCommand;
+	}
+
+	/**
+	 * This action is performed, when the user wants to save the current filter as a filter favorite.
+	 */
+	public void performSaveAsFavorite( ) {
+		try {
+			// We simply save the filter's content and delegate to the main controller. This should rather be performed with a scope, but is currently not
+			// possible due to a bug.
+			final TracesFilter filter = savePresentationFilter( );
+			getController( MainController.class ).performSaveAsFavorite( TracesView.class, filter );
+		} catch ( final BusinessException ex ) {
+			throw new BusinessRuntimeException( ex );
+		}
+	}
+
+	private void updatePresentationTraces( final List<MethodCall> aTraceRoots ) {
 		final PropertiesService propertiesService = getService( PropertiesService.class );
 		final boolean showUnmonitoredTime = propertiesService.loadApplicationProperty( ShowUnmonitoredTimeProperty.class );
 
@@ -93,78 +289,78 @@ class TracesViewModel extends ViewModelBase<TracesView> {
 		getView( ).getTreeTableView( ).setRoot( root );
 	}
 
-	public void updatePresentationDurationColumnHeader( final String aSuffix ) {
+	private void updatePresentationDurationColumnHeader( final String aSuffix ) {
 		getView( ).getDurationColumn( ).setText( getLocalizedString( "columnDuration" ) + " " + aSuffix );
 	}
 
-	public void updatePresentationDetails( final MethodCall aMethodCall ) {
+	private void updatePresentationDetails( final MethodCall aMethodCall ) {
 		final String noDataAvailable = getLocalizedString( "noDataAvailable" );
 
 		if ( aMethodCall != null ) {
-			getView( ).getDetailsHost( ).setText( aMethodCall.getHost( ) );
-			getView( ).getDetailsClass( ).setText( aMethodCall.getClazz( ) );
-			getView( ).getDetailsMethod( ).setText( aMethodCall.getMethod( ) );
-			getView( ).getDetailsException( ).setText( aMethodCall.getException( ) != null ? aMethodCall.getException( ) : noDataAvailable );
-			getView( ).getDetailsTraceDepth( ).setText( Integer.toString( aMethodCall.getTraceDepth( ) ) );
-			getView( ).getDetailsTraceSize( ).setText( Integer.toString( aMethodCall.getTraceSize( ) ) );
-			getView( ).getDetailsDuration( ).setText( String.format( "%d [ns]", aMethodCall.getDuration( ) ) );
-			getView( ).getDetailsPercent( ).setText( String.format( "%f %%", aMethodCall.getPercent( ) ) );
-			getView( ).getDetailsTimestamp( ).setText( Long.toString( aMethodCall.getTimestamp( ) ) );
-			getView( ).getDetailsTraceId( ).setText( Long.toString( aMethodCall.getTraceId( ) ) );
+			ivDetailsHostProperty.set( aMethodCall.getHost( ) );
+			ivDetailsClassProperty.set( aMethodCall.getClazz( ) );
+			ivDetailsMethodProperty.set( aMethodCall.getMethod( ) );
+			ivDetailsExceptionProperty.set( aMethodCall.getException( ) != null ? aMethodCall.getException( ) : noDataAvailable );
+			ivDetailsTraceDepthProperty.set( Integer.toString( aMethodCall.getTraceDepth( ) ) );
+			ivDetailsTraceSizeProperty.set( Integer.toString( aMethodCall.getTraceSize( ) ) );
+			ivDetailsDurationProperty.set( String.format( "%d [ns]", aMethodCall.getDuration( ) ) );
+			ivDetailsPercentProperty.set( String.format( "%f %%", aMethodCall.getPercent( ) ) );
+			ivDetailsTimestampProperty.set( Long.toString( aMethodCall.getTimestamp( ) ) );
+			ivDetailsTraceIdProperty.set( Long.toString( aMethodCall.getTraceId( ) ) );
 		} else {
-			getView( ).getDetailsHost( ).setText( noDataAvailable );
-			getView( ).getDetailsClass( ).setText( noDataAvailable );
-			getView( ).getDetailsMethod( ).setText( noDataAvailable );
-			getView( ).getDetailsException( ).setText( noDataAvailable );
-			getView( ).getDetailsTraceDepth( ).setText( noDataAvailable );
-			getView( ).getDetailsTraceSize( ).setText( noDataAvailable );
-			getView( ).getDetailsDuration( ).setText( noDataAvailable );
-			getView( ).getDetailsPercent( ).setText( noDataAvailable );
-			getView( ).getDetailsTimestamp( ).setText( noDataAvailable );
-			getView( ).getDetailsTraceId( ).setText( noDataAvailable );
+			ivDetailsHostProperty.set( noDataAvailable );
+			ivDetailsClassProperty.set( noDataAvailable );
+			ivDetailsMethodProperty.set( noDataAvailable );
+			ivDetailsExceptionProperty.set( noDataAvailable );
+			ivDetailsTraceDepthProperty.set( noDataAvailable );
+			ivDetailsTraceSizeProperty.set( noDataAvailable );
+			ivDetailsDurationProperty.set( noDataAvailable );
+			ivDetailsPercentProperty.set( noDataAvailable );
+			ivDetailsTimestampProperty.set( noDataAvailable );
+			ivDetailsTraceIdProperty.set( noDataAvailable );
 		}
 	}
 
-	public void updatePresentationStatus( final int aTraces, final int aTotalTraces ) {
+	private void updatePresentationStatus( final int aTraces, final int aTotalTraces ) {
 		final NumberFormat decimalFormat = DecimalFormat.getInstance( );
-		getView( ).getStatusLabel( ).setText( String.format( getLocalizedString( "statusLabel" ), decimalFormat.format( aTraces ), decimalFormat.format( aTotalTraces ) ) );
+		ivStatusLabelProperty.set( String.format( getLocalizedString( "statusLabel" ), decimalFormat.format( aTraces ), decimalFormat.format( aTotalTraces ) ) );
 	}
 
-	public MethodCall getSelected( ) {
-		final TreeItem<MethodCall> selectedItem = getView( ).getTreeTableView( ).getSelectionModel( ).getSelectedItem( );
-		return selectedItem != null ? selectedItem.getValue( ) : null;
+	private MethodCall getSelected( ) {
+		final TreeItem<MethodCall> treeItem = ivSelectedMethodCallProperty.get( );
+		return treeItem != null ? treeItem.getValue( ) : null;
 	}
 
-	public void updatePresentationFilter( final TracesFilter aFilter ) {
-		getView( ).getFilterHost( ).setText( aFilter.getHost( ) );
-		getView( ).getFilterClass( ).setText( aFilter.getClazz( ) );
-		getView( ).getFilterMethod( ).setText( aFilter.getMethod( ) );
-		getView( ).getFilterException( ).setText( aFilter.getException( ) );
-		getView( ).getFilterTraceId( ).setText( aFilter.getTraceId( ) != null ? Long.toString( aFilter.getTraceId( ) ) : null );
-		getView( ).getFilterUseRegExpr( ).setSelected( aFilter.isUseRegExpr( ) );
-		getView( ).getFilterSearchWholeTrace( ).setSelected( aFilter.isSearchWholeTrace( ) );
-		getView( ).getFilterLowerDate( ).setValue( aFilter.getLowerDate( ) );
-		getView( ).getFilterLowerTime( ).setCalendar( aFilter.getLowerTime( ) );
-		getView( ).getFilterUpperDate( ).setValue( aFilter.getUpperDate( ) );
-		getView( ).getFilterUpperTime( ).setCalendar( aFilter.getUpperTime( ) );
-		getView( ).getFilterSearchType( ).setValue( aFilter.getSearchType( ) );
+	private void updatePresentationFilter( final TracesFilter aFilter ) {
+		ivFilterHostProperty.set( aFilter.getHost( ) );
+		ivFilterClassProperty.set( aFilter.getClazz( ) );
+		ivFilterMethodProperty.set( aFilter.getMethod( ) );
+		ivFilterExceptionProperty.set( aFilter.getException( ) );
+		ivFilterTraceIdProperty.set( aFilter.getTraceId( ) );
+		ivFilterUseRegExprProperty.set( aFilter.isUseRegExpr( ) );
+		ivFilterSearchWholeTraceProperty.set( aFilter.isSearchWholeTrace( ) );
+		ivFilterLowerDateProperty.setValue( aFilter.getLowerDate( ) );
+		ivFilterLowerTimeProperty.set( aFilter.getLowerTime( ) );
+		ivFilterUpperDateProperty.setValue( aFilter.getUpperDate( ) );
+		ivFilterUpperTimeProperty.set( aFilter.getUpperTime( ) );
+		ivFilterSearchTypeProperty.setValue( aFilter.getSearchType( ) );
 	}
 
-	public TracesFilter savePresentationFilter( ) throws BusinessException {
+	private TracesFilter savePresentationFilter( ) throws BusinessException {
 		final TracesFilter filter = new TracesFilter( );
 
-		filter.setHost( trimToNull( getView( ).getFilterHost( ).getText( ) ) );
-		filter.setClazz( trimToNull( getView( ).getFilterClass( ).getText( ) ) );
-		filter.setMethod( trimToNull( getView( ).getFilterMethod( ).getText( ) ) );
-		filter.setException( trimToNull( getView( ).getFilterException( ).getText( ) ) );
-		filter.setUseRegExpr( getView( ).getFilterUseRegExpr( ).isSelected( ) );
-		filter.setSearchWholeTrace( getView( ).getFilterSearchWholeTrace( ).isSelected( ) );
-		filter.setLowerDate( getView( ).getFilterLowerDate( ).getValue( ) );
-		filter.setLowerTime( getView( ).getFilterLowerTime( ).getCalendar( ) );
-		filter.setUpperDate( getView( ).getFilterUpperDate( ).getValue( ) );
-		filter.setUpperTime( getView( ).getFilterUpperTime( ).getCalendar( ) );
-		filter.setSearchType( getView( ).getFilterSearchType( ).getValue( ) );
-		filter.setTraceId( getView( ).getFilterTraceId( ).getValue( ) );
+		filter.setHost( trimToNull( ivFilterHostProperty.get( ) ) );
+		filter.setClazz( trimToNull( ivFilterClassProperty.get( ) ) );
+		filter.setMethod( trimToNull( ivFilterMethodProperty.get( ) ) );
+		filter.setException( trimToNull( ivFilterExceptionProperty.get( ) ) );
+		filter.setUseRegExpr( ivFilterUseRegExprProperty.get( ) );
+		filter.setSearchWholeTrace( ivFilterSearchWholeTraceProperty.get( ) );
+		filter.setLowerDate( ivFilterLowerDateProperty.getValue( ) );
+		filter.setLowerTime( ivFilterLowerTimeProperty.getValue( ) );
+		filter.setUpperDate( ivFilterUpperDateProperty.getValue( ) );
+		filter.setUpperTime( ivFilterUpperTimeProperty.getValue( ) );
+		filter.setSearchType( ivFilterSearchTypeProperty.getValue( ) );
+		filter.setTraceId( ivFilterTraceIdProperty.getValue( ) );
 
 		// If we are using regular expressions, we should check them
 		if ( filter.isUseRegExpr( ) ) {
@@ -190,8 +386,8 @@ class TracesViewModel extends ViewModelBase<TracesView> {
 		return filter;
 	}
 
-	public void select( final MethodCall aMethodCall ) {
-		final TreeItem<MethodCall> root = getView( ).getTreeTableView( ).getRoot( );
+	private void select( final MethodCall aMethodCall ) {
+		final TreeItem<MethodCall> root = ivRootMethodCallProperty.get( );
 
 		final Stack<TreeItem<MethodCall>> stack = new Stack<>( );
 		stack.push( root );
@@ -202,7 +398,8 @@ class TracesViewModel extends ViewModelBase<TracesView> {
 			if ( treeItem.getValue( ) == aMethodCall ) {
 				// We found the item. Select it - and expand all parents
 				expand( treeItem );
-				getView( ).getTreeTableView( ).getSelectionModel( ).select( treeItem );
+
+				publish( EVENT_SELECT_TREE_ITEM, treeItem );
 
 				break;
 			} else {
@@ -218,6 +415,110 @@ class TracesViewModel extends ViewModelBase<TracesView> {
 			root.setExpanded( true );
 			root = root.getParent( );
 		}
+	}
+
+	StringProperty getFilterHostProperty( ) {
+		return ivFilterHostProperty;
+	}
+
+	StringProperty getFilterClassProperty( ) {
+		return ivFilterClassProperty;
+	}
+
+	StringProperty getFilterMethodProperty( ) {
+		return ivFilterMethodProperty;
+	}
+
+	StringProperty getFilterExceptionProperty( ) {
+		return ivFilterExceptionProperty;
+	}
+
+	ObjectProperty<Long> getFilterTraceIdProperty( ) {
+		return ivFilterTraceIdProperty;
+	}
+
+	BooleanProperty getFilterUseRegExprProperty( ) {
+		return ivFilterUseRegExprProperty;
+	}
+
+	ObjectProperty<LocalDate> getFilterLowerDateProperty( ) {
+		return ivFilterLowerDateProperty;
+	}
+
+	ObjectProperty<Calendar> getFilterLowerTimeProperty( ) {
+		return ivFilterLowerTimeProperty;
+	}
+
+	ObjectProperty<LocalDate> getFilterUpperDateProperty( ) {
+		return ivFilterUpperDateProperty;
+	}
+
+	ObjectProperty<Calendar> getFilterUpperTimeProperty( ) {
+		return ivFilterUpperTimeProperty;
+	}
+
+	BooleanProperty getFilterSearchWholeTraceProperty( ) {
+		return ivFilterSearchWholeTraceProperty;
+	}
+
+	ObjectProperty<SearchType> getFilterSearchTypeProperty( ) {
+		return ivFilterSearchTypeProperty;
+	}
+
+	ObjectProperty<TreeItem<MethodCall>> getRootMethodCallProperty( ) {
+		return ivRootMethodCallProperty;
+	}
+
+	ObjectProperty<TreeItem<MethodCall>> getSelectedMethodCallProperty( ) {
+		return ivSelectedMethodCallProperty;
+	}
+
+	StringProperty getDetailsHostProperty( ) {
+		return ivDetailsHostProperty;
+	}
+
+	StringProperty getDetailsClassProperty( ) {
+		return ivDetailsClassProperty;
+	}
+
+	StringProperty getDetailsMethodProperty( ) {
+		return ivDetailsMethodProperty;
+	}
+
+	StringProperty getDetailsExceptionProperty( ) {
+		return ivDetailsExceptionProperty;
+	}
+
+	StringProperty getDetailsTraceDepthProperty( ) {
+		return ivDetailsTraceDepthProperty;
+	}
+
+	StringProperty getDetailsTraceSizeProperty( ) {
+		return ivDetailsTraceSizeProperty;
+	}
+
+	StringProperty getDetailsDurationProperty( ) {
+		return ivDetailsDurationProperty;
+	}
+
+	StringProperty getDetailsPercentProperty( ) {
+		return ivDetailsPercentProperty;
+	}
+
+	StringProperty getDetailsTimestampProperty( ) {
+		return ivDetailsTimestampProperty;
+	}
+
+	StringProperty getDetailsTraceIdProperty( ) {
+		return ivDetailsTraceIdProperty;
+	}
+
+	StringProperty getStatusLabelProperty( ) {
+		return ivStatusLabelProperty;
+	}
+
+	StringProperty getDurationColumnHeaderProperty( ) {
+		return ivDurationColumnHeaderProperty;
 	}
 
 }

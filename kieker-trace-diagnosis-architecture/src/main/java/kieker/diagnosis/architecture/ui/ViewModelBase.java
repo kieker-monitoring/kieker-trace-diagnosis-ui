@@ -89,6 +89,18 @@ public abstract class ViewModelBase<V extends ViewBase<?>> {
 	}
 
 	/**
+	 * Gets a controller of the given type. Use this method with care, as it can lead to incomprehensible execution flow.
+	 *
+	 * @param aControllerClass
+	 *            The type of the controller.
+	 *
+	 * @return The controller.
+	 */
+	protected final <C extends ControllerBase<?>> C getController( final Class<C> aControllerClass ) {
+		return ivInjector.getInstance( aControllerClass );
+	}
+
+	/**
 	 * Closes the corresponding window of the view. If the view is a dialog, this closes the dialog. Otherwise the whole application window will be closed.
 	 */
 	public final void close( ) {

@@ -19,6 +19,8 @@ package kieker.diagnosis.ui.main;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import de.saxsys.mvvmfx.FluentViewLoader;
+import de.saxsys.mvvmfx.ViewTuple;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -33,11 +35,12 @@ import kieker.diagnosis.ui.tabs.aggregatedmethods.AggregatedMethodsView;
 import kieker.diagnosis.ui.tabs.methods.MethodsView;
 import kieker.diagnosis.ui.tabs.statistics.StatisticsView;
 import kieker.diagnosis.ui.tabs.traces.TracesView;
+import kieker.diagnosis.ui.tabs.traces.TracesViewModel;
 
 @Singleton
 public class MainView extends ViewBase<MainController> {
 
-	private final TracesView ivTracesView;
+	private final TracesViewModel ivTracesViewModel;
 	private final MethodsView ivMethodsView;
 	private final AggregatedMethodsView ivAggregatedMethodsView;
 	private final StatisticsView ivStatisticsView;
@@ -45,7 +48,7 @@ public class MainView extends ViewBase<MainController> {
 	private final Menu ivFavorites;
 
 	@Inject
-	public MainView( final TracesView aTracesView, final MethodsView aMethodsView, final AggregatedMethodsView aAggregatedMethodsView, final StatisticsView aStatisticsView ) {
+	public MainView( final MethodsView aMethodsView, final AggregatedMethodsView aAggregatedMethodsView, final StatisticsView aStatisticsView ) {
 		// Main menu
 		{
 			final MenuBar menuBar = new MenuBar( );
@@ -166,19 +169,19 @@ public class MainView extends ViewBase<MainController> {
 			VBox.setVgrow( ivTabPane, Priority.ALWAYS );
 
 			{
-				ivTracesView = aTracesView;
-				ivTracesView.initialize( );
+				final ViewTuple<TracesView, TracesViewModel> tuple = FluentViewLoader.javaView( TracesView.class ).load( );
+				ivTracesViewModel = tuple.getViewModel( );
 
 				final Tab tab = new Tab( );
 
 				tab.setText( getLocalizedString( "traces" ) );
-				tab.setContent( aTracesView );
+				tab.setContent( tuple.getView( ) );
 
 				ivTabPane.getTabs( ).add( tab );
 
 				// Only one default button is allowed - even if the other buttons are not visible. Therefore we have to set the default button property only for
 				// the current tab.
-				ivTracesView.getSearchButton( ).defaultButtonProperty( ).bind( ivTabPane.getSelectionModel( ).selectedItemProperty( ).isEqualTo( tab ) );
+				tuple.getCodeBehind( ).getSearchButton( ).defaultButtonProperty( ).bind( ivTabPane.getSelectionModel( ).selectedItemProperty( ).isEqualTo( tab ) );
 			}
 
 			{
@@ -240,14 +243,18 @@ public class MainView extends ViewBase<MainController> {
 	}
 
 	public void prepareRefresh( ) {
-		ivTracesView.prepareRefresh( );
+		// This should rather be performed with a scope, but is currently not possible due to a bug.
+		ivTracesViewModel.getPrepareRefreshCommand( ).execute( );
+
 		ivMethodsView.prepareRefresh( );
 		ivAggregatedMethodsView.prepareRefresh( );
 		ivStatisticsView.prepareRefresh( );
 	}
 
 	public void performRefresh( ) {
-		ivTracesView.performRefresh( );
+		// This should rather be performed with a scope, but is currently not possible due to a bug.
+		ivTracesViewModel.getRefreshCommand( ).execute( );
+
 		ivMethodsView.performRefresh( );
 		ivAggregatedMethodsView.performRefresh( );
 		ivStatisticsView.performRefresh( );
