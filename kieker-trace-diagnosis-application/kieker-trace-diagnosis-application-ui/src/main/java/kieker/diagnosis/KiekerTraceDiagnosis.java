@@ -17,10 +17,13 @@
 package kieker.diagnosis;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 
 import de.saxsys.mvvmfx.guice.MvvmfxGuiceApplication;
 import javafx.scene.Scene;
@@ -38,6 +41,16 @@ public class KiekerTraceDiagnosis extends MvvmfxGuiceApplication {
 
 	public static void main( final String[] aArgs ) {
 		launch( aArgs );
+	}
+
+	@Override
+	protected Injector createInjector( final Set<Module> modules ) {
+		return Guice.createInjector( com.google.inject.Stage.PRODUCTION, modules );
+	}
+
+	@Override
+	public void initGuiceModules( final List<Module> modules ) throws Exception {
+		modules.add( new KiekerTraceDiagnosisUIModule( ) );
 	}
 
 	@Override

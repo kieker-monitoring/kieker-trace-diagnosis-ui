@@ -16,14 +16,21 @@
 
 package kieker.diagnosis.ui.dialogs.about;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import com.google.inject.Singleton;
 
+import de.saxsys.mvvmfx.InjectViewModel;
+import de.saxsys.mvvmfx.JavaView;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import jfxtras.scene.layout.VBox;
 import kieker.diagnosis.architecture.ui.DialogViewBase;
@@ -34,7 +41,10 @@ import kieker.diagnosis.architecture.ui.DialogViewBase;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class AboutDialogView extends DialogViewBase<AboutDialogController, Void> {
+public class AboutDialogView extends DialogViewBase<AboutDialogController, Void> implements JavaView<AboutDialogViewModel>, Initializable {
+
+	@InjectViewModel
+	private AboutDialogViewModel ivViewModel;
 
 	public AboutDialogView( ) {
 		super( Modality.WINDOW_MODAL, StageStyle.DECORATED, true );
@@ -64,7 +74,7 @@ public class AboutDialogView extends DialogViewBase<AboutDialogController, Void>
 				button.setText( getLocalizedString( "ok" ) );
 				button.setDefaultButton( true );
 				button.setCancelButton( true );
-				button.setOnAction( e -> getController( ).performClose( ) );
+				button.setOnAction( e -> ivViewModel.getCloseDialogCommand( ).execute( ) );
 
 				buttonBar.getButtons( ).add( button );
 			}
@@ -76,6 +86,11 @@ public class AboutDialogView extends DialogViewBase<AboutDialogController, Void>
 	@Override
 	public void setParameter( final Object aParameter ) {
 
+	}
+
+	@Override
+	public void initialize( final URL aURL, final ResourceBundle aResourceBundle ) {
+		ivViewModel.subscribe( AboutDialogViewModel.EVENT_CLOSE_DIALOG, ( aKey, aPayload ) -> ( (Stage) getScene( ).getWindow( ) ).close( ) );
 	}
 
 }

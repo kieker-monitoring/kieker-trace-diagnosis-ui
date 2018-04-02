@@ -18,6 +18,10 @@ package kieker.diagnosis.ui.dialogs.about;
 
 import com.google.inject.Singleton;
 
+import de.saxsys.mvvmfx.ViewModel;
+import de.saxsys.mvvmfx.utils.commands.Action;
+import de.saxsys.mvvmfx.utils.commands.Command;
+import de.saxsys.mvvmfx.utils.commands.DelegateCommand;
 import kieker.diagnosis.architecture.ui.ViewModelBase;
 
 /**
@@ -26,6 +30,31 @@ import kieker.diagnosis.architecture.ui.ViewModelBase;
  * @author Nils Christian Ehmke
  */
 @Singleton
-class AboutDialogViewModel extends ViewModelBase<AboutDialogView> {
+public class AboutDialogViewModel extends ViewModelBase<AboutDialogView> implements ViewModel {
+
+	public static final String EVENT_CLOSE_DIALOG = "EVENT_CLOSE_DIALOG";
+
+	private final Command ivCloseDialogCommand = createCommand( this::performClose );
+
+	Command getCloseDialogCommand( ) {
+		return ivCloseDialogCommand;
+	}
+
+	/**
+	 * This action is performed, when the user wants to close the about dialog.
+	 */
+	private void performClose( ) {
+		publish( EVENT_CLOSE_DIALOG );
+	}
+
+	private Command createCommand( final Runnable aAction ) {
+		return new DelegateCommand( ( ) -> new Action( ) {
+
+			@Override
+			protected void action( ) throws Exception {
+				aAction.run( );
+			}
+		} );
+	}
 
 }

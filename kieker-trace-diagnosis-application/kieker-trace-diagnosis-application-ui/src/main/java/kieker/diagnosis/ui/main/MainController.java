@@ -23,6 +23,8 @@ import java.util.Optional;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import de.saxsys.mvvmfx.FluentViewLoader;
+import de.saxsys.mvvmfx.ViewTuple;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -46,6 +48,7 @@ import kieker.diagnosis.service.data.MonitoringLogService;
 import kieker.diagnosis.service.export.CSVData;
 import kieker.diagnosis.service.export.ExportService;
 import kieker.diagnosis.ui.dialogs.about.AboutDialogView;
+import kieker.diagnosis.ui.dialogs.about.AboutDialogViewModel;
 import kieker.diagnosis.ui.dialogs.manual.ManualDialogView;
 import kieker.diagnosis.ui.dialogs.monitoring.MonitoringDialogView;
 import kieker.diagnosis.ui.dialogs.progress.ProgressDialog;
@@ -61,9 +64,6 @@ public class MainController extends ControllerBase<MainViewModel> {
 
 	@Inject
 	SettingsDialogView ivSettingsDialogView;
-
-	@Inject
-	AboutDialogView ivAboutDialogView;
 
 	@Inject
 	MonitoringDialogView ivMonitoringDialogView;
@@ -142,7 +142,8 @@ public class MainController extends ControllerBase<MainViewModel> {
 	}
 
 	public void performAbout( ) {
-		ivAboutDialogView.open( getViewModel( ).getWindow( ) );
+		final ViewTuple<AboutDialogView, AboutDialogViewModel> tuple = FluentViewLoader.javaView( AboutDialogView.class ).load( );
+		tuple.getCodeBehind( ).open( getViewModel( ).getWindow( ) );
 	}
 
 	/**
