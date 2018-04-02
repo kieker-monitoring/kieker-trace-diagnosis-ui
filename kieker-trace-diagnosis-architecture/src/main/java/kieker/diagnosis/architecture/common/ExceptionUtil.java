@@ -33,6 +33,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
 
 /**
@@ -64,8 +65,8 @@ public class ExceptionUtil {
 
 	private static void showExceptionDialog( final Throwable aThrowable ) {
 		// Find out whether this is a business exception or not
-		final boolean isBusinessException = aThrowable instanceof BusinessRuntimeException;
-		final Throwable exception = isBusinessException ? aThrowable.getCause( ) : aThrowable;
+		final boolean isBusinessException = aThrowable instanceof BusinessRuntimeException || aThrowable instanceof BusinessException;
+		final Throwable exception = aThrowable instanceof BusinessRuntimeException ? aThrowable.getCause( ) : aThrowable;
 		final AlertType alertType = isBusinessException ? AlertType.WARNING : AlertType.ERROR;
 
 		// Keep in mind that some controllers start a new thread. As this might also lead to exceptions, the whole dialog showing has to be performed in the

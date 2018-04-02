@@ -27,7 +27,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import kieker.diagnosis.architecture.exception.BusinessException;
-import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
 import kieker.diagnosis.architecture.monitoring.MonitoringConfiguration;
 import kieker.diagnosis.architecture.monitoring.Status;
 import kieker.diagnosis.architecture.monitoring.Timer;
@@ -75,22 +74,16 @@ public class MonitoringDialogViewModel extends ViewModelBase<MonitoringDialogVie
 
 	/**
 	 * This action is performed, when the user wants to save and close the dialog.
-	 *
-	 * @return
 	 */
-	private void performSaveAndClose( ) {
-		try {
-			// Get the configuration...
-			final MonitoringConfiguration configuration = savePresentationConfiguration( );
+	private void performSaveAndClose( ) throws BusinessException {
+		// Get the configuration...
+		final MonitoringConfiguration configuration = savePresentationConfiguration( );
 
-			// ...and apply it
-			final MonitoringService monitoringService = getService( MonitoringService.class );
-			monitoringService.configureMonitoring( configuration );
+		// ...and apply it
+		final MonitoringService monitoringService = getService( MonitoringService.class );
+		monitoringService.configureMonitoring( configuration );
 
-			performClose( );
-		} catch ( final BusinessException ex ) {
-			throw new BusinessRuntimeException( ex );
-		}
+		performClose( );
 	}
 
 	Command getCloseCommand( ) {

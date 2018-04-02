@@ -27,6 +27,8 @@ import de.saxsys.mvvmfx.utils.commands.DelegateCommand;
 import javafx.scene.Scene;
 import javafx.stage.Window;
 import kieker.diagnosis.architecture.common.ClassUtil;
+import kieker.diagnosis.architecture.common.ExceptionUtil;
+import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.service.ServiceBase;
 
 /**
@@ -116,14 +118,28 @@ public abstract class ViewModelBase<V extends ViewBase<?>> {
 		}
 	}
 
-	protected final Command createCommand( final Runnable aAction ) {
+	protected final Command createCommand( final ViewModelAction aAction ) {
 		return new DelegateCommand( ( ) -> new Action( ) {
 
 			@Override
-			protected void action( ) throws Exception {
-				aAction.run( );
+			protected void action( ) {
+				try {
+					aAction.run( );
+				} catch ( final BusinessException ex ) {
+					final Class<?> viewModelClass = ClassUtil.getRealClass( ViewModelBase.this.getClass( ) );
+
+					// Now handle the exception
+					ExceptionUtil.handleException( ex, viewModelClass.getName( ) );
+				}
 			}
 		} );
+	}
+
+	@FunctionalInterface
+	public static interface ViewModelAction {
+
+		void run( ) throws BusinessException;
+
 	}
 
 }
