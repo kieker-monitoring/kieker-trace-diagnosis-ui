@@ -25,6 +25,7 @@ import java.util.Stack;
 
 import com.google.inject.Singleton;
 
+import de.saxsys.mvvmfx.InjectScope;
 import de.saxsys.mvvmfx.ViewModel;
 import de.saxsys.mvvmfx.utils.commands.Command;
 import javafx.beans.property.BooleanProperty;
@@ -35,7 +36,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.TreeItem;
 import kieker.diagnosis.architecture.exception.BusinessException;
-import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
 import kieker.diagnosis.architecture.service.properties.PropertiesService;
 import kieker.diagnosis.architecture.ui.ViewModelBase;
 import kieker.diagnosis.service.data.MethodCall;
@@ -50,6 +50,7 @@ import kieker.diagnosis.service.traces.SearchType;
 import kieker.diagnosis.service.traces.TracesFilter;
 import kieker.diagnosis.service.traces.TracesService;
 import kieker.diagnosis.ui.main.MainController;
+import kieker.diagnosis.ui.scopes.MainScope;
 import kieker.diagnosis.ui.tabs.traces.aggregator.Aggregator;
 import kieker.diagnosis.ui.tabs.traces.aggregator.DurationAggregator;
 import kieker.diagnosis.ui.tabs.traces.aggregator.IdentityAggregator;
@@ -68,11 +69,14 @@ public class TracesViewModel extends ViewModelBase<TracesView> implements ViewMo
 
 	public static final String EVENT_SELECT_TREE_ITEM = "EVENT_SELECT_TREE_ITEM";
 
-	private final Command searchCommand = createCommand( this::performSearch );
-	private final Command saveAsFavoriteCommand = createCommand( this::performSaveAsFavorite );
-	private final Command selectionChangeCommand = createCommand( this::performSelectionChange );
-	private final Command refreshCommand = createCommand( this::performRefresh );
-	private final Command prepareRefreshCommand = createCommand( this::performPrepareRefresh );
+	@InjectScope
+	private MainScope ivMainScope;
+
+	private final Command ivSearchCommand = createCommand( this::performSearch );
+	private final Command ivSaveAsFavoriteCommand = createCommand( this::performSaveAsFavorite );
+	private final Command ivSelectionChangeCommand = createCommand( this::performSelectionChange );
+	private final Command ivRefreshCommand = createCommand( this::performRefresh );
+	private final Command ivPrepareRefreshCommand = createCommand( this::performPrepareRefresh );
 
 	// Filter
 	private final StringProperty ivFilterHostProperty = new SimpleStringProperty( );
@@ -120,10 +124,9 @@ public class TracesViewModel extends ViewModelBase<TracesView> implements ViewMo
 		updatePresentationDetails( null );
 		updatePresentationStatus( 0, 0 );
 		updatePresentationFilter( new TracesFilter( ) );
-	}
 
-	public Command getPrepareRefreshCommand( ) {
-		return prepareRefreshCommand;
+		ivMainScope.subscribe( MainScope.EVENT_REFRESH, ( aKey, aPayload ) -> ivRefreshCommand.execute( ) );
+		ivMainScope.subscribe( MainScope.EVENT_PREPARE_REFRESH, ( aKey, aPayload ) -> ivPrepareRefreshCommand.execute( ) );
 	}
 
 	/**
@@ -139,10 +142,6 @@ public class TracesViewModel extends ViewModelBase<TracesView> implements ViewMo
 		// Get the duration suffix
 		final SettingsService settingsService = getService( SettingsService.class );
 		ivDurationSuffix = settingsService.getCurrentDurationSuffix( );
-	}
-
-	public Command getRefreshCommand( ) {
-		return refreshCommand;
 	}
 
 	/**
@@ -162,7 +161,7 @@ public class TracesViewModel extends ViewModelBase<TracesView> implements ViewMo
 	}
 
 	Command getSelectionChangeCommand( ) {
-		return selectionChangeCommand;
+		return ivSelectionChangeCommand;
 	}
 
 	/**
@@ -174,29 +173,24 @@ public class TracesViewModel extends ViewModelBase<TracesView> implements ViewMo
 	}
 
 	Command getSearchCommand( ) {
-		return searchCommand;
+		return ivSearchCommand;
 	}
 
 	/**
 	 * This action is performed, when the user wants to perform a search.
 	 */
-	public void performSearch( ) {
-		try {
-			// Get the filter input from the user
-			final TracesFilter filter = savePresentationFilter( );
+	public void performSearch( ) throws BusinessException {
+		// Get the filter input from the user
+		final TracesFilter filter = savePresentationFilter( );
 
-			// Find the trace roots to display
-			final TracesService tracesService = getService( TracesService.class );
-			final List<MethodCall> traceRoots = tracesService.searchTraces( filter );
-			final int totalTraces = tracesService.countTraces( );
+		// Find the trace roots to display
+		final TracesService tracesService = getService( TracesService.class );
+		final List<MethodCall> traceRoots = tracesService.searchTraces( filter );
+		final int totalTraces = tracesService.countTraces( );
 
-			// Update the view
-			updatePresentationTraces( traceRoots );
-			updatePresentationStatus( traceRoots.size( ), totalTraces );
-		} catch ( final BusinessException ex ) {
-			throw new BusinessRuntimeException( ex );
-		}
-
+		// Update the view
+		updatePresentationTraces( traceRoots );
+		updatePresentationStatus( traceRoots.size( ), totalTraces );
 	}
 
 	/**
@@ -207,7 +201,7 @@ public class TracesViewModel extends ViewModelBase<TracesView> implements ViewMo
 	 * @param aParameter
 	 *            The parameter.
 	 */
-	public void performSetParameter( final Object aParameter ) {
+	public void performSetParameter( final Object aParameter ) throws BusinessException {
 		if ( aParameter instanceof MethodCall ) {
 			final MethodCall methodCall = (MethodCall) aParameter;
 
@@ -230,21 +224,17 @@ public class TracesViewModel extends ViewModelBase<TracesView> implements ViewMo
 	}
 
 	Command getSaveAsFavoriteCommand( ) {
-		return saveAsFavoriteCommand;
+		return ivSaveAsFavoriteCommand;
 	}
 
 	/**
 	 * This action is performed, when the user wants to save the current filter as a filter favorite.
 	 */
-	public void performSaveAsFavorite( ) {
-		try {
-			// We simply save the filter's content and delegate to the main controller. This should rather be performed with a scope, but is currently not
-			// possible due to a bug.
-			final TracesFilter filter = savePresentationFilter( );
-			getController( MainController.class ).performSaveAsFavorite( TracesView.class, filter );
-		} catch ( final BusinessException ex ) {
-			throw new BusinessRuntimeException( ex );
-		}
+	public void performSaveAsFavorite( ) throws BusinessException {
+		// We simply save the filter's content and delegate to the main controller. This should rather be performed with a scope, but is currently not
+		// possible due to a bug.
+		final TracesFilter filter = savePresentationFilter( );
+		getController( MainController.class ).performSaveAsFavorite( TracesView.class, filter );
 	}
 
 	private void updatePresentationTraces( final List<MethodCall> aTraceRoots ) {

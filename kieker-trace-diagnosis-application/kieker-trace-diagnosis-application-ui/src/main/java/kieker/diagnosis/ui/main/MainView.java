@@ -31,6 +31,7 @@ import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import kieker.diagnosis.architecture.ui.ViewBase;
+import kieker.diagnosis.ui.scopes.MainScope;
 import kieker.diagnosis.ui.tabs.aggregatedmethods.AggregatedMethodsView;
 import kieker.diagnosis.ui.tabs.methods.MethodsView;
 import kieker.diagnosis.ui.tabs.statistics.StatisticsView;
@@ -40,7 +41,8 @@ import kieker.diagnosis.ui.tabs.traces.TracesViewModel;
 @Singleton
 public class MainView extends ViewBase<MainController> {
 
-	private final TracesViewModel ivTracesViewModel;
+	private final MainScope ivMainScope = new MainScope( );
+
 	private final MethodsView ivMethodsView;
 	private final AggregatedMethodsView ivAggregatedMethodsView;
 	private final StatisticsView ivStatisticsView;
@@ -169,9 +171,7 @@ public class MainView extends ViewBase<MainController> {
 			VBox.setVgrow( ivTabPane, Priority.ALWAYS );
 
 			{
-				final ViewTuple<TracesView, TracesViewModel> tuple = FluentViewLoader.javaView( TracesView.class ).load( );
-				ivTracesViewModel = tuple.getViewModel( );
-
+				final ViewTuple<TracesView, TracesViewModel> tuple = FluentViewLoader.javaView( TracesView.class ).providedScopes( ivMainScope ).load( );
 				final Tab tab = new Tab( );
 
 				tab.setText( getLocalizedString( "traces" ) );
@@ -243,8 +243,7 @@ public class MainView extends ViewBase<MainController> {
 	}
 
 	public void prepareRefresh( ) {
-		// This should rather be performed with a scope, but is currently not possible due to a bug.
-		ivTracesViewModel.getPrepareRefreshCommand( ).execute( );
+		ivMainScope.publish( MainScope.EVENT_PREPARE_REFRESH );
 
 		ivMethodsView.prepareRefresh( );
 		ivAggregatedMethodsView.prepareRefresh( );
@@ -252,8 +251,7 @@ public class MainView extends ViewBase<MainController> {
 	}
 
 	public void performRefresh( ) {
-		// This should rather be performed with a scope, but is currently not possible due to a bug.
-		ivTracesViewModel.getRefreshCommand( ).execute( );
+		ivMainScope.publish( MainScope.EVENT_REFRESH );
 
 		ivMethodsView.performRefresh( );
 		ivAggregatedMethodsView.performRefresh( );

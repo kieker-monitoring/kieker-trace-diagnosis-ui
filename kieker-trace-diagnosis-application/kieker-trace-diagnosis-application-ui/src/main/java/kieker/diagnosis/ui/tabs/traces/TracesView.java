@@ -44,6 +44,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import jfxtras.scene.control.CalendarTimeTextField;
+import kieker.diagnosis.architecture.exception.BusinessException;
+import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
 import kieker.diagnosis.architecture.ui.EnumStringConverter;
 import kieker.diagnosis.architecture.ui.ViewBase;
 import kieker.diagnosis.architecture.ui.components.LongTextField;
@@ -742,7 +744,11 @@ public class TracesView extends ViewBase<TracesController> implements JavaView<T
 	@Override
 	public void setParameter( final Object aParameter ) {
 		// This should rather be performed with a scope or a command
-		ivViewModel.performSetParameter( aParameter );
+		try {
+			ivViewModel.performSetParameter( aParameter );
+		} catch ( final BusinessException ex ) {
+			throw new BusinessRuntimeException( ex );
+		}
 	}
 
 	public Button getSearchButton( ) {
