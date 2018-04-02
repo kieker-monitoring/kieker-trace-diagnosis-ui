@@ -19,9 +19,7 @@ package kieker.diagnosis.ui.dialogs.about;
 import com.google.inject.Singleton;
 
 import de.saxsys.mvvmfx.ViewModel;
-import de.saxsys.mvvmfx.utils.commands.Action;
 import de.saxsys.mvvmfx.utils.commands.Command;
-import de.saxsys.mvvmfx.utils.commands.DelegateCommand;
 import kieker.diagnosis.architecture.ui.ViewModelBase;
 
 /**
@@ -45,16 +43,6 @@ public class AboutDialogViewModel extends ViewModelBase<AboutDialogView> impleme
 	 */
 	private void performClose( ) {
 		publish( EVENT_CLOSE_DIALOG );
-	}
-
-	private Command createCommand( final Runnable aAction ) {
-		return new DelegateCommand( ( ) -> new Action( ) {
-
-			@Override
-			protected void action( ) throws Exception {
-				aAction.run( );
-			}
-		} );
 	}
 
 }

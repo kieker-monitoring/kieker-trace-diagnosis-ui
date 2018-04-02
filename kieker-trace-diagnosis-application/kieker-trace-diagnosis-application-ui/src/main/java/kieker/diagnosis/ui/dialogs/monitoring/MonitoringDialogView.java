@@ -16,15 +16,21 @@
 
 package kieker.diagnosis.ui.dialogs.monitoring;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import com.google.inject.Singleton;
 
+import de.saxsys.mvvmfx.InjectViewModel;
+import de.saxsys.mvvmfx.JavaView;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ComboBoxBase;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
@@ -32,6 +38,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import kieker.diagnosis.architecture.monitoring.Timer;
 import kieker.diagnosis.architecture.monitoring.Writer;
@@ -45,7 +52,10 @@ import kieker.diagnosis.architecture.ui.components.IntegerTextField;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class MonitoringDialogView extends DialogViewBase<MonitoringDialogController, Void> {
+public class MonitoringDialogView extends DialogViewBase<MonitoringDialogController, Void> implements JavaView<MonitoringDialogViewModel>, Initializable {
+
+	@InjectViewModel
+	private MonitoringDialogViewModel ivViewModel;
 
 	private Label ivStatus;
 	private CheckBox ivActive;
@@ -57,7 +67,7 @@ public class MonitoringDialogView extends DialogViewBase<MonitoringDialogControl
 	private IntegerTextField ivBuffer;
 
 	public MonitoringDialogView( ) {
-		super( Modality.WINDOW_MODAL, StageStyle.DECORATED, MonitoringDialogController::performRefresh, true );
+		super( Modality.WINDOW_MODAL, StageStyle.DECORATED, true );
 
 		setSpacing( 10 );
 
@@ -252,7 +262,7 @@ public class MonitoringDialogView extends DialogViewBase<MonitoringDialogControl
 				final Button button = new Button( );
 				button.setText( getLocalizedString( "cancel" ) );
 				button.setCancelButton( true );
-				button.setOnAction( e -> getController( ).performClose( ) );
+				button.setOnAction( e -> ivViewModel.getCloseCommand( ).execute( ) );
 
 				buttonBar.getButtons( ).add( button );
 			}
@@ -260,9 +270,7 @@ public class MonitoringDialogView extends DialogViewBase<MonitoringDialogControl
 				final Button button = new Button( );
 				button.setText( getLocalizedString( "ok" ) );
 				button.setDefaultButton( true );
-				button.setOnAction( e -> {
-					getController( ).performSaveAndClose( );
-				} );
+				button.setOnAction( e -> ivViewModel.getSaveAndCloseCommand( ).execute( ) );
 
 				buttonBar.getButtons( ).add( button );
 			}
@@ -275,36 +283,29 @@ public class MonitoringDialogView extends DialogViewBase<MonitoringDialogControl
 	public void setParameter( final Object aParameter ) {
 	}
 
-	Label getStatus( ) {
-		return ivStatus;
+	@Override
+	public void initialize( final URL aURL, final ResourceBundle aResourceBundle ) {
+		ivViewModel.subscribe( MonitoringDialogViewModel.EVENT_CLOSE_DIALOG, ( aKey, aPayload ) -> ( (Stage) getScene( ).getWindow( ) ).close( ) );
+
+		ivStatus.textProperty( ).bindBidirectional( ivViewModel.getStatusProperty( ) );
+		ivActive.selectedProperty( ).bindBidirectional( ivViewModel.getActiveProperty( ) );
+		ivOutputDirectory.textProperty( ).bindBidirectional( ivViewModel.getOutputDirectoryProperty( ) );
+		ivTimer.valueProperty( ).bindBidirectional( ivViewModel.getTimerProperty( ) );
+		ivWriter.valueProperty( ).bindBidirectional( ivViewModel.getWriterProperty( ) );
+		ivMaxEntriesPerFile.valueProperty( ).bindBidirectional( ivViewModel.getMaxEntriesPerFileProperty( ) );
+		ivQueueSize.valueProperty( ).bindBidirectional( ivViewModel.getQueueSizeProperty( ) );
+		ivBuffer.valueProperty( ).bindBidirectional( ivViewModel.getBufferProperty( ) );
+
+		ivViewModel.getStatusStyleClassProperty( ).addListener( (ChangeListener<String>) ( aObservableValue, aOldValue, aNewValue ) -> {
+			refreshStatusStyleClass( aOldValue, aNewValue );
+		} );
+		// As the view model is currently initialized before the view, and we are only registered for changes, we have to update at this point manually.
+		refreshStatusStyleClass( null, ivViewModel.getStatusStyleClassProperty( ).get( ) );
 	}
 
-	CheckBox getActive( ) {
-		return ivActive;
-	}
-
-	TextField getOutputDirectory( ) {
-		return ivOutputDirectory;
-	}
-
-	ComboBoxBase<Timer> getTimer( ) {
-		return ivTimer;
-	}
-
-	ComboBoxBase<Writer> getWriter( ) {
-		return ivWriter;
-	}
-
-	IntegerTextField getMaxEntriesPerFile( ) {
-		return ivMaxEntriesPerFile;
-	}
-
-	IntegerTextField getQueueSize( ) {
-		return ivQueueSize;
-	}
-
-	IntegerTextField getBuffer( ) {
-		return ivBuffer;
+	private void refreshStatusStyleClass( final String aOldValue, final String aNewValue ) {
+		ivStatus.getStyleClass( ).remove( aOldValue );
+		ivStatus.getStyleClass( ).add( aNewValue );
 	}
 
 }

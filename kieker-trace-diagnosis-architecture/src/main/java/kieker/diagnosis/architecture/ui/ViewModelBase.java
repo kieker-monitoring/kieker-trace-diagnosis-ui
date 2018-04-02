@@ -1,17 +1,17 @@
-/*************************************************************************** 
- * Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)         
- *                                                                           
- * Licensed under the Apache License, Version 2.0 (the "License");           
- * you may not use this file except in compliance with the License.          
- * You may obtain a copy of the License at                                   
- *                                                                           
- *     http://www.apache.org/licenses/LICENSE-2.0                            
- *                                                                           
- * Unless required by applicable law or agreed to in writing, software       
- * distributed under the License is distributed on an "AS IS" BASIS,         
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  
- * See the License for the specific language governing permissions and       
- * limitations under the License.                                            
+/***************************************************************************
+ * Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  ***************************************************************************/
 
 package kieker.diagnosis.architecture.ui;
@@ -21,6 +21,9 @@ import java.util.ResourceBundle;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
+import de.saxsys.mvvmfx.utils.commands.Action;
+import de.saxsys.mvvmfx.utils.commands.Command;
+import de.saxsys.mvvmfx.utils.commands.DelegateCommand;
 import javafx.scene.Scene;
 import javafx.stage.Window;
 import kieker.diagnosis.architecture.common.ClassUtil;
@@ -111,6 +114,16 @@ public abstract class ViewModelBase<V extends ViewBase<?>> {
 				return string;
 			}
 		}
+	}
+
+	protected final Command createCommand( final Runnable aAction ) {
+		return new DelegateCommand( ( ) -> new Action( ) {
+
+			@Override
+			protected void action( ) throws Exception {
+				aAction.run( );
+			}
+		} );
 	}
 
 }

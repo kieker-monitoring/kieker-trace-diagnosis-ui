@@ -52,6 +52,7 @@ import kieker.diagnosis.ui.dialogs.about.AboutDialogViewModel;
 import kieker.diagnosis.ui.dialogs.manual.ManualDialogView;
 import kieker.diagnosis.ui.dialogs.manual.ManualDialogViewModel;
 import kieker.diagnosis.ui.dialogs.monitoring.MonitoringDialogView;
+import kieker.diagnosis.ui.dialogs.monitoring.MonitoringDialogViewModel;
 import kieker.diagnosis.ui.dialogs.progress.ProgressDialog;
 import kieker.diagnosis.ui.dialogs.settings.SettingsDialogView;
 import kieker.diagnosis.ui.main.properties.CloseWithoutPromptProperty;
@@ -65,9 +66,6 @@ public class MainController extends ControllerBase<MainViewModel> {
 
 	@Inject
 	SettingsDialogView ivSettingsDialogView;
-
-	@Inject
-	MonitoringDialogView ivMonitoringDialogView;
 
 	/**
 	 * This action is performed, when the user wants to import a monitoring log.
@@ -307,7 +305,8 @@ public class MainController extends ControllerBase<MainViewModel> {
 	}
 
 	public void performMonitoring( ) {
-		ivMonitoringDialogView.open( getViewModel( ).getWindow( ) );
+		final ViewTuple<MonitoringDialogView, MonitoringDialogViewModel> tuple = FluentViewLoader.javaView( MonitoringDialogView.class ).load( );
+		tuple.getCodeBehind( ).open( getViewModel( ).getWindow( ) );
 	}
 
 	public void performDocumentation( ) {
