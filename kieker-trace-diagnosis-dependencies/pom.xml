@@ -6,21 +6,21 @@
 
 	<groupId>net.kieker-monitoring</groupId>
 	<artifactId>kieker-trace-diagnosis-dependencies</artifactId>
-	<version>3.0.0</version>
+	<version>3.1.0.RC4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<properties>
 		<appassembler.plugin.version>2.0.0</appassembler.plugin.version>
 		<kieker.version>1.13</kieker.version>
-		<guice.version>4.1.0</guice.version>
+		<guice.version>4.2.0</guice.version>
 		<hppc.version>0.7.3</hppc.version>
-		<log4j.version>2.9.1</log4j.version>
-		<jfxtras.version>8.0-r5</jfxtras.version>
+		<log4j.version>2.11.0</log4j.version>
+		<jfxtras.version>8.0-r6</jfxtras.version>
 		<junit.version>4.12</junit.version>
 		<hamcrest.version>1.3</hamcrest.version>
 		<dependency.plugin.version>3.0.2</dependency.plugin.version>
 		<aopalliance.version>1.0</aopalliance.version>
-		<guava.version>19.0</guava.version>
+		<guava.version>23.0</guava.version>
 		<maven.compiler.version>3.7.0</maven.compiler.version>
 		<resources.plugin.version>3.0.2</resources.plugin.version>
 		<mvvmfx.version>1.7.0</mvvmfx.version>
@@ -31,17 +31,17 @@
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>kieker-trace-diagnosis-architecture</artifactId>
-				<version>3.0.0</version>
+				<version>3.1.0.RC4-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>kieker-trace-diagnosis-application-ui</artifactId>
-				<version>3.0.0</version>
+				<version>3.1.0.RC4-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>kieker-trace-diagnosis-application-service</artifactId>
-				<version>3.0.0</version>
+				<version>3.1.0.RC4-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>

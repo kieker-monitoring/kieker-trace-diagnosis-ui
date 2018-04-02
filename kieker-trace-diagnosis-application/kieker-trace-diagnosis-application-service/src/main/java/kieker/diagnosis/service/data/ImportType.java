@@ -14,26 +14,15 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.ui.dialogs.manual;
-
-import com.google.inject.Singleton;
-
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
-import kieker.diagnosis.architecture.ui.ViewModelBase;
+package kieker.diagnosis.service.data;
 
 /**
- * The view model of the user manual dialog.
+ * This enum represents the possible types of imports (from a directory or from a specific file).
  *
  * @author Nils Christian Ehmke
  */
-@Singleton
-class ManualDialogViewModel extends ViewModelBase<ManualDialogView> {
+public enum ImportType {
 
-	public void updatePresentation( final String aContent ) {
-		final WebView webView = getView( ).getWebView( );
-		final WebEngine engine = webView.getEngine( );
-		engine.loadContent( aContent );
-	}
+	DIRECTORY, ZIP_FILE
 
 }

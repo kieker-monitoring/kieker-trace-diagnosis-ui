@@ -1,3 +1,29 @@
+3.1.0
+	30 Mar 2018
+	Task (TRACEUI-21)
+	Updated all libraries within the application.
+
+	30 Mar 2018
+	Bug (TRACEUI-20)
+	Fixed a broken link in the internal documentation.
+
+	30 Mar 2018
+	Feature (TRACEUI-19)
+	Improved the internal documentation by using Bootstrap.
+
+	30 Mar 2018
+	Bug (TRACEUI-18)
+	Internal controller classes are now using the correct logger.
+	
+	21 Mar 2018
+	Feature (TRACEUI-17)
+	The signatures of method calls is now taken from the after operation events rather than from the before operation events. For most users this is not important. However, some applications take the methods' results into account for the records,
+	which means that their after operation events have an enriched method signature compared to their before operation events.
+
+	20 Mar 2018
+	Feature (TRACEUI-16)
+	Monitoring logs can now be read directly from a ZIP file.
+
 3.0.0
 	25 Dec 2017
 	Bug (TRACEUI-15)

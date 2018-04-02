@@ -17,10 +17,19 @@
 package kieker.diagnosis.service.data;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
 
+import com.google.common.io.ByteStreams;
+import com.google.common.io.Files;
 import com.google.inject.Singleton;
 
 import kieker.diagnosis.architecture.exception.BusinessException;
@@ -56,11 +65,14 @@ public class MonitoringLogService extends ServiceBase {
 		super( false );
 	}
 
-	public void importMonitoringLog( final File aDirectory ) {
+	public void importMonitoringLog( final File aDirectoryOrFile, final ImportType aType ) {
 		final long tin = System.currentTimeMillis( );
 
+		File directory = null;
 		try {
 			clear( );
+
+			directory = extractIfNecessary( aDirectoryOrFile, aType );
 
 			// We use some helper classes to avoid having temporary fields in the service
 			final TemporaryRepository temporaryRepository = new TemporaryRepository( this );
@@ -72,8 +84,8 @@ public class MonitoringLogService extends ServiceBase {
 			boolean directoryImported = false;
 
 			for ( final Reader reader : readerList ) {
-				if ( reader.shouldBeExecuted( aDirectory ) ) {
-					reader.readFromDirectory( aDirectory );
+				if ( reader.shouldBeExecuted( directory ) ) {
+					reader.readFromDirectory( directory );
 					directoryImported = true;
 				}
 			}
@@ -91,15 +103,67 @@ public class MonitoringLogService extends ServiceBase {
 				throw new BusinessException( msg );
 			}
 
-			setDataAvailable( aDirectory, tin );
+			setDataAvailable( aDirectoryOrFile, tin );
 		} catch ( final BusinessException ex ) {
 			// A business exception means, that something went wrong, but that the data is partially available
-			setDataAvailable( aDirectory, tin );
+			setDataAvailable( aDirectoryOrFile, tin );
 
 			throw new BusinessRuntimeException( ex );
 		} catch ( final Exception ex ) {
 			throw new TechnicalException( getLocalizedString( "errorMessageImportFailed" ), ex );
+		} finally {
+			// If necessary delete the temporary directory
+			if ( aType == ImportType.ZIP_FILE && directory != null ) {
+				deleteDirectory( directory );
+			}
 		}
+	}
+
+	private File extractIfNecessary( final File aDirectoryOrFile, final ImportType aType ) throws ZipException, IOException {
+		final File directory;
+		switch ( aType ) {
+			case DIRECTORY:
+				directory = aDirectoryOrFile;
+			break;
+			case ZIP_FILE:
+				directory = extractZIPFile( aDirectoryOrFile );
+			break;
+			default:
+				// Should not happen
+				directory = null;
+			break;
+
+		}
+		return directory;
+	}
+
+	private File extractZIPFile( final File aFile ) throws ZipException, IOException {
+		final File tempDirectory = Files.createTempDir( );
+
+		try ( final ZipFile zipFile = new ZipFile( aFile ) ) {
+			final Enumeration<? extends ZipEntry> zipEntries = zipFile.entries( );
+			while ( zipEntries.hasMoreElements( ) ) {
+				final ZipEntry zipEntry = zipEntries.nextElement( );
+				try ( InputStream inputStream = zipFile.getInputStream( zipEntry ) ) {
+					try ( final FileOutputStream outputStream = new FileOutputStream( new File( tempDirectory, zipEntry.getName( ) ) ) ) {
+						ByteStreams.copy( inputStream, outputStream );
+					}
+				}
+			}
+		}
+
+		return tempDirectory;
+	}
+
+	private void deleteDirectory( final File aDirectory ) {
+		final File[] children = aDirectory.listFiles( );
+		if ( children != null ) {
+			for ( final File child : children ) {
+				deleteDirectory( child );
+			}
+		}
+
+		aDirectory.delete( );
 	}
 
 	private void setDataAvailable( final File aDirectory, final long aTin ) {
