@@ -14,7 +14,7 @@
 		<guice.version>4.2.0</guice.version>
 		<hppc.version>0.7.3</hppc.version>
 		<log4j.version>2.11.0</log4j.version>
-		<jfxtras.version>8.0-r6</jfxtras.version>
+		<jfxtras.version>9.0-r1</jfxtras.version>
 		<junit.version>4.12</junit.version>
 		<hamcrest.version>1.3</hamcrest.version>
 		<dependency.plugin.version>3.0.2</dependency.plugin.version>
