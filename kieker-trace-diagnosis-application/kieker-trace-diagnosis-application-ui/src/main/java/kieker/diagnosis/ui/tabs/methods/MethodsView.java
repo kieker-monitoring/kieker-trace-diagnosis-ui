@@ -36,7 +36,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import jfxtras.scene.control.CalendarTimeTextField;
+import jfxtras.scene.control.LocalTimeTextField;
 import kieker.diagnosis.architecture.ui.EnumStringConverter;
 import kieker.diagnosis.architecture.ui.ViewBase;
 import kieker.diagnosis.architecture.ui.components.LongTextField;
@@ -65,9 +65,9 @@ public class MethodsView extends ViewBase<MethodsController> {
 	private final CheckBox ivFilterUseRegExpr;
 
 	private final DatePicker ivFilterLowerDate;
-	private final CalendarTimeTextField ivFilterLowerTime;
+	private final LocalTimeTextField ivFilterLowerTime;
 	private final DatePicker ivFilterUpperDate;
-	private final CalendarTimeTextField ivFilterUpperTime;
+	private final LocalTimeTextField ivFilterUpperTime;
 	private final ComboBox<SearchType> ivFilterSearchType;
 
 	private final Button ivSearchButton;
@@ -183,7 +183,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 				}
 
 				{
-					ivFilterLowerTime = new CalendarTimeTextField( );
+					ivFilterLowerTime = new LocalTimeTextField( );
 					ivFilterLowerTime.setPromptText( getLocalizedString( "filterByLowerTime" ) );
 
 					// The CalendarTimeTextField doesn't recognize the default button
@@ -213,7 +213,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 				}
 
 				{
-					ivFilterUpperTime = new CalendarTimeTextField( );
+					ivFilterUpperTime = new LocalTimeTextField( );
 					ivFilterUpperTime.setPromptText( getLocalizedString( "filterByUpperTime" ) );
 
 					// The CalendarTimeTextField doesn't recognize the default button
@@ -600,7 +600,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 		return ivFilterLowerDate;
 	}
 
-	CalendarTimeTextField getFilterLowerTime( ) {
+	LocalTimeTextField getFilterLowerTime( ) {
 		return ivFilterLowerTime;
 	}
 
@@ -608,7 +608,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 		return ivFilterUpperDate;
 	}
 
-	CalendarTimeTextField getFilterUpperTime( ) {
+	LocalTimeTextField getFilterUpperTime( ) {
 		return ivFilterUpperTime;
 	}
 

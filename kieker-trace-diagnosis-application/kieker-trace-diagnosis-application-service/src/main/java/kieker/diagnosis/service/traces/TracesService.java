@@ -71,9 +71,10 @@ public class TracesService extends ServiceBase {
 		final List<MethodCall> traceRoots = monitoringLogService.getTraceRoots( );
 
 		// ...and apply the filter to each of the traces
-		final List<MethodCall> filteredTraceRoots = traceRoots.parallelStream( ).filter( predicate ).collect( Collectors.toList( ) );
-
-		return filteredTraceRoots;
+		return traceRoots
+				.parallelStream( )
+				.filter( predicate )
+				.collect( Collectors.toList( ) );
 	}
 
 	private Predicate<MethodCall> getSearchTypePredicate( final SearchType aSearchType ) {

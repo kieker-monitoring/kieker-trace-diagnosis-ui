@@ -86,9 +86,9 @@ class MethodsViewModel extends ViewModelBase<MethodsView> {
 		getView( ).getFilterTraceId( ).setText( aFilter.getTraceId( ) != null ? Long.toString( aFilter.getTraceId( ) ) : null );
 		getView( ).getFilterUseRegExpr( ).setSelected( aFilter.isUseRegExpr( ) );
 		getView( ).getFilterLowerDate( ).setValue( aFilter.getLowerDate( ) );
-		getView( ).getFilterLowerTime( ).setCalendar( aFilter.getLowerTime( ) );
+		getView( ).getFilterLowerTime( ).setLocalTime( aFilter.getLowerTime( ) );
 		getView( ).getFilterUpperDate( ).setValue( aFilter.getUpperDate( ) );
-		getView( ).getFilterUpperTime( ).setCalendar( aFilter.getUpperTime( ) );
+		getView( ).getFilterUpperTime( ).setLocalTime( aFilter.getUpperTime( ) );
 
 	}
 
@@ -102,9 +102,9 @@ class MethodsViewModel extends ViewModelBase<MethodsView> {
 		filter.setSearchType( getView( ).getFilterSearchType( ).getValue( ) );
 		filter.setUseRegExpr( getView( ).getFilterUseRegExpr( ).isSelected( ) );
 		filter.setLowerDate( getView( ).getFilterLowerDate( ).getValue( ) );
-		filter.setLowerTime( getView( ).getFilterLowerTime( ).getCalendar( ) );
+		filter.setLowerTime( getView( ).getFilterLowerTime( ).getLocalTime( ) );
 		filter.setUpperDate( getView( ).getFilterUpperDate( ).getValue( ) );
-		filter.setUpperTime( getView( ).getFilterUpperTime( ).getCalendar( ) );
+		filter.setUpperTime( getView( ).getFilterUpperTime( ).getLocalTime( ) );
 		filter.setTraceId( getView( ).getFilterTraceId( ).getValue( ) );
 
 		// If we are using regular expressions, we should check them

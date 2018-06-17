@@ -16,7 +16,6 @@
 
 package kieker.diagnosis.service.aggregatedmethods;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -45,25 +44,20 @@ public class AggregatedMethodsService extends ServiceBase {
 	 * @return A new list containing all available aggregated method calls matching the filter.
 	 */
 	public List<AggregatedMethodCall> searchMethods( final AggregatedMethodsFilter aFilter ) {
-		// Prepare the predicates
-		final FilterService filterService = getService( FilterService.class );
-
-		final List<Predicate<AggregatedMethodCall>> predicates = new ArrayList<>( );
-		predicates.add( filterService.getStringPredicate( AggregatedMethodCall::getHost, aFilter.getHost( ), aFilter.isUseRegExpr( ) ) );
-		predicates.add( filterService.getStringPredicate( AggregatedMethodCall::getClazz, aFilter.getClazz( ), aFilter.isUseRegExpr( ) ) );
-		predicates.add( filterService.getStringPredicate( AggregatedMethodCall::getMethod, aFilter.getMethod( ), aFilter.isUseRegExpr( ) ) );
-		predicates.add( filterService.getStringPredicate( AggregatedMethodCall::getException, aFilter.getException( ), aFilter.isUseRegExpr( ) ) );
-		predicates.add( getSearchTypePredicate( aFilter.getSearchType( ) ) );
-
-		final Predicate<AggregatedMethodCall> predicate = filterService.conjunct( predicates );
-
 		// Get the methods
 		final MonitoringLogService monitoringLogService = getService( MonitoringLogService.class );
 		final List<AggregatedMethodCall> methods = monitoringLogService.getAggreatedMethods( );
 
 		// Filter the methods
-		final List<AggregatedMethodCall> filteredMethods = methods.parallelStream( ).filter( predicate ).collect( Collectors.toList( ) );
-		return filteredMethods;
+		final FilterService filterService = getService( FilterService.class );
+		return methods
+				.parallelStream( )
+				.filter( filterService.getStringPredicate( AggregatedMethodCall::getHost, aFilter.getHost( ), aFilter.isUseRegExpr( ) ) )
+				.filter( filterService.getStringPredicate( AggregatedMethodCall::getClazz, aFilter.getClazz( ), aFilter.isUseRegExpr( ) ) )
+				.filter( filterService.getStringPredicate( AggregatedMethodCall::getMethod, aFilter.getMethod( ), aFilter.isUseRegExpr( ) ) )
+				.filter( filterService.getStringPredicate( AggregatedMethodCall::getException, aFilter.getException( ), aFilter.isUseRegExpr( ) ) )
+				.filter( getSearchTypePredicate( aFilter.getSearchType( ) ) )
+				.collect( Collectors.toList( ) );
 	}
 
 	private Predicate<AggregatedMethodCall> getSearchTypePredicate( final SearchType aSearchType ) {

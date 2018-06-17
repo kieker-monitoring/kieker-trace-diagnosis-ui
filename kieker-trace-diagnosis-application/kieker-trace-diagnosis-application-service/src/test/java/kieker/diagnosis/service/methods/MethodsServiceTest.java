@@ -1,17 +1,17 @@
-/*************************************************************************** 
- * Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)         
- *                                                                           
- * Licensed under the Apache License, Version 2.0 (the "License");           
- * you may not use this file except in compliance with the License.          
- * You may obtain a copy of the License at                                   
- *                                                                           
- *     http://www.apache.org/licenses/LICENSE-2.0                            
- *                                                                           
- * Unless required by applicable law or agreed to in writing, software       
- * distributed under the License is distributed on an "AS IS" BASIS,         
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  
- * See the License for the specific language governing permissions and       
- * limitations under the License.                                            
+/***************************************************************************
+ * Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  ***************************************************************************/
 
 package kieker.diagnosis.service.methods;
@@ -20,6 +20,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Calendar;
 
 import org.junit.Before;
@@ -160,35 +161,35 @@ public class MethodsServiceTest {
 		// Now search with a filter
 		final MethodsFilter methodsFilter = new MethodsFilter( );
 		methodsFilter.setLowerDate( LocalDate.of( 2000, 05, 01 ) );
-		methodsFilter.setLowerTime( getCalendarFor( 15, 20 ) );
+		methodsFilter.setLowerTime( LocalTime.of( 15, 20 ) );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2000, 05, 01 ) );
-		methodsFilter.setLowerTime( getCalendarFor( 14, 20 ) );
+		methodsFilter.setLowerTime( LocalTime.of( 14, 20 ) );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2000, 05, 01 ) );
-		methodsFilter.setLowerTime( getCalendarFor( 16, 20 ) );
+		methodsFilter.setLowerTime( LocalTime.of( 16, 20 ) );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2000, 05, 01 ) );
-		methodsFilter.setLowerTime( getCalendarFor( 15, 21 ) );
+		methodsFilter.setLowerTime( LocalTime.of( 15, 21 ) );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2015, 01, 01 ) );
-		methodsFilter.setLowerTime( getCalendarFor( 15, 20 ) );
+		methodsFilter.setLowerTime( LocalTime.of( 15, 20 ) );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2015, 01, 04 ) );
-		methodsFilter.setLowerTime( getCalendarFor( 15, 20 ) );
+		methodsFilter.setLowerTime( LocalTime.of( 15, 20 ) );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2015, 01, 05 ) );
-		methodsFilter.setLowerTime( getCalendarFor( 10, 10 ) );
+		methodsFilter.setLowerTime( LocalTime.of( 10, 10 ) );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 0 ) );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2015, 01, 04 ) );
-		methodsFilter.setLowerTime( getCalendarFor( 15, 26 ) );
+		methodsFilter.setLowerTime( LocalTime.of( 15, 26 ) );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 0 ) );
 
 		methodsFilter.setLowerDate( null );
@@ -200,7 +201,7 @@ public class MethodsServiceTest {
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
 
 		methodsFilter.setLowerDate( null );
-		methodsFilter.setLowerTime( getCalendarFor( 15, 25 ) );
+		methodsFilter.setLowerTime( LocalTime.of( 15, 25 ) );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
 	}
 
@@ -217,35 +218,35 @@ public class MethodsServiceTest {
 		// Now search with a filter
 		final MethodsFilter methodsFilter = new MethodsFilter( );
 		methodsFilter.setUpperDate( LocalDate.of( 2000, 05, 01 ) );
-		methodsFilter.setUpperTime( getCalendarFor( 15, 20 ) );
+		methodsFilter.setUpperTime( LocalTime.of( 15, 20 ) );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2000, 05, 01 ) );
-		methodsFilter.setUpperTime( getCalendarFor( 14, 20 ) );
+		methodsFilter.setUpperTime( LocalTime.of( 14, 20 ) );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 0 ) );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2000, 05, 01 ) );
-		methodsFilter.setUpperTime( getCalendarFor( 16, 20 ) );
+		methodsFilter.setUpperTime( LocalTime.of( 16, 20 ) );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2000, 05, 05 ) );
-		methodsFilter.setUpperTime( getCalendarFor( 15, 21 ) );
+		methodsFilter.setUpperTime( LocalTime.of( 15, 21 ) );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2015, 01, 01 ) );
-		methodsFilter.setUpperTime( getCalendarFor( 15, 20 ) );
+		methodsFilter.setUpperTime( LocalTime.of( 15, 20 ) );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2015, 01, 04 ) );
-		methodsFilter.setUpperTime( getCalendarFor( 15, 20 ) );
+		methodsFilter.setUpperTime( LocalTime.of( 15, 20 ) );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2015, 01, 05 ) );
-		methodsFilter.setUpperTime( getCalendarFor( 10, 10 ) );
+		methodsFilter.setUpperTime( LocalTime.of( 10, 10 ) );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2015, 01, 04 ) );
-		methodsFilter.setUpperTime( getCalendarFor( 15, 26 ) );
+		methodsFilter.setUpperTime( LocalTime.of( 15, 26 ) );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
 		methodsFilter.setUpperDate( null );
@@ -257,19 +258,12 @@ public class MethodsServiceTest {
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
 
 		methodsFilter.setUpperDate( null );
-		methodsFilter.setUpperTime( getCalendarFor( 15, 25 ) );
+		methodsFilter.setUpperTime( LocalTime.of( 15, 25 ) );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
 		methodsFilter.setUpperDate( null );
-		methodsFilter.setUpperTime( getCalendarFor( 15, 20 ) );
+		methodsFilter.setUpperTime( LocalTime.of( 15, 20 ) );
 		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
-	}
-
-	private Calendar getCalendarFor( final int aHour, final int aMinute ) {
-		final Calendar calendar = Calendar.getInstance( );
-		calendar.set( Calendar.HOUR_OF_DAY, aHour );
-		calendar.set( Calendar.MINUTE, aMinute );
-		return calendar;
 	}
 
 	private void createMethodCall( final String aHost, final String aClazz, final String aMethod, final String aException ) {
