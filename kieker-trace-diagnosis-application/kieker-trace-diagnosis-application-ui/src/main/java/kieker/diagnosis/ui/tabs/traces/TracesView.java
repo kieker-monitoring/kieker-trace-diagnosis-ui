@@ -43,7 +43,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import jfxtras.scene.control.CalendarTimeTextField;
+import jfxtras.scene.control.LocalTimeTextField;
 import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
 import kieker.diagnosis.architecture.ui.EnumStringConverter;
@@ -77,9 +77,9 @@ public class TracesView extends ViewBase<TracesController> implements JavaView<T
 	private final CheckBox ivFilterUseRegExpr;
 
 	private final DatePicker ivFilterLowerDate;
-	private final CalendarTimeTextField ivFilterLowerTime;
+	private final LocalTimeTextField ivFilterLowerTime;
 	private final DatePicker ivFilterUpperDate;
-	private final CalendarTimeTextField ivFilterUpperTime;
+	private final LocalTimeTextField ivFilterUpperTime;
 	private final CheckBox ivFilterSearchWholeTrace;
 	private final ComboBox<SearchType> ivFilterSearchType;
 
@@ -195,7 +195,7 @@ public class TracesView extends ViewBase<TracesController> implements JavaView<T
 				}
 
 				{
-					ivFilterLowerTime = new CalendarTimeTextField( );
+					ivFilterLowerTime = new LocalTimeTextField( );
 					ivFilterLowerTime.setPromptText( getLocalizedString( "filterByLowerTime" ) );
 
 					// The CalendarTimeTextField doesn't recognize the default button
@@ -225,7 +225,7 @@ public class TracesView extends ViewBase<TracesController> implements JavaView<T
 				}
 
 				{
-					ivFilterUpperTime = new CalendarTimeTextField( );
+					ivFilterUpperTime = new LocalTimeTextField( );
 					ivFilterUpperTime.setPromptText( getLocalizedString( "filterByUpperTime" ) );
 
 					// The CalendarTimeTextField doesn't recognize the default button
@@ -673,7 +673,7 @@ public class TracesView extends ViewBase<TracesController> implements JavaView<T
 		return ivFilterLowerDate;
 	}
 
-	CalendarTimeTextField getFilterLowerTime( ) {
+	LocalTimeTextField getFilterLowerTime( ) {
 		return ivFilterLowerTime;
 	}
 
@@ -681,7 +681,7 @@ public class TracesView extends ViewBase<TracesController> implements JavaView<T
 		return ivFilterUpperDate;
 	}
 
-	CalendarTimeTextField getFilterUpperTime( ) {
+	LocalTimeTextField getFilterUpperTime( ) {
 		return ivFilterUpperTime;
 	}
 
@@ -766,9 +766,9 @@ public class TracesView extends ViewBase<TracesController> implements JavaView<T
 		ivFilterUseRegExpr.selectedProperty( ).bindBidirectional( ivViewModel.getFilterUseRegExprProperty( ) );
 
 		ivFilterLowerDate.valueProperty( ).bindBidirectional( ivViewModel.getFilterLowerDateProperty( ) );
-		ivFilterLowerTime.calendarProperty( ).bindBidirectional( ivViewModel.getFilterLowerTimeProperty( ) );
+		ivFilterLowerTime.localTimeProperty( ).bindBidirectional( ivViewModel.getFilterLowerTimeProperty( ) );
 		ivFilterUpperDate.valueProperty( ).bindBidirectional( ivViewModel.getFilterUpperDateProperty( ) );
-		ivFilterUpperTime.calendarProperty( ).bindBidirectional( ivViewModel.getFilterUpperTimeProperty( ) );
+		ivFilterUpperTime.localTimeProperty( ).bindBidirectional( ivViewModel.getFilterUpperTimeProperty( ) );
 		ivFilterSearchWholeTrace.selectedProperty( ).bindBidirectional( ivViewModel.getFilterSearchWholeTraceProperty( ) );
 		ivFilterSearchType.valueProperty( ).bindBidirectional( ivViewModel.getFilterSearchTypeProperty( ) );
 
@@ -793,8 +793,8 @@ public class TracesView extends ViewBase<TracesController> implements JavaView<T
 		// Subscription to events
 		ivViewModel.subscribe( TracesViewModel.EVENT_SELECT_TREE_ITEM, ( aKey, aPayload ) -> {
 			if ( aPayload.length == 1 ) {
-				@SuppressWarnings ( "unchecked" )
-				final TreeItem<MethodCall> methodCall = (TreeItem<MethodCall>) aPayload[0];
+				@SuppressWarnings( "unchecked" )
+				final TreeItem<MethodCall> methodCall = ( TreeItem<MethodCall> ) aPayload[0];
 				ivTreeTableView.getSelectionModel( ).select( methodCall );
 			}
 		} );

@@ -1,23 +1,23 @@
-/*************************************************************************** 
- * Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)         
- *                                                                           
- * Licensed under the Apache License, Version 2.0 (the "License");           
- * you may not use this file except in compliance with the License.          
- * You may obtain a copy of the License at                                   
- *                                                                           
- *     http://www.apache.org/licenses/LICENSE-2.0                            
- *                                                                           
- * Unless required by applicable law or agreed to in writing, software       
- * distributed under the License is distributed on an "AS IS" BASIS,         
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  
- * See the License for the specific language governing permissions and       
- * limitations under the License.                                            
+/***************************************************************************
+ * Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  ***************************************************************************/
 
 package kieker.diagnosis.service.traces;
 
 import java.time.LocalDate;
-import java.util.Calendar;
+import java.time.LocalTime;
 
 /**
  * This is a data transfer object holding the filter for the traces service.
@@ -34,9 +34,9 @@ public final class TracesFilter {
 	private SearchType ivSearchType = SearchType.ALL;
 	private boolean ivUseRegExpr;
 	private boolean ivSearchWholeTrace;
-	private Calendar ivLowerTime;
+	private LocalTime ivLowerTime;
 	private LocalDate ivUpperDate;
-	private Calendar ivUpperTime;
+	private LocalTime ivUpperTime;
 	private LocalDate ivLowerDate;
 
 	public String getHost( ) {
@@ -95,11 +95,11 @@ public final class TracesFilter {
 		ivSearchWholeTrace = aSearchWholeTrace;
 	}
 
-	public Calendar getLowerTime( ) {
+	public LocalTime getLowerTime( ) {
 		return ivLowerTime;
 	}
 
-	public void setLowerTime( final Calendar aLowerTime ) {
+	public void setLowerTime( final LocalTime aLowerTime ) {
 		ivLowerTime = aLowerTime;
 	}
 
@@ -111,11 +111,11 @@ public final class TracesFilter {
 		ivUpperDate = aUpperDate;
 	}
 
-	public Calendar getUpperTime( ) {
+	public LocalTime getUpperTime( ) {
 		return ivUpperTime;
 	}
 
-	public void setUpperTime( final Calendar aUpperTime ) {
+	public void setUpperTime( final LocalTime aUpperTime ) {
 		ivUpperTime = aUpperTime;
 	}
 

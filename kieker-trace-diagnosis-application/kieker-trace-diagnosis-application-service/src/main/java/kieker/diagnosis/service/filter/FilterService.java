@@ -18,10 +18,11 @@ package kieker.diagnosis.service.filter;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoField;
-import java.util.Calendar;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -40,14 +41,19 @@ import kieker.diagnosis.service.pattern.PatternService;
 public class FilterService extends ServiceBase {
 
 	public <T> Predicate<T> getLongPredicate( final Function<T, Long> aLongFunction, final Long aSearchLong ) {
-		return t -> {
-			final long actualLong = aLongFunction.apply( t );
-			return aSearchLong == null || actualLong == aSearchLong.longValue( );
-		};
+		if ( aSearchLong == null ) {
+			return t -> true;
+		}
+
+		return t -> aLongFunction.apply( t ) == aSearchLong.longValue( );
 	}
 
 	public <T> Predicate<T> getStringPredicate( final Function<T, String> aStringFunction, final String aSearchString, final boolean aUseRegExpr ) {
-		if ( aUseRegExpr && aSearchString != null ) {
+		if ( aSearchString == null ) {
+			return t -> true;
+		}
+
+		if ( aUseRegExpr ) {
 			// If we use a regular expression, we have to compile the pattern
 			final PatternService patternService = getService( PatternService.class );
 			final Pattern pattern = patternService.compilePattern( aSearchString );
@@ -57,12 +63,12 @@ public class FilterService extends ServiceBase {
 				final String actualString = aStringFunction.apply( t );
 				return actualString != null && pattern.matcher( actualString ).matches( );
 			};
-		} else {
-			return t -> {
-				final String actualString = aStringFunction.apply( t );
-				return aSearchString == null || actualString != null && actualString.toLowerCase( ).contains( aSearchString.toLowerCase( ) );
-			};
 		}
+
+		return t -> {
+			final String actualString = aStringFunction.apply( t );
+			return actualString != null && actualString.toLowerCase( ).contains( aSearchString.toLowerCase( ) );
+		};
 	}
 
 	/**
@@ -73,85 +79,62 @@ public class FilterService extends ServiceBase {
 	 *
 	 * @return The conjuncted predicates.
 	 */
-	public <T> Predicate<T> conjunct( final Iterable<Predicate<T>> aPredicates ) {
-		Predicate<T> predicate = t -> true;
-
-		for ( final Predicate<T> subPredicate : aPredicates ) {
-			predicate = predicate.and( subPredicate );
-		}
-
-		return predicate;
+	public <T> Predicate<T> conjunct( final List<Predicate<T>> aPredicates ) {
+		return aPredicates
+				.stream( )
+				.reduce( t -> true, Predicate::and );
 	}
 
-	public <T> Predicate<T> getAfterTimePredicate( final Function<T, Long> aTimestampFunction, final LocalDate aLowerDate, final Calendar aLowerTime ) {
+	public <T> Predicate<T> getAfterTimePredicate( final Function<T, Long> aTimestampFunction, final LocalDate aLowerDate, final LocalTime aLowerTime ) {
 		if ( aLowerDate == null && aLowerTime == null ) {
-			// Nothing to do. Just return an always-true-filter
 			return t -> true;
-		} else {
-			return t -> {
-				// Get the date and time from the timestamp
-				final ZonedDateTime zonedDateTime = getZonedDateTime( aTimestampFunction, t );
+		}
 
-				// Compare the date
-				if ( aLowerDate != null ) {
-					final LocalDate localDate = LocalDate.from( zonedDateTime );
-					if ( localDate.isAfter( aLowerDate ) ) {
-						// We don't have to check the time. It is another day.
-						return true;
-					}
-					if ( localDate.isBefore( aLowerDate ) ) {
-						return false;
-					}
+		return t -> {
+			// Get the date and time from the timestamp
+			final LocalDateTime localDateTime = getDateTime( aTimestampFunction, t );
+
+			// Compare the date
+			if ( aLowerDate != null ) {
+				final LocalDate localDate = localDateTime.toLocalDate( );
+
+				if ( localDate.isAfter( aLowerDate ) ) {
+					return true;
 				}
+				if ( localDate.isBefore( aLowerDate ) ) {
+					return false;
+				}
+			}
 
-				// Compare the time
-				if ( aLowerTime != null ) {
-					final int hour1 = zonedDateTime.get( ChronoField.HOUR_OF_DAY );
-					final int minute1 = zonedDateTime.get( ChronoField.MINUTE_OF_HOUR );
+			// Compare the time
+			if ( aLowerTime != null ) {
+				final LocalTime localTime = localDateTime.toLocalTime( );
 
-					final int hour2 = aLowerTime.get( Calendar.HOUR_OF_DAY );
-					final int minute2 = aLowerTime.get( Calendar.MINUTE );
-
-					final boolean result;
-
-					if ( hour2 < hour1 ) {
-						result = true;
-					} else if ( hour2 > hour1 ) {
-						result = false;
-					} else if ( minute2 < minute1 ) {
-						result = true;
-					} else if ( minute2 > minute1 ) {
-						result = false;
-					} else {
-						result = true;
-					}
-
-					if ( !result ) {
-						return result;
-					}
-
+				if ( localTime.isBefore( aLowerTime ) ) {
+					return false;
 				}
 
 				return true;
+			}
 
-			};
-		}
+			return true;
+
+		};
 	}
 
-	public <T> Predicate<T> getBeforeTimePredicate( final Function<T, Long> aTimestampFunction, final LocalDate aUpperDate, final Calendar aUpperTime ) {
+	public <T> Predicate<T> getBeforeTimePredicate( final Function<T, Long> aTimestampFunction, final LocalDate aUpperDate, final LocalTime aUpperTime ) {
 		if ( aUpperDate == null && aUpperTime == null ) {
-			// Nothing to do. Just return an always-true-filter
 			return t -> true;
 		} else {
 			return t -> {
 				// Get the date and time from the timestamp
-				final ZonedDateTime zonedDateTime = getZonedDateTime( aTimestampFunction, t );
+				final LocalDateTime localDateTime = getDateTime( aTimestampFunction, t );
 
 				// Compare the date
 				if ( aUpperDate != null ) {
-					final LocalDate localDate = LocalDate.from( zonedDateTime );
+					final LocalDate localDate = localDateTime.toLocalDate( );
+
 					if ( localDate.isBefore( aUpperDate ) ) {
-						// We don't have to check the time. It is another day.
 						return true;
 					}
 					if ( localDate.isAfter( aUpperDate ) ) {
@@ -161,30 +144,13 @@ public class FilterService extends ServiceBase {
 
 				// Compare the time
 				if ( aUpperTime != null ) {
-					final int hour1 = zonedDateTime.get( ChronoField.HOUR_OF_DAY );
-					final int minute1 = zonedDateTime.get( ChronoField.MINUTE_OF_HOUR );
+					final LocalTime localTime = localDateTime.toLocalTime( );
 
-					final int hour2 = aUpperTime.get( Calendar.HOUR_OF_DAY );
-					final int minute2 = aUpperTime.get( Calendar.MINUTE );
-
-					final boolean result;
-
-					if ( hour2 > hour1 ) {
-						result = true;
-					} else if ( hour2 < hour1 ) {
-						result = false;
-					} else if ( minute2 > minute1 ) {
-						result = true;
-					} else if ( minute2 < minute1 ) {
-						result = false;
-					} else {
-						result = true;
+					if ( localTime.isAfter( aUpperTime ) ) {
+						return false;
 					}
 
-					if ( !result ) {
-						return result;
-					}
-
+					return true;
 				}
 
 				return true;
@@ -193,10 +159,10 @@ public class FilterService extends ServiceBase {
 		}
 	}
 
-	private <T> ZonedDateTime getZonedDateTime( final Function<T, Long> aTimestampFunction, final T t ) {
+	private <T> LocalDateTime getDateTime( final Function<T, Long> aTimestampFunction, final T t ) {
 		final long timestamp = aTimestampFunction.apply( t );
 		final Instant instant = Instant.ofEpochMilli( timestamp );
-		return ZonedDateTime.ofInstant( instant, ZoneId.systemDefault( ) );
+		return LocalDateTime.ofInstant( instant, ZoneId.systemDefault( ) ).truncatedTo( ChronoUnit.SECONDS );
 	}
 
 }

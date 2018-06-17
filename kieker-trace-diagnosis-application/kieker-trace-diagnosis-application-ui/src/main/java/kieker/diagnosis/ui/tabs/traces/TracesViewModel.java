@@ -19,7 +19,7 @@ package kieker.diagnosis.ui.tabs.traces;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
-import java.util.Calendar;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Stack;
 
@@ -87,9 +87,9 @@ public class TracesViewModel extends ViewModelBase<TracesView> implements ViewMo
 	private final BooleanProperty ivFilterUseRegExprProperty = new SimpleBooleanProperty( );
 
 	private final ObjectProperty<LocalDate> ivFilterLowerDateProperty = new SimpleObjectProperty<>( );
-	private final ObjectProperty<Calendar> ivFilterLowerTimeProperty = new SimpleObjectProperty<>( );
+	private final ObjectProperty<LocalTime> ivFilterLowerTimeProperty = new SimpleObjectProperty<>( );
 	private final ObjectProperty<LocalDate> ivFilterUpperDateProperty = new SimpleObjectProperty<>( );
-	private final ObjectProperty<Calendar> ivFilterUpperTimeProperty = new SimpleObjectProperty<>( );
+	private final ObjectProperty<LocalTime> ivFilterUpperTimeProperty = new SimpleObjectProperty<>( );
 	private final BooleanProperty ivFilterSearchWholeTraceProperty = new SimpleBooleanProperty( );
 	private final ObjectProperty<SearchType> ivFilterSearchTypeProperty = new SimpleObjectProperty<>( );
 
@@ -130,8 +130,7 @@ public class TracesViewModel extends ViewModelBase<TracesView> implements ViewMo
 	}
 
 	/**
-	 * This action is performed when settings or data are changed and the view has to be refreshed. The actual refresh is only performed when
-	 * {@link #performRefresh()} is called. This method prepares only the refresh.
+	 * This action is performed when settings or data are changed and the view has to be refreshed. The actual refresh is only performed when {@link #performRefresh()} is called. This method prepares only the refresh.
 	 */
 	public void performPrepareRefresh( ) {
 		// Find the trace roots to display
@@ -194,16 +193,14 @@ public class TracesViewModel extends ViewModelBase<TracesView> implements ViewMo
 	}
 
 	/**
-	 * This action is performed, when someone requested a jump into the traces tab. The real action is determined based on the type of the parameter. If the
-	 * parameter is a {@link TracesFilter}, the filter is simply applied. If the parameter is a {@link MethodCall}, the trace for the method call is shown and
-	 * the view tries to navigate directly to the method call. If the method call is not visible, the trace is still shown.
+	 * This action is performed, when someone requested a jump into the traces tab. The real action is determined based on the type of the parameter. If the parameter is a {@link TracesFilter}, the filter is simply applied. If the parameter is a {@link MethodCall}, the trace for the method call is shown and the view tries to navigate directly to the method call. If the method call is not visible, the trace is still shown.
 	 *
 	 * @param aParameter
 	 *            The parameter.
 	 */
 	public void performSetParameter( final Object aParameter ) throws BusinessException {
 		if ( aParameter instanceof MethodCall ) {
-			final MethodCall methodCall = (MethodCall) aParameter;
+			final MethodCall methodCall = ( MethodCall ) aParameter;
 
 			// We are supposed to jump to the method call
 			final TracesFilter filter = new TracesFilter( );
@@ -216,7 +213,7 @@ public class TracesViewModel extends ViewModelBase<TracesView> implements ViewMo
 		}
 
 		if ( aParameter instanceof TracesFilter ) {
-			final TracesFilter filter = (TracesFilter) aParameter;
+			final TracesFilter filter = ( TracesFilter ) aParameter;
 			updatePresentationFilter( filter );
 
 			performSearch( );
@@ -435,7 +432,7 @@ public class TracesViewModel extends ViewModelBase<TracesView> implements ViewMo
 		return ivFilterLowerDateProperty;
 	}
 
-	ObjectProperty<Calendar> getFilterLowerTimeProperty( ) {
+	ObjectProperty<LocalTime> getFilterLowerTimeProperty( ) {
 		return ivFilterLowerTimeProperty;
 	}
 
@@ -443,7 +440,7 @@ public class TracesViewModel extends ViewModelBase<TracesView> implements ViewMo
 		return ivFilterUpperDateProperty;
 	}
 
-	ObjectProperty<Calendar> getFilterUpperTimeProperty( ) {
+	ObjectProperty<LocalTime> getFilterUpperTimeProperty( ) {
 		return ivFilterUpperTimeProperty;
 	}
 

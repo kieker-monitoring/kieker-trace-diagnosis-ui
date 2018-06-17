@@ -43,7 +43,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import jfxtras.scene.control.CalendarTimeTextField;
+import jfxtras.scene.control.LocalTimeTextField;
 import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
 import kieker.diagnosis.architecture.ui.EnumStringConverter;
@@ -77,9 +77,9 @@ public class MethodsView extends ViewBase<MethodsController> implements JavaView
 	private final CheckBox ivFilterUseRegExpr;
 
 	private final DatePicker ivFilterLowerDate;
-	private final CalendarTimeTextField ivFilterLowerTime;
+	private final LocalTimeTextField ivFilterLowerTime;
 	private final DatePicker ivFilterUpperDate;
-	private final CalendarTimeTextField ivFilterUpperTime;
+	private final LocalTimeTextField ivFilterUpperTime;
 	private final ComboBox<SearchType> ivFilterSearchType;
 
 	private final Button ivSearchButton;
@@ -191,7 +191,7 @@ public class MethodsView extends ViewBase<MethodsController> implements JavaView
 				}
 
 				{
-					ivFilterLowerTime = new CalendarTimeTextField( );
+					ivFilterLowerTime = new LocalTimeTextField( );
 					ivFilterLowerTime.setPromptText( getLocalizedString( "filterByLowerTime" ) );
 
 					// The CalendarTimeTextField doesn't recognize the default button
@@ -221,7 +221,7 @@ public class MethodsView extends ViewBase<MethodsController> implements JavaView
 				}
 
 				{
-					ivFilterUpperTime = new CalendarTimeTextField( );
+					ivFilterUpperTime = new LocalTimeTextField( );
 					ivFilterUpperTime.setPromptText( getLocalizedString( "filterByUpperTime" ) );
 
 					// The CalendarTimeTextField doesn't recognize the default button
@@ -588,9 +588,9 @@ public class MethodsView extends ViewBase<MethodsController> implements JavaView
 		ivFilterUseRegExpr.selectedProperty( ).bindBidirectional( ivViewModel.getFilterUseRegExprProperty( ) );
 
 		ivFilterLowerDate.valueProperty( ).bindBidirectional( ivViewModel.getFilterLowerDateProperty( ) );
-		ivFilterLowerTime.calendarProperty( ).bindBidirectional( ivViewModel.getFilterLowerTimeProperty( ) );
+		ivFilterLowerTime.localTimeProperty( ).bindBidirectional( ivViewModel.getFilterLowerTimeProperty( ) );
 		ivFilterUpperDate.valueProperty( ).bindBidirectional( ivViewModel.getFilterUpperDateProperty( ) );
-		ivFilterUpperTime.calendarProperty( ).bindBidirectional( ivViewModel.getFilterUpperTimeProperty( ) );
+		ivFilterUpperTime.localTimeProperty( ).bindBidirectional( ivViewModel.getFilterUpperTimeProperty( ) );
 		ivFilterSearchType.valueProperty( ).bindBidirectional( ivViewModel.getFilterSearchTypeProperty( ) );
 
 		ivTableView.itemsProperty( ).bindBidirectional( ivViewModel.getMethodsProperty( ) );

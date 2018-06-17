@@ -19,8 +19,8 @@ package kieker.diagnosis.ui.tabs.methods;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import com.google.inject.Singleton;
@@ -79,9 +79,9 @@ public class MethodsViewModel extends ViewModelBase<MethodsView> implements View
 	private final BooleanProperty ivFilterUseRegExprProperty = new SimpleBooleanProperty( );
 
 	private final ObjectProperty<LocalDate> ivFilterLowerDateProperty = new SimpleObjectProperty<>( );
-	private final ObjectProperty<Calendar> ivFilterLowerTimeProperty = new SimpleObjectProperty<>( );
+	private final ObjectProperty<LocalTime> ivFilterLowerTimeProperty = new SimpleObjectProperty<>( );
 	private final ObjectProperty<LocalDate> ivFilterUpperDateProperty = new SimpleObjectProperty<>( );
-	private final ObjectProperty<Calendar> ivFilterUpperTimeProperty = new SimpleObjectProperty<>( );
+	private final ObjectProperty<LocalTime> ivFilterUpperTimeProperty = new SimpleObjectProperty<>( );
 	private final ObjectProperty<SearchType> ivFilterSearchTypeProperty = new SimpleObjectProperty<>( );
 
 	// Table
@@ -202,7 +202,7 @@ public class MethodsViewModel extends ViewModelBase<MethodsView> implements View
 
 	public void performSetParameter( final Object aParameter ) throws BusinessException {
 		if ( aParameter instanceof AggregatedMethodCall ) {
-			final AggregatedMethodCall methodCall = (AggregatedMethodCall) aParameter;
+			final AggregatedMethodCall methodCall = ( AggregatedMethodCall ) aParameter;
 
 			// We have to prepare a filter which maches only the method call
 			final MethodsFilter filter = new MethodsFilter( );
@@ -219,7 +219,7 @@ public class MethodsViewModel extends ViewModelBase<MethodsView> implements View
 		}
 
 		if ( aParameter instanceof MethodsFilter ) {
-			final MethodsFilter filter = (MethodsFilter) aParameter;
+			final MethodsFilter filter = ( MethodsFilter ) aParameter;
 			updatePresentationFilter( filter );
 
 			performSearch( );
@@ -381,7 +381,7 @@ public class MethodsViewModel extends ViewModelBase<MethodsView> implements View
 		return ivFilterLowerDateProperty;
 	}
 
-	ObjectProperty<Calendar> getFilterLowerTimeProperty( ) {
+	ObjectProperty<LocalTime> getFilterLowerTimeProperty( ) {
 		return ivFilterLowerTimeProperty;
 	}
 
@@ -389,7 +389,7 @@ public class MethodsViewModel extends ViewModelBase<MethodsView> implements View
 		return ivFilterUpperDateProperty;
 	}
 
-	ObjectProperty<Calendar> getFilterUpperTimeProperty( ) {
+	ObjectProperty<LocalTime> getFilterUpperTimeProperty( ) {
 		return ivFilterUpperTimeProperty;
 	}
 
