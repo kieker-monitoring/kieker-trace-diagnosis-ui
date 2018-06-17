@@ -57,8 +57,16 @@ public class StatisticsService extends ServiceBase {
 			statistics.setTraces( monitoringLogService.getTraceRoots( ).size( ) );
 			statistics.setDirectory( monitoringLogService.getDirectory( ) );
 
-			final long minTimestamp = monitoringLogService.getMethods( ).parallelStream( ).map( MethodCall::getTimestamp ).min( Long::compareTo ).orElse( 0L );
-			final long maxTimestamp = monitoringLogService.getMethods( ).parallelStream( ).map( MethodCall::getTimestamp ).max( Long::compareTo ).orElse( 0L );
+			final long minTimestamp = monitoringLogService.getMethods( )
+					.parallelStream( )
+					.map( MethodCall::getTimestamp )
+					.min( Long::compareTo )
+					.orElse( 0L );
+			final long maxTimestamp = monitoringLogService.getMethods( )
+					.parallelStream( )
+					.map( MethodCall::getTimestamp )
+					.max( Long::compareTo )
+					.orElse( 0L );
 			statistics.setBeginnOfMonitoring( TimestampAppearance.DATE_AND_TIME.convert( minTimestamp ) );
 			statistics.setEndOfMonitoring( TimestampAppearance.DATE_AND_TIME.convert( maxTimestamp ) );
 		}
