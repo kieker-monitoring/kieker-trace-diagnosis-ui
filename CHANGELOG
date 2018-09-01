@@ -1,5 +1,9 @@
 3.2.0
 	01 Sep 2018
+	Bug (TRACEUI-23)
+	Corrected the width of the combo boxes within the filters.
+
+	01 Sep 2018
 	Feature (TRACEUI-22)
 	Improved the performance during the sorting of columns.
 

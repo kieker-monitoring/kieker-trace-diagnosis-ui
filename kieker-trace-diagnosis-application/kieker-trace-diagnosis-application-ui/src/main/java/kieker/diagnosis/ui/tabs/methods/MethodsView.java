@@ -24,6 +24,7 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -36,9 +37,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import jfxtras.scene.control.LocalTimeTextField;
 import kieker.diagnosis.architecture.service.properties.PropertiesService;
@@ -117,148 +120,162 @@ public class MethodsView extends ViewBase<MethodsController> {
 			titledPane.setText( getLocalizedString( "filterTitle" ) );
 
 			{
-				final GridPane gridPane = new GridPane( );
-				gridPane.setHgap( 5 );
-				gridPane.setVgap( 5 );
+				final GridPane outerGridPane = new GridPane( );
+				outerGridPane.setHgap( 5 );
+				outerGridPane.setVgap( 5 );
 
-				int columnIndex = 0;
-				int rowIndex = 0;
-
-				{
-					ivFilterHost = new TextField( );
-					ivFilterHost.setPromptText( getLocalizedString( "filterByHost" ) );
-					GridPane.setColumnIndex( ivFilterHost, columnIndex++ );
-					GridPane.setRowIndex( ivFilterHost, rowIndex );
-					GridPane.setHgrow( ivFilterHost, Priority.ALWAYS );
-
-					gridPane.getChildren( ).add( ivFilterHost );
+				for ( int i = 0; i < 3; i++ ) {
+					final RowConstraints constraint = new RowConstraints( );
+					constraint.setPercentHeight( 100.0 / 3 );
+					outerGridPane.getRowConstraints( ).add( constraint );
 				}
 
 				{
-					ivFilterClass = new TextField( );
-					ivFilterClass.setPromptText( getLocalizedString( "filterByClass" ) );
-					GridPane.setColumnIndex( ivFilterClass, columnIndex++ );
-					GridPane.setRowIndex( ivFilterClass, rowIndex );
-					GridPane.setHgrow( ivFilterClass, Priority.ALWAYS );
+					final GridPane gridPane = new GridPane( );
+					gridPane.setHgap( 5 );
+					gridPane.setVgap( 5 );
 
-					gridPane.getChildren( ).add( ivFilterClass );
+					for ( int i = 0; i < 5; i++ ) {
+						final ColumnConstraints constraint = new ColumnConstraints( );
+						constraint.setPercentWidth( 100.0 / 5 );
+						gridPane.getColumnConstraints( ).add( constraint );
+					}
+
+					int columnIndex = 0;
+					int rowIndex = 0;
+
+					{
+						ivFilterHost = new TextField( );
+						ivFilterHost.setPromptText( getLocalizedString( "filterByHost" ) );
+						GridPane.setColumnIndex( ivFilterHost, columnIndex++ );
+						GridPane.setRowIndex( ivFilterHost, rowIndex );
+						GridPane.setHgrow( ivFilterHost, Priority.ALWAYS );
+
+						gridPane.getChildren( ).add( ivFilterHost );
+					}
+
+					{
+						ivFilterClass = new TextField( );
+						ivFilterClass.setPromptText( getLocalizedString( "filterByClass" ) );
+						GridPane.setColumnIndex( ivFilterClass, columnIndex++ );
+						GridPane.setRowIndex( ivFilterClass, rowIndex );
+						GridPane.setHgrow( ivFilterClass, Priority.ALWAYS );
+
+						gridPane.getChildren( ).add( ivFilterClass );
+					}
+
+					{
+						ivFilterMethod = new TextField( );
+						ivFilterMethod.setPromptText( getLocalizedString( "filterByMethod" ) );
+						GridPane.setColumnIndex( ivFilterMethod, columnIndex++ );
+						GridPane.setRowIndex( ivFilterMethod, rowIndex );
+						GridPane.setHgrow( ivFilterMethod, Priority.ALWAYS );
+
+						gridPane.getChildren( ).add( ivFilterMethod );
+					}
+
+					{
+						ivFilterException = new TextField( );
+						ivFilterException.setPromptText( getLocalizedString( "filterByException" ) );
+						GridPane.setColumnIndex( ivFilterException, columnIndex++ );
+						GridPane.setRowIndex( ivFilterException, rowIndex );
+						GridPane.setHgrow( ivFilterException, Priority.ALWAYS );
+
+						gridPane.getChildren( ).add( ivFilterException );
+					}
+
+					{
+						ivFilterTraceId = new LongTextField( );
+						ivFilterTraceId.setPromptText( getLocalizedString( "filterByTraceId" ) );
+						GridPane.setColumnIndex( ivFilterTraceId, columnIndex++ );
+						GridPane.setRowIndex( ivFilterTraceId, rowIndex );
+						GridPane.setHgrow( ivFilterTraceId, Priority.ALWAYS );
+
+						gridPane.getChildren( ).add( ivFilterTraceId );
+					}
+
+					columnIndex = 0;
+					rowIndex++;
+
+					{
+						ivFilterLowerDate = new DatePicker( );
+						ivFilterLowerDate.setPromptText( getLocalizedString( "filterByLowerDate" ) );
+						ivFilterLowerDate.setMaxWidth( Double.POSITIVE_INFINITY );
+
+						GridPane.setColumnIndex( ivFilterLowerDate, columnIndex++ );
+						GridPane.setRowIndex( ivFilterLowerDate, rowIndex );
+						GridPane.setHgrow( ivFilterLowerDate, Priority.ALWAYS );
+
+						gridPane.getChildren( ).add( ivFilterLowerDate );
+					}
+
+					{
+						ivFilterLowerTime = new LocalTimeTextField( );
+						ivFilterLowerTime.setPromptText( getLocalizedString( "filterByLowerTime" ) );
+
+						// The CalendarTimeTextField doesn't recognize the default button
+						ivFilterLowerTime.setOnKeyReleased( e -> {
+							if ( e.getCode( ) == KeyCode.ENTER ) {
+								getController( ).performSearch( );
+							}
+						} );
+
+						GridPane.setColumnIndex( ivFilterLowerTime, columnIndex++ );
+						GridPane.setRowIndex( ivFilterLowerTime, rowIndex );
+						GridPane.setHgrow( ivFilterLowerTime, Priority.ALWAYS );
+
+						gridPane.getChildren( ).add( ivFilterLowerTime );
+					}
+
+					{
+						ivFilterUpperDate = new DatePicker( );
+						ivFilterUpperDate.setPromptText( getLocalizedString( "filterByUpperDate" ) );
+						ivFilterUpperDate.setMaxWidth( Double.POSITIVE_INFINITY );
+
+						GridPane.setColumnIndex( ivFilterUpperDate, columnIndex++ );
+						GridPane.setRowIndex( ivFilterUpperDate, rowIndex );
+						GridPane.setHgrow( ivFilterUpperDate, Priority.ALWAYS );
+
+						gridPane.getChildren( ).add( ivFilterUpperDate );
+					}
+
+					{
+						ivFilterUpperTime = new LocalTimeTextField( );
+						ivFilterUpperTime.setPromptText( getLocalizedString( "filterByUpperTime" ) );
+
+						// The CalendarTimeTextField doesn't recognize the default button
+						ivFilterUpperTime.setOnKeyReleased( e -> {
+							if ( e.getCode( ) == KeyCode.ENTER ) {
+								getController( ).performSearch( );
+							}
+						} );
+
+						GridPane.setColumnIndex( ivFilterUpperTime, columnIndex++ );
+						GridPane.setRowIndex( ivFilterUpperTime, rowIndex );
+						GridPane.setHgrow( ivFilterUpperTime, Priority.ALWAYS );
+
+						gridPane.getChildren( ).add( ivFilterUpperTime );
+					}
+
+					{
+						ivFilterSearchType = new ComboBox<>( );
+						ivFilterSearchType.setItems( FXCollections.observableArrayList( SearchType.values( ) ) );
+						ivFilterSearchType.setConverter( new EnumStringConverter<>( SearchType.class ) );
+						ivFilterSearchType.setMaxWidth( Double.POSITIVE_INFINITY );
+
+						GridPane.setColumnIndex( ivFilterSearchType, columnIndex++ );
+						GridPane.setRowIndex( ivFilterSearchType, rowIndex );
+
+						gridPane.getChildren( ).add( ivFilterSearchType );
+					}
+
+					GridPane.setColumnIndex( gridPane, 0 );
+					GridPane.setRowIndex( gridPane, 0 );
+					GridPane.setRowSpan( gridPane, 2 );
+					GridPane.setHgrow( gridPane, Priority.ALWAYS );
+
+					outerGridPane.getChildren( ).add( gridPane );
 				}
-
-				{
-					ivFilterMethod = new TextField( );
-					ivFilterMethod.setPromptText( getLocalizedString( "filterByMethod" ) );
-					GridPane.setColumnIndex( ivFilterMethod, columnIndex++ );
-					GridPane.setRowIndex( ivFilterMethod, rowIndex );
-					GridPane.setHgrow( ivFilterMethod, Priority.ALWAYS );
-
-					gridPane.getChildren( ).add( ivFilterMethod );
-				}
-
-				{
-					ivFilterException = new TextField( );
-					ivFilterException.setPromptText( getLocalizedString( "filterByException" ) );
-					GridPane.setColumnIndex( ivFilterException, columnIndex++ );
-					GridPane.setRowIndex( ivFilterException, rowIndex );
-					GridPane.setHgrow( ivFilterException, Priority.ALWAYS );
-
-					gridPane.getChildren( ).add( ivFilterException );
-				}
-
-				{
-					ivFilterTraceId = new LongTextField( );
-					ivFilterTraceId.setPromptText( getLocalizedString( "filterByTraceId" ) );
-					GridPane.setColumnIndex( ivFilterTraceId, columnIndex++ );
-					GridPane.setRowIndex( ivFilterTraceId, rowIndex );
-					GridPane.setHgrow( ivFilterTraceId, Priority.ALWAYS );
-
-					gridPane.getChildren( ).add( ivFilterTraceId );
-				}
-
-				{
-					ivFilterUseRegExpr = new CheckBox( );
-					ivFilterUseRegExpr.setText( getLocalizedString( "filterUseRegExpr" ) );
-
-					GridPane.setColumnIndex( ivFilterUseRegExpr, columnIndex++ );
-					GridPane.setRowIndex( ivFilterUseRegExpr, rowIndex );
-
-					gridPane.getChildren( ).add( ivFilterUseRegExpr );
-				}
-
-				columnIndex = 0;
-				rowIndex++;
-
-				{
-					ivFilterLowerDate = new DatePicker( );
-					ivFilterLowerDate.setPromptText( getLocalizedString( "filterByLowerDate" ) );
-					ivFilterLowerDate.setMaxWidth( Double.POSITIVE_INFINITY );
-
-					GridPane.setColumnIndex( ivFilterLowerDate, columnIndex++ );
-					GridPane.setRowIndex( ivFilterLowerDate, rowIndex );
-					GridPane.setHgrow( ivFilterLowerDate, Priority.ALWAYS );
-
-					gridPane.getChildren( ).add( ivFilterLowerDate );
-				}
-
-				{
-					ivFilterLowerTime = new LocalTimeTextField( );
-					ivFilterLowerTime.setPromptText( getLocalizedString( "filterByLowerTime" ) );
-
-					// The CalendarTimeTextField doesn't recognize the default button
-					ivFilterLowerTime.setOnKeyReleased( e -> {
-						if ( e.getCode( ) == KeyCode.ENTER ) {
-							getController( ).performSearch( );
-						}
-					} );
-
-					GridPane.setColumnIndex( ivFilterLowerTime, columnIndex++ );
-					GridPane.setRowIndex( ivFilterLowerTime, rowIndex );
-					GridPane.setHgrow( ivFilterLowerTime, Priority.ALWAYS );
-
-					gridPane.getChildren( ).add( ivFilterLowerTime );
-				}
-
-				{
-					ivFilterUpperDate = new DatePicker( );
-					ivFilterUpperDate.setPromptText( getLocalizedString( "filterByUpperDate" ) );
-					ivFilterUpperDate.setMaxWidth( Double.POSITIVE_INFINITY );
-
-					GridPane.setColumnIndex( ivFilterUpperDate, columnIndex++ );
-					GridPane.setRowIndex( ivFilterUpperDate, rowIndex );
-					GridPane.setHgrow( ivFilterUpperDate, Priority.ALWAYS );
-
-					gridPane.getChildren( ).add( ivFilterUpperDate );
-				}
-
-				{
-					ivFilterUpperTime = new LocalTimeTextField( );
-					ivFilterUpperTime.setPromptText( getLocalizedString( "filterByUpperTime" ) );
-
-					// The CalendarTimeTextField doesn't recognize the default button
-					ivFilterUpperTime.setOnKeyReleased( e -> {
-						if ( e.getCode( ) == KeyCode.ENTER ) {
-							getController( ).performSearch( );
-						}
-					} );
-
-					GridPane.setColumnIndex( ivFilterUpperTime, columnIndex++ );
-					GridPane.setRowIndex( ivFilterUpperTime, rowIndex );
-					GridPane.setHgrow( ivFilterUpperTime, Priority.ALWAYS );
-
-					gridPane.getChildren( ).add( ivFilterUpperTime );
-				}
-
-				{
-					ivFilterSearchType = new ComboBox<>( );
-					ivFilterSearchType.setItems( FXCollections.observableArrayList( SearchType.values( ) ) );
-					ivFilterSearchType.setConverter( new EnumStringConverter<>( SearchType.class ) );
-
-					GridPane.setColumnIndex( ivFilterSearchType, columnIndex++ );
-					GridPane.setRowIndex( ivFilterSearchType, rowIndex );
-
-					gridPane.getChildren( ).add( ivFilterSearchType );
-				}
-
-				rowIndex++;
 
 				{
 					final Hyperlink hyperlink = new Hyperlink( );
@@ -266,9 +283,20 @@ public class MethodsView extends ViewBase<MethodsController> {
 					hyperlink.setOnAction( e -> getController( ).performSaveAsFavorite( ) );
 
 					GridPane.setColumnIndex( hyperlink, 0 );
-					GridPane.setRowIndex( hyperlink, rowIndex );
+					GridPane.setRowIndex( hyperlink, 2 );
 
-					gridPane.getChildren( ).add( hyperlink );
+					outerGridPane.getChildren( ).add( hyperlink );
+				}
+
+				{
+					ivFilterUseRegExpr = new CheckBox( );
+					ivFilterUseRegExpr.setText( getLocalizedString( "filterUseRegExpr" ) );
+
+					GridPane.setColumnIndex( ivFilterUseRegExpr, 1 );
+					GridPane.setRowIndex( ivFilterUseRegExpr, 0 );
+					GridPane.setValignment( ivFilterUseRegExpr, VPos.CENTER );
+
+					outerGridPane.getChildren( ).add( ivFilterUseRegExpr );
 				}
 
 				{
@@ -278,13 +306,13 @@ public class MethodsView extends ViewBase<MethodsController> {
 					ivSearchButton.setMaxWidth( Double.POSITIVE_INFINITY );
 					ivSearchButton.setOnAction( e -> getController( ).performSearch( ) );
 
-					GridPane.setColumnIndex( ivSearchButton, columnIndex++ );
-					GridPane.setRowIndex( ivSearchButton, rowIndex );
+					GridPane.setColumnIndex( ivSearchButton, 1 );
+					GridPane.setRowIndex( ivSearchButton, 2 );
 
-					gridPane.getChildren( ).add( ivSearchButton );
+					outerGridPane.getChildren( ).add( ivSearchButton );
 				}
 
-				titledPane.setContent( gridPane );
+				titledPane.setContent( outerGridPane );
 			}
 
 			getChildren( ).add( titledPane );

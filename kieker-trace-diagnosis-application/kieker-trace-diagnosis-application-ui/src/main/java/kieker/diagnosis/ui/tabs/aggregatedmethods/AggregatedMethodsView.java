@@ -24,6 +24,7 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -34,9 +35,11 @@ import javafx.scene.control.TableColumn.SortType;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import kieker.diagnosis.architecture.service.properties.PropertiesService;
 import kieker.diagnosis.architecture.ui.EnumStringConverter;
@@ -114,71 +117,86 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 			titledPane.setText( getLocalizedString( "filterTitle" ) );
 
 			{
-				final GridPane gridPane = new GridPane( );
-				gridPane.setHgap( 5 );
-				gridPane.setVgap( 5 );
+				final GridPane outerGridPane = new GridPane( );
+				outerGridPane.setHgap( 5 );
+				outerGridPane.setVgap( 5 );
 
-				int columnIndex = 0;
-
-				{
-					ivFilterHost = new TextField( );
-					ivFilterHost.setPromptText( getLocalizedString( "filterByHost" ) );
-					GridPane.setColumnIndex( ivFilterHost, columnIndex++ );
-					GridPane.setRowIndex( ivFilterHost, 0 );
-					GridPane.setHgrow( ivFilterHost, Priority.ALWAYS );
-
-					gridPane.getChildren( ).add( ivFilterHost );
+				for ( int i = 0; i < 2; i++ ) {
+					final RowConstraints constraint = new RowConstraints( );
+					constraint.setPercentHeight( 100.0 / 2 );
+					outerGridPane.getRowConstraints( ).add( constraint );
 				}
 
 				{
-					ivFilterClass = new TextField( );
-					ivFilterClass.setPromptText( getLocalizedString( "filterByClass" ) );
-					GridPane.setColumnIndex( ivFilterClass, columnIndex++ );
-					GridPane.setRowIndex( ivFilterClass, 0 );
-					GridPane.setHgrow( ivFilterClass, Priority.ALWAYS );
+					final GridPane gridPane = new GridPane( );
+					gridPane.setHgap( 5 );
+					gridPane.setVgap( 5 );
 
-					gridPane.getChildren( ).add( ivFilterClass );
-				}
+					for ( int i = 0; i < 5; i++ ) {
+						final ColumnConstraints constraint = new ColumnConstraints( );
+						constraint.setPercentWidth( 100.0 / 5 );
+						gridPane.getColumnConstraints( ).add( constraint );
+					}
 
-				{
-					ivFilterMethod = new TextField( );
-					ivFilterMethod.setPromptText( getLocalizedString( "filterByMethod" ) );
-					GridPane.setColumnIndex( ivFilterMethod, columnIndex++ );
-					GridPane.setRowIndex( ivFilterMethod, 0 );
-					GridPane.setHgrow( ivFilterMethod, Priority.ALWAYS );
+					int columnIndex = 0;
 
-					gridPane.getChildren( ).add( ivFilterMethod );
-				}
+					{
+						ivFilterHost = new TextField( );
+						ivFilterHost.setPromptText( getLocalizedString( "filterByHost" ) );
+						GridPane.setColumnIndex( ivFilterHost, columnIndex++ );
+						GridPane.setRowIndex( ivFilterHost, 0 );
+						GridPane.setHgrow( ivFilterHost, Priority.ALWAYS );
 
-				{
-					ivFilterException = new TextField( );
-					ivFilterException.setPromptText( getLocalizedString( "filterByException" ) );
-					GridPane.setColumnIndex( ivFilterException, columnIndex++ );
-					GridPane.setRowIndex( ivFilterException, 0 );
-					GridPane.setHgrow( ivFilterException, Priority.ALWAYS );
+						gridPane.getChildren( ).add( ivFilterHost );
+					}
 
-					gridPane.getChildren( ).add( ivFilterException );
-				}
+					{
+						ivFilterClass = new TextField( );
+						ivFilterClass.setPromptText( getLocalizedString( "filterByClass" ) );
+						GridPane.setColumnIndex( ivFilterClass, columnIndex++ );
+						GridPane.setRowIndex( ivFilterClass, 0 );
+						GridPane.setHgrow( ivFilterClass, Priority.ALWAYS );
 
-				{
-					ivFilterSearchType = new ComboBox<>( );
-					ivFilterSearchType.setItems( FXCollections.observableArrayList( SearchType.values( ) ) );
-					ivFilterSearchType.setConverter( new EnumStringConverter<>( SearchType.class ) );
+						gridPane.getChildren( ).add( ivFilterClass );
+					}
 
-					GridPane.setColumnIndex( ivFilterSearchType, columnIndex++ );
-					GridPane.setRowIndex( ivFilterSearchType, 0 );
+					{
+						ivFilterMethod = new TextField( );
+						ivFilterMethod.setPromptText( getLocalizedString( "filterByMethod" ) );
+						GridPane.setColumnIndex( ivFilterMethod, columnIndex++ );
+						GridPane.setRowIndex( ivFilterMethod, 0 );
+						GridPane.setHgrow( ivFilterMethod, Priority.ALWAYS );
 
-					gridPane.getChildren( ).add( ivFilterSearchType );
-				}
+						gridPane.getChildren( ).add( ivFilterMethod );
+					}
 
-				{
-					ivFilterUseRegExpr = new CheckBox( );
-					ivFilterUseRegExpr.setText( getLocalizedString( "filterUseRegExpr" ) );
+					{
+						ivFilterException = new TextField( );
+						ivFilterException.setPromptText( getLocalizedString( "filterByException" ) );
+						GridPane.setColumnIndex( ivFilterException, columnIndex++ );
+						GridPane.setRowIndex( ivFilterException, 0 );
+						GridPane.setHgrow( ivFilterException, Priority.ALWAYS );
 
-					GridPane.setColumnIndex( ivFilterUseRegExpr, columnIndex );
-					GridPane.setRowIndex( ivFilterUseRegExpr, 0 );
+						gridPane.getChildren( ).add( ivFilterException );
+					}
 
-					gridPane.getChildren( ).add( ivFilterUseRegExpr );
+					{
+						ivFilterSearchType = new ComboBox<>( );
+						ivFilterSearchType.setItems( FXCollections.observableArrayList( SearchType.values( ) ) );
+						ivFilterSearchType.setConverter( new EnumStringConverter<>( SearchType.class ) );
+						ivFilterSearchType.setMaxWidth( Double.POSITIVE_INFINITY );
+
+						GridPane.setColumnIndex( ivFilterSearchType, columnIndex++ );
+						GridPane.setRowIndex( ivFilterSearchType, 0 );
+
+						gridPane.getChildren( ).add( ivFilterSearchType );
+					}
+
+					GridPane.setColumnIndex( gridPane, 0 );
+					GridPane.setRowIndex( gridPane, 0 );
+					GridPane.setHgrow( gridPane, Priority.ALWAYS );
+
+					outerGridPane.getChildren( ).add( gridPane );
 				}
 
 				{
@@ -189,7 +207,18 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 					GridPane.setColumnIndex( hyperlink, 0 );
 					GridPane.setRowIndex( hyperlink, 1 );
 
-					gridPane.getChildren( ).add( hyperlink );
+					outerGridPane.getChildren( ).add( hyperlink );
+				}
+
+				{
+					ivFilterUseRegExpr = new CheckBox( );
+					ivFilterUseRegExpr.setText( getLocalizedString( "filterUseRegExpr" ) );
+
+					GridPane.setColumnIndex( ivFilterUseRegExpr, 1 );
+					GridPane.setRowIndex( ivFilterUseRegExpr, 0 );
+					GridPane.setValignment( ivFilterUseRegExpr, VPos.CENTER );
+
+					outerGridPane.getChildren( ).add( ivFilterUseRegExpr );
 				}
 
 				{
@@ -199,13 +228,13 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 					ivSearchButton.setMaxWidth( Double.POSITIVE_INFINITY );
 					ivSearchButton.setOnAction( e -> getController( ).performSearch( ) );
 
-					GridPane.setColumnIndex( ivSearchButton, columnIndex++ );
+					GridPane.setColumnIndex( ivSearchButton, 1 );
 					GridPane.setRowIndex( ivSearchButton, 1 );
 
-					gridPane.getChildren( ).add( ivSearchButton );
+					outerGridPane.getChildren( ).add( ivSearchButton );
 				}
 
-				titledPane.setContent( gridPane );
+				titledPane.setContent( outerGridPane );
 			}
 
 			getChildren( ).add( titledPane );
