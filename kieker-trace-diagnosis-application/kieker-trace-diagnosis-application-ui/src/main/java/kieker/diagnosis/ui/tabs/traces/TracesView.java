@@ -19,8 +19,9 @@ package kieker.diagnosis.ui.tabs.traces;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -30,17 +31,24 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableColumn.SortType;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import jfxtras.scene.control.LocalTimeTextField;
+import kieker.diagnosis.architecture.service.properties.PropertiesService;
 import kieker.diagnosis.architecture.ui.EnumStringConverter;
 import kieker.diagnosis.architecture.ui.ViewBase;
 import kieker.diagnosis.architecture.ui.components.LongTextField;
 import kieker.diagnosis.service.data.MethodCall;
+import kieker.diagnosis.service.settings.ClassAppearance;
+import kieker.diagnosis.service.settings.MethodAppearance;
+import kieker.diagnosis.service.settings.properties.ClassAppearanceProperty;
+import kieker.diagnosis.service.settings.properties.MethodAppearanceProperty;
 import kieker.diagnosis.service.traces.SearchType;
 import kieker.diagnosis.ui.tabs.traces.components.ClassCellValueFactory;
 import kieker.diagnosis.ui.tabs.traces.components.DurationCellValueFactory;
@@ -73,6 +81,15 @@ public class TracesView extends ViewBase<TracesController> {
 
 	// Table
 	private final TreeTableView<MethodCall> ivTreeTableView;
+	private TreeTableColumn<MethodCall, String> ivDurationColumn;
+	private TreeTableColumn<MethodCall, String> ivHostColumn;
+	private TreeTableColumn<MethodCall, String> ivClassColumn;
+	private TreeTableColumn<MethodCall, String> ivMethodColumn;
+	private TreeTableColumn<MethodCall, String> ivTraceDepthColumn;
+	private TreeTableColumn<MethodCall, String> ivTraceSizeColumn;
+	private TreeTableColumn<MethodCall, String> ivPercentColumn;
+	private TreeTableColumn<MethodCall, String> ivTimestampColumn;
+	private TreeTableColumn<MethodCall, String> ivTraceIdColumn;
 
 	// Details
 	private final TextField ivDetailsHost;
@@ -90,7 +107,8 @@ public class TracesView extends ViewBase<TracesController> {
 
 	private final Button ivSearchButton;
 
-	private TreeTableColumn<MethodCall, Long> ivDurationColumn;
+	@Inject
+	private PropertiesService ivPropertiesService;
 
 	@Inject
 	public TracesView( ) {
@@ -298,57 +316,57 @@ public class TracesView extends ViewBase<TracesController> {
 			VBox.setVgrow( ivTreeTableView, Priority.ALWAYS );
 
 			{
-				final TreeTableColumn<MethodCall, String> column = new TreeTableColumn<>( );
-				column.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getValue( ).getHost( ) ) );
-				column.setText( getLocalizedString( "columnHost" ) );
-				column.setPrefWidth( 100 );
+				ivHostColumn = new TreeTableColumn<>( );
+				ivHostColumn.setCellValueFactory( aParam -> new ReadOnlyStringWrapper( aParam.getValue( ).getValue( ).getHost( ) ) );
+				ivHostColumn.setText( getLocalizedString( "columnHost" ) );
+				ivHostColumn.setPrefWidth( 100 );
 
-				ivTreeTableView.getColumns( ).add( column );
+				ivTreeTableView.getColumns( ).add( ivHostColumn );
 			}
 
 			{
-				final TreeTableColumn<MethodCall, String> column = new TreeTableColumn<>( );
-				column.setCellValueFactory( new ClassCellValueFactory( ) );
-				column.setText( getLocalizedString( "columnClass" ) );
-				column.setPrefWidth( 200 );
+				ivClassColumn = new TreeTableColumn<>( );
+				ivClassColumn.setCellValueFactory( new ClassCellValueFactory( ) );
+				ivClassColumn.setText( getLocalizedString( "columnClass" ) );
+				ivClassColumn.setPrefWidth( 200 );
 
-				ivTreeTableView.getColumns( ).add( column );
+				ivTreeTableView.getColumns( ).add( ivClassColumn );
 			}
 
 			{
-				final TreeTableColumn<MethodCall, String> column = new TreeTableColumn<>( );
-				column.setCellValueFactory( new MethodCellValueFactory( ) );
-				column.setText( getLocalizedString( "columnMethod" ) );
-				column.setPrefWidth( 400 );
+				ivMethodColumn = new TreeTableColumn<>( );
+				ivMethodColumn.setCellValueFactory( new MethodCellValueFactory( ) );
+				ivMethodColumn.setText( getLocalizedString( "columnMethod" ) );
+				ivMethodColumn.setPrefWidth( 400 );
 
-				ivTreeTableView.getColumns( ).add( column );
+				ivTreeTableView.getColumns( ).add( ivMethodColumn );
 			}
 
 			{
-				final TreeTableColumn<MethodCall, Integer> column = new TreeTableColumn<>( );
-				column.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getValue( ).getTraceDepth( ) ) );
-				column.setText( getLocalizedString( "columnTraceDepth" ) );
-				column.setPrefWidth( 100 );
+				ivTraceDepthColumn = new TreeTableColumn<>( );
+				ivTraceDepthColumn.setCellValueFactory( aParam -> new ReadOnlyStringWrapper( Integer.toString( aParam.getValue( ).getValue( ).getTraceDepth( ) ).intern( ) ) );
+				ivTraceDepthColumn.setText( getLocalizedString( "columnTraceDepth" ) );
+				ivTraceDepthColumn.setPrefWidth( 100 );
 
-				ivTreeTableView.getColumns( ).add( column );
+				ivTreeTableView.getColumns( ).add( ivTraceDepthColumn );
 			}
 
 			{
-				final TreeTableColumn<MethodCall, Integer> column = new TreeTableColumn<>( );
-				column.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getValue( ).getTraceSize( ) ) );
-				column.setText( getLocalizedString( "columnTraceSize" ) );
-				column.setPrefWidth( 100 );
+				ivTraceSizeColumn = new TreeTableColumn<>( );
+				ivTraceSizeColumn.setCellValueFactory( aParam -> new ReadOnlyStringWrapper( Integer.toString( aParam.getValue( ).getValue( ).getTraceSize( ) ).intern( ) ) );
+				ivTraceSizeColumn.setText( getLocalizedString( "columnTraceSize" ) );
+				ivTraceSizeColumn.setPrefWidth( 100 );
 
-				ivTreeTableView.getColumns( ).add( column );
+				ivTreeTableView.getColumns( ).add( ivTraceSizeColumn );
 			}
 
 			{
-				final TreeTableColumn<MethodCall, Float> column = new TreeTableColumn<>( );
-				column.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getValue( ).getPercent( ) ) );
-				column.setText( getLocalizedString( "columnPercent" ) );
-				column.setPrefWidth( 100 );
+				ivPercentColumn = new TreeTableColumn<>( );
+				ivPercentColumn.setCellValueFactory( aParam -> new ReadOnlyStringWrapper( Float.toString( aParam.getValue( ).getValue( ).getPercent( ) ).intern( ) ) );
+				ivPercentColumn.setText( getLocalizedString( "columnPercent" ) );
+				ivPercentColumn.setPrefWidth( 100 );
 
-				ivTreeTableView.getColumns( ).add( column );
+				ivTreeTableView.getColumns( ).add( ivPercentColumn );
 			}
 
 			{
@@ -361,22 +379,118 @@ public class TracesView extends ViewBase<TracesController> {
 			}
 
 			{
-				final TreeTableColumn<MethodCall, String> column = new TreeTableColumn<>( );
-				column.setCellValueFactory( new TimestampCellValueFactory( ) );
-				column.setText( getLocalizedString( "columnTimestamp" ) );
-				column.setPrefWidth( 150 );
+				ivTimestampColumn = new TreeTableColumn<>( );
+				ivTimestampColumn.setCellValueFactory( new TimestampCellValueFactory( ) );
+				ivTimestampColumn.setText( getLocalizedString( "columnTimestamp" ) );
+				ivTimestampColumn.setPrefWidth( 150 );
 
-				ivTreeTableView.getColumns( ).add( column );
+				ivTreeTableView.getColumns( ).add( ivTimestampColumn );
 			}
 
 			{
-				final TreeTableColumn<MethodCall, Long> column = new TreeTableColumn<>( );
-				column.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getValue( ).getTraceId( ) ) );
-				column.setText( getLocalizedString( "columnTraceId" ) );
-				column.setPrefWidth( 150 );
+				ivTraceIdColumn = new TreeTableColumn<>( );
+				ivTraceIdColumn.setCellValueFactory( aParam -> new ReadOnlyStringWrapper( Long.toString( aParam.getValue( ).getValue( ).getTraceId( ) ).intern( ) ) );
+				ivTraceIdColumn.setText( getLocalizedString( "columnTraceId" ) );
+				ivTraceIdColumn.setPrefWidth( 150 );
 
-				ivTreeTableView.getColumns( ).add( column );
+				ivTreeTableView.getColumns( ).add( ivTraceIdColumn );
 			}
+
+			// The default sorting is a little bit too slow. Therefore we use a custom sort policy which sorts directly the data.
+			ivTreeTableView.setSortPolicy( param -> {
+				final ObservableList<TreeTableColumn<MethodCall, ?>> sortOrder = param.getSortOrder( );
+
+				if ( sortOrder.size( ) == 1 ) {
+					final TreeTableColumn<MethodCall, ?> tableColumn = sortOrder.get( 0 );
+
+					if ( tableColumn == ivHostColumn ) {
+						final ObservableList<TreeItem<MethodCall>> items = param.getRoot( ).getChildren( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> o1.getValue( ).getHost( ).compareTo( o2.getValue( ).getHost( ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> o2.getValue( ).getHost( ).compareTo( o1.getValue( ).getHost( ) ) );
+						}
+					}
+
+					if ( tableColumn == ivClassColumn ) {
+						final ClassAppearance classAppearance = ivPropertiesService.loadApplicationProperty( ClassAppearanceProperty.class );
+
+						final ObservableList<TreeItem<MethodCall>> items = param.getRoot( ).getChildren( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> classAppearance.convert( o1.getValue( ).getClazz( ) ).compareTo( classAppearance.convert( o2.getValue( ).getClazz( ) ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> classAppearance.convert( o2.getValue( ).getClazz( ) ).compareTo( classAppearance.convert( o1.getValue( ).getClazz( ) ) ) );
+						}
+					}
+
+					if ( tableColumn == ivMethodColumn ) {
+						final MethodAppearance methodAppearance = ivPropertiesService.loadApplicationProperty( MethodAppearanceProperty.class );
+
+						final ObservableList<TreeItem<MethodCall>> items = param.getRoot( ).getChildren( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> methodAppearance.convert( o1.getValue( ).getMethod( ) ).compareTo( methodAppearance.convert( o2.getValue( ).getMethod( ) ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> methodAppearance.convert( o2.getValue( ).getMethod( ) ).compareTo( methodAppearance.convert( o1.getValue( ).getMethod( ) ) ) );
+						}
+					}
+
+					if ( tableColumn == ivDurationColumn ) {
+						final ObservableList<TreeItem<MethodCall>> items = param.getRoot( ).getChildren( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> Long.compare( o1.getValue( ).getDuration( ), o2.getValue( ).getDuration( ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> Long.compare( o2.getValue( ).getDuration( ), o1.getValue( ).getDuration( ) ) );
+						}
+					}
+
+					if ( tableColumn == ivTimestampColumn ) {
+						final ObservableList<TreeItem<MethodCall>> items = param.getRoot( ).getChildren( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> Long.compare( o1.getValue( ).getTimestamp( ), o2.getValue( ).getTimestamp( ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> Long.compare( o2.getValue( ).getTimestamp( ), o1.getValue( ).getTimestamp( ) ) );
+						}
+					}
+
+					if ( tableColumn == ivTraceIdColumn ) {
+						final ObservableList<TreeItem<MethodCall>> items = param.getRoot( ).getChildren( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> Long.compare( o1.getValue( ).getTraceId( ), o2.getValue( ).getTraceId( ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> Long.compare( o2.getValue( ).getTraceId( ), o1.getValue( ).getTraceId( ) ) );
+						}
+					}
+
+					if ( tableColumn == ivTraceDepthColumn ) {
+						final ObservableList<TreeItem<MethodCall>> items = param.getRoot( ).getChildren( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> Long.compare( o1.getValue( ).getTraceDepth( ), o2.getValue( ).getTraceDepth( ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> Long.compare( o2.getValue( ).getTraceDepth( ), o1.getValue( ).getTraceDepth( ) ) );
+						}
+					}
+
+					if ( tableColumn == ivTraceSizeColumn ) {
+						final ObservableList<TreeItem<MethodCall>> items = param.getRoot( ).getChildren( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> Long.compare( o1.getValue( ).getTraceSize( ), o2.getValue( ).getTraceSize( ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> Long.compare( o2.getValue( ).getTraceSize( ), o1.getValue( ).getTraceSize( ) ) );
+						}
+					}
+
+					if ( tableColumn == ivPercentColumn ) {
+						final ObservableList<TreeItem<MethodCall>> items = param.getRoot( ).getChildren( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> Float.compare( o1.getValue( ).getPercent( ), o2.getValue( ).getPercent( ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> Float.compare( o2.getValue( ).getPercent( ), o1.getValue( ).getPercent( ) ) );
+						}
+					}
+				}
+
+				return true;
+			} );
 
 			getChildren( ).add( ivTreeTableView );
 		}
@@ -724,7 +838,7 @@ public class TracesView extends ViewBase<TracesController> {
 		return ivStatusLabel;
 	}
 
-	TreeTableColumn<MethodCall, Long> getDurationColumn( ) {
+	TreeTableColumn<MethodCall, String> getDurationColumn( ) {
 		return ivDurationColumn;
 	}
 

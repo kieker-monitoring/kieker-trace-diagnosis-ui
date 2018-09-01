@@ -19,7 +19,7 @@ package kieker.diagnosis.ui.tabs.aggregatedmethods.components;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.util.Callback;
@@ -29,12 +29,11 @@ import kieker.diagnosis.service.data.AggregatedMethodCall;
 import kieker.diagnosis.service.settings.properties.TimeUnitProperty;
 
 /**
- * This is a cell factory for a table which shows the duration of a method call in the configured manner. It has to be in the CDI context, as it has to have
- * access to the application properties.
+ * This is a cell factory for a table which shows the duration of a method call in the configured manner.
  *
  * @author Nils Christian Ehmke
  */
-public class DurationCellValueFactory implements Callback<CellDataFeatures<AggregatedMethodCall, Long>, ObservableValue<Long>> {
+public class DurationCellValueFactory implements Callback<CellDataFeatures<AggregatedMethodCall, String>, ObservableValue<String>> {
 
 	private final PropertiesService ivPropertiesService = ServiceFactory.getService( PropertiesService.class );
 
@@ -45,9 +44,9 @@ public class DurationCellValueFactory implements Callback<CellDataFeatures<Aggre
 	}
 
 	@Override
-	public ObservableValue<Long> call( final CellDataFeatures<AggregatedMethodCall, Long> aParam ) {
+	public ObservableValue<String> call( final CellDataFeatures<AggregatedMethodCall, String> aParam ) {
 		final TimeUnit timeUnit = ivPropertiesService.loadApplicationProperty( TimeUnitProperty.class );
-		return new ReadOnlyObjectWrapper<>( timeUnit.convert( ivGetter.apply( aParam.getValue( ) ), TimeUnit.NANOSECONDS ) );
+		return new ReadOnlyStringWrapper( Long.toString( timeUnit.convert( ivGetter.apply( aParam.getValue( ) ), TimeUnit.NANOSECONDS ) ).intern( ) );
 	}
 
 }

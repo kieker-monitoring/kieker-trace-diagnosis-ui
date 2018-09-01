@@ -16,10 +16,13 @@
 
 package kieker.diagnosis.ui.tabs.methods;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -28,6 +31,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.SortType;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
@@ -37,11 +41,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import jfxtras.scene.control.LocalTimeTextField;
+import kieker.diagnosis.architecture.service.properties.PropertiesService;
 import kieker.diagnosis.architecture.ui.EnumStringConverter;
 import kieker.diagnosis.architecture.ui.ViewBase;
 import kieker.diagnosis.architecture.ui.components.LongTextField;
 import kieker.diagnosis.service.data.MethodCall;
 import kieker.diagnosis.service.methods.SearchType;
+import kieker.diagnosis.service.settings.ClassAppearance;
+import kieker.diagnosis.service.settings.MethodAppearance;
+import kieker.diagnosis.service.settings.properties.ClassAppearanceProperty;
+import kieker.diagnosis.service.settings.properties.MethodAppearanceProperty;
 import kieker.diagnosis.ui.tabs.methods.components.ClassCellValueFactory;
 import kieker.diagnosis.ui.tabs.methods.components.DurationCellValueFactory;
 import kieker.diagnosis.ui.tabs.methods.components.MethodCellValueFactory;
@@ -74,7 +83,12 @@ public class MethodsView extends ViewBase<MethodsController> {
 
 	// Table
 	private final TableView<MethodCall> ivTableView;
-	private final TableColumn<MethodCall, Long> ivDurationColumn;
+	private TableColumn<MethodCall, String> ivHostColumn;
+	private TableColumn<MethodCall, String> ivClassColumn;
+	private TableColumn<MethodCall, String> ivMethodColumn;
+	private final TableColumn<MethodCall, String> ivDurationColumn;
+	private TableColumn<MethodCall, String> ivTimestampColumn;
+	private TableColumn<MethodCall, String> ivTraceIdColumn;
 
 	// Details
 	private final TextField ivDetailsHost;
@@ -87,6 +101,9 @@ public class MethodsView extends ViewBase<MethodsController> {
 
 	// Status bar
 	private final Label ivStatusLabel;
+
+	@Inject
+	private PropertiesService ivPropertiesService;
 
 	public void initialize( ) {
 		getController( ).performInitialize( );
@@ -287,30 +304,30 @@ public class MethodsView extends ViewBase<MethodsController> {
 			VBox.setVgrow( ivTableView, Priority.ALWAYS );
 
 			{
-				final TableColumn<MethodCall, String> column = new TableColumn<>( );
-				column.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getHost( ) ) );
-				column.setText( getLocalizedString( "columnHost" ) );
-				column.setPrefWidth( 100 );
+				ivHostColumn = new TableColumn<>( );
+				ivHostColumn.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getHost( ) ) );
+				ivHostColumn.setText( getLocalizedString( "columnHost" ) );
+				ivHostColumn.setPrefWidth( 100 );
 
-				ivTableView.getColumns( ).add( column );
+				ivTableView.getColumns( ).add( ivHostColumn );
 			}
 
 			{
-				final TableColumn<MethodCall, String> column = new TableColumn<>( );
-				column.setCellValueFactory( new ClassCellValueFactory( ) );
-				column.setText( getLocalizedString( "columnClass" ) );
-				column.setPrefWidth( 200 );
+				ivClassColumn = new TableColumn<>( );
+				ivClassColumn.setCellValueFactory( new ClassCellValueFactory( ) );
+				ivClassColumn.setText( getLocalizedString( "columnClass" ) );
+				ivClassColumn.setPrefWidth( 200 );
 
-				ivTableView.getColumns( ).add( column );
+				ivTableView.getColumns( ).add( ivClassColumn );
 			}
 
 			{
-				final TableColumn<MethodCall, String> column = new TableColumn<>( );
-				column.setCellValueFactory( new MethodCellValueFactory( ) );
-				column.setText( getLocalizedString( "columnMethod" ) );
-				column.setPrefWidth( 400 );
+				ivMethodColumn = new TableColumn<>( );
+				ivMethodColumn.setCellValueFactory( new MethodCellValueFactory( ) );
+				ivMethodColumn.setText( getLocalizedString( "columnMethod" ) );
+				ivMethodColumn.setPrefWidth( 400 );
 
-				ivTableView.getColumns( ).add( column );
+				ivTableView.getColumns( ).add( ivMethodColumn );
 			}
 
 			{
@@ -323,22 +340,91 @@ public class MethodsView extends ViewBase<MethodsController> {
 			}
 
 			{
-				final TableColumn<MethodCall, String> column = new TableColumn<>( );
-				column.setCellValueFactory( new TimestampCellValueFactory( ) );
-				column.setText( getLocalizedString( "columnTimestamp" ) );
-				column.setPrefWidth( 150 );
+				ivTimestampColumn = new TableColumn<>( );
+				ivTimestampColumn.setCellValueFactory( new TimestampCellValueFactory( ) );
+				ivTimestampColumn.setText( getLocalizedString( "columnTimestamp" ) );
+				ivTimestampColumn.setPrefWidth( 150 );
 
-				ivTableView.getColumns( ).add( column );
+				ivTableView.getColumns( ).add( ivTimestampColumn );
 			}
 
 			{
-				final TableColumn<MethodCall, Long> column = new TableColumn<>( );
-				column.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getTraceId( ) ) );
-				column.setText( getLocalizedString( "columnTraceId" ) );
-				column.setPrefWidth( 150 );
+				ivTraceIdColumn = new TableColumn<>( );
+				ivTraceIdColumn.setCellValueFactory( aParam -> new ReadOnlyStringWrapper( Long.toString( aParam.getValue( ).getTraceId( ) ).intern( ) ) );
+				ivTraceIdColumn.setText( getLocalizedString( "columnTraceId" ) );
+				ivTraceIdColumn.setPrefWidth( 150 );
 
-				ivTableView.getColumns( ).add( column );
+				ivTableView.getColumns( ).add( ivTraceIdColumn );
 			}
+
+			// The default sorting is a little bit too slow. Therefore we use a custom sort policy which sorts directly the data.
+			ivTableView.setSortPolicy( param -> {
+				final ObservableList<TableColumn<MethodCall, ?>> sortOrder = param.getSortOrder( );
+
+				if ( sortOrder.size( ) == 1 ) {
+					final TableColumn<MethodCall, ?> tableColumn = sortOrder.get( 0 );
+
+					if ( tableColumn == ivHostColumn ) {
+						final ObservableList<MethodCall> items = param.getItems( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> o1.getHost( ).compareTo( o2.getHost( ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> o2.getHost( ).compareTo( o1.getHost( ) ) );
+						}
+					}
+
+					if ( tableColumn == ivClassColumn ) {
+						final ClassAppearance classAppearance = ivPropertiesService.loadApplicationProperty( ClassAppearanceProperty.class );
+
+						final ObservableList<MethodCall> items = param.getItems( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> classAppearance.convert( o1.getClazz( ) ).compareTo( classAppearance.convert( o2.getClazz( ) ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> classAppearance.convert( o2.getClazz( ) ).compareTo( classAppearance.convert( o1.getClazz( ) ) ) );
+						}
+					}
+
+					if ( tableColumn == ivMethodColumn ) {
+						final MethodAppearance methodAppearance = ivPropertiesService.loadApplicationProperty( MethodAppearanceProperty.class );
+
+						final ObservableList<MethodCall> items = param.getItems( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> methodAppearance.convert( o1.getMethod( ) ).compareTo( methodAppearance.convert( o2.getMethod( ) ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> methodAppearance.convert( o2.getMethod( ) ).compareTo( methodAppearance.convert( o1.getMethod( ) ) ) );
+						}
+					}
+
+					if ( tableColumn == ivDurationColumn ) {
+						final ObservableList<MethodCall> items = param.getItems( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> Long.compare( o1.getDuration( ), o2.getDuration( ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> Long.compare( o2.getDuration( ), o1.getDuration( ) ) );
+						}
+					}
+
+					if ( tableColumn == ivTimestampColumn ) {
+						final ObservableList<MethodCall> items = param.getItems( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> Long.compare( o1.getTimestamp( ), o2.getTimestamp( ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> Long.compare( o2.getTimestamp( ), o1.getTimestamp( ) ) );
+						}
+					}
+
+					if ( tableColumn == ivTraceIdColumn ) {
+						final ObservableList<MethodCall> items = param.getItems( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> Long.compare( o1.getTraceId( ), o2.getTraceId( ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> Long.compare( o2.getTraceId( ), o1.getTraceId( ) ) );
+						}
+					}
+				}
+
+				return true;
+			} );
 
 			getChildren( ).add( ivTableView );
 		}
@@ -564,7 +650,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 		return ivTableView;
 	}
 
-	TableColumn<MethodCall, Long> getDurationColumn( ) {
+	TableColumn<MethodCall, String> getDurationColumn( ) {
 		return ivDurationColumn;
 	}
 

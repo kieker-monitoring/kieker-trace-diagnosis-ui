@@ -1,3 +1,8 @@
+3.2.0
+	01 Sep 2018
+	Feature (TRACEUI-22)
+	Improved the performance during the sorting of columns.
+
 3.1.0
 	30 Mar / 02 Jun 2018
 	Task (TRACEUI-21)

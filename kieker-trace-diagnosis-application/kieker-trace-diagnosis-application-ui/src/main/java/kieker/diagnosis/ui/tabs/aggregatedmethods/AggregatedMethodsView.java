@@ -20,7 +20,9 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -28,6 +30,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.SortType;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
@@ -35,10 +38,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import kieker.diagnosis.architecture.service.properties.PropertiesService;
 import kieker.diagnosis.architecture.ui.EnumStringConverter;
 import kieker.diagnosis.architecture.ui.ViewBase;
 import kieker.diagnosis.service.aggregatedmethods.SearchType;
 import kieker.diagnosis.service.data.AggregatedMethodCall;
+import kieker.diagnosis.service.settings.ClassAppearance;
+import kieker.diagnosis.service.settings.MethodAppearance;
+import kieker.diagnosis.service.settings.properties.ClassAppearanceProperty;
+import kieker.diagnosis.service.settings.properties.MethodAppearanceProperty;
 import kieker.diagnosis.ui.tabs.aggregatedmethods.components.ClassCellValueFactory;
 import kieker.diagnosis.ui.tabs.aggregatedmethods.components.DurationCellValueFactory;
 import kieker.diagnosis.ui.tabs.aggregatedmethods.components.MethodCellValueFactory;
@@ -65,11 +73,11 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 	// Table
 	private final TableView<AggregatedMethodCall> ivTableView;
 
-	private final TableColumn<AggregatedMethodCall, Long> ivColumnMinDuration;
-	private final TableColumn<AggregatedMethodCall, Long> ivColumnAvgDuration;
-	private final TableColumn<AggregatedMethodCall, Long> ivColumnMedianDuration;
-	private final TableColumn<AggregatedMethodCall, Long> ivColumnMaxDuration;
-	private final TableColumn<AggregatedMethodCall, Long> ivColumnTotalDuration;
+	private final TableColumn<AggregatedMethodCall, String> ivColumnMinDuration;
+	private final TableColumn<AggregatedMethodCall, String> ivColumnAvgDuration;
+	private final TableColumn<AggregatedMethodCall, String> ivColumnMedianDuration;
+	private final TableColumn<AggregatedMethodCall, String> ivColumnMaxDuration;
+	private final TableColumn<AggregatedMethodCall, String> ivColumnTotalDuration;
 
 	// Details
 	private final TextField ivDetailsCount;
@@ -85,6 +93,13 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 
 	// Status bar
 	private final Label ivStatusLabel;
+	private TableColumn<AggregatedMethodCall, String> ivHostColumn;
+	private TableColumn<AggregatedMethodCall, String> ivClassColumn;
+	private TableColumn<AggregatedMethodCall, String> ivMethodColumn;
+	private TableColumn<AggregatedMethodCall, String> ivCountColumn;
+
+	@Inject
+	private PropertiesService ivPropertiesService;
 
 	public void initialize( ) {
 		getController( ).performInitialize( );
@@ -210,39 +225,39 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 			VBox.setVgrow( ivTableView, Priority.ALWAYS );
 
 			{
-				final TableColumn<AggregatedMethodCall, Integer> column = new TableColumn<>( );
-				column.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getCount( ) ) );
-				column.setText( getLocalizedString( "columnCount" ) );
-				column.setPrefWidth( 100 );
+				ivCountColumn = new TableColumn<>( );
+				ivCountColumn.setCellValueFactory( aParam -> new ReadOnlyStringWrapper( Integer.toString( aParam.getValue( ).getCount( ) ).intern( ) ) );
+				ivCountColumn.setText( getLocalizedString( "columnCount" ) );
+				ivCountColumn.setPrefWidth( 100 );
 
-				ivTableView.getColumns( ).add( column );
+				ivTableView.getColumns( ).add( ivCountColumn );
 			}
 
 			{
-				final TableColumn<AggregatedMethodCall, String> column = new TableColumn<>( );
-				column.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getHost( ) ) );
-				column.setText( getLocalizedString( "columnHost" ) );
-				column.setPrefWidth( 100 );
+				ivHostColumn = new TableColumn<>( );
+				ivHostColumn.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getHost( ) ) );
+				ivHostColumn.setText( getLocalizedString( "columnHost" ) );
+				ivHostColumn.setPrefWidth( 100 );
 
-				ivTableView.getColumns( ).add( column );
+				ivTableView.getColumns( ).add( ivHostColumn );
 			}
 
 			{
-				final TableColumn<AggregatedMethodCall, String> column = new TableColumn<>( );
-				column.setCellValueFactory( new ClassCellValueFactory( ) );
-				column.setText( getLocalizedString( "columnClass" ) );
-				column.setPrefWidth( 200 );
+				ivClassColumn = new TableColumn<>( );
+				ivClassColumn.setCellValueFactory( new ClassCellValueFactory( ) );
+				ivClassColumn.setText( getLocalizedString( "columnClass" ) );
+				ivClassColumn.setPrefWidth( 200 );
 
-				ivTableView.getColumns( ).add( column );
+				ivTableView.getColumns( ).add( ivClassColumn );
 			}
 
 			{
-				final TableColumn<AggregatedMethodCall, String> column = new TableColumn<>( );
-				column.setCellValueFactory( new MethodCellValueFactory( ) );
-				column.setText( getLocalizedString( "columnMethod" ) );
-				column.setPrefWidth( 400 );
+				ivMethodColumn = new TableColumn<>( );
+				ivMethodColumn.setCellValueFactory( new MethodCellValueFactory( ) );
+				ivMethodColumn.setText( getLocalizedString( "columnMethod" ) );
+				ivMethodColumn.setPrefWidth( 400 );
 
-				ivTableView.getColumns( ).add( column );
+				ivTableView.getColumns( ).add( ivMethodColumn );
 			}
 
 			{
@@ -304,6 +319,102 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 
 				ivTableView.getColumns( ).add( ivColumnTotalDuration );
 			}
+
+			// The default sorting is a little bit too slow. Therefore we use a custom sort policy which sorts directly the data.
+			ivTableView.setSortPolicy( param -> {
+				final ObservableList<TableColumn<AggregatedMethodCall, ?>> sortOrder = param.getSortOrder( );
+
+				if ( sortOrder.size( ) == 1 ) {
+					final TableColumn<AggregatedMethodCall, ?> tableColumn = sortOrder.get( 0 );
+
+					if ( tableColumn == ivCountColumn ) {
+						final ObservableList<AggregatedMethodCall> items = param.getItems( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> Long.compare( o1.getCount( ), o2.getCount( ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> Long.compare( o2.getCount( ), o1.getCount( ) ) );
+						}
+					}
+
+					if ( tableColumn == ivHostColumn ) {
+						final ObservableList<AggregatedMethodCall> items = param.getItems( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> o1.getHost( ).compareTo( o2.getHost( ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> o2.getHost( ).compareTo( o1.getHost( ) ) );
+						}
+					}
+
+					if ( tableColumn == ivClassColumn ) {
+						final ClassAppearance classAppearance = ivPropertiesService.loadApplicationProperty( ClassAppearanceProperty.class );
+
+						final ObservableList<AggregatedMethodCall> items = param.getItems( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> classAppearance.convert( o1.getClazz( ) ).compareTo( classAppearance.convert( o2.getClazz( ) ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> classAppearance.convert( o2.getClazz( ) ).compareTo( classAppearance.convert( o1.getClazz( ) ) ) );
+						}
+					}
+
+					if ( tableColumn == ivMethodColumn ) {
+						final MethodAppearance methodAppearance = ivPropertiesService.loadApplicationProperty( MethodAppearanceProperty.class );
+
+						final ObservableList<AggregatedMethodCall> items = param.getItems( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> methodAppearance.convert( o1.getMethod( ) ).compareTo( methodAppearance.convert( o2.getMethod( ) ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> methodAppearance.convert( o2.getMethod( ) ).compareTo( methodAppearance.convert( o1.getMethod( ) ) ) );
+						}
+					}
+
+					if ( tableColumn == ivColumnMinDuration ) {
+						final ObservableList<AggregatedMethodCall> items = param.getItems( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> Long.compare( o1.getMinDuration( ), o2.getMinDuration( ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> Long.compare( o2.getMinDuration( ), o1.getMinDuration( ) ) );
+						}
+					}
+
+					if ( tableColumn == ivColumnAvgDuration ) {
+						final ObservableList<AggregatedMethodCall> items = param.getItems( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> Long.compare( o1.getAvgDuration( ), o2.getAvgDuration( ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> Long.compare( o2.getAvgDuration( ), o1.getAvgDuration( ) ) );
+						}
+					}
+
+					if ( tableColumn == ivColumnMedianDuration ) {
+						final ObservableList<AggregatedMethodCall> items = param.getItems( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> Long.compare( o1.getMedianDuration( ), o2.getMedianDuration( ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> Long.compare( o2.getMedianDuration( ), o1.getMedianDuration( ) ) );
+						}
+					}
+
+					if ( tableColumn == ivColumnMaxDuration ) {
+						final ObservableList<AggregatedMethodCall> items = param.getItems( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> Long.compare( o1.getMaxDuration( ), o2.getMaxDuration( ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> Long.compare( o2.getMaxDuration( ), o1.getMaxDuration( ) ) );
+						}
+					}
+
+					if ( tableColumn == ivColumnTotalDuration ) {
+						final ObservableList<AggregatedMethodCall> items = param.getItems( );
+						if ( tableColumn.getSortType( ) == SortType.ASCENDING ) {
+							items.sort( ( o1, o2 ) -> Long.compare( o1.getTotalDuration( ), o2.getTotalDuration( ) ) );
+						} else {
+							items.sort( ( o1, o2 ) -> Long.compare( o2.getTotalDuration( ), o1.getTotalDuration( ) ) );
+						}
+					}
+				}
+
+				return true;
+			} );
 
 			getChildren( ).add( ivTableView );
 
@@ -615,23 +726,23 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 		return ivSearchButton;
 	}
 
-	TableColumn<AggregatedMethodCall, Long> getColumnMinDuration( ) {
+	TableColumn<AggregatedMethodCall, String> getColumnMinDuration( ) {
 		return ivColumnMinDuration;
 	}
 
-	TableColumn<AggregatedMethodCall, Long> getColumnAvgDuration( ) {
+	TableColumn<AggregatedMethodCall, String> getColumnAvgDuration( ) {
 		return ivColumnAvgDuration;
 	}
 
-	TableColumn<AggregatedMethodCall, Long> getColumnMedianDuration( ) {
+	TableColumn<AggregatedMethodCall, String> getColumnMedianDuration( ) {
 		return ivColumnMedianDuration;
 	}
 
-	TableColumn<AggregatedMethodCall, Long> getColumnMaxDuration( ) {
+	TableColumn<AggregatedMethodCall, String> getColumnMaxDuration( ) {
 		return ivColumnMaxDuration;
 	}
 
-	TableColumn<AggregatedMethodCall, Long> getColumnTotalDuration( ) {
+	TableColumn<AggregatedMethodCall, String> getColumnTotalDuration( ) {
 		return ivColumnTotalDuration;
 	}
 
