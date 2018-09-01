@@ -1,5 +1,9 @@
 3.2.0
 	01 Sep 2018
+	Bug (TRACEUI-24)
+	The dialog for creating a new filter favorite was missing the application icon.
+
+	01 Sep 2018
 	Bug (TRACEUI-23)
 	Corrected the width of the combo boxes within the filters.
 

@@ -259,6 +259,13 @@ public class MainController extends ControllerBase<MainViewModel> {
 			final TextInputDialog textInputDialog = new TextInputDialog( );
 			textInputDialog.setTitle( getLocalizedString( "newFilterFavorite" ) );
 			textInputDialog.setHeaderText( getLocalizedString( "newFilterFavoriteName" ) );
+
+			final String iconPath = getLocalizedString( "iconNewFavorite" );
+			final InputStream iconStream = getClass( ).getClassLoader( ).getResourceAsStream( iconPath );
+			final Image icon = new Image( iconStream );
+			final Stage stage = ( Stage ) textInputDialog.getDialogPane( ).getScene( ).getWindow( );
+			stage.getIcons( ).add( icon );
+
 			final Optional<String> result = textInputDialog.showAndWait( );
 
 			if ( result.isPresent( ) ) {
