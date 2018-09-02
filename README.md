@@ -16,4 +16,4 @@ https://build.se.informatik.uni-kiel.de/jenkins/job/kieker-monitoring/job/kieker
 
 # IDE Setup for Contributors
 
-Kieker Trace Diagnosis is a Maven project and can thus be imported into an IDE of your choice. In Eclipse, for instance, you can open it by using the menu point <i>Import -> Import as Maven Project</i>. Please make also sure that you have a JDK-9 installed and configured in your IDE.
+Kieker Trace Diagnosis is a Maven project and can thus be imported into an IDE of your choice. In Eclipse, for instance, you can open it by using the menu point <i>Import -> Import as Maven Project</i>. Please make also sure that you have a JDK-9 installed and configured in your IDE. In Eclipse you should also use the e(fx)clipse plugin for handling the JavaFX classes.
