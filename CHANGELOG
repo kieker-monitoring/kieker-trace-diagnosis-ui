@@ -1,4 +1,8 @@
 3.2.0
+	02 Sep
+	Feature (TRACEUI-28)
+	The important menu items now have shortcut keys.
+	
 	02 Sep 
 	Feature (TRACEUI-27)
 	A deactivated monitoring within the application now requires less memory.

@@ -26,6 +26,7 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import kieker.diagnosis.architecture.ui.ViewBase;
@@ -59,6 +60,7 @@ public class MainView extends ViewBase<MainController> {
 					final MenuItem menuItem = new MenuItem( );
 					menuItem.setText( getLocalizedString( "importLog" ) );
 					menuItem.setOnAction( ( e ) -> getController( ).performImportLog( ) );
+					menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+O" ) );
 
 					menu.getItems( ).add( menuItem );
 				}
@@ -67,6 +69,7 @@ public class MainView extends ViewBase<MainController> {
 					final MenuItem menuItem = new MenuItem( );
 					menuItem.setText( getLocalizedString( "importLogFromZip" ) );
 					menuItem.setOnAction( ( e ) -> getController( ).performImportLogFromZip( ) );
+					menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+Z" ) );
 
 					menu.getItems( ).add( menuItem );
 				}
@@ -89,6 +92,7 @@ public class MainView extends ViewBase<MainController> {
 					final MenuItem menuItem = new MenuItem( );
 					menuItem.setText( getLocalizedString( "settings" ) );
 					menuItem.setOnAction( ( e ) -> getController( ).performSettings( ) );
+					menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+S" ) );
 
 					menu.getItems( ).add( menuItem );
 				}
@@ -104,6 +108,7 @@ public class MainView extends ViewBase<MainController> {
 					menuItem.setId( "close" );
 					menuItem.setText( getLocalizedString( "close" ) );
 					menuItem.setOnAction( ( e ) -> getController( ).performClose( ) );
+					menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+X" ) );
 
 					menu.getItems( ).add( menuItem );
 				}
@@ -134,6 +139,7 @@ public class MainView extends ViewBase<MainController> {
 					final MenuItem menuItem = new MenuItem( );
 					menuItem.setText( getLocalizedString( "documentation" ) );
 					menuItem.setOnAction( e -> getController( ).performDocumentation( ) );
+					menuItem.setAccelerator( KeyCombination.keyCombination( "F1" ) );
 
 					menu.getItems( ).add( menuItem );
 				}
@@ -176,8 +182,8 @@ public class MainView extends ViewBase<MainController> {
 
 				ivTabPane.getTabs( ).add( tab );
 
-				// Only one default button is allowed - even if the other buttons are not visible. Therefore we have to set the default button property only for
-				// the current tab.
+				// Only one default button is allowed - even if the other buttons are not visible. Therefore we have to set the default
+				// button property only for the current tab.
 				ivTracesView.getSearchButton( ).defaultButtonProperty( ).bind( ivTabPane.getSelectionModel( ).selectedItemProperty( ).isEqualTo( tab ) );
 			}
 
@@ -191,8 +197,8 @@ public class MainView extends ViewBase<MainController> {
 				tab.setContent( aMethodsView );
 
 				ivTabPane.getTabs( ).add( tab );
-				// Only one default button is allowed - even if the other buttons are not visible. Therefore we have to set the default button property only for
-				// the current tab.
+				// Only one default button is allowed - even if the other buttons are not visible. Therefore we have to set the default
+				// button property only for the current tab.
 				ivMethodsView.getSearchButton( ).defaultButtonProperty( ).bind( ivTabPane.getSelectionModel( ).selectedItemProperty( ).isEqualTo( tab ) );
 			}
 
@@ -208,8 +214,8 @@ public class MainView extends ViewBase<MainController> {
 
 				ivTabPane.getTabs( ).add( tab );
 
-				// Only one default button is allowed - even if the other buttons are not visible. Therefore we have to set the default button property only for
-				// the current tab.
+				// Only one default button is allowed - even if the other buttons are not visible. Therefore we have to set the default
+				// button property only for the current tab.
 				ivAggregatedMethodsView.getSearchButton( ).defaultButtonProperty( ).bind( ivTabPane.getSelectionModel( ).selectedItemProperty( ).isEqualTo( tab ) );
 			}
 
