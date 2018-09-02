@@ -1,4 +1,8 @@
 3.2.0
+	02 Sep 2018
+	Feature (TRACEUI-25)
+	The tables and tree tables now have alternating row colors.
+
 	01 Sep 2018
 	Bug (TRACEUI-24)
 	The dialog for creating a new filter favorite was missing the application icon.
