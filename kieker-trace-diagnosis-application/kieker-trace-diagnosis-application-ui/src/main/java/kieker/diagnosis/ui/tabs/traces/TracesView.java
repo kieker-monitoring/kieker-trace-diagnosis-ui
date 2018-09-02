@@ -317,6 +317,7 @@ public class TracesView extends ViewBase<TracesController> {
 					ivSearchButton.setMinWidth( 140 );
 					ivSearchButton.setMaxWidth( Double.POSITIVE_INFINITY );
 					ivSearchButton.setOnAction( e -> getController( ).performSearch( ) );
+					ivSearchButton.setGraphic( createIcon( Icon.SEARCH ) );
 
 					GridPane.setColumnIndex( ivSearchButton, 1 );
 					GridPane.setRowIndex( ivSearchButton, 2 );

@@ -1,5 +1,9 @@
 3.2.0
 	02 Sep
+	Feature (TRACEUI-29)
+	Included Font Awesome as icon library.
+	
+	02 Sep
 	Feature (TRACEUI-28)
 	The important menu items now have shortcut keys.
 	

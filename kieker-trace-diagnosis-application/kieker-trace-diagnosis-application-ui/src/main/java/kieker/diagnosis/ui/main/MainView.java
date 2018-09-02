@@ -61,6 +61,7 @@ public class MainView extends ViewBase<MainController> {
 					menuItem.setText( getLocalizedString( "importLog" ) );
 					menuItem.setOnAction( ( e ) -> getController( ).performImportLog( ) );
 					menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+O" ) );
+					menuItem.setGraphic( createIcon( Icon.FOLDER_OPEN ) );
 
 					menu.getItems( ).add( menuItem );
 				}
@@ -70,6 +71,7 @@ public class MainView extends ViewBase<MainController> {
 					menuItem.setText( getLocalizedString( "importLogFromZip" ) );
 					menuItem.setOnAction( ( e ) -> getController( ).performImportLogFromZip( ) );
 					menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+Z" ) );
+					menuItem.setGraphic( createIcon( Icon.ZIP_ARCHIVE ) );
 
 					menu.getItems( ).add( menuItem );
 				}
@@ -84,6 +86,7 @@ public class MainView extends ViewBase<MainController> {
 					final MenuItem menuItem = new MenuItem( );
 					menuItem.setText( getLocalizedString( "monitoring" ) );
 					menuItem.setOnAction( e -> getController( ).performMonitoring( ) );
+					menuItem.setGraphic( createIcon( Icon.CHART ) );
 
 					menu.getItems( ).add( menuItem );
 				}
@@ -93,6 +96,7 @@ public class MainView extends ViewBase<MainController> {
 					menuItem.setText( getLocalizedString( "settings" ) );
 					menuItem.setOnAction( ( e ) -> getController( ).performSettings( ) );
 					menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+S" ) );
+					menuItem.setGraphic( createIcon( Icon.COGS ) );
 
 					menu.getItems( ).add( menuItem );
 				}
@@ -109,6 +113,7 @@ public class MainView extends ViewBase<MainController> {
 					menuItem.setText( getLocalizedString( "close" ) );
 					menuItem.setOnAction( ( e ) -> getController( ).performClose( ) );
 					menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+X" ) );
+					menuItem.setGraphic( createIcon( Icon.TIMES ) );
 
 					menu.getItems( ).add( menuItem );
 				}
@@ -140,6 +145,7 @@ public class MainView extends ViewBase<MainController> {
 					menuItem.setText( getLocalizedString( "documentation" ) );
 					menuItem.setOnAction( e -> getController( ).performDocumentation( ) );
 					menuItem.setAccelerator( KeyCombination.keyCombination( "F1" ) );
+					menuItem.setGraphic( createIcon( Icon.QUESTION_CIRCLE ) );
 
 					menu.getItems( ).add( menuItem );
 				}
@@ -154,6 +160,7 @@ public class MainView extends ViewBase<MainController> {
 					final MenuItem menuItem = new MenuItem( );
 					menuItem.setText( getLocalizedString( "about" ) );
 					menuItem.setOnAction( e -> getController( ).performAbout( ) );
+					menuItem.setGraphic( createIcon( Icon.INFO_CIRCLE ) );
 
 					menu.getItems( ).add( menuItem );
 				}
