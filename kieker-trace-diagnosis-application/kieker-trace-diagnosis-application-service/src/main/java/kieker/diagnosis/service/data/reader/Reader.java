@@ -30,6 +30,7 @@ import com.carrotsearch.hppc.IntObjectHashMap;
 import com.carrotsearch.hppc.IntObjectMap;
 
 import kieker.diagnosis.architecture.monitoring.MonitoringProbe;
+import kieker.diagnosis.architecture.monitoring.MonitoringUtil;
 
 /**
  * This is an abstract base for readers, which import monitoring logs. It provides some convenient helper methods.
@@ -51,18 +52,19 @@ public abstract class Reader {
 	public abstract boolean shouldBeExecuted( final File aDirectory ) throws IOException;
 
 	/**
-	 * Reads the Kieker mapping file from the given directory. If the directory contains no such mapping file, an empty map is returned.
+	 * Reads the Kieker mapping file from the given directory. If the directory contains no such mapping file, an empty map
+	 * is returned.
 	 *
 	 * @param aDirectory
-	 *            The directory from which the mapping file should be read.
+	 *                   The directory from which the mapping file should be read.
 	 *
 	 * @return The mapping between the keys and the Strings.
 	 *
 	 * @throws IOException
-	 *             If the mapping file exists but could not be read.
+	 *                     If the mapping file exists but could not be read.
 	 */
 	protected final IntObjectMap<String> readMappingFile( final File aDirectory ) throws IOException {
-		final MonitoringProbe probe = new MonitoringProbe( getClass( ), "readMappingFile(java.io.File)" );
+		final MonitoringProbe probe = MonitoringUtil.createMonitoringProbe( getClass( ), "readMappingFile(java.io.File)" );
 
 		try {
 			final IntObjectMap<String> stringMapping = new IntObjectHashMap<>( );
@@ -97,20 +99,21 @@ public abstract class Reader {
 	}
 
 	/**
-	 * Delivers a list of all directories, which contain at least one file for each of the given extensions. The search is performed recursive.
+	 * Delivers a list of all directories, which contain at least one file for each of the given extensions. The search is
+	 * performed recursive.
 	 *
 	 * @param aDirectory
-	 *            The root directory.
+	 *                    The root directory.
 	 * @param aExtensions
-	 *            The extensions to search for.
+	 *                    The extensions to search for.
 	 *
 	 * @return The resulting list of directories.
 	 *
 	 * @throws IOException
-	 *             If the list of directories could not be determined.
+	 *                     If the list of directories could not be determined.
 	 */
 	protected List<File> findDirectoriesContainingFilesWithExtensions( final File aDirectory, final String... aExtensions ) throws IOException {
-		final MonitoringProbe probe = new MonitoringProbe( getClass( ), "findDirectoriesContainingFilesWithExtensions(java.io.File, java.lang.String[])" );
+		final MonitoringProbe probe = MonitoringUtil.createMonitoringProbe( getClass( ), "findDirectoriesContainingFilesWithExtensions(java.io.File, java.lang.String[])" );
 
 		try {
 			return Files.walk( aDirectory.toPath( ), Integer.MAX_VALUE, new FileVisitOption[0] ) // Visit all files in infinite depth...
@@ -128,7 +131,7 @@ public abstract class Reader {
 	private boolean containsFilesWithAllExtensions( final File aDirectory, final String[] aExtensions ) {
 		for ( final String extension : aExtensions ) {
 			final String lowerExtension = extension.toLowerCase( );
-			final File[] filesWithExtension = aDirectory.listFiles( (FilenameFilter) ( aDir, aName ) -> aName.toLowerCase( ).endsWith( lowerExtension ) );
+			final File[] filesWithExtension = aDirectory.listFiles( ( FilenameFilter ) ( aDir, aName ) -> aName.toLowerCase( ).endsWith( lowerExtension ) );
 
 			// Did we find a file with the extension?
 			if ( filesWithExtension.length == 0 ) {
@@ -144,21 +147,21 @@ public abstract class Reader {
 	 * Delivers a list of all files with the given extension. The search is performed non-recursive.
 	 *
 	 * @param aDirectory
-	 *            The root directory.
+	 *                   The root directory.
 	 * @param aExtension
-	 *            The extension to search for.
+	 *                   The extension to search for.
 	 *
 	 * @return The resulting list of files.
 	 *
 	 * @throws IOException
-	 *             If the list of files could not be determined.
+	 *                     If the list of files could not be determined.
 	 */
 	protected File[] findFilesWithExtension( final File aDirectory, final String aExtension ) throws IOException {
-		final MonitoringProbe probe = new MonitoringProbe( getClass( ), "findFilesWithExtension(java.io.File, java.lang.String)" );
+		final MonitoringProbe probe = MonitoringUtil.createMonitoringProbe( getClass( ), "findFilesWithExtension(java.io.File, java.lang.String)" );
 
 		try {
 			final String lowerExtension = aExtension.toLowerCase( );
-			return aDirectory.listFiles( (FilenameFilter) ( aDir, aName ) -> aName.toLowerCase( ).endsWith( lowerExtension ) );
+			return aDirectory.listFiles( ( FilenameFilter ) ( aDir, aName ) -> aName.toLowerCase( ).endsWith( lowerExtension ) );
 		} catch ( final Throwable t ) {
 			probe.fail( t );
 			throw t;

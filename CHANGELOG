@@ -1,4 +1,12 @@
 3.2.0
+	02 Sep 
+	Feature (TRACEUI-27)
+	A deactivated monitoring within the application now requires less memory.
+	
+	02 Sep 2018
+	Bug (TRACEUI-26)
+	The Ascii reader did not process the Kieker metadata records in a correct way.
+	
 	02 Sep 2018
 	Feature (TRACEUI-25)
 	The tables and tree tables now have alternating row colors.

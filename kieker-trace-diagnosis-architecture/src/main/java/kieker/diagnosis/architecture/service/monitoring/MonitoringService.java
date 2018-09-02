@@ -21,8 +21,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 import com.google.inject.Singleton;
 
 import kieker.common.configuration.Configuration;
+import kieker.diagnosis.architecture.monitoring.DefaultMonitoringProbeFactory;
 import kieker.diagnosis.architecture.monitoring.MonitoringConfiguration;
 import kieker.diagnosis.architecture.monitoring.MonitoringControllerHolder;
+import kieker.diagnosis.architecture.monitoring.MonitoringUtil;
+import kieker.diagnosis.architecture.monitoring.NoOpMonitoringProbeFactory;
 import kieker.diagnosis.architecture.monitoring.Status;
 import kieker.diagnosis.architecture.monitoring.Timer;
 import kieker.diagnosis.architecture.monitoring.Writer;
@@ -64,7 +67,8 @@ public class MonitoringService extends ServiceBase {
 	}
 
 	/**
-	 * Delivers the current configuration of the monitoring. If there is no such configuration, a suitable default configuration is returned.
+	 * Delivers the current configuration of the monitoring. If there is no such configuration, a suitable default
+	 * configuration is returned.
 	 *
 	 * @return The monitoring configuration.
 	 */
@@ -90,7 +94,7 @@ public class MonitoringService extends ServiceBase {
 	 * Configures the application. That means, that the old monitoring is terminated and a new monitoring is started.
 	 *
 	 * @param aConfiguration
-	 *            The monitoring configuration.
+	 *                       The monitoring configuration.
 	 */
 	public void configureMonitoring( final MonitoringConfiguration aConfiguration ) {
 		// Terminate the old monitoring controller
@@ -103,6 +107,7 @@ public class MonitoringService extends ServiceBase {
 		MonitoringController.getInstance( ).terminateMonitoring( );
 
 		MonitoringControllerHolder.setCurrentConfiguration( aConfiguration );
+		MonitoringUtil.setMonitoringProbeFactory( new NoOpMonitoringProbeFactory( ) );
 
 		if ( aConfiguration.isActive( ) ) {
 			// Create the new configuration
@@ -133,16 +138,16 @@ public class MonitoringService extends ServiceBase {
 					configuration.setProperty( AsciiFileWriter.CONFIG_MAXENTRIESINFILE, maxEntriesPerFile );
 					configuration.setProperty( AsciiFileWriter.CONFIG_CHARSET_NAME, "UTF-8" );
 					configuration.setProperty( AsciiFileWriter.CONFIG_FLUSH_MAPFILE, "true" );
-				break;
+					break;
 				case BINARY_WRITER:
 					configuration.setProperty( ConfigurationFactory.WRITER_CLASSNAME, BinaryFileWriter.class.getName( ) );
 					configuration.setProperty( BinaryFileWriter.CONFIG_PATH, aConfiguration.getOutputDirectory( ) );
 					configuration.setProperty( BinaryFileWriter.CONFIG_MAXENTRIESINFILE, maxEntriesPerFile );
 					configuration.setProperty( BinaryFileWriter.CONFIG_BUFFERSIZE, bufferSize );
 					configuration.setProperty( BinaryFileWriter.CONFIG_FLUSH_MAPFILE, "true" );
-				break;
+					break;
 				default:
-				break;
+					break;
 
 			}
 
@@ -158,6 +163,7 @@ public class MonitoringService extends ServiceBase {
 			// Create the new monitoring controller
 			monitoringController = MonitoringController.createInstance( configuration );
 			MonitoringControllerHolder.setMonitoringController( monitoringController );
+			MonitoringUtil.setMonitoringProbeFactory( new DefaultMonitoringProbeFactory( ) );
 		}
 	}
 

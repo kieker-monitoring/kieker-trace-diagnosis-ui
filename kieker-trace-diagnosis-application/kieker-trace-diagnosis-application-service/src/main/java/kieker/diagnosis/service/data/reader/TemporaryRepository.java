@@ -33,6 +33,7 @@ import com.carrotsearch.hppc.LongObjectMap;
 
 import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.monitoring.MonitoringProbe;
+import kieker.diagnosis.architecture.monitoring.MonitoringUtil;
 import kieker.diagnosis.service.data.AggregatedMethodCall;
 import kieker.diagnosis.service.data.MethodCall;
 import kieker.diagnosis.service.data.MonitoringLogService;
@@ -83,7 +84,8 @@ public final class TemporaryRepository {
 			methodCall.setTimestamp( timestamp );
 
 			if ( !methodList.isEmpty( ) ) {
-				// This is not the first entry and thus not the root of a method. Which means that this method is the child of the previous method.
+				// This is not the first entry and thus not the root of a method. Which means that this method is the child of the
+				// previous method.
 				final int lastIndex = methodList.size( ) - 1;
 				final MethodCall previousMethodCall = methodList.get( lastIndex );
 				previousMethodCall.addChild( methodCall );
@@ -171,11 +173,11 @@ public final class TemporaryRepository {
 	}
 
 	/**
-	 * This method should be called after all readers performed their work and everything has been added to this repository. It performs the remaining
-	 * calculation and transfers its data to the monitoring service (where still necessary).
+	 * This method should be called after all readers performed their work and everything has been added to this repository.
+	 * It performs the remaining calculation and transfers its data to the monitoring service (where still necessary).
 	 *
 	 * @throws BusinessException
-	 *             If the monitoring log stream was somehow corrupted.
+	 *                           If the monitoring log stream was somehow corrupted.
 	 */
 	public void finish( ) throws BusinessException {
 		calculatePercentAndCollectMethods( );
@@ -192,7 +194,7 @@ public final class TemporaryRepository {
 	}
 
 	private void calculatePercentAndCollectMethods( ) {
-		final MonitoringProbe probe = new MonitoringProbe( getClass( ), "calculatePercentAndCollectMethods()" );
+		final MonitoringProbe probe = MonitoringUtil.createMonitoringProbe( getClass( ), "calculatePercentAndCollectMethods()" );
 
 		try {
 
@@ -236,14 +238,14 @@ public final class TemporaryRepository {
 	}
 
 	private void aggregateMethods( ) {
-		final MonitoringProbe probe = new MonitoringProbe( getClass( ), "aggregateMethods()" );
+		final MonitoringProbe probe = MonitoringUtil.createMonitoringProbe( getClass( ), "aggregateMethods()" );
 
 		try {
 			final Map<AggregationKey, MethodCall> aggregationMapWithExemplaricMethodCall = new HashMap<>( );
 			final Map<AggregationKey, LongArrayList> aggregationMapWithDuration = new HashMap<>( );
 
-			// Aggregate the methods. We perform only the key calculation in parallel, as the put into the aggregation maps would be slower due to
-			// synchronization.
+			// Aggregate the methods. We perform only the key calculation in parallel, as the put into the aggregation maps would be
+			// slower due to synchronization.
 			final List<MethodCall> methodCalls = ivMonitoringLogService.getMethods( );
 			methodCalls.parallelStream( ).map( method -> new AggregationKey( method.getHost( ), method.getClazz( ), method.getMethod( ), method.getException( ), method ) )
 					.sequential( ).forEach( key -> {
@@ -262,8 +264,8 @@ public final class TemporaryRepository {
 			// As we need the median, we have to have sorted lists. The sorting can be performed in parallel.
 			aggregationMapWithDuration.values( ).parallelStream( ).forEach( list -> Arrays.sort( list.buffer, 0, list.size( ) ) );
 
-			// Now we can calculate the aggregated methods based on the aggregation maps. As we have no "complex" put-if-absent-part here (as above), we do this
-			// in parallel.
+			// Now we can calculate the aggregated methods based on the aggregation maps. As we have no "complex" put-if-absent-part
+			// here (as above), we do this in parallel.
 			final Queue<AggregatedMethodCall> aggregatedMethodCalls = new ConcurrentLinkedQueue<>( );
 			aggregationMapWithExemplaricMethodCall.keySet( ).parallelStream( ).forEach( key -> {
 				final MethodCall exemplaricMethodCall = aggregationMapWithExemplaricMethodCall.get( key );
@@ -351,7 +353,7 @@ public final class TemporaryRepository {
 			if ( getClass( ) != obj.getClass( ) ) {
 				return false;
 			}
-			final AggregationKey other = (AggregationKey) obj;
+			final AggregationKey other = ( AggregationKey ) obj;
 			if ( ivClass == null ) {
 				if ( other.ivClass != null ) {
 					return false;

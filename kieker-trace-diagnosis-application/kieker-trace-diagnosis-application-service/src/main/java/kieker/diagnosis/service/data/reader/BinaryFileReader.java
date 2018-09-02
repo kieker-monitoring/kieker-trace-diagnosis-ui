@@ -38,11 +38,12 @@ import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.diagnosis.architecture.monitoring.MonitoringProbe;
+import kieker.diagnosis.architecture.monitoring.MonitoringUtil;
 import kieker.diagnosis.service.data.MethodCall;
 
 /**
- * This is a reader to import files written with Kieker's binary file writer. It exchanges readability and maintainability for performance and reduced memory
- * consumption.
+ * This is a reader to import files written with Kieker's binary file writer. It exchanges readability and
+ * maintainability for performance and reduced memory consumption.
  *
  * @author Nils Christian Ehmke
  */
@@ -65,7 +66,7 @@ public final class BinaryFileReader extends Reader {
 
 	@Override
 	public void readFromDirectory( final File aDirectory ) throws IOException {
-		final MonitoringProbe probe = new MonitoringProbe( getClass( ), "readFromDirectory(java.io.File)" );
+		final MonitoringProbe probe = MonitoringUtil.createMonitoringProbe( getClass( ), "readFromDirectory(java.io.File)" );
 
 		try {
 			final List<File> directoriesToBeRead = findDirectoriesToBeRead( aDirectory );
@@ -83,7 +84,7 @@ public final class BinaryFileReader extends Reader {
 	}
 
 	private void readNonRecursiveFromDirectory( final File aDirectory ) throws IOException {
-		final MonitoringProbe probe = new MonitoringProbe( getClass( ), "readNonRecursiveFromDirectory(java.io.File)" );
+		final MonitoringProbe probe = MonitoringUtil.createMonitoringProbe( getClass( ), "readNonRecursiveFromDirectory(java.io.File)" );
 
 		try {
 			ivTemporaryRepository.clearBeforeNextDirectory( );
@@ -112,7 +113,7 @@ public final class BinaryFileReader extends Reader {
 		ivTraceMetadataKey = -1;
 		ivKiekerMetadataRecordKey = -1;
 
-		ivStringMapping.forEach( (Consumer<IntObjectCursor<String>>) aCursor -> {
+		ivStringMapping.forEach( ( Consumer<IntObjectCursor<String>> ) aCursor -> {
 			final int key = aCursor.key;
 			final String value = aCursor.value;
 
@@ -131,7 +132,7 @@ public final class BinaryFileReader extends Reader {
 	}
 
 	private void readBinaryFile( final Path aBinaryFile ) throws IOException {
-		final MonitoringProbe probe = new MonitoringProbe( getClass( ), "readBinaryFile(java.nio.file.Path)" );
+		final MonitoringProbe probe = MonitoringUtil.createMonitoringProbe( getClass( ), "readBinaryFile(java.nio.file.Path)" );
 
 		try {
 			final byte[] binaryContent = Files.readAllBytes( aBinaryFile );
@@ -140,7 +141,7 @@ public final class BinaryFileReader extends Reader {
 			try {
 				while ( byteBuffer.hasRemaining( ) ) {
 					final int recordKey = byteBuffer.getInt( );
-					skipBytes( (byte) 8, byteBuffer ); // Ignore the logging timestamp
+					skipBytes( ( byte ) 8, byteBuffer ); // Ignore the logging timestamp
 
 					if ( recordKey == ivBeforeOperationEventKey ) {
 						readBeforeOperationEvent( byteBuffer );
@@ -178,7 +179,7 @@ public final class BinaryFileReader extends Reader {
 	private void readBeforeOperationEvent( final ByteBuffer aByteBuffer ) {
 		final long timestamp = aByteBuffer.getLong( ); // Timestamp
 		final long traceId = aByteBuffer.getLong( ); // Trace Id
-		skipBytes( (byte) ( 3 * 4 ), aByteBuffer ); // Ignore order index, method name and class name
+		skipBytes( ( byte ) ( 3 * 4 ), aByteBuffer ); // Ignore order index, method name and class name
 
 		ivTemporaryRepository.processBeforeOperationEvent( timestamp, traceId );
 	}
@@ -186,7 +187,7 @@ public final class BinaryFileReader extends Reader {
 	private MethodCall readAfterOperationEvent( final ByteBuffer aByteBuffer ) {
 		final long timestamp = aByteBuffer.getLong( ); // Timestamp
 		final long traceId = aByteBuffer.getLong( ); // Trace Id
-		skipBytes( (byte) 4, aByteBuffer ); // Ignore order index
+		skipBytes( ( byte ) 4, aByteBuffer ); // Ignore order index
 		final String methodName = ivStringMapping.get( aByteBuffer.getInt( ) ); // Method name
 		final String clazz = ivStringMapping.get( aByteBuffer.getInt( ) ); // Class name
 
@@ -207,18 +208,18 @@ public final class BinaryFileReader extends Reader {
 
 	private void readTraceMetadata( final ByteBuffer aByteBuffer ) {
 		final long traceId = aByteBuffer.getLong( );
-		skipBytes( (byte) ( 8 + 4 ), aByteBuffer ); // Ignore thread id and session id
+		skipBytes( ( byte ) ( 8 + 4 ), aByteBuffer ); // Ignore thread id and session id
 
 		final String host = ivStringMapping.get( aByteBuffer.getInt( ) ); // Hostname
-		skipBytes( (byte) ( 8 + 4 ), aByteBuffer ); // Ignore parent trace Id and parent order Id
+		skipBytes( ( byte ) ( 8 + 4 ), aByteBuffer ); // Ignore parent trace Id and parent order Id
 
 		ivTemporaryRepository.processTraceMetadata( traceId, host );
 	}
 
 	private void readKiekerMetadataRecord( final ByteBuffer aByteBuffer ) {
-		skipBytes( (byte) ( 4 * 4 + 1 + 8 ), aByteBuffer ); // Ignore a lot of fields...
+		skipBytes( ( byte ) ( 4 * 4 + 1 + 8 ), aByteBuffer ); // Ignore a lot of fields...
 		final String timeUnitName = ivStringMapping.get( aByteBuffer.getInt( ) ); // Time unit
-		skipBytes( (byte) 8, aByteBuffer ); // Ignore the number of records
+		skipBytes( ( byte ) 8, aByteBuffer ); // Ignore the number of records
 
 		ivTemporaryRepository.processSourceTimeUnit( timeUnitName );
 	}
@@ -231,7 +232,7 @@ public final class BinaryFileReader extends Reader {
 			try {
 				final Class<?> recordClass = Class.forName( recordName );
 				final Field sizeField = recordClass.getDeclaredField( "SIZE" );
-				size = (byte) (int) sizeField.get( null );
+				size = ( byte ) ( int ) sizeField.get( null );
 
 				ivIgnoredRecordsSizeMap.put( aRecordKey, size );
 			} catch ( final Exception ex ) {

@@ -35,11 +35,12 @@ import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.diagnosis.architecture.monitoring.MonitoringProbe;
+import kieker.diagnosis.architecture.monitoring.MonitoringUtil;
 import kieker.diagnosis.service.data.MethodCall;
 
 /**
- * This is a reader to import files written with Kieker's ascii file writer. It exchanges readability and maintainability for performance and reduced memory
- * consumption.
+ * This is a reader to import files written with Kieker's ascii file writer. It exchanges readability and
+ * maintainability for performance and reduced memory consumption.
  *
  * @author Nils Christian Ehmke
  */
@@ -50,7 +51,7 @@ public final class AsciiFileReader extends Reader {
 	private static final Pattern cvAsciiFileAfterOperationEventPattern = Pattern.compile( "(\\d*);(-?\\d*);\\d*;([^;]*);([^;]*)" );
 	private static final Pattern cvAsciiFileAfterOperationFailedEventPattern = Pattern.compile( "(\\d*);(-?\\d*);\\d*;([^;]*);([^;]*);(.*)" );
 	private static final Pattern cvAsciiFileTraceMetadataPattern = Pattern.compile( "(-?\\d*);\\d*;[^;]*;([^;]*).*" );
-	private static final Pattern cvAsciiFileKiekerMetadataRecordPattern = Pattern.compile( "[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;([^;]*).*" );
+	private static final Pattern cvAsciiFileKiekerMetadataRecordPattern = Pattern.compile( "[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;([^;]*).*" );
 
 	private int ivBeforeOperationEventKey;
 	private int ivAfterOperationEventKey;
@@ -66,7 +67,7 @@ public final class AsciiFileReader extends Reader {
 
 	@Override
 	public void readFromDirectory( final File aDirectory ) throws IOException {
-		final MonitoringProbe probe = new MonitoringProbe( getClass( ), "readFromDirectory(java.io.File)" );
+		final MonitoringProbe probe = MonitoringUtil.createMonitoringProbe( getClass( ), "readFromDirectory(java.io.File)" );
 
 		try {
 			final List<File> directoriesToBeRead = findDirectoriesToBeRead( aDirectory );
@@ -84,7 +85,7 @@ public final class AsciiFileReader extends Reader {
 	}
 
 	private void readNonRecursiveFromDirectory( final File aDirectory ) throws IOException {
-		final MonitoringProbe probe = new MonitoringProbe( getClass( ), "readNonRecursiveFromDirectory(java.io.File)" );
+		final MonitoringProbe probe = MonitoringUtil.createMonitoringProbe( getClass( ), "readNonRecursiveFromDirectory(java.io.File)" );
 
 		try {
 			ivTemporaryRepository.clearBeforeNextDirectory( );
@@ -112,7 +113,7 @@ public final class AsciiFileReader extends Reader {
 		ivTraceMetadataKey = -1;
 		ivKiekerMetadataRecordKey = -1;
 
-		ivStringMapping.forEach( (Consumer<IntObjectCursor<String>>) aCursor -> {
+		ivStringMapping.forEach( ( Consumer<IntObjectCursor<String>> ) aCursor -> {
 			final int key = aCursor.key;
 			final String value = aCursor.value;
 
@@ -131,7 +132,7 @@ public final class AsciiFileReader extends Reader {
 	}
 
 	private void readAsciiFile( final Path aAsciiFile ) throws IOException {
-		final MonitoringProbe probe = new MonitoringProbe( getClass( ), "readAsciiFile(java.nio.file.Path)" );
+		final MonitoringProbe probe = MonitoringUtil.createMonitoringProbe( getClass( ), "readAsciiFile(java.nio.file.Path)" );
 
 		try {
 			final List<String> lines = Files.readAllLines( aAsciiFile, Charset.forName( "UTF-8" ) );
