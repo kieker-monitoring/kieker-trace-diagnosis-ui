@@ -42,7 +42,7 @@ import kieker.diagnosis.service.pattern.PatternService;
 class MethodsViewModel extends ViewModelBase<MethodsView> {
 
 	public void updatePresentationMethods( final List<MethodCall> aMethods ) {
-		getView( ).getTableView( ).setItems( FXCollections.observableArrayList( aMethods ) );
+		getView( ).getTableView( ).setItems( FXCollections.observableList( aMethods ) );
 		getView( ).getTableView( ).refresh( );
 	}
 

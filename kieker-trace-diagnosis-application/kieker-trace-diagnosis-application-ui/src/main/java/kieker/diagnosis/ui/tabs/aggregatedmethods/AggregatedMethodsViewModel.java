@@ -79,7 +79,7 @@ class AggregatedMethodsViewModel extends ViewModelBase<AggregatedMethodsView> {
 	}
 
 	public void updatePresentationMethods( final List<AggregatedMethodCall> aMethods ) {
-		getView( ).getTableView( ).setItems( FXCollections.observableArrayList( aMethods ) );
+		getView( ).getTableView( ).setItems( FXCollections.observableList( aMethods ) );
 		getView( ).getTableView( ).refresh( );
 	}
 

@@ -1,4 +1,8 @@
 3.2.0
+	04 Sep
+	Feature (TRACEUI-30)
+	Reduced the memory usage of the application during search operations.
+	
 	02 Sep
 	Feature (TRACEUI-29)
 	Included Font Awesome as icon library.
