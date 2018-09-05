@@ -22,7 +22,6 @@ import java.util.ResourceBundle;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
-import kieker.diagnosis.architecture.common.ClassUtil;
 import kieker.diagnosis.service.data.MethodCall;
 import kieker.diagnosis.ui.tabs.traces.aggregator.Aggregator;
 
@@ -34,7 +33,7 @@ import kieker.diagnosis.ui.tabs.traces.aggregator.Aggregator;
  */
 public final class MethodCallTreeItem extends TreeItem<MethodCall> {
 
-	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle( ClassUtil.getRealName( getClass( ) ) );
+	private static final ResourceBundle cvResourceBundle = ResourceBundle.getBundle( MethodCallTreeItem.class.getName( ) );
 
 	private boolean ivChildrenInitialized = false;
 	private final boolean ivShowUnmonitoredTime;
@@ -93,7 +92,7 @@ public final class MethodCallTreeItem extends TreeItem<MethodCall> {
 			final MethodCall methodCall = new MethodCall( );
 			methodCall.setHost( "-" );
 			methodCall.setClazz( "-" );
-			methodCall.setMethod( ivResourceBundle.getString( "unmonitoredTime" ) );
+			methodCall.setMethod( cvResourceBundle.getString( "unmonitoredTime" ) );
 			methodCall.setTraceId( getValue( ).getTraceId( ) );
 			methodCall.setTimestamp( getValue( ).getTimestamp( ) );
 
