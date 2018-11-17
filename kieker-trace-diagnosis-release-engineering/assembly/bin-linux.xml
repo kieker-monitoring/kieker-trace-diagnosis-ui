@@ -12,8 +12,9 @@
 
 	<files>
 		<file>
-			<source>${project.build.directory}/appassembler/bin/start</source>
+			<source>${project.build.directory}/appassembler/bin/start-unix</source>
 			<outputDirectory>bin</outputDirectory>
+			<destName>start</destName>
 		</file>
 	</files>
 

@@ -36,12 +36,33 @@
 						<configuration>
 							<programs>
 								<program>
+									<platforms>
+										<platform>windows</platform>
+									</platforms>
 									<mainClass>kieker.diagnosis.KiekerTraceDiagnosis</mainClass>
-									<name>start</name>
+									<name>start-windows</name>
 									<jvmSettings>
 										<extraArgument>-Djava.awt.headless=false</extraArgument>
 										<initialMemorySize>500M</initialMemorySize>
 										<maxMemorySize>3G</maxMemorySize>
+										<extraArgument>--module-path</extraArgument>
+										<extraArgument>%REPO%</extraArgument>
+										<extraArgument>--add-modules=javafx.controls,javafx.fxml,javafx.web</extraArgument>
+									</jvmSettings>
+								</program>
+								<program>
+									<platforms>
+										<platform>unix</platform>
+									</platforms>
+									<mainClass>kieker.diagnosis.KiekerTraceDiagnosis</mainClass>
+									<name>start-unix</name>
+									<jvmSettings>
+										<extraArgument>-Djava.awt.headless=false</extraArgument>
+										<initialMemorySize>500M</initialMemorySize>
+										<maxMemorySize>3G</maxMemorySize>
+										<extraArgument>--module-path</extraArgument>
+										<extraArgument>$REPO</extraArgument>
+										<extraArgument>--add-modules=javafx.controls,javafx.fxml,javafx.web</extraArgument>
 									</jvmSettings>
 								</program>
 							</programs>

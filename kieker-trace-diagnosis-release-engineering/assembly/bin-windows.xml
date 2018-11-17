@@ -12,8 +12,9 @@
 
 	<files>
 		<file>
-			<source>${project.build.directory}/appassembler/bin/start.bat</source>
+			<source>${project.build.directory}/appassembler/bin/start-windows.bat</source>
 			<outputDirectory>bin</outputDirectory>
+			<destName>start.bat</destName>
 		</file>
 	</files>
 
