@@ -21,11 +21,10 @@
 		The following requirements are necessary to use <i>Kieker Trace Diagnosis</i>.
 		<ul>
 			<li>Windows or Linux</li>
-			<li>Java Runtime Environment 9 or higher</li>
+			<li>Java Runtime Environment 11 or higher</li>
 		</ul>
 		
-		The usage of Oracle's JDK for the tool is recommended.
-		The troubleshooting for the usage of OpenJDK can be found in section <a href="#OpenJDK">OpenJDK</a>.
+		The usage of OpenJDK for the tool is recommended.
 		The memory usage of the tool depends on the size of the monitoring logs.
 		As guideline it is recommended to provide twice the size of the monitoring logs.</br></br>
 
@@ -85,10 +84,6 @@
 	
 	<h2 id="troubleshooting">Troubleshooting</h2>
 	  
-		<h3 id="OpenJDK">Usage of OpenJDK</h2>
-  			The usage of OpenJDK instead of Oracle's JDK is basically possible.
-  			However, it can be necessary to install OpenJFX explicitly.
-
 		<h3>Unable to create file logs/Kieker Trace Diagnosis.log</h3>
   			If this error message appears during the start, it is very likely that <i>Kieker Trace Diagnosis</i> does not have write permissions in the current working directory.
   			In this case the application can not write any log files, but can be used as usual.
