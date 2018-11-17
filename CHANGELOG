@@ -1,21 +1,26 @@
+4.0.0
+	17 Nov 2018
+	Internal Improvement (TRACEUI-32)
+	The tool now uses and requires Java 11
+	
 3.2.0
-	05 Sep
+	05 Sep 2018
 	Feature (TRACEUI-31)
 	Further reduced the memory usage of elements in the traces view and accelerated their creation.
 	
-	04 Sep
+	04 Sep 2018
 	Feature (TRACEUI-30)
 	Reduced the memory usage of the application during search operations.
 	
-	02 Sep
+	02 Sep 2018
 	Feature (TRACEUI-29)
 	Included Font Awesome as icon library.
 	
-	02 Sep
+	02 Sep 2018
 	Feature (TRACEUI-28)
 	The important menu items now have shortcut keys.
 	
-	02 Sep 
+	02 Sep 2018
 	Feature (TRACEUI-27)
 	A deactivated monitoring within the application now requires less memory.
 	
