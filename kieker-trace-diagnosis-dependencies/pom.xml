@@ -21,7 +21,8 @@
 		<dependency.plugin.version>3.1.1</dependency.plugin.version>
 		<aopalliance.version>1.0</aopalliance.version>
 		<guava.version>23.0</guava.version>
-		<maven.compiler.version>3.7.0</maven.compiler.version>
+		<javafx.version>11</javafx.version>
+		<maven.compiler.version>3.8.0</maven.compiler.version>
 		<resources.plugin.version>3.0.2</resources.plugin.version>
 	</properties>
 
@@ -102,6 +103,21 @@
 				<artifactId>aopalliance</artifactId>
 				<version>${aopalliance.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-controls</artifactId>
+				<version>${javafx.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-web</artifactId>
+				<version>${javafx.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-fxml</artifactId>
+				<version>${javafx.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -122,15 +138,6 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>
 					<version>${dependency.plugin.version}</version>
-
-					<!-- This is currently necessary for Java 9 -->
-					<dependencies>
-						<dependency>
-							<groupId>org.ow2.asm</groupId>
-							<artifactId>asm</artifactId>
-							<version>6.0</version>
-						</dependency>
-					</dependencies>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

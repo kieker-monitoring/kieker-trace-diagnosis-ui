@@ -14,9 +14,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<maven.compiler.source>1.9</maven.compiler.source>
-		<maven.compiler.target>1.9</maven.compiler.target>
-		<maven.compiler.release>9</maven.compiler.release>
+		<java.version>11</java.version>
 		
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -25,9 +23,17 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<release>${java.version}</release>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 
 				<configuration>
+					<skip>true</skip> <!-- Can currently not be used with Java 11 -->
 					<failOnWarning>true</failOnWarning>
 					<ignoreNonCompile>true</ignoreNonCompile>
 				</configuration>
