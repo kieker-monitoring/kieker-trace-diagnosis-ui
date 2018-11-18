@@ -46,7 +46,7 @@
 										<initialMemorySize>500M</initialMemorySize>
 										<maxMemorySize>3G</maxMemorySize>
 										<extraArgument>--module-path</extraArgument>
-										<extraArgument>%REPO%</extraArgument>
+										<extraArgument>%BASEDIR%\modules</extraArgument>
 										<extraArgument>--add-modules=javafx.controls,javafx.fxml,javafx.web</extraArgument>
 									</jvmSettings>
 								</program>
@@ -61,7 +61,7 @@
 										<initialMemorySize>500M</initialMemorySize>
 										<maxMemorySize>3G</maxMemorySize>
 										<extraArgument>--module-path</extraArgument>
-										<extraArgument>$REPO</extraArgument>
+										<extraArgument>$BASEDIR/modules</extraArgument>
 										<extraArgument>--add-modules=javafx.controls,javafx.fxml,javafx.web</extraArgument>
 									</jvmSettings>
 								</program>

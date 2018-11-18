@@ -10,6 +10,16 @@
 
 	<includeBaseDirectory>false</includeBaseDirectory>
 
+	<fileSets>
+		<fileSet>
+			<directory>${project.build.directory}/appassembler/lib</directory>
+			<outputDirectory>modules</outputDirectory>
+			<includes>
+				<include>javafx-*-win.jar</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+
 	<files>
 		<file>
 			<source>${project.build.directory}/appassembler/bin/start-windows.bat</source>
@@ -17,7 +27,7 @@
 			<destName>start.bat</destName>
 		</file>
 	</files>
-
+	
 	<componentDescriptors>
 		<componentDescriptor>assembly/bin-base.xml</componentDescriptor>
 	</componentDescriptors>
