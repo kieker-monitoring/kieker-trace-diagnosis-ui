@@ -5,7 +5,7 @@ pipeline {
 	}
   
 	environment {
-		DOCKER_CONTAINER = 'kieker/kieker-build:ta-v3'
+		DOCKER_CONTAINER = 'kieker/kieker-build:ta-v4'
 	}
 	
 	stages {
