@@ -5,7 +5,7 @@ pipeline {
 	}
   
 	environment {
-		DOCKER_CONTAINER = 'kieker/kieker-build:ta-v4'
+		DOCKER_CONTAINER = 'openjdk:11-jdk-slim'
 	}
 	
 	stages {
