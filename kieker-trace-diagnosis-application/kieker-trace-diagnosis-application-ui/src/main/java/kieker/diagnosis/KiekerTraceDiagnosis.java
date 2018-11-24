@@ -1,22 +1,22 @@
-/*************************************************************************** 
- * Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)         
- *                                                                           
- * Licensed under the Apache License, Version 2.0 (the "License");           
- * you may not use this file except in compliance with the License.          
- * You may obtain a copy of the License at                                   
- *                                                                           
- *     http://www.apache.org/licenses/LICENSE-2.0                            
- *                                                                           
- * Unless required by applicable law or agreed to in writing, software       
- * distributed under the License is distributed on an "AS IS" BASIS,         
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  
- * See the License for the specific language governing permissions and       
- * limitations under the License.                                            
+/***************************************************************************
+ * Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  ***************************************************************************/
 
 package kieker.diagnosis;
 
-import java.io.InputStream;
+import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.google.inject.Guice;
@@ -34,7 +34,9 @@ import kieker.diagnosis.ui.main.MainView;
  *
  * @author Nils Christian Ehmke
  */
-public class KiekerTraceDiagnosis extends Application {
+public final class KiekerTraceDiagnosis extends Application {
+
+	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( KiekerTraceDiagnosis.class.getCanonicalName( ) );
 
 	public static void main( final String[] aArgs ) {
 		Application.launch( aArgs );
@@ -42,24 +44,16 @@ public class KiekerTraceDiagnosis extends Application {
 
 	@Override
 	public void start( final Stage aPrimaryStage ) throws Exception {
-		// Load the CDI container
-		final KiekerTraceDiagnosisUIModule module = new KiekerTraceDiagnosisUIModule( );
-		final Injector injector = Guice.createInjector( com.google.inject.Stage.PRODUCTION, module );
+		final Injector injector = startCdiContainer( );
 		final MainView mainView = injector.getInstance( MainView.class );
 		final MainController mainController = injector.getInstance( MainController.class );
 
-		// Load the icon for the window
-		final ResourceBundle resourceBundle = ResourceBundle.getBundle( getClass( ).getCanonicalName( ) );
-		final String iconPath = resourceBundle.getString( "icon" );
-		final InputStream iconStream = getClass( ).getClassLoader( ).getResourceAsStream( iconPath );
-		final Image icon = new Image( iconStream );
-
 		// Prepare the stage and show the window
 		final Scene scene = new Scene( mainView );
-		aPrimaryStage.getIcons( ).add( icon );
-		aPrimaryStage.setTitle( resourceBundle.getString( "title" ) );
 		aPrimaryStage.setScene( scene );
 		aPrimaryStage.setMaximized( true );
+		aPrimaryStage.getIcons( ).add( createIcon( ) );
+		aPrimaryStage.setTitle( RESOURCE_BUNDLE.getString( "title" ) );
 
 		// Catch the default close event
 		aPrimaryStage.setOnCloseRequest( e -> {
@@ -68,6 +62,18 @@ public class KiekerTraceDiagnosis extends Application {
 		} );
 
 		aPrimaryStage.show( );
+	}
+
+	private Injector startCdiContainer( ) {
+		final KiekerTraceDiagnosisUIModule module = new KiekerTraceDiagnosisUIModule( );
+		return Guice.createInjector( com.google.inject.Stage.PRODUCTION, module );
+	}
+
+	private Image createIcon( ) {
+		final String iconPath = RESOURCE_BUNDLE.getString( "icon" );
+		final URL iconURL = getClass( ).getResource( iconPath );
+		final String iconExternalForm = iconURL.toExternalForm( );
+		return new Image( iconExternalForm );
 	}
 
 }
