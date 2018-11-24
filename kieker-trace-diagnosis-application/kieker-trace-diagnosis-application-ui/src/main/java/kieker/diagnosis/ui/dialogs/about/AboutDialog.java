@@ -3,13 +3,11 @@ package kieker.diagnosis.ui.dialogs.about;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -32,6 +30,9 @@ public final class AboutDialog extends Alert {
 	private void configureDialog( ) {
 		setTitle( RESOURCE_BUNDLE.getString( "title" ) );
 		getStage( ).getIcons( ).add( createIcon( ) );
+		final URL cssURL = getClass( ).getResource( getClass( ).getSimpleName( ) + ".css" );
+		final String cssExternalForm = cssURL.toExternalForm( );
+		getDialogPane( ).getStylesheets( ).add( cssExternalForm );
 	}
 
 	private Stage getStage( ) {
@@ -49,7 +50,6 @@ public final class AboutDialog extends Alert {
 	private void addComponents( ) {
 		final Label label = new Label( );
 		label.setText( RESOURCE_BUNDLE.getString( "description" ) );
-		VBox.setMargin( label, new Insets( 10, 10, 0, 10 ) );
 		getDialogPane( ).setContent( label );
 	}
 

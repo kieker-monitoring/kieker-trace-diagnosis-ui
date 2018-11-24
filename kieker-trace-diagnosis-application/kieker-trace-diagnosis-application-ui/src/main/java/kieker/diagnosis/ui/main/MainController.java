@@ -46,7 +46,7 @@ import kieker.diagnosis.service.data.MonitoringLogService;
 import kieker.diagnosis.service.export.CSVData;
 import kieker.diagnosis.service.export.ExportService;
 import kieker.diagnosis.ui.dialogs.about.AboutDialog;
-import kieker.diagnosis.ui.dialogs.manual.ManualDialogView;
+import kieker.diagnosis.ui.dialogs.manual.ManualDialog;
 import kieker.diagnosis.ui.dialogs.monitoring.MonitoringDialogView;
 import kieker.diagnosis.ui.dialogs.progress.ProgressDialog;
 import kieker.diagnosis.ui.dialogs.settings.SettingsDialogView;
@@ -64,9 +64,6 @@ public class MainController extends ControllerBase<MainViewModel> {
 
 	@Inject
 	MonitoringDialogView ivMonitoringDialogView;
-
-	@Inject
-	ManualDialogView ivDocumentationDialogView;
 
 	/**
 	 * This action is performed, when the user wants to import a monitoring log.
@@ -317,7 +314,8 @@ public class MainController extends ControllerBase<MainViewModel> {
 	}
 
 	public void performDocumentation( ) {
-		ivDocumentationDialogView.open( getViewModel( ).getWindow( ) );
+		final ManualDialog manualDialog = new ManualDialog( );
+		manualDialog.showAndWait( );
 	}
 
 }
