@@ -16,7 +16,6 @@
 
 package kieker.diagnosis;
 
-import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.google.inject.Guice;
@@ -28,13 +27,14 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import kieker.diagnosis.ui.main.MainController;
 import kieker.diagnosis.ui.main.MainView;
+import kieker.diagnosis.ui.mixin.ImageMixin;
 
 /**
  * This is the application's main class.
  *
  * @author Nils Christian Ehmke
  */
-public final class KiekerTraceDiagnosis extends Application {
+public final class KiekerTraceDiagnosis extends Application implements ImageMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( KiekerTraceDiagnosis.class.getCanonicalName( ) );
 
@@ -71,9 +71,7 @@ public final class KiekerTraceDiagnosis extends Application {
 
 	private Image createIcon( ) {
 		final String iconPath = RESOURCE_BUNDLE.getString( "icon" );
-		final URL iconURL = getClass( ).getResource( iconPath );
-		final String iconExternalForm = iconURL.toExternalForm( );
-		return new Image( iconExternalForm );
+		return loadImage( iconPath );
 	}
 
 }
