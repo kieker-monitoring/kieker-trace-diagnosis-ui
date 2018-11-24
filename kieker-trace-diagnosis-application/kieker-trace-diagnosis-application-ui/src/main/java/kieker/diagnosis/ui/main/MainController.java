@@ -45,7 +45,7 @@ import kieker.diagnosis.service.data.MethodCall;
 import kieker.diagnosis.service.data.MonitoringLogService;
 import kieker.diagnosis.service.export.CSVData;
 import kieker.diagnosis.service.export.ExportService;
-import kieker.diagnosis.ui.dialogs.about.AboutDialogView;
+import kieker.diagnosis.ui.dialogs.about.AboutDialog;
 import kieker.diagnosis.ui.dialogs.manual.ManualDialogView;
 import kieker.diagnosis.ui.dialogs.monitoring.MonitoringDialogView;
 import kieker.diagnosis.ui.dialogs.progress.ProgressDialog;
@@ -61,9 +61,6 @@ public class MainController extends ControllerBase<MainViewModel> {
 
 	@Inject
 	SettingsDialogView ivSettingsDialogView;
-
-	@Inject
-	AboutDialogView ivAboutDialogView;
 
 	@Inject
 	MonitoringDialogView ivMonitoringDialogView;
@@ -142,7 +139,8 @@ public class MainController extends ControllerBase<MainViewModel> {
 	}
 
 	public void performAbout( ) {
-		ivAboutDialogView.open( getViewModel( ).getWindow( ) );
+		final AboutDialog aboutDialog = new AboutDialog( );
+		aboutDialog.showAndWait( );
 	}
 
 	/**
@@ -173,12 +171,12 @@ public class MainController extends ControllerBase<MainViewModel> {
 			final String iconPath = getLocalizedString( "iconReallyClose" );
 			final InputStream iconStream = getClass( ).getClassLoader( ).getResourceAsStream( iconPath );
 			final Image icon = new Image( iconStream );
-			final Stage stage = (Stage) alert.getDialogPane( ).getScene( ).getWindow( );
+			final Stage stage = ( Stage ) alert.getDialogPane( ).getScene( ).getWindow( );
 			stage.getIcons( ).add( icon );
 
 			// If the user clicked ok, we close the window
 			final Optional<ButtonType> result = alert.showAndWait( );
-			if ( result.isPresent( ) && ( result.get( ) == ButtonType.YES || result.get( ) == alwaysYesButtonType ) ) {
+			if ( result.isPresent( ) && (result.get( ) == ButtonType.YES || result.get( ) == alwaysYesButtonType ) ) {
 				if ( result.get( ) == alwaysYesButtonType ) {
 					propertiesService.saveApplicationProperty( CloseWithoutPromptProperty.class, Boolean.TRUE );
 				}
