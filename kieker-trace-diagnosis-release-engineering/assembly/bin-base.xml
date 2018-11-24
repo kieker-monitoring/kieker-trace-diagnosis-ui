@@ -22,6 +22,17 @@
 		<fileSet>
 			<directory>licenses</directory>
 			<outputDirectory>lib</outputDirectory>
+			<excludes>
+				<exclude>javafx-*.license</exclude>
+			</excludes>
+		</fileSet>
+		
+		<fileSet>
+			<directory>licenses</directory>
+			<outputDirectory>modules</outputDirectory>
+			<includes>
+				<include>javafx-*.license</include>
+			</includes>
 		</fileSet>
 
 		<fileSet>
