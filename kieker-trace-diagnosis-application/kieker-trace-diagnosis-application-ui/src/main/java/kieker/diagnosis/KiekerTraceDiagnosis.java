@@ -25,8 +25,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import kieker.diagnosis.ui.main.MainController;
-import kieker.diagnosis.ui.main.MainView;
+import kieker.diagnosis.ui.complex.main.MainController;
+import kieker.diagnosis.ui.complex.main.MainView;
 import kieker.diagnosis.ui.mixin.ImageMixin;
 
 /**
