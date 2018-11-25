@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Optional;
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import javafx.application.Platform;
@@ -48,11 +47,13 @@ import kieker.diagnosis.service.data.MethodCall;
 import kieker.diagnosis.service.data.MonitoringLogService;
 import kieker.diagnosis.service.export.CSVData;
 import kieker.diagnosis.service.export.ExportService;
+import kieker.diagnosis.service.settings.Settings;
+import kieker.diagnosis.service.settings.SettingsService;
 import kieker.diagnosis.ui.dialogs.about.AboutDialog;
 import kieker.diagnosis.ui.dialogs.manual.ManualDialog;
 import kieker.diagnosis.ui.dialogs.monitoring.MonitoringDialog;
 import kieker.diagnosis.ui.dialogs.progress.ProgressDialog;
-import kieker.diagnosis.ui.dialogs.settings.SettingsDialogView;
+import kieker.diagnosis.ui.dialogs.settings.SettingsDialog;
 import kieker.diagnosis.ui.main.properties.CloseWithoutPromptProperty;
 import kieker.diagnosis.ui.main.properties.LastExportPathProperty;
 import kieker.diagnosis.ui.main.properties.LastImportPathProperty;
@@ -61,9 +62,6 @@ import kieker.diagnosis.ui.tabs.traces.TracesView;
 
 @Singleton
 public class MainController extends ControllerBase<MainViewModel> {
-
-	@Inject
-	SettingsDialogView ivSettingsDialogView;
 
 	/**
 	 * This action is performed, when the user wants to import a monitoring log.
@@ -127,12 +125,17 @@ public class MainController extends ControllerBase<MainViewModel> {
 	 * This action is performed, when the user wants to configure the settings.
 	 */
 	public void performSettings( ) {
-		final boolean settingsChanged = Boolean.TRUE.equals( ivSettingsDialogView.open( getViewModel( ).getWindow( ) ) );
+		final SettingsService settingsService = getService( SettingsService.class );
+		final Settings settings = settingsService.loadSettings( );
 
-		// Now refresh everything - if necessary
-		if ( settingsChanged ) {
+		final SettingsDialog settingsDialog = new SettingsDialog( );
+		settingsDialog.setValue( settings );
+		final Optional<Settings> result = settingsDialog.showAndWait( );
+
+		result.ifPresent( newSettings -> {
+			settingsService.saveSettings( newSettings );
 			getViewModel( ).refresh( );
-		}
+		} );
 	}
 
 	public void performAbout( ) {
