@@ -19,120 +19,29 @@ package kieker.diagnosis.service.traces;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * This is a data transfer object holding the filter for the traces service.
  *
  * @author Nils Christian Ehmke
  */
+@Getter
+@Setter
 public final class TracesFilter {
 
-	private String ivHost;
-	private String ivClazz;
-	private String ivMethod;
-	private String ivException;
-	private Long ivTraceId;
-	private SearchType ivSearchType = SearchType.ALL;
-	private boolean ivUseRegExpr;
-	private boolean ivSearchWholeTrace;
-	private LocalTime ivLowerTime;
-	private LocalDate ivUpperDate;
-	private LocalTime ivUpperTime;
-	private LocalDate ivLowerDate;
-
-	public String getHost( ) {
-		return ivHost;
-	}
-
-	public void setHost( final String aHost ) {
-		ivHost = aHost;
-	}
-
-	public String getClazz( ) {
-		return ivClazz;
-	}
-
-	public void setClazz( final String aClazz ) {
-		ivClazz = aClazz;
-	}
-
-	public String getMethod( ) {
-		return ivMethod;
-	}
-
-	public void setMethod( final String aMethod ) {
-		ivMethod = aMethod;
-	}
-
-	public String getException( ) {
-		return ivException;
-	}
-
-	public void setException( final String aException ) {
-		ivException = aException;
-	}
-
-	public Long getTraceId( ) {
-		return ivTraceId;
-	}
-
-	public void setTraceId( final Long aTraceId ) {
-		ivTraceId = aTraceId;
-	}
-
-	public boolean isUseRegExpr( ) {
-		return ivUseRegExpr;
-	}
-
-	public void setUseRegExpr( final boolean aUseRegExpr ) {
-		ivUseRegExpr = aUseRegExpr;
-	}
-
-	public boolean isSearchWholeTrace( ) {
-		return ivSearchWholeTrace;
-	}
-
-	public void setSearchWholeTrace( final boolean aSearchWholeTrace ) {
-		ivSearchWholeTrace = aSearchWholeTrace;
-	}
-
-	public LocalTime getLowerTime( ) {
-		return ivLowerTime;
-	}
-
-	public void setLowerTime( final LocalTime aLowerTime ) {
-		ivLowerTime = aLowerTime;
-	}
-
-	public LocalDate getUpperDate( ) {
-		return ivUpperDate;
-	}
-
-	public void setUpperDate( final LocalDate aUpperDate ) {
-		ivUpperDate = aUpperDate;
-	}
-
-	public LocalTime getUpperTime( ) {
-		return ivUpperTime;
-	}
-
-	public void setUpperTime( final LocalTime aUpperTime ) {
-		ivUpperTime = aUpperTime;
-	}
-
-	public LocalDate getLowerDate( ) {
-		return ivLowerDate;
-	}
-
-	public void setLowerDate( final LocalDate aLowerDate ) {
-		ivLowerDate = aLowerDate;
-	}
-
-	public SearchType getSearchType( ) {
-		return ivSearchType;
-	}
-
-	public void setSearchType( final SearchType aSearchType ) {
-		ivSearchType = aSearchType;
-	}
+	private String host;
+	private String clazz;
+	private String method;
+	private String exception;
+	private Long traceId;
+	private SearchType searchType = SearchType.ALL;
+	private boolean useRegExpr;
+	private boolean searchWholeTrace;
+	private LocalTime lowerTime;
+	private LocalDate upperDate;
+	private LocalTime upperTime;
+	private LocalDate lowerDate;
 
 }
