@@ -16,29 +16,29 @@
 
 package kieker.diagnosis.service.statistics;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * This is a data transfer object holding the statistics for the statistics service.
  *
  * @author Nils Christian Ehmke
  */
+@Builder
 @Getter
-@Setter
 public final class Statistics {
 
-	private long processedBytes;
-	private long processDuration;
-	private long processSpeed;
-	private int ignoredRecords;
-	private int danglingRecords;
-	private int incompleteTraces;
-	private int methods;
-	private int aggregatedMethods;
-	private int traces;
-	private String beginnOfMonitoring;
-	private String endOfMonitoring;
-	private String directory;
+	private final long processedBytes;
+	private final long processDuration;
+	private final long processSpeed;
+	private final int ignoredRecords;
+	private final int danglingRecords;
+	private final int incompleteTraces;
+	private final int methods;
+	private final int aggregatedMethods;
+	private final int traces;
+	private final String beginnOfMonitoring;
+	private final String endOfMonitoring;
+	private final String directory;
 
 }

@@ -18,6 +18,7 @@ package kieker.diagnosis.ui.tabs.statistics;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
+import java.util.Optional;
 
 import com.google.inject.Singleton;
 
@@ -34,7 +35,7 @@ import kieker.diagnosis.service.statistics.StatisticsService;
 @Singleton
 class StatisticsController extends ControllerBase<StatisticsViewModel> {
 
-	private Statistics ivStatistics;
+	private Optional<Statistics> ivStatistics;
 
 	public StatisticsController( ) {
 		// Start a thread to update the memory usage regularly
@@ -64,7 +65,7 @@ class StatisticsController extends ControllerBase<StatisticsViewModel> {
 	 * This action is performed once during the application's start.
 	 */
 	public void performInitialize( ) {
-		getViewModel( ).updatePresentation( null );
+		getViewModel( ).updatePresentation( Optional.empty( ) );
 	}
 
 	/**

@@ -16,8 +16,8 @@
 
 package kieker.diagnosis.ui.tabs.statistics;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Optional;
 
 import com.google.inject.Singleton;
 
@@ -32,23 +32,23 @@ import kieker.diagnosis.service.statistics.Statistics;
 @Singleton
 class StatisticsViewModel extends ViewModelBase<StatisticsView> {
 
-	public void updatePresentation( final Statistics aStatistics ) {
-		if ( aStatistics != null ) {
-			final NumberFormat decimalFormat = DecimalFormat.getInstance( );
+	public void updatePresentation( final Optional<Statistics> aStatistics ) {
+		aStatistics.ifPresentOrElse( statistics -> {
+			final NumberFormat decimalFormat = NumberFormat.getInstance( );
 
-			getView( ).getProcessedBytes( ).setText( convertToByteString( aStatistics.getProcessedBytes( ) ) );
-			getView( ).getProcessDuration( ).setText( convertToDurationString( aStatistics.getProcessDuration( ) ) );
-			getView( ).getProcessSpeed( ).setText( convertToSpeedString( aStatistics.getProcessSpeed( ) ) );
-			getView( ).getMethods( ).setText( decimalFormat.format( aStatistics.getMethods( ) ) );
-			getView( ).getAggregatedMethods( ).setText( decimalFormat.format( aStatistics.getAggregatedMethods( ) ) );
-			getView( ).getTraces( ).setText( decimalFormat.format( aStatistics.getTraces( ) ) );
-			getView( ).getIgnoredRecords( ).setText( decimalFormat.format( aStatistics.getIgnoredRecords( ) ) );
-			getView( ).getDanglingRecords( ).setText( decimalFormat.format( aStatistics.getDanglingRecords( ) ) );
-			getView( ).getIncompleteTraces( ).setText( decimalFormat.format( aStatistics.getIncompleteTraces( ) ) );
-			getView( ).getBeginnOfMonitoring( ).setText( aStatistics.getBeginnOfMonitoring( ) );
-			getView( ).getEndOfMonitoring( ).setText( aStatistics.getEndOfMonitoring( ) );
-			getView( ).getDirectory( ).setText( aStatistics.getDirectory( ) );
-		} else {
+			getView( ).getProcessedBytes( ).setText( convertToByteString( statistics.getProcessedBytes( ) ) );
+			getView( ).getProcessDuration( ).setText( convertToDurationString( statistics.getProcessDuration( ) ) );
+			getView( ).getProcessSpeed( ).setText( convertToSpeedString( statistics.getProcessSpeed( ) ) );
+			getView( ).getMethods( ).setText( decimalFormat.format( statistics.getMethods( ) ) );
+			getView( ).getAggregatedMethods( ).setText( decimalFormat.format( statistics.getAggregatedMethods( ) ) );
+			getView( ).getTraces( ).setText( decimalFormat.format( statistics.getTraces( ) ) );
+			getView( ).getIgnoredRecords( ).setText( decimalFormat.format( statistics.getIgnoredRecords( ) ) );
+			getView( ).getDanglingRecords( ).setText( decimalFormat.format( statistics.getDanglingRecords( ) ) );
+			getView( ).getIncompleteTraces( ).setText( decimalFormat.format( statistics.getIncompleteTraces( ) ) );
+			getView( ).getBeginnOfMonitoring( ).setText( statistics.getBeginnOfMonitoring( ) );
+			getView( ).getEndOfMonitoring( ).setText( statistics.getEndOfMonitoring( ) );
+			getView( ).getDirectory( ).setText( statistics.getDirectory( ) );
+		}, ( ) -> {
 			getView( ).getProcessedBytes( ).setText( getLocalizedString( "noDataAvailable" ) );
 			getView( ).getProcessDuration( ).setText( getLocalizedString( "noDataAvailable" ) );
 			getView( ).getProcessSpeed( ).setText( getLocalizedString( "noDataAvailable" ) );
@@ -61,7 +61,7 @@ class StatisticsViewModel extends ViewModelBase<StatisticsView> {
 			getView( ).getBeginnOfMonitoring( ).setText( getLocalizedString( "noDataAvailable" ) );
 			getView( ).getEndOfMonitoring( ).setText( getLocalizedString( "noDataAvailable" ) );
 			getView( ).getDirectory( ).setText( getLocalizedString( "noDataAvailable" ) );
-		}
+		} );
 	}
 
 	private String convertToByteString( final long aBytes ) {
