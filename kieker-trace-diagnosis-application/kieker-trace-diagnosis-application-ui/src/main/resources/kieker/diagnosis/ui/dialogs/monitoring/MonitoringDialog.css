@@ -1,6 +1,5 @@
-.status {
-	-fx-background-color: transparent;
-	-fx-background-insets: 0px;
+.dialog-pane:no-header .graphic-container {
+    -fx-padding: 0;
 }
 
 .noMonitoringStarted {

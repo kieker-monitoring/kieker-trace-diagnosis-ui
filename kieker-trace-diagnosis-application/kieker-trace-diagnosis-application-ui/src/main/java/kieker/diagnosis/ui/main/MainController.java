@@ -35,6 +35,9 @@ import javafx.stage.Stage;
 import kieker.diagnosis.architecture.common.ExceptionUtil;
 import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
+import kieker.diagnosis.architecture.monitoring.MonitoringConfiguration;
+import kieker.diagnosis.architecture.monitoring.Status;
+import kieker.diagnosis.architecture.service.monitoring.MonitoringService;
 import kieker.diagnosis.architecture.service.properties.DevelopmentModeProperty;
 import kieker.diagnosis.architecture.service.properties.PropertiesService;
 import kieker.diagnosis.architecture.ui.ControllerBase;
@@ -47,7 +50,7 @@ import kieker.diagnosis.service.export.CSVData;
 import kieker.diagnosis.service.export.ExportService;
 import kieker.diagnosis.ui.dialogs.about.AboutDialog;
 import kieker.diagnosis.ui.dialogs.manual.ManualDialog;
-import kieker.diagnosis.ui.dialogs.monitoring.MonitoringDialogView;
+import kieker.diagnosis.ui.dialogs.monitoring.MonitoringDialog;
 import kieker.diagnosis.ui.dialogs.progress.ProgressDialog;
 import kieker.diagnosis.ui.dialogs.settings.SettingsDialogView;
 import kieker.diagnosis.ui.main.properties.CloseWithoutPromptProperty;
@@ -61,9 +64,6 @@ public class MainController extends ControllerBase<MainViewModel> {
 
 	@Inject
 	SettingsDialogView ivSettingsDialogView;
-
-	@Inject
-	MonitoringDialogView ivMonitoringDialogView;
 
 	/**
 	 * This action is performed, when the user wants to import a monitoring log.
@@ -310,7 +310,16 @@ public class MainController extends ControllerBase<MainViewModel> {
 	}
 
 	public void performMonitoring( ) {
-		ivMonitoringDialogView.open( getViewModel( ).getWindow( ) );
+		final MonitoringService monitoringService = getService( MonitoringService.class );
+		final MonitoringConfiguration monitoringConfiguration = monitoringService.getCurrentConfiguration( );
+		final Status status = monitoringService.getCurrentStatus( );
+
+		final MonitoringDialog monitoringDialog = new MonitoringDialog( );
+		monitoringDialog.setValue( monitoringConfiguration );
+		monitoringDialog.setStatus( status );
+
+		final Optional<MonitoringConfiguration> result = monitoringDialog.showAndWait( );
+		result.ifPresent( monitoringService::configureMonitoring );
 	}
 
 	public void performDocumentation( ) {
