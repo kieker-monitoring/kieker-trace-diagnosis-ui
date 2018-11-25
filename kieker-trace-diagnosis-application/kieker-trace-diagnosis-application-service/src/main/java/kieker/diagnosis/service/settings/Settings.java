@@ -18,25 +18,25 @@ package kieker.diagnosis.service.settings;
 
 import java.util.concurrent.TimeUnit;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * This is a data transfer object holding the settings of the application.
  *
  * @author Nils Christian Ehmke
  */
+@Builder
 @Getter
-@Setter
 public final class Settings {
 
-	private TimestampAppearance timestampAppearance;
-	private TimeUnit timeUnit;
-	private ClassAppearance classAppearance;
-	private MethodAppearance methodAppearance;
-	private boolean showUnmonitoredTimeProperty;
-	private MethodCallAggregation methodCallAggregation;
-	private int maxNumberOfMethodCalls;
-	private float methodCallThreshold;
+	private final TimestampAppearance timestampAppearance;
+	private final TimeUnit timeUnit;
+	private final ClassAppearance classAppearance;
+	private final MethodAppearance methodAppearance;
+	private final boolean showUnmonitoredTimeProperty;
+	private final MethodCallAggregation methodCallAggregation;
+	private final int maxNumberOfMethodCalls;
+	private final float methodCallThreshold;
 
 }

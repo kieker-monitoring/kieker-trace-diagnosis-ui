@@ -322,18 +322,16 @@ public final class SettingsDialog extends Dialog<Settings> implements DialogMixi
 	}
 
 	public Settings getValue( ) {
-		final Settings settings = new Settings( );
-
-		settings.setTimestampAppearance( ivTimestampAppearance.getValue( ) );
-		settings.setTimeUnit( ivTimeUnit.getValue( ) );
-		settings.setClassAppearance( ivClassAppearance.getValue( ) );
-		settings.setMethodAppearance( ivMethodAppearance.getValue( ) );
-		settings.setShowUnmonitoredTimeProperty( ivShowUnmonitoredTimeProperty.getValue( ) );
-		settings.setMethodCallAggregation( ivMethodCallAggregation.getValue( ) );
-		settings.setMaxNumberOfMethodCalls( ivMaxNumberOfMethodCalls.getValue( ) );
-		settings.setMethodCallThreshold( ivMethodCallThreshold.getValue( ) );
-
-		return settings;
+		return Settings.builder( )
+				.timestampAppearance( ivTimestampAppearance.getValue( ) )
+				.timeUnit( ivTimeUnit.getValue( ) )
+				.classAppearance( ivClassAppearance.getValue( ) )
+				.methodAppearance( ivMethodAppearance.getValue( ) )
+				.showUnmonitoredTimeProperty( ivShowUnmonitoredTimeProperty.getValue( ) )
+				.methodCallAggregation( ivMethodCallAggregation.getValue( ) )
+				.maxNumberOfMethodCalls( ivMaxNumberOfMethodCalls.getValue( ) )
+				.methodCallThreshold( ivMethodCallThreshold.getValue( ) )
+				.build( );
 	}
 
 	private void addButtons( ) {

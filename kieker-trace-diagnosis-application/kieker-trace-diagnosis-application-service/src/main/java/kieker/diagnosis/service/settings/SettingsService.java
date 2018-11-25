@@ -45,26 +45,24 @@ public class SettingsService extends ServiceBase {
 	 * @return The current settings.
 	 */
 	public Settings loadSettings( ) {
-		final Settings settings = new Settings( );
-
 		final PropertiesService propertiesService = getService( PropertiesService.class );
-		settings.setTimestampAppearance( propertiesService.loadApplicationProperty( TimestampProperty.class ) );
-		settings.setTimeUnit( propertiesService.loadApplicationProperty( TimeUnitProperty.class ) );
-		settings.setClassAppearance( propertiesService.loadApplicationProperty( ClassAppearanceProperty.class ) );
-		settings.setMethodAppearance( propertiesService.loadApplicationProperty( MethodAppearanceProperty.class ) );
-		settings.setShowUnmonitoredTimeProperty( propertiesService.loadApplicationProperty( ShowUnmonitoredTimeProperty.class ) );
-		settings.setMethodCallAggregation( propertiesService.loadApplicationProperty( MethodCallAggregationProperty.class ) );
-		settings.setMethodCallThreshold( propertiesService.loadApplicationProperty( MethodCallThresholdProperty.class ) );
-		settings.setMaxNumberOfMethodCalls( propertiesService.loadApplicationProperty( MaxNumberOfMethodCallsProperty.class ) );
 
-		return settings;
+		return Settings.builder( )
+				.timestampAppearance( propertiesService.loadApplicationProperty( TimestampProperty.class ) )
+				.timeUnit( propertiesService.loadApplicationProperty( TimeUnitProperty.class ) )
+				.classAppearance( propertiesService.loadApplicationProperty( ClassAppearanceProperty.class ) )
+				.methodAppearance( propertiesService.loadApplicationProperty( MethodAppearanceProperty.class ) )
+				.showUnmonitoredTimeProperty( propertiesService.loadApplicationProperty( ShowUnmonitoredTimeProperty.class ) )
+				.methodCallAggregation( propertiesService.loadApplicationProperty( MethodCallAggregationProperty.class ) )
+				.methodCallThreshold( propertiesService.loadApplicationProperty( MethodCallThresholdProperty.class ) )
+				.maxNumberOfMethodCalls( propertiesService.loadApplicationProperty( MaxNumberOfMethodCallsProperty.class ) )
+				.build( );
 	}
 
 	/**
 	 * This method saves the given application settings.
 	 *
-	 * @param aSettings
-	 *            The new settings.
+	 * @param aSettings The new settings.
 	 */
 	public void saveSettings( final Settings aSettings ) {
 		final PropertiesService propertiesService = getService( PropertiesService.class );
@@ -79,8 +77,7 @@ public class SettingsService extends ServiceBase {
 	}
 
 	/**
-	 * This method returns a suitable suffix for durations depending on the current settings. The suffix is of the form {@code [ms]} for milliseconds for
-	 * example.
+	 * This method returns a suitable suffix for durations depending on the current settings. The suffix is of the form {@code [ms]} for milliseconds for example.
 	 *
 	 * @return The current duration suffix.
 	 */
@@ -91,29 +88,29 @@ public class SettingsService extends ServiceBase {
 		String suffix;
 
 		switch ( timeUnit ) {
-			case DAYS:
-				suffix = "[d]";
+		case DAYS:
+			suffix = "[d]";
 			break;
-			case HOURS:
-				suffix = "[h]";
+		case HOURS:
+			suffix = "[h]";
 			break;
-			case MICROSECONDS:
-				suffix = "[µs]";
+		case MICROSECONDS:
+			suffix = "[µs]";
 			break;
-			case MILLISECONDS:
-				suffix = "[ms]";
+		case MILLISECONDS:
+			suffix = "[ms]";
 			break;
-			case MINUTES:
-				suffix = "[m]";
+		case MINUTES:
+			suffix = "[m]";
 			break;
-			case NANOSECONDS:
-				suffix = "[ns]";
+		case NANOSECONDS:
+			suffix = "[ns]";
 			break;
-			case SECONDS:
-				suffix = "[s]";
+		case SECONDS:
+			suffix = "[s]";
 			break;
-			default:
-				suffix = null;
+		default:
+			suffix = null;
 			break;
 
 		}
