@@ -1,3 +1,8 @@
+3.2.1
+	06 Dec
+	Bug (TRACEUI-33)
+	The sorting in the trace view did not apply to the children of the root calls.
+	
 3.2.0
 	05 Sep
 	Feature (TRACEUI-31)

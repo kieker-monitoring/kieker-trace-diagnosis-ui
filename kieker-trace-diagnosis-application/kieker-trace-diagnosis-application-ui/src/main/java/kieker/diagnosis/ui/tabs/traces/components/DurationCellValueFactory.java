@@ -18,7 +18,7 @@ package kieker.diagnosis.ui.tabs.traces.components;
 
 import java.util.concurrent.TimeUnit;
 
-import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
 import javafx.util.Callback;
@@ -32,14 +32,14 @@ import kieker.diagnosis.service.settings.properties.TimeUnitProperty;
  *
  * @author Nils Christian Ehmke
  */
-public class DurationCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>> {
+public class DurationCellValueFactory implements Callback<CellDataFeatures<MethodCall, Long>, ObservableValue<Long>> {
 
 	private final PropertiesService ivPropertiesService = ServiceFactory.getService( PropertiesService.class );
 
 	@Override
-	public ObservableValue<String> call( final CellDataFeatures<MethodCall, String> aParam ) {
+	public ObservableValue<Long> call( final CellDataFeatures<MethodCall, Long> aParam ) {
 		final TimeUnit timeUnit = ivPropertiesService.loadApplicationProperty( TimeUnitProperty.class );
-		return new ReadOnlyStringWrapper( Long.toString( timeUnit.convert( aParam.getValue( ).getValue( ).getDuration( ), TimeUnit.NANOSECONDS ) ).intern( ) );
+		return new ReadOnlyObjectWrapper<>( timeUnit.convert( aParam.getValue( ).getValue( ).getDuration( ), TimeUnit.NANOSECONDS ) );
 	}
 
 }
