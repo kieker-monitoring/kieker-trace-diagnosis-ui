@@ -6,7 +6,7 @@
 
 	<groupId>net.kieker-monitoring</groupId>
 	<artifactId>kieker-trace-diagnosis-dependencies</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
+	<version>4.0.0.RC1</version>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -32,17 +32,17 @@
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>kieker-trace-diagnosis-architecture</artifactId>
-				<version>4.0.0-SNAPSHOT</version>
+				<version>4.0.0.RC1</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>kieker-trace-diagnosis-application-ui</artifactId>
-				<version>4.0.0-SNAPSHOT</version>
+				<version>4.0.0.RC1</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>kieker-trace-diagnosis-application-service</artifactId>
-				<version>4.0.0-SNAPSHOT</version>
+				<version>4.0.0.RC1</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
