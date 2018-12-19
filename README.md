@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/kieker-monitoring/kieker-trace-diagnosis-ui.svg?branch=master)](https://travis-ci.org/kieker-monitoring/kieker-trace-diagnosis-ui)
+
 # Description
 
 We developed the Kieker Trace Diagnosis tool to display Kieker monitoring logs in a tabular way and to help you find performance issues in those logs. You can filter and sort the data in various ways. We put a main focus on memory usage and performance, which means that bigger logs in the range of several million method calls can still be processed. We also made sure that even slightly damaged and incomplete monitoring logs are handled in a correct way.
