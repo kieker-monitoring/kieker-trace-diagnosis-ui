@@ -1,18 +1,19 @@
 # Description
 
-Kieker Trace Diagnosis is a tool that has been developed to present Kieker monitoring logs in a tabular way and make them searchable. A focus has been put on memory usage and performance, which means that bigger logs in the range of several million method calls can still be opened.
+We developed the Kieker Trace Diagnosis tool to display Kieker monitoring logs in a tabular way and to help you find performance issues in those logs. You can filter and sort the data in various ways. We put a main focus on memory usage and performance, which means that bigger logs in the range of several million method calls can still be processed. We also made sure that even slightly damaged and incomplete monitoring logs are handled in a correct way.
 
-Currently the tool supports monitoring logs written by Kieker's binary and ascii writers. The used records have to be Kieker's <i>TraceMetadata</i>, <i>BeforeOperationEvent</i>, <i>AfterOperationEvent</i>, and <i>AfterOperationFailedEvent</i>. Other records are ignored by the tool.
-
-Our issue management system is located at https://kieker-monitoring.atlassian.net.
+Currently the tool supports monitoring logs written by Kieker's binary and ascii writers. The used records have to be Kieker's <i>TraceMetadata</i>, <i>BeforeOperationEvent</i>, <i>AfterOperationEvent</i>, and <i>AfterOperationFailedEvent</i>. Our tool ignores all other records.
 
 # Download
 
 Releases of Kieker Trace Diagnosis can be downloaded via
 https://github.com/kieker-monitoring/kieker-trace-diagnosis-ui/releases
 
-Snapshots of Kieker Trace Diagnosis can be downloaded via
-https://build.se.informatik.uni-kiel.de/jenkins/job/kieker-monitoring/job/kieker-trace-diagnosis-ui/
+The latest version is 4.0.0 and requires Java 11. 
+
+# Issues
+
+If you have any issues, please check our [wiki](https://github.com/kieker-monitoring/kieker-trace-diagnosis-ui/wiki). If that does not solve your problem or if you have any feature requests, please visit our issue management system at https://kieker-monitoring.atlassian.net.
 
 # IDE Setup for Contributors
 
