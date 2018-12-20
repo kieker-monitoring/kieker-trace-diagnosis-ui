@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/kieker-monitoring/kieker-trace-diagnosis-ui.svg?branch=master)](https://travis-ci.org/kieker-monitoring/kieker-trace-diagnosis-ui)
+[![Coverage](https://codecov.io/gh/kieker-monitoring/kieker-trace-diagnosis-ui/branch/master/graphs/badge.svg?branch=master)](https://codecov.io/gh/nkieker-monitoring/kieker-trace-diagnosis-ui/branch/master)
 
 # Description
 
