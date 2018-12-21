@@ -61,5 +61,7 @@ public final class PropertiesServiceTest {
 	public void testLoadSystemProperty( ) {
 		System.setProperty( "SimpleBooleanSystemProperty", "true" );
 		assertThat( propertiesService.loadSystemProperty( SimpleBooleanSystemProperty.class ), is( Boolean.TRUE ) );
+
+		assertThat( propertiesService.loadSystemProperty( DevelopmentModeProperty.class ), is( Boolean.FALSE ) );
 	}
 }
