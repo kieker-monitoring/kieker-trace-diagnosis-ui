@@ -21,7 +21,6 @@ import org.aopalliance.intercept.MethodInvocation;
 
 import kieker.diagnosis.architecture.common.ClassUtil;
 import kieker.diagnosis.architecture.common.ExceptionUtil;
-import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
 
 /**
  * This is an interceptor which handles all kind of {@link Throwable Throwables}. It is usually used around controller actions. If an exception occurs, the
