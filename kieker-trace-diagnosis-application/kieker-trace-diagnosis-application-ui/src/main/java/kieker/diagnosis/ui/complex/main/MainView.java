@@ -58,7 +58,6 @@ public class MainView extends ViewBase<MainController> {
 
 				{
 					final MenuItem menuItem = new MenuItem( );
-					menuItem.setId( "menuItemImportLog" );
 					menuItem.setText( getLocalizedString( "importLog" ) );
 					menuItem.setOnAction( ( e ) -> getController( ).performImportLog( ) );
 					menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+O" ) );

@@ -322,7 +322,6 @@ public class MethodsView extends ViewBase<MethodsController> {
 		// Table view
 		{
 			ivTableView = new TableView<>( );
-			ivTableView.setId( "tabMethodsTable" );
 			ivTableView.setTableMenuButtonVisible( true );
 			ivTableView.setRowFactory( aParam -> new StyledRow( ) );
 			ivTableView.getSelectionModel( ).selectedItemProperty( ).addListener( ( aObservable, aOldValue, aNewValue ) -> getController( ).performSelectionChange( ) );
