@@ -101,6 +101,7 @@ public final class MonitoringDialog extends Dialog<MonitoringConfiguration> impl
 
 		{
 			final Label statusField = new Label( );
+			statusField.setId( "monitoringDialogStatus" );
 			statusField.setMaxWidth( Double.POSITIVE_INFINITY );
 			statusField.textProperty( ).bindBidirectional( ivStatus, new EnumStringConverter<>( Status.class ) );
 			ivStatus.addListener( ( ChangeListener<Status> ) ( observable, oldStatus, newStatus ) -> {
@@ -127,6 +128,7 @@ public final class MonitoringDialog extends Dialog<MonitoringConfiguration> impl
 
 		{
 			final CheckBox activeField = new CheckBox( );
+			activeField.setId( "monitoringDialogActive" );
 			activeField.setMaxWidth( Double.POSITIVE_INFINITY );
 			activeField.selectedProperty( ).bindBidirectional( ivActive );
 
@@ -275,6 +277,7 @@ public final class MonitoringDialog extends Dialog<MonitoringConfiguration> impl
 
 	private void addButtons( ) {
 		getDialogPane( ).getButtonTypes( ).addAll( ButtonType.CANCEL, ButtonType.OK );
+		getDialogPane( ).lookupButton( ButtonType.OK ).setId( "monitoringDialogOk" );
 		getDialogPane( ).lookupButton( ButtonType.OK ).addEventFilter( ActionEvent.ACTION, event -> {
 			if ( !inputValid( ) ) {
 				event.consume( );

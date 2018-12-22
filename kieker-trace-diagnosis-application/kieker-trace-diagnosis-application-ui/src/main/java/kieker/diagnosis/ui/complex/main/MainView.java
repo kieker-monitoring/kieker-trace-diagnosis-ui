@@ -54,7 +54,7 @@ public class MainView extends ViewBase<MainController> {
 			{
 				final Menu menu = new Menu( );
 				menu.setText( getLocalizedString( "file" ) );
-				menu.setId( "file" );
+				menu.setId( "menuFile" );
 
 				{
 					final MenuItem menuItem = new MenuItem( );
@@ -84,6 +84,7 @@ public class MainView extends ViewBase<MainController> {
 
 				{
 					final MenuItem menuItem = new MenuItem( );
+					menuItem.setId( "menuItemMonitoringSettings" );
 					menuItem.setText( getLocalizedString( "monitoring" ) );
 					menuItem.setOnAction( e -> getController( ).performMonitoring( ) );
 					menuItem.setGraphic( createIcon( Icon.CHART ) );
