@@ -1,0 +1,10 @@
+$0=
+$1=host1
+$2=kieker.common.record.flow.trace.TraceMetadata
+$3=class1
+$4=method1
+$5=kieker.common.record.flow.trace.operation.BeforeOperationEvent
+$6=method2
+$7=kieker.common.record.flow.trace.operation.AfterOperationEvent
+$8=host2
+$9=class2

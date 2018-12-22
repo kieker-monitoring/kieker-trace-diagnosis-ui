@@ -244,6 +244,7 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 		// Table view
 		{
 			ivTableView = new TableView<>( );
+			ivTableView.setId( "tabAggregatedMethodsTable" );
 			ivTableView.setTableMenuButtonVisible( true );
 			ivTableView.setRowFactory( aParam -> new StyledRow( ) );
 			ivTableView.getSelectionModel( ).selectedItemProperty( ).addListener( ( aObservable, aOldValue, aNewValue ) -> getController( ).performSelectionChange( ) );
