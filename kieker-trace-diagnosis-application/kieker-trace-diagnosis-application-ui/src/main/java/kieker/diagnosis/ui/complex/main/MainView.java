@@ -138,6 +138,7 @@ public class MainView extends ViewBase<MainController> {
 
 			{
 				final Menu menu = new Menu( );
+				menu.setId( "menuHelp" );
 				menu.setText( getLocalizedString( "help" ) );
 
 				{
@@ -158,6 +159,7 @@ public class MainView extends ViewBase<MainController> {
 
 				{
 					final MenuItem menuItem = new MenuItem( );
+					menuItem.setId( "menuItemAbout" );
 					menuItem.setText( getLocalizedString( "about" ) );
 					menuItem.setOnAction( e -> getController( ).performAbout( ) );
 					menuItem.setGraphic( createIcon( Icon.INFO_CIRCLE ) );

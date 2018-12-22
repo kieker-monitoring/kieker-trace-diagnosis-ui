@@ -16,18 +16,22 @@
 
 package kieker.diagnosis.ui;
 
+import static org.hamcrest.core.StringContains.containsString;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
+import javafx.scene.control.Labeled;
 import javafx.stage.Stage;
 import kieker.diagnosis.KiekerTraceDiagnosis;
 
 /**
- * This is a UI test which just makes sure that the application is at least startable.
+ * This is a UI test which checks that the about dialog is working as expected.
  *
  * @author Nils Christian Ehmke
  */
-public final class SmokeTestUI extends ApplicationTest {
+public final class AboutTestUI extends ApplicationTest {
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
@@ -36,23 +40,13 @@ public final class SmokeTestUI extends ApplicationTest {
 	}
 
 	@Test
-	public void visitMethods( ) {
-		clickOn( "#tabMethods" );
-	}
+	public void testAboutDialog( ) throws InterruptedException {
+		clickOn( "#menuHelp" ).clickOn( "#menuItemAbout" );
+		final Labeled descriptionLabel = lookup( "#aboutDialogDescription" ).queryLabeled( );
 
-	@Test
-	public void visitAggregatedMethods( ) {
-		clickOn( "#tabAggregatedMethods" );
-	}
-
-	@Test
-	public void visitStatistics( ) {
-		clickOn( "#tabStatistics" );
-	}
-
-	@Test
-	public void visitTraces( ) {
-		clickOn( "#tabTraces" );
+		assertThat( descriptionLabel.getText( ), containsString( "Kieker Trace Diagnosis - " ) );
+		assertThat( descriptionLabel.getText( ), containsString( "Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)" ) );
+		assertThat( descriptionLabel.getText( ), containsString( "Dieses Werkzeug ist unter der Apache License 2.0 lizenziert." ) );
 	}
 
 }

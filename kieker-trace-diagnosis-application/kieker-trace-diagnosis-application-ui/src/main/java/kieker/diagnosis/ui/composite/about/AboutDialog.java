@@ -55,6 +55,7 @@ public final class AboutDialog extends Alert implements DialogMixin, ImageMixin 
 
 	private void addComponents( ) {
 		final Label label = new Label( );
+		label.setId( "aboutDialogDescription" );
 		label.setText( RESOURCE_BUNDLE.getString( "description" ) );
 		getDialogPane( ).setContent( label );
 	}
