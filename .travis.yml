@@ -6,12 +6,15 @@ matrix:
       dist: trusty
       jdk: openjdk11
       env:
+        # All of these options are just required for the (headless) UI tests 
         - _JAVA_OPTIONS="-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -DenableUiTests=true"
 
+# Prepare the X-Server for the (headless) UI tests
 before_install:
-  - if [[ "${TRAVIS_OS_NAME}" == linux ]]; then export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start; fi
+  - export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start
 
 install: true
 
+# Send the coverage reports to codecov
 after_success:
   - bash <(curl -s https://codecov.io/bash)
