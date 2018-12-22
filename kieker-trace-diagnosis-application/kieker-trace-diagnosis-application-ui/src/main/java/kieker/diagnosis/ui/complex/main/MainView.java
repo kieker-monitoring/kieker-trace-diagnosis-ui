@@ -183,6 +183,7 @@ public class MainView extends ViewBase<MainController> {
 				ivTracesView.initialize( );
 
 				final Tab tab = new Tab( );
+				tab.setId( "tabTraces" );
 
 				tab.setText( getLocalizedString( "traces" ) );
 				tab.setContent( aTracesView );
@@ -199,6 +200,7 @@ public class MainView extends ViewBase<MainController> {
 				ivMethodsView.initialize( );
 
 				final Tab tab = new Tab( );
+				tab.setId( "tabMethods" );
 
 				tab.setText( getLocalizedString( "methods" ) );
 				tab.setContent( aMethodsView );
@@ -215,6 +217,7 @@ public class MainView extends ViewBase<MainController> {
 				ivAggregatedMethodsView.initialize( );
 
 				final Tab tab = new Tab( );
+				tab.setId( "tabAggregatedMethods" );
 
 				tab.setText( getLocalizedString( "aggregatedMethods" ) );
 				tab.setContent( aAggregatedMethodsView );
@@ -232,6 +235,7 @@ public class MainView extends ViewBase<MainController> {
 				ivStatisticsView.initialize( );
 
 				final Tab tab = new Tab( );
+				tab.setId( "tabStatistics" );
 
 				tab.setText( getLocalizedString( "statistics" ) );
 				tab.setContent( aStatisticsView );

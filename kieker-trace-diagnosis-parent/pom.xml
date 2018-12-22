@@ -61,7 +61,8 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<argLine>@{argLine} -Duser.country=DE -Duser.language=de -Duser.timezone=Europe/Berlin</argLine>
+					<argLine>@{argLine} -Duser.country=DE -Duser.language=de
+						-Duser.timezone=Europe/Berlin</argLine>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -121,5 +122,37 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>UI-Tests</id>
+			<activation>
+				<property>
+					<name>enableUiTests</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<executions>
+							<execution>
+								<goals>
+									<goal>test</goal>
+								</goals>
+								<configuration>
+									<includes>
+										<include>**/*TestUI.java</include>
+									</includes>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>
