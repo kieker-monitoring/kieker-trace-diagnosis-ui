@@ -336,6 +336,7 @@ public final class SettingsDialog extends Dialog<Settings> implements DialogMixi
 
 	private void addButtons( ) {
 		getDialogPane( ).getButtonTypes( ).addAll( ButtonType.CANCEL, ButtonType.OK );
+		getDialogPane( ).lookupButton( ButtonType.OK ).setId( "settingsDialogOk" );
 		getDialogPane( ).lookupButton( ButtonType.OK ).addEventFilter( ActionEvent.ACTION, event -> {
 			if ( !inputValid( ) ) {
 				event.consume( );

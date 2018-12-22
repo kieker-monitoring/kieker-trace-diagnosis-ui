@@ -94,6 +94,7 @@ public class MainView extends ViewBase<MainController> {
 
 				{
 					final MenuItem menuItem = new MenuItem( );
+					menuItem.setId( "menuItemSettings" );
 					menuItem.setText( getLocalizedString( "settings" ) );
 					menuItem.setOnAction( ( e ) -> getController( ).performSettings( ) );
 					menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+S" ) );
