@@ -146,6 +146,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 
 					{
 						ivFilterHost = new TextField( );
+						ivFilterHost.setId( "tabMethodsFilterHost" );
 						ivFilterHost.setPromptText( getLocalizedString( "filterByHost" ) );
 						GridPane.setColumnIndex( ivFilterHost, columnIndex++ );
 						GridPane.setRowIndex( ivFilterHost, rowIndex );
@@ -301,6 +302,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 
 				{
 					ivSearchButton = new Button( );
+					ivSearchButton.setId( "tabMethodsSearch" );
 					ivSearchButton.setText( getLocalizedString( "search" ) );
 					ivSearchButton.setMinWidth( 140 );
 					ivSearchButton.setMaxWidth( Double.POSITIVE_INFINITY );

@@ -142,6 +142,7 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 
 					{
 						ivFilterHost = new TextField( );
+						ivFilterHost.setId( "tabAggregatedMethodsFilterHost" );
 						ivFilterHost.setPromptText( getLocalizedString( "filterByHost" ) );
 						GridPane.setColumnIndex( ivFilterHost, columnIndex++ );
 						GridPane.setRowIndex( ivFilterHost, 0 );
@@ -223,6 +224,7 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 
 				{
 					ivSearchButton = new Button( );
+					ivSearchButton.setId( "tabAggregatedMethodsSearch" );
 					ivSearchButton.setText( getLocalizedString( "search" ) );
 					ivSearchButton.setMinWidth( 140 );
 					ivSearchButton.setMaxWidth( Double.POSITIVE_INFINITY );

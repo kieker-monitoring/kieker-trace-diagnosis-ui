@@ -128,6 +128,7 @@ public class TracesView extends ViewBase<TracesController> {
 
 					{
 						ivFilterHost = new TextField( );
+						ivFilterHost.setId( "tabTracesFilterHost" );
 						ivFilterHost.setPromptText( getLocalizedString( "filterByHost" ) );
 						GridPane.setColumnIndex( ivFilterHost, columnIndex++ );
 						GridPane.setRowIndex( ivFilterHost, rowIndex );
@@ -294,6 +295,7 @@ public class TracesView extends ViewBase<TracesController> {
 
 				{
 					ivSearchButton = new Button( );
+					ivSearchButton.setId( "tabTracesSearch" );
 					ivSearchButton.setText( getLocalizedString( "search" ) );
 					ivSearchButton.setMinWidth( 140 );
 					ivSearchButton.setMaxWidth( Double.POSITIVE_INFINITY );

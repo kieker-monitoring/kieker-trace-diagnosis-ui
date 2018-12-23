@@ -88,6 +88,10 @@ public final class ImportLogsTestUI extends ApplicationTest {
 
 		final TreeTableView<?> treeTableView = lookup( "#tabTracesTreeTable" ).query( );
 		assertThat( treeTableView.getRoot( ).getChildren( ).size( ), is( 2 ) );
+		
+		clickOn( "#tabTracesFilterHost" ).write( "host1" );
+		clickOn( "#tabTracesSearch" );
+		assertThat( treeTableView.getRoot( ).getChildren( ).size( ), is( 1 ) );
 	}
 
 	private void checkMethods( ) {
@@ -95,6 +99,10 @@ public final class ImportLogsTestUI extends ApplicationTest {
 
 		final TableView<Object> tableView = lookup( "#tabMethodsTable" ).queryTableView( );
 		assertThat( tableView.getItems( ).size( ), is( 3 ) );
+		
+		clickOn( "#tabMethodsFilterHost" ).write( "host1" );
+		clickOn( "#tabMethodsSearch" );
+		assertThat( tableView.getItems( ).size( ), is( 2 ) );
 	}
 
 	private void checkAggregatedMethods( ) {
@@ -102,6 +110,10 @@ public final class ImportLogsTestUI extends ApplicationTest {
 
 		final TableView<Object> tableView = lookup( "#tabAggregatedMethodsTable" ).queryTableView( );
 		assertThat( tableView.getItems( ).size( ), is( 3 ) );
+		
+		clickOn( "#tabAggregatedMethodsFilterHost" ).write( "host1" );
+		clickOn( "#tabAggregatedMethodsSearch" );
+		assertThat( tableView.getItems( ).size( ), is( 2 ) );
 	}
 
 	@Test
