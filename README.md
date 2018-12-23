@@ -21,7 +21,7 @@ If you have any issues, please check our [wiki](https://github.com/kieker-monito
 
 # IDE Setup for Contributors
 
-Kieker Trace Diagnosis is a Maven project and can thus be imported into an IDE of your choice. However, since 4.0.0 the tool uses and requires Java 11. It is recommended to install an OpenJDK 11 and, for instance, the latest Eclipse with the e(fx)clipse plugin. Please install also the platform dependent OpenJFX SDK. If you use Eclipse, make sure that Eclipse itself is started with Java 11 (by modifying the eclipse.ini). In order to start the application from within your IDE, you need to provide the following VM parameters: 
+Kieker Trace Diagnosis is a Maven project and can thus be imported into an IDE of your choice. However, since 4.0.0 the tool uses and requires Java 11. It is recommended to install an OpenJDK 11 and, for instance, the latest Eclipse with the e(fx)clipse plugin. Please install also Project Lombok into your IDE and the platform dependent OpenJFX SDK. If you use Eclipse, make sure that Eclipse itself is started with Java 11 (by modifying the eclipse.ini). In order to start the application from within your IDE, you need to provide the following VM parameters: 
 ```
 --module-path <PATH to OpenJFX SDK>  --add-modules=javafx.controls,javafx.fxml,javafx.web
 ```
