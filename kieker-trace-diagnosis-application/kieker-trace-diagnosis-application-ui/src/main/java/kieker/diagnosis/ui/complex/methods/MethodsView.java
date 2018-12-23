@@ -483,6 +483,7 @@ public class MethodsView extends ViewBase<MethodsController> {
 
 				{
 					ivDetailsHost = new TextField( );
+					ivDetailsHost.setId( "tabMethodsDetailHost" );
 					ivDetailsHost.setEditable( false );
 					ivDetailsHost.getStyleClass( ).add( "details" );
 

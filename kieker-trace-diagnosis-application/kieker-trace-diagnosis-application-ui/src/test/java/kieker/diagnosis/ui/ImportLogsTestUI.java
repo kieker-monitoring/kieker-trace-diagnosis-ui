@@ -32,6 +32,7 @@ import org.testfx.framework.junit.ApplicationTest;
 
 import com.google.inject.Injector;
 
+import javafx.scene.Node;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeTableView;
 import javafx.stage.Stage;
@@ -92,6 +93,9 @@ public final class ImportLogsTestUI extends ApplicationTest {
 		clickOn( "#tabTracesFilterHost" ).write( "host1" );
 		clickOn( "#tabTracesSearch" );
 		assertThat( treeTableView.getRoot( ).getChildren( ).size( ), is( 1 ) );
+		
+		clickOn( lookup( ".tree-table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
+		assertThat( lookup( "#tabTracesDetailHost" ).queryTextInputControl( ).getText(), is( "host1" ));
 	}
 
 	private void checkMethods( ) {
@@ -103,6 +107,9 @@ public final class ImportLogsTestUI extends ApplicationTest {
 		clickOn( "#tabMethodsFilterHost" ).write( "host1" );
 		clickOn( "#tabMethodsSearch" );
 		assertThat( tableView.getItems( ).size( ), is( 2 ) );
+		
+		clickOn( lookup( "#tabMethodsTable" ).lookup( ".table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
+		assertThat( lookup( "#tabMethodsDetailHost" ).queryTextInputControl( ).getText(), is( "host1" ));
 	}
 
 	private void checkAggregatedMethods( ) {
@@ -114,6 +121,9 @@ public final class ImportLogsTestUI extends ApplicationTest {
 		clickOn( "#tabAggregatedMethodsFilterHost" ).write( "host1" );
 		clickOn( "#tabAggregatedMethodsSearch" );
 		assertThat( tableView.getItems( ).size( ), is( 2 ) );
+		
+		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
+		assertThat( lookup( "#tabAggregatedMethodsDetailHost" ).queryTextInputControl( ).getText(), is( "host1" ));
 	}
 
 	@Test

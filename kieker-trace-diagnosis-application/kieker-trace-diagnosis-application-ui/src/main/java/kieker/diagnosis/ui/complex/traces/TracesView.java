@@ -436,6 +436,7 @@ public class TracesView extends ViewBase<TracesController> {
 
 				{
 					ivDetailsHost = new TextField( );
+					ivDetailsHost.setId( "tabTracesDetailHost" );
 					ivDetailsHost.setEditable( false );
 					ivDetailsHost.getStyleClass( ).add( "details" );
 

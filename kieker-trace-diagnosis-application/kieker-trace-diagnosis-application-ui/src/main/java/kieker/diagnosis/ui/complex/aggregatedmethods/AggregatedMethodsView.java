@@ -496,6 +496,7 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 
 				{
 					ivDetailsHost = new TextField( );
+					ivDetailsHost.setId( "tabAggregatedMethodsDetailHost" );
 					ivDetailsHost.setEditable( false );
 					ivDetailsHost.getStyleClass( ).add( "details" );
 
