@@ -84,6 +84,14 @@ public class MainController extends ControllerBase<MainViewModel> {
 			importThread.start( );
 		}
 	}
+	
+	/**
+	 * This method is only to be used from the UI tests to bypass the native dialogs in the test environments.
+	 */
+	public void performImportLog( final File directory ) {
+		final ImportThread importThread = new ImportThread( directory, ImportType.DIRECTORY );
+		importThread.start( );
+	}
 
 	/**
 	 * This action is performed, when the user wants to import a monitoring log from a ZIP file.

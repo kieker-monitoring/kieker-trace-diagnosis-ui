@@ -316,6 +316,7 @@ public class TracesView extends ViewBase<TracesController> {
 		// Tree table
 		{
 			ivTreeTableView = new TreeTableView<>( );
+			ivTreeTableView.setId( "tabTracesTreeTable" );
 			ivTreeTableView.setShowRoot( false );
 			ivTreeTableView.setTableMenuButtonVisible( true );
 			ivTreeTableView.getSelectionModel( ).selectedItemProperty( ).addListener( ( aObservable, aOldValue, aNewValue ) -> getController( ).performSelectionChange( ) );

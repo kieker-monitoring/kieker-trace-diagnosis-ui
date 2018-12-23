@@ -38,13 +38,15 @@ public final class KiekerTraceDiagnosis extends Application implements ImageMixi
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( KiekerTraceDiagnosis.class.getCanonicalName( ) );
 
+	private Injector injector;
+	
 	public static void main( final String[] aArgs ) {
 		Application.launch( aArgs );
 	}
 
 	@Override
 	public void start( final Stage aPrimaryStage ) throws Exception {
-		final Injector injector = startCdiContainer( );
+		injector = startCdiContainer( );
 		final MainView mainView = injector.getInstance( MainView.class );
 		final MainController mainController = injector.getInstance( MainController.class );
 
@@ -72,6 +74,13 @@ public final class KiekerTraceDiagnosis extends Application implements ImageMixi
 	private Image createIcon( ) {
 		final String iconPath = RESOURCE_BUNDLE.getString( "icon" );
 		return loadImage( iconPath );
+	}
+	
+	/**
+	 * This method is only to be used from the UI tests to bypass the native dialogs in the test environments.
+	 */
+	public Injector getInjector() {
+		return injector;
 	}
 
 }
