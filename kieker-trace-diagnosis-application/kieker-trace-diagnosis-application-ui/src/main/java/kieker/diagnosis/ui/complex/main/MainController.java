@@ -23,6 +23,7 @@ import java.util.Optional;
 import com.google.inject.Singleton;
 
 import javafx.application.Platform;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -175,6 +176,9 @@ public class MainController extends ControllerBase<MainViewModel> {
 			final ButtonType alwaysYesButtonType = new ButtonType( getLocalizedString( "buttonAlwaysYes" ) );
 			alert.getButtonTypes( ).add( alwaysYesButtonType );
 
+			final Node yesButton = alert.getDialogPane( ).lookupButton( ButtonType.YES );
+			yesButton.setId( "mainCloseDialogYes" );
+			
 			// Add the logo
 			final String iconPath = getLocalizedString( "iconReallyClose" );
 			final InputStream iconStream = getClass( ).getClassLoader( ).getResourceAsStream( iconPath );

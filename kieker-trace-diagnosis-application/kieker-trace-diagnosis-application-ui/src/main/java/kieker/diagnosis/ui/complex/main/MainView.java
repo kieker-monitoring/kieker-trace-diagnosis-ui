@@ -111,7 +111,7 @@ public class MainView extends ViewBase<MainController> {
 
 				{
 					final MenuItem menuItem = new MenuItem( );
-					menuItem.setId( "close" );
+					menuItem.setId( "menuFileClose" );
 					menuItem.setText( getLocalizedString( "close" ) );
 					menuItem.setOnAction( ( e ) -> getController( ).performClose( ) );
 					menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+X" ) );
@@ -145,6 +145,7 @@ public class MainView extends ViewBase<MainController> {
 
 				{
 					final MenuItem menuItem = new MenuItem( );
+					menuItem.setId( "menuItemManual" );
 					menuItem.setText( getLocalizedString( "documentation" ) );
 					menuItem.setOnAction( e -> getController( ).performDocumentation( ) );
 					menuItem.setAccelerator( KeyCombination.keyCombination( "F1" ) );
@@ -194,7 +195,8 @@ public class MainView extends ViewBase<MainController> {
 
 				ivTabPane.getTabs( ).add( tab );
 
-				// Only one default button is allowed - even if the other buttons are not visible. Therefore we have to set the default
+				// Only one default button is allowed - even if the other buttons are not
+				// visible. Therefore we have to set the default
 				// button property only for the current tab.
 				ivTracesView.getSearchButton( ).defaultButtonProperty( ).bind( ivTabPane.getSelectionModel( ).selectedItemProperty( ).isEqualTo( tab ) );
 			}
@@ -210,7 +212,8 @@ public class MainView extends ViewBase<MainController> {
 				tab.setContent( aMethodsView );
 
 				ivTabPane.getTabs( ).add( tab );
-				// Only one default button is allowed - even if the other buttons are not visible. Therefore we have to set the default
+				// Only one default button is allowed - even if the other buttons are not
+				// visible. Therefore we have to set the default
 				// button property only for the current tab.
 				ivMethodsView.getSearchButton( ).defaultButtonProperty( ).bind( ivTabPane.getSelectionModel( ).selectedItemProperty( ).isEqualTo( tab ) );
 			}
@@ -228,7 +231,8 @@ public class MainView extends ViewBase<MainController> {
 
 				ivTabPane.getTabs( ).add( tab );
 
-				// Only one default button is allowed - even if the other buttons are not visible. Therefore we have to set the default
+				// Only one default button is allowed - even if the other buttons are not
+				// visible. Therefore we have to set the default
 				// button property only for the current tab.
 				ivAggregatedMethodsView.getSearchButton( ).defaultButtonProperty( ).bind( ivTabPane.getSelectionModel( ).selectedItemProperty( ).isEqualTo( tab ) );
 			}

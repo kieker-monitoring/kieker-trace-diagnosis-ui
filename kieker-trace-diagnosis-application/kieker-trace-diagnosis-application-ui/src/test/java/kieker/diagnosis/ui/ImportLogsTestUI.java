@@ -40,7 +40,8 @@ import kieker.diagnosis.KiekerTraceDiagnosis;
 import kieker.diagnosis.ui.complex.main.MainController;
 
 /**
- * This is a UI test which imports both ascii and binary monitoring logs and makes sure that the results are correct.
+ * This is a UI test which imports both ascii and binary monitoring logs and
+ * makes sure that the results are correct.
  *
  * @author Nils Christian Ehmke
  */
@@ -54,7 +55,7 @@ public final class ImportLogsTestUI extends ApplicationTest {
 	public void start( final Stage stage ) throws Exception {
 		final KiekerTraceDiagnosis kiekerTraceDiagnosis = new KiekerTraceDiagnosis( );
 		kiekerTraceDiagnosis.start( stage );
-		
+
 		final Injector injector = kiekerTraceDiagnosis.getInjector( );
 		mainController = injector.getInstance( MainController.class );
 	}
@@ -67,6 +68,7 @@ public final class ImportLogsTestUI extends ApplicationTest {
 		checkTraces( );
 		checkMethods( );
 		checkAggregatedMethods( );
+		closeApplication( );
 	}
 
 	private void loadBinaryDataIntoTemporaryFolder( ) throws IOException {
@@ -79,9 +81,10 @@ public final class ImportLogsTestUI extends ApplicationTest {
 	}
 
 	private void importTemporaryFolder( ) {
-		// We cannot use the GUI at this point. TestFX cannot handle native dialogs and neither can the headless test environment.
+		// We cannot use the GUI at this point. TestFX cannot handle native dialogs and
+		// neither can the headless test environment.
 		// In this case we have to import the logs via code.
-		mainController.performImportLog(temporaryFolder.getRoot());
+		mainController.performImportLog( temporaryFolder.getRoot( ) );
 	}
 
 	private void checkTraces( ) {
@@ -89,13 +92,13 @@ public final class ImportLogsTestUI extends ApplicationTest {
 
 		final TreeTableView<?> treeTableView = lookup( "#tabTracesTreeTable" ).query( );
 		assertThat( treeTableView.getRoot( ).getChildren( ).size( ), is( 2 ) );
-		
+
 		clickOn( "#tabTracesFilterHost" ).write( "host1" );
 		clickOn( "#tabTracesSearch" );
 		assertThat( treeTableView.getRoot( ).getChildren( ).size( ), is( 1 ) );
-		
+
 		clickOn( lookup( ".tree-table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabTracesDetailHost" ).queryTextInputControl( ).getText(), is( "host1" ));
+		assertThat( lookup( "#tabTracesDetailHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
 	}
 
 	private void checkMethods( ) {
@@ -103,13 +106,13 @@ public final class ImportLogsTestUI extends ApplicationTest {
 
 		final TableView<Object> tableView = lookup( "#tabMethodsTable" ).queryTableView( );
 		assertThat( tableView.getItems( ).size( ), is( 3 ) );
-		
+
 		clickOn( "#tabMethodsFilterHost" ).write( "host1" );
 		clickOn( "#tabMethodsSearch" );
 		assertThat( tableView.getItems( ).size( ), is( 2 ) );
-		
+
 		clickOn( lookup( "#tabMethodsTable" ).lookup( ".table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabMethodsDetailHost" ).queryTextInputControl( ).getText(), is( "host1" ));
+		assertThat( lookup( "#tabMethodsDetailHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
 	}
 
 	private void checkAggregatedMethods( ) {
@@ -117,13 +120,18 @@ public final class ImportLogsTestUI extends ApplicationTest {
 
 		final TableView<Object> tableView = lookup( "#tabAggregatedMethodsTable" ).queryTableView( );
 		assertThat( tableView.getItems( ).size( ), is( 3 ) );
-		
+
 		clickOn( "#tabAggregatedMethodsFilterHost" ).write( "host1" );
 		clickOn( "#tabAggregatedMethodsSearch" );
 		assertThat( tableView.getItems( ).size( ), is( 2 ) );
-		
+
 		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabAggregatedMethodsDetailHost" ).queryTextInputControl( ).getText(), is( "host1" ));
+		assertThat( lookup( "#tabAggregatedMethodsDetailHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
+	}
+
+	private void closeApplication( ) {
+		clickOn( "#menuFile" ).clickOn( "#menuFileClose" );
+		clickOn( "#mainCloseDialogYes" );
 	}
 
 	@Test
@@ -134,6 +142,7 @@ public final class ImportLogsTestUI extends ApplicationTest {
 		checkTraces( );
 		checkMethods( );
 		checkAggregatedMethods( );
+		closeApplication( );
 	}
 
 	private void loadAsciiDataIntoTemporaryFolder( ) throws IOException {

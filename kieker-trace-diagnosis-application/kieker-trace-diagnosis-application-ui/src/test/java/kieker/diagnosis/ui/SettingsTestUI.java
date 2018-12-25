@@ -23,7 +23,8 @@ import javafx.stage.Stage;
 import kieker.diagnosis.KiekerTraceDiagnosis;
 
 /**
- * This is a UI test which checks that the settings dialog is working as expected.
+ * This is a UI test which checks that the settings dialog is working as
+ * expected.
  *
  * @author Nils Christian Ehmke
  */
@@ -36,7 +37,7 @@ public final class SettingsTestUI extends ApplicationTest {
 	}
 
 	@Test
-	public void testSettingsDialog( ) throws InterruptedException {
+	public void testSettingsDialog( ) {
 		clickOn( "#menuFile" ).clickOn( "#menuItemSettings" );
 
 		clickOn( "#settingsDialogOk" );

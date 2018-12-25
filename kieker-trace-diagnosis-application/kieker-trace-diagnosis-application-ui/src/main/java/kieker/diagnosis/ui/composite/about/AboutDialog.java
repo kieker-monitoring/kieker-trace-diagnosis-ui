@@ -62,6 +62,7 @@ public final class AboutDialog extends Alert implements DialogMixin, ImageMixin 
 
 	private void addButtons( ) {
 		getButtonTypes( ).add( ButtonType.OK );
+		getDialogPane( ).lookupButton( ButtonType.OK ).setId( "aboutDialogOk" );
 	}
 
 }

@@ -16,22 +16,18 @@
 
 package kieker.diagnosis.ui;
 
-import static org.hamcrest.core.StringContains.containsString;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
-import javafx.scene.control.Labeled;
 import javafx.stage.Stage;
 import kieker.diagnosis.KiekerTraceDiagnosis;
 
 /**
- * This is a UI test which checks that the about dialog is working as expected.
+ * This is a UI test which checks that the manual dialog is working as expected.
  *
  * @author Nils Christian Ehmke
  */
-public final class AboutTestUI extends ApplicationTest {
+public final class ManualTestUI extends ApplicationTest {
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
@@ -40,15 +36,9 @@ public final class AboutTestUI extends ApplicationTest {
 	}
 
 	@Test
-	public void testAboutDialog( ) {
-		clickOn( "#menuHelp" ).clickOn( "#menuItemAbout" );
-		final Labeled descriptionLabel = lookup( "#aboutDialogDescription" ).queryLabeled( );
-
-		assertThat( descriptionLabel.getText( ), containsString( "Kieker Trace Diagnosis - " ) );
-		assertThat( descriptionLabel.getText( ), containsString( "Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)" ) );
-		assertThat( descriptionLabel.getText( ), containsString( "Dieses Werkzeug ist unter der Apache License 2.0 lizenziert." ) );
-
-		clickOn( "#aboutDialogOk" );
+	public void testManualDialog( ) {
+		clickOn( "#menuHelp" ).clickOn( "#menuItemManual" );
+		clickOn( "#manualDialogOk" );
 	}
 
 }

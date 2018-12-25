@@ -18,6 +18,8 @@ package kieker.diagnosis.service.statistics;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -30,6 +32,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import kieker.diagnosis.service.KiekerTraceDiagnosisServiceModule;
+import kieker.diagnosis.service.ServiceMockModule;
 import kieker.diagnosis.service.data.MethodCall;
 import kieker.diagnosis.service.data.MonitoringLogService;
 
@@ -45,9 +48,10 @@ public final class StatisticsServiceTest {
 
 	@Before
 	public void setUp( ) {
-		final Injector injector = Guice.createInjector( new KiekerTraceDiagnosisServiceModule( ) );
+		dataService = mock( MonitoringLogService.class );
+
+		final Injector injector = Guice.createInjector( new KiekerTraceDiagnosisServiceModule( ), new ServiceMockModule( MonitoringLogService.class, dataService ) );
 		statisticsService = injector.getInstance( StatisticsService.class );
-		dataService = injector.getInstance( MonitoringLogService.class );
 	}
 
 	@Test
@@ -58,7 +62,19 @@ public final class StatisticsServiceTest {
 
 	@Test
 	public void testExistingData( ) {
-		loadTestDataIntoDataService( );
+		when( dataService.isDataAvailable( ) ).thenReturn( true );
+		when( dataService.getDanglingRecords( ) ).thenReturn( 42 );
+		when( dataService.getIgnoredRecords( ) ).thenReturn( 15 );
+		when( dataService.getIncompleteTraces( ) ).thenReturn( 10 );
+		when( dataService.getProcessedBytes( ) ).thenReturn( 50L );
+		when( dataService.getProcessDuration( ) ).thenReturn( 25L );
+		when( dataService.getDirectory( ) ).thenReturn( "/tmp/" );
+
+		final MethodCall methodCallStart = createMethodCall( 2018, 12, 1, 20, 00 );
+		final MethodCall methodCallEnd = createMethodCall( 2018, 12, 2, 22, 00 );
+
+		when( dataService.getMethods( ) ).thenReturn( Arrays.asList( methodCallStart, methodCallEnd ) );
+		when( dataService.getTraceRoots( ) ).thenReturn( Arrays.asList( methodCallStart ) );
 
 		final Statistics statistics = statisticsService.getStatistics( ).get( );
 		assertThat( statistics.getDanglingRecords( ), is( 42 ) );
@@ -66,6 +82,10 @@ public final class StatisticsServiceTest {
 		assertThat( statistics.getIncompleteTraces( ), is( 10 ) );
 		assertThat( statistics.getProcessedBytes( ), is( 50L ) );
 		assertThat( statistics.getIncompleteTraces( ), is( 10 ) );
+		assertThat( statistics.getProcessDuration( ), is( 25L ) );
+		assertThat( statistics.getProcessSpeed( ), is( 2L ) );
+
+		assertThat( statistics.getDirectory( ), is( "/tmp/" ) );
 
 		assertThat( statistics.getAggregatedMethods( ), is( 0 ) );
 		assertThat( statistics.getMethods( ), is( 2 ) );
@@ -75,17 +95,15 @@ public final class StatisticsServiceTest {
 		assertThat( statistics.getEndOfMonitoring( ), is( "02.12.2018, 22:00:00" ) );
 	}
 
-	private void loadTestDataIntoDataService( ) {
-		dataService.setDataAvailable( true );
-		dataService.setDanglingRecords( 42 );
-		dataService.setIgnoredRecords( 15 );
-		dataService.setIncompleteTraces( 10 );
-		dataService.setProcessedBytes( 50L );
+	@Test
+	public void testProcessDurationIsZero( ) {
+		when( dataService.isDataAvailable( ) ).thenReturn( true );
+		when( dataService.getProcessedBytes( ) ).thenReturn( 50L );
+		when( dataService.getProcessDuration( ) ).thenReturn( 0L );
 
-		final MethodCall methodCallStart = createMethodCall( 2018, 12, 1, 20, 00 );
-		final MethodCall methodCallEnd = createMethodCall( 2018, 12, 2, 22, 00 );
-		dataService.addMethods( Arrays.asList( methodCallStart, methodCallEnd ) );
-		dataService.addTraceRoot( methodCallStart );
+		final Statistics statistics = statisticsService.getStatistics( ).get( );
+		assertThat( statistics.getProcessDuration( ), is( 0L ) );
+		assertThat( statistics.getProcessSpeed( ), is( 0L ) );
 	}
 
 	private MethodCall createMethodCall( final int aYear, final int aMonth, final int aDay, final int aHour, final int aMinute ) {

@@ -383,7 +383,8 @@ public class MonitoringLogServiceTest {
 		writeMappingFile( );
 		finishWriting( );
 
-		// Import the directory and make sure that a business exception occurs (because records
+		// Import the directory and make sure that a business exception occurs (because
+		// records
 		// where ignored, but no traces were reconstructed)
 		final File directory = ivTemporaryFolder.getRoot( );
 		ivExpectedException.expect( BusinessRuntimeException.class );
@@ -435,7 +436,7 @@ public class MonitoringLogServiceTest {
 		assertThat( firstMethod.getException( ), is( "cause" ) );
 		assertThat( firstMethod.getTimestamp( ), is( 1L ) );
 		assertThat( firstMethod.getDuration( ), is( 3000000L ) );
-		assertThat( (double) firstMethod.getPercent( ), is( closeTo( 100.0, 0.01 ) ) );
+		assertThat( ( double ) firstMethod.getPercent( ), is( closeTo( 100.0, 0.01 ) ) );
 		assertThat( firstMethod.getTraceDepth( ), is( 2 ) );
 		assertThat( firstMethod.getTraceId( ), is( 1L ) );
 		assertThat( firstMethod.getTraceSize( ), is( 2 ) );
@@ -447,7 +448,7 @@ public class MonitoringLogServiceTest {
 		assertThat( secondMethod.getException( ), is( nullValue( ) ) );
 		assertThat( secondMethod.getTimestamp( ), is( 2L ) );
 		assertThat( secondMethod.getDuration( ), is( 500000L ) );
-		assertThat( (double) secondMethod.getPercent( ), is( closeTo( 16.66, 0.01 ) ) );
+		assertThat( ( double ) secondMethod.getPercent( ), is( closeTo( 16.66, 0.01 ) ) );
 		assertThat( secondMethod.getTraceDepth( ), is( 1 ) );
 		assertThat( secondMethod.getTraceId( ), is( 1L ) );
 		assertThat( secondMethod.getTraceSize( ), is( 1 ) );
@@ -455,7 +456,7 @@ public class MonitoringLogServiceTest {
 		assertThat( ivService.getTraceRoots( ).get( 0 ), is( firstMethod ) );
 	}
 
-	@SuppressWarnings ( "deprecation" )
+	@SuppressWarnings( "deprecation" )
 	private void writeRecord( final AbstractMonitoringRecord aRecord ) {
 		// Register the record name
 		final int recordKey = ivStringRegistry.get( aRecord.getClass( ).getName( ) );
@@ -480,7 +481,7 @@ public class MonitoringLogServiceTest {
 
 		final Object[] allStrings = ivStringRegistry.getAll( );
 		for ( final Object string : allStrings ) {
-			final int id = ivStringRegistry.get( (String) string );
+			final int id = ivStringRegistry.get( ( String ) string );
 			stringBuilder.append( "$" ).append( id ).append( "=" ).append( string ).append( "\n" );
 		}
 

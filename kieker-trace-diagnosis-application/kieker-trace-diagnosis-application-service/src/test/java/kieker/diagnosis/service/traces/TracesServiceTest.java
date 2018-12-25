@@ -138,7 +138,7 @@ public final class TracesServiceTest {
 		tracesFilter.setSearchType( SearchType.ONLY_SUCCESSFUL );
 		assertThat( tracesService.searchTraces( tracesFilter ).size( ), is( 1 ) );
 	}
-	
+
 	@Test
 	public void testTraceIdFilter( ) {
 		// Prepare some data for the search
@@ -163,7 +163,7 @@ public final class TracesServiceTest {
 		tracesFilter.setTraceId( 4L );
 		assertThat( tracesService.searchTraces( tracesFilter ).size( ), is( 0 ) );
 	}
-	
+
 	@Test
 	public void testLowerTimeFilter( ) {
 		// Prepare some data for the search
@@ -302,7 +302,7 @@ public final class TracesServiceTest {
 
 		dataService.getTraceRoots( ).add( methodCall );
 	}
-	
+
 	private void createMethodCall( final int aYear, final int aMonth, final int aDay, final int aHour, final int aMinute ) {
 		final Calendar calendar = Calendar.getInstance( );
 		calendar.set( aYear, aMonth - 1, aDay, aHour, aMinute, 0 );
@@ -312,7 +312,7 @@ public final class TracesServiceTest {
 
 		dataService.getTraceRoots( ).add( methodCall );
 	}
-	
+
 	private void createMethodCall( final long aTraceId ) {
 		final MethodCall methodCall = new MethodCall( );
 		methodCall.setTraceId( aTraceId );
