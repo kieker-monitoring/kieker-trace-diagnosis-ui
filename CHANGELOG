@@ -1,4 +1,8 @@
 4.0.0
+	26 Dec 2018
+	Bug (TRACEUI-34)
+	Fixed some typos in the English localization.
+
 	17 Nov 2018
 	Internal Improvement (TRACEUI-32)
 	The tool now uses and requires Java 11
