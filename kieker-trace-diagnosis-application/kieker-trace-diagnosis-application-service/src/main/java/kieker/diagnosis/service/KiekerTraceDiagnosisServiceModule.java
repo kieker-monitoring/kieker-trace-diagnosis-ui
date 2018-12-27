@@ -19,6 +19,7 @@ package kieker.diagnosis.service;
 import com.google.inject.AbstractModule;
 
 import kieker.diagnosis.architecture.KiekerTraceDiagnosisArchitectureModule;
+import kieker.diagnosis.architecture.KiekerTraceDiagnosisServiceBaseModule;
 
 /**
  * This is the Guice module for the service part of the application.
@@ -30,6 +31,7 @@ public class KiekerTraceDiagnosisServiceModule extends AbstractModule {
 	@Override
 	protected void configure( ) {
 		// We need to make sure that the Guice module from the architecture sub-project is installed
+		install( new KiekerTraceDiagnosisServiceBaseModule( ) );
 		install( new KiekerTraceDiagnosisArchitectureModule( ) );
 	}
 

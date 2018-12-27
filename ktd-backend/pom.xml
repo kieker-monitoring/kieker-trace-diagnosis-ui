@@ -15,8 +15,9 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>ktd-backend-export</module>
 		<module>ktd-backend-base</module>
+		<module>ktd-backend-export</module>
+		<module>ktd-backend-settings</module>
 	</modules>
 	
 </project>

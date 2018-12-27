@@ -19,6 +19,10 @@
 			<artifactId>kieker-trace-diagnosis-architecture</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-backend-settings</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.carrotsearch</groupId>
 			<artifactId>hppc</artifactId>
 		</dependency>

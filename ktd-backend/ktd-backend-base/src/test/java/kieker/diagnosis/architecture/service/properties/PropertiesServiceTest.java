@@ -26,8 +26,6 @@ import org.junit.Test;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import kieker.diagnosis.architecture.KiekerTraceDiagnosisArchitectureModule;
-
 /**
  * Test class for {@link PropertiesService}.
  *
@@ -39,7 +37,7 @@ public final class PropertiesServiceTest {
 
 	@Before
 	public void setUp( ) {
-		final Injector injector = Guice.createInjector( new KiekerTraceDiagnosisArchitectureModule( ) );
+		final Injector injector = Guice.createInjector( );
 		propertiesService = injector.getInstance( PropertiesService.class );
 	}
 
