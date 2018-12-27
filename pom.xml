@@ -5,7 +5,7 @@
 
 	<groupId>net.kieker-monitoring</groupId>
 	<artifactId>kieker-trace-diagnosis</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
+	<version>5.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Kieker Trace Diagnosis</name>
@@ -13,9 +13,11 @@
 	<modules>
 		<module>kieker-trace-diagnosis-application</module>
 		<module>kieker-trace-diagnosis-architecture</module>
-		<module>kieker-trace-diagnosis-dependencies</module>
-		<module>kieker-trace-diagnosis-parent</module>
-		<module>kieker-trace-diagnosis-release-engineering</module>
+		<module>ktd-dependencies</module>
+		<module>ktd-parent</module>
+		<module>ktd-backend</module>
+		<module>ktd-frontend</module>
+		<module>ktd-release-engineering</module>
 	</modules>
 
 </project>
