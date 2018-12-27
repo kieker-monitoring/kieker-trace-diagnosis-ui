@@ -8,15 +8,14 @@
 		<groupId>net.kieker-monitoring</groupId>
 		<artifactId>ktd-parent</artifactId>
 		<version>5.0.0-SNAPSHOT</version>
-		<relativePath>../ktd-parent</relativePath>
+		<relativePath>../../ktd-parent</relativePath>
 	</parent>
 
-	<artifactId>ktd-frontend</artifactId>
+	<artifactId>ktd-frontend-dialog</artifactId>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>ktd-frontend-base</module>
-		<module>ktd-frontend-dialog</module>
+		<module>ktd-frontend-dialog-about</module>
 	</modules>
 	
 </project>
