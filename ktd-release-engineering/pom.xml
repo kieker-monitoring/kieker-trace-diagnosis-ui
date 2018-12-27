@@ -15,7 +15,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>net.kieker-monitoring</groupId>
-			<artifactId>kieker-trace-diagnosis-application-ui</artifactId>
+			<artifactId>ktd-frontend-application</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>

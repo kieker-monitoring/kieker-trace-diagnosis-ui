@@ -8,18 +8,20 @@
 		<groupId>net.kieker-monitoring</groupId>
 		<artifactId>ktd-parent</artifactId>
 		<version>5.0.0-SNAPSHOT</version>
-		<relativePath>../../ktd-parent</relativePath>
+		<relativePath>../../../ktd-parent</relativePath>
 	</parent>
 
-	<artifactId>ktd-frontend-dialog</artifactId>
-	<packaging>pom</packaging>
+	<artifactId>ktd-frontend-dialog-settings</artifactId>
 
-	<modules>
-		<module>ktd-frontend-dialog-about</module>
-		<module>ktd-frontend-dialog-manual</module>
-		<module>ktd-frontend-dialog-monitoring</module>
-		<module>ktd-frontend-dialog-settings</module>
-		<module>ktd-frontend-dialog-progress</module>
-	</modules>
-	
+	<dependencies>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-frontend-base</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-backend-settings</artifactId>
+		</dependency>
+	</dependencies>
+
 </project>

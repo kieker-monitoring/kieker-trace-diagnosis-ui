@@ -34,6 +34,16 @@
 		<dependencies>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
+				<artifactId>ktd-frontend-application</artifactId>
+				<version>5.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>net.kieker-monitoring</groupId>
+				<artifactId>ktd-frontend-main</artifactId>
+				<version>5.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-dialog-about</artifactId>
 				<version>5.0.0-SNAPSHOT</version>
 			</dependency>
@@ -49,12 +59,17 @@
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
-				<artifactId>ktd-frontend-base</artifactId>
+				<artifactId>ktd-frontend-dialog-settings</artifactId>
 				<version>5.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
-				<artifactId>kieker-trace-diagnosis-application-ui</artifactId>
+				<artifactId>ktd-frontend-dialog-progress</artifactId>
+				<version>5.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>net.kieker-monitoring</groupId>
+				<artifactId>ktd-frontend-base</artifactId>
 				<version>5.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>

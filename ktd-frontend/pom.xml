@@ -17,6 +17,8 @@
 	<modules>
 		<module>ktd-frontend-base</module>
 		<module>ktd-frontend-dialog</module>
+		<module>ktd-frontend-main</module>
+		<module>ktd-frontend-application</module>
 	</modules>
 	
 </project>
