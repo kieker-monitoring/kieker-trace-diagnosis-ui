@@ -15,6 +15,10 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-backend-base</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
 		</dependency>
@@ -63,7 +67,7 @@
 			<artifactId>mockito-core</artifactId>
 			<scope>test</scope>
 		</dependency>
-			<dependency>
+		<dependency>
 			<groupId>org.testfx</groupId>
 			<artifactId>testfx-core</artifactId>
 			<scope>test</scope>

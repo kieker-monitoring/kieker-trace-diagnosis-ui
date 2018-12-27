@@ -16,6 +16,10 @@
 	<dependencies>
 		<dependency>
 			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-backend-export</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
 			<artifactId>kieker-trace-diagnosis-architecture</artifactId>
 		</dependency>
 		<dependency>

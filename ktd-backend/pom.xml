@@ -14,4 +14,9 @@
 	<artifactId>ktd-backend</artifactId>
 	<packaging>pom</packaging>
 
+	<modules>
+		<module>ktd-backend-export</module>
+		<module>ktd-backend-base</module>
+	</modules>
+	
 </project>
