@@ -23,7 +23,6 @@ import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.matcher.Matchers;
 
 import kieker.diagnosis.architecture.monitoring.MonitoringInterceptor;
-import kieker.diagnosis.architecture.service.ServiceBase;
 import kieker.diagnosis.architecture.ui.ControllerBase;
 import kieker.diagnosis.architecture.ui.ErrorHandlingInterceptor;
 import kieker.diagnosis.architecture.ui.ViewModelBase;
@@ -37,17 +36,12 @@ public final class KiekerTraceDiagnosisArchitectureModule extends AbstractModule
 
 	@Override
 	protected void configure( ) {
-		// Create the interceptors once. Some of them should not exist multiple times.
 		final ErrorHandlingInterceptor errorHandlingInterceptor = new ErrorHandlingInterceptor( );
 		final MonitoringInterceptor monitoringInterceptor = new MonitoringInterceptor( );
 
-		// Add the interceptors for the UI
 		bindInterceptor( Matchers.subclassesOf( ControllerBase.class ), Matchers.any( ), errorHandlingInterceptor );
 		bindInterceptor( Matchers.subclassesOf( ControllerBase.class ), Matchers.not( new SyntheticMethodMatcher( ) ), monitoringInterceptor );
 		bindInterceptor( Matchers.subclassesOf( ViewModelBase.class ), Matchers.not( new SyntheticMethodMatcher( ) ), monitoringInterceptor );
-
-		// Add the interceptors for the services
-		bindInterceptor( Matchers.subclassesOf( ServiceBase.class ), Matchers.not( new SyntheticMethodMatcher( ) ), monitoringInterceptor );
 	}
 
 	/**

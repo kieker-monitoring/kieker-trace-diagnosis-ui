@@ -12,7 +12,6 @@
 
 	<modules>
 		<module>kieker-trace-diagnosis-application</module>
-		<module>kieker-trace-diagnosis-architecture</module>
 		<module>ktd-dependencies</module>
 		<module>ktd-parent</module>
 		<module>ktd-backend</module>
