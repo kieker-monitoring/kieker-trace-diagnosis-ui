@@ -10,7 +10,6 @@
 
 	<modules>
 		<module>kieker-trace-diagnosis-application-ui</module>
-		<module>kieker-trace-diagnosis-application-service</module>
 	</modules> 
 
 </project>
