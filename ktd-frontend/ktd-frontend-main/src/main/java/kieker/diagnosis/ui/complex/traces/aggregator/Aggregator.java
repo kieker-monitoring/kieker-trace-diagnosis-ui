@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-import kieker.diagnosis.service.data.MethodCall;
+import kieker.diagnosis.backend.data.MethodCall;
 
 /**
  * Implementation of this class are responsible for aggregating method calls in a trace by various parameters.

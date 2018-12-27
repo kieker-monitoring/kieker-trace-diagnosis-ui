@@ -18,7 +18,7 @@ package kieker.diagnosis.ui.complex.main.properties;
 
 import com.google.inject.Singleton;
 
-import kieker.diagnosis.architecture.service.properties.StringApplicationProperty;
+import kieker.diagnosis.backend.base.service.properties.StringApplicationProperty;
 
 /**
  * This property represents the last used import path.

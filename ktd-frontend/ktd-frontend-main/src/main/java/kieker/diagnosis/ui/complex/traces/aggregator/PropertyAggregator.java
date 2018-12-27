@@ -21,7 +21,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import kieker.diagnosis.service.data.MethodCall;
+import kieker.diagnosis.backend.data.MethodCall;
 
 /**
  * An abstract base class for aggregators which aggregate method calls within a trace by a specific property of the method call.

@@ -25,7 +25,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import kieker.diagnosis.architecture.common.ClassUtil;
+import kieker.diagnosis.backend.base.common.ClassUtil;
 
 /**
  * This is the abstract base for a view. It provides a convenient method to localize a string. Also a corresponding

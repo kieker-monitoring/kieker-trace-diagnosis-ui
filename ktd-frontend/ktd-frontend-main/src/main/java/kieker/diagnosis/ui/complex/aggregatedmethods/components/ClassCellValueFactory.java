@@ -20,11 +20,11 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.util.Callback;
-import kieker.diagnosis.architecture.service.ServiceFactory;
-import kieker.diagnosis.architecture.service.properties.PropertiesService;
-import kieker.diagnosis.service.data.AggregatedMethodCall;
-import kieker.diagnosis.service.settings.ClassAppearance;
-import kieker.diagnosis.service.settings.properties.ClassAppearanceProperty;
+import kieker.diagnosis.backend.base.service.ServiceFactory;
+import kieker.diagnosis.backend.base.service.properties.PropertiesService;
+import kieker.diagnosis.backend.data.AggregatedMethodCall;
+import kieker.diagnosis.backend.settings.ClassAppearance;
+import kieker.diagnosis.backend.settings.properties.ClassAppearanceProperty;
 
 /**
  * This is a cell factory for a table which shows the class of a method call in the configured manner.

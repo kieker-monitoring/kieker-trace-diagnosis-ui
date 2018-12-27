@@ -24,8 +24,8 @@ import org.apache.logging.log4j.Logger;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
-import kieker.diagnosis.architecture.common.ClassUtil;
-import kieker.diagnosis.architecture.service.ServiceBase;
+import kieker.diagnosis.backend.base.common.ClassUtil;
+import kieker.diagnosis.backend.base.service.ServiceBase;
 
 /**
  * This is the abstract base for a controller. It provides convenient methods, like retrieving a service or localizing a string. For each class extending this

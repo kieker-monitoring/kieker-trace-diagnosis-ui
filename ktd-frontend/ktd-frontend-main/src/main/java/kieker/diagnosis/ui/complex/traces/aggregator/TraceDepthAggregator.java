@@ -18,7 +18,7 @@ package kieker.diagnosis.ui.complex.traces.aggregator;
 
 import java.util.Comparator;
 
-import kieker.diagnosis.service.data.MethodCall;
+import kieker.diagnosis.backend.data.MethodCall;
 
 /**
  * This aggregator aggregates method calls by trace depth. That means that method calls in a trace with lower trace depth are aggregated into a single method

@@ -18,7 +18,7 @@ package kieker.diagnosis.ui.complex.traces.aggregator;
 
 import java.util.List;
 
-import kieker.diagnosis.service.data.MethodCall;
+import kieker.diagnosis.backend.data.MethodCall;
 
 /**
  * This aggregator is a pseudo aggregator which does not do anything. It is basically the identity function on method call aggregation.

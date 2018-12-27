@@ -20,16 +20,16 @@ import java.util.List;
 
 import com.google.inject.Singleton;
 
-import kieker.diagnosis.architecture.exception.BusinessException;
-import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
 import kieker.diagnosis.architecture.ui.ControllerBase;
-import kieker.diagnosis.service.data.AggregatedMethodCall;
-import kieker.diagnosis.service.data.MethodCall;
-import kieker.diagnosis.service.export.CSVData;
-import kieker.diagnosis.service.methods.MethodsFilter;
-import kieker.diagnosis.service.methods.MethodsService;
-import kieker.diagnosis.service.methods.SearchType;
-import kieker.diagnosis.service.settings.SettingsService;
+import kieker.diagnosis.backend.base.exception.BusinessException;
+import kieker.diagnosis.backend.base.exception.BusinessRuntimeException;
+import kieker.diagnosis.backend.data.AggregatedMethodCall;
+import kieker.diagnosis.backend.data.MethodCall;
+import kieker.diagnosis.backend.export.CSVData;
+import kieker.diagnosis.backend.search.methods.MethodsFilter;
+import kieker.diagnosis.backend.search.methods.MethodsService;
+import kieker.diagnosis.backend.search.methods.SearchType;
+import kieker.diagnosis.backend.settings.SettingsService;
 import kieker.diagnosis.ui.complex.main.MainController;
 
 /**

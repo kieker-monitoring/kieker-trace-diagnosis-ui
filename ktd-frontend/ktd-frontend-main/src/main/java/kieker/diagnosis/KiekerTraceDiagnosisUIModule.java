@@ -19,7 +19,7 @@ package kieker.diagnosis;
 import com.google.inject.AbstractModule;
 
 import kieker.diagnosis.architecture.KiekerTraceDiagnosisArchitectureModule;
-import kieker.diagnosis.architecture.KiekerTraceDiagnosisServiceBaseModule;
+import kieker.diagnosis.backend.base.KiekerTraceDiagnosisServiceBaseModule;
 
 /**
  * This is the Guice module for the UI.

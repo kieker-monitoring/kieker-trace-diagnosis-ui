@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
-import kieker.diagnosis.service.data.MethodCall;
+import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.ui.complex.traces.aggregator.Aggregator;
 
 /**

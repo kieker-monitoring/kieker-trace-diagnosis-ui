@@ -17,7 +17,7 @@
 package kieker.diagnosis.ui.complex.aggregatedmethods.components;
 
 import javafx.scene.control.TableRow;
-import kieker.diagnosis.service.data.AggregatedMethodCall;
+import kieker.diagnosis.backend.data.AggregatedMethodCall;
 
 /**
  * This is a row for a table which is aware of a method call being failed. If the method call has an exception, it is styled accordingly.

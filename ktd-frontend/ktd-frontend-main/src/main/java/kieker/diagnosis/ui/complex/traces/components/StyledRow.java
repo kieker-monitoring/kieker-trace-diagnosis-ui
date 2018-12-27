@@ -17,7 +17,7 @@
 package kieker.diagnosis.ui.complex.traces.components;
 
 import javafx.scene.control.TreeTableRow;
-import kieker.diagnosis.service.data.MethodCall;
+import kieker.diagnosis.backend.data.MethodCall;
 
 /**
  * This is a row for a tree table which is aware of a method call being failed. If the method call has an exception, it is styled accordingly.

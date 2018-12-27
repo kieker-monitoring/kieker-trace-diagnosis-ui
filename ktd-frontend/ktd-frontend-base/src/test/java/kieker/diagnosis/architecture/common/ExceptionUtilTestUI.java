@@ -26,8 +26,8 @@ import org.testfx.util.WaitForAsyncUtils;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import kieker.diagnosis.architecture.exception.BusinessException;
-import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
+import kieker.diagnosis.backend.base.exception.BusinessException;
+import kieker.diagnosis.backend.base.exception.BusinessRuntimeException;
 
 /**
  * This is a UI test which checks that the exception handling is working as expected.

@@ -33,7 +33,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
-import kieker.diagnosis.architecture.exception.BusinessRuntimeException;
+import kieker.diagnosis.backend.base.exception.BusinessRuntimeException;
 
 /**
  * A util class to handle exceptions

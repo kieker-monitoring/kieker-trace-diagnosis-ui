@@ -20,11 +20,11 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.util.Callback;
-import kieker.diagnosis.architecture.service.ServiceFactory;
-import kieker.diagnosis.architecture.service.properties.PropertiesService;
-import kieker.diagnosis.service.data.MethodCall;
-import kieker.diagnosis.service.settings.TimestampAppearance;
-import kieker.diagnosis.service.settings.properties.TimestampProperty;
+import kieker.diagnosis.backend.base.service.ServiceFactory;
+import kieker.diagnosis.backend.base.service.properties.PropertiesService;
+import kieker.diagnosis.backend.data.MethodCall;
+import kieker.diagnosis.backend.settings.TimestampAppearance;
+import kieker.diagnosis.backend.settings.properties.TimestampProperty;
 
 public class TimestampCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>> {
 

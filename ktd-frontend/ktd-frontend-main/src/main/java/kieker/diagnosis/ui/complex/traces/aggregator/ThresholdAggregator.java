@@ -19,7 +19,7 @@ package kieker.diagnosis.ui.complex.traces.aggregator;
 import java.util.ArrayList;
 import java.util.List;
 
-import kieker.diagnosis.service.data.MethodCall;
+import kieker.diagnosis.backend.data.MethodCall;
 
 /**
  * This aggregator aggregates method calls by a given threshold. That means that method calls below this threshold are aggregated into a single method call.

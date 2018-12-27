@@ -19,8 +19,8 @@ package kieker.diagnosis.architecture.ui;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
-import kieker.diagnosis.architecture.common.ClassUtil;
 import kieker.diagnosis.architecture.common.ExceptionUtil;
+import kieker.diagnosis.backend.base.common.ClassUtil;
 
 /**
  * This is an interceptor which handles all kind of {@link Throwable Throwables}. It is usually used around controller actions. If an exception occurs, the

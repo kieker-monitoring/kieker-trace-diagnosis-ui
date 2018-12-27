@@ -29,7 +29,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import kieker.diagnosis.architecture.exception.TechnicalException;
+import kieker.diagnosis.backend.base.exception.TechnicalException;
 import kieker.diagnosis.ui.mixin.DialogMixin;
 import kieker.diagnosis.ui.mixin.ImageMixin;
 

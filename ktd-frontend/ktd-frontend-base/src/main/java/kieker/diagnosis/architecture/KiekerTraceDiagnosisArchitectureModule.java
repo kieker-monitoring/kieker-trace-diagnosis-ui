@@ -22,10 +22,10 @@ import com.google.inject.AbstractModule;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.matcher.Matchers;
 
-import kieker.diagnosis.architecture.monitoring.MonitoringInterceptor;
 import kieker.diagnosis.architecture.ui.ControllerBase;
 import kieker.diagnosis.architecture.ui.ErrorHandlingInterceptor;
 import kieker.diagnosis.architecture.ui.ViewModelBase;
+import kieker.diagnosis.backend.base.monitoring.MonitoringInterceptor;
 
 /**
  * This is the Guice module for the architecture.

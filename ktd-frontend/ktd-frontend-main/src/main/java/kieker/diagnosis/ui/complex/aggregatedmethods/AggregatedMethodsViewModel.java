@@ -26,12 +26,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import kieker.diagnosis.architecture.exception.BusinessException;
 import kieker.diagnosis.architecture.ui.ViewModelBase;
-import kieker.diagnosis.service.aggregatedmethods.AggregatedMethodsFilter;
-import kieker.diagnosis.service.data.AggregatedMethodCall;
-import kieker.diagnosis.service.export.CSVData;
-import kieker.diagnosis.service.pattern.PatternService;
+import kieker.diagnosis.backend.base.exception.BusinessException;
+import kieker.diagnosis.backend.data.AggregatedMethodCall;
+import kieker.diagnosis.backend.export.CSVData;
+import kieker.diagnosis.backend.pattern.PatternService;
+import kieker.diagnosis.backend.search.aggregatedmethods.AggregatedMethodsFilter;
 
 /**
  * The view model of the aggregated methods tab.

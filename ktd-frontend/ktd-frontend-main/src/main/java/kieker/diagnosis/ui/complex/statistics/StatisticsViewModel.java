@@ -22,7 +22,7 @@ import java.util.Optional;
 import com.google.inject.Singleton;
 
 import kieker.diagnosis.architecture.ui.ViewModelBase;
-import kieker.diagnosis.service.statistics.Statistics;
+import kieker.diagnosis.backend.search.statistics.Statistics;
 
 /**
  * The view model of the statistics tab.

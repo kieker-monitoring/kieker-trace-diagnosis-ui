@@ -23,8 +23,8 @@ import com.google.inject.Injector;
 
 import javafx.scene.Scene;
 import javafx.stage.Window;
-import kieker.diagnosis.architecture.common.ClassUtil;
-import kieker.diagnosis.architecture.service.ServiceBase;
+import kieker.diagnosis.backend.base.common.ClassUtil;
+import kieker.diagnosis.backend.base.service.ServiceBase;
 
 /**
  * This is the abstract base for a view model. It provides convenient methods, like retrieving a service or localizing a string. For each class extending this
