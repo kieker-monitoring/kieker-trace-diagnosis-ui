@@ -20,6 +20,26 @@
 		</dependency>
 		<dependency>
 			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-backend-data</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-backend-search</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-backend-filter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-backend-pattern</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-backend-settings</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
 			<artifactId>kieker-trace-diagnosis-architecture</artifactId>
 		</dependency>
 		<dependency>

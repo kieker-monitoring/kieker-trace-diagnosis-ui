@@ -11,30 +11,16 @@
 		<relativePath>../../ktd-parent</relativePath>
 	</parent>
 
-	<artifactId>ktd-backend-base</artifactId>
+	<artifactId>ktd-backend-filter</artifactId>
 
 	<dependencies>
 		<dependency>
-			<groupId>com.google.inject</groupId>
-			<artifactId>guice</artifactId>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-backend-base</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>net.kieker-monitoring</groupId>
-			<artifactId>kieker</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<scope>runtime</scope>
+			<artifactId>ktd-backend-pattern</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

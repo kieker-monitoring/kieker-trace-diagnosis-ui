@@ -18,6 +18,10 @@
 		<module>ktd-backend-base</module>
 		<module>ktd-backend-export</module>
 		<module>ktd-backend-settings</module>
+		<module>ktd-backend-search</module>
+		<module>ktd-backend-data</module>
+		<module>ktd-backend-filter</module>
+		<module>ktd-backend-pattern</module>
 	</modules>
 	
 </project>

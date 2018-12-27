@@ -20,7 +20,6 @@ import com.google.inject.AbstractModule;
 
 import kieker.diagnosis.architecture.KiekerTraceDiagnosisArchitectureModule;
 import kieker.diagnosis.architecture.KiekerTraceDiagnosisServiceBaseModule;
-import kieker.diagnosis.service.KiekerTraceDiagnosisServiceModule;
 
 /**
  * This is the Guice module for the UI.
@@ -33,7 +32,6 @@ public class KiekerTraceDiagnosisUIModule extends AbstractModule {
 	protected void configure( ) {
 		// We need to make sure that the Guice module from the service and the architecture sub-projects are installed
 		install( new KiekerTraceDiagnosisServiceBaseModule( ) );
-		install( new KiekerTraceDiagnosisServiceModule( ) );
 		install( new KiekerTraceDiagnosisArchitectureModule( ) );
 	}
 
