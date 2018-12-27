@@ -68,6 +68,8 @@ public class ProgressDialog extends VBox {
 
 			getChildren( ).add( ivLabel );
 		}
+		
+		getStylesheets( ).add( "/kieker/diagnosis/architecture/ui/Dialog.css" );
 	}
 
 	public void open( final Window aParent ) {
@@ -92,7 +94,7 @@ public class ProgressDialog extends VBox {
 		stage.setTitle( getLocalizedString( "title" ) );
 		stage.setScene( scene );
 		stage.setOnCloseRequest( aEvent -> aEvent.consume( ) );
-
+		
 		stage.showAndWait( );
 	}
 

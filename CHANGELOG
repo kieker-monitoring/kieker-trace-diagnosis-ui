@@ -1,5 +1,9 @@
 4.0.0
 	26 Dec 2018
+	Feature (TRACEUI-35)
+	The tool now comes with a fixed font which allows for a consistent appearance across all operation systems.
+
+	26 Dec 2018
 	Bug (TRACEUI-34)
 	Fixed some typos in the English localization.
 

@@ -47,6 +47,18 @@ public abstract class ViewBase<C extends ControllerBase<?>> extends VBox {
 	static {
 		final URL fontAwesomeUrl = ViewBase.class.getResource( "fa-solid-900.ttf" );
 		Font.loadFont( fontAwesomeUrl.toExternalForm( ), 12 );
+		
+		final URL openSansUrl = ViewBase.class.getResource( "OpenSans-Regular.ttf" );
+		Font.loadFont( openSansUrl.toExternalForm( ), 12 );
+		
+		final URL openSansBoldUrl = ViewBase.class.getResource( "OpenSans-Bold.ttf" );
+		Font.loadFont( openSansBoldUrl.toExternalForm( ), 12 );
+		
+		final URL openSansItalicUrl = ViewBase.class.getResource( "OpenSans-Italic.ttf" );
+		Font.loadFont( openSansItalicUrl.toExternalForm( ), 12 );
+		
+		final URL openSansBoldItalicUrl = ViewBase.class.getResource( "OpenSans-BoldItalic.ttf" );
+		Font.loadFont( openSansBoldItalicUrl.toExternalForm( ), 12 );
 	}
 
 	public ViewBase( ) {
