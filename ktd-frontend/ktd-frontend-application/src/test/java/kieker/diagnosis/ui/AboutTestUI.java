@@ -24,7 +24,7 @@ import org.testfx.framework.junit.ApplicationTest;
 
 import javafx.scene.control.Labeled;
 import javafx.stage.Stage;
-import kieker.diagnosis.KiekerTraceDiagnosis;
+import kieker.diagnosis.frontend.application.KiekerTraceDiagnosis;
 
 /**
  * This is a UI test which checks that the about dialog is working as expected.

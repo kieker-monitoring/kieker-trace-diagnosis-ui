@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis;
+package kieker.diagnosis.frontend.application;
 
 import java.util.ResourceBundle;
 
@@ -25,6 +25,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import kieker.diagnosis.KiekerTraceDiagnosisUIModule;
 import kieker.diagnosis.ui.complex.main.MainController;
 import kieker.diagnosis.ui.complex.main.MainView;
 import kieker.diagnosis.ui.mixin.ImageMixin;

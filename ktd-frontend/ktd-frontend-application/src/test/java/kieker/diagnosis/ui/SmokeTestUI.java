@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
 import javafx.stage.Stage;
-import kieker.diagnosis.KiekerTraceDiagnosis;
+import kieker.diagnosis.frontend.application.KiekerTraceDiagnosis;
 
 /**
  * This is a UI test which just makes sure that the application is at least startable.

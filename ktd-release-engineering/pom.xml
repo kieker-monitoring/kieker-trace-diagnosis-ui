@@ -39,7 +39,7 @@
 									<platforms>
 										<platform>windows</platform>
 									</platforms>
-									<mainClass>kieker.diagnosis.KiekerTraceDiagnosis</mainClass>
+									<mainClass>kieker.diagnosis.frontend.application.KiekerTraceDiagnosis</mainClass>
 									<name>start-windows</name>
 									<jvmSettings>
 										<extraArgument>-Djava.awt.headless=false</extraArgument>
@@ -54,7 +54,7 @@
 									<platforms>
 										<platform>unix</platform>
 									</platforms>
-									<mainClass>kieker.diagnosis.KiekerTraceDiagnosis</mainClass>
+									<mainClass>kieker.diagnosis.frontend.application.KiekerTraceDiagnosis</mainClass>
 									<name>start-unix</name>
 									<jvmSettings>
 										<extraArgument>-Djava.awt.headless=false</extraArgument>

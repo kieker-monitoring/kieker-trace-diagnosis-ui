@@ -36,7 +36,7 @@ import javafx.scene.Node;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeTableView;
 import javafx.stage.Stage;
-import kieker.diagnosis.KiekerTraceDiagnosis;
+import kieker.diagnosis.frontend.application.KiekerTraceDiagnosis;
 import kieker.diagnosis.ui.complex.main.MainController;
 
 /**
