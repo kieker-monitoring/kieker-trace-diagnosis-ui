@@ -16,6 +16,8 @@
 
 package kieker.diagnosis.backend.cache;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -24,7 +26,17 @@ import static org.mockito.Mockito.when;
 import java.lang.reflect.Method;
 
 import org.aopalliance.intercept.MethodInvocation;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
+import com.google.common.util.concurrent.UncheckedExecutionException;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Singleton;
+
+import kieker.diagnosis.backend.base.service.Service;
 
 /**
  * Test class for {@link CacheInterceptor}.
@@ -33,37 +45,31 @@ import org.junit.Test;
  */
 public final class CacheInterceptorTest {
 
+	@Rule
+	public final ExpectedException expectedException = ExpectedException.none( );
+
+	private TestService testService;
+
+	@Before
+	public void setUp( ) {
+		final Injector injector = Guice.createInjector( new CacheModule( ) );
+		testService = injector.getInstance( TestService.class );
+	}
+
 	@Test
 	public void testWithoutUseCacheAnnotation( ) throws Throwable {
-		final Method method = mock( Method.class );
-		final MethodInvocation methodInvocation = mock( MethodInvocation.class );
-		when( methodInvocation.getMethod( ) ).thenReturn( method );
+		testService.methodA( "test-key" );
+		testService.methodA( "test-key" );
 
-		final CacheInterceptor cacheInterceptor = new CacheInterceptor( );
-		cacheInterceptor.invoke( methodInvocation );
-		cacheInterceptor.invoke( methodInvocation );
-
-		verify( methodInvocation, times( 2 ) ).proceed( );
+		assertThat( testService.getCounter( ), is( 2 ) );
 	}
 
 	@Test
 	public void testWithUseCacheAnnotation( ) throws Throwable {
-		final UseCache useCache = mock( UseCache.class );
-		when( useCache.cacheName( ) ).thenReturn( "test-cache" );
+		testService.methodB( "test-key" );
+		testService.methodB( "test-key" );
 
-		final Method method = mock( Method.class );
-		when( method.getAnnotation( UseCache.class ) ).thenReturn( useCache );
-
-		final MethodInvocation methodInvocation = mock( MethodInvocation.class );
-		when( methodInvocation.getMethod( ) ).thenReturn( method );
-		when( methodInvocation.getArguments( ) ).thenReturn( new Object[] { "test-key" } );
-		when( methodInvocation.proceed( ) ).thenReturn( "test-value" );
-
-		final CacheInterceptor cacheInterceptor = new CacheInterceptor( );
-		cacheInterceptor.invoke( methodInvocation );
-		cacheInterceptor.invoke( methodInvocation );
-
-		verify( methodInvocation, times( 1 ) ).proceed( );
+		assertThat( testService.getCounter( ), is( 1 ) );
 	}
 
 	@Test
@@ -86,36 +92,24 @@ public final class CacheInterceptorTest {
 	}
 
 	@Test
-	public void testWithInvalidateCacheAnnotation( ) throws Throwable {
-		final UseCache useCache = mock( UseCache.class );
-		when( useCache.cacheName( ) ).thenReturn( "test-cache" );
-
-		final Method fstMethod = mock( Method.class );
-		when( fstMethod.getAnnotation( UseCache.class ) ).thenReturn( useCache );
-
-		final MethodInvocation fstMethodInvocation = mock( MethodInvocation.class );
-		when( fstMethodInvocation.getMethod( ) ).thenReturn( fstMethod );
-		when( fstMethodInvocation.getArguments( ) ).thenReturn( new Object[] { "test-key" } );
-		when( fstMethodInvocation.proceed( ) ).thenReturn( "test-value" );
-
-		final InvalidateCache invalidateCache = mock( InvalidateCache.class );
-		when( invalidateCache.cacheName( ) ).thenReturn( "test-cache" );
-		when( invalidateCache.keyParameter( ) ).thenReturn( 0 );
-
-		final Method sndMethod = mock( Method.class );
-		when( sndMethod.getAnnotation( InvalidateCache.class ) ).thenReturn( invalidateCache );
-
-		final MethodInvocation sndMethodInvocation = mock( MethodInvocation.class );
-		when( sndMethodInvocation.getMethod( ) ).thenReturn( sndMethod );
-		when( sndMethodInvocation.getArguments( ) ).thenReturn( new Object[] { "test-key" } );
+	public void testWithoutAnyAnnotation( ) throws Throwable {
+		final Method method = mock( Method.class );
+		final MethodInvocation methodInvocation = mock( MethodInvocation.class );
+		when( methodInvocation.getMethod( ) ).thenReturn( method );
 
 		final CacheInterceptor cacheInterceptor = new CacheInterceptor( );
-		cacheInterceptor.invoke( fstMethodInvocation );
-		cacheInterceptor.invoke( sndMethodInvocation );
-		cacheInterceptor.invoke( fstMethodInvocation );
+		cacheInterceptor.invoke( methodInvocation );
 
-		verify( fstMethodInvocation, times( 2 ) ).proceed( );
-		verify( sndMethodInvocation, times( 1 ) ).proceed( );
+		verify( methodInvocation, times( 1 ) ).proceed( );
+	}
+
+	@Test
+	public void testWithInvalidateCacheAnnotation( ) throws Throwable {
+		testService.methodB( "test-key" );
+		testService.methodC( "test-key" );
+		testService.methodB( "test-key" );
+
+		assertThat( testService.getCounter( ), is( 2 ) );
 	}
 
 	@Test
@@ -135,6 +129,43 @@ public final class CacheInterceptorTest {
 		cacheInterceptor.invoke( methodInvocation );
 
 		verify( methodInvocation, times( 1 ) ).proceed( );
+	}
+
+	@Test
+	public void testException( ) throws Throwable {
+		expectedException.expect( UncheckedExecutionException.class );
+		testService.methodD( "test-key" );
+	}
+
+	@Singleton
+	public static class TestService implements Service {
+
+		private int counter = 0;
+
+		public String methodA( final String key ) {
+			counter++;
+			return "test-value";
+		}
+
+		@UseCache( cacheName = "test-cache" )
+		public String methodB( final String key ) {
+			counter++;
+			return "test-value";
+		}
+
+		@InvalidateCache( cacheName = "test-cache", keyParameter = 0 )
+		public void methodC( final String key ) {
+		}
+
+		@UseCache( cacheName = "test-cache" )
+		public String methodD( final String key ) {
+			throw new IllegalArgumentException( );
+		}
+
+		public int getCounter( ) {
+			return counter;
+		}
+
 	}
 
 }
