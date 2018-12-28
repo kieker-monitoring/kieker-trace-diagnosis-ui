@@ -82,6 +82,11 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<excludes>
+						<exclude>**/*Exception.*</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 		</plugins>
 
