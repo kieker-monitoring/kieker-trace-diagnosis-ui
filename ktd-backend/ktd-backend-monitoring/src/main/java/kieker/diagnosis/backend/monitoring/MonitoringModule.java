@@ -14,29 +14,41 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis;
+package kieker.diagnosis.backend.monitoring;
+
+import java.lang.reflect.Method;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.matcher.AbstractMatcher;
+import com.google.inject.matcher.Matchers;
 
-import kieker.diagnosis.architecture.KiekerTraceDiagnosisArchitectureModule;
-import kieker.diagnosis.backend.base.ServiceBaseModule;
-import kieker.diagnosis.backend.cache.CacheModule;
-import kieker.diagnosis.backend.monitoring.KiekerTraceDiagnosisMonitoringModule;
+import kieker.diagnosis.backend.base.service.Service;
 
 /**
- * This is the Guice module for the UI.
+ * This is the Guice module for the monitoring component.
  *
  * @author Nils Christian Ehmke
  */
-public class KiekerTraceDiagnosisUIModule extends AbstractModule {
+public final class MonitoringModule extends AbstractModule {
 
 	@Override
 	protected void configure( ) {
-		// We need to make sure that the Guice module from the service and the architecture sub-projects are installed
-		install( new KiekerTraceDiagnosisMonitoringModule( ) );
-		install( new CacheModule( ) );
-		install( new ServiceBaseModule( ) );
-		install( new KiekerTraceDiagnosisArchitectureModule( ) );
+		final MonitoringInterceptor monitoringInterceptor = new MonitoringInterceptor( );
+
+		bindInterceptor( Matchers.subclassesOf( Service.class ), Matchers.not( new SyntheticMethodMatcher( ) ), monitoringInterceptor );
+	}
+
+	/**
+	 * A helper class to find out whether a method is synthetic or not.
+	 *
+	 * @author Nils Christian Ehmke
+	 */
+	private static final class SyntheticMethodMatcher extends AbstractMatcher<Method> {
+
+		@Override
+		public boolean matches( final Method aMethod ) {
+			return aMethod.isSynthetic( );
+		}
 	}
 
 }

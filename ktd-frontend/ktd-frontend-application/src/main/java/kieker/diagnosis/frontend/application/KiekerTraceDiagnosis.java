@@ -25,7 +25,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import kieker.diagnosis.KiekerTraceDiagnosisUIModule;
+import kieker.diagnosis.FrontendModule;
 import kieker.diagnosis.ui.complex.main.MainController;
 import kieker.diagnosis.ui.complex.main.MainView;
 import kieker.diagnosis.ui.mixin.ImageMixin;
@@ -68,7 +68,7 @@ public final class KiekerTraceDiagnosis extends Application implements ImageMixi
 	}
 
 	private Injector startCdiContainer( ) {
-		final KiekerTraceDiagnosisUIModule module = new KiekerTraceDiagnosisUIModule( );
+		final FrontendModule module = new FrontendModule( );
 		return Guice.createInjector( com.google.inject.Stage.PRODUCTION, module );
 	}
 

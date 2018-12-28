@@ -28,11 +28,11 @@ import kieker.diagnosis.architecture.ui.ViewModelBase;
 import kieker.diagnosis.backend.monitoring.MonitoringInterceptor;
 
 /**
- * This is the Guice module for the architecture.
+ * This is the Guice module for the frontend base.
  *
  * @author Nils Christian Ehmke
  */
-public final class KiekerTraceDiagnosisArchitectureModule extends AbstractModule {
+public final class FrontendBaseModule extends AbstractModule {
 
 	@Override
 	protected void configure( ) {
