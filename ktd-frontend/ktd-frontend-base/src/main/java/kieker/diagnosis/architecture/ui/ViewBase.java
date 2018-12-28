@@ -28,12 +28,9 @@ import javafx.scene.text.Font;
 import kieker.diagnosis.backend.base.common.ClassUtil;
 
 /**
- * This is the abstract base for a view. It provides a convenient method to localize a string. Also a corresponding
- * stylesheet file is applied. For each class extending this base, a resource bundle has to be available in the
- * classpath with the name of the implementing class.
+ * This is the abstract base for a view. It provides a convenient method to localize a string. Also a corresponding stylesheet file is applied. For each class extending this base, a resource bundle has to be available in the classpath with the name of the implementing class.
  *
- * @param <C>
- *        The type of the controller.
+ * @param <C> The type of the controller.
  *
  * @author Nils Christian Ehmke
  */
@@ -47,24 +44,21 @@ public abstract class ViewBase<C extends ControllerBase<?>> extends VBox {
 	static {
 		final URL fontAwesomeUrl = ViewBase.class.getResource( "fa-solid-900.ttf" );
 		Font.loadFont( fontAwesomeUrl.toExternalForm( ), 12 );
-		
+
 		final URL openSansUrl = ViewBase.class.getResource( "OpenSans-Regular.ttf" );
 		Font.loadFont( openSansUrl.toExternalForm( ), 12 );
-		
+
 		final URL openSansBoldUrl = ViewBase.class.getResource( "OpenSans-Bold.ttf" );
 		Font.loadFont( openSansBoldUrl.toExternalForm( ), 12 );
-		
+
 		final URL openSansItalicUrl = ViewBase.class.getResource( "OpenSans-Italic.ttf" );
 		Font.loadFont( openSansItalicUrl.toExternalForm( ), 12 );
-		
+
 		final URL openSansBoldItalicUrl = ViewBase.class.getResource( "OpenSans-BoldItalic.ttf" );
 		Font.loadFont( openSansBoldItalicUrl.toExternalForm( ), 12 );
 	}
 
 	public ViewBase( ) {
-		// Make sure that the singleton annotation is present
-		ClassUtil.assertSingletonAnnotation( getClass( ) );
-
 		getStylesheets( ).add( getBaseStylesheetUrl( ) );
 		getStylesheets( ).add( getStylsheetUrl( ) );
 	}
@@ -72,8 +66,7 @@ public abstract class ViewBase<C extends ControllerBase<?>> extends VBox {
 	/**
 	 * Delivers the localized string for the given key for the current class.
 	 *
-	 * @param aKey
-	 *             The resource key.
+	 * @param aKey The resource key.
 	 *
 	 * @return The localized string.
 	 */
@@ -99,19 +92,16 @@ public abstract class ViewBase<C extends ControllerBase<?>> extends VBox {
 	}
 
 	/**
-	 * This method can be used to send a parameter to the current view. The precise nature of the parameter (and all actions
-	 * necessary to use it) depends on the view.
+	 * This method can be used to send a parameter to the current view. The precise nature of the parameter (and all actions necessary to use it) depends on the view.
 	 *
-	 * @param aParameter
-	 *                   The parameter.
+	 * @param aParameter The parameter.
 	 */
 	public abstract void setParameter( Object aParameter );
 
 	/**
 	 * This method creates an icon which can for instance be used as a graphic for a node.
 	 *
-	 * @param aIcon
-	 *              The type of the icon.
+	 * @param aIcon The type of the icon.
 	 *
 	 * @return A new icon.
 	 */
@@ -124,7 +114,7 @@ public abstract class ViewBase<C extends ControllerBase<?>> extends VBox {
 		return label;
 	}
 
-	public static enum Icon {
+	public enum Icon {
 
 		SEARCH( "\uf002" ),
 		FOLDER_OPEN( "\uf07c" ),

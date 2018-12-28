@@ -28,11 +28,9 @@ import kieker.diagnosis.backend.base.common.ClassUtil;
 import kieker.diagnosis.backend.base.service.ServiceBase;
 
 /**
- * This is the abstract base for a controller. It provides convenient methods, like retrieving a service or localizing a string. For each class extending this
- * base, a resource bundle has to be available in the classpath with the name of the implementing class.
+ * This is the abstract base for a controller. It provides convenient methods, like retrieving a service or localizing a string. For each class extending this base, a resource bundle has to be available in the classpath with the name of the implementing class.
  *
- * @param <VM>
- *            The type of the view model.
+ * @param <VM> The type of the view model.
  *
  * @author Nils Christian Ehmke
  */
@@ -48,11 +46,6 @@ public abstract class ControllerBase<VM extends ViewModelBase<?>> {
 	@Inject
 	private Injector ivInjector;
 
-	public ControllerBase( ) {
-		// Make sure that the singleton annotation is present
-		ClassUtil.assertSingletonAnnotation( getClass( ) );
-	}
-
 	/**
 	 * Gets the view model for this controller.
 	 *
@@ -65,8 +58,7 @@ public abstract class ControllerBase<VM extends ViewModelBase<?>> {
 	/**
 	 * Gets a service of the given type.
 	 *
-	 * @param aServiceClass
-	 *            The type of the service.
+	 * @param aServiceClass The type of the service.
 	 *
 	 * @return The service.
 	 */
@@ -90,8 +82,7 @@ public abstract class ControllerBase<VM extends ViewModelBase<?>> {
 	/**
 	 * Gets a controller of the given type. Use this method with care, as it can lead to incomprehensible execution flow.
 	 *
-	 * @param aControllerClass
-	 *            The type of the controller.
+	 * @param aControllerClass The type of the controller.
 	 *
 	 * @return The controller.
 	 */
@@ -102,8 +93,7 @@ public abstract class ControllerBase<VM extends ViewModelBase<?>> {
 	/**
 	 * Delivers the localized string for the given key for the current class.
 	 *
-	 * @param aKey
-	 *            The resource key.
+	 * @param aKey The resource key.
 	 *
 	 * @return The localized string.
 	 */
