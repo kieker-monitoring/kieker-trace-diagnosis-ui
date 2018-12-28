@@ -53,26 +53,4 @@ public final class ClassUtil {
 		return getRealClass( aClass ).getName( );
 	}
 
-	/**
-	 * Delivers the real canonical name of the given class. This means that for a proxy class the name of the super class will be returned and the name of the class itself otherwise.
-	 *
-	 * @param aClass The (potentially proxy) class.
-	 *
-	 * @return The real canonical class name.
-	 */
-	public static String getRealCanonicalName( final Class<?> aClass ) {
-		return getRealClass( aClass ).getCanonicalName( );
-	}
-
-	/**
-	 * Delivers the real simple name of the given class. This means that for a proxy class the name of the super class will be returned and the name of the class itself otherwise.
-	 *
-	 * @param aClass The (potentially proxy) class.
-	 *
-	 * @return The real simple class name.
-	 */
-	public static Object getRealSimpleName( final Class<?> aClass ) {
-		return getRealClass( aClass ).getSimpleName( );
-	}
-
 }

@@ -61,26 +61,6 @@ public class ClassUtilTest {
 		assertThat( ClassUtil.getRealName( ivInjector.getInstance( NonProxiedClass.class ).getClass( ) ), is( equalTo( NonProxiedClass.class.getName( ) ) ) );
 	}
 
-	@Test
-	public void realCanonicalNameOfProxyClassShouldReturnCorrectName( ) {
-		assertThat( ClassUtil.getRealCanonicalName( ivInjector.getInstance( ProxiedClass.class ).getClass( ) ), is( equalTo( ProxiedClass.class.getCanonicalName( ) ) ) );
-	}
-
-	@Test
-	public void realCanonicalNameOfNonProxyClassShouldReturnCorrectName( ) {
-		assertThat( ClassUtil.getRealCanonicalName( ivInjector.getInstance( NonProxiedClass.class ).getClass( ) ), is( equalTo( NonProxiedClass.class.getCanonicalName( ) ) ) );
-	}
-
-	@Test
-	public void realSimpleNameOfProxyClassShouldReturnCorrectName( ) {
-		assertThat( ClassUtil.getRealSimpleName( ivInjector.getInstance( ProxiedClass.class ).getClass( ) ), is( equalTo( ProxiedClass.class.getSimpleName( ) ) ) );
-	}
-
-	@Test
-	public void realSimpleNameOfNonProxyClassShouldReturnCorrectName( ) {
-		assertThat( ClassUtil.getRealSimpleName( ivInjector.getInstance( NonProxiedClass.class ).getClass( ) ), is( equalTo( NonProxiedClass.class.getSimpleName( ) ) ) );
-	}
-
 }
 
 class NonProxiedClass {
