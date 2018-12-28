@@ -13,3 +13,8 @@
 .monitoringRunning {
 	-fx-text-background-color: green;
 }
+
+.root {
+	-fx-font-family: "Open Sans";
+	-fx-font-size: 13px;
+}

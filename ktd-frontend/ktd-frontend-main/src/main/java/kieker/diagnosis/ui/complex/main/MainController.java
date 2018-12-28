@@ -27,6 +27,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.stage.DirectoryChooser;
@@ -168,7 +169,7 @@ public class MainController extends ControllerBase<MainViewModel> {
 			final Alert alert = new Alert( AlertType.CONFIRMATION );
 			alert.setTitle( getLocalizedString( "titleReallyClose" ) );
 			alert.setHeaderText( getLocalizedString( "headerReallyClose" ) );
-
+			
 			// Modify the buttons a little bit
 			alert.getButtonTypes( ).remove( ButtonType.OK );
 			alert.getButtonTypes( ).add( ButtonType.YES );
@@ -176,15 +177,17 @@ public class MainController extends ControllerBase<MainViewModel> {
 			final ButtonType alwaysYesButtonType = new ButtonType( getLocalizedString( "buttonAlwaysYes" ) );
 			alert.getButtonTypes( ).add( alwaysYesButtonType );
 
-			final Node yesButton = alert.getDialogPane( ).lookupButton( ButtonType.YES );
+			final DialogPane dialogPane = alert.getDialogPane( );
+			final Node yesButton = dialogPane.lookupButton( ButtonType.YES );
 			yesButton.setId( "mainCloseDialogYes" );
 			
 			// Add the logo
 			final String iconPath = getLocalizedString( "iconReallyClose" );
 			final InputStream iconStream = getClass( ).getClassLoader( ).getResourceAsStream( iconPath );
 			final Image icon = new Image( iconStream );
-			final Stage stage = ( Stage ) alert.getDialogPane( ).getScene( ).getWindow( );
+			final Stage stage = ( Stage ) dialogPane.getScene( ).getWindow( );
 			stage.getIcons( ).add( icon );
+			dialogPane.getStylesheets( ).add( "/kieker/diagnosis/architecture/ui/Dialog.css" );
 
 			// If the user clicked ok, we close the window
 			final Optional<ButtonType> result = alert.showAndWait( );
@@ -269,13 +272,14 @@ public class MainController extends ControllerBase<MainViewModel> {
 			final TextInputDialog textInputDialog = new TextInputDialog( );
 			textInputDialog.setTitle( getLocalizedString( "newFilterFavorite" ) );
 			textInputDialog.setHeaderText( getLocalizedString( "newFilterFavoriteName" ) );
-
+			
 			final String iconPath = getLocalizedString( "iconNewFavorite" );
 			final InputStream iconStream = getClass( ).getClassLoader( ).getResourceAsStream( iconPath );
 			final Image icon = new Image( iconStream );
-			final Stage stage = ( Stage ) textInputDialog.getDialogPane( ).getScene( ).getWindow( );
+			final DialogPane dialogPane = textInputDialog.getDialogPane( );
+			final Stage stage = ( Stage ) dialogPane.getScene( ).getWindow( );
 			stage.getIcons( ).add( icon );
-
+			dialogPane.getStylesheets( ).add( "/kieker/diagnosis/architecture/ui/Dialog.css" );
 			final Optional<String> result = textInputDialog.showAndWait( );
 
 			if ( result.isPresent( ) ) {

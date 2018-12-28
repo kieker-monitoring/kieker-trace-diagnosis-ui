@@ -71,7 +71,7 @@ public final class ManualDialog extends Alert implements DialogMixin, ImageMixin
 
 	public String compileDocumentation( ) {
 		final StringBuilder documentation = new StringBuilder( );
-		documentation.append( "<html><body><div class=\"container\">" );
+		documentation.append( "<html><body><div class=\"container\" style=\"font-family: Open Sans; font-size: 15;\">" );
 
 		documentation.append( "<head><style>" );
 		appendBootstrapCSS( documentation );

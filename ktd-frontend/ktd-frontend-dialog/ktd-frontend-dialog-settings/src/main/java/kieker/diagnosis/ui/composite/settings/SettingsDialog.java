@@ -72,6 +72,7 @@ public final class SettingsDialog extends Dialog<Settings> implements DialogMixi
 	private void configureDialog( ) {
 		setTitle( RESOURCE_BUNDLE.getString( "title" ) );
 		getStage( ).getIcons( ).add( createIcon( ) );
+		addDefaultStylesheet( );
 	}
 
 	private Image createIcon( ) {
