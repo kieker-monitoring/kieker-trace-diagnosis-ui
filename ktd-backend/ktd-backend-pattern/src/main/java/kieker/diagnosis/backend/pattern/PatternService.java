@@ -22,7 +22,7 @@ import java.util.regex.PatternSyntaxException;
 import com.google.inject.Singleton;
 
 import kieker.diagnosis.backend.base.service.ServiceBase;
-import kieker.diagnosis.backend.base.service.cache.UseCache;
+import kieker.diagnosis.backend.cache.UseCache;
 
 /**
  * The {@link PatternService} is responsible for validating and compiling regular expressions. Some of the methods are cached.

@@ -29,8 +29,8 @@ import java.util.stream.Collectors;
 import com.carrotsearch.hppc.IntObjectHashMap;
 import com.carrotsearch.hppc.IntObjectMap;
 
-import kieker.diagnosis.backend.base.monitoring.MonitoringProbe;
-import kieker.diagnosis.backend.base.monitoring.MonitoringUtil;
+import kieker.diagnosis.backend.monitoring.MonitoringProbe;
+import kieker.diagnosis.backend.monitoring.MonitoringUtil;
 
 /**
  * This is an abstract base for readers, which import monitoring logs. It provides some convenient helper methods.

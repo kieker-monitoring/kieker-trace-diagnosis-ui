@@ -34,9 +34,9 @@ import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.misc.KiekerMetadataRecord;
-import kieker.diagnosis.backend.base.monitoring.MonitoringProbe;
-import kieker.diagnosis.backend.base.monitoring.MonitoringUtil;
 import kieker.diagnosis.backend.data.MethodCall;
+import kieker.diagnosis.backend.monitoring.MonitoringProbe;
+import kieker.diagnosis.backend.monitoring.MonitoringUtil;
 
 /**
  * This is a reader to import files written with Kieker's ascii file writer. It exchanges readability and

@@ -25,7 +25,7 @@ import com.google.inject.matcher.Matchers;
 import kieker.diagnosis.architecture.ui.ControllerBase;
 import kieker.diagnosis.architecture.ui.ErrorHandlingInterceptor;
 import kieker.diagnosis.architecture.ui.ViewModelBase;
-import kieker.diagnosis.backend.base.monitoring.MonitoringInterceptor;
+import kieker.diagnosis.backend.monitoring.MonitoringInterceptor;
 
 /**
  * This is the Guice module for the architecture.

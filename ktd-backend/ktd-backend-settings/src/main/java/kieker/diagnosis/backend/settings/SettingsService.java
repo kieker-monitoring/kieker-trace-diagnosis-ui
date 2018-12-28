@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 import com.google.inject.Singleton;
 
 import kieker.diagnosis.backend.base.service.ServiceBase;
-import kieker.diagnosis.backend.base.service.properties.PropertiesService;
+import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.settings.properties.ClassAppearanceProperty;
 import kieker.diagnosis.backend.settings.properties.MaxNumberOfMethodCallsProperty;
 import kieker.diagnosis.backend.settings.properties.MethodAppearanceProperty;

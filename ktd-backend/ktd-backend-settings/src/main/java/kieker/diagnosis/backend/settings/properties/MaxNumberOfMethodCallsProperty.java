@@ -34,7 +34,7 @@ package kieker.diagnosis.backend.settings.properties;
 
 import com.google.inject.Singleton;
 
-import kieker.diagnosis.backend.base.service.properties.IntegerApplicationProperty;
+import kieker.diagnosis.backend.properties.IntegerApplicationProperty;
 
 /**
  * @author Nils Christian Ehmke

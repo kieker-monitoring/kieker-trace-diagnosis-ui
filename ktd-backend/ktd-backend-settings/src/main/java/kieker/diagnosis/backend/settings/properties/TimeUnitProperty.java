@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.inject.Singleton;
 
-import kieker.diagnosis.backend.base.service.properties.EnumApplicationProperty;
+import kieker.diagnosis.backend.properties.EnumApplicationProperty;
 
 /**
  * @author Nils Christian Ehmke

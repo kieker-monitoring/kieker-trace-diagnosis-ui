@@ -20,8 +20,8 @@ import com.google.inject.AbstractModule;
 
 import kieker.diagnosis.architecture.KiekerTraceDiagnosisArchitectureModule;
 import kieker.diagnosis.backend.base.KiekerTraceDiagnosisServiceBaseModule;
-import kieker.diagnosis.backend.base.monitoring.KiekerTraceDiagnosisMonitoringModule;
-import kieker.diagnosis.backend.base.service.cache.KiekerTraceDiagnosisCacheModule;
+import kieker.diagnosis.backend.cache.KiekerTraceDiagnosisCacheModule;
+import kieker.diagnosis.backend.monitoring.KiekerTraceDiagnosisMonitoringModule;
 
 /**
  * This is the Guice module for the UI.

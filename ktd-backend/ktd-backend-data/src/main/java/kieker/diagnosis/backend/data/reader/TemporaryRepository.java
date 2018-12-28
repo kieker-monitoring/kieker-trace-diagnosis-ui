@@ -32,11 +32,11 @@ import com.carrotsearch.hppc.LongObjectHashMap;
 import com.carrotsearch.hppc.LongObjectMap;
 
 import kieker.diagnosis.backend.base.exception.BusinessException;
-import kieker.diagnosis.backend.base.monitoring.MonitoringProbe;
-import kieker.diagnosis.backend.base.monitoring.MonitoringUtil;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.data.MonitoringLogService;
+import kieker.diagnosis.backend.monitoring.MonitoringProbe;
+import kieker.diagnosis.backend.monitoring.MonitoringUtil;
 
 /**
  * This is a temporary storage used during an import of monitoring logs. Readers can use it to store the read data.

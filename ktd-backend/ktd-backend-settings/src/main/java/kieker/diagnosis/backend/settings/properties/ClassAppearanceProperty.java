@@ -18,7 +18,7 @@ package kieker.diagnosis.backend.settings.properties;
 
 import com.google.inject.Singleton;
 
-import kieker.diagnosis.backend.base.service.properties.EnumApplicationProperty;
+import kieker.diagnosis.backend.properties.EnumApplicationProperty;
 import kieker.diagnosis.backend.settings.ClassAppearance;
 
 /**

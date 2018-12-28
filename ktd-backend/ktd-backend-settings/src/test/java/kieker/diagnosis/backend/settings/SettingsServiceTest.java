@@ -30,7 +30,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import kieker.diagnosis.backend.base.KiekerTraceDiagnosisServiceBaseModule;
-import kieker.diagnosis.backend.base.service.properties.PropertiesService;
+import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.settings.ClassAppearance;
 import kieker.diagnosis.backend.settings.MethodAppearance;
 import kieker.diagnosis.backend.settings.MethodCallAggregation;

@@ -23,8 +23,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.util.Callback;
 import kieker.diagnosis.backend.base.service.ServiceFactory;
-import kieker.diagnosis.backend.base.service.properties.PropertiesService;
 import kieker.diagnosis.backend.data.MethodCall;
+import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.settings.properties.TimeUnitProperty;
 
 /**
