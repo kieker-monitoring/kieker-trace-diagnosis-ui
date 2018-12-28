@@ -60,11 +60,6 @@ public class MonitoringLogService extends ServiceBase {
 	private int ivIncompleteTraces;
 	private String ivDirectory;
 
-	public MonitoringLogService( ) {
-		// This is one of the few services that is allowed to store a state
-		super( false );
-	}
-
 	public void importMonitoringLog( final File aDirectoryOrFile, final ImportType aType ) {
 		final long tin = System.currentTimeMillis( );
 
@@ -122,15 +117,15 @@ public class MonitoringLogService extends ServiceBase {
 	private File extractIfNecessary( final File aDirectoryOrFile, final ImportType aType ) throws ZipException, IOException {
 		final File directory;
 		switch ( aType ) {
-			case DIRECTORY:
-				directory = aDirectoryOrFile;
+		case DIRECTORY:
+			directory = aDirectoryOrFile;
 			break;
-			case ZIP_FILE:
-				directory = extractZIPFile( aDirectoryOrFile );
+		case ZIP_FILE:
+			directory = extractZIPFile( aDirectoryOrFile );
 			break;
-			default:
-				// Should not happen
-				directory = null;
+		default:
+			// Should not happen
+			directory = null;
 			break;
 
 		}

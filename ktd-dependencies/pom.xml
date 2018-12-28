@@ -24,6 +24,7 @@
 		<guava.version>23.0</guava.version>
 		<javafx.version>11</javafx.version>
 		<mockito.version>2.23.4</mockito.version>
+		<archunit.version>0.9.3</archunit.version>
 		<maven.compiler.version>3.8.0</maven.compiler.version>
 		<resources.plugin.version>3.0.2</resources.plugin.version>
 		<jacoco.plugin.version>0.8.2</jacoco.plugin.version>
@@ -186,6 +187,11 @@
 				<groupId>org.mockito</groupId>
 				<artifactId>mockito-core</artifactId>
 				<version>${mockito.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.tngtech.archunit</groupId>
+				<artifactId>archunit</artifactId>
+				<version>${archunit.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.testfx</groupId>

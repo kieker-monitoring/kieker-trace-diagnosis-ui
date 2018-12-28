@@ -1,17 +1,17 @@
-/*************************************************************************** 
- * Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)         
- *                                                                           
- * Licensed under the Apache License, Version 2.0 (the "License");           
- * you may not use this file except in compliance with the License.          
- * You may obtain a copy of the License at                                   
- *                                                                           
- *     http://www.apache.org/licenses/LICENSE-2.0                            
- *                                                                           
- * Unless required by applicable law or agreed to in writing, software       
- * distributed under the License is distributed on an "AS IS" BASIS,         
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  
- * See the License for the specific language governing permissions and       
- * limitations under the License.                                            
+/***************************************************************************
+ * Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  ***************************************************************************/
 
 package kieker.diagnosis.backend.properties;
@@ -38,19 +38,14 @@ public class PropertiesService extends ServiceBase {
 	@Inject
 	private Injector ivInjector;
 
-	public PropertiesService( ) {
-		super( false );
-	}
-
 	/**
 	 * Delivers the value of the given application property or its default value, if the property has not been set yet. This method is cached.
 	 *
-	 * @param aPropertyClass
-	 *            The property.
+	 * @param aPropertyClass The property.
 	 *
 	 * @return The value of the given property.
 	 */
-	@UseCache ( cacheName = "applicationProperties" )
+	@UseCache( cacheName = "applicationProperties" )
 	public <T> T loadApplicationProperty( final Class<? extends ApplicationProperty<T>> aPropertyClass ) {
 		final ApplicationProperty<T> property = getProperty( aPropertyClass );
 		final String key = property.getKey( );
@@ -65,12 +60,10 @@ public class PropertiesService extends ServiceBase {
 	/**
 	 * Saves the given application property.
 	 *
-	 * @param aPropertyClass
-	 *            The property.
-	 * @param aValue
-	 *            The new value of the property.
+	 * @param aPropertyClass The property.
+	 * @param aValue         The new value of the property.
 	 */
-	@InvalidateCache ( cacheName = "applicationProperties", keyParameter = 0 )
+	@InvalidateCache( cacheName = "applicationProperties", keyParameter = 0 )
 	public <T> void saveApplicationProperty( final Class<? extends ApplicationProperty<T>> aPropertyClass, final T aValue ) {
 		final ApplicationProperty<T> property = getProperty( aPropertyClass );
 		final String key = property.getKey( );
@@ -94,12 +87,11 @@ public class PropertiesService extends ServiceBase {
 	/**
 	 * Delivers the value of the given system property. This method is cached.
 	 *
-	 * @param aPropertyClass
-	 *            The property.
+	 * @param aPropertyClass The property.
 	 *
 	 * @return The value of the given property.
 	 */
-	@UseCache ( cacheName = "systemProperties" )
+	@UseCache( cacheName = "systemProperties" )
 	public <T> T loadSystemProperty( final Class<? extends SystemProperty<T>> aPropertyClass ) {
 		final SystemProperty<T> property = getProperty( aPropertyClass );
 		final String key = property.getKey( );
