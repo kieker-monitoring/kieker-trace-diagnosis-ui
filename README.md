@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/kieker-monitoring/kieker-trace-diagnosis-ui.svg?branch=master)](https://travis-ci.org/kieker-monitoring/kieker-trace-diagnosis-ui)
-[![Coverage](https://codecov.io/gh/kieker-monitoring/kieker-trace-diagnosis-ui/branch/master/graphs/badge.svg?branch=master)](https://codecov.io/gh/kieker-monitoring/kieker-trace-diagnosis-ui/branch/master)
+[![Build Status](https://travis-ci.org/kieker-monitoring/kieker-trace-diagnosis-ui.svg?branch=refactoring)](https://travis-ci.org/kieker-monitoring/kieker-trace-diagnosis-ui)
+[![Coverage](https://codecov.io/gh/kieker-monitoring/kieker-trace-diagnosis-ui/branch/master/graphs/badge.svg?branch=master)](https://codecov.io/gh/kieker-monitoring/kieker-trace-diagnosis-ui/branch/refactoring)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 # Description
