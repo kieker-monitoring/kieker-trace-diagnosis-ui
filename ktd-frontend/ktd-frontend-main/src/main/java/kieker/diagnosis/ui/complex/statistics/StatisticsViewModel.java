@@ -21,8 +21,8 @@ import java.util.Optional;
 
 import com.google.inject.Singleton;
 
-import kieker.diagnosis.architecture.ui.ViewModelBase;
 import kieker.diagnosis.backend.search.statistics.Statistics;
+import kieker.diagnosis.frontend.base.ui.ViewModelBase;
 
 /**
  * The view model of the statistics tab.

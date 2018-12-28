@@ -14,29 +14,30 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.ui.atom;
+package kieker.diagnosis.frontend.base.atom;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
-import javafx.util.converter.FloatStringConverter;
+import javafx.util.converter.IntegerStringConverter;
 
 /**
- * This is an implementation of a {@link TextField} which allows only to enter {@code float} values.
+ * This is an implementation of a {@link TextField} which allows only to enter {@code int} values.
  *
  * @author Nils Christian Ehmke
  */
-public final class FloatTextField extends TextField {
+public final class IntegerTextField extends TextField {
 
-	private final ObjectProperty<Float> ivValueProperty = new SimpleObjectProperty<>( );
+	private final ObjectProperty<Integer> ivValueProperty = new SimpleObjectProperty<>( );
 
-	public FloatTextField( ) {
+	public IntegerTextField( ) {
 		// We combine a converter with a filter. The converter will make sure that only valid numbers are in the field once it looses focus. The filter will
 		// make sure that only numbers can be entered in the first place. As the pattern requires us also to add a minus sign though, we cannot control
 		// everything just with the filter.
-		setTextFormatter( new TextFormatter<>( new FloatStringConverter( ), null, new NumericFloatingPointFilter( ) ) );
-		textProperty( ).bindBidirectional( ivValueProperty, new FloatStringConverter( ) );
+		setTextFormatter( new TextFormatter<>( new IntegerStringConverter( ), null, new NumericIntegerFilter( ) ) );
+
+		textProperty( ).bindBidirectional( ivValueProperty, new IntegerStringConverter( ) );
 	}
 
 	/**
@@ -44,7 +45,7 @@ public final class FloatTextField extends TextField {
 	 *
 	 * @param aValue The new value.
 	 */
-	public void setValue( final Float aValue ) {
+	public void setValue( final Integer aValue ) {
 		ivValueProperty.set( aValue );
 	}
 
@@ -53,11 +54,11 @@ public final class FloatTextField extends TextField {
 	 *
 	 * @return The current value.
 	 */
-	public Float getValue( ) {
+	public Integer getValue( ) {
 		return ivValueProperty.get( );
 	}
 
-	public ObjectProperty<Float> valueProperty( ) {
+	public ObjectProperty<Integer> valueProperty( ) {
 		return ivValueProperty;
 	}
 

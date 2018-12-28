@@ -20,13 +20,13 @@ import java.util.List;
 
 import com.google.inject.Singleton;
 
-import kieker.diagnosis.architecture.ui.ControllerBase;
 import kieker.diagnosis.backend.base.exception.BusinessException;
 import kieker.diagnosis.backend.base.exception.BusinessRuntimeException;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.search.traces.TracesFilter;
 import kieker.diagnosis.backend.search.traces.TracesService;
 import kieker.diagnosis.backend.settings.SettingsService;
+import kieker.diagnosis.frontend.base.ui.ControllerBase;
 import kieker.diagnosis.ui.complex.main.MainController;
 
 /**

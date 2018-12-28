@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.ui.atom;
+package kieker.diagnosis.frontend.base.atom;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 import org.junit.Test;
 
 import javafx.scene.control.TextFormatter.Change;
+import kieker.diagnosis.frontend.base.atom.NumericIntegerFilter;
 
 /**
  * Test class for the {@link NumericIntegerFilter}.

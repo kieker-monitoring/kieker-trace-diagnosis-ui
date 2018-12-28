@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.architecture.common;
+package kieker.diagnosis.frontend.base.common;
 
 import java.io.InputStream;
 import java.io.PrintWriter;

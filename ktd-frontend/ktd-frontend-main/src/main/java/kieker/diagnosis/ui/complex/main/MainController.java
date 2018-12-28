@@ -33,9 +33,6 @@ import javafx.scene.image.Image;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import kieker.diagnosis.architecture.common.ExceptionUtil;
-import kieker.diagnosis.architecture.ui.ControllerBase;
-import kieker.diagnosis.architecture.ui.ViewBase;
 import kieker.diagnosis.backend.base.exception.BusinessException;
 import kieker.diagnosis.backend.base.exception.BusinessRuntimeException;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
@@ -51,6 +48,9 @@ import kieker.diagnosis.backend.properties.DevelopmentModeProperty;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.settings.Settings;
 import kieker.diagnosis.backend.settings.SettingsService;
+import kieker.diagnosis.frontend.base.common.ExceptionUtil;
+import kieker.diagnosis.frontend.base.ui.ControllerBase;
+import kieker.diagnosis.frontend.base.ui.ViewBase;
 import kieker.diagnosis.ui.complex.main.properties.CloseWithoutPromptProperty;
 import kieker.diagnosis.ui.complex.main.properties.LastExportPathProperty;
 import kieker.diagnosis.ui.complex.main.properties.LastImportPathProperty;
@@ -187,7 +187,7 @@ public class MainController extends ControllerBase<MainViewModel> {
 			final Image icon = new Image( iconStream );
 			final Stage stage = ( Stage ) dialogPane.getScene( ).getWindow( );
 			stage.getIcons( ).add( icon );
-			dialogPane.getStylesheets( ).add( "/kieker/diagnosis/architecture/ui/Dialog.css" );
+			dialogPane.getStylesheets( ).add( "/kieker/diagnosis/frontend/base/ui/Dialog.css" );
 
 			// If the user clicked ok, we close the window
 			final Optional<ButtonType> result = alert.showAndWait( );
@@ -279,7 +279,7 @@ public class MainController extends ControllerBase<MainViewModel> {
 			final DialogPane dialogPane = textInputDialog.getDialogPane( );
 			final Stage stage = ( Stage ) dialogPane.getScene( ).getWindow( );
 			stage.getIcons( ).add( icon );
-			dialogPane.getStylesheets( ).add( "/kieker/diagnosis/architecture/ui/Dialog.css" );
+			dialogPane.getStylesheets( ).add( "/kieker/diagnosis/frontend/base/ui/Dialog.css" );
 			final Optional<String> result = textInputDialog.showAndWait( );
 
 			if ( result.isPresent( ) ) {

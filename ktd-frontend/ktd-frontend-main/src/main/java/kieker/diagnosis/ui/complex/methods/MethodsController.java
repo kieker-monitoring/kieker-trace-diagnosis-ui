@@ -20,7 +20,6 @@ import java.util.List;
 
 import com.google.inject.Singleton;
 
-import kieker.diagnosis.architecture.ui.ControllerBase;
 import kieker.diagnosis.backend.base.exception.BusinessException;
 import kieker.diagnosis.backend.base.exception.BusinessRuntimeException;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
@@ -30,6 +29,7 @@ import kieker.diagnosis.backend.search.methods.MethodsFilter;
 import kieker.diagnosis.backend.search.methods.MethodsService;
 import kieker.diagnosis.backend.search.methods.SearchType;
 import kieker.diagnosis.backend.settings.SettingsService;
+import kieker.diagnosis.frontend.base.ui.ControllerBase;
 import kieker.diagnosis.ui.complex.main.MainController;
 
 /**

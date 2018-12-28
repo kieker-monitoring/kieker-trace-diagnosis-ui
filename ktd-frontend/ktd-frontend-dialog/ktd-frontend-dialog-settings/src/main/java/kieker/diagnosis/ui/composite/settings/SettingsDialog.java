@@ -38,16 +38,16 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import kieker.diagnosis.architecture.ui.EnumStringConverter;
 import kieker.diagnosis.backend.settings.ClassAppearance;
 import kieker.diagnosis.backend.settings.MethodAppearance;
 import kieker.diagnosis.backend.settings.MethodCallAggregation;
 import kieker.diagnosis.backend.settings.Settings;
 import kieker.diagnosis.backend.settings.TimestampAppearance;
-import kieker.diagnosis.ui.atom.FloatTextField;
-import kieker.diagnosis.ui.atom.IntegerTextField;
-import kieker.diagnosis.ui.mixin.DialogMixin;
-import kieker.diagnosis.ui.mixin.ImageMixin;
+import kieker.diagnosis.frontend.base.atom.FloatTextField;
+import kieker.diagnosis.frontend.base.atom.IntegerTextField;
+import kieker.diagnosis.frontend.base.mixin.DialogMixin;
+import kieker.diagnosis.frontend.base.mixin.ImageMixin;
+import kieker.diagnosis.frontend.base.ui.EnumStringConverter;
 
 public final class SettingsDialog extends Dialog<Settings> implements DialogMixin, ImageMixin {
 

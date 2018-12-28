@@ -24,8 +24,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.stage.Window;
-import kieker.diagnosis.architecture.ui.ViewBase;
-import kieker.diagnosis.architecture.ui.ViewModelBase;
+import kieker.diagnosis.frontend.base.ui.ViewBase;
+import kieker.diagnosis.frontend.base.ui.ViewModelBase;
 
 @Singleton
 public class MainViewModel extends ViewModelBase<MainView> {

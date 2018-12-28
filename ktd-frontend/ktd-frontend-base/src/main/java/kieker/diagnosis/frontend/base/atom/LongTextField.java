@@ -14,7 +14,7 @@
  * limitations under the License.                                            
  ***************************************************************************/
 
-package kieker.diagnosis.ui.atom;
+package kieker.diagnosis.frontend.base.atom;
 
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;

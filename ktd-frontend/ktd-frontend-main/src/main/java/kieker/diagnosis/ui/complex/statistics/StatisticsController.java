@@ -23,9 +23,9 @@ import java.util.Optional;
 import com.google.inject.Singleton;
 
 import javafx.application.Platform;
-import kieker.diagnosis.architecture.ui.ControllerBase;
 import kieker.diagnosis.backend.search.statistics.Statistics;
 import kieker.diagnosis.backend.search.statistics.StatisticsService;
+import kieker.diagnosis.frontend.base.ui.ControllerBase;
 
 /**
  * The controller of the statistics tab.

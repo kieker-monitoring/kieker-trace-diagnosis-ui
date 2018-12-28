@@ -30,8 +30,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import kieker.diagnosis.backend.base.exception.TechnicalException;
-import kieker.diagnosis.ui.mixin.DialogMixin;
-import kieker.diagnosis.ui.mixin.ImageMixin;
+import kieker.diagnosis.frontend.base.mixin.DialogMixin;
+import kieker.diagnosis.frontend.base.mixin.ImageMixin;
 
 public final class ManualDialog extends Alert implements DialogMixin, ImageMixin {
 

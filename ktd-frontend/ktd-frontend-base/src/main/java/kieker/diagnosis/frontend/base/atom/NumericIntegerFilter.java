@@ -14,37 +14,33 @@
  * limitations under the License.                                            
  ***************************************************************************/
 
-package kieker.diagnosis.architecture.ui;
+package kieker.diagnosis.frontend.base.atom;
 
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
+import java.util.function.UnaryOperator;
+import java.util.regex.Pattern;
 
-import kieker.diagnosis.architecture.common.ExceptionUtil;
-import kieker.diagnosis.backend.base.common.ClassUtil;
+import javafx.scene.control.TextFormatter.Change;
 
 /**
- * This is an interceptor which handles all kind of {@link Throwable Throwables}. It is usually used around controller actions. If an exception occurs, the
- * interceptor logs the exception, shows an error dialog, and returns {@code null}. If the exception is a {@link BusinessRuntimeException}, the error is not
- * logged and the error dialog indicates that the error is a business error.
+ * A simple filter which accepts only numeric integer values (and a single minus sign).
  *
  * @author Nils Christian Ehmke
  */
-public final class ErrorHandlingInterceptor implements MethodInterceptor {
+final class NumericIntegerFilter implements UnaryOperator<Change> {
+
+	private static final Pattern cvNumericPattern = Pattern.compile( "(-)?\\d*" );
 
 	@Override
-	public Object invoke( final MethodInvocation aMethodInvocation ) throws Throwable {
-		try {
-			return aMethodInvocation.proceed( );
-		} catch ( final Throwable ex ) {
-			// Get the logger name
-			final Object controller = aMethodInvocation.getThis( );
-			final Class<?> controllerClass = ClassUtil.getRealClass( controller.getClass( ) );
-
-			// Now handle the exception
-			ExceptionUtil.handleException( ex, controllerClass.getName( ) );
-
+	public Change apply( final Change aChange ) {
+		if ( onlyNumeric( aChange.getControlNewText( ) ) ) {
+			return aChange;
+		} else {
 			return null;
 		}
+	}
+
+	private boolean onlyNumeric( final String aText ) {
+		return cvNumericPattern.matcher( aText ).matches( );
 	}
 
 }

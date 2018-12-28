@@ -22,8 +22,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import kieker.diagnosis.ui.mixin.DialogMixin;
-import kieker.diagnosis.ui.mixin.ImageMixin;
+import kieker.diagnosis.frontend.base.mixin.DialogMixin;
+import kieker.diagnosis.frontend.base.mixin.ImageMixin;
 
 /**
  * The about dialog shows some information (like the license) about the tool.

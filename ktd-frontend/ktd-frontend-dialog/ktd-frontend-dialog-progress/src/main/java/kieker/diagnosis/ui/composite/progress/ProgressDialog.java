@@ -69,7 +69,7 @@ public class ProgressDialog extends VBox {
 			getChildren( ).add( ivLabel );
 		}
 		
-		getStylesheets( ).add( "/kieker/diagnosis/architecture/ui/Dialog.css" );
+		getStylesheets( ).add( "/kieker/diagnosis/frontend/base/ui/Dialog.css" );
 	}
 
 	public void open( final Window aParent ) {

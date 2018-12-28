@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.architecture.ui;
+package kieker.diagnosis.frontend.base.ui;
 
 import java.net.URL;
 import java.util.ResourceBundle;

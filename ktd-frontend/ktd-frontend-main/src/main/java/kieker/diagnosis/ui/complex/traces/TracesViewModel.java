@@ -24,7 +24,6 @@ import java.util.Stack;
 import com.google.inject.Singleton;
 
 import javafx.scene.control.TreeItem;
-import kieker.diagnosis.architecture.ui.ViewModelBase;
 import kieker.diagnosis.backend.base.exception.BusinessException;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.pattern.PatternService;
@@ -35,6 +34,7 @@ import kieker.diagnosis.backend.settings.properties.MaxNumberOfMethodCallsProper
 import kieker.diagnosis.backend.settings.properties.MethodCallAggregationProperty;
 import kieker.diagnosis.backend.settings.properties.MethodCallThresholdProperty;
 import kieker.diagnosis.backend.settings.properties.ShowUnmonitoredTimeProperty;
+import kieker.diagnosis.frontend.base.ui.ViewModelBase;
 import kieker.diagnosis.ui.complex.traces.aggregator.Aggregator;
 import kieker.diagnosis.ui.complex.traces.aggregator.DurationAggregator;
 import kieker.diagnosis.ui.complex.traces.aggregator.IdentityAggregator;

@@ -18,10 +18,10 @@ package kieker.diagnosis;
 
 import com.google.inject.AbstractModule;
 
-import kieker.diagnosis.architecture.FrontendBaseModule;
 import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.backend.cache.CacheModule;
 import kieker.diagnosis.backend.monitoring.MonitoringModule;
+import kieker.diagnosis.frontend.base.FrontendBaseModule;
 
 /**
  * This is the Guice module for the frontend.

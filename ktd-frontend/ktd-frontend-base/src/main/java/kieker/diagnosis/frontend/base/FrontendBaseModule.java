@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.architecture;
+package kieker.diagnosis.frontend.base;
 
 import java.lang.reflect.Method;
 
@@ -22,10 +22,10 @@ import com.google.inject.AbstractModule;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.matcher.Matchers;
 
-import kieker.diagnosis.architecture.ui.ControllerBase;
-import kieker.diagnosis.architecture.ui.ErrorHandlingInterceptor;
-import kieker.diagnosis.architecture.ui.ViewModelBase;
 import kieker.diagnosis.backend.monitoring.MonitoringInterceptor;
+import kieker.diagnosis.frontend.base.ui.ControllerBase;
+import kieker.diagnosis.frontend.base.ui.ErrorHandlingInterceptor;
+import kieker.diagnosis.frontend.base.ui.ViewModelBase;
 
 /**
  * This is the Guice module for the frontend base.

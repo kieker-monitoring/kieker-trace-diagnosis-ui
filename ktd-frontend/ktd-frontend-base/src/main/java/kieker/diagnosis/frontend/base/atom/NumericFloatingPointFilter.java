@@ -14,7 +14,7 @@
  * limitations under the License.                                            
  ***************************************************************************/
 
-package kieker.diagnosis.ui.atom;
+package kieker.diagnosis.frontend.base.atom;
 
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
@@ -22,13 +22,13 @@ import java.util.regex.Pattern;
 import javafx.scene.control.TextFormatter.Change;
 
 /**
- * A simple filter which accepts only numeric integer values (and a single minus sign).
+ * A simple filter which accepts only numeric floating point values (and a single minus sign).
  *
  * @author Nils Christian Ehmke
  */
-final class NumericIntegerFilter implements UnaryOperator<Change> {
+final class NumericFloatingPointFilter implements UnaryOperator<Change> {
 
-	private static final Pattern cvNumericPattern = Pattern.compile( "(-)?\\d*" );
+	private static final Pattern cvNumericPattern = Pattern.compile( "(-)?\\d*(\\.\\d*)?" );
 
 	@Override
 	public Change apply( final Change aChange ) {

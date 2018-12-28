@@ -29,7 +29,7 @@ import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import kieker.diagnosis.architecture.ui.ViewBase;
+import kieker.diagnosis.frontend.base.ui.ViewBase;
 import kieker.diagnosis.ui.complex.aggregatedmethods.AggregatedMethodsView;
 import kieker.diagnosis.ui.complex.methods.MethodsView;
 import kieker.diagnosis.ui.complex.statistics.StatisticsView;

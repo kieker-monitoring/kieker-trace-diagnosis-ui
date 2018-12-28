@@ -29,7 +29,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import kieker.diagnosis.architecture.ui.ViewBase;
+import kieker.diagnosis.frontend.base.ui.ViewBase;
 
 /**
  * The view of the statistics tab.

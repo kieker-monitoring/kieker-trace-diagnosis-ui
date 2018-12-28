@@ -26,9 +26,9 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import kieker.diagnosis.FrontendModule;
+import kieker.diagnosis.frontend.base.mixin.ImageMixin;
 import kieker.diagnosis.ui.complex.main.MainController;
 import kieker.diagnosis.ui.complex.main.MainView;
-import kieker.diagnosis.ui.mixin.ImageMixin;
 
 /**
  * This is the application's main class.

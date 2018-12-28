@@ -14,7 +14,7 @@
  * limitations under the License.                                            
  ***************************************************************************/
 
-package kieker.diagnosis.architecture.common;
+package kieker.diagnosis.frontend.base.common;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -28,6 +28,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import kieker.diagnosis.backend.base.exception.BusinessException;
 import kieker.diagnosis.backend.base.exception.BusinessRuntimeException;
+import kieker.diagnosis.frontend.base.common.ExceptionUtil;
 
 /**
  * This is a UI test which checks that the exception handling is working as expected.

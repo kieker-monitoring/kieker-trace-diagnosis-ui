@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.ui.mixin;
+package kieker.diagnosis.frontend.base.mixin;
 
 import java.net.URL;
 

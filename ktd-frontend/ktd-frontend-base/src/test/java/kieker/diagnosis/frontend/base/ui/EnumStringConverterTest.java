@@ -14,13 +14,15 @@
  * limitations under the License.                                            
  ***************************************************************************/
 
-package kieker.diagnosis.architecture.ui;
+package kieker.diagnosis.frontend.base.ui;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
+
+import kieker.diagnosis.frontend.base.ui.EnumStringConverter;
 
 /**
  * Test class for {@link EnumStringConverter}.

@@ -15,13 +15,13 @@ import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
 
-import kieker.diagnosis.architecture.ui.ControllerBase;
-import kieker.diagnosis.architecture.ui.ViewBase;
-import kieker.diagnosis.architecture.ui.ViewModelBase;
 import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.data.MonitoringLogService;
 import kieker.diagnosis.backend.properties.ApplicationProperty;
 import kieker.diagnosis.backend.properties.PropertiesService;
+import kieker.diagnosis.frontend.base.ui.ControllerBase;
+import kieker.diagnosis.frontend.base.ui.ViewBase;
+import kieker.diagnosis.frontend.base.ui.ViewModelBase;
 
 public final class ArchitectureTest {
 
