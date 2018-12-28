@@ -14,17 +14,32 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.backend.base;
+package kieker.diagnosis.backend.base.service;
 
-import com.google.inject.AbstractModule;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.junit.Assert.assertThat;
 
-import kieker.diagnosis.backend.base.service.ServiceFactory;
+import org.junit.Test;
 
-public final class KiekerTraceDiagnosisServiceBaseModule extends AbstractModule {
+import com.google.inject.Guice;
 
-	@Override
-	protected void configure( ) {
-		requestStaticInjection( ServiceFactory.class );
+import kieker.diagnosis.backend.base.ServiceBaseModule;
+
+/**
+ * Test class for {@link ClassUtil}.
+ *
+ * @author Nils Christian Ehmke
+ */
+public final class ServiceFactoryTest {
+
+	@Test
+	public void testGetService( ) {
+		Guice.createInjector( new ServiceBaseModule( ) );
+		assertThat( ServiceFactory.getService( TestService.class ), is( notNullValue( ) ) );
+	}
+
+	private static final class TestService implements Service {
 	}
 
 }

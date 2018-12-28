@@ -31,7 +31,7 @@ import org.junit.Test;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import kieker.diagnosis.backend.base.KiekerTraceDiagnosisServiceBaseModule;
+import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.data.MonitoringLogService;
 import kieker.diagnosis.backend.search.ServiceMockModule;
@@ -52,7 +52,7 @@ public final class StatisticsServiceTest {
 	public void setUp( ) {
 		dataService = mock( MonitoringLogService.class );
 
-		final Injector injector = Guice.createInjector( new KiekerTraceDiagnosisServiceBaseModule( ), new ServiceMockModule( MonitoringLogService.class, dataService ) );
+		final Injector injector = Guice.createInjector( new ServiceBaseModule( ), new ServiceMockModule( MonitoringLogService.class, dataService ) );
 		statisticsService = injector.getInstance( StatisticsService.class );
 	}
 

@@ -17,7 +17,7 @@
 package kieker.diagnosis.backend.base.common;
 
 /**
- * A util class to get the real classes of proxied objects.
+ * A util class to get the real classes from objects proxied by Guice.
  *
  * @author Nils Christian Ehmke
  */

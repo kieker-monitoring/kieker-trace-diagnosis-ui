@@ -34,7 +34,7 @@ import com.google.inject.matcher.Matchers;
  *
  * @author Nils Christian Ehmke
  */
-public class ClassUtilTest {
+public final class ClassUtilTest {
 
 	@Rule
 	public final ExpectedException ivExpectedException = ExpectedException.none( );

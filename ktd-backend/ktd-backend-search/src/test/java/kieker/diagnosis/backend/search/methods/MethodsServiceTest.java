@@ -29,7 +29,7 @@ import org.junit.Test;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import kieker.diagnosis.backend.base.KiekerTraceDiagnosisServiceBaseModule;
+import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.data.MonitoringLogService;
 import kieker.diagnosis.backend.search.methods.MethodsFilter;
@@ -48,7 +48,7 @@ public class MethodsServiceTest {
 
 	@Before
 	public void setUp( ) {
-		final Injector injector = Guice.createInjector( new KiekerTraceDiagnosisServiceBaseModule( ) );
+		final Injector injector = Guice.createInjector( new ServiceBaseModule( ) );
 		ivMethodsService = injector.getInstance( MethodsService.class );
 		ivDataService = injector.getInstance( MonitoringLogService.class );
 	}

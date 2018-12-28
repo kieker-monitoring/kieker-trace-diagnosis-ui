@@ -14,29 +14,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis;
+package kieker.diagnosis.backend.base;
 
 import com.google.inject.AbstractModule;
 
-import kieker.diagnosis.architecture.KiekerTraceDiagnosisArchitectureModule;
-import kieker.diagnosis.backend.base.ServiceBaseModule;
-import kieker.diagnosis.backend.cache.KiekerTraceDiagnosisCacheModule;
-import kieker.diagnosis.backend.monitoring.KiekerTraceDiagnosisMonitoringModule;
+import kieker.diagnosis.backend.base.service.ServiceFactory;
 
 /**
- * This is the Guice module for the UI.
+ * This is the Guice module for the service base.
  *
  * @author Nils Christian Ehmke
  */
-public class KiekerTraceDiagnosisUIModule extends AbstractModule {
+public final class ServiceBaseModule extends AbstractModule {
 
 	@Override
 	protected void configure( ) {
-		// We need to make sure that the Guice module from the service and the architecture sub-projects are installed
-		install( new KiekerTraceDiagnosisMonitoringModule( ) );
-		install( new KiekerTraceDiagnosisCacheModule( ) );
-		install( new ServiceBaseModule( ) );
-		install( new KiekerTraceDiagnosisArchitectureModule( ) );
+		requestStaticInjection( ServiceFactory.class );
 	}
 
 }
