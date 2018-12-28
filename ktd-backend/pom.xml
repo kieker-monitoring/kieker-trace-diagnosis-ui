@@ -22,6 +22,9 @@
 		<module>ktd-backend-data</module>
 		<module>ktd-backend-filter</module>
 		<module>ktd-backend-pattern</module>
+		<module>ktd-backend-monitoring</module>
+		<module>ktd-backend-cache</module>
+		<module>ktd-backend-properties</module>
 	</modules>
 	
 </project>

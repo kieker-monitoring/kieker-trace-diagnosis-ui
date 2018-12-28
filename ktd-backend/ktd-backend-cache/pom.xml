@@ -11,31 +11,12 @@
 		<relativePath>../../ktd-parent</relativePath>
 	</parent>
 
-	<artifactId>ktd-backend-pattern</artifactId>
+	<artifactId>ktd-backend-cache</artifactId>
 
 	<dependencies>
 		<dependency>
 			<groupId>net.kieker-monitoring</groupId>
 			<artifactId>ktd-backend-base</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.kieker-monitoring</groupId>
-			<artifactId>ktd-backend-cache</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-core</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-all</artifactId>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

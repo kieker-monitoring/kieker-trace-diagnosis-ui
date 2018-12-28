@@ -109,6 +109,21 @@
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
+				<artifactId>ktd-backend-properties</artifactId>
+				<version>5.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>net.kieker-monitoring</groupId>
+				<artifactId>ktd-backend-monitoring</artifactId>
+				<version>5.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>net.kieker-monitoring</groupId>
+				<artifactId>ktd-backend-cache</artifactId>
+				<version>5.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>kieker</artifactId>
 				<version>${kieker.version}</version>
 			</dependency>

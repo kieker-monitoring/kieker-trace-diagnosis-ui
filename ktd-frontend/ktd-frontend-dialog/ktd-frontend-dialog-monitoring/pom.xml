@@ -18,6 +18,10 @@
 			<groupId>net.kieker-monitoring</groupId>
 			<artifactId>ktd-frontend-base</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-backend-monitoring</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

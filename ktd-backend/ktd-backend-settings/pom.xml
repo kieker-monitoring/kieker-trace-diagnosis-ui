@@ -19,6 +19,10 @@
 			<artifactId>ktd-backend-base</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-backend-properties</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
