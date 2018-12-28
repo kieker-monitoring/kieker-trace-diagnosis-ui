@@ -27,9 +27,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import kieker.diagnosis.backend.base.service.ServiceBase;
+import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.pattern.PatternService;
 
 /**
@@ -38,7 +39,10 @@ import kieker.diagnosis.backend.pattern.PatternService;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class FilterService extends ServiceBase {
+public class FilterService implements Service {
+
+	@Inject
+	private PatternService patternService;
 
 	public <T> Predicate<T> getLongPredicate( final Function<T, Long> aLongFunction, final Long aSearchLong ) {
 		if ( aSearchLong == null ) {
@@ -55,7 +59,6 @@ public class FilterService extends ServiceBase {
 
 		if ( aUseRegExpr ) {
 			// If we use a regular expression, we have to compile the pattern
-			final PatternService patternService = getService( PatternService.class );
 			final Pattern pattern = patternService.compilePattern( aSearchString );
 
 			// The returned function checks whether the actual string matches on the pattern
@@ -74,8 +77,7 @@ public class FilterService extends ServiceBase {
 	/**
 	 * This method conjuncts a given list of predicates. That means they are AND-linked. If the list is empty, an always true predicate is returned.
 	 *
-	 * @param aPredicates
-	 *            The (possible empty) list of predicates.
+	 * @param aPredicates The (possible empty) list of predicates.
 	 *
 	 * @return The conjuncted predicates.
 	 */

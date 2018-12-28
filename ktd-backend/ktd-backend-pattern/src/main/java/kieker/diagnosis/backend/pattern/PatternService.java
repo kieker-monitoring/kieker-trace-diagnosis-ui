@@ -19,9 +19,12 @@ package kieker.diagnosis.backend.pattern;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.inject.Singleton;
 
-import kieker.diagnosis.backend.base.service.ServiceBase;
+import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.cache.UseCache;
 
 /**
@@ -30,23 +33,24 @@ import kieker.diagnosis.backend.cache.UseCache;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class PatternService extends ServiceBase {
+public class PatternService implements Service {
+
+	private static final Logger LOGGER = LogManager.getLogger( PatternService.class );
 
 	/**
 	 * Checks whether the given pattern is valid. In other words: Is the pattern compilable by {@link #compilePattern(String)}. This method is cached.
 	 *
-	 * @param aPattern
-	 *            The pattern to check.
+	 * @param aPattern The pattern to check.
 	 *
 	 * @return true if and only if the pattern is valid.
 	 */
-	@UseCache ( cacheName = "validPattern" )
+	@UseCache( cacheName = "validPattern" )
 	public boolean isValidPattern( final String aPattern ) {
 		try {
 			Pattern.compile( aPattern );
 			return true;
 		} catch ( final PatternSyntaxException | NullPointerException ex ) {
-			getLogger( ).debug( ( ) -> String.format( "Pattern \"%s\" is invalid", aPattern ), ex );
+			LOGGER.debug( ( ) -> String.format( "Pattern \"%s\" is invalid", aPattern ), ex );
 
 			return false;
 		}
@@ -55,12 +59,11 @@ public class PatternService extends ServiceBase {
 	/**
 	 * Compiles the given pattern. This method is cached.
 	 *
-	 * @param aPattern
-	 *            The pattern to compile.
+	 * @param aPattern The pattern to compile.
 	 *
 	 * @return The compiled pattern.
 	 */
-	@UseCache ( cacheName = "pattern" )
+	@UseCache( cacheName = "pattern" )
 	public Pattern compilePattern( final String aPattern ) {
 		return Pattern.compile( aPattern );
 	}

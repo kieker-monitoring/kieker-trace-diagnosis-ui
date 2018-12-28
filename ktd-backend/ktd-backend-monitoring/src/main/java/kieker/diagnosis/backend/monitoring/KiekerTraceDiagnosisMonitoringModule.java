@@ -6,7 +6,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.matcher.Matchers;
 
-import kieker.diagnosis.backend.base.service.ServiceBase;
+import kieker.diagnosis.backend.base.service.Service;
 
 public final class KiekerTraceDiagnosisMonitoringModule extends AbstractModule {
 
@@ -14,7 +14,7 @@ public final class KiekerTraceDiagnosisMonitoringModule extends AbstractModule {
 	protected void configure( ) {
 		final MonitoringInterceptor monitoringInterceptor = new MonitoringInterceptor( );
 
-		bindInterceptor( Matchers.subclassesOf( ServiceBase.class ), Matchers.not( new SyntheticMethodMatcher( ) ), monitoringInterceptor );
+		bindInterceptor( Matchers.subclassesOf( Service.class ), Matchers.not( new SyntheticMethodMatcher( ) ), monitoringInterceptor );
 	}
 	
 

@@ -16,25 +16,11 @@
 
 package kieker.diagnosis.backend.base.service;
 
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-
 /**
- * This factory can be used to retrieve a service from the CDI context, even if the requesting class is not in the context.
+ * This is a marker interface for each service.
  *
  * @author Nils Christian Ehmke
  */
-public final class ServiceFactory {
-
-	@Inject
-	private static Injector cvInjector;
-
-	private ServiceFactory( ) {
-		// Avoid instantiation
-	}
-
-	public static <S extends Service> S getService( final Class<S> aServiceClass ) {
-		return cvInjector.getInstance( aServiceClass );
-	}
+public interface Service {
 
 }

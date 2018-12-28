@@ -21,7 +21,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import com.google.inject.Singleton;
 
 import kieker.common.configuration.Configuration;
-import kieker.diagnosis.backend.base.service.ServiceBase;
+import kieker.diagnosis.backend.base.service.Service;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -37,7 +37,7 @@ import kieker.monitoring.writer.filesystem.BinaryFileWriter;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class MonitoringService extends ServiceBase {
+public class MonitoringService implements Service {
 
 	/**
 	 * Delivers the current status of the monitoring.

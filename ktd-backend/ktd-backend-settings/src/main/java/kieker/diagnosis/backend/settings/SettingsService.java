@@ -18,9 +18,10 @@ package kieker.diagnosis.backend.settings;
 
 import java.util.concurrent.TimeUnit;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import kieker.diagnosis.backend.base.service.ServiceBase;
+import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.settings.properties.ClassAppearanceProperty;
 import kieker.diagnosis.backend.settings.properties.MaxNumberOfMethodCallsProperty;
@@ -37,7 +38,10 @@ import kieker.diagnosis.backend.settings.properties.TimestampProperty;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class SettingsService extends ServiceBase {
+public class SettingsService implements Service {
+
+	@Inject
+	private PropertiesService propertiesService;
 
 	/**
 	 * This method loads the current settings of the application.
@@ -45,8 +49,6 @@ public class SettingsService extends ServiceBase {
 	 * @return The current settings.
 	 */
 	public Settings loadSettings( ) {
-		final PropertiesService propertiesService = getService( PropertiesService.class );
-
 		return Settings.builder( )
 				.timestampAppearance( propertiesService.loadApplicationProperty( TimestampProperty.class ) )
 				.timeUnit( propertiesService.loadApplicationProperty( TimeUnitProperty.class ) )
@@ -65,7 +67,6 @@ public class SettingsService extends ServiceBase {
 	 * @param aSettings The new settings.
 	 */
 	public void saveSettings( final Settings aSettings ) {
-		final PropertiesService propertiesService = getService( PropertiesService.class );
 		propertiesService.saveApplicationProperty( TimestampProperty.class, aSettings.getTimestampAppearance( ) );
 		propertiesService.saveApplicationProperty( TimeUnitProperty.class, aSettings.getTimeUnit( ) );
 		propertiesService.saveApplicationProperty( ClassAppearanceProperty.class, aSettings.getClassAppearance( ) );
@@ -82,7 +83,6 @@ public class SettingsService extends ServiceBase {
 	 * @return The current duration suffix.
 	 */
 	public String getCurrentDurationSuffix( ) {
-		final PropertiesService propertiesService = getService( PropertiesService.class );
 		final TimeUnit timeUnit = propertiesService.loadApplicationProperty( TimeUnitProperty.class );
 
 		String suffix;

@@ -4,6 +4,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
 import org.junit.Test;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
@@ -17,7 +18,7 @@ import com.tngtech.archunit.lang.SimpleConditionEvent;
 import kieker.diagnosis.architecture.ui.ControllerBase;
 import kieker.diagnosis.architecture.ui.ViewBase;
 import kieker.diagnosis.architecture.ui.ViewModelBase;
-import kieker.diagnosis.backend.base.service.ServiceBase;
+import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.data.MonitoringLogService;
 import kieker.diagnosis.backend.properties.ApplicationProperty;
 import kieker.diagnosis.backend.properties.PropertiesService;
@@ -63,10 +64,26 @@ public final class ArchitectureTest {
 
 		// Currently MonitoringLogService and PropertiesService are an exception from the rule. We should change this in the future though.
 		final ArchRule rule = classes( ).that( )
-				.areAssignableTo( ServiceBase.class ).and( ).dontHaveModifier( JavaModifier.ABSTRACT ).and( ).areNotAssignableFrom( MonitoringLogService.class ).and( ).areNotAssignableFrom( PropertiesService.class )
-				.should( haveNoNonStaticFields( ) );
+				.implement( Service.class ).and( ).areNotAssignableFrom( MonitoringLogService.class ).and( ).areNotAssignableFrom( PropertiesService.class )
+				.should( haveNoStatefulFields( ) );
 
 		rule.check( importedClasses );
+	}
+
+	private ArchCondition<JavaClass> haveNoStatefulFields( ) {
+		return new ArchCondition<>( "have no stateful fields" ) {
+
+			@Override
+			public void check( final JavaClass item, final ConditionEvents events ) {
+				item.getFields( )
+						.stream( )
+						.filter( javaField -> !javaField.getModifiers( ).contains( JavaModifier.STATIC ) )
+						.filter( javaField -> !javaField.isAnnotatedWith( Inject.class ) )
+						.map( javaField -> String.format( "Field %s is neither static nor injected", javaField.getFullName( ) ) )
+						.map( message -> SimpleConditionEvent.violated( item, message ) )
+						.forEach( events::add );
+			}
+		};
 	}
 
 	@Test
@@ -74,25 +91,10 @@ public final class ArchitectureTest {
 		final JavaClasses importedClasses = new ClassFileImporter( ).importPackages( "kieker.diagnosis" );
 
 		final ArchRule rule = classes( ).that( )
-				.areAssignableTo( ServiceBase.class ).and( ).dontHaveModifier( JavaModifier.ABSTRACT )
+				.implement( Service.class ).and( ).dontHaveModifier( JavaModifier.ABSTRACT )
 				.should( ).beAnnotatedWith( Singleton.class );
 
 		rule.check( importedClasses );
-	}
-
-	private ArchCondition<JavaClass> haveNoNonStaticFields( ) {
-		return new ArchCondition<>( "have no non-static fields" ) {
-
-			@Override
-			public void check( final JavaClass item, final ConditionEvents events ) {
-				item.getFields( )
-						.stream( )
-						.filter( javaField -> !javaField.getModifiers( ).contains( JavaModifier.STATIC ) )
-						.map( javaField -> String.format( "Field %s is not static", javaField.getFullName( ) ) )
-						.map( message -> SimpleConditionEvent.violated( item, message ) )
-						.forEach( events::add );
-			}
-		};
 	}
 
 	@Test

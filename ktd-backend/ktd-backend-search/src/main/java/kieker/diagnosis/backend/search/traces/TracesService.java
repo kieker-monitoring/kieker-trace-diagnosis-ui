@@ -22,9 +22,10 @@ import java.util.Stack;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import kieker.diagnosis.backend.base.service.ServiceBase;
+import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.data.MonitoringLogService;
 import kieker.diagnosis.backend.filter.FilterService;
@@ -35,20 +36,23 @@ import kieker.diagnosis.backend.filter.FilterService;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class TracesService extends ServiceBase {
+public class TracesService implements Service {
+
+	@Inject
+	private MonitoringLogService monitoringLogService;
+
+	@Inject
+	private FilterService filterService;
 
 	/**
 	 * This method searches, based on the given filter, for traces within the imported monitoring log.
 	 *
-	 * @param aFilter
-	 *            The filter to apply to the traces.
+	 * @param aFilter The filter to apply to the traces.
 	 *
 	 * @return A new list containing all available traces matching the filter. Only the root method calls of the traces are returned.
 	 */
 	public List<MethodCall> searchTraces( final TracesFilter aFilter ) {
 		// Prepare the predicates
-		final FilterService filterService = getService( FilterService.class );
-
 		final List<Predicate<MethodCall>> predicates = new ArrayList<>( );
 		predicates.add( filterService.getStringPredicate( MethodCall::getHost, aFilter.getHost( ), aFilter.isUseRegExpr( ) ) );
 		predicates.add( filterService.getStringPredicate( MethodCall::getClazz, aFilter.getClazz( ), aFilter.isUseRegExpr( ) ) );
@@ -67,7 +71,6 @@ public class TracesService extends ServiceBase {
 		}
 
 		// Get all trace roots...
-		final MonitoringLogService monitoringLogService = getService( MonitoringLogService.class );
 		final List<MethodCall> traceRoots = monitoringLogService.getTraceRoots( );
 
 		// ...and apply the filter to each of the traces
@@ -112,7 +115,6 @@ public class TracesService extends ServiceBase {
 	 * @return The number of all traces.
 	 */
 	public int countTraces( ) {
-		final MonitoringLogService monitoringLogService = getService( MonitoringLogService.class );
 		return monitoringLogService.getTraceRoots( ).size( );
 	}
 

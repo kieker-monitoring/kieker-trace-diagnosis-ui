@@ -6,7 +6,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.matcher.Matcher;
 import com.google.inject.matcher.Matchers;
 
-import kieker.diagnosis.backend.base.service.ServiceBase;
+import kieker.diagnosis.backend.base.service.Service;
 
 public final class KiekerTraceDiagnosisCacheModule extends AbstractModule {
 
@@ -15,7 +15,7 @@ public final class KiekerTraceDiagnosisCacheModule extends AbstractModule {
 		final CacheInterceptor cacheInterceptor = new CacheInterceptor( );
 
 		final Matcher<AnnotatedElement> cacheMatcher = Matchers.annotatedWith( UseCache.class ).or( Matchers.annotatedWith( InvalidateCache.class ) );
-		bindInterceptor( Matchers.subclassesOf( ServiceBase.class ), cacheMatcher, cacheInterceptor );
+		bindInterceptor( Matchers.subclassesOf( Service.class ), cacheMatcher, cacheInterceptor );
 	}
 	
 }

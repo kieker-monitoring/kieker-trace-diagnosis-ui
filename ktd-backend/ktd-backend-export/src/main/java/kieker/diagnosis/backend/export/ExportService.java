@@ -23,7 +23,7 @@ import java.io.IOException;
 import com.google.inject.Singleton;
 
 import kieker.diagnosis.backend.base.exception.BusinessException;
-import kieker.diagnosis.backend.base.service.ServiceBase;
+import kieker.diagnosis.backend.base.service.Service;
 
 /**
  * This is the service responsible for exporting data from the application into other files and formats.
@@ -31,7 +31,7 @@ import kieker.diagnosis.backend.base.service.ServiceBase;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class ExportService extends ServiceBase {
+public class ExportService implements Service {
 
 	/**
 	 * Exports the given data into the given file as CSV data. The columns are separated with a semicolon.

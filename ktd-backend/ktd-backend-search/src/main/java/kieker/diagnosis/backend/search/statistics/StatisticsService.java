@@ -18,9 +18,10 @@ package kieker.diagnosis.backend.search.statistics;
 
 import java.util.Optional;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import kieker.diagnosis.backend.base.service.ServiceBase;
+import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.data.MonitoringLogService;
 import kieker.diagnosis.backend.search.statistics.Statistics.StatisticsBuilder;
@@ -32,11 +33,12 @@ import kieker.diagnosis.backend.settings.TimestampAppearance;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class StatisticsService extends ServiceBase {
+public class StatisticsService implements Service {
+
+	@Inject
+	private MonitoringLogService monitoringLogService;
 
 	public Optional<Statistics> getStatistics( ) {
-		final MonitoringLogService monitoringLogService = getService( MonitoringLogService.class );
-
 		// We create the DTO only, if we have any data available
 		if ( monitoringLogService.isDataAvailable( ) ) {
 			final StatisticsBuilder statisticsBuilder = Statistics.builder( );

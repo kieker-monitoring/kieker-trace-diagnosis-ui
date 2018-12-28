@@ -16,14 +16,18 @@
 
 package kieker.diagnosis.backend.properties;
 
+import java.util.ResourceBundle;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
 
-import kieker.diagnosis.backend.base.service.ServiceBase;
+import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.cache.InvalidateCache;
 import kieker.diagnosis.backend.cache.UseCache;
 
@@ -33,7 +37,10 @@ import kieker.diagnosis.backend.cache.UseCache;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class PropertiesService extends ServiceBase {
+public class PropertiesService implements Service {
+
+	private static final ResourceBundle RESOURCES = ResourceBundle.getBundle( PropertiesService.class.getName( ) );
+	private static final Logger LOGGER = LogManager.getLogger( PropertiesService.class );
 
 	@Inject
 	private Injector ivInjector;
@@ -76,7 +83,7 @@ public class PropertiesService extends ServiceBase {
 		try {
 			preferences.flush( );
 		} catch ( final BackingStoreException ex ) {
-			getLogger( ).error( getLocalizedString( "errorMessage" ), ex );
+			LOGGER.error( RESOURCES.getString( "errorMessage" ), ex );
 		}
 	}
 

@@ -20,9 +20,10 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import kieker.diagnosis.backend.base.service.ServiceBase;
+import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.data.MonitoringLogService;
 import kieker.diagnosis.backend.filter.FilterService;
@@ -33,23 +34,26 @@ import kieker.diagnosis.backend.filter.FilterService;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class MethodsService extends ServiceBase {
+public class MethodsService implements Service {
+
+	@Inject
+	private MonitoringLogService monitoringLogService;
+
+	@Inject
+	private FilterService filterService;
 
 	/**
 	 * This method searches, based on the given filter, for method calls within the imported monitoring log.
 	 *
-	 * @param aFilter
-	 *            The filter to apply to the method calls.
+	 * @param aFilter The filter to apply to the method calls.
 	 *
 	 * @return A new list containing all available method calls matching the filter.
 	 */
 	public List<MethodCall> searchMethods( final MethodsFilter aFilter ) {
 		// Get the methods
-		final MonitoringLogService monitoringLogService = getService( MonitoringLogService.class );
 		final List<MethodCall> methods = monitoringLogService.getMethods( );
 
 		// Filter the methods
-		final FilterService filterService = getService( FilterService.class );
 		return methods
 				.parallelStream( )
 				.filter( filterService.getStringPredicate( MethodCall::getHost, aFilter.getHost( ), aFilter.isUseRegExpr( ) ) )
@@ -76,7 +80,6 @@ public class MethodsService extends ServiceBase {
 	 * @return The number of all method calls.
 	 */
 	public int countMethods( ) {
-		final MonitoringLogService monitoringLogService = getService( MonitoringLogService.class );
 		final List<MethodCall> methods = monitoringLogService.getMethods( );
 		return methods.size( );
 	}

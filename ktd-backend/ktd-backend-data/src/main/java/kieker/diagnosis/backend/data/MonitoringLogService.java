@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
@@ -35,7 +36,7 @@ import com.google.inject.Singleton;
 import kieker.diagnosis.backend.base.exception.BusinessException;
 import kieker.diagnosis.backend.base.exception.BusinessRuntimeException;
 import kieker.diagnosis.backend.base.exception.TechnicalException;
-import kieker.diagnosis.backend.base.service.ServiceBase;
+import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.data.reader.AsciiFileReader;
 import kieker.diagnosis.backend.data.reader.BinaryFileReader;
 import kieker.diagnosis.backend.data.reader.Reader;
@@ -47,7 +48,9 @@ import kieker.diagnosis.backend.data.reader.TemporaryRepository;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class MonitoringLogService extends ServiceBase {
+public class MonitoringLogService implements Service {
+
+	private static final ResourceBundle RESOURCES = ResourceBundle.getBundle( MonitoringLogService.class.getName( ) );
 
 	private final List<MethodCall> ivTraceRoots = new ArrayList<>( );
 	private final List<AggregatedMethodCall> ivAggreatedMethods = new ArrayList<>( );
@@ -89,12 +92,12 @@ public class MonitoringLogService extends ServiceBase {
 
 			if ( !directoryImported ) {
 				// No reader felt responsible for the import directory. We inform the user.
-				throw new BusinessException( getLocalizedString( "errorMessageUnknownMonitoringLog" ) );
+				throw new BusinessException( RESOURCES.getString( "errorMessageUnknownMonitoringLog" ) );
 			}
 
 			if ( ivIgnoredRecords > 0 && ivTraceRoots.size( ) == 0 ) {
 				// No traces have been reconstructed and records have been ignored. We inform the user.
-				final String msg = String.format( getLocalizedString( "errorMessageNoTraceAndRecordsIgnored" ), ivIgnoredRecords );
+				final String msg = String.format( RESOURCES.getString( "errorMessageNoTraceAndRecordsIgnored" ), ivIgnoredRecords );
 				throw new BusinessException( msg );
 			}
 
@@ -105,7 +108,7 @@ public class MonitoringLogService extends ServiceBase {
 
 			throw new BusinessRuntimeException( ex );
 		} catch ( final Exception ex ) {
-			throw new TechnicalException( getLocalizedString( "errorMessageImportFailed" ), ex );
+			throw new TechnicalException( RESOURCES.getString( "errorMessageImportFailed" ), ex );
 		} finally {
 			// If necessary delete the temporary directory
 			if ( aType == ImportType.ZIP_FILE && directory != null ) {

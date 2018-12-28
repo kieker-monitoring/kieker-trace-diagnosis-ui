@@ -25,7 +25,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 import kieker.diagnosis.backend.base.common.ClassUtil;
-import kieker.diagnosis.backend.base.service.ServiceBase;
+import kieker.diagnosis.backend.base.service.Service;
 
 /**
  * This is the abstract base for a controller. It provides convenient methods, like retrieving a service or localizing a string. For each class extending this base, a resource bundle has to be available in the classpath with the name of the implementing class.
@@ -62,7 +62,7 @@ public abstract class ControllerBase<VM extends ViewModelBase<?>> {
 	 *
 	 * @return The service.
 	 */
-	protected final <S extends ServiceBase> S getService( final Class<S> aServiceClass ) {
+	protected final <S extends Service> S getService( final Class<S> aServiceClass ) {
 		return ivInjector.getInstance( aServiceClass );
 	}
 
