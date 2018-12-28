@@ -44,33 +44,50 @@ public class FilterService implements Service {
 	@Inject
 	private PatternService patternService;
 
-	public <T> Predicate<T> getLongPredicate( final Function<T, Long> aLongFunction, final Long aSearchLong ) {
-		if ( aSearchLong == null ) {
+	/**
+	 * Creates a predicate which applies the given function and checks whether the result is equal to the given long. If the value is {@code null}, an always-true predicate will be returned.
+	 *
+	 * @param getter The function to apply.
+	 * @param value  The value which should be checked for equality.
+	 *
+	 * @return A new predicate.
+	 */
+	public <T> Predicate<T> createLongPredicate( final Function<T, Long> getter, final Long value ) {
+		if ( value == null ) {
 			return t -> true;
 		}
 
-		return t -> aLongFunction.apply( t ) == aSearchLong.longValue( );
+		return t -> getter.apply( t ) == value.longValue( );
 	}
 
-	public <T> Predicate<T> getStringPredicate( final Function<T, String> aStringFunction, final String aSearchString, final boolean aUseRegExpr ) {
-		if ( aSearchString == null ) {
+	/**
+	 * Creates a predicate which applies the given function and checks whether the result is equal to the given value. If the value is {@code null}, an always-true predicate will be returned.
+	 *
+	 * @param getter     The function to apply.
+	 * @param value      The value which should be checked for equality.
+	 * @param useRegExpr Whether the value is actually a pattern.
+	 *
+	 * @return A new predicate.
+	 */
+	public <T> Predicate<T> createStringPredicate( final Function<T, String> getter, final String value, final boolean useRegExpr ) {
+		if ( value == null ) {
 			return t -> true;
 		}
 
-		if ( aUseRegExpr ) {
+		if ( useRegExpr ) {
 			// If we use a regular expression, we have to compile the pattern
-			final Pattern pattern = patternService.compilePattern( aSearchString );
+			final Pattern pattern = patternService.compilePattern( value );
 
 			// The returned function checks whether the actual string matches on the pattern
 			return t -> {
-				final String actualString = aStringFunction.apply( t );
+				final String actualString = getter.apply( t );
 				return actualString != null && pattern.matcher( actualString ).matches( );
 			};
 		}
 
 		return t -> {
-			final String actualString = aStringFunction.apply( t );
-			return actualString != null && actualString.toLowerCase( ).contains( aSearchString.toLowerCase( ) );
+			final String actualString = getter.apply( t );
+			return actualString != null && actualString.toLowerCase( ).contains( value.toLowerCase( ) );
 		};
 	}
 
@@ -87,7 +104,7 @@ public class FilterService implements Service {
 				.reduce( t -> true, Predicate::and );
 	}
 
-	public <T> Predicate<T> getAfterTimePredicate( final Function<T, Long> aTimestampFunction, final LocalDate aLowerDate, final LocalTime aLowerTime ) {
+	public <T> Predicate<T> createAfterTimePredicate( final Function<T, Long> aTimestampFunction, final LocalDate aLowerDate, final LocalTime aLowerTime ) {
 		if ( aLowerDate == null && aLowerTime == null ) {
 			return t -> true;
 		}
@@ -124,7 +141,7 @@ public class FilterService implements Service {
 		};
 	}
 
-	public <T> Predicate<T> getBeforeTimePredicate( final Function<T, Long> aTimestampFunction, final LocalDate aUpperDate, final LocalTime aUpperTime ) {
+	public <T> Predicate<T> createBeforeTimePredicate( final Function<T, Long> aTimestampFunction, final LocalDate aUpperDate, final LocalTime aUpperTime ) {
 		if ( aUpperDate == null && aUpperTime == null ) {
 			return t -> true;
 		} else {

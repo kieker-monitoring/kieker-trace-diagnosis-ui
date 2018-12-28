@@ -19,6 +19,7 @@ package kieker.diagnosis.backend.filter;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.Arrays;
 import java.util.function.Predicate;
 
 import org.junit.Before;
@@ -28,7 +29,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import kieker.diagnosis.backend.base.ServiceBaseModule;
-import kieker.diagnosis.backend.filter.FilterService;
 
 /**
  * Test class for the {@link FilterService}.
@@ -46,15 +46,58 @@ public final class FilterServiceTest {
 	}
 
 	@Test
-	public void testGetStringPredicateWithNull( ) {
-		Predicate<Object> predicate = filterService.getStringPredicate( e -> null, "A", false );
+	public void testCreateLongPredicate( ) {
+		final Predicate<Long> predicate = filterService.createLongPredicate( e -> e, 42L );
+		assertThat( predicate.test( 42L ), is( true ) );
+		assertThat( predicate.test( 15L ), is( false ) );
+	}
+
+	@Test
+	public void testCreateLongPredicateWithNull( ) {
+		final Predicate<Long> predicate = filterService.createLongPredicate( e -> e, null );
+		assertThat( predicate.test( null ), is( true ) );
+	}
+
+	@Test
+	public void testCreateStringPredicate( ) {
+		final Predicate<String> predicate = filterService.createStringPredicate( e -> e, "A", false );
+		assertThat( predicate.test( "A" ), is( true ) );
+		assertThat( predicate.test( "a" ), is( true ) );
+		assertThat( predicate.test( "B" ), is( false ) );
 		assertThat( predicate.test( null ), is( false ) );
 	}
 
 	@Test
-	public void testGetStringPredicateWithNullAndRegExpr( ) {
-		Predicate<Object> predicate = filterService.getStringPredicate( e -> null, ".*", true );
+	public void testCreateStringPredicateWithRegExpr( ) {
+		final Predicate<String> predicate = filterService.createStringPredicate( e -> e, ".*A.*", true );
+		assertThat( predicate.test( "A" ), is( true ) );
+		assertThat( predicate.test( "BAB" ), is( true ) );
+		assertThat( predicate.test( "B" ), is( false ) );
 		assertThat( predicate.test( null ), is( false ) );
+	}
+
+	@Test
+	public void testCreateStringPredicateWithNull( ) {
+		final Predicate<String> predicate = filterService.createStringPredicate( e -> e, null, false );
+		assertThat( predicate.test( null ), is( true ) );
+	}
+
+	@Test
+	public void testCreateStringPredicateWithNullAndRegExpr( ) {
+		final Predicate<String> predicate = filterService.createStringPredicate( e -> e, ".*", true );
+		assertThat( predicate.test( null ), is( false ) );
+	}
+
+	@Test
+	public void testConjunct( ) {
+		final Predicate<Integer> predicateA = value -> value % 2 == 0;
+		final Predicate<Integer> predicateB = value -> value % 3 == 0;
+		final Predicate<Integer> conjunction = filterService.conjunct( Arrays.asList( predicateA, predicateB ) );
+
+		assertThat( conjunction.test( 12 ), is( true ) );
+		assertThat( conjunction.test( 30 ), is( true ) );
+		assertThat( conjunction.test( 9 ), is( false ) );
+		assertThat( conjunction.test( 4 ), is( false ) );
 	}
 
 }

@@ -56,10 +56,10 @@ public class AggregatedMethodsService implements Service {
 		// Filter the methods
 		return methods
 				.parallelStream( )
-				.filter( filterService.getStringPredicate( AggregatedMethodCall::getHost, aFilter.getHost( ), aFilter.isUseRegExpr( ) ) )
-				.filter( filterService.getStringPredicate( AggregatedMethodCall::getClazz, aFilter.getClazz( ), aFilter.isUseRegExpr( ) ) )
-				.filter( filterService.getStringPredicate( AggregatedMethodCall::getMethod, aFilter.getMethod( ), aFilter.isUseRegExpr( ) ) )
-				.filter( filterService.getStringPredicate( AggregatedMethodCall::getException, aFilter.getException( ), aFilter.isUseRegExpr( ) ) )
+				.filter( filterService.createStringPredicate( AggregatedMethodCall::getHost, aFilter.getHost( ), aFilter.isUseRegExpr( ) ) )
+				.filter( filterService.createStringPredicate( AggregatedMethodCall::getClazz, aFilter.getClazz( ), aFilter.isUseRegExpr( ) ) )
+				.filter( filterService.createStringPredicate( AggregatedMethodCall::getMethod, aFilter.getMethod( ), aFilter.isUseRegExpr( ) ) )
+				.filter( filterService.createStringPredicate( AggregatedMethodCall::getException, aFilter.getException( ), aFilter.isUseRegExpr( ) ) )
 				.filter( getSearchTypePredicate( aFilter.getSearchType( ) ) )
 				.collect( Collectors.toList( ) );
 	}

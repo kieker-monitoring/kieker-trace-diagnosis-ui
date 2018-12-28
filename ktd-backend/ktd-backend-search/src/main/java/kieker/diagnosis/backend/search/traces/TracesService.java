@@ -54,14 +54,14 @@ public class TracesService implements Service {
 	public List<MethodCall> searchTraces( final TracesFilter aFilter ) {
 		// Prepare the predicates
 		final List<Predicate<MethodCall>> predicates = new ArrayList<>( );
-		predicates.add( filterService.getStringPredicate( MethodCall::getHost, aFilter.getHost( ), aFilter.isUseRegExpr( ) ) );
-		predicates.add( filterService.getStringPredicate( MethodCall::getClazz, aFilter.getClazz( ), aFilter.isUseRegExpr( ) ) );
-		predicates.add( filterService.getStringPredicate( MethodCall::getMethod, aFilter.getMethod( ), aFilter.isUseRegExpr( ) ) );
-		predicates.add( filterService.getStringPredicate( MethodCall::getException, aFilter.getException( ), aFilter.isUseRegExpr( ) ) );
-		predicates.add( filterService.getLongPredicate( MethodCall::getTraceId, aFilter.getTraceId( ) ) );
+		predicates.add( filterService.createStringPredicate( MethodCall::getHost, aFilter.getHost( ), aFilter.isUseRegExpr( ) ) );
+		predicates.add( filterService.createStringPredicate( MethodCall::getClazz, aFilter.getClazz( ), aFilter.isUseRegExpr( ) ) );
+		predicates.add( filterService.createStringPredicate( MethodCall::getMethod, aFilter.getMethod( ), aFilter.isUseRegExpr( ) ) );
+		predicates.add( filterService.createStringPredicate( MethodCall::getException, aFilter.getException( ), aFilter.isUseRegExpr( ) ) );
+		predicates.add( filterService.createLongPredicate( MethodCall::getTraceId, aFilter.getTraceId( ) ) );
 		predicates.add( getSearchTypePredicate( aFilter.getSearchType( ) ) );
-		predicates.add( filterService.getAfterTimePredicate( MethodCall::getTimestamp, aFilter.getLowerDate( ), aFilter.getLowerTime( ) ) );
-		predicates.add( filterService.getBeforeTimePredicate( MethodCall::getTimestamp, aFilter.getUpperDate( ), aFilter.getUpperTime( ) ) );
+		predicates.add( filterService.createAfterTimePredicate( MethodCall::getTimestamp, aFilter.getLowerDate( ), aFilter.getLowerTime( ) ) );
+		predicates.add( filterService.createBeforeTimePredicate( MethodCall::getTimestamp, aFilter.getUpperDate( ), aFilter.getUpperTime( ) ) );
 
 		Predicate<MethodCall> predicate = filterService.conjunct( predicates );
 

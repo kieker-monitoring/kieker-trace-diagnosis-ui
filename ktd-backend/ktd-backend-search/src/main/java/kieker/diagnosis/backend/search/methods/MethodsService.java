@@ -56,14 +56,14 @@ public class MethodsService implements Service {
 		// Filter the methods
 		return methods
 				.parallelStream( )
-				.filter( filterService.getStringPredicate( MethodCall::getHost, aFilter.getHost( ), aFilter.isUseRegExpr( ) ) )
-				.filter( filterService.getStringPredicate( MethodCall::getClazz, aFilter.getClazz( ), aFilter.isUseRegExpr( ) ) )
-				.filter( filterService.getStringPredicate( MethodCall::getMethod, aFilter.getMethod( ), aFilter.isUseRegExpr( ) ) )
-				.filter( filterService.getStringPredicate( MethodCall::getException, aFilter.getException( ), aFilter.isUseRegExpr( ) ) )
-				.filter( filterService.getLongPredicate( MethodCall::getTraceId, aFilter.getTraceId( ) ) )
+				.filter( filterService.createStringPredicate( MethodCall::getHost, aFilter.getHost( ), aFilter.isUseRegExpr( ) ) )
+				.filter( filterService.createStringPredicate( MethodCall::getClazz, aFilter.getClazz( ), aFilter.isUseRegExpr( ) ) )
+				.filter( filterService.createStringPredicate( MethodCall::getMethod, aFilter.getMethod( ), aFilter.isUseRegExpr( ) ) )
+				.filter( filterService.createStringPredicate( MethodCall::getException, aFilter.getException( ), aFilter.isUseRegExpr( ) ) )
+				.filter( filterService.createLongPredicate( MethodCall::getTraceId, aFilter.getTraceId( ) ) )
 				.filter( getSearchTypePredicate( aFilter.getSearchType( ) ) )
-				.filter( filterService.getAfterTimePredicate( MethodCall::getTimestamp, aFilter.getLowerDate( ), aFilter.getLowerTime( ) ) )
-				.filter( filterService.getBeforeTimePredicate( MethodCall::getTimestamp, aFilter.getUpperDate( ), aFilter.getUpperTime( ) ) )
+				.filter( filterService.createAfterTimePredicate( MethodCall::getTimestamp, aFilter.getLowerDate( ), aFilter.getLowerTime( ) ) )
+				.filter( filterService.createBeforeTimePredicate( MethodCall::getTimestamp, aFilter.getUpperDate( ), aFilter.getUpperTime( ) ) )
 				.collect( Collectors.toList( ) );
 	}
 
