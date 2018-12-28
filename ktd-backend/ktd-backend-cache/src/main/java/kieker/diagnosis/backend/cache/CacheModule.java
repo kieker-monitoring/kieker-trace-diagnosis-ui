@@ -14,29 +14,29 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis;
+package kieker.diagnosis.backend.cache;
+
+import java.lang.reflect.AnnotatedElement;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.matcher.Matcher;
+import com.google.inject.matcher.Matchers;
 
-import kieker.diagnosis.architecture.KiekerTraceDiagnosisArchitectureModule;
-import kieker.diagnosis.backend.base.ServiceBaseModule;
-import kieker.diagnosis.backend.cache.CacheModule;
-import kieker.diagnosis.backend.monitoring.KiekerTraceDiagnosisMonitoringModule;
+import kieker.diagnosis.backend.base.service.Service;
 
 /**
- * This is the Guice module for the UI.
+ * This is the Guice module for the cache component.
  *
  * @author Nils Christian Ehmke
  */
-public class KiekerTraceDiagnosisUIModule extends AbstractModule {
+public final class CacheModule extends AbstractModule {
 
 	@Override
 	protected void configure( ) {
-		// We need to make sure that the Guice module from the service and the architecture sub-projects are installed
-		install( new KiekerTraceDiagnosisMonitoringModule( ) );
-		install( new CacheModule( ) );
-		install( new ServiceBaseModule( ) );
-		install( new KiekerTraceDiagnosisArchitectureModule( ) );
+		final CacheInterceptor cacheInterceptor = new CacheInterceptor( );
+
+		final Matcher<AnnotatedElement> cacheMatcher = Matchers.annotatedWith( UseCache.class ).or( Matchers.annotatedWith( InvalidateCache.class ) );
+		bindInterceptor( Matchers.subclassesOf( Service.class ), cacheMatcher, cacheInterceptor );
 	}
 
 }
