@@ -1,6 +1,7 @@
 package kieker.diagnosis;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 
 import org.junit.Test;
 
@@ -14,6 +15,7 @@ import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
+import com.tngtech.archunit.library.Architectures.LayeredArchitecture;
 
 import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.data.MonitoringLogService;
@@ -104,6 +106,21 @@ public final class ArchitectureTest {
 		final ArchRule rule = classes( ).that( )
 				.areAssignableTo( ApplicationProperty.class ).and( ).dontHaveModifier( JavaModifier.ABSTRACT )
 				.should( ).beAnnotatedWith( Singleton.class );
+
+		rule.check( importedClasses );
+	}
+
+	@Test
+	public void backendShouldNotUseFrontend( ) {
+		final JavaClasses importedClasses = new ClassFileImporter( ).importPackages( "kieker.diagnosis" );
+
+		final LayeredArchitecture rule = layeredArchitecture( )
+				.layer( "Backend" ).definedBy( "kieker.diagnosis.backend.." )
+				.layer( "Frontend" ).definedBy( "kieker.diagnosis.frontend.." )
+				.layer( "Frontend-Old" ).definedBy( "kieker.diagnosis.ui.." )
+				.whereLayer( "Frontend" ).mayOnlyBeAccessedByLayers( "Frontend-Old" )
+				.whereLayer( "Frontend-Old" ).mayOnlyBeAccessedByLayers( "Frontend" )
+				.whereLayer( "Backend" ).mayOnlyBeAccessedByLayers( "Frontend", "Frontend-Old" );
 
 		rule.check( importedClasses );
 	}
