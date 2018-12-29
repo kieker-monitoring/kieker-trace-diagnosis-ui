@@ -1,4 +1,8 @@
 4.0.0
+	29 Dec 2018
+	Bug (TRACEUI-36)
+	Added some missing spaces in the table of the aggregated methods view.
+
 	26 Dec 2018
 	Feature (TRACEUI-35)
 	The tool now comes with a fixed font which allows for a consistent appearance across all operation systems.
