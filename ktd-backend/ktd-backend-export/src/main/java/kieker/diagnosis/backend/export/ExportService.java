@@ -42,36 +42,32 @@ public class ExportService implements Service {
 	 *            The CSV data to be written.
 	 *
 	 * @throws BusinessException
-	 *             If an I/O error occured while trying to export the data.
+	 *             If an I/O error occurred while trying to export the data.
 	 */
-	public void exportToCSV( final File aFile, final CSVData aCsvData ) throws BusinessException {
-		try ( final FileWriter fileWriter = new FileWriter( aFile ) ) {
-			final String[] headers = aCsvData.getHeader( );
-			final int columnsSize = headers.length;
+	public void exportToCSV( final File file, final CSVData csvData ) throws BusinessException {
+		try ( final FileWriter fileWriter = new FileWriter( file ) ) {
+			writeHeader( fileWriter, csvData.getHeader( ) );
+			writeValues( fileWriter, csvData.getValues( ), csvData.getHeader( ) );
+		} catch ( final IOException ex ) {
+			throw new BusinessException( ex );
+		}
+	}
 
-			// The header first
-			for ( int columnIndex = 0; columnIndex < columnsSize; columnIndex++ ) {
+	private void writeHeader( final FileWriter fileWriter, final String[] header ) throws IOException {
+		final String headerLine = String.join( ";", header );
+		fileWriter.append( headerLine ).append( "\n" );
+	}
+
+	private void writeValues( final FileWriter fileWriter, final String[][] values, final String[] header ) throws IOException {
+		final int valuesSize = values.length > 0 ? values[0].length : 0;
+		for ( int rowIndex = 0; rowIndex < valuesSize; rowIndex++ ) {
+			for ( int columnIndex = 0; columnIndex < header.length; columnIndex++ ) {
 				if ( columnIndex != 0 ) {
 					fileWriter.append( ";" );
 				}
-				fileWriter.append( headers[columnIndex] );
+				fileWriter.append( values[columnIndex][rowIndex] );
 			}
 			fileWriter.append( "\n" );
-
-			// Now the values
-			final String[][] values = aCsvData.getValues( );
-			final int valuesSize = values.length > 0 ? values[0].length : 0;
-			for ( int rowIndex = 0; rowIndex < valuesSize; rowIndex++ ) {
-				for ( int columnIndex = 0; columnIndex < columnsSize; columnIndex++ ) {
-					if ( columnIndex != 0 ) {
-						fileWriter.append( ";" );
-					}
-					fileWriter.append( values[columnIndex][rowIndex] );
-				}
-				fileWriter.append( "\n" );
-			}
-		} catch ( final IOException ex ) {
-			throw new BusinessException( ex );
 		}
 	}
 

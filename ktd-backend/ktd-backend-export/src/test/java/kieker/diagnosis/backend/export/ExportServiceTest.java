@@ -32,11 +32,9 @@ import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 
 import kieker.diagnosis.backend.base.exception.BusinessException;
-import kieker.diagnosis.backend.export.CSVData;
-import kieker.diagnosis.backend.export.ExportService;
 
 /**
- * Test class for the {@link ExportService}.
+ * This is a unit test for {@link ExportService}.
  *
  * @author Nils Christian Ehmke
  */

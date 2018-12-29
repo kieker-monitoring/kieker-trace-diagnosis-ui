@@ -30,16 +30,16 @@ public final class CSVData {
 		return header;
 	}
 
-	public void setHeader( final String[] aHeader ) {
-		header = aHeader;
+	public void setHeader( final String[] header ) {
+		this.header = header;
 	}
 
 	public String[][] getValues( ) {
 		return values;
 	}
 
-	public void setValues( final String[][] aValues ) {
-		values = aValues;
+	public void setValues( final String[][] values ) {
+		this.values = values;
 	}
 
 }
