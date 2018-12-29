@@ -16,7 +16,6 @@
 
 package kieker.diagnosis.ui.complex.aggregatedmethods;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 
@@ -42,11 +41,11 @@ import kieker.diagnosis.service.pattern.PatternService;
 class AggregatedMethodsViewModel extends ViewModelBase<AggregatedMethodsView> {
 
 	public void updatePresentationDurationColumnHeader( final String aSuffix ) {
-		getView( ).getColumnMinDuration( ).setText( getLocalizedString( "columnMinDuration" ) + aSuffix );
-		getView( ).getColumnAvgDuration( ).setText( getLocalizedString( "columnAvgDuration" ) + aSuffix );
-		getView( ).getColumnMedianDuration( ).setText( getLocalizedString( "columnMedianDuration" ) + aSuffix );
-		getView( ).getColumnMaxDuration( ).setText( getLocalizedString( "columnMaxDuration" ) + aSuffix );
-		getView( ).getColumnTotalDuration( ).setText( getLocalizedString( "columnTotalDuration" ) + aSuffix );
+		getView( ).getColumnMinDuration( ).setText( getLocalizedString( "columnMinDuration" ) + " " + aSuffix );
+		getView( ).getColumnAvgDuration( ).setText( getLocalizedString( "columnAvgDuration" ) + " " + aSuffix );
+		getView( ).getColumnMedianDuration( ).setText( getLocalizedString( "columnMedianDuration" ) + " " + aSuffix );
+		getView( ).getColumnMaxDuration( ).setText( getLocalizedString( "columnMaxDuration" ) + " " + aSuffix );
+		getView( ).getColumnTotalDuration( ).setText( getLocalizedString( "columnTotalDuration" ) + " " + aSuffix );
 
 	}
 
@@ -84,7 +83,7 @@ class AggregatedMethodsViewModel extends ViewModelBase<AggregatedMethodsView> {
 	}
 
 	public void updatePresentationStatus( final int aMethods, final int aTotalMethods ) {
-		final NumberFormat decimalFormat = DecimalFormat.getInstance( );
+		final NumberFormat decimalFormat = NumberFormat.getInstance( );
 		getView( ).getStatusLabel( ).setText( String.format( getLocalizedString( "statusLabel" ), decimalFormat.format( aMethods ), decimalFormat.format( aTotalMethods ) ) );
 	}
 
@@ -111,19 +110,19 @@ class AggregatedMethodsViewModel extends ViewModelBase<AggregatedMethodsView> {
 		if ( filter.isUseRegExpr( ) ) {
 			final PatternService patternService = getService( PatternService.class );
 
-			if ( !( patternService.isValidPattern( filter.getHost( ) ) || filter.getHost( ) == null ) ) {
+			if ( !(patternService.isValidPattern( filter.getHost( ) ) || filter.getHost( ) == null ) ) {
 				throw new BusinessException( String.format( getLocalizedString( "errorMessageRegExpr" ), filter.getHost( ) ) );
 			}
 
-			if ( !( patternService.isValidPattern( filter.getClazz( ) ) || filter.getClazz( ) == null ) ) {
+			if ( !(patternService.isValidPattern( filter.getClazz( ) ) || filter.getClazz( ) == null ) ) {
 				throw new BusinessException( String.format( getLocalizedString( "errorMessageRegExpr" ), filter.getClazz( ) ) );
 			}
 
-			if ( !( patternService.isValidPattern( filter.getMethod( ) ) || filter.getMethod( ) == null ) ) {
+			if ( !(patternService.isValidPattern( filter.getMethod( ) ) || filter.getMethod( ) == null ) ) {
 				throw new BusinessException( String.format( getLocalizedString( "errorMessageRegExpr" ), filter.getMethod( ) ) );
 			}
 
-			if ( !( patternService.isValidPattern( filter.getException( ) ) || filter.getException( ) == null ) ) {
+			if ( !(patternService.isValidPattern( filter.getException( ) ) || filter.getException( ) == null ) ) {
 				throw new BusinessException( String.format( getLocalizedString( "errorMessageRegExpr" ), filter.getException( ) ) );
 			}
 		}
