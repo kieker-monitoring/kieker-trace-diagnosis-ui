@@ -266,9 +266,11 @@ public final class SettingsDialog extends Dialog<Settings> implements DialogMixi
 
 				{
 					final IntegerTextField maxNumberOfCallsField = new IntegerTextField( );
+					maxNumberOfCallsField.setId( "settingsDialogMaxMethodCalls" );
 
 					final ReadOnlyObjectProperty<MethodCallAggregation> property = methodCallAggregationField.getSelectionModel( ).selectedItemProperty( );
-					maxNumberOfCallsField.disableProperty( ).bind( property.isEqualTo( MethodCallAggregation.NONE ).or( property.isEqualTo( MethodCallAggregation.BY_THRESHOLD ) ) );
+					maxNumberOfCallsField.disableProperty( )
+							.bind( property.isEqualTo( MethodCallAggregation.NONE ).or( property.isEqualTo( MethodCallAggregation.BY_THRESHOLD ) ) );
 					maxNumberOfCallsField.valueProperty( ).bindBidirectional( ivMaxNumberOfMethodCalls );
 
 					GridPane.setRowIndex( maxNumberOfCallsField, rowIndex++ );
@@ -289,6 +291,7 @@ public final class SettingsDialog extends Dialog<Settings> implements DialogMixi
 
 				{
 					final FloatTextField methodCallThresholdField = new FloatTextField( );
+					methodCallThresholdField.setId( "settingsDialogMethodCallThreshold" );
 					methodCallThresholdField.valueProperty( ).bindBidirectional( ivMethodCallThreshold );
 					final ReadOnlyObjectProperty<MethodCallAggregation> selectedItemProperty = methodCallAggregationField.getSelectionModel( ).selectedItemProperty( );
 					methodCallThresholdField.disableProperty( ).bind( selectedItemProperty.isEqualTo( MethodCallAggregation.BY_THRESHOLD ).not( ) );
@@ -363,6 +366,7 @@ public final class SettingsDialog extends Dialog<Settings> implements DialogMixi
 
 		if ( !inputValid ) {
 			final Alert alert = new Alert( AlertType.WARNING );
+			alert.getDialogPane( ).lookupButton( ButtonType.OK ).setId( "settingsDialogValidationOk" );
 			alert.setContentText( errorMessage );
 			alert.show( );
 		}
