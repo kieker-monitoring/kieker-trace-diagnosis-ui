@@ -64,11 +64,12 @@ public class ProgressDialog extends VBox {
 
 		{
 			ivLabel = new Label( );
+			ivLabel.setId( "progressDialogMessage" );
 			VBox.setVgrow( ivLabel, Priority.ALWAYS );
 
 			getChildren( ).add( ivLabel );
 		}
-		
+
 		getStylesheets( ).add( "/kieker/diagnosis/frontend/base/ui/Dialog.css" );
 	}
 
@@ -94,7 +95,7 @@ public class ProgressDialog extends VBox {
 		stage.setTitle( getLocalizedString( "title" ) );
 		stage.setScene( scene );
 		stage.setOnCloseRequest( aEvent -> aEvent.consume( ) );
-		
+
 		stage.showAndWait( );
 	}
 
