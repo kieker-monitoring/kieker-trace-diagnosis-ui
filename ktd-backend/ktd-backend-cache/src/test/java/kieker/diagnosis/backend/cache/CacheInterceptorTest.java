@@ -31,7 +31,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.google.common.util.concurrent.UncheckedExecutionException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
@@ -39,7 +38,7 @@ import com.google.inject.Singleton;
 import kieker.diagnosis.backend.base.service.Service;
 
 /**
- * Test class for {@link CacheInterceptor}.
+ * This is a unit test for {@link CacheInterceptor}.
  *
  * @author Nils Christian Ehmke
  */
@@ -133,7 +132,7 @@ public final class CacheInterceptorTest {
 
 	@Test
 	public void testException( ) throws Throwable {
-		expectedException.expect( UncheckedExecutionException.class );
+		expectedException.expect( Exception.class );
 		testService.methodD( "test-key" );
 	}
 
@@ -147,17 +146,17 @@ public final class CacheInterceptorTest {
 			return "test-value";
 		}
 
-		@UseCache( cacheName = "test-cache" )
+		@UseCache ( cacheName = "test-cache" )
 		public String methodB( final String key ) {
 			counter++;
 			return "test-value";
 		}
 
-		@InvalidateCache( cacheName = "test-cache", keyParameter = 0 )
+		@InvalidateCache ( cacheName = "test-cache", keyParameter = 0 )
 		public void methodC( final String key ) {
 		}
 
-		@UseCache( cacheName = "test-cache" )
+		@UseCache ( cacheName = "test-cache" )
 		public String methodD( final String key ) {
 			throw new IllegalArgumentException( );
 		}

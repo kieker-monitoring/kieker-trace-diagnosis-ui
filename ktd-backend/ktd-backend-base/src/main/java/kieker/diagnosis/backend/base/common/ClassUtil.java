@@ -30,13 +30,16 @@ public final class ClassUtil {
 	}
 
 	/**
-	 * Retrieves the real class of the given class. If the given class is a proxy class, the super class will be returned. Otherwise the class itself will be returned.
+	 * Retrieves the real class of the given class. If the given class is a proxy class, the super class will be
+	 * returned. Otherwise the class itself will be returned.
 	 *
-	 * @param clazz The (potentially proxy) class. Must not be {@code null}.
+	 * @param clazz
+	 *            The (potentially proxy) class. Must not be {@code null}.
 	 *
 	 * @return The real class.
 	 *
-	 * @throws NullPointerException If the given class is {@code null}.
+	 * @throws NullPointerException
+	 *             If the given class is {@code null}.
 	 */
 	public static Class<?> getRealClass( final Class<?> clazz ) {
 		Objects.requireNonNull( clazz, "The class must not be null." );
@@ -49,13 +52,16 @@ public final class ClassUtil {
 	}
 
 	/**
-	 * Retrieves the real name of the given class. If the given class is a proxy class, the name of the super class will be returned. Otherwise the name of class itself will be returned.
+	 * Retrieves the real name of the given class. If the given class is a proxy class, the name of the super class will
+	 * be returned. Otherwise the name of class itself will be returned.
 	 *
-	 * @param aClass The (potentially proxy) class. Must not be {@code null}.
+	 * @param aClass
+	 *            The (potentially proxy) class. Must not be {@code null}.
 	 *
 	 * @return The real class name.
 	 *
-	 * @throws NullPointerException If the given class is {@code null}.
+	 * @throws NullPointerException
+	 *             If the given class is {@code null}.
 	 */
 	public static String getRealName( final Class<?> clazz ) {
 		return getRealClass( clazz ).getName( );

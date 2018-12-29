@@ -20,7 +20,8 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 /**
- * This factory can be used to retrieve a service from the CDI context, even if the requesting class is not in the context.
+ * This factory can be used to retrieve a service from the CDI context, even if the requesting class is not in the
+ * context.
  *
  * @author Nils Christian Ehmke
  */
