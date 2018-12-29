@@ -25,60 +25,54 @@ import static org.mockito.Mockito.when;
 import org.junit.After;
 import org.junit.Test;
 
-import kieker.diagnosis.backend.monitoring.MonitoringConfiguration;
-import kieker.diagnosis.backend.monitoring.MonitoringControllerHolder;
-import kieker.diagnosis.backend.monitoring.MonitoringService;
-import kieker.diagnosis.backend.monitoring.Status;
-import kieker.diagnosis.backend.monitoring.Timer;
-import kieker.diagnosis.backend.monitoring.Writer;
 import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
- * Test class for {@link MonitoringService}.
+ * This is a unit test for {@link MonitoringService}.
  *
  * @author Nils Christian Ehmke
  */
 public final class MonitoringServiceTest {
 
 	@After
-	public void After( ) {
+	public void after( ) {
 		MonitoringControllerHolder.setMonitoringController( null );
 		MonitoringControllerHolder.setCurrentConfiguration( null );
 	}
-	
+
 	@Test
 	public void testGetCurrentStatusNoMonitoring( ) {
 		final MonitoringService monitoringService = new MonitoringService( );
-		
+
 		assertThat( monitoringService.getCurrentStatus( ), is( Status.NO_MONITORING ) );
 	}
-	
+
 	@Test
 	public void testGetCurrentStatusRunning( ) {
 		final MonitoringService monitoringService = new MonitoringService( );
-		
+
 		final IMonitoringController controller = mock( IMonitoringController.class );
 		when( controller.isMonitoringTerminated( ) ).thenReturn( Boolean.FALSE );
 		MonitoringControllerHolder.setMonitoringController( controller );
 
 		assertThat( monitoringService.getCurrentStatus( ), is( Status.RUNNING ) );
 	}
-	
+
 	@Test
 	public void testGetCurrentStatusTerminated( ) {
 		final MonitoringService monitoringService = new MonitoringService( );
-		
+
 		final IMonitoringController controller = mock( IMonitoringController.class );
 		when( controller.isMonitoringTerminated( ) ).thenReturn( Boolean.TRUE );
 		MonitoringControllerHolder.setMonitoringController( controller );
-		
+
 		assertThat( monitoringService.getCurrentStatus( ), is( Status.TERMINATED ) );
 	}
-	
+
 	@Test
 	public void testGetCurrentConfigurationNotSet( ) {
 		final MonitoringService monitoringService = new MonitoringService( );
-		
+
 		assertThat( monitoringService.getCurrentConfiguration( ), is( notNullValue( ) ) );
 	}
 
@@ -88,28 +82,28 @@ public final class MonitoringServiceTest {
 
 		final MonitoringConfiguration configuration = new MonitoringConfiguration( );
 		MonitoringControllerHolder.setCurrentConfiguration( configuration );
-		
+
 		assertThat( monitoringService.getCurrentConfiguration( ), is( configuration ) );
 	}
-	
+
 	@Test
 	public void testConfigureMonitoringActivateAndDeactivate( ) {
 		final MonitoringService monitoringService = new MonitoringService( );
 
 		final MonitoringConfiguration configuration = monitoringService.getCurrentConfiguration( );
-		
+
 		configuration.setActive( true );
 		monitoringService.configureMonitoring( configuration );
 		assertThat( monitoringService.getCurrentStatus( ), is( Status.RUNNING ) );
-		
+
 		configuration.setTimer( Timer.MILLIS );
 		configuration.setWriter( Writer.ASCII_WRITER );
 		monitoringService.configureMonitoring( configuration );
 		assertThat( monitoringService.getCurrentStatus( ), is( Status.RUNNING ) );
-		
+
 		configuration.setActive( false );
 		monitoringService.configureMonitoring( configuration );
 		assertThat( monitoringService.getCurrentStatus( ), is( Status.NO_MONITORING ) );
 	}
-	
+
 }
