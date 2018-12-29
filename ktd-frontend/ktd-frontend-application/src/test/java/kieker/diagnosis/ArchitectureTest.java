@@ -2,6 +2,7 @@ package kieker.diagnosis;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
+import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
 
 import org.junit.Test;
 
@@ -16,6 +17,7 @@ import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
 import com.tngtech.archunit.library.Architectures.LayeredArchitecture;
+import com.tngtech.archunit.library.dependencies.SliceRule;
 
 import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.data.MonitoringLogService;
@@ -123,6 +125,26 @@ public final class ArchitectureTest {
 				.whereLayer( "Backend" ).mayOnlyBeAccessedByLayers( "Frontend", "Frontend-Old" );
 
 		rule.check( importedClasses );
+	}
+
+	@Test
+	public void packagesShouldBeFreeOfCycles( ) {
+		final JavaClasses importedClasses = new ClassFileImporter( ).importPackages( "kieker.diagnosis" );
+
+		final SliceRule rule1 = slices( ).matching( "kieker.diagnosis.backend.(*).." )
+				.should( ).beFreeOfCycles( );
+
+		rule1.check( importedClasses );
+
+		final SliceRule rule2 = slices( ).matching( "kieker.diagnosis.frontend.(*).." )
+				.should( ).beFreeOfCycles( );
+
+		rule2.check( importedClasses );
+
+		final SliceRule rule3 = slices( ).matching( "kieker.diagnosis.ui.(*).." )
+				.should( ).beFreeOfCycles( );
+
+		rule3.check( importedClasses );
 	}
 
 }
