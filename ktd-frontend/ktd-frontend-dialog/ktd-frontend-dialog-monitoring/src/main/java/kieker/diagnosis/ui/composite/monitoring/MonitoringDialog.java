@@ -217,6 +217,7 @@ public final class MonitoringDialog extends Dialog<MonitoringConfiguration> impl
 
 		{
 			final IntegerTextField maxEntriesPerFileField = new IntegerTextField( );
+			maxEntriesPerFileField.setId( "monitoringDialogMaxEntriesPerFile" );
 			maxEntriesPerFileField.setMaxWidth( Double.POSITIVE_INFINITY );
 			maxEntriesPerFileField.valueProperty( ).bindBidirectional( ivMaxEntriesPerFile );
 
@@ -238,6 +239,7 @@ public final class MonitoringDialog extends Dialog<MonitoringConfiguration> impl
 
 		{
 			final IntegerTextField queueSizeField = new IntegerTextField( );
+			queueSizeField.setId( "monitoringDialogQueueSize" );
 			queueSizeField.setMaxWidth( Double.POSITIVE_INFINITY );
 			queueSizeField.valueProperty( ).bindBidirectional( ivQueueSize );
 
@@ -259,6 +261,7 @@ public final class MonitoringDialog extends Dialog<MonitoringConfiguration> impl
 
 		{
 			final IntegerTextField bufferField = new IntegerTextField( );
+			bufferField.setId( "monitoringDialogBufferSize" );
 			bufferField.setMaxWidth( Double.POSITIVE_INFINITY );
 			bufferField.valueProperty( ).bindBidirectional( ivBuffer );
 
@@ -305,6 +308,7 @@ public final class MonitoringDialog extends Dialog<MonitoringConfiguration> impl
 
 		if ( !inputValid ) {
 			final Alert alert = new Alert( AlertType.WARNING );
+			alert.getDialogPane( ).lookupButton( ButtonType.OK ).setId( "monitoringDialogValidationOk" );
 			alert.setContentText( RESOURCE_BUNDLE.getString( "errorRange" ) );
 			alert.show( );
 		}
