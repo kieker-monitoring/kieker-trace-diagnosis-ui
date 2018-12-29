@@ -17,6 +17,8 @@
 package kieker.diagnosis.frontend.complex.aggregatedmethods;
 
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import com.google.inject.Singleton;
 
@@ -28,7 +30,7 @@ import kieker.diagnosis.backend.search.aggregatedmethods.AggregatedMethodsFilter
 import kieker.diagnosis.backend.search.aggregatedmethods.AggregatedMethodsService;
 import kieker.diagnosis.backend.settings.SettingsService;
 import kieker.diagnosis.frontend.base.ui.ControllerBase;
-import kieker.diagnosis.frontend.complex.main.MainController;
+import kieker.diagnosis.frontend.base.ui.ViewBase;
 
 /**
  * The controller of the aggregated methods tab.
@@ -36,11 +38,14 @@ import kieker.diagnosis.frontend.complex.main.MainController;
  * @author Nils Christian Ehmke
  */
 @Singleton
-class AggregatedMethodsController extends ControllerBase<AggregatedMethodsViewModel> {
+public class AggregatedMethodsController extends ControllerBase<AggregatedMethodsViewModel> {
 
 	private List<AggregatedMethodCall> ivMethods;
 	private String ivDurationSuffix;
 	private int ivTotalMethods;
+	private BiConsumer<Class<? extends ViewBase<?>>, Object> onPerformSaveAsFavorite;
+	private Consumer<AggregatedMethodCall> onPerformJumpToMethods;
+	private Consumer<CSVData> onPerformExportToCSV;
 
 	/**
 	 * This action is performed once during the application's start.
@@ -98,17 +103,21 @@ class AggregatedMethodsController extends ControllerBase<AggregatedMethodsViewMo
 
 	public void performSetParameter( final Object aParameter ) {
 		if ( aParameter instanceof AggregatedMethodsFilter ) {
-			final AggregatedMethodsFilter filter = (AggregatedMethodsFilter) aParameter;
+			final AggregatedMethodsFilter filter = ( AggregatedMethodsFilter ) aParameter;
 			getViewModel( ).updatePresentationFilter( filter );
 
 			performSearch( );
 		}
 	}
 
+	public void setOnPerformSaveAsFavorite( final BiConsumer<Class<? extends ViewBase<?>>, Object> action ) {
+		onPerformSaveAsFavorite = action;
+	}
+
 	public void performSaveAsFavorite( ) {
 		try {
 			final AggregatedMethodsFilter filter = getViewModel( ).savePresentationFilter( );
-			getController( MainController.class ).performSaveAsFavorite( AggregatedMethodsView.class, filter );
+			onPerformSaveAsFavorite.accept( AggregatedMethodsView.class, filter );
 		} catch ( final BusinessException ex ) {
 			throw new BusinessRuntimeException( ex );
 		}
@@ -119,17 +128,25 @@ class AggregatedMethodsController extends ControllerBase<AggregatedMethodsViewMo
 		getViewModel( ).updatePresentationDetails( methodCall );
 	}
 
+	public void setOnPerformJumpToMethods( final Consumer<AggregatedMethodCall> action ) {
+		onPerformJumpToMethods = action;
+	}
+
 	public void performJumpToMethods( ) {
 		final AggregatedMethodCall methodCall = getViewModel( ).getSelected( );
 
 		if ( methodCall != null ) {
-			getController( MainController.class ).performJumpToMethods( methodCall );
+			onPerformJumpToMethods.accept( methodCall );
 		}
+	}
+
+	public void setOnPerformExportToCSV( final Consumer<CSVData> action ) {
+		onPerformExportToCSV = action;
 	}
 
 	public void performExportToCSV( ) {
 		final CSVData csvData = getViewModel( ).savePresentationAsCSV( );
-		getController( MainController.class ).performExportToCSV( csvData );
+		onPerformExportToCSV.accept( csvData );
 	}
 
 }

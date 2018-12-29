@@ -52,6 +52,10 @@
 		</dependency>
 		<dependency>
 			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-frontend-tab-aggregated-methods</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
 			<artifactId>ktd-backend-export</artifactId>
 		</dependency>
 		<dependency>

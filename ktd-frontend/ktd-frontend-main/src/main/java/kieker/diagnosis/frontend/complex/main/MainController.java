@@ -51,6 +51,7 @@ import kieker.diagnosis.backend.settings.SettingsService;
 import kieker.diagnosis.frontend.base.common.ExceptionUtil;
 import kieker.diagnosis.frontend.base.ui.ControllerBase;
 import kieker.diagnosis.frontend.base.ui.ViewBase;
+import kieker.diagnosis.frontend.complex.aggregatedmethods.AggregatedMethodsController;
 import kieker.diagnosis.frontend.complex.main.properties.CloseWithoutPromptProperty;
 import kieker.diagnosis.frontend.complex.main.properties.LastExportPathProperty;
 import kieker.diagnosis.frontend.complex.main.properties.LastImportPathProperty;
@@ -78,6 +79,11 @@ public class MainController extends ControllerBase<MainViewModel> {
 		methodsController.setOnPerformSaveAsFavorite( this::performSaveAsFavorite );
 		methodsController.setOnPerformJumpToTrace( this::performJumpToTrace );
 		methodsController.setOnPerformExportToCSV( this::performExportToCSV );
+
+		final AggregatedMethodsController aggregatedMethodsController = getController( AggregatedMethodsController.class );
+		aggregatedMethodsController.setOnPerformSaveAsFavorite( this::performSaveAsFavorite );
+		aggregatedMethodsController.setOnPerformJumpToMethods( this::performJumpToMethods );
+		aggregatedMethodsController.setOnPerformExportToCSV( this::performExportToCSV );
 	}
 
 	/**
