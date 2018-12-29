@@ -8,15 +8,20 @@
 		<groupId>net.kieker-monitoring</groupId>
 		<artifactId>ktd-parent</artifactId>
 		<version>5.0.0-SNAPSHOT</version>
-		<relativePath>../../ktd-parent</relativePath>
+		<relativePath>../../../ktd-parent</relativePath>
 	</parent>
 
-	<artifactId>ktd-frontend-tab</artifactId>
-	<packaging>pom</packaging>
+	<artifactId>ktd-frontend-tab-statistics</artifactId>
 
-	<modules>
-		<module>ktd-frontend-tab-traces</module>
-		<module>ktd-frontend-tab-statistics</module>
-	</modules>
-
+	<dependencies>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-frontend-base</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-backend-search</artifactId>
+		</dependency>
+	</dependencies>
+ 
 </project>
