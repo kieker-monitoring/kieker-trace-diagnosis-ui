@@ -34,7 +34,8 @@ import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.pattern.PatternService;
 
 /**
- * This is the service responsible for handling various filters and predicates. It helps to assemble predicates in a uniform way.
+ * This is the service responsible for handling various filters and predicates. It helps to assemble predicates in a
+ * uniform way.
  *
  * @author Nils Christian Ehmke
  */
@@ -45,10 +46,13 @@ public class FilterService implements Service {
 	private PatternService patternService;
 
 	/**
-	 * Creates a predicate which applies the given function and checks whether the result is equal to the given long. If the value is {@code null}, an always-true predicate will be returned.
+	 * Creates a predicate which applies the given function and checks whether the result is equal to the given long. If
+	 * the value is {@code null}, an always-true predicate will be returned.
 	 *
-	 * @param getter The function to apply.
-	 * @param value  The value which should be checked for equality.
+	 * @param getter
+	 *            The function to apply.
+	 * @param value
+	 *            The value which should be checked for equality.
 	 *
 	 * @return A new predicate.
 	 */
@@ -61,11 +65,15 @@ public class FilterService implements Service {
 	}
 
 	/**
-	 * Creates a predicate which applies the given function and checks whether the result is equal to the given value. If the value is {@code null}, an always-true predicate will be returned.
+	 * Creates a predicate which applies the given function and checks whether the result is equal to the given value.
+	 * If the value is {@code null}, an always-true predicate will be returned.
 	 *
-	 * @param getter     The function to apply.
-	 * @param value      The value which should be checked for equality.
-	 * @param useRegExpr Whether the value is actually a pattern.
+	 * @param getter
+	 *            The function to apply.
+	 * @param value
+	 *            The value which should be checked for equality.
+	 * @param useRegExpr
+	 *            Whether the value is actually a pattern.
 	 *
 	 * @return A new predicate.
 	 */
@@ -92,16 +100,16 @@ public class FilterService implements Service {
 	}
 
 	/**
-	 * This method conjuncts a given list of predicates. That means they are AND-linked. If the list is empty, an always true predicate is returned.
+	 * This method conjuncts a given list of predicates. That means they are AND-linked. If the list is empty, an always
+	 * true predicate is returned.
 	 *
-	 * @param aPredicates The (possible empty) list of predicates.
+	 * @param aPredicates
+	 *            The (possible empty) list of predicates.
 	 *
 	 * @return The conjuncted predicates.
 	 */
 	public <T> Predicate<T> conjunct( final List<Predicate<T>> aPredicates ) {
-		return aPredicates
-				.stream( )
-				.reduce( t -> true, Predicate::and );
+		return aPredicates.stream( ).reduce( t -> true, Predicate::and );
 	}
 
 	public <T> Predicate<T> createAfterTimePredicate( final Function<T, Long> aTimestampFunction, final LocalDate aLowerDate, final LocalTime aLowerTime ) {

@@ -34,7 +34,7 @@ import com.google.inject.Injector;
 import kieker.diagnosis.backend.base.ServiceBaseModule;
 
 /**
- * Test class for the {@link FilterService}.
+ * This is a unit test the {@link FilterService}.
  *
  * @author Nils Christian Ehmke
  */
