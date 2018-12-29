@@ -55,6 +55,7 @@ import kieker.diagnosis.frontend.complex.main.properties.CloseWithoutPromptPrope
 import kieker.diagnosis.frontend.complex.main.properties.LastExportPathProperty;
 import kieker.diagnosis.frontend.complex.main.properties.LastImportPathProperty;
 import kieker.diagnosis.frontend.complex.methods.MethodsView;
+import kieker.diagnosis.frontend.complex.traces.TracesController;
 import kieker.diagnosis.frontend.complex.traces.TracesView;
 import kieker.diagnosis.frontend.dialog.about.AboutDialog;
 import kieker.diagnosis.frontend.dialog.manual.ManualDialog;
@@ -64,6 +65,14 @@ import kieker.diagnosis.frontend.dialog.settings.SettingsDialog;
 
 @Singleton
 public class MainController extends ControllerBase<MainViewModel> {
+
+	/**
+	 * This method should be called exactly once during startup
+	 */
+	public void initialize( ) {
+		final TracesController tracesController = getController( TracesController.class );
+		tracesController.setOnPerformSaveAsFavorite( this::performSaveAsFavorite );
+	}
 
 	/**
 	 * This action is performed, when the user wants to import a monitoring log.
@@ -86,7 +95,7 @@ public class MainController extends ControllerBase<MainViewModel> {
 			importThread.start( );
 		}
 	}
-	
+
 	/**
 	 * This method is only to be used from the UI tests to bypass the native dialogs in the test environments.
 	 */
@@ -169,7 +178,7 @@ public class MainController extends ControllerBase<MainViewModel> {
 			final Alert alert = new Alert( AlertType.CONFIRMATION );
 			alert.setTitle( getLocalizedString( "titleReallyClose" ) );
 			alert.setHeaderText( getLocalizedString( "headerReallyClose" ) );
-			
+
 			// Modify the buttons a little bit
 			alert.getButtonTypes( ).remove( ButtonType.OK );
 			alert.getButtonTypes( ).add( ButtonType.YES );
@@ -180,7 +189,7 @@ public class MainController extends ControllerBase<MainViewModel> {
 			final DialogPane dialogPane = alert.getDialogPane( );
 			final Node yesButton = dialogPane.lookupButton( ButtonType.YES );
 			yesButton.setId( "mainCloseDialogYes" );
-			
+
 			// Add the logo
 			final String iconPath = getLocalizedString( "iconReallyClose" );
 			final InputStream iconStream = getClass( ).getClassLoader( ).getResourceAsStream( iconPath );
@@ -272,7 +281,7 @@ public class MainController extends ControllerBase<MainViewModel> {
 			final TextInputDialog textInputDialog = new TextInputDialog( );
 			textInputDialog.setTitle( getLocalizedString( "newFilterFavorite" ) );
 			textInputDialog.setHeaderText( getLocalizedString( "newFilterFavoriteName" ) );
-			
+
 			final String iconPath = getLocalizedString( "iconNewFavorite" );
 			final InputStream iconStream = getClass( ).getClassLoader( ).getResourceAsStream( iconPath );
 			final Image icon = new Image( iconStream );

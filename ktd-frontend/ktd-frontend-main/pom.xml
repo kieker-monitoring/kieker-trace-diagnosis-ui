@@ -40,6 +40,10 @@
 		</dependency>
 		<dependency>
 			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-frontend-tab-traces</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
 			<artifactId>ktd-backend-export</artifactId>
 		</dependency>
 		<dependency>

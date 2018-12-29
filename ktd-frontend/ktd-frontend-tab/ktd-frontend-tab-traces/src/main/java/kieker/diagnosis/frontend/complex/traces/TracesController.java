@@ -1,22 +1,23 @@
-/*************************************************************************** 
- * Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)         
- *                                                                           
- * Licensed under the Apache License, Version 2.0 (the "License");           
- * you may not use this file except in compliance with the License.          
- * You may obtain a copy of the License at                                   
- *                                                                           
- *     http://www.apache.org/licenses/LICENSE-2.0                            
- *                                                                           
- * Unless required by applicable law or agreed to in writing, software       
- * distributed under the License is distributed on an "AS IS" BASIS,         
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  
- * See the License for the specific language governing permissions and       
- * limitations under the License.                                            
+/***************************************************************************
+ * Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  ***************************************************************************/
 
 package kieker.diagnosis.frontend.complex.traces;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 
 import com.google.inject.Singleton;
 
@@ -27,7 +28,7 @@ import kieker.diagnosis.backend.search.traces.TracesFilter;
 import kieker.diagnosis.backend.search.traces.TracesService;
 import kieker.diagnosis.backend.settings.SettingsService;
 import kieker.diagnosis.frontend.base.ui.ControllerBase;
-import kieker.diagnosis.frontend.complex.main.MainController;
+import kieker.diagnosis.frontend.base.ui.ViewBase;
 
 /**
  * The controller of the traces tab.
@@ -35,11 +36,12 @@ import kieker.diagnosis.frontend.complex.main.MainController;
  * @author Nils Christian Ehmke
  */
 @Singleton
-class TracesController extends ControllerBase<TracesViewModel> {
+public class TracesController extends ControllerBase<TracesViewModel> {
 
 	private List<MethodCall> ivTraceRoots;
 	private int ivTotalTraces;
 	private String ivDurationSuffix;
+	private BiConsumer<Class<? extends ViewBase<?>>, Object> onPerformSaveAsFavorite;
 
 	/**
 	 * This action is performed once during the application's start.
@@ -51,8 +53,7 @@ class TracesController extends ControllerBase<TracesViewModel> {
 	}
 
 	/**
-	 * This action is performed when settings or data are changed and the view has to be refreshed. The actual refresh is only performed when
-	 * {@link #performRefresh()} is called. This method prepares only the refresh.
+	 * This action is performed when settings or data are changed and the view has to be refreshed. The actual refresh is only performed when {@link #performRefresh()} is called. This method prepares only the refresh.
 	 */
 	public void performPrepareRefresh( ) {
 		// Find the trace roots to display
@@ -112,16 +113,13 @@ class TracesController extends ControllerBase<TracesViewModel> {
 	}
 
 	/**
-	 * This action is performed, when someone requested a jump into the traces tab. The real action is determined based on the type of the parameter. If the
-	 * parameter is a {@link TracesFilter}, the filter is simply applied. If the parameter is a {@link MethodCall}, the trace for the method call is shown and
-	 * the view tries to navigate directly to the method call. If the method call is not visible, the trace is still shown.
+	 * This action is performed, when someone requested a jump into the traces tab. The real action is determined based on the type of the parameter. If the parameter is a {@link TracesFilter}, the filter is simply applied. If the parameter is a {@link MethodCall}, the trace for the method call is shown and the view tries to navigate directly to the method call. If the method call is not visible, the trace is still shown.
 	 *
-	 * @param aParameter
-	 *            The parameter.
+	 * @param aParameter The parameter.
 	 */
 	public void performSetParameter( final Object aParameter ) {
 		if ( aParameter instanceof MethodCall ) {
-			final MethodCall methodCall = (MethodCall) aParameter;
+			final MethodCall methodCall = ( MethodCall ) aParameter;
 
 			// We are supposed to jump to the method call
 			final TracesFilter filter = new TracesFilter( );
@@ -134,11 +132,15 @@ class TracesController extends ControllerBase<TracesViewModel> {
 		}
 
 		if ( aParameter instanceof TracesFilter ) {
-			final TracesFilter filter = (TracesFilter) aParameter;
+			final TracesFilter filter = ( TracesFilter ) aParameter;
 			getViewModel( ).updatePresentationFilter( filter );
 
 			performSearch( );
 		}
+	}
+
+	public void setOnPerformSaveAsFavorite( final BiConsumer<Class<? extends ViewBase<?>>, Object> action ) {
+		onPerformSaveAsFavorite = action;
 	}
 
 	/**
@@ -148,7 +150,7 @@ class TracesController extends ControllerBase<TracesViewModel> {
 		try {
 			// We simply save the filter's content and delegate to the main controller.
 			final TracesFilter filter = getViewModel( ).savePresentationFilter( );
-			getController( MainController.class ).performSaveAsFavorite( TracesView.class, filter );
+			onPerformSaveAsFavorite.accept( TracesView.class, filter );
 		} catch ( final BusinessException ex ) {
 			throw new BusinessRuntimeException( ex );
 		}
