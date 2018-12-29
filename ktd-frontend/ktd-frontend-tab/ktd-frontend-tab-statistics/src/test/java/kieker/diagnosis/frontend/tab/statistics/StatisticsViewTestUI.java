@@ -41,7 +41,6 @@ public final class StatisticsViewTestUI extends ApplicationTest {
 
 	@Test
 	public void testStatisticsView( ) {
-		System.out.println( lookup( "#statisticsProcessedBytes" ).query( ) );
 		final TextInputControl processedBytesTextField = lookup( "#statisticsProcessedBytes" ).queryTextInputControl( );
 		assertThat( processedBytesTextField.getText( ), is( "<Keine Daten verfügbar> " ) );
 
