@@ -17,6 +17,7 @@
 package kieker.diagnosis.backend.data.reader;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
@@ -48,9 +49,10 @@ public final class AsciiFileReaderTest {
 		asciiFileReader.readFromDirectory( logDirectory );
 		temporaryRepository.finish( );
 
-		assertThat( monitoringLogService.getTraceRoots( ), hasSize( 2 ) );
-		assertThat( monitoringLogService.getAggreatedMethods( ), hasSize( 3 ) );
-		assertThat( monitoringLogService.getMethods( ), hasSize( 3 ) );
+		assertThat( monitoringLogService.getTraceRoots( ), hasSize( 3 ) );
+		assertThat( monitoringLogService.getAggreatedMethods( ), hasSize( 4 ) );
+		assertThat( monitoringLogService.getMethods( ), hasSize( 4 ) );
+		assertThat( monitoringLogService.getIgnoredRecords( ), is( 1 ) );
 	}
 
 }
