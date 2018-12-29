@@ -27,14 +27,14 @@ import com.google.inject.Injector;
 public final class ServiceFactory {
 
 	@Inject
-	private static Injector cvInjector;
+	private static Injector injector;
 
 	private ServiceFactory( ) {
 		// Avoid instantiation
 	}
 
-	public static <S extends Service> S getService( final Class<S> aServiceClass ) {
-		return cvInjector.getInstance( aServiceClass );
+	public static <S extends Service> S getService( final Class<S> serviceClass ) {
+		return injector.getInstance( serviceClass );
 	}
 
 }

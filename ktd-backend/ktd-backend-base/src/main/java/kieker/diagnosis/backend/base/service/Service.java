@@ -17,7 +17,7 @@
 package kieker.diagnosis.backend.base.service;
 
 /**
- * This is a marker interface for each service.
+ * This is a marker interface, which should be implemented by each service.
  *
  * @author Nils Christian Ehmke
  */

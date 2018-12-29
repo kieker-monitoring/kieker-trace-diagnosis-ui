@@ -27,14 +27,14 @@ import com.google.inject.Guice;
 import kieker.diagnosis.backend.base.ServiceBaseModule;
 
 /**
- * Test class for {@link ClassUtil}.
+ * This is a unit test for {@link ClassUtil}.
  *
  * @author Nils Christian Ehmke
  */
 public final class ServiceFactoryTest {
 
 	@Test
-	public void testGetService( ) {
+	public void getServiceShouldReturnServiceFromCDIContext( ) {
 		Guice.createInjector( new ServiceBaseModule( ) );
 		assertThat( ServiceFactory.getService( TestService.class ), is( notNullValue( ) ) );
 	}

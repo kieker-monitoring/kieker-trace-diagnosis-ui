@@ -25,16 +25,16 @@ public final class TechnicalException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public TechnicalException( final String aMessage, final Throwable aCause ) {
-		super( aMessage, aCause );
+	public TechnicalException( final String message, final Throwable cause ) {
+		super( message, cause );
 	}
 
-	public TechnicalException( final String aFormatMessage, final Object... aArgs ) {
-		super( String.format( aFormatMessage, aArgs ) );
+	public TechnicalException( final String formatMessage, final Object... args ) {
+		super( String.format( formatMessage, args ) );
 	}
 
-	public TechnicalException( final Throwable aCause ) {
-		super( aCause );
+	public TechnicalException( final Throwable cause ) {
+		super( cause );
 	}
 
 }

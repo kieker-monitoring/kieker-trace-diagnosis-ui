@@ -16,8 +16,10 @@
 
 package kieker.diagnosis.backend.base.common;
 
+import java.util.Objects;
+
 /**
- * A util class to get the real classes from objects proxied by Guice.
+ * This util class retrieves the real classes and class names from Guice's proxy classes.
  *
  * @author Nils Christian Ehmke
  */
@@ -28,29 +30,35 @@ public final class ClassUtil {
 	}
 
 	/**
-	 * Delivers the real class of the given class. This means that for a proxy class the super class will be returned and the class itself otherwise.
+	 * Retrieves the real class of the given class. If the given class is a proxy class, the super class will be returned. Otherwise the class itself will be returned.
 	 *
-	 * @param aClass The (potentially proxy) class.
+	 * @param clazz The (potentially proxy) class. Must not be {@code null}.
 	 *
 	 * @return The real class.
+	 *
+	 * @throws NullPointerException If the given class is {@code null}.
 	 */
-	public static Class<?> getRealClass( final Class<?> aClass ) {
-		if ( aClass.getName( ).contains( "$$EnhancerByGuice$$" ) ) {
-			return aClass.getSuperclass( );
+	public static Class<?> getRealClass( final Class<?> clazz ) {
+		Objects.requireNonNull( clazz, "The class must not be null." );
+
+		if ( clazz.getName( ).contains( "$$EnhancerByGuice$$" ) ) {
+			return clazz.getSuperclass( );
 		} else {
-			return aClass;
+			return clazz;
 		}
 	}
 
 	/**
-	 * Delivers the real name of the given class. This means that for a proxy class the name of the super class will be returned and the name of the class itself otherwise.
+	 * Retrieves the real name of the given class. If the given class is a proxy class, the name of the super class will be returned. Otherwise the name of class itself will be returned.
 	 *
-	 * @param aClass The (potentially proxy) class.
+	 * @param aClass The (potentially proxy) class. Must not be {@code null}.
 	 *
 	 * @return The real class name.
+	 *
+	 * @throws NullPointerException If the given class is {@code null}.
 	 */
-	public static String getRealName( final Class<?> aClass ) {
-		return getRealClass( aClass ).getName( );
+	public static String getRealName( final Class<?> clazz ) {
+		return getRealClass( clazz ).getName( );
 	}
 
 }

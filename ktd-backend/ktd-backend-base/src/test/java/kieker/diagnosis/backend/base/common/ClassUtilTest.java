@@ -30,7 +30,7 @@ import com.google.inject.Injector;
 import com.google.inject.matcher.Matchers;
 
 /**
- * Test class for {@link ClassUtil}.
+ * This is a unit test for {@link ClassUtil}.
  *
  * @author Nils Christian Ehmke
  */
@@ -39,26 +39,30 @@ public final class ClassUtilTest {
 	@Rule
 	public final ExpectedException ivExpectedException = ExpectedException.none( );
 
-	private final Injector ivInjector = Guice.createInjector( new Module( ) );
+	private final Injector injector = Guice.createInjector( new Module( ) );
 
 	@Test
 	public void realClassOfProxyClassShouldReturnCorrectClass( ) {
-		assertThat( ClassUtil.getRealClass( ivInjector.getInstance( ProxiedClass.class ).getClass( ) ), is( equalTo( ProxiedClass.class ) ) );
+		final Class<?> realClass = ClassUtil.getRealClass( injector.getInstance( ProxiedClass.class ).getClass( ) );
+		assertThat( realClass, is( equalTo( ProxiedClass.class ) ) );
 	}
 
 	@Test
 	public void realClassOfNonProxyClassShouldReturnCorrectClass( ) {
-		assertThat( ClassUtil.getRealClass( ivInjector.getInstance( NonProxiedClass.class ).getClass( ) ), is( equalTo( NonProxiedClass.class ) ) );
+		final Class<?> realClass = ClassUtil.getRealClass( injector.getInstance( NonProxiedClass.class ).getClass( ) );
+		assertThat( realClass, is( equalTo( NonProxiedClass.class ) ) );
 	}
 
 	@Test
 	public void realNameOfProxyClassShouldReturnCorrectName( ) {
-		assertThat( ClassUtil.getRealName( ivInjector.getInstance( ProxiedClass.class ).getClass( ) ), is( equalTo( ProxiedClass.class.getName( ) ) ) );
+		final String realName = ClassUtil.getRealName( injector.getInstance( ProxiedClass.class ).getClass( ) );
+		assertThat( realName, is( equalTo( ProxiedClass.class.getName( ) ) ) );
 	}
 
 	@Test
 	public void realNameOfNonProxyClassShouldReturnCorrectName( ) {
-		assertThat( ClassUtil.getRealName( ivInjector.getInstance( NonProxiedClass.class ).getClass( ) ), is( equalTo( NonProxiedClass.class.getName( ) ) ) );
+		final String realName = ClassUtil.getRealName( injector.getInstance( NonProxiedClass.class ).getClass( ) );
+		assertThat( realName, is( equalTo( NonProxiedClass.class.getName( ) ) ) );
 	}
 
 }

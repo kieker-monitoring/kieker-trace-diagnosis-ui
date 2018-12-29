@@ -27,8 +27,8 @@ public final class BusinessRuntimeException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public BusinessRuntimeException( final BusinessException aBusinessException ) {
-		super( aBusinessException );
+	public BusinessRuntimeException( final BusinessException businessException ) {
+		super( businessException );
 	}
 
 }
