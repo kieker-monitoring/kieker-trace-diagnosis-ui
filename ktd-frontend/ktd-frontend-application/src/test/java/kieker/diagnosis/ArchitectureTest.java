@@ -119,10 +119,8 @@ public final class ArchitectureTest {
 		final LayeredArchitecture rule = layeredArchitecture( )
 				.layer( "Backend" ).definedBy( "kieker.diagnosis.backend.." )
 				.layer( "Frontend" ).definedBy( "kieker.diagnosis.frontend.." )
-				.layer( "Frontend-Old" ).definedBy( "kieker.diagnosis.ui.." )
-				.whereLayer( "Frontend" ).mayOnlyBeAccessedByLayers( "Frontend-Old" )
-				.whereLayer( "Frontend-Old" ).mayOnlyBeAccessedByLayers( "Frontend" )
-				.whereLayer( "Backend" ).mayOnlyBeAccessedByLayers( "Frontend", "Frontend-Old" );
+				.whereLayer( "Frontend" ).mayNotBeAccessedByAnyLayer( )
+				.whereLayer( "Backend" ).mayOnlyBeAccessedByLayers( "Frontend" );
 
 		rule.check( importedClasses );
 	}
@@ -131,20 +129,10 @@ public final class ArchitectureTest {
 	public void packagesShouldBeFreeOfCycles( ) {
 		final JavaClasses importedClasses = new ClassFileImporter( ).importPackages( "kieker.diagnosis" );
 
-		final SliceRule rule1 = slices( ).matching( "kieker.diagnosis.backend.(*).." )
+		final SliceRule rule = slices( ).matching( "kieker.diagnosis.(*).." )
 				.should( ).beFreeOfCycles( );
 
-		rule1.check( importedClasses );
-
-		final SliceRule rule2 = slices( ).matching( "kieker.diagnosis.frontend.(*).." )
-				.should( ).beFreeOfCycles( );
-
-		rule2.check( importedClasses );
-
-		final SliceRule rule3 = slices( ).matching( "kieker.diagnosis.ui.(*).." )
-				.should( ).beFreeOfCycles( );
-
-		rule3.check( importedClasses );
+		rule.check( importedClasses );
 	}
 
 }

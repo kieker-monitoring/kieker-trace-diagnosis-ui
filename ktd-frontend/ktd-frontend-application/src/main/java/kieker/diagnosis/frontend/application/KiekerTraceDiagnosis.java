@@ -25,10 +25,10 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import kieker.diagnosis.frontend.FrontendModule;
 import kieker.diagnosis.frontend.base.mixin.ImageMixin;
-import kieker.diagnosis.ui.FrontendModule;
-import kieker.diagnosis.ui.complex.main.MainController;
-import kieker.diagnosis.ui.complex.main.MainView;
+import kieker.diagnosis.frontend.complex.main.MainController;
+import kieker.diagnosis.frontend.complex.main.MainView;
 
 /**
  * This is the application's main class.
