@@ -49,9 +49,9 @@ import kieker.diagnosis.backend.monitoring.MonitoringUtil;
  */
 public final class BinaryFileReader extends Reader {
 
-	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle( getClass( ).getName( ) );
+	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( BinaryFileReader.class.getName( ) );
 
-	private final IntByteMap ivIgnoredRecordsSizeMap = new IntByteHashMap( );
+	private final IntByteMap ignoredRecordsSizeMap = new IntByteHashMap( );
 	private IntObjectMap<String> ivStringMapping;
 
 	private int ivBeforeOperationEventKey;
@@ -87,8 +87,8 @@ public final class BinaryFileReader extends Reader {
 		final MonitoringProbe probe = MonitoringUtil.createMonitoringProbe( getClass( ), "readNonRecursiveFromDirectory(java.io.File)" );
 
 		try {
-			ivTemporaryRepository.clearBeforeNextDirectory( );
-			ivIgnoredRecordsSizeMap.clear( );
+			temporaryRepository.clearBeforeNextDirectory( );
+			ignoredRecordsSizeMap.clear( );
 
 			ivStringMapping = readMappingFile( aDirectory );
 			extractImportKeysFromMapping( );
@@ -113,7 +113,7 @@ public final class BinaryFileReader extends Reader {
 		ivTraceMetadataKey = -1;
 		ivKiekerMetadataRecordKey = -1;
 
-		ivStringMapping.forEach( ( Consumer<IntObjectCursor<String>> ) aCursor -> {
+		ivStringMapping.forEach( (Consumer<IntObjectCursor<String>>) aCursor -> {
 			final int key = aCursor.key;
 			final String value = aCursor.value;
 
@@ -141,7 +141,7 @@ public final class BinaryFileReader extends Reader {
 			try {
 				while ( byteBuffer.hasRemaining( ) ) {
 					final int recordKey = byteBuffer.getInt( );
-					skipBytes( ( byte ) 8, byteBuffer ); // Ignore the logging timestamp
+					skipBytes( (byte) 8, byteBuffer ); // Ignore the logging timestamp
 
 					if ( recordKey == ivBeforeOperationEventKey ) {
 						readBeforeOperationEvent( byteBuffer );
@@ -160,10 +160,10 @@ public final class BinaryFileReader extends Reader {
 				}
 			} catch ( final BufferUnderflowException | IllegalArgumentException ex ) {
 				// The stream is incomplete. We still want to terminate the whole import in a useful manner.
-				ivTemporaryRepository.processException( ex );
+				temporaryRepository.processException( ex );
 			}
 
-			ivTemporaryRepository.processProcessedBytes( binaryContent.length );
+			temporaryRepository.processProcessedBytes( binaryContent.length );
 		} catch ( final Throwable t ) {
 			probe.fail( t );
 			throw t;
@@ -179,19 +179,19 @@ public final class BinaryFileReader extends Reader {
 	private void readBeforeOperationEvent( final ByteBuffer aByteBuffer ) {
 		final long timestamp = aByteBuffer.getLong( ); // Timestamp
 		final long traceId = aByteBuffer.getLong( ); // Trace Id
-		skipBytes( ( byte ) ( 3 * 4 ), aByteBuffer ); // Ignore order index, method name and class name
+		skipBytes( (byte) ( 3 * 4 ), aByteBuffer ); // Ignore order index, method name and class name
 
-		ivTemporaryRepository.processBeforeOperationEvent( timestamp, traceId );
+		temporaryRepository.processBeforeOperationEvent( timestamp, traceId );
 	}
 
 	private MethodCall readAfterOperationEvent( final ByteBuffer aByteBuffer ) {
 		final long timestamp = aByteBuffer.getLong( ); // Timestamp
 		final long traceId = aByteBuffer.getLong( ); // Trace Id
-		skipBytes( ( byte ) 4, aByteBuffer ); // Ignore order index
+		skipBytes( (byte) 4, aByteBuffer ); // Ignore order index
 		final String methodName = ivStringMapping.get( aByteBuffer.getInt( ) ); // Method name
 		final String clazz = ivStringMapping.get( aByteBuffer.getInt( ) ); // Class name
 
-		return ivTemporaryRepository.processAfterOperationEvent( timestamp, traceId, methodName, clazz );
+		return temporaryRepository.processAfterOperationEvent( timestamp, traceId, methodName, clazz );
 	}
 
 	private void readAfterOperationFailedEvent( final ByteBuffer aByteBuffer ) {
@@ -208,42 +208,42 @@ public final class BinaryFileReader extends Reader {
 
 	private void readTraceMetadata( final ByteBuffer aByteBuffer ) {
 		final long traceId = aByteBuffer.getLong( );
-		skipBytes( ( byte ) ( 8 + 4 ), aByteBuffer ); // Ignore thread id and session id
+		skipBytes( (byte) ( 8 + 4 ), aByteBuffer ); // Ignore thread id and session id
 
 		final String host = ivStringMapping.get( aByteBuffer.getInt( ) ); // Hostname
-		skipBytes( ( byte ) ( 8 + 4 ), aByteBuffer ); // Ignore parent trace Id and parent order Id
+		skipBytes( (byte) ( 8 + 4 ), aByteBuffer ); // Ignore parent trace Id and parent order Id
 
-		ivTemporaryRepository.processTraceMetadata( traceId, host );
+		temporaryRepository.processTraceMetadata( traceId, host );
 	}
 
 	private void readKiekerMetadataRecord( final ByteBuffer aByteBuffer ) {
-		skipBytes( ( byte ) ( 4 * 4 + 1 + 8 ), aByteBuffer ); // Ignore a lot of fields...
+		skipBytes( (byte) ( 4 * 4 + 1 + 8 ), aByteBuffer ); // Ignore a lot of fields...
 		final String timeUnitName = ivStringMapping.get( aByteBuffer.getInt( ) ); // Time unit
-		skipBytes( ( byte ) 8, aByteBuffer ); // Ignore the number of records
+		skipBytes( (byte) 8, aByteBuffer ); // Ignore the number of records
 
-		ivTemporaryRepository.processSourceTimeUnit( timeUnitName );
+		temporaryRepository.processSourceTimeUnit( timeUnitName );
 	}
 
 	private void readUnknownRecord( final ByteBuffer aByteBuffer, final int aRecordKey ) {
 		byte size;
 
-		if ( !ivIgnoredRecordsSizeMap.containsKey( aRecordKey ) ) {
+		if ( !ignoredRecordsSizeMap.containsKey( aRecordKey ) ) {
 			final String recordName = ivStringMapping.get( aRecordKey );
 			try {
 				final Class<?> recordClass = Class.forName( recordName );
 				final Field sizeField = recordClass.getDeclaredField( "SIZE" );
-				size = ( byte ) ( int ) sizeField.get( null );
+				size = (byte) (int) sizeField.get( null );
 
-				ivIgnoredRecordsSizeMap.put( aRecordKey, size );
+				ignoredRecordsSizeMap.put( aRecordKey, size );
 			} catch ( final Exception ex ) {
 				// We have no chance. We cannot skip the record, as we don't know its size.
-				throw new RuntimeException( String.format( ivResourceBundle.getString( "errorMessageUnknownRecord" ), recordName ), ex );
+				throw new RuntimeException( String.format( RESOURCE_BUNDLE.getString( "errorMessageUnknownRecord" ), recordName ), ex );
 			}
 		} else {
-			size = ivIgnoredRecordsSizeMap.get( aRecordKey );
+			size = ignoredRecordsSizeMap.get( aRecordKey );
 		}
 
-		ivTemporaryRepository.processIgnoredRecord( );
+		temporaryRepository.processIgnoredRecord( );
 		skipBytes( size, aByteBuffer );
 	}
 

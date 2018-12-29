@@ -52,25 +52,25 @@ public class MonitoringLogService implements Service {
 
 	private static final ResourceBundle RESOURCES = ResourceBundle.getBundle( MonitoringLogService.class.getName( ) );
 
-	private final List<MethodCall> ivTraceRoots = new ArrayList<>( );
-	private final List<AggregatedMethodCall> ivAggreatedMethods = new ArrayList<>( );
-	private final List<MethodCall> ivMethods = new ArrayList<>( );
-	private long ivProcessDuration;
-	private long ivProcessedBytes;
+	private final List<MethodCall> traceRoots = new ArrayList<>( );
+	private final List<AggregatedMethodCall> aggreatedMethods = new ArrayList<>( );
+	private final List<MethodCall> methods = new ArrayList<>( );
+	private long processDuration;
+	private long processedBytes;
 	private boolean dataAvailable = false;
-	private int ivIgnoredRecords;
-	private int ivDanglingRecords;
-	private int ivIncompleteTraces;
-	private String ivDirectory;
+	private int ignoredRecords;
+	private int danglingRecords;
+	private int incompleteTraces;
+	private String directory;
 
-	public void importMonitoringLog( final File aDirectoryOrFile, final ImportType aType ) {
+	public void importMonitoringLog( final File directoryOrFile, final ImportType type ) {
 		final long tin = System.currentTimeMillis( );
 
 		File directory = null;
 		try {
 			clear( );
 
-			directory = extractIfNecessary( aDirectoryOrFile, aType );
+			directory = extractIfNecessary( directoryOrFile, type );
 
 			// We use some helper classes to avoid having temporary fields in the service
 			final TemporaryRepository temporaryRepository = new TemporaryRepository( this );
@@ -95,50 +95,50 @@ public class MonitoringLogService implements Service {
 				throw new BusinessException( RESOURCES.getString( "errorMessageUnknownMonitoringLog" ) );
 			}
 
-			if ( ivIgnoredRecords > 0 && ivTraceRoots.size( ) == 0 ) {
+			if ( ignoredRecords > 0 && traceRoots.size( ) == 0 ) {
 				// No traces have been reconstructed and records have been ignored. We inform the user.
-				final String msg = String.format( RESOURCES.getString( "errorMessageNoTraceAndRecordsIgnored" ), ivIgnoredRecords );
+				final String msg = String.format( RESOURCES.getString( "errorMessageNoTraceAndRecordsIgnored" ), ignoredRecords );
 				throw new BusinessException( msg );
 			}
 
-			setDataAvailable( aDirectoryOrFile, tin );
+			setDataAvailable( directoryOrFile, tin );
 		} catch ( final BusinessException ex ) {
 			// A business exception means, that something went wrong, but that the data is partially available
-			setDataAvailable( aDirectoryOrFile, tin );
+			setDataAvailable( directoryOrFile, tin );
 
 			throw new BusinessRuntimeException( ex );
 		} catch ( final Exception ex ) {
 			throw new TechnicalException( RESOURCES.getString( "errorMessageImportFailed" ), ex );
 		} finally {
 			// If necessary delete the temporary directory
-			if ( aType == ImportType.ZIP_FILE && directory != null ) {
+			if ( type == ImportType.ZIP_FILE && directory != null ) {
 				deleteDirectory( directory );
 			}
 		}
 	}
 
-	private File extractIfNecessary( final File aDirectoryOrFile, final ImportType aType ) throws ZipException, IOException {
+	private File extractIfNecessary( final File directoryOrFile, final ImportType type ) throws ZipException, IOException {
 		final File directory;
-		switch ( aType ) {
-		case DIRECTORY:
-			directory = aDirectoryOrFile;
+		switch ( type ) {
+			case DIRECTORY:
+				directory = directoryOrFile;
 			break;
-		case ZIP_FILE:
-			directory = extractZIPFile( aDirectoryOrFile );
+			case ZIP_FILE:
+				directory = extractZIPFile( directoryOrFile );
 			break;
-		default:
-			// Should not happen
-			directory = null;
+			default:
+				// Should not happen
+				directory = null;
 			break;
 
 		}
 		return directory;
 	}
 
-	private File extractZIPFile( final File aFile ) throws ZipException, IOException {
+	private File extractZIPFile( final File file ) throws ZipException, IOException {
 		final File tempDirectory = Files.createTempDir( );
 
-		try ( final ZipFile zipFile = new ZipFile( aFile ) ) {
+		try ( final ZipFile zipFile = new ZipFile( file ) ) {
 			final Enumeration<? extends ZipEntry> zipEntries = zipFile.entries( );
 			while ( zipEntries.hasMoreElements( ) ) {
 				final ZipEntry zipEntry = zipEntries.nextElement( );
@@ -153,67 +153,67 @@ public class MonitoringLogService implements Service {
 		return tempDirectory;
 	}
 
-	private void deleteDirectory( final File aDirectory ) {
-		final File[] children = aDirectory.listFiles( );
+	private void deleteDirectory( final File directory ) {
+		final File[] children = directory.listFiles( );
 		if ( children != null ) {
 			for ( final File child : children ) {
 				deleteDirectory( child );
 			}
 		}
 
-		aDirectory.delete( );
+		directory.delete( );
 	}
 
-	private void setDataAvailable( final File aDirectory, final long aTin ) {
-		ivDirectory = aDirectory.getAbsolutePath( );
+	private void setDataAvailable( final File inputDirectory, final long tin ) {
+		directory = inputDirectory.getAbsolutePath( );
 		dataAvailable = true;
 
 		final long tout = System.currentTimeMillis( );
-		final long duration = tout - aTin;
-		ivProcessDuration = duration;
+		final long duration = tout - tin;
+		processDuration = duration;
 	}
 
 	private void clear( ) {
 		dataAvailable = false;
-		ivTraceRoots.clear( );
-		ivAggreatedMethods.clear( );
-		ivMethods.clear( );
+		traceRoots.clear( );
+		aggreatedMethods.clear( );
+		methods.clear( );
 	}
 
-	public void addTraceRoot( final MethodCall aTraceRoot ) {
-		ivTraceRoots.add( aTraceRoot );
+	public void addTraceRoot( final MethodCall traceRoot ) {
+		traceRoots.add( traceRoot );
 	}
 
-	public void addAggregatedMethods( final Collection<AggregatedMethodCall> aAggregatedMethodCalls ) {
-		ivAggreatedMethods.addAll( aAggregatedMethodCalls );
+	public void addAggregatedMethods( final Collection<AggregatedMethodCall> aggregatedMethodCalls ) {
+		aggreatedMethods.addAll( aggregatedMethodCalls );
 	}
 
-	public void addMethods( final Collection<MethodCall> aMethodCalls ) {
-		ivMethods.addAll( aMethodCalls );
+	public void addMethods( final Collection<MethodCall> methodCalls ) {
+		methods.addAll( methodCalls );
 	}
 
-	public void setProcessedBytes( final long aProcessedBytes ) {
-		ivProcessedBytes = aProcessedBytes;
+	public void setProcessedBytes( final long processedBytes ) {
+		this.processedBytes = processedBytes;
 	}
 
 	public List<MethodCall> getTraceRoots( ) {
-		return ivTraceRoots;
+		return traceRoots;
 	}
 
 	public List<AggregatedMethodCall> getAggreatedMethods( ) {
-		return ivAggreatedMethods;
+		return aggreatedMethods;
 	}
 
 	public List<MethodCall> getMethods( ) {
-		return ivMethods;
+		return methods;
 	}
 
 	public long getProcessDuration( ) {
-		return ivProcessDuration;
+		return processDuration;
 	}
 
 	public long getProcessedBytes( ) {
-		return ivProcessedBytes;
+		return processedBytes;
 	}
 
 	public boolean isDataAvailable( ) {
@@ -221,35 +221,35 @@ public class MonitoringLogService implements Service {
 	}
 
 	public int getIgnoredRecords( ) {
-		return ivIgnoredRecords;
+		return ignoredRecords;
 	}
 
-	public void setIgnoredRecords( final int aIgnoredRecords ) {
-		ivIgnoredRecords = aIgnoredRecords;
+	public void setIgnoredRecords( final int ignoredRecords ) {
+		this.ignoredRecords = ignoredRecords;
 	}
 
 	public int getDanglingRecords( ) {
-		return ivDanglingRecords;
+		return danglingRecords;
 	}
 
-	public void setDanglingRecords( final int aDanglingRecords ) {
-		ivDanglingRecords = aDanglingRecords;
+	public void setDanglingRecords( final int danglingRecords ) {
+		this.danglingRecords = danglingRecords;
 	}
 
 	public int getIncompleteTraces( ) {
-		return ivIncompleteTraces;
+		return incompleteTraces;
 	}
 
-	public void setIncompleteTraces( final int aIncompleteTraces ) {
-		ivIncompleteTraces = aIncompleteTraces;
+	public void setIncompleteTraces( final int incompleteTraces ) {
+		this.incompleteTraces = incompleteTraces;
 	}
 
-	public void setDataAvailable( final boolean aDataAvailable ) {
-		dataAvailable = aDataAvailable;
+	public void setDataAvailable( final boolean dataAvailable ) {
+		this.dataAvailable = dataAvailable;
 	}
 
 	public String getDirectory( ) {
-		return ivDirectory;
+		return directory;
 	}
 
 }

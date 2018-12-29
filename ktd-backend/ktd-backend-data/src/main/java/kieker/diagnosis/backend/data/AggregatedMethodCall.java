@@ -20,7 +20,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * This is a data transfer object representing a single aggregaed method call.
+ * This is a data transfer object representing a single aggregated method call.
  *
  * @author Nils Christian Ehmke
  */

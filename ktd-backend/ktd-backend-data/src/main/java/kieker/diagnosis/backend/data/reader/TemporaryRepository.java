@@ -48,34 +48,34 @@ public final class TemporaryRepository {
 	private static final TimeUnit DESTINATION_TIMESTAMP_TIME_UNIT = TimeUnit.MILLISECONDS;
 	private static final TimeUnit DESTINATION_DURATION_TIME_UNIT = TimeUnit.NANOSECONDS;
 
-	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle( getClass( ).getName( ) );
+	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( TemporaryRepository.class.getName( ) );
 
-	private final LongObjectMap<String> ivHostMap = new LongObjectHashMap<>( );
-	private final LongObjectMap<List<MethodCall>> ivReconstructionMap = new LongObjectHashMap<>( );
-	private boolean ivStreamCorrupt = false;
-	private Exception ivException = null;
-	private final MonitoringLogService ivMonitoringLogService;
+	private final LongObjectMap<String> hostMap = new LongObjectHashMap<>( );
+	private final LongObjectMap<List<MethodCall>> reconstructionMap = new LongObjectHashMap<>( );
+	private boolean streamCorrupt = false;
+	private Exception exception = null;
+	private final MonitoringLogService monitoringLogService;
 
-	private int ivIgnoredRecords;
-	private int ivDanglingRecords;
+	private int ignoredRecords;
+	private int danglingRecords;
 
-	private TimeUnit ivSourceTimeUnit;
-	private long ivProcessedBytes;
+	private TimeUnit sourceTimeUnit;
+	private long processedBytes;
 
-	public TemporaryRepository( final MonitoringLogService aMonitoringLogService ) {
-		ivMonitoringLogService = aMonitoringLogService;
+	public TemporaryRepository( final MonitoringLogService monitoringLogService ) {
+		this.monitoringLogService = monitoringLogService;
 	}
 
 	void processBeforeOperationEvent( final long timestamp, final long traceId ) {
-		final List<MethodCall> methodList = ivReconstructionMap.get( traceId );
+		final List<MethodCall> methodList = reconstructionMap.get( traceId );
 
 		if ( methodList == null ) {
 			// This can happen if the data is incomplete and we have a method call, but not a trace record
-			ivDanglingRecords++;
+			danglingRecords++;
 		} else {
 
 			final MethodCall methodCall = new MethodCall( );
-			final String host = ivHostMap.get( traceId );
+			final String host = hostMap.get( traceId );
 			methodCall.setHost( host );
 
 			methodCall.setTraceId( traceId );
@@ -84,7 +84,8 @@ public final class TemporaryRepository {
 			methodCall.setTimestamp( timestamp );
 
 			if ( !methodList.isEmpty( ) ) {
-				// This is not the first entry and thus not the root of a method. Which means that this method is the child of the
+				// This is not the first entry and thus not the root of a method. Which means that this method is the
+				// child of the
 				// previous method.
 				final int lastIndex = methodList.size( ) - 1;
 				final MethodCall previousMethodCall = methodList.get( lastIndex );
@@ -96,11 +97,11 @@ public final class TemporaryRepository {
 	}
 
 	MethodCall processAfterOperationEvent( final long timestamp, final long traceId, final String methodName, final String clazz ) {
-		final List<MethodCall> methodList = ivReconstructionMap.get( traceId );
+		final List<MethodCall> methodList = reconstructionMap.get( traceId );
 
 		if ( methodList == null ) {
 			// This can happen if the data is incomplete and we have a method call, but not a trace record
-			ivDanglingRecords++;
+			danglingRecords++;
 			return null;
 		}
 
@@ -111,27 +112,27 @@ public final class TemporaryRepository {
 
 		long duration = timestamp - lastMethodCall.getTimestamp( );
 		// Make sure that the duration is always in nanoseconds
-		if ( DESTINATION_DURATION_TIME_UNIT != ivSourceTimeUnit ) {
-			duration = DESTINATION_DURATION_TIME_UNIT.convert( duration, ivSourceTimeUnit );
+		if ( DESTINATION_DURATION_TIME_UNIT != sourceTimeUnit ) {
+			duration = DESTINATION_DURATION_TIME_UNIT.convert( duration, sourceTimeUnit );
 		}
 		lastMethodCall.setDuration( duration );
 		lastMethodCall.setClazz( clazz );
 		lastMethodCall.setMethod( methodName );
 
 		// Make sure that the timestamp is always in milliseconds
-		if ( DESTINATION_TIMESTAMP_TIME_UNIT != ivSourceTimeUnit ) {
-			final long newTimestamp = DESTINATION_TIMESTAMP_TIME_UNIT.convert( lastMethodCall.getTimestamp( ), ivSourceTimeUnit );
+		if ( DESTINATION_TIMESTAMP_TIME_UNIT != sourceTimeUnit ) {
+			final long newTimestamp = DESTINATION_TIMESTAMP_TIME_UNIT.convert( lastMethodCall.getTimestamp( ), sourceTimeUnit );
 			lastMethodCall.setTimestamp( newTimestamp );
 		}
 
 		// If the list is now empty, we just finished a whole trace
 		if ( methodList.isEmpty( ) ) {
 			// Remove the data we no longer need
-			ivHostMap.remove( traceId );
-			ivReconstructionMap.remove( traceId );
+			hostMap.remove( traceId );
+			reconstructionMap.remove( traceId );
 
 			// Add the trace to the container
-			ivMonitoringLogService.addTraceRoot( lastMethodCall );
+			monitoringLogService.addTraceRoot( lastMethodCall );
 		} else {
 			final MethodCall previousMethodCall = methodList.get( methodList.size( ) - 1 );
 			// We can calculate the trace size and the trace depth on-the-fly
@@ -143,53 +144,54 @@ public final class TemporaryRepository {
 	}
 
 	void processTraceMetadata( final long traceId, final String host ) {
-		ivReconstructionMap.put( traceId, new ArrayList<>( ) );
-		ivHostMap.put( traceId, host.intern( ) );
+		reconstructionMap.put( traceId, new ArrayList<>( ) );
+		hostMap.put( traceId, host.intern( ) );
 	}
 
-	public void processSourceTimeUnit( final String aTimeUnitName ) {
-		ivSourceTimeUnit = TimeUnit.valueOf( aTimeUnitName );
+	public void processSourceTimeUnit( final String timeUnitName ) {
+		sourceTimeUnit = TimeUnit.valueOf( timeUnitName );
 	}
 
 	public void processIgnoredRecord( ) {
-		ivIgnoredRecords++;
+		ignoredRecords++;
 	}
 
-	public void processProcessedBytes( final long aBytes ) {
-		ivProcessedBytes += aBytes;
+	public void processProcessedBytes( final long bytes ) {
+		processedBytes += bytes;
 	}
 
 	public void clearBeforeNextDirectory( ) {
-		ivHostMap.clear( );
-		ivReconstructionMap.clear( );
+		hostMap.clear( );
+		reconstructionMap.clear( );
 
 		// This is just necessary, if we have incomplete data and have to assume a time unit
-		ivSourceTimeUnit = TimeUnit.NANOSECONDS;
+		sourceTimeUnit = TimeUnit.NANOSECONDS;
 	}
 
-	public void processException( final Exception aEx ) {
-		ivStreamCorrupt = true;
-		ivException = aEx;
+	public void processException( final Exception exception ) {
+		streamCorrupt = true;
+		this.exception = exception;
 	}
 
 	/**
-	 * This method should be called after all readers performed their work and everything has been added to this repository.
-	 * It performs the remaining calculation and transfers its data to the monitoring service (where still necessary).
+	 * This method should be called after all readers performed their work and everything has been added to this
+	 * repository. It performs the remaining calculation and transfers its data to the monitoring service (where still
+	 * necessary).
 	 *
 	 * @throws BusinessException
-	 *                           If the monitoring log stream was somehow corrupted.
+	 *             If the monitoring log stream was somehow corrupted.
 	 */
 	public void finish( ) throws BusinessException {
 		calculatePercentAndCollectMethods( );
 		aggregateMethods( );
 
-		ivMonitoringLogService.setProcessedBytes( ivProcessedBytes );
-		ivMonitoringLogService.setIgnoredRecords( ivIgnoredRecords );
-		ivMonitoringLogService.setDanglingRecords( ivDanglingRecords );
-		ivMonitoringLogService.setIncompleteTraces( ivReconstructionMap.size( ) );
+		monitoringLogService.setProcessedBytes( processedBytes );
+		monitoringLogService.setIgnoredRecords( ignoredRecords );
+		monitoringLogService.setDanglingRecords( danglingRecords );
+		monitoringLogService.setIncompleteTraces( reconstructionMap.size( ) );
 
-		if ( ivStreamCorrupt ) {
-			throw new BusinessException( ivResourceBundle.getString( "errorMessageStreamCorrupt" ), ivException );
+		if ( streamCorrupt ) {
+			throw new BusinessException( RESOURCE_BUNDLE.getString( "errorMessageStreamCorrupt" ), exception );
 		}
 	}
 
@@ -198,7 +200,7 @@ public final class TemporaryRepository {
 
 		try {
 
-			final List<MethodCall> traceRoots = ivMonitoringLogService.getTraceRoots( );
+			final List<MethodCall> traceRoots = monitoringLogService.getTraceRoots( );
 
 			final Stack<MethodCall> stack = new Stack<>( );
 			stack.addAll( traceRoots );
@@ -228,7 +230,7 @@ public final class TemporaryRepository {
 				methods.add( methodCall );
 			}
 
-			ivMonitoringLogService.addMethods( methods );
+			monitoringLogService.addMethods( methods );
 		} catch ( final Throwable t ) {
 			probe.fail( t );
 			throw t;
@@ -244,9 +246,10 @@ public final class TemporaryRepository {
 			final Map<AggregationKey, MethodCall> aggregationMapWithExemplaricMethodCall = new HashMap<>( );
 			final Map<AggregationKey, LongArrayList> aggregationMapWithDuration = new HashMap<>( );
 
-			// Aggregate the methods. We perform only the key calculation in parallel, as the put into the aggregation maps would be
+			// Aggregate the methods. We perform only the key calculation in parallel, as the put into the aggregation
+			// maps would be
 			// slower due to synchronization.
-			final List<MethodCall> methodCalls = ivMonitoringLogService.getMethods( );
+			final List<MethodCall> methodCalls = monitoringLogService.getMethods( );
 			methodCalls.parallelStream( ).map( method -> new AggregationKey( method.getHost( ), method.getClazz( ), method.getMethod( ), method.getException( ), method ) )
 					.sequential( ).forEach( key -> {
 						LongArrayList durationlist = aggregationMapWithDuration.get( key );
@@ -264,7 +267,8 @@ public final class TemporaryRepository {
 			// As we need the median, we have to have sorted lists. The sorting can be performed in parallel.
 			aggregationMapWithDuration.values( ).parallelStream( ).forEach( list -> Arrays.sort( list.buffer, 0, list.size( ) ) );
 
-			// Now we can calculate the aggregated methods based on the aggregation maps. As we have no "complex" put-if-absent-part
+			// Now we can calculate the aggregated methods based on the aggregation maps. As we have no "complex"
+			// put-if-absent-part
 			// here (as above), we do this in parallel.
 			final Queue<AggregatedMethodCall> aggregatedMethodCalls = new ConcurrentLinkedQueue<>( );
 			aggregationMapWithExemplaricMethodCall.keySet( ).parallelStream( ).forEach( key -> {
@@ -296,7 +300,7 @@ public final class TemporaryRepository {
 			} );
 
 			// Add them now to the service, as we are out of the parallel stream
-			ivMonitoringLogService.addAggregatedMethods( aggregatedMethodCalls );
+			monitoringLogService.addAggregatedMethods( aggregatedMethodCalls );
 		} catch ( final Throwable t ) {
 			probe.fail( t );
 			throw t;
@@ -307,19 +311,19 @@ public final class TemporaryRepository {
 
 	private static class AggregationKey {
 
-		private final String ivHost;
-		private final String ivClass;
-		private final String ivMethod;
-		private final String ivException;
-		private final MethodCall ivMethodCall;
+		private final String host;
+		private final String clazz;
+		private final String method;
+		private final String exception;
+		private final MethodCall methodCall;
 		private int ivHash;
 
-		public AggregationKey( final String aHost, final String aClass, final String aMethod, final String aException, final MethodCall aMethodCall ) {
-			ivHost = aHost;
-			ivClass = aClass;
-			ivMethod = aMethod;
-			ivException = aException;
-			ivMethodCall = aMethodCall;
+		public AggregationKey( final String host, final String clazz, final String method, final String exception, final MethodCall methodCall ) {
+			this.host = host;
+			this.clazz = clazz;
+			this.method = method;
+			this.exception = exception;
+			this.methodCall = methodCall;
 
 			calculateHash( );
 		}
@@ -328,10 +332,10 @@ public final class TemporaryRepository {
 			final int prime = 31;
 
 			int result = 1;
-			result = prime * result + ( ivClass == null ? 0 : ivClass.hashCode( ) );
-			result = prime * result + ( ivException == null ? 0 : ivException.hashCode( ) );
-			result = prime * result + ( ivHost == null ? 0 : ivHost.hashCode( ) );
-			result = prime * result + ( ivMethod == null ? 0 : ivMethod.hashCode( ) );
+			result = prime * result + ( clazz == null ? 0 : clazz.hashCode( ) );
+			result = prime * result + ( exception == null ? 0 : exception.hashCode( ) );
+			result = prime * result + ( host == null ? 0 : host.hashCode( ) );
+			result = prime * result + ( method == null ? 0 : method.hashCode( ) );
 
 			// We calculate the hash eagerly and only once.
 			ivHash = result;
@@ -353,40 +357,40 @@ public final class TemporaryRepository {
 			if ( getClass( ) != obj.getClass( ) ) {
 				return false;
 			}
-			final AggregationKey other = ( AggregationKey ) obj;
-			if ( ivClass == null ) {
-				if ( other.ivClass != null ) {
+			final AggregationKey other = (AggregationKey) obj;
+			if ( clazz == null ) {
+				if ( other.clazz != null ) {
 					return false;
 				}
-			} else if ( !ivClass.equals( other.ivClass ) ) {
+			} else if ( !clazz.equals( other.clazz ) ) {
 				return false;
 			}
-			if ( ivException == null ) {
-				if ( other.ivException != null ) {
+			if ( exception == null ) {
+				if ( other.exception != null ) {
 					return false;
 				}
-			} else if ( !ivException.equals( other.ivException ) ) {
+			} else if ( !exception.equals( other.exception ) ) {
 				return false;
 			}
-			if ( ivHost == null ) {
-				if ( other.ivHost != null ) {
+			if ( host == null ) {
+				if ( other.host != null ) {
 					return false;
 				}
-			} else if ( !ivHost.equals( other.ivHost ) ) {
+			} else if ( !host.equals( other.host ) ) {
 				return false;
 			}
-			if ( ivMethod == null ) {
-				if ( other.ivMethod != null ) {
+			if ( method == null ) {
+				if ( other.method != null ) {
 					return false;
 				}
-			} else if ( !ivMethod.equals( other.ivMethod ) ) {
+			} else if ( !method.equals( other.method ) ) {
 				return false;
 			}
 			return true;
 		}
 
 		public MethodCall getMethodCall( ) {
-			return ivMethodCall;
+			return methodCall;
 		}
 
 	}

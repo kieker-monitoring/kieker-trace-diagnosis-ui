@@ -21,129 +21,129 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * This is a data transfer object representing a single method call. However, it contains also all necessary information to represent a part (or the root) of a
- * trace.
+ * This is a data transfer object representing a single method call. However, it contains also all necessary information
+ * to represent a part (or the root) of a trace.
  *
  * @author Nils Christian Ehmke
  */
 public final class MethodCall {
 
-	private ArrayList<MethodCall> ivChildren;
+	private ArrayList<MethodCall> children;
 
-	private long ivTimestamp;
-	private long ivDuration;
-	private long ivTraceId;
-	private String ivHost;
-	private String ivClazz;
-	private String ivMethod;
-	private String ivException;
+	private long timestamp;
+	private long duration;
+	private long traceId;
+	private String host;
+	private String clazz;
+	private String method;
+	private String exception;
 
-	private int ivTraceDepth;
-	private int ivTraceSize;
-	private float ivPercent;
+	private int traceDepth;
+	private int traceSize;
+	private float percent;
 
 	public List<MethodCall> getChildren( ) {
-		if ( ivChildren == null ) {
+		if ( children == null ) {
 			return Collections.emptyList( );
 		}
-		return ivChildren;
+		return children;
 	}
 
-	public void addChild( final MethodCall aMethod ) {
-		if ( ivChildren == null ) {
-			ivChildren = new ArrayList<>( );
+	public void addChild( final MethodCall method ) {
+		if ( children == null ) {
+			children = new ArrayList<>( );
 		}
-		ivChildren.add( aMethod );
+		children.add( method );
 	}
 
 	public void trimToSize( ) {
-		if ( ivChildren != null ) {
-			ivChildren.trimToSize( );
+		if ( children != null ) {
+			children.trimToSize( );
 		}
 	}
 
 	public long getTimestamp( ) {
-		return ivTimestamp;
+		return timestamp;
 	}
 
-	public void setTimestamp( final long aTimestamp ) {
-		ivTimestamp = aTimestamp;
+	public void setTimestamp( final long timestamp ) {
+		this.timestamp = timestamp;
 	}
 
 	public long getDuration( ) {
-		return ivDuration;
+		return duration;
 	}
 
-	public void setDuration( final long aDuration ) {
-		ivDuration = aDuration;
+	public void setDuration( final long duration ) {
+		this.duration = duration;
 	}
 
 	public long getTraceId( ) {
-		return ivTraceId;
+		return traceId;
 	}
 
-	public void setTraceId( final long aTraceId ) {
-		ivTraceId = aTraceId;
+	public void setTraceId( final long traceId ) {
+		this.traceId = traceId;
 	}
 
 	public String getHost( ) {
-		return ivHost;
+		return host;
 	}
 
-	public void setHost( final String aHost ) {
-		ivHost = aHost;
+	public void setHost( final String host ) {
+		this.host = host;
 	}
 
 	public String getClazz( ) {
-		return ivClazz;
+		return clazz;
 	}
 
-	public void setClazz( final String aClazz ) {
-		ivClazz = aClazz;
+	public void setClazz( final String clazz ) {
+		this.clazz = clazz;
 	}
 
 	public String getMethod( ) {
-		return ivMethod;
+		return method;
 	}
 
-	public void setMethod( final String aMethod ) {
-		ivMethod = aMethod;
+	public void setMethod( final String method ) {
+		this.method = method;
 	}
 
 	public String getException( ) {
-		return ivException;
+		return exception;
 	}
 
-	public void setException( final String aException ) {
-		ivException = aException;
+	public void setException( final String exception ) {
+		this.exception = exception;
 	}
 
 	public int getTraceDepth( ) {
-		return ivTraceDepth;
+		return traceDepth;
 	}
 
-	public void setTraceDepth( final int aTraceDepth ) {
-		ivTraceDepth = aTraceDepth;
+	public void setTraceDepth( final int traceDepth ) {
+		this.traceDepth = traceDepth;
 	}
 
 	public int getTraceSize( ) {
-		return ivTraceSize;
+		return traceSize;
 	}
 
-	public void setTraceSize( final int aTraceSize ) {
-		ivTraceSize = aTraceSize;
+	public void setTraceSize( final int traceSize ) {
+		this.traceSize = traceSize;
 	}
 
 	public float getPercent( ) {
-		return ivPercent;
+		return percent;
 	}
 
-	public void setPercent( final float aPercent ) {
-		ivPercent = aPercent;
+	public void setPercent( final float percent ) {
+		this.percent = percent;
 	}
 
-	public void addToTraceSize( final int aTraceSize ) {
-		ivTraceSize += aTraceSize;
+	public void addToTraceSize( final int traceSize ) {
+		this.traceSize += traceSize;
 	}
 
 }
