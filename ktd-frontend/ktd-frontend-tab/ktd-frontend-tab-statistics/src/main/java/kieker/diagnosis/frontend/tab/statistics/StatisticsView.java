@@ -95,6 +95,7 @@ public class StatisticsView extends ViewBase<StatisticsController> {
 
 		{
 			ivProcessedBytes = new TextField( );
+			ivProcessedBytes.setId( "statisticsProcessedBytes" );
 			ivProcessedBytes.setEditable( false );
 
 			GridPane.setColumnIndex( ivProcessedBytes, 1 );
