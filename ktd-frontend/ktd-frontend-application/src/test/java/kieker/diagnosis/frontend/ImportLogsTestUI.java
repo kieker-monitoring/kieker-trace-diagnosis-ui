@@ -37,7 +37,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TreeTableView;
 import javafx.stage.Stage;
 import kieker.diagnosis.frontend.application.KiekerTraceDiagnosis;
-import kieker.diagnosis.frontend.complex.main.MainController;
+import kieker.diagnosis.frontend.main.MainController;
 
 /**
  * This is a UI test which imports both ascii and binary monitoring logs and
