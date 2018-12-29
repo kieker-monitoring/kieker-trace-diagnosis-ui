@@ -54,6 +54,7 @@ import kieker.diagnosis.frontend.base.ui.ViewBase;
 import kieker.diagnosis.frontend.complex.main.properties.CloseWithoutPromptProperty;
 import kieker.diagnosis.frontend.complex.main.properties.LastExportPathProperty;
 import kieker.diagnosis.frontend.complex.main.properties.LastImportPathProperty;
+import kieker.diagnosis.frontend.complex.methods.MethodsController;
 import kieker.diagnosis.frontend.complex.methods.MethodsView;
 import kieker.diagnosis.frontend.complex.traces.TracesController;
 import kieker.diagnosis.frontend.complex.traces.TracesView;
@@ -72,6 +73,11 @@ public class MainController extends ControllerBase<MainViewModel> {
 	public void initialize( ) {
 		final TracesController tracesController = getController( TracesController.class );
 		tracesController.setOnPerformSaveAsFavorite( this::performSaveAsFavorite );
+
+		final MethodsController methodsController = getController( MethodsController.class );
+		methodsController.setOnPerformSaveAsFavorite( this::performSaveAsFavorite );
+		methodsController.setOnPerformJumpToTrace( this::performJumpToTrace );
+		methodsController.setOnPerformExportToCSV( this::performExportToCSV );
 	}
 
 	/**

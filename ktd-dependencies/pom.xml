@@ -85,6 +85,11 @@
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
+				<artifactId>ktd-frontend-tab-methods</artifactId>
+				<version>5.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-base</artifactId>
 				<version>5.0.0-SNAPSHOT</version>
 			</dependency>

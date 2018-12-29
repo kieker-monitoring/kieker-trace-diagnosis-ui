@@ -42,9 +42,13 @@
 			<groupId>net.kieker-monitoring</groupId>
 			<artifactId>ktd-frontend-tab-traces</artifactId>
 		</dependency>
-			<dependency>
+		<dependency>
 			<groupId>net.kieker-monitoring</groupId>
 			<artifactId>ktd-frontend-tab-statistics</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-frontend-tab-methods</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>net.kieker-monitoring</groupId>

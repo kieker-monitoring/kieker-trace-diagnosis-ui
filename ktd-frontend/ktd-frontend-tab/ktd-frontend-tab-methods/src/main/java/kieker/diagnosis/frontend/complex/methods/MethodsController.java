@@ -17,6 +17,8 @@
 package kieker.diagnosis.frontend.complex.methods;
 
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import com.google.inject.Singleton;
 
@@ -30,7 +32,7 @@ import kieker.diagnosis.backend.search.methods.MethodsService;
 import kieker.diagnosis.backend.search.methods.SearchType;
 import kieker.diagnosis.backend.settings.SettingsService;
 import kieker.diagnosis.frontend.base.ui.ControllerBase;
-import kieker.diagnosis.frontend.complex.main.MainController;
+import kieker.diagnosis.frontend.base.ui.ViewBase;
 
 /**
  * The controller of the methods tab.
@@ -38,11 +40,14 @@ import kieker.diagnosis.frontend.complex.main.MainController;
  * @author Nils Christian Ehmke
  */
 @Singleton
-class MethodsController extends ControllerBase<MethodsViewModel> {
+public class MethodsController extends ControllerBase<MethodsViewModel> {
 
 	private List<MethodCall> ivMethods;
 	private String ivDurationSuffix;
 	private int ivTotalMethods;
+	private BiConsumer<Class<? extends ViewBase<?>>, Object> onPerformSaveAsFavorite;
+	private Consumer<MethodCall> onPerformJumpToTrace;
+	private Consumer<CSVData> onPerformExportToCSV;
 
 	/**
 	 * This action is performed once during the application's start.
@@ -105,18 +110,26 @@ class MethodsController extends ControllerBase<MethodsViewModel> {
 		getViewModel( ).updatePresentationDetails( methodCall );
 	}
 
+	public void setOnPerformJumpToTrace( final Consumer<MethodCall> action ) {
+		onPerformJumpToTrace = action;
+	}
+
 	public void performJumpToTrace( ) {
 		final MethodCall methodCall = getViewModel( ).getSelected( );
 
 		if ( methodCall != null ) {
-			getController( MainController.class ).performJumpToTrace( methodCall );
+			onPerformJumpToTrace.accept( methodCall );
 		}
+	}
+
+	public void setOnPerformSaveAsFavorite( final BiConsumer<Class<? extends ViewBase<?>>, Object> action ) {
+		onPerformSaveAsFavorite = action;
 	}
 
 	public void performSaveAsFavorite( ) {
 		try {
 			final MethodsFilter filter = getViewModel( ).savePresentationFilter( );
-			getController( MainController.class ).performSaveAsFavorite( MethodsView.class, filter );
+			onPerformSaveAsFavorite.accept( MethodsView.class, filter );
 		} catch ( final BusinessException ex ) {
 			throw new BusinessRuntimeException( ex );
 		}
@@ -124,7 +137,7 @@ class MethodsController extends ControllerBase<MethodsViewModel> {
 
 	public void performSetParameter( final Object aParameter ) {
 		if ( aParameter instanceof AggregatedMethodCall ) {
-			final AggregatedMethodCall methodCall = (AggregatedMethodCall) aParameter;
+			final AggregatedMethodCall methodCall = ( AggregatedMethodCall ) aParameter;
 
 			// We have to prepare a filter which maches only the method call
 			final MethodsFilter filter = new MethodsFilter( );
@@ -141,16 +154,20 @@ class MethodsController extends ControllerBase<MethodsViewModel> {
 		}
 
 		if ( aParameter instanceof MethodsFilter ) {
-			final MethodsFilter filter = (MethodsFilter) aParameter;
+			final MethodsFilter filter = ( MethodsFilter ) aParameter;
 			getViewModel( ).updatePresentationFilter( filter );
 
 			performSearch( );
 		}
 	}
 
+	public void setOnPerformExportToCSV( final Consumer<CSVData> action ) {
+		onPerformExportToCSV = action;
+	}
+
 	public void performExportToCSV( ) {
 		final CSVData csvData = getViewModel( ).savePresentationAsCSV( );
-		getController( MainController.class ).performExportToCSV( csvData );
+		onPerformExportToCSV.accept( csvData );
 	}
 
 }

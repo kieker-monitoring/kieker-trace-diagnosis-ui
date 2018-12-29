@@ -17,6 +17,7 @@
 	<modules>
 		<module>ktd-frontend-tab-traces</module>
 		<module>ktd-frontend-tab-statistics</module>
+		<module>ktd-frontend-tab-methods</module>
 	</modules>
 
 </project>
