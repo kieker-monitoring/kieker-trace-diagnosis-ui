@@ -25,15 +25,19 @@ import javafx.scene.Scene;
 import javafx.stage.Window;
 import kieker.diagnosis.backend.base.common.ClassUtil;
 import kieker.diagnosis.backend.base.service.Service;
+import kieker.diagnosis.frontend.base.mixin.StringMixin;
 
 /**
- * This is the abstract base for a view model. It provides convenient methods, like retrieving a service or localizing a string. For each class extending this base, a resource bundle has to be available in the classpath with the name of the implementing class.
+ * This is the abstract base for a view model. It provides convenient methods, like retrieving a service or localizing a
+ * string. For each class extending this base, a resource bundle has to be available in the classpath with the name of
+ * the implementing class.
  *
- * @param <V> The type of the view.
+ * @param <V>
+ *            The type of the view.
  *
  * @author Nils Christian Ehmke
  */
-public abstract class ViewModelBase<V extends ViewBase<?>> {
+public abstract class ViewModelBase<V extends ViewBase<?>> implements StringMixin {
 
 	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle( ClassUtil.getRealName( getClass( ) ) );
 
@@ -55,7 +59,8 @@ public abstract class ViewModelBase<V extends ViewBase<?>> {
 	/**
 	 * Delivers the localized string for the given key for the current class.
 	 *
-	 * @param aKey The resource key.
+	 * @param aKey
+	 *            The resource key.
 	 *
 	 * @return The localized string.
 	 */
@@ -64,9 +69,11 @@ public abstract class ViewModelBase<V extends ViewBase<?>> {
 	}
 
 	/**
-	 * Gets a service of the given type. Use this method with care, as view models should use services only in very rare cases.
+	 * Gets a service of the given type. Use this method with care, as view models should use services only in very rare
+	 * cases.
 	 *
-	 * @param aServiceClass The type of the service.
+	 * @param aServiceClass
+	 *            The type of the service.
 	 *
 	 * @return The service.
 	 */
@@ -75,32 +82,13 @@ public abstract class ViewModelBase<V extends ViewBase<?>> {
 	}
 
 	/**
-	 * Closes the corresponding window of the view. If the view is a dialog, this closes the dialog. Otherwise the whole application window will be closed.
+	 * Closes the corresponding window of the view. If the view is a dialog, this closes the dialog. Otherwise the whole
+	 * application window will be closed.
 	 */
 	public final void close( ) {
 		final Scene scene = getView( ).getScene( );
 		final Window window = scene.getWindow( );
 		window.hide( );
-	}
-
-	/**
-	 * A convenient helper method to trim a user input.
-	 *
-	 * @param aString The string to trim. Can be {@code null}.
-	 *
-	 * @return The trimmed string. If the string becomes empty, {@code null} will be returned.
-	 */
-	protected final String trimToNull( final String aString ) {
-		if ( aString == null ) {
-			return aString;
-		} else {
-			final String string = aString.trim( );
-			if ( string.isEmpty( ) ) {
-				return null;
-			} else {
-				return string;
-			}
-		}
 	}
 
 }

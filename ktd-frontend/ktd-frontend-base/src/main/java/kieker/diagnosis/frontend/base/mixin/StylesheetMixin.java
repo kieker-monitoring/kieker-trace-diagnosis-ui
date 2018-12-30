@@ -14,27 +14,20 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.frontend.tab.methods.components;
+package kieker.diagnosis.frontend.base.mixin;
 
-import javafx.scene.control.TableRow;
-import kieker.diagnosis.backend.data.MethodCall;
+import java.net.URL;
 
-/**
- * This is a row for a table which is aware of a method call being failed. If the method call has an exception, it is styled accordingly.
- *
- * @author Nils Christian Ehmke
- */
-public final class StyledRow extends TableRow<MethodCall> {
+import javafx.collections.ObservableList;
 
-	@Override
-	protected void updateItem( final MethodCall aItem, final boolean aEmpty ) {
-		super.updateItem( aItem, aEmpty );
+public interface StylesheetMixin {
 
-		getStyleClass( ).remove( "failed" );
-
-		if ( aItem != null && aItem.getException( ) != null ) {
-			getStyleClass( ).add( "failed" );
-		}
+	default void addDefaultStylesheet( ) {
+		final URL cssURL = getClass( ).getResource( getClass( ).getSimpleName( ) + ".css" );
+		final String cssExternalForm = cssURL.toExternalForm( );
+		getStylesheets( ).add( cssExternalForm );
 	}
+
+	ObservableList<String> getStylesheets( );
 
 }

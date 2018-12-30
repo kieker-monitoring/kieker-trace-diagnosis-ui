@@ -14,9 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.frontend.tab.methods.components;
-
-import com.google.inject.Singleton;
+package kieker.diagnosis.frontend.tab.methods.atom;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -25,24 +23,17 @@ import javafx.util.Callback;
 import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.properties.PropertiesService;
-import kieker.diagnosis.backend.settings.ClassAppearance;
-import kieker.diagnosis.backend.settings.properties.ClassAppearanceProperty;
+import kieker.diagnosis.backend.settings.TimestampAppearance;
+import kieker.diagnosis.backend.settings.properties.TimestampProperty;
 
-/**
- * This is a cell factory for a table which shows the class of a method call in the configured manner. It has to be in the CDI context, as it has to have access
- * to the application properties.
- *
- * @author Nils Christian Ehmke
- */
-@Singleton
-public class ClassCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>> {
+public class TimestampCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>> {
 
 	private final PropertiesService ivPropertiesService = ServiceFactory.getService( PropertiesService.class );
 
 	@Override
 	public ObservableValue<String> call( final CellDataFeatures<MethodCall, String> aParam ) {
-		final ClassAppearance classAppearance = ivPropertiesService.loadApplicationProperty( ClassAppearanceProperty.class );
-		return new ReadOnlyObjectWrapper<>( classAppearance.convert( aParam.getValue( ).getClazz( ) ) );
+		final TimestampAppearance timestampAppearance = ivPropertiesService.loadApplicationProperty( TimestampProperty.class );
+		return new ReadOnlyObjectWrapper<>( timestampAppearance.convert( aParam.getValue( ).getTimestamp( ) ) );
 	}
 
 }

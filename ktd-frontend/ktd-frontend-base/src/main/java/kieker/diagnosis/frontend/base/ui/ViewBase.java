@@ -21,20 +21,22 @@ import java.util.ResourceBundle;
 
 import com.google.inject.Inject;
 
-import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import kieker.diagnosis.backend.base.common.ClassUtil;
+import kieker.diagnosis.frontend.base.mixin.IconMixin;
 
 /**
- * This is the abstract base for a view. It provides a convenient method to localize a string. Also a corresponding stylesheet file is applied. For each class extending this base, a resource bundle has to be available in the classpath with the name of the implementing class.
+ * This is the abstract base for a view. It provides a convenient method to localize a string. Also a corresponding
+ * stylesheet file is applied. For each class extending this base, a resource bundle has to be available in the
+ * classpath with the name of the implementing class.
  *
- * @param <C> The type of the controller.
+ * @param <C>
+ *            The type of the controller.
  *
  * @author Nils Christian Ehmke
  */
-public abstract class ViewBase<C extends ControllerBase<?>> extends VBox {
+public abstract class ViewBase<C extends ControllerBase<?>> extends VBox implements IconMixin {
 
 	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle( ClassUtil.getRealName( getClass( ) ) );
 
@@ -66,7 +68,8 @@ public abstract class ViewBase<C extends ControllerBase<?>> extends VBox {
 	/**
 	 * Delivers the localized string for the given key for the current class.
 	 *
-	 * @param aKey The resource key.
+	 * @param aKey
+	 *            The resource key.
 	 *
 	 * @return The localized string.
 	 */
@@ -92,49 +95,12 @@ public abstract class ViewBase<C extends ControllerBase<?>> extends VBox {
 	}
 
 	/**
-	 * This method can be used to send a parameter to the current view. The precise nature of the parameter (and all actions necessary to use it) depends on the view.
+	 * This method can be used to send a parameter to the current view. The precise nature of the parameter (and all
+	 * actions necessary to use it) depends on the view.
 	 *
-	 * @param aParameter The parameter.
+	 * @param aParameter
+	 *            The parameter.
 	 */
 	public abstract void setParameter( Object aParameter );
-
-	/**
-	 * This method creates an icon which can for instance be used as a graphic for a node.
-	 *
-	 * @param aIcon The type of the icon.
-	 *
-	 * @return A new icon.
-	 */
-	protected final Node createIcon( final Icon aIcon ) {
-		final Label label = new Label( );
-
-		label.setText( aIcon.getUnicode( ) );
-		label.getStyleClass( ).add( "font-awesome-icon" );
-
-		return label;
-	}
-
-	public enum Icon {
-
-		SEARCH( "\uf002" ),
-		FOLDER_OPEN( "\uf07c" ),
-		ZIP_ARCHIVE( "\uf1c6" ),
-		TIMES( "\uf00d" ),
-		COGS( "\uf085" ),
-		QUESTION_CIRCLE( "\uf059" ),
-		INFO_CIRCLE( "\uf05a" ),
-		CHART( "\uf080" );
-
-		private final String unicode;
-
-		private Icon( final String unicode ) {
-			this.unicode = unicode;
-		}
-
-		public String getUnicode( ) {
-			return unicode;
-		}
-
-	}
 
 }
