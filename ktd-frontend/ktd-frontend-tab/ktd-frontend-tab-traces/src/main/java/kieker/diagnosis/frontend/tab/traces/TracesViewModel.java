@@ -16,7 +16,6 @@
 
 package kieker.diagnosis.frontend.tab.traces;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Stack;
@@ -41,7 +40,7 @@ import kieker.diagnosis.frontend.tab.traces.aggregator.IdentityAggregator;
 import kieker.diagnosis.frontend.tab.traces.aggregator.ThresholdAggregator;
 import kieker.diagnosis.frontend.tab.traces.aggregator.TraceDepthAggregator;
 import kieker.diagnosis.frontend.tab.traces.aggregator.TraceSizeAggregator;
-import kieker.diagnosis.frontend.tab.traces.components.MethodCallTreeItem;
+import kieker.diagnosis.frontend.tab.traces.atom.MethodCallTreeItem;
 
 /**
  * The view model of the traces tab.
@@ -97,37 +96,13 @@ class TracesViewModel extends ViewModelBase<TracesView> {
 		getView( ).getDurationColumn( ).setText( getLocalizedString( "columnDuration" ) + " " + aSuffix );
 	}
 
-	public void updatePresentationDetails( final MethodCall aMethodCall ) {
-		final String noDataAvailable = getLocalizedString( "noDataAvailable" );
-
-		if ( aMethodCall != null ) {
-			getView( ).getDetailsHost( ).setText( aMethodCall.getHost( ) );
-			getView( ).getDetailsClass( ).setText( aMethodCall.getClazz( ) );
-			getView( ).getDetailsMethod( ).setText( aMethodCall.getMethod( ) );
-			getView( ).getDetailsException( ).setText( aMethodCall.getException( ) != null ? aMethodCall.getException( ) : noDataAvailable );
-			getView( ).getDetailsTraceDepth( ).setText( Integer.toString( aMethodCall.getTraceDepth( ) ) );
-			getView( ).getDetailsTraceSize( ).setText( Integer.toString( aMethodCall.getTraceSize( ) ) );
-			getView( ).getDetailsDuration( ).setText( String.format( "%d [ns]", aMethodCall.getDuration( ) ) );
-			getView( ).getDetailsPercent( ).setText( String.format( "%f %%", aMethodCall.getPercent( ) ) );
-			getView( ).getDetailsTimestamp( ).setText( Long.toString( aMethodCall.getTimestamp( ) ) );
-			getView( ).getDetailsTraceId( ).setText( Long.toString( aMethodCall.getTraceId( ) ) );
-		} else {
-			getView( ).getDetailsHost( ).setText( noDataAvailable );
-			getView( ).getDetailsClass( ).setText( noDataAvailable );
-			getView( ).getDetailsMethod( ).setText( noDataAvailable );
-			getView( ).getDetailsException( ).setText( noDataAvailable );
-			getView( ).getDetailsTraceDepth( ).setText( noDataAvailable );
-			getView( ).getDetailsTraceSize( ).setText( noDataAvailable );
-			getView( ).getDetailsDuration( ).setText( noDataAvailable );
-			getView( ).getDetailsPercent( ).setText( noDataAvailable );
-			getView( ).getDetailsTimestamp( ).setText( noDataAvailable );
-			getView( ).getDetailsTraceId( ).setText( noDataAvailable );
-		}
+	public void updatePresentationDetails( final MethodCall methodCall ) {
+		getView( ).getDetails( ).setValue( methodCall );
 	}
 
 	public void updatePresentationStatus( final int aTraces, final int aTotalTraces ) {
-		final NumberFormat decimalFormat = DecimalFormat.getInstance( );
-		getView( ).getStatusLabel( ).setText( String.format( getLocalizedString( "statusLabel" ), decimalFormat.format( aTraces ), decimalFormat.format( aTotalTraces ) ) );
+		final NumberFormat decimalFormat = NumberFormat.getInstance( );
+		getView( ).getStatus( ).setValue( String.format( getLocalizedString( "statusLabel" ), decimalFormat.format( aTraces ), decimalFormat.format( aTotalTraces ) ) );
 	}
 
 	public MethodCall getSelected( ) {
@@ -135,36 +110,12 @@ class TracesViewModel extends ViewModelBase<TracesView> {
 		return selectedItem != null ? selectedItem.getValue( ) : null;
 	}
 
-	public void updatePresentationFilter( final TracesFilter aFilter ) {
-		getView( ).getFilterHost( ).setText( aFilter.getHost( ) );
-		getView( ).getFilterClass( ).setText( aFilter.getClazz( ) );
-		getView( ).getFilterMethod( ).setText( aFilter.getMethod( ) );
-		getView( ).getFilterException( ).setText( aFilter.getException( ) );
-		getView( ).getFilterTraceId( ).setText( aFilter.getTraceId( ) != null ? Long.toString( aFilter.getTraceId( ) ) : null );
-		getView( ).getFilterUseRegExpr( ).setSelected( aFilter.isUseRegExpr( ) );
-		getView( ).getFilterSearchWholeTrace( ).setSelected( aFilter.isSearchWholeTrace( ) );
-		getView( ).getFilterLowerDate( ).setValue( aFilter.getLowerDate( ) );
-		getView( ).getFilterLowerTime( ).setLocalTime( aFilter.getLowerTime( ) );
-		getView( ).getFilterUpperDate( ).setValue( aFilter.getUpperDate( ) );
-		getView( ).getFilterUpperTime( ).setLocalTime( aFilter.getUpperTime( ) );
-		getView( ).getFilterSearchType( ).setValue( aFilter.getSearchType( ) );
+	public void updatePresentationFilter( final TracesFilter filter ) {
+		getView( ).getFilter( ).setValue( filter );
 	}
 
 	public TracesFilter savePresentationFilter( ) throws BusinessException {
-		final TracesFilter filter = new TracesFilter( );
-
-		filter.setHost( trimToNull( getView( ).getFilterHost( ).getText( ) ) );
-		filter.setClazz( trimToNull( getView( ).getFilterClass( ).getText( ) ) );
-		filter.setMethod( trimToNull( getView( ).getFilterMethod( ).getText( ) ) );
-		filter.setException( trimToNull( getView( ).getFilterException( ).getText( ) ) );
-		filter.setUseRegExpr( getView( ).getFilterUseRegExpr( ).isSelected( ) );
-		filter.setSearchWholeTrace( getView( ).getFilterSearchWholeTrace( ).isSelected( ) );
-		filter.setLowerDate( getView( ).getFilterLowerDate( ).getValue( ) );
-		filter.setLowerTime( getView( ).getFilterLowerTime( ).getLocalTime( ) );
-		filter.setUpperDate( getView( ).getFilterUpperDate( ).getValue( ) );
-		filter.setUpperTime( getView( ).getFilterUpperTime( ).getLocalTime( ) );
-		filter.setSearchType( getView( ).getFilterSearchType( ).getValue( ) );
-		filter.setTraceId( getView( ).getFilterTraceId( ).getValue( ) );
+		final TracesFilter filter = getView( ).getFilter( ).getValue( );
 
 		// If we are using regular expressions, we should check them
 		if ( filter.isUseRegExpr( ) ) {

@@ -198,7 +198,7 @@ public class MainView extends ViewBase<MainController> {
 				// Only one default button is allowed - even if the other buttons are not
 				// visible. Therefore we have to set the default
 				// button property only for the current tab.
-				ivTracesView.getSearchButton( ).defaultButtonProperty( ).bind( ivTabPane.getSelectionModel( ).selectedItemProperty( ).isEqualTo( tab ) );
+				ivTracesView.defaultButtonProperty( ).bind( ivTabPane.getSelectionModel( ).selectedItemProperty( ).isEqualTo( tab ) );
 			}
 
 			{

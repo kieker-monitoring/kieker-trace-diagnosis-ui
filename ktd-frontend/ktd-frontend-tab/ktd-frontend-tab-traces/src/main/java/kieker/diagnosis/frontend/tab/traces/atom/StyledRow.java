@@ -14,7 +14,7 @@
  * limitations under the License.                                            
  ***************************************************************************/
 
-package kieker.diagnosis.frontend.tab.traces.components;
+package kieker.diagnosis.frontend.tab.traces.atom;
 
 import javafx.scene.control.TreeTableRow;
 import kieker.diagnosis.backend.data.MethodCall;

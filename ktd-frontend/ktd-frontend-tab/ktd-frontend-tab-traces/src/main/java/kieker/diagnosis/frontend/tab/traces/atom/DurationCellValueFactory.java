@@ -14,7 +14,9 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.frontend.tab.traces.components;
+package kieker.diagnosis.frontend.tab.traces.atom;
+
+import java.util.concurrent.TimeUnit;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -23,22 +25,21 @@ import javafx.util.Callback;
 import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.properties.PropertiesService;
-import kieker.diagnosis.backend.settings.TimestampAppearance;
-import kieker.diagnosis.backend.settings.properties.TimestampProperty;
+import kieker.diagnosis.backend.settings.properties.TimeUnitProperty;
 
 /**
- * This is a cell factory for a tree table which shows the timestamp of a method call in the configured manner.
+ * This is a cell factory for a tree table which shows the duration of a method call in the configured manner.
  *
  * @author Nils Christian Ehmke
  */
-public class TimestampCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>> {
+public class DurationCellValueFactory implements Callback<CellDataFeatures<MethodCall, Long>, ObservableValue<Long>> {
 
 	private final PropertiesService ivPropertiesService = ServiceFactory.getService( PropertiesService.class );
 
 	@Override
-	public ObservableValue<String> call( final CellDataFeatures<MethodCall, String> aParam ) {
-		final TimestampAppearance timestampAppearance = ivPropertiesService.loadApplicationProperty( TimestampProperty.class );
-		return new ReadOnlyObjectWrapper<>( timestampAppearance.convert( aParam.getValue( ).getValue( ).getTimestamp( ) ) );
+	public ObservableValue<Long> call( final CellDataFeatures<MethodCall, Long> aParam ) {
+		final TimeUnit timeUnit = ivPropertiesService.loadApplicationProperty( TimeUnitProperty.class );
+		return new ReadOnlyObjectWrapper<>( timeUnit.convert( aParam.getValue( ).getValue( ).getDuration( ), TimeUnit.NANOSECONDS ) );
 	}
 
 }

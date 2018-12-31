@@ -14,7 +14,7 @@
  * limitations under the License.                                            
  ***************************************************************************/
 
-package kieker.diagnosis.frontend.tab.traces.components;
+package kieker.diagnosis.frontend.tab.traces.atom;
 
 import java.util.ArrayList;
 import java.util.List;

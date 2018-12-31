@@ -14,9 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.frontend.tab.traces.components;
-
-import java.util.concurrent.TimeUnit;
+package kieker.diagnosis.frontend.tab.traces.atom;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -25,21 +23,22 @@ import javafx.util.Callback;
 import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.properties.PropertiesService;
-import kieker.diagnosis.backend.settings.properties.TimeUnitProperty;
+import kieker.diagnosis.backend.settings.ClassAppearance;
+import kieker.diagnosis.backend.settings.properties.ClassAppearanceProperty;
 
 /**
- * This is a cell factory for a tree table which shows the duration of a method call in the configured manner.
+ * This is a cell factory for a tree table which shows the class of a method call in the configured manner.
  *
  * @author Nils Christian Ehmke
  */
-public class DurationCellValueFactory implements Callback<CellDataFeatures<MethodCall, Long>, ObservableValue<Long>> {
+public class ClassCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>> {
 
 	private final PropertiesService ivPropertiesService = ServiceFactory.getService( PropertiesService.class );
 
 	@Override
-	public ObservableValue<Long> call( final CellDataFeatures<MethodCall, Long> aParam ) {
-		final TimeUnit timeUnit = ivPropertiesService.loadApplicationProperty( TimeUnitProperty.class );
-		return new ReadOnlyObjectWrapper<>( timeUnit.convert( aParam.getValue( ).getValue( ).getDuration( ), TimeUnit.NANOSECONDS ) );
+	public ObservableValue<String> call( final CellDataFeatures<MethodCall, String> aParam ) {
+		final ClassAppearance classAppearance = ivPropertiesService.loadApplicationProperty( ClassAppearanceProperty.class );
+		return new ReadOnlyObjectWrapper<>( classAppearance.convert( aParam.getValue( ).getValue( ).getClazz( ) ) );
 	}
 
 }
