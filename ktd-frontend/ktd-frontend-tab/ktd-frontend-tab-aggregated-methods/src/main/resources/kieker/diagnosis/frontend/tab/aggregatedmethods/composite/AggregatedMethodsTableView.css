@@ -1,0 +1,11 @@
+.failed {
+	-fx-text-background-color: red;
+}
+
+.table-row-cell:odd {
+	-fx-background-color: #F4F4F4;
+}
+
+.table-row-cell:selected {
+	-fx-background-color: #0096c9
+}

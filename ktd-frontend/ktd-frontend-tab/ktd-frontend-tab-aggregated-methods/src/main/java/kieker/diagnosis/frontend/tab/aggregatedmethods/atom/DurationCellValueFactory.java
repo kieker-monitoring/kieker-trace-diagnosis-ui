@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.frontend.tab.aggregatedmethods.components;
+package kieker.diagnosis.frontend.tab.aggregatedmethods.atom;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;

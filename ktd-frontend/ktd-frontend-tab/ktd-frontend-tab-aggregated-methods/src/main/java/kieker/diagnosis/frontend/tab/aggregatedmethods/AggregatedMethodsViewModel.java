@@ -49,32 +49,8 @@ class AggregatedMethodsViewModel extends ViewModelBase<AggregatedMethodsView> {
 
 	}
 
-	public void updatePresentationDetails( final AggregatedMethodCall aMethodCall ) {
-		final String noDataAvailable = getLocalizedString( "noDataAvailable" );
-
-		if ( aMethodCall != null ) {
-			getView( ).getDetailsCount( ).setText( Integer.toString( aMethodCall.getCount( ) ) );
-			getView( ).getDetailsHost( ).setText( aMethodCall.getHost( ) );
-			getView( ).getDetailsClass( ).setText( aMethodCall.getClazz( ) );
-			getView( ).getDetailsMethod( ).setText( aMethodCall.getMethod( ) );
-			getView( ).getDetailsException( ).setText( aMethodCall.getException( ) != null ? aMethodCall.getException( ) : noDataAvailable );
-			getView( ).getDetailsMinDuration( ).setText( String.format( "%d [ns]", aMethodCall.getMinDuration( ) ) );
-			getView( ).getDetailsAvgDuration( ).setText( String.format( "%d [ns]", aMethodCall.getAvgDuration( ) ) );
-			getView( ).getDetailsMedianDuration( ).setText( String.format( "%d [ns]", aMethodCall.getMedianDuration( ) ) );
-			getView( ).getDetailsMaxDuration( ).setText( String.format( "%d [ns]", aMethodCall.getMaxDuration( ) ) );
-			getView( ).getDetailsTotalDuration( ).setText( String.format( "%d [ns]", aMethodCall.getTotalDuration( ) ) );
-		} else {
-			getView( ).getDetailsCount( ).setText( noDataAvailable );
-			getView( ).getDetailsHost( ).setText( noDataAvailable );
-			getView( ).getDetailsClass( ).setText( noDataAvailable );
-			getView( ).getDetailsMethod( ).setText( noDataAvailable );
-			getView( ).getDetailsException( ).setText( noDataAvailable );
-			getView( ).getDetailsMinDuration( ).setText( noDataAvailable );
-			getView( ).getDetailsAvgDuration( ).setText( noDataAvailable );
-			getView( ).getDetailsMedianDuration( ).setText( noDataAvailable );
-			getView( ).getDetailsMaxDuration( ).setText( noDataAvailable );
-			getView( ).getDetailsTotalDuration( ).setText( noDataAvailable );
-		}
+	public void updatePresentationDetails( final AggregatedMethodCall methodCall ) {
+		getView( ).getDetails( ).setValue( methodCall );
 	}
 
 	public void updatePresentationMethods( final List<AggregatedMethodCall> aMethods ) {
@@ -84,45 +60,33 @@ class AggregatedMethodsViewModel extends ViewModelBase<AggregatedMethodsView> {
 
 	public void updatePresentationStatus( final int aMethods, final int aTotalMethods ) {
 		final NumberFormat decimalFormat = NumberFormat.getInstance( );
-		getView( ).getStatusLabel( ).setText( String.format( getLocalizedString( "statusLabel" ), decimalFormat.format( aMethods ), decimalFormat.format( aTotalMethods ) ) );
+		getView( ).getStatus( ).setValue( String.format( getLocalizedString( "statusLabel" ), decimalFormat.format( aMethods ), decimalFormat.format( aTotalMethods ) ) );
 	}
 
-	public void updatePresentationFilter( final AggregatedMethodsFilter aFilter ) {
-		getView( ).getFilterHost( ).setText( aFilter.getHost( ) );
-		getView( ).getFilterClass( ).setText( aFilter.getClazz( ) );
-		getView( ).getFilterMethod( ).setText( aFilter.getMethod( ) );
-		getView( ).getFilterException( ).setText( aFilter.getException( ) );
-		getView( ).getFilterUseRegExpr( ).setSelected( aFilter.isUseRegExpr( ) );
-		getView( ).getFilterSearchType( ).setValue( aFilter.getSearchType( ) );
+	public void updatePresentationFilter( final AggregatedMethodsFilter filter ) {
+		getView( ).getFilter( ).setValue( filter );
 	}
 
 	public AggregatedMethodsFilter savePresentationFilter( ) throws BusinessException {
-		final AggregatedMethodsFilter filter = new AggregatedMethodsFilter( );
-
-		filter.setHost( trimToNull( getView( ).getFilterHost( ).getText( ) ) );
-		filter.setClazz( trimToNull( getView( ).getFilterClass( ).getText( ) ) );
-		filter.setMethod( trimToNull( getView( ).getFilterMethod( ).getText( ) ) );
-		filter.setException( trimToNull( getView( ).getFilterException( ).getText( ) ) );
-		filter.setUseRegExpr( getView( ).getFilterUseRegExpr( ).isSelected( ) );
-		filter.setSearchType( getView( ).getFilterSearchType( ).getValue( ) );
+		final AggregatedMethodsFilter filter = getView( ).getFilter( ).getValue( );
 
 		// If we are using regular expressions, we should check them
 		if ( filter.isUseRegExpr( ) ) {
 			final PatternService patternService = getService( PatternService.class );
 
-			if ( !(patternService.isValidPattern( filter.getHost( ) ) || filter.getHost( ) == null ) ) {
+			if ( !( patternService.isValidPattern( filter.getHost( ) ) || filter.getHost( ) == null ) ) {
 				throw new BusinessException( String.format( getLocalizedString( "errorMessageRegExpr" ), filter.getHost( ) ) );
 			}
 
-			if ( !(patternService.isValidPattern( filter.getClazz( ) ) || filter.getClazz( ) == null ) ) {
+			if ( !( patternService.isValidPattern( filter.getClazz( ) ) || filter.getClazz( ) == null ) ) {
 				throw new BusinessException( String.format( getLocalizedString( "errorMessageRegExpr" ), filter.getClazz( ) ) );
 			}
 
-			if ( !(patternService.isValidPattern( filter.getMethod( ) ) || filter.getMethod( ) == null ) ) {
+			if ( !( patternService.isValidPattern( filter.getMethod( ) ) || filter.getMethod( ) == null ) ) {
 				throw new BusinessException( String.format( getLocalizedString( "errorMessageRegExpr" ), filter.getMethod( ) ) );
 			}
 
-			if ( !(patternService.isValidPattern( filter.getException( ) ) || filter.getException( ) == null ) ) {
+			if ( !( patternService.isValidPattern( filter.getException( ) ) || filter.getException( ) == null ) ) {
 				throw new BusinessException( String.format( getLocalizedString( "errorMessageRegExpr" ), filter.getException( ) ) );
 			}
 		}

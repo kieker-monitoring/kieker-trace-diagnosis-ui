@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.frontend.tab.aggregatedmethods.components;
+package kieker.diagnosis.frontend.tab.aggregatedmethods.atom;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
