@@ -35,16 +35,16 @@ public final class TraceDetailsPane extends TitledPane implements StylesheetMixi
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( TraceDetailsPane.class.getName( ) );
 
-	private final TextField ivDetailsHost;
-	private final TextField ivDetailsClass;
-	private final TextField ivDetailsMethod;
-	private final TextField ivDetailsException;
-	private final TextField ivDetailsTraceDepth;
-	private final TextField ivDetailsTraceSize;
-	private final TextField ivDetailsDuration;
-	private final TextField ivDetailsPercent;
-	private final TextField ivDetailsTimestamp;
-	private final TextField ivDetailsTraceId;
+	private final TextField host;
+	private final TextField clazz;
+	private final TextField method;
+	private final TextField exception;
+	private final TextField traceDepth;
+	private final TextField traceSize;
+	private final TextField duration;
+	private final TextField percent;
+	private final TextField timestamp;
+	private final TextField traceId;
 
 	public TraceDetailsPane( ) {
 		setText( RESOURCE_BUNDLE.getString( "detailTitle" ) );
@@ -65,16 +65,16 @@ public final class TraceDetailsPane extends TitledPane implements StylesheetMixi
 			}
 
 			{
-				ivDetailsHost = new TextField( );
-				ivDetailsHost.setId( "tabTracesDetailHost" );
-				ivDetailsHost.setEditable( false );
-				ivDetailsHost.getStyleClass( ).add( "details" );
+				host = new TextField( );
+				host.setId( "tabTracesDetailHost" );
+				host.setEditable( false );
+				host.getStyleClass( ).add( "details" );
 
-				GridPane.setColumnIndex( ivDetailsHost, 1 );
-				GridPane.setRowIndex( ivDetailsHost, rowIndex++ );
-				GridPane.setHgrow( ivDetailsHost, Priority.ALWAYS );
+				GridPane.setColumnIndex( host, 1 );
+				GridPane.setRowIndex( host, rowIndex++ );
+				GridPane.setHgrow( host, Priority.ALWAYS );
 
-				griPane.getChildren( ).add( ivDetailsHost );
+				griPane.getChildren( ).add( host );
 			}
 
 			{
@@ -88,15 +88,15 @@ public final class TraceDetailsPane extends TitledPane implements StylesheetMixi
 			}
 
 			{
-				ivDetailsClass = new TextField( );
-				ivDetailsClass.setEditable( false );
-				ivDetailsClass.getStyleClass( ).add( "details" );
+				clazz = new TextField( );
+				clazz.setEditable( false );
+				clazz.getStyleClass( ).add( "details" );
 
-				GridPane.setColumnIndex( ivDetailsClass, 1 );
-				GridPane.setRowIndex( ivDetailsClass, rowIndex++ );
-				GridPane.setHgrow( ivDetailsClass, Priority.ALWAYS );
+				GridPane.setColumnIndex( clazz, 1 );
+				GridPane.setRowIndex( clazz, rowIndex++ );
+				GridPane.setHgrow( clazz, Priority.ALWAYS );
 
-				griPane.getChildren( ).add( ivDetailsClass );
+				griPane.getChildren( ).add( clazz );
 			}
 
 			{
@@ -110,15 +110,15 @@ public final class TraceDetailsPane extends TitledPane implements StylesheetMixi
 			}
 
 			{
-				ivDetailsMethod = new TextField( );
-				ivDetailsMethod.setEditable( false );
-				ivDetailsMethod.getStyleClass( ).add( "details" );
+				method = new TextField( );
+				method.setEditable( false );
+				method.getStyleClass( ).add( "details" );
 
-				GridPane.setColumnIndex( ivDetailsMethod, 1 );
-				GridPane.setRowIndex( ivDetailsMethod, rowIndex++ );
-				GridPane.setHgrow( ivDetailsMethod, Priority.ALWAYS );
+				GridPane.setColumnIndex( method, 1 );
+				GridPane.setRowIndex( method, rowIndex++ );
+				GridPane.setHgrow( method, Priority.ALWAYS );
 
-				griPane.getChildren( ).add( ivDetailsMethod );
+				griPane.getChildren( ).add( method );
 			}
 
 			{
@@ -132,15 +132,15 @@ public final class TraceDetailsPane extends TitledPane implements StylesheetMixi
 			}
 
 			{
-				ivDetailsException = new TextField( );
-				ivDetailsException.setEditable( false );
-				ivDetailsException.getStyleClass( ).add( "details" );
+				exception = new TextField( );
+				exception.setEditable( false );
+				exception.getStyleClass( ).add( "details" );
 
-				GridPane.setColumnIndex( ivDetailsException, 1 );
-				GridPane.setRowIndex( ivDetailsException, rowIndex++ );
-				GridPane.setHgrow( ivDetailsException, Priority.ALWAYS );
+				GridPane.setColumnIndex( exception, 1 );
+				GridPane.setRowIndex( exception, rowIndex++ );
+				GridPane.setHgrow( exception, Priority.ALWAYS );
 
-				griPane.getChildren( ).add( ivDetailsException );
+				griPane.getChildren( ).add( exception );
 			}
 
 			{
@@ -154,15 +154,15 @@ public final class TraceDetailsPane extends TitledPane implements StylesheetMixi
 			}
 
 			{
-				ivDetailsTraceDepth = new TextField( );
-				ivDetailsTraceDepth.setEditable( false );
-				ivDetailsTraceDepth.getStyleClass( ).add( "details" );
+				traceDepth = new TextField( );
+				traceDepth.setEditable( false );
+				traceDepth.getStyleClass( ).add( "details" );
 
-				GridPane.setColumnIndex( ivDetailsTraceDepth, 1 );
-				GridPane.setRowIndex( ivDetailsTraceDepth, rowIndex++ );
-				GridPane.setHgrow( ivDetailsTraceDepth, Priority.ALWAYS );
+				GridPane.setColumnIndex( traceDepth, 1 );
+				GridPane.setRowIndex( traceDepth, rowIndex++ );
+				GridPane.setHgrow( traceDepth, Priority.ALWAYS );
 
-				griPane.getChildren( ).add( ivDetailsTraceDepth );
+				griPane.getChildren( ).add( traceDepth );
 			}
 
 			rowIndex = 0;
@@ -178,15 +178,15 @@ public final class TraceDetailsPane extends TitledPane implements StylesheetMixi
 			}
 
 			{
-				ivDetailsTraceSize = new TextField( );
-				ivDetailsTraceSize.setEditable( false );
-				ivDetailsTraceSize.getStyleClass( ).add( "details" );
+				traceSize = new TextField( );
+				traceSize.setEditable( false );
+				traceSize.getStyleClass( ).add( "details" );
 
-				GridPane.setColumnIndex( ivDetailsTraceSize, 3 );
-				GridPane.setRowIndex( ivDetailsTraceSize, rowIndex++ );
-				GridPane.setHgrow( ivDetailsTraceSize, Priority.ALWAYS );
+				GridPane.setColumnIndex( traceSize, 3 );
+				GridPane.setRowIndex( traceSize, rowIndex++ );
+				GridPane.setHgrow( traceSize, Priority.ALWAYS );
 
-				griPane.getChildren( ).add( ivDetailsTraceSize );
+				griPane.getChildren( ).add( traceSize );
 			}
 
 			{
@@ -200,15 +200,15 @@ public final class TraceDetailsPane extends TitledPane implements StylesheetMixi
 			}
 
 			{
-				ivDetailsPercent = new TextField( );
-				ivDetailsPercent.setEditable( false );
-				ivDetailsPercent.getStyleClass( ).add( "details" );
+				percent = new TextField( );
+				percent.setEditable( false );
+				percent.getStyleClass( ).add( "details" );
 
-				GridPane.setColumnIndex( ivDetailsPercent, 3 );
-				GridPane.setRowIndex( ivDetailsPercent, rowIndex++ );
-				GridPane.setHgrow( ivDetailsPercent, Priority.ALWAYS );
+				GridPane.setColumnIndex( percent, 3 );
+				GridPane.setRowIndex( percent, rowIndex++ );
+				GridPane.setHgrow( percent, Priority.ALWAYS );
 
-				griPane.getChildren( ).add( ivDetailsPercent );
+				griPane.getChildren( ).add( percent );
 			}
 
 			{
@@ -222,15 +222,15 @@ public final class TraceDetailsPane extends TitledPane implements StylesheetMixi
 			}
 
 			{
-				ivDetailsDuration = new TextField( );
-				ivDetailsDuration.setEditable( false );
-				ivDetailsDuration.getStyleClass( ).add( "details" );
+				duration = new TextField( );
+				duration.setEditable( false );
+				duration.getStyleClass( ).add( "details" );
 
-				GridPane.setColumnIndex( ivDetailsDuration, 3 );
-				GridPane.setRowIndex( ivDetailsDuration, rowIndex++ );
-				GridPane.setHgrow( ivDetailsDuration, Priority.ALWAYS );
+				GridPane.setColumnIndex( duration, 3 );
+				GridPane.setRowIndex( duration, rowIndex++ );
+				GridPane.setHgrow( duration, Priority.ALWAYS );
 
-				griPane.getChildren( ).add( ivDetailsDuration );
+				griPane.getChildren( ).add( duration );
 			}
 
 			{
@@ -244,15 +244,15 @@ public final class TraceDetailsPane extends TitledPane implements StylesheetMixi
 			}
 
 			{
-				ivDetailsTimestamp = new TextField( );
-				ivDetailsTimestamp.setEditable( false );
-				ivDetailsTimestamp.getStyleClass( ).add( "details" );
+				timestamp = new TextField( );
+				timestamp.setEditable( false );
+				timestamp.getStyleClass( ).add( "details" );
 
-				GridPane.setColumnIndex( ivDetailsTimestamp, 3 );
-				GridPane.setRowIndex( ivDetailsTimestamp, rowIndex++ );
-				GridPane.setHgrow( ivDetailsTimestamp, Priority.ALWAYS );
+				GridPane.setColumnIndex( timestamp, 3 );
+				GridPane.setRowIndex( timestamp, rowIndex++ );
+				GridPane.setHgrow( timestamp, Priority.ALWAYS );
 
-				griPane.getChildren( ).add( ivDetailsTimestamp );
+				griPane.getChildren( ).add( timestamp );
 			}
 
 			{
@@ -266,15 +266,15 @@ public final class TraceDetailsPane extends TitledPane implements StylesheetMixi
 			}
 
 			{
-				ivDetailsTraceId = new TextField( );
-				ivDetailsTraceId.setEditable( false );
-				ivDetailsTraceId.getStyleClass( ).add( "details" );
+				traceId = new TextField( );
+				traceId.setEditable( false );
+				traceId.getStyleClass( ).add( "details" );
 
-				GridPane.setColumnIndex( ivDetailsTraceId, 3 );
-				GridPane.setRowIndex( ivDetailsTraceId, rowIndex++ );
-				GridPane.setHgrow( ivDetailsTraceId, Priority.ALWAYS );
+				GridPane.setColumnIndex( traceId, 3 );
+				GridPane.setRowIndex( traceId, rowIndex++ );
+				GridPane.setHgrow( traceId, Priority.ALWAYS );
 
-				griPane.getChildren( ).add( ivDetailsTraceId );
+				griPane.getChildren( ).add( traceId );
 			}
 
 			setContent( griPane );
@@ -293,27 +293,27 @@ public final class TraceDetailsPane extends TitledPane implements StylesheetMixi
 		final String noDataAvailable = RESOURCE_BUNDLE.getString( "noDataAvailable" );
 
 		if ( value != null ) {
-			ivDetailsHost.setText( value.getHost( ) );
-			ivDetailsClass.setText( value.getClazz( ) );
-			ivDetailsMethod.setText( value.getMethod( ) );
-			ivDetailsException.setText( value.getException( ) != null ? value.getException( ) : noDataAvailable );
-			ivDetailsTraceDepth.setText( Integer.toString( value.getTraceDepth( ) ) );
-			ivDetailsTraceSize.setText( Integer.toString( value.getTraceSize( ) ) );
-			ivDetailsDuration.setText( String.format( "%d [ns]", value.getDuration( ) ) );
-			ivDetailsPercent.setText( String.format( "%f %%", value.getPercent( ) ) );
-			ivDetailsTimestamp.setText( Long.toString( value.getTimestamp( ) ) );
-			ivDetailsTraceId.setText( Long.toString( value.getTraceId( ) ) );
+			host.setText( value.getHost( ) );
+			clazz.setText( value.getClazz( ) );
+			method.setText( value.getMethod( ) );
+			exception.setText( value.getException( ) != null ? value.getException( ) : noDataAvailable );
+			traceDepth.setText( Integer.toString( value.getTraceDepth( ) ) );
+			traceSize.setText( Integer.toString( value.getTraceSize( ) ) );
+			duration.setText( String.format( "%d [ns]", value.getDuration( ) ) );
+			percent.setText( String.format( "%f %%", value.getPercent( ) ) );
+			timestamp.setText( Long.toString( value.getTimestamp( ) ) );
+			traceId.setText( Long.toString( value.getTraceId( ) ) );
 		} else {
-			ivDetailsHost.setText( noDataAvailable );
-			ivDetailsClass.setText( noDataAvailable );
-			ivDetailsMethod.setText( noDataAvailable );
-			ivDetailsException.setText( noDataAvailable );
-			ivDetailsTraceDepth.setText( noDataAvailable );
-			ivDetailsTraceSize.setText( noDataAvailable );
-			ivDetailsDuration.setText( noDataAvailable );
-			ivDetailsPercent.setText( noDataAvailable );
-			ivDetailsTimestamp.setText( noDataAvailable );
-			ivDetailsTraceId.setText( noDataAvailable );
+			host.setText( noDataAvailable );
+			clazz.setText( noDataAvailable );
+			method.setText( noDataAvailable );
+			exception.setText( noDataAvailable );
+			traceDepth.setText( noDataAvailable );
+			traceSize.setText( noDataAvailable );
+			duration.setText( noDataAvailable );
+			percent.setText( noDataAvailable );
+			timestamp.setText( noDataAvailable );
+			traceId.setText( noDataAvailable );
 		}
 	}
 

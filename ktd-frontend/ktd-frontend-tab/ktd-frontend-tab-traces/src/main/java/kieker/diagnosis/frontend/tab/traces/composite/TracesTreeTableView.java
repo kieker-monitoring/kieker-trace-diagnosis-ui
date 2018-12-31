@@ -20,7 +20,7 @@ public final class TracesTreeTableView extends TreeTableView<MethodCall> impleme
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( TracesTreeTableView.class.getName( ) );
 
-	private TreeTableColumn<MethodCall, Long> ivDurationColumn;
+	private TreeTableColumn<MethodCall, Long> durationColumn;
 
 	public TracesTreeTableView( ) {
 		setShowRoot( false );
@@ -86,12 +86,12 @@ public final class TracesTreeTableView extends TreeTableView<MethodCall> impleme
 		}
 
 		{
-			ivDurationColumn = new TreeTableColumn<>( );
-			ivDurationColumn.setCellValueFactory( new DurationCellValueFactory( ) );
-			ivDurationColumn.setText( RESOURCE_BUNDLE.getString( "columnDuration" ) );
-			ivDurationColumn.setPrefWidth( 150 );
+			durationColumn = new TreeTableColumn<>( );
+			durationColumn.setCellValueFactory( new DurationCellValueFactory( ) );
+			durationColumn.setText( RESOURCE_BUNDLE.getString( "columnDuration" ) );
+			durationColumn.setPrefWidth( 150 );
 
-			getColumns( ).add( ivDurationColumn );
+			getColumns( ).add( durationColumn );
 		}
 
 		{
@@ -116,7 +116,7 @@ public final class TracesTreeTableView extends TreeTableView<MethodCall> impleme
 	}
 
 	public TreeTableColumn<MethodCall, Long> getDurationColumn( ) {
-		return ivDurationColumn;
+		return durationColumn;
 	}
 
 	/**

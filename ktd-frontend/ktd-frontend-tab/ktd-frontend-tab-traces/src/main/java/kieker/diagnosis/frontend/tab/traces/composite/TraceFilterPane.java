@@ -52,19 +52,19 @@ public final class TraceFilterPane extends TitledPane implements StringMixin, Ic
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( TraceFilterPane.class.getName( ) );
 
-	private final TextField ivFilterHost;
-	private final TextField ivFilterClass;
-	private final TextField ivFilterMethod;
-	private final TextField ivFilterException;
-	private final LongTextField ivFilterTraceId;
-	private final CheckBox ivFilterUseRegExpr;
+	private final TextField host;
+	private final TextField clazz;
+	private final TextField method;
+	private final TextField exception;
+	private final LongTextField traceId;
+	private final CheckBox useRegExpr;
 
-	private final DatePicker ivFilterLowerDate;
-	private final LocalTimeTextField ivFilterLowerTime;
-	private final DatePicker ivFilterUpperDate;
-	private final LocalTimeTextField ivFilterUpperTime;
-	private final CheckBox ivFilterSearchWholeTrace;
-	private final ComboBox<SearchType> ivFilterSearchType;
+	private final DatePicker lowerDate;
+	private final LocalTimeTextField lowerTime;
+	private final DatePicker upperDate;
+	private final LocalTimeTextField upperTime;
+	private final CheckBox seachWholeTrace;
+	private final ComboBox<SearchType> searchType;
 
 	private final Button searchButton;
 	private final Hyperlink saveAsFavoriteLink;
@@ -98,115 +98,115 @@ public final class TraceFilterPane extends TitledPane implements StringMixin, Ic
 				int rowIndex = 0;
 
 				{
-					ivFilterHost = new TextField( );
-					ivFilterHost.setId( "tabTracesFilterHost" );
-					ivFilterHost.setPromptText( RESOURCE_BUNDLE.getString( "filterByHost" ) );
-					GridPane.setColumnIndex( ivFilterHost, columnIndex++ );
-					GridPane.setRowIndex( ivFilterHost, rowIndex );
-					GridPane.setHgrow( ivFilterHost, Priority.ALWAYS );
+					host = new TextField( );
+					host.setId( "tabTracesFilterHost" );
+					host.setPromptText( RESOURCE_BUNDLE.getString( "filterByHost" ) );
+					GridPane.setColumnIndex( host, columnIndex++ );
+					GridPane.setRowIndex( host, rowIndex );
+					GridPane.setHgrow( host, Priority.ALWAYS );
 
-					gridPane.getChildren( ).add( ivFilterHost );
+					gridPane.getChildren( ).add( host );
 				}
 
 				{
-					ivFilterClass = new TextField( );
-					ivFilterClass.setPromptText( RESOURCE_BUNDLE.getString( "filterByClass" ) );
-					GridPane.setColumnIndex( ivFilterClass, columnIndex++ );
-					GridPane.setRowIndex( ivFilterClass, rowIndex );
-					GridPane.setHgrow( ivFilterClass, Priority.ALWAYS );
+					clazz = new TextField( );
+					clazz.setPromptText( RESOURCE_BUNDLE.getString( "filterByClass" ) );
+					GridPane.setColumnIndex( clazz, columnIndex++ );
+					GridPane.setRowIndex( clazz, rowIndex );
+					GridPane.setHgrow( clazz, Priority.ALWAYS );
 
-					gridPane.getChildren( ).add( ivFilterClass );
+					gridPane.getChildren( ).add( clazz );
 				}
 
 				{
-					ivFilterMethod = new TextField( );
-					ivFilterMethod.setPromptText( RESOURCE_BUNDLE.getString( "filterByMethod" ) );
-					GridPane.setColumnIndex( ivFilterMethod, columnIndex++ );
-					GridPane.setRowIndex( ivFilterMethod, rowIndex );
-					GridPane.setHgrow( ivFilterMethod, Priority.ALWAYS );
+					method = new TextField( );
+					method.setPromptText( RESOURCE_BUNDLE.getString( "filterByMethod" ) );
+					GridPane.setColumnIndex( method, columnIndex++ );
+					GridPane.setRowIndex( method, rowIndex );
+					GridPane.setHgrow( method, Priority.ALWAYS );
 
-					gridPane.getChildren( ).add( ivFilterMethod );
+					gridPane.getChildren( ).add( method );
 				}
 
 				{
-					ivFilterException = new TextField( );
-					ivFilterException.setPromptText( RESOURCE_BUNDLE.getString( "filterByException" ) );
-					GridPane.setColumnIndex( ivFilterException, columnIndex++ );
-					GridPane.setRowIndex( ivFilterException, rowIndex );
-					GridPane.setHgrow( ivFilterException, Priority.ALWAYS );
+					exception = new TextField( );
+					exception.setPromptText( RESOURCE_BUNDLE.getString( "filterByException" ) );
+					GridPane.setColumnIndex( exception, columnIndex++ );
+					GridPane.setRowIndex( exception, rowIndex );
+					GridPane.setHgrow( exception, Priority.ALWAYS );
 
-					gridPane.getChildren( ).add( ivFilterException );
+					gridPane.getChildren( ).add( exception );
 				}
 
 				{
-					ivFilterTraceId = new LongTextField( );
-					ivFilterTraceId.setPromptText( RESOURCE_BUNDLE.getString( "filterByTraceId" ) );
-					GridPane.setColumnIndex( ivFilterTraceId, columnIndex++ );
-					GridPane.setRowIndex( ivFilterTraceId, rowIndex );
-					GridPane.setHgrow( ivFilterTraceId, Priority.ALWAYS );
+					traceId = new LongTextField( );
+					traceId.setPromptText( RESOURCE_BUNDLE.getString( "filterByTraceId" ) );
+					GridPane.setColumnIndex( traceId, columnIndex++ );
+					GridPane.setRowIndex( traceId, rowIndex );
+					GridPane.setHgrow( traceId, Priority.ALWAYS );
 
-					gridPane.getChildren( ).add( ivFilterTraceId );
+					gridPane.getChildren( ).add( traceId );
 				}
 
 				columnIndex = 0;
 				rowIndex++;
 
 				{
-					ivFilterLowerDate = new DatePicker( );
-					ivFilterLowerDate.setPromptText( RESOURCE_BUNDLE.getString( "filterByLowerDate" ) );
-					ivFilterLowerDate.setMaxWidth( Double.POSITIVE_INFINITY );
+					lowerDate = new DatePicker( );
+					lowerDate.setPromptText( RESOURCE_BUNDLE.getString( "filterByLowerDate" ) );
+					lowerDate.setMaxWidth( Double.POSITIVE_INFINITY );
 
-					GridPane.setColumnIndex( ivFilterLowerDate, columnIndex++ );
-					GridPane.setRowIndex( ivFilterLowerDate, rowIndex );
-					GridPane.setHgrow( ivFilterLowerDate, Priority.ALWAYS );
+					GridPane.setColumnIndex( lowerDate, columnIndex++ );
+					GridPane.setRowIndex( lowerDate, rowIndex );
+					GridPane.setHgrow( lowerDate, Priority.ALWAYS );
 
-					gridPane.getChildren( ).add( ivFilterLowerDate );
+					gridPane.getChildren( ).add( lowerDate );
 				}
 
 				{
-					ivFilterLowerTime = new LocalTimeTextField( );
-					ivFilterLowerTime.setPromptText( RESOURCE_BUNDLE.getString( "filterByLowerTime" ) );
+					lowerTime = new LocalTimeTextField( );
+					lowerTime.setPromptText( RESOURCE_BUNDLE.getString( "filterByLowerTime" ) );
 
-					GridPane.setColumnIndex( ivFilterLowerTime, columnIndex++ );
-					GridPane.setRowIndex( ivFilterLowerTime, rowIndex );
-					GridPane.setHgrow( ivFilterLowerTime, Priority.ALWAYS );
+					GridPane.setColumnIndex( lowerTime, columnIndex++ );
+					GridPane.setRowIndex( lowerTime, rowIndex );
+					GridPane.setHgrow( lowerTime, Priority.ALWAYS );
 
-					gridPane.getChildren( ).add( ivFilterLowerTime );
+					gridPane.getChildren( ).add( lowerTime );
 				}
 
 				{
-					ivFilterUpperDate = new DatePicker( );
-					ivFilterUpperDate.setPromptText( RESOURCE_BUNDLE.getString( "filterByUpperDate" ) );
-					ivFilterUpperDate.setMaxWidth( Double.POSITIVE_INFINITY );
+					upperDate = new DatePicker( );
+					upperDate.setPromptText( RESOURCE_BUNDLE.getString( "filterByUpperDate" ) );
+					upperDate.setMaxWidth( Double.POSITIVE_INFINITY );
 
-					GridPane.setColumnIndex( ivFilterUpperDate, columnIndex++ );
-					GridPane.setRowIndex( ivFilterUpperDate, rowIndex );
-					GridPane.setHgrow( ivFilterUpperDate, Priority.ALWAYS );
+					GridPane.setColumnIndex( upperDate, columnIndex++ );
+					GridPane.setRowIndex( upperDate, rowIndex );
+					GridPane.setHgrow( upperDate, Priority.ALWAYS );
 
-					gridPane.getChildren( ).add( ivFilterUpperDate );
+					gridPane.getChildren( ).add( upperDate );
 				}
 
 				{
-					ivFilterUpperTime = new LocalTimeTextField( );
-					ivFilterUpperTime.setPromptText( RESOURCE_BUNDLE.getString( "filterByUpperTime" ) );
+					upperTime = new LocalTimeTextField( );
+					upperTime.setPromptText( RESOURCE_BUNDLE.getString( "filterByUpperTime" ) );
 
-					GridPane.setColumnIndex( ivFilterUpperTime, columnIndex++ );
-					GridPane.setRowIndex( ivFilterUpperTime, rowIndex );
-					GridPane.setHgrow( ivFilterUpperTime, Priority.ALWAYS );
+					GridPane.setColumnIndex( upperTime, columnIndex++ );
+					GridPane.setRowIndex( upperTime, rowIndex );
+					GridPane.setHgrow( upperTime, Priority.ALWAYS );
 
-					gridPane.getChildren( ).add( ivFilterUpperTime );
+					gridPane.getChildren( ).add( upperTime );
 				}
 
 				{
-					ivFilterSearchType = new ComboBox<>( );
-					ivFilterSearchType.setItems( FXCollections.observableArrayList( SearchType.values( ) ) );
-					ivFilterSearchType.setConverter( new EnumStringConverter<>( SearchType.class ) );
-					ivFilterSearchType.setMaxWidth( Double.POSITIVE_INFINITY );
+					searchType = new ComboBox<>( );
+					searchType.setItems( FXCollections.observableArrayList( SearchType.values( ) ) );
+					searchType.setConverter( new EnumStringConverter<>( SearchType.class ) );
+					searchType.setMaxWidth( Double.POSITIVE_INFINITY );
 
-					GridPane.setColumnIndex( ivFilterSearchType, columnIndex++ );
-					GridPane.setRowIndex( ivFilterSearchType, rowIndex );
+					GridPane.setColumnIndex( searchType, columnIndex++ );
+					GridPane.setRowIndex( searchType, rowIndex );
 
-					gridPane.getChildren( ).add( ivFilterSearchType );
+					gridPane.getChildren( ).add( searchType );
 				}
 
 				GridPane.setColumnIndex( gridPane, 0 );
@@ -218,25 +218,25 @@ public final class TraceFilterPane extends TitledPane implements StringMixin, Ic
 			}
 
 			{
-				ivFilterUseRegExpr = new CheckBox( );
-				ivFilterUseRegExpr.setText( RESOURCE_BUNDLE.getString( "filterUseRegExpr" ) );
+				useRegExpr = new CheckBox( );
+				useRegExpr.setText( RESOURCE_BUNDLE.getString( "filterUseRegExpr" ) );
 
-				GridPane.setColumnIndex( ivFilterUseRegExpr, 1 );
-				GridPane.setRowIndex( ivFilterUseRegExpr, 0 );
-				GridPane.setValignment( ivFilterUseRegExpr, VPos.CENTER );
+				GridPane.setColumnIndex( useRegExpr, 1 );
+				GridPane.setRowIndex( useRegExpr, 0 );
+				GridPane.setValignment( useRegExpr, VPos.CENTER );
 
-				outerGridPane.getChildren( ).add( ivFilterUseRegExpr );
+				outerGridPane.getChildren( ).add( useRegExpr );
 			}
 
 			{
-				ivFilterSearchWholeTrace = new CheckBox( );
-				ivFilterSearchWholeTrace.setText( RESOURCE_BUNDLE.getString( "filterSearchWholeTrace" ) );
+				seachWholeTrace = new CheckBox( );
+				seachWholeTrace.setText( RESOURCE_BUNDLE.getString( "filterSearchWholeTrace" ) );
 
-				GridPane.setColumnIndex( ivFilterSearchWholeTrace, 1 );
-				GridPane.setRowIndex( ivFilterSearchWholeTrace, 1 );
-				GridPane.setValignment( ivFilterSearchWholeTrace, VPos.CENTER );
+				GridPane.setColumnIndex( seachWholeTrace, 1 );
+				GridPane.setRowIndex( seachWholeTrace, 1 );
+				GridPane.setValignment( seachWholeTrace, VPos.CENTER );
 
-				outerGridPane.getChildren( ).add( ivFilterSearchWholeTrace );
+				outerGridPane.getChildren( ).add( seachWholeTrace );
 			}
 
 			{
@@ -270,13 +270,13 @@ public final class TraceFilterPane extends TitledPane implements StringMixin, Ic
 		{
 			// The CalendarTimeTextField doesn't recognize the default button
 
-			ivFilterLowerTime.setOnKeyReleased( e -> {
+			lowerTime.setOnKeyReleased( e -> {
 				if ( e.getCode( ) == KeyCode.ENTER ) {
 					searchButton.fire( );
 				}
 			} );
 
-			ivFilterUpperTime.setOnKeyReleased( e -> {
+			upperTime.setOnKeyReleased( e -> {
 				if ( e.getCode( ) == KeyCode.ENTER ) {
 					searchButton.fire( );
 				}
@@ -318,18 +318,18 @@ public final class TraceFilterPane extends TitledPane implements StringMixin, Ic
 	 *            The new value. Must not be {@code null}.
 	 */
 	public void setValue( final TracesFilter filter ) {
-		ivFilterHost.setText( filter.getHost( ) );
-		ivFilterClass.setText( filter.getClazz( ) );
-		ivFilterMethod.setText( filter.getMethod( ) );
-		ivFilterException.setText( filter.getException( ) );
-		ivFilterTraceId.setText( filter.getTraceId( ) != null ? Long.toString( filter.getTraceId( ) ) : null );
-		ivFilterUseRegExpr.setSelected( filter.isUseRegExpr( ) );
-		ivFilterSearchWholeTrace.setSelected( filter.isSearchWholeTrace( ) );
-		ivFilterLowerDate.setValue( filter.getLowerDate( ) );
-		ivFilterLowerTime.setLocalTime( filter.getLowerTime( ) );
-		ivFilterUpperDate.setValue( filter.getUpperDate( ) );
-		ivFilterUpperTime.setLocalTime( filter.getUpperTime( ) );
-		ivFilterSearchType.setValue( filter.getSearchType( ) );
+		host.setText( filter.getHost( ) );
+		clazz.setText( filter.getClazz( ) );
+		method.setText( filter.getMethod( ) );
+		exception.setText( filter.getException( ) );
+		traceId.setText( filter.getTraceId( ) != null ? Long.toString( filter.getTraceId( ) ) : null );
+		useRegExpr.setSelected( filter.isUseRegExpr( ) );
+		seachWholeTrace.setSelected( filter.isSearchWholeTrace( ) );
+		lowerDate.setValue( filter.getLowerDate( ) );
+		lowerTime.setLocalTime( filter.getLowerTime( ) );
+		upperDate.setValue( filter.getUpperDate( ) );
+		upperTime.setLocalTime( filter.getUpperTime( ) );
+		searchType.setValue( filter.getSearchType( ) );
 	}
 
 	/**
@@ -340,18 +340,18 @@ public final class TraceFilterPane extends TitledPane implements StringMixin, Ic
 	public TracesFilter getValue( ) {
 		final TracesFilter filter = new TracesFilter( );
 
-		filter.setHost( trimToNull( ivFilterHost.getText( ) ) );
-		filter.setClazz( trimToNull( ivFilterClass.getText( ) ) );
-		filter.setMethod( trimToNull( ivFilterMethod.getText( ) ) );
-		filter.setException( trimToNull( ivFilterException.getText( ) ) );
-		filter.setUseRegExpr( ivFilterUseRegExpr.isSelected( ) );
-		filter.setSearchWholeTrace( ivFilterSearchWholeTrace.isSelected( ) );
-		filter.setLowerDate( ivFilterLowerDate.getValue( ) );
-		filter.setLowerTime( ivFilterLowerTime.getLocalTime( ) );
-		filter.setUpperDate( ivFilterUpperDate.getValue( ) );
-		filter.setUpperTime( ivFilterUpperTime.getLocalTime( ) );
-		filter.setSearchType( ivFilterSearchType.getValue( ) );
-		filter.setTraceId( ivFilterTraceId.getValue( ) );
+		filter.setHost( trimToNull( host.getText( ) ) );
+		filter.setClazz( trimToNull( clazz.getText( ) ) );
+		filter.setMethod( trimToNull( method.getText( ) ) );
+		filter.setException( trimToNull( exception.getText( ) ) );
+		filter.setUseRegExpr( useRegExpr.isSelected( ) );
+		filter.setSearchWholeTrace( seachWholeTrace.isSelected( ) );
+		filter.setLowerDate( lowerDate.getValue( ) );
+		filter.setLowerTime( lowerTime.getLocalTime( ) );
+		filter.setUpperDate( upperDate.getValue( ) );
+		filter.setUpperTime( upperTime.getLocalTime( ) );
+		filter.setSearchType( searchType.getValue( ) );
+		filter.setTraceId( traceId.getValue( ) );
 
 		return filter;
 	}
