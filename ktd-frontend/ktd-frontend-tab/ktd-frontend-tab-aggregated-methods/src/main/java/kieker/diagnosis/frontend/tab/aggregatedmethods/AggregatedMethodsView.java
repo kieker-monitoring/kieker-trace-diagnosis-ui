@@ -16,6 +16,7 @@
 
 package kieker.diagnosis.frontend.tab.aggregatedmethods;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import javafx.beans.property.BooleanProperty;
@@ -47,8 +48,8 @@ public class AggregatedMethodsView extends ViewBase<AggregatedMethodsController>
 		getController( ).performInitialize( );
 	}
 
+	@Inject
 	public AggregatedMethodsView( ) {
-
 		{
 			filterPane = new AggregatedMethodFilterPane( );
 			filterPane.setOnSearch( e -> getController( ).performSearch( ) );
