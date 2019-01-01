@@ -15,7 +15,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import javafx.scene.Scene;
-import javafx.scene.control.TextInputControl;
 import javafx.stage.Stage;
 import kieker.diagnosis.backend.search.statistics.Statistics;
 import kieker.diagnosis.backend.search.statistics.StatisticsService;
@@ -29,13 +28,13 @@ public final class StatisticsViewTestUI extends ApplicationTest {
 
 	private StatisticsService statisticsService;
 	private StatisticsView statisticsView;
+	private StatisticsPage statisticsPage;
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
 		final Injector injector = Guice.createInjector( new Module( ) );
 
 		statisticsService = injector.getInstance( StatisticsService.class );
-		when( statisticsService.getStatistics( ) ).thenReturn( Optional.empty( ) );
 
 		statisticsView = injector.getInstance( StatisticsView.class );
 		statisticsView.setParameter( null );
@@ -44,45 +43,39 @@ public final class StatisticsViewTestUI extends ApplicationTest {
 		final Scene scene = new Scene( statisticsView );
 		stage.setScene( scene );
 		stage.show( );
+
+		statisticsPage = new StatisticsPage( this );
 	}
 
 	@Test
-	public void testStatisticsView( ) {
-		final TextInputControl processedBytesTextField = lookup( "#statisticsProcessedBytes" ).queryTextInputControl( );
-		assertThat( processedBytesTextField.getText( ), is( "<Keine Daten verfügbar> " ) );
+	public void testWithoutData( ) {
+		loadData( createFirstStatistics( ) );
 
-		final TextInputControl processDuration = lookup( "#statisticsProcessDuration" ).queryTextInputControl( );
-		assertThat( processDuration.getText( ), is( "<Keine Daten verfügbar> " ) );
+		assertThat( statisticsPage.getProcessedBytes( ).getText( ), is( "<Keine Daten verfügbar> " ) );
+		assertThat( statisticsPage.getProcessDuration( ).getText( ), is( "<Keine Daten verfügbar> " ) );
+		assertThat( statisticsPage.getProcessSpeed( ).getText( ), is( "<Keine Daten verfügbar> " ) );
+	}
 
-		final TextInputControl processSpeed = lookup( "#statisticsProcessSpeed" ).queryTextInputControl( );
-		assertThat( processSpeed.getText( ), is( "<Keine Daten verfügbar> " ) );
-
-		when( statisticsService.getStatistics( ) ).thenReturn( createFirstStatistics( ) );
+	private void loadData( final Optional<Statistics> statistics ) {
+		when( statisticsService.getStatistics( ) ).thenReturn( statistics );
 		statisticsView.prepareRefresh( );
 		statisticsView.performRefresh( );
-
-		assertThat( processedBytesTextField.getText( ), is( "250 [B]" ) );
-		assertThat( processDuration.getText( ), is( "10 [ms]" ) );
-		assertThat( processSpeed.getText( ), is( "1000 [B/s]" ) );
-
-		when( statisticsService.getStatistics( ) ).thenReturn( createSecondStatistics( ) );
-		statisticsView.prepareRefresh( );
-		statisticsView.performRefresh( );
-
-		assertThat( processedBytesTextField.getText( ), is( "244 [KB]" ) );
-		assertThat( processDuration.getText( ), is( "10 [s]" ) );
-		assertThat( processSpeed.getText( ), is( "9 [KB/s]" ) );
-
-		when( statisticsService.getStatistics( ) ).thenReturn( createThirdStatistics( ) );
-		statisticsView.prepareRefresh( );
-		statisticsView.performRefresh( );
-
-		assertThat( processedBytesTextField.getText( ), is( "238 [MB]" ) );
-		assertThat( processDuration.getText( ), is( "10 [m]" ) );
-		assertThat( processSpeed.getText( ), is( "9 [MB/s]" ) );
 	}
 
 	private Optional<Statistics> createFirstStatistics( ) {
+		return Optional.empty( );
+	}
+
+	@Test
+	public void testWithFirstUnits( ) {
+		loadData( createSecondStatistics( ) );
+
+		assertThat( statisticsPage.getProcessedBytes( ).getText( ), is( "250 [B]" ) );
+		assertThat( statisticsPage.getProcessDuration( ).getText( ), is( "10 [ms]" ) );
+		assertThat( statisticsPage.getProcessSpeed( ).getText( ), is( "1000 [B/s]" ) );
+	}
+
+	private Optional<Statistics> createSecondStatistics( ) {
 		return Optional.of( Statistics
 				.builder( )
 				.processedBytes( 250L )
@@ -91,7 +84,16 @@ public final class StatisticsViewTestUI extends ApplicationTest {
 				.build( ) );
 	}
 
-	private Optional<Statistics> createSecondStatistics( ) {
+	@Test
+	public void testWithSecondsUnits( ) {
+		loadData( createThirdStatistics( ) );
+
+		assertThat( statisticsPage.getProcessedBytes( ).getText( ), is( "244 [KB]" ) );
+		assertThat( statisticsPage.getProcessDuration( ).getText( ), is( "10 [s]" ) );
+		assertThat( statisticsPage.getProcessSpeed( ).getText( ), is( "9 [KB/s]" ) );
+	}
+
+	private Optional<Statistics> createThirdStatistics( ) {
 		return Optional.of( Statistics
 				.builder( )
 				.processedBytes( 250000L )
@@ -100,7 +102,16 @@ public final class StatisticsViewTestUI extends ApplicationTest {
 				.build( ) );
 	}
 
-	private Optional<Statistics> createThirdStatistics( ) {
+	@Test
+	public void testWithThirdUnits( ) {
+		loadData( createFourthStatistics( ) );
+
+		assertThat( statisticsPage.getProcessedBytes( ).getText( ), is( "238 [MB]" ) );
+		assertThat( statisticsPage.getProcessDuration( ).getText( ), is( "10 [m]" ) );
+		assertThat( statisticsPage.getProcessSpeed( ).getText( ), is( "9 [MB/s]" ) );
+	}
+
+	private Optional<Statistics> createFourthStatistics( ) {
 		return Optional.of( Statistics
 				.builder( )
 				.processedBytes( 250000000L )

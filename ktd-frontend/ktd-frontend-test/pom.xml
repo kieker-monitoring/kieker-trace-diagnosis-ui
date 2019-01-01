@@ -8,19 +8,20 @@
 		<groupId>net.kieker-monitoring</groupId>
 		<artifactId>ktd-parent</artifactId>
 		<version>5.0.0-SNAPSHOT</version>
-		<relativePath>../ktd-parent</relativePath>
+		<relativePath>../../ktd-parent</relativePath>
 	</parent>
 
-	<artifactId>ktd-frontend</artifactId>
-	<packaging>pom</packaging>
+	<artifactId>ktd-frontend-test</artifactId>
 
-	<modules>
-		<module>ktd-frontend-base</module>
-		<module>ktd-frontend-dialog</module>
-		<module>ktd-frontend-tab</module>
-		<module>ktd-frontend-main</module>
-		<module>ktd-frontend-application</module>
-		<module>ktd-frontend-test</module>
-	</modules>
-	
+	<dependencies>
+		<dependency>
+			<groupId>org.testfx</groupId>
+			<artifactId>testfx-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+		</dependency>
+	</dependencies>
+
 </project>
