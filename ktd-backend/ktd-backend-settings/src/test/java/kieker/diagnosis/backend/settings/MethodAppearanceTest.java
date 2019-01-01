@@ -22,8 +22,6 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import kieker.diagnosis.backend.settings.MethodAppearance;
-
 /**
  * Test class for the {@link MethodAppearance}.
  *
@@ -48,6 +46,7 @@ public final class MethodAppearanceTest {
 		assertThat( MethodAppearance.SHORT.convert( "A.B.C.d()" ), is( "d(...)" ) );
 		assertThat( MethodAppearance.SHORT.convert( "d()" ), is( "d(...)" ) );
 		assertThat( MethodAppearance.SHORT.convert( "A.B.C.d(int, String)" ), is( "d(...)" ) );
+		assertThat( MethodAppearance.SHORT.convert( "e" ), is( "e" ) );
 	}
 
 }
