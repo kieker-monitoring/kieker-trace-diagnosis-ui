@@ -117,6 +117,7 @@ public class StatisticsView extends ViewBase<StatisticsController> {
 
 		{
 			ivProcessDuration = new TextField( );
+			ivProcessDuration.setId( "statisticsProcessDuration" );
 			ivProcessDuration.setEditable( false );
 
 			GridPane.setColumnIndex( ivProcessDuration, 1 );
@@ -138,6 +139,7 @@ public class StatisticsView extends ViewBase<StatisticsController> {
 
 		{
 			ivProcessSpeed = new TextField( );
+			ivProcessSpeed.setId( "statisticsProcessSpeed" );
 			ivProcessSpeed.setEditable( false );
 
 			GridPane.setColumnIndex( ivProcessSpeed, 1 );
