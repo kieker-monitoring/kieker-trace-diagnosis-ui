@@ -19,8 +19,13 @@ package kieker.diagnosis.frontend;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
+import javafx.scene.Scene;
 import javafx.stage.Stage;
-import kieker.diagnosis.frontend.application.KiekerTraceDiagnosis;
+import kieker.diagnosis.backend.base.ServiceBaseModule;
+import kieker.diagnosis.frontend.main.MainView;
 
 /**
  * This is a UI test which just makes sure that the application is at least startable.
@@ -31,8 +36,13 @@ public final class SmokeTestUI extends ApplicationTest {
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
-		final KiekerTraceDiagnosis kiekerTraceDiagnosis = new KiekerTraceDiagnosis( );
-		kiekerTraceDiagnosis.start( stage );
+		final Injector injector = Guice.createInjector( new ServiceBaseModule( ) );
+
+		final MainView mainView = injector.getInstance( MainView.class );
+
+		final Scene scene = new Scene( mainView );
+		stage.setScene( scene );
+		stage.show( );
 	}
 
 	@Test

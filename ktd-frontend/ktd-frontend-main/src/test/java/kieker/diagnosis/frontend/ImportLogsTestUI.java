@@ -30,18 +30,20 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.testfx.framework.junit.ApplicationTest;
 
+import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeTableView;
 import javafx.stage.Stage;
-import kieker.diagnosis.frontend.application.KiekerTraceDiagnosis;
+import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.frontend.main.MainController;
+import kieker.diagnosis.frontend.main.MainView;
 
 /**
- * This is a UI test which imports both ascii and binary monitoring logs and
- * makes sure that the results are correct.
+ * This is a UI test which imports both ascii and binary monitoring logs and makes sure that the results are correct.
  *
  * @author Nils Christian Ehmke
  */
@@ -53,11 +55,14 @@ public final class ImportLogsTestUI extends ApplicationTest {
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
-		final KiekerTraceDiagnosis kiekerTraceDiagnosis = new KiekerTraceDiagnosis( );
-		kiekerTraceDiagnosis.start( stage );
+		final Injector injector = Guice.createInjector( new ServiceBaseModule( ) );
 
-		final Injector injector = kiekerTraceDiagnosis.getInjector( );
+		final MainView mainView = injector.getInstance( MainView.class );
 		mainController = injector.getInstance( MainController.class );
+
+		final Scene scene = new Scene( mainView );
+		stage.setScene( scene );
+		stage.show( );
 	}
 
 	@Test
