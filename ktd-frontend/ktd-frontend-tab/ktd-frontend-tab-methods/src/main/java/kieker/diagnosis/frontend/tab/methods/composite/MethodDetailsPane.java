@@ -135,6 +135,7 @@ public final class MethodDetailsPane extends TitledPane implements StylesheetMix
 
 		{
 			exception = new TextField( );
+			exception.setId( "tabMethodsDetailException" );
 			exception.setEditable( false );
 			exception.getStyleClass( ).add( "details" );
 

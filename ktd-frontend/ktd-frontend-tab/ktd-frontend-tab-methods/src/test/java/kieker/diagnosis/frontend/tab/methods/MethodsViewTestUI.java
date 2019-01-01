@@ -5,6 +5,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -19,6 +20,11 @@ import javafx.stage.Stage;
 import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.data.MonitoringLogService;
+import kieker.diagnosis.backend.properties.PropertiesService;
+import kieker.diagnosis.backend.settings.TimestampAppearance;
+import kieker.diagnosis.backend.settings.properties.TimeUnitProperty;
+import kieker.diagnosis.backend.settings.properties.TimestampProperty;
+import kieker.diagnosis.frontend.base.FrontendBaseModule;
 
 /**
  * This is a UI test which checks that the methods view is working as expected.
@@ -29,10 +35,14 @@ public final class MethodsViewTestUI extends ApplicationTest {
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
-		final Injector injector = Guice.createInjector( new ServiceBaseModule( ) );
+		final Injector injector = Guice.createInjector( new ServiceBaseModule( ), new FrontendBaseModule( ) );
 
 		final MonitoringLogService monitoringLogService = injector.getInstance( MonitoringLogService.class );
-		monitoringLogService.addMethods( createCalls( ) );
+		monitoringLogService.addMethods( createMethodCalls( ) );
+
+		final PropertiesService propertiesService = injector.getInstance( PropertiesService.class );
+		propertiesService.saveApplicationProperty( TimeUnitProperty.class, TimeUnit.NANOSECONDS );
+		propertiesService.saveApplicationProperty( TimestampProperty.class, TimestampAppearance.TIMESTAMP );
 
 		final MethodsView methodsView = injector.getInstance( MethodsView.class );
 		methodsView.initialize( );
@@ -44,30 +54,145 @@ public final class MethodsViewTestUI extends ApplicationTest {
 		stage.show( );
 	}
 
-	private List<MethodCall> createCalls( ) {
+	private List<MethodCall> createMethodCalls( ) {
 		final MethodCall call1 = new MethodCall( );
 		call1.setHost( "host1" );
+		call1.setClazz( "class1" );
+		call1.setMethod( "method1" );
 
 		final MethodCall call2 = new MethodCall( );
 		call2.setHost( "host1" );
+		call2.setClazz( "class1" );
+		call2.setMethod( "method1" );
+		call2.setException( "exception" );
 
 		final MethodCall call3 = new MethodCall( );
 		call3.setHost( "host2" );
+		call3.setClazz( "class1" );
+		call3.setMethod( "method1" );
 
-		return Arrays.asList( call1, call2, call3 );
+		final MethodCall call4 = new MethodCall( );
+		call4.setHost( "host3" );
+		call4.setClazz( "class3" );
+		call4.setMethod( "method3" );
+		call4.setDuration( 150L );
+		call4.setTimestamp( 1000L );
+		call4.setTraceId( 42L );
+
+		return Arrays.asList( call1, call2, call3, call4 );
 	}
 
 	@Test
-	public void testMethodsView( ) {
+	public void testNormalSearch( ) {
 		final TableView<Object> tableView = lookup( "#tabMethodsTable" ).queryTableView( );
-		assertThat( tableView.getItems( ).size( ), is( 3 ) );
+		assertThat( tableView.getItems( ).size( ), is( 4 ) );
 
 		clickOn( "#tabMethodsFilterHost" ).write( "host1" );
+		clickOn( "#tabMethodsFilterClass" ).write( "class1" );
+		clickOn( "#tabMethodsFilterMethod" ).write( "method1" );
 		clickOn( "#tabMethodsSearch" );
 		assertThat( tableView.getItems( ).size( ), is( 2 ) );
 
-		clickOn( lookup( "#tabMethodsTable" ).lookup( ".table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabMethodsDetailHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
+		clickOn( "#tabMethodsFilterException" ).write( "exception" );
+		clickOn( "#tabMethodsSearch" );
+		assertThat( tableView.getItems( ).size( ), is( 1 ) );
+
+		clickOn( "#tabMethodsFilterException" ).eraseText( 9 );
+		clickOn( "#tabMethodsFilterSearchType" ).clickOn( "Nur fehlgeschlagene" );
+		clickOn( "#tabMethodsSearch" );
+		assertThat( tableView.getItems( ).size( ), is( 1 ) );
+
+		clickOn( "#tabMethodsFilterHost" ).eraseText( 5 );
+		clickOn( "#tabMethodsFilterSearchType" ).clickOn( "Nur erfolgreiche " );
+		clickOn( "#tabMethodsSearch" );
+		assertThat( tableView.getItems( ).size( ), is( 2 ) );
 	}
 
+	@Test
+	public void testDetailPanel( ) {
+		clickOn( lookup( "#tabMethodsTable" ).lookup( ".table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
+		assertThat( lookup( "#tabMethodsDetailHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
+		assertThat( lookup( "#tabMethodsDetailException" ).queryTextInputControl( ).getText( ), is( "<Keine Daten verfügbar>" ) );
+
+		clickOn( lookup( "#tabMethodsTable" ).lookup( ".table-row-cell" ).nth( 1 ).queryAs( Node.class ) );
+		assertThat( lookup( "#tabMethodsDetailHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
+		assertThat( lookup( "#tabMethodsDetailException" ).queryTextInputControl( ).getText( ), is( "exception" ) );
+	}
+
+	@Test
+	public void testSearchWithRegularExpressions( ) {
+		final TableView<Object> tableView = lookup( "#tabMethodsTable" ).queryTableView( );
+		assertThat( tableView.getItems( ).size( ), is( 4 ) );
+
+		clickOn( "#tabMethodsFilterUseRegExpr" );
+
+		clickOn( "#tabMethodsFilterHost" ).write( ".*1.*" );
+		clickOn( "#tabMethodsFilterClass" ).write( "class1" );
+		clickOn( "#tabMethodsFilterMethod" ).write( "m....d\\d" );
+		clickOn( "#tabMethodsSearch" );
+		assertThat( tableView.getItems( ).size( ), is( 2 ) );
+
+		clickOn( "#tabMethodsFilterException" ).write( "e.*" );
+		clickOn( "#tabMethodsSearch" );
+		assertThat( tableView.getItems( ).size( ), is( 1 ) );
+
+		clickOn( "#tabMethodsFilterException" ).eraseText( 9 );
+		clickOn( "#tabMethodsFilterSearchType" ).clickOn( "Nur fehlgeschlagene" );
+		clickOn( "#tabMethodsSearch" );
+		assertThat( tableView.getItems( ).size( ), is( 1 ) );
+	}
+
+	@Test
+	public void testSearchWithInvalidRegularExpressions( ) {
+		final TableView<Object> tableView = lookup( "#tabMethodsTable" ).queryTableView( );
+		assertThat( tableView.getItems( ).size( ), is( 4 ) );
+
+		clickOn( "#tabMethodsFilterUseRegExpr" );
+
+		clickOn( "#tabMethodsFilterHost" ).write( "(" );
+		clickOn( "#tabMethodsSearch" );
+		clickOn( ".dialog-pane .button" );
+
+		clickOn( "#tabMethodsFilterHost" ).eraseText( 1 );
+		clickOn( "#tabMethodsFilterClass" ).write( "(" );
+		clickOn( "#tabMethodsSearch" );
+		clickOn( ".dialog-pane .button" );
+
+		clickOn( "#tabMethodsFilterClass" ).eraseText( 1 );
+		clickOn( "#tabMethodsFilterMethod" ).write( "(" );
+		clickOn( "#tabMethodsSearch" );
+		clickOn( ".dialog-pane .button" );
+
+		clickOn( "#tabMethodsFilterMethod" ).eraseText( 1 );
+		clickOn( "#tabMethodsFilterException" ).write( "(" );
+		clickOn( "#tabMethodsSearch" );
+		clickOn( ".dialog-pane .button" );
+	}
+
+	@Test
+	public void testSorting( ) {
+		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 1 ).queryAs( Node.class ) );
+		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 1 ).queryAs( Node.class ) );
+		assertThat( lookup( "#tabMethodsTable" ).lookup( ".table-cell" ).nth( 0 ).queryLabeled( ).getText( ), is( "host3" ) );
+
+		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 2 ).queryAs( Node.class ) );
+		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 2 ).queryAs( Node.class ) );
+		assertThat( lookup( "#tabMethodsTable" ).lookup( ".table-cell" ).nth( 1 ).queryLabeled( ).getText( ), is( "class3" ) );
+
+		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 3 ).queryAs( Node.class ) );
+		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 3 ).queryAs( Node.class ) );
+		assertThat( lookup( "#tabMethodsTable" ).lookup( ".table-cell" ).nth( 2 ).queryLabeled( ).getText( ), is( "method3" ) );
+
+		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 4 ).queryAs( Node.class ) );
+		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 4 ).queryAs( Node.class ) );
+		assertThat( lookup( "#tabMethodsTable" ).lookup( ".table-cell" ).nth( 3 ).queryLabeled( ).getText( ), is( "150" ) );
+
+		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 5 ).queryAs( Node.class ) );
+		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 5 ).queryAs( Node.class ) );
+		assertThat( lookup( "#tabMethodsTable" ).lookup( ".table-cell" ).nth( 4 ).queryLabeled( ).getText( ), is( "1000" ) );
+
+		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 6 ).queryAs( Node.class ) );
+		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 6 ).queryAs( Node.class ) );
+		assertThat( lookup( "#tabMethodsTable" ).lookup( ".table-cell" ).nth( 5 ).queryLabeled( ).getText( ), is( "42" ) );
+	}
 }

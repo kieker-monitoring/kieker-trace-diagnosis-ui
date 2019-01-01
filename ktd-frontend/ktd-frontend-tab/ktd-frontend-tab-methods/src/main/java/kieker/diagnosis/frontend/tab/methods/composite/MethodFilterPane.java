@@ -108,6 +108,7 @@ public final class MethodFilterPane extends TitledPane implements IconMixin, Str
 
 			{
 				clazz = new TextField( );
+				clazz.setId( "tabMethodsFilterClass" );
 				clazz.setPromptText( RESOURCE_BUNDLE.getString( "filterByClass" ) );
 				GridPane.setColumnIndex( clazz, columnIndex++ );
 				GridPane.setRowIndex( clazz, rowIndex );
@@ -118,6 +119,7 @@ public final class MethodFilterPane extends TitledPane implements IconMixin, Str
 
 			{
 				method = new TextField( );
+				method.setId( "tabMethodsFilterMethod" );
 				method.setPromptText( RESOURCE_BUNDLE.getString( "filterByMethod" ) );
 				GridPane.setColumnIndex( method, columnIndex++ );
 				GridPane.setRowIndex( method, rowIndex );
@@ -128,6 +130,7 @@ public final class MethodFilterPane extends TitledPane implements IconMixin, Str
 
 			{
 				exception = new TextField( );
+				exception.setId( "tabMethodsFilterException" );
 				exception.setPromptText( RESOURCE_BUNDLE.getString( "filterByException" ) );
 				GridPane.setColumnIndex( exception, columnIndex++ );
 				GridPane.setRowIndex( exception, rowIndex );
@@ -197,6 +200,7 @@ public final class MethodFilterPane extends TitledPane implements IconMixin, Str
 
 			{
 				searchType = new ComboBox<>( );
+				searchType.setId( "tabMethodsFilterSearchType" );
 				searchType.setItems( FXCollections.observableArrayList( SearchType.values( ) ) );
 				searchType.setConverter( new EnumStringConverter<>( SearchType.class ) );
 				searchType.setMaxWidth( Double.POSITIVE_INFINITY );
@@ -227,6 +231,7 @@ public final class MethodFilterPane extends TitledPane implements IconMixin, Str
 
 		{
 			useRegExpr = new CheckBox( );
+			useRegExpr.setId( "tabMethodsFilterUseRegExpr" );
 			useRegExpr.setText( RESOURCE_BUNDLE.getString( "filterUseRegExpr" ) );
 
 			GridPane.setColumnIndex( useRegExpr, 1 );
