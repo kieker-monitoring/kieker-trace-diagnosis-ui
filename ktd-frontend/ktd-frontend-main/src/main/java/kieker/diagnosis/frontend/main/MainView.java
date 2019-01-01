@@ -125,6 +125,7 @@ public class MainView extends ViewBase<MainController> {
 
 			{
 				ivFavorites = new Menu( );
+				ivFavorites.setId( "menuFavorites" );
 				ivFavorites.setText( getLocalizedString( "favorites" ) );
 
 				{

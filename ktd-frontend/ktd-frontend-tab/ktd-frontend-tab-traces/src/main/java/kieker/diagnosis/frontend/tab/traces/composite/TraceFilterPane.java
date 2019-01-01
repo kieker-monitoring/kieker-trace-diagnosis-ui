@@ -241,6 +241,7 @@ public final class TraceFilterPane extends TitledPane implements StringMixin, Ic
 
 			{
 				saveAsFavoriteLink = new Hyperlink( );
+				saveAsFavoriteLink.setId( "tabTracesSaveAsFavorite" );
 				saveAsFavoriteLink.setText( RESOURCE_BUNDLE.getString( "saveAsFavorite" ) );
 
 				GridPane.setColumnIndex( saveAsFavoriteLink, 0 );
