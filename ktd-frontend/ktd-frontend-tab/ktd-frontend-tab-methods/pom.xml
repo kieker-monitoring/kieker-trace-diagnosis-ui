@@ -46,7 +46,7 @@
 			<groupId>org.jfxtras</groupId>
 			<artifactId>jfxtras-common</artifactId>
 		</dependency>
-			<dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
