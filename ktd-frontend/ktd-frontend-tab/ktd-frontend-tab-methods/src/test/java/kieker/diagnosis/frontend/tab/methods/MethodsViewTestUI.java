@@ -1,11 +1,19 @@
 package kieker.diagnosis.frontend.tab.methods;
 
+import static org.hamcrest.collection.IsArrayWithSize.arrayWithSize;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -13,6 +21,8 @@ import org.testfx.framework.junit.ApplicationTest;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TableView;
@@ -20,11 +30,13 @@ import javafx.stage.Stage;
 import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.data.MonitoringLogService;
+import kieker.diagnosis.backend.export.CSVData;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.settings.TimestampAppearance;
 import kieker.diagnosis.backend.settings.properties.TimeUnitProperty;
 import kieker.diagnosis.backend.settings.properties.TimestampProperty;
 import kieker.diagnosis.frontend.base.FrontendBaseModule;
+import kieker.diagnosis.frontend.base.ui.ViewBase;
 
 /**
  * This is a UI test which checks that the methods view is working as expected.
@@ -32,6 +44,9 @@ import kieker.diagnosis.frontend.base.FrontendBaseModule;
  * @author Nils Christian Ehmke
  */
 public final class MethodsViewTestUI extends ApplicationTest {
+
+	private MethodsController methodsController;
+	private MethodsView methodsView;
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
@@ -44,7 +59,8 @@ public final class MethodsViewTestUI extends ApplicationTest {
 		propertiesService.saveApplicationProperty( TimeUnitProperty.class, TimeUnit.NANOSECONDS );
 		propertiesService.saveApplicationProperty( TimestampProperty.class, TimestampAppearance.TIMESTAMP );
 
-		final MethodsView methodsView = injector.getInstance( MethodsView.class );
+		methodsController = injector.getInstance( MethodsController.class );
+		methodsView = injector.getInstance( MethodsView.class );
 		methodsView.initialize( );
 		methodsView.prepareRefresh( );
 		methodsView.performRefresh( );
@@ -195,4 +211,50 @@ public final class MethodsViewTestUI extends ApplicationTest {
 		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 6 ).queryAs( Node.class ) );
 		assertThat( lookup( "#tabMethodsTable" ).lookup( ".table-cell" ).nth( 5 ).queryLabeled( ).getText( ), is( "42" ) );
 	}
+
+	@Test
+	public void testSaveAsFavorite( ) {
+		final Property<Object> filterHolder = new SimpleObjectProperty<>( );
+		final BiConsumer<Class<? extends ViewBase<?>>, Object> action = ( viewBase, filter ) -> filterHolder.setValue( filter );
+		methodsController.setOnPerformSaveAsFavorite( action );
+
+		clickOn( "#tabMethodsFilterHost" ).write( "host1" );
+		clickOn( "#tabMethodsFilteSaveAsFavorite" );
+		clickOn( "#tabMethodsFilterHost" ).eraseText( 5 );
+
+		assertThat( filterHolder.getValue( ), is( notNullValue( ) ) );
+		interact( ( ) -> methodsView.setParameter( filterHolder.getValue( ) ) );
+
+		assertThat( lookup( "#tabMethodsFilterHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
+	}
+
+	@Test
+	public void testJumpToTrace( ) {
+		@SuppressWarnings ( "unchecked" )
+		final Consumer<MethodCall> action = mock( Consumer.class );
+		methodsController.setOnPerformJumpToTrace( action );
+
+		clickOn( "#tabMethodsJumpToTrace" );
+		verify( action, never( ) ).accept( any( ) );
+
+		clickOn( lookup( "#tabMethodsTable" ).lookup( ".table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
+		clickOn( "#tabMethodsJumpToTrace" );
+		verify( action ).accept( any( ) );
+	}
+
+	@Test
+	public void testExportToCsv( ) {
+		final Property<CSVData> dataHolder = new SimpleObjectProperty<>( );
+		final Consumer<CSVData> action = csvData -> dataHolder.setValue( csvData );
+		methodsController.setOnPerformExportToCSV( action );
+
+		clickOn( "#methodCallTabExportToCsv" );
+
+		final CSVData csvData = dataHolder.getValue( );
+		assertThat( csvData, is( notNullValue( ) ) );
+		assertThat( csvData.getHeader( ), is( arrayWithSize( 6 ) ) );
+		assertThat( csvData.getValues( ), is( arrayWithSize( 6 ) ) );
+		assertThat( csvData.getValues( )[0], is( arrayWithSize( 4 ) ) );
+	}
+
 }

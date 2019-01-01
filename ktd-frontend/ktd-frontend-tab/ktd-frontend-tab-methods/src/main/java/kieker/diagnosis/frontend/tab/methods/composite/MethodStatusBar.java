@@ -50,6 +50,7 @@ public final class MethodStatusBar extends HBox {
 
 		{
 			exportToCsvLink = new Hyperlink( );
+			exportToCsvLink.setId( "methodCallTabExportToCsv" );
 			exportToCsvLink.setText( RESOURCE_BUNDLE.getString( "exportToCSV" ) );
 
 			getChildren( ).add( exportToCsvLink );

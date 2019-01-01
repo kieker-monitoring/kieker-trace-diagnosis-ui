@@ -221,6 +221,7 @@ public final class MethodFilterPane extends TitledPane implements IconMixin, Str
 
 		{
 			saveAsFavoriteLink = new Hyperlink( );
+			saveAsFavoriteLink.setId( "tabMethodsFilteSaveAsFavorite" );
 			saveAsFavoriteLink.setText( RESOURCE_BUNDLE.getString( "saveAsFavorite" ) );
 
 			GridPane.setColumnIndex( saveAsFavoriteLink, 0 );

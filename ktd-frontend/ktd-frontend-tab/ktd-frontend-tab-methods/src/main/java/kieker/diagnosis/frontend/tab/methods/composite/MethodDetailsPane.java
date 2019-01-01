@@ -148,6 +148,7 @@ public final class MethodDetailsPane extends TitledPane implements StylesheetMix
 
 		{
 			jumpToTraceLink = new Hyperlink( );
+			jumpToTraceLink.setId( "tabMethodsJumpToTrace" );
 			jumpToTraceLink.setText( RESOURCE_BUNDLE.getString( "jumpToTrace" ) );
 
 			GridPane.setColumnIndex( jumpToTraceLink, 0 );
