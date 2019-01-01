@@ -77,11 +77,4 @@ public final class KiekerTraceDiagnosis extends Application implements ImageMixi
 		return loadImage( iconPath );
 	}
 
-	/**
-	 * This method is only to be used from the UI tests to bypass the native dialogs in the test environments.
-	 */
-	public Injector getInjector( ) {
-		return injector;
-	}
-
 }
