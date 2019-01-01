@@ -98,7 +98,7 @@ public final class MainViewTestUI extends ApplicationTest {
 		clickOn( "#tabTracesFilterHost" ).write( "host1" );
 		clickOn( "#tabTracesSaveAsFavorite" );
 
-		clickOn( ".dialog-pane .text-field" ).write( "Favorite 1" );
+		write( "Favorite 1" );
 		clickOn( ".dialog-pane .button" );
 
 		clickOn( "#tabTracesFilterHost" ).eraseText( 5 );
