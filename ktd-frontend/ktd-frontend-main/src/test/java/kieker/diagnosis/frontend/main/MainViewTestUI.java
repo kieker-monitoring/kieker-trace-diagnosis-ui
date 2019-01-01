@@ -98,14 +98,13 @@ public final class MainViewTestUI extends ApplicationTest {
 		clickOn( "#tabTracesFilterHost" ).write( "host1" );
 		clickOn( "#tabTracesSaveAsFavorite" );
 
-		clickOn( ".dialog-pane .text" ).write( "Favorite 1" );
+		clickOn( ".dialog-pane .text-field" ).write( "Favorite 1" );
 		clickOn( ".dialog-pane .button" );
 
 		clickOn( "#tabTracesFilterHost" ).eraseText( 5 );
-		// Query for "Favorite 1" does not work in headless environment
-		// clickOn( "#menuFavorites" ).clickOn( "Favorite 1" );
+		clickOn( "#menuFavorites" ).clickOn( "Favorite 1" );
 
-		// assertThat( lookup( "#tabTracesFilterHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
+		assertThat( lookup( "#tabTracesFilterHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
 	}
 
 	@Test
