@@ -95,4 +95,13 @@ public final class DefaultMonitoringProbeTest {
 		verify( monitoringController, times( 2 ) ).newMonitoringRecord( any( AfterOperationEvent.class ) );
 	}
 
+	@Test
+	public void testBehaviourWithoutController( ) {
+		MonitoringControllerHolder.setMonitoringController( null );
+
+		final DefaultMonitoringProbe probe = new DefaultMonitoringProbe( String.class, "toString()" );
+		probe.fail( new NullPointerException( ) );
+		probe.stop( );
+	}
+
 }

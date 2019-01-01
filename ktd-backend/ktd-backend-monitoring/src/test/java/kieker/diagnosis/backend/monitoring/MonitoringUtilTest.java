@@ -16,20 +16,31 @@
 
 package kieker.diagnosis.backend.monitoring;
 
-public class MonitoringUtil {
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
-	private static volatile MonitoringProbeFactory cvMonitoringProbeFactory = new NoOpMonitoringProbeFactory( );
+import org.junit.After;
+import org.junit.Test;
 
-	private MonitoringUtil( ) {
-		// Avoid instantiation
+/**
+ * This is a unit test for {@link MonitoringUtil}.
+ *
+ * @author Nils Christian Ehmke
+ */
+public final class MonitoringUtilTest {
+
+	@After
+	public void after( ) {
+		MonitoringUtil.setMonitoringProbeFactory( new NoOpMonitoringProbeFactory( ) );
 	}
 
-	public static MonitoringProbe createMonitoringProbe( final Class<?> aClass, final String aMethod ) {
-		return cvMonitoringProbeFactory.createMonitoringProbe( aClass, aMethod );
-	}
+	@Test
+	public void testMonitoringUtil( ) {
+		final MonitoringProbeFactory probeFactory = mock( MonitoringProbeFactory.class );
+		MonitoringUtil.setMonitoringProbeFactory( probeFactory );
 
-	public static void setMonitoringProbeFactory( final MonitoringProbeFactory aMonitoringProbeFactory ) {
-		cvMonitoringProbeFactory = aMonitoringProbeFactory;
+		MonitoringUtil.createMonitoringProbe( String.class, "toString()" );
+		verify( probeFactory ).createMonitoringProbe( String.class, "toString()" );
 	}
 
 }

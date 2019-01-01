@@ -16,20 +16,32 @@
 
 package kieker.diagnosis.backend.monitoring;
 
-public class MonitoringUtil {
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
-	private static volatile MonitoringProbeFactory cvMonitoringProbeFactory = new NoOpMonitoringProbeFactory( );
+import org.junit.Test;
 
-	private MonitoringUtil( ) {
-		// Avoid instantiation
+/**
+ * This is a unit test for {@link NoOpMonitoringProbeFactory}.
+ *
+ * @author Nils Christian Ehmke
+ */
+public final class NoOpMonitoringProbeFactoryTest {
+
+	@Test
+	public void factoryShouldReturnSameInstance( ) {
+		final NoOpMonitoringProbeFactory probeFactory = new NoOpMonitoringProbeFactory( );
+
+		assertThat( probeFactory.createMonitoringProbe( null, null ), is( probeFactory.createMonitoringProbe( null, null ) ) );
 	}
 
-	public static MonitoringProbe createMonitoringProbe( final Class<?> aClass, final String aMethod ) {
-		return cvMonitoringProbeFactory.createMonitoringProbe( aClass, aMethod );
-	}
+	@Test
+	public void createdProbeShouldBeCallable( ) {
+		final NoOpMonitoringProbeFactory probeFactory = new NoOpMonitoringProbeFactory( );
 
-	public static void setMonitoringProbeFactory( final MonitoringProbeFactory aMonitoringProbeFactory ) {
-		cvMonitoringProbeFactory = aMonitoringProbeFactory;
+		final MonitoringProbe monitoringProbe = probeFactory.createMonitoringProbe( null, null );
+		monitoringProbe.fail( new RuntimeException( ) );
+		monitoringProbe.stop( );
 	}
 
 }
