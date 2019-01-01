@@ -7,7 +7,7 @@ matrix:
       jdk: openjdk11
       env:
         # All of these options are just required for the (headless) UI tests 
-        - _JAVA_OPTIONS="-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Denable.ui.tests=true"
+        - _JAVA_OPTIONS="-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Denable.ui.tests=true -Dheadless.geometry=1920x1080-32"
 
 # Prepare the X-Server for the (headless) UI tests
 before_install:
