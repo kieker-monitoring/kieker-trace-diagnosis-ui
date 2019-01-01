@@ -206,13 +206,13 @@ public class MainController extends ControllerBase<MainViewModel> {
 			final String iconPath = getLocalizedString( "iconReallyClose" );
 			final InputStream iconStream = getClass( ).getClassLoader( ).getResourceAsStream( iconPath );
 			final Image icon = new Image( iconStream );
-			final Stage stage = ( Stage ) dialogPane.getScene( ).getWindow( );
+			final Stage stage = (Stage) dialogPane.getScene( ).getWindow( );
 			stage.getIcons( ).add( icon );
 			dialogPane.getStylesheets( ).add( "/kieker/diagnosis/frontend/base/ui/Dialog.css" );
 
 			// If the user clicked ok, we close the window
 			final Optional<ButtonType> result = alert.showAndWait( );
-			if ( result.isPresent( ) && (result.get( ) == ButtonType.YES || result.get( ) == alwaysYesButtonType ) ) {
+			if ( result.isPresent( ) && ( result.get( ) == ButtonType.YES || result.get( ) == alwaysYesButtonType ) ) {
 				if ( result.get( ) == alwaysYesButtonType ) {
 					propertiesService.saveApplicationProperty( CloseWithoutPromptProperty.class, Boolean.TRUE );
 				}
@@ -258,7 +258,8 @@ public class MainController extends ControllerBase<MainViewModel> {
 				try {
 					monitoringLogService.importMonitoringLog( ivDirectoryOrFile, ivType );
 				} catch ( final BusinessRuntimeException ex ) {
-					// If a business exception occurs, we still want to refresh, but we also want to display the exception.
+					// If a business exception occurs, we still want to refresh, but we also want to display the
+					// exception.
 					exception = ex;
 				}
 
@@ -298,9 +299,10 @@ public class MainController extends ControllerBase<MainViewModel> {
 			final InputStream iconStream = getClass( ).getClassLoader( ).getResourceAsStream( iconPath );
 			final Image icon = new Image( iconStream );
 			final DialogPane dialogPane = textInputDialog.getDialogPane( );
-			final Stage stage = ( Stage ) dialogPane.getScene( ).getWindow( );
+			final Stage stage = (Stage) dialogPane.getScene( ).getWindow( );
 			stage.getIcons( ).add( icon );
 			dialogPane.getStylesheets( ).add( "/kieker/diagnosis/frontend/base/ui/Dialog.css" );
+			dialogPane.lookupButton( ButtonType.OK ).setId( "favoriteFilterDialogOk" );
 			final Optional<String> result = textInputDialog.showAndWait( );
 
 			if ( result.isPresent( ) ) {
