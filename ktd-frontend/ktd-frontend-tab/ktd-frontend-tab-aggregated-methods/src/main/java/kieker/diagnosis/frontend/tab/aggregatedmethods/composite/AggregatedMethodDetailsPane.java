@@ -160,6 +160,7 @@ public final class AggregatedMethodDetailsPane extends TitledPane implements Sty
 
 			{
 				exception = new TextField( );
+				exception.setId( "tabAggregatedMethodsDetailException" );
 				exception.setEditable( false );
 				exception.getStyleClass( ).add( "details" );
 

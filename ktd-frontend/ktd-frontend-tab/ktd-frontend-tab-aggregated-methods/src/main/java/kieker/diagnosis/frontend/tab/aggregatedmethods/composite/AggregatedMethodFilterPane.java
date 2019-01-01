@@ -97,6 +97,7 @@ public final class AggregatedMethodFilterPane extends TitledPane implements Stri
 
 			{
 				clazz = new TextField( );
+				clazz.setId( "tabAggregatedMethodsFilterClass" );
 				clazz.setPromptText( RESOURCE_BUNDLE.getString( "filterByClass" ) );
 				GridPane.setColumnIndex( clazz, columnIndex++ );
 				GridPane.setRowIndex( clazz, 0 );
@@ -107,6 +108,7 @@ public final class AggregatedMethodFilterPane extends TitledPane implements Stri
 
 			{
 				method = new TextField( );
+				method.setId( "tabAggregatedMethodsFilterMethod" );
 				method.setPromptText( RESOURCE_BUNDLE.getString( "filterByMethod" ) );
 				GridPane.setColumnIndex( method, columnIndex++ );
 				GridPane.setRowIndex( method, 0 );
@@ -117,6 +119,7 @@ public final class AggregatedMethodFilterPane extends TitledPane implements Stri
 
 			{
 				exception = new TextField( );
+				exception.setId( "tabAggregatedMethodsFilterException" );
 				exception.setPromptText( RESOURCE_BUNDLE.getString( "filterByException" ) );
 				GridPane.setColumnIndex( exception, columnIndex++ );
 				GridPane.setRowIndex( exception, 0 );
@@ -127,6 +130,7 @@ public final class AggregatedMethodFilterPane extends TitledPane implements Stri
 
 			{
 				searchType = new ComboBox<>( );
+				searchType.setId( "tabAggregatedMethodsFilterSearchType" );
 				searchType.setItems( FXCollections.observableArrayList( SearchType.values( ) ) );
 				searchType.setConverter( new EnumStringConverter<>( SearchType.class ) );
 				searchType.setMaxWidth( Double.POSITIVE_INFINITY );
@@ -156,6 +160,7 @@ public final class AggregatedMethodFilterPane extends TitledPane implements Stri
 
 		{
 			useRegExpr = new CheckBox( );
+			useRegExpr.setId( "tabAggregatedMethodsFilterUseRegExpr" );
 			useRegExpr.setText( RESOURCE_BUNDLE.getString( "filterUseRegExpr" ) );
 
 			GridPane.setColumnIndex( useRegExpr, 1 );
