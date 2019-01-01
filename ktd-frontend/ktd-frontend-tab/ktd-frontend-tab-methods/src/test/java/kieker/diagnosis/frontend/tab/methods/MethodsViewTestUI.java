@@ -25,7 +25,7 @@ import kieker.diagnosis.backend.data.MonitoringLogService;
  *
  * @author Nils Christian Ehmke
  */
-public final class MethodsViewTest extends ApplicationTest {
+public final class MethodsViewTestUI extends ApplicationTest {
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
