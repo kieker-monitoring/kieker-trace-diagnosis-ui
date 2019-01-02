@@ -23,30 +23,21 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import kieker.diagnosis.frontend.base.ui.ViewBase;
-import kieker.diagnosis.frontend.tab.aggregatedmethods.AggregatedMethodsView;
-import kieker.diagnosis.frontend.tab.methods.MethodsView;
-import kieker.diagnosis.frontend.tab.statistics.StatisticsView;
-import kieker.diagnosis.frontend.tab.traces.TracesView;
+import kieker.diagnosis.frontend.main.composite.MainTabPane;
 
 @Singleton
 public class MainView extends ViewBase<MainController> {
 
-	private final TracesView ivTracesView;
-	private final MethodsView ivMethodsView;
-	private final AggregatedMethodsView ivAggregatedMethodsView;
-	private final StatisticsView ivStatisticsView;
-	private final TabPane ivTabPane;
 	private final Menu ivFavorites;
+	private final MainTabPane mainTabPane;
 
 	@Inject
-	public MainView( final TracesView aTracesView, final MethodsView aMethodsView, final AggregatedMethodsView aAggregatedMethodsView, final StatisticsView aStatisticsView ) {
+	public MainView( final MainTabPane mainTabPane ) {
 		// Main menu
 		{
 			final MenuBar menuBar = new MenuBar( );
@@ -177,83 +168,13 @@ public class MainView extends ViewBase<MainController> {
 			getChildren( ).add( menuBar );
 		}
 
-		// Tab pane
 		{
-			ivTabPane = new TabPane( );
-			ivTabPane.setId( "mainTabPane" );
-			ivTabPane.setTabClosingPolicy( TabClosingPolicy.UNAVAILABLE );
+			this.mainTabPane = mainTabPane;
+			mainTabPane.setId( "mainTabPane" );
 
-			VBox.setVgrow( ivTabPane, Priority.ALWAYS );
+			VBox.setVgrow( mainTabPane, Priority.ALWAYS );
 
-			{
-				ivTracesView = aTracesView;
-				ivTracesView.initialize( );
-
-				final Tab tab = new Tab( );
-				tab.setId( "tabTraces" );
-
-				tab.setText( getLocalizedString( "traces" ) );
-				tab.setContent( aTracesView );
-
-				ivTabPane.getTabs( ).add( tab );
-
-				// Only one default button is allowed - even if the other buttons are not
-				// visible. Therefore we have to set the default
-				// button property only for the current tab.
-				ivTracesView.defaultButtonProperty( ).bind( ivTabPane.getSelectionModel( ).selectedItemProperty( ).isEqualTo( tab ) );
-			}
-
-			{
-				ivMethodsView = aMethodsView;
-				ivMethodsView.initialize( );
-
-				final Tab tab = new Tab( );
-				tab.setId( "tabMethods" );
-
-				tab.setText( getLocalizedString( "methods" ) );
-				tab.setContent( aMethodsView );
-
-				ivTabPane.getTabs( ).add( tab );
-				// Only one default button is allowed - even if the other buttons are not
-				// visible. Therefore we have to set the default
-				// button property only for the current tab.
-				ivMethodsView.defaultButtonProperty( ).bind( ivTabPane.getSelectionModel( ).selectedItemProperty( ).isEqualTo( tab ) );
-			}
-
-			{
-
-				ivAggregatedMethodsView = aAggregatedMethodsView;
-				ivAggregatedMethodsView.initialize( );
-
-				final Tab tab = new Tab( );
-				tab.setId( "tabAggregatedMethods" );
-
-				tab.setText( getLocalizedString( "aggregatedMethods" ) );
-				tab.setContent( aAggregatedMethodsView );
-
-				ivTabPane.getTabs( ).add( tab );
-
-				// Only one default button is allowed - even if the other buttons are not
-				// visible. Therefore we have to set the default
-				// button property only for the current tab.
-				ivAggregatedMethodsView.defaultButtonProperty( ).bind( ivTabPane.getSelectionModel( ).selectedItemProperty( ).isEqualTo( tab ) );
-			}
-
-			{
-
-				ivStatisticsView = aStatisticsView;
-				ivStatisticsView.initialize( );
-
-				final Tab tab = new Tab( );
-				tab.setId( "tabStatistics" );
-
-				tab.setText( getLocalizedString( "statistics" ) );
-				tab.setContent( aStatisticsView );
-
-				ivTabPane.getTabs( ).add( tab );
-			}
-
-			getChildren( ).add( ivTabPane );
+			getChildren( ).add( mainTabPane );
 		}
 	}
 
@@ -267,21 +188,15 @@ public class MainView extends ViewBase<MainController> {
 	}
 
 	public void prepareRefresh( ) {
-		ivTracesView.prepareRefresh( );
-		ivMethodsView.prepareRefresh( );
-		ivAggregatedMethodsView.prepareRefresh( );
-		ivStatisticsView.prepareRefresh( );
+		mainTabPane.prepareRefresh( );
 	}
 
 	public void performRefresh( ) {
-		ivTracesView.performRefresh( );
-		ivMethodsView.performRefresh( );
-		ivAggregatedMethodsView.performRefresh( );
-		ivStatisticsView.performRefresh( );
+		mainTabPane.performRefresh( );
 	}
 
 	TabPane getTabPane( ) {
-		return ivTabPane;
+		return mainTabPane;
 	}
 
 }
