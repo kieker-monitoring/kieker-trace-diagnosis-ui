@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015-2019 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ public final class AboutDialogTestUI extends ApplicationTest {
 		final Labeled descriptionLabel = lookup( "#aboutDialogDescription" ).queryLabeled( );
 
 		assertThat( descriptionLabel.getText( ), containsString( "Kieker Trace Diagnosis - " ) );
-		assertThat( descriptionLabel.getText( ), containsString( "Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)" ) );
+		assertThat( descriptionLabel.getText( ), containsString( "Copyright 2015-2019 Kieker Project (http://kieker-monitoring.net)" ) );
 		assertThat( descriptionLabel.getText( ), containsString( "Dieses Werkzeug ist unter der Apache License 2.0 lizenziert." ) );
 
 		clickOn( "#aboutDialogOk" );

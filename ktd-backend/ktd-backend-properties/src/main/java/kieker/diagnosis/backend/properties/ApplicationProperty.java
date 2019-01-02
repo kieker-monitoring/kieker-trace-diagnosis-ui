@@ -1,21 +1,5 @@
-/*************************************************************************** 
- * Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)         
- *                                                                           
- * Licensed under the Apache License, Version 2.0 (the "License");           
- * you may not use this file except in compliance with the License.          
- * You may obtain a copy of the License at                                   
- *                                                                           
- *     http://www.apache.org/licenses/LICENSE-2.0                            
- *                                                                           
- * Unless required by applicable law or agreed to in writing, software       
- * distributed under the License is distributed on an "AS IS" BASIS,         
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  
- * See the License for the specific language governing permissions and       
- * limitations under the License.                                            
- ***************************************************************************/
-
 /***************************************************************************
- * Copyright 2015-2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015-2019 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,8 +17,9 @@
 package kieker.diagnosis.backend.properties;
 
 /**
- * Classes implementing this interface can be considered application properties. They are stored and loaded in a properties storage. Unlike
- * {@link SystemProperty system properties} they can be modified during runtime. Classes implementing this interface should be annotated with {@link Property}.
+ * Classes implementing this interface can be considered application properties. They are stored and loaded in a
+ * properties storage. Unlike {@link SystemProperty system properties} they can be modified during runtime. Classes
+ * implementing this interface should be annotated with {@link Property}.
  *
  * @author Nils Christian Ehmke
  *
@@ -51,14 +36,14 @@ public interface ApplicationProperty<T> {
 	 *
 	 * @return The key of the property.
 	 */
-	public String getKey( );
+	String getKey( );
 
 	/**
 	 * Delivers the default value of the property. This should not be null.
 	 *
 	 * @return The default value of the property.
 	 */
-	public T getDefaultValue( );
+	T getDefaultValue( );
 
 	/**
 	 * Serializes the property into a string representation.
@@ -68,7 +53,7 @@ public interface ApplicationProperty<T> {
 	 *
 	 * @return A string representation of the given value.
 	 */
-	public String serialize( T aValue );
+	String serialize( T aValue );
 
 	/**
 	 * Deserializes the property from the string representation.
@@ -78,6 +63,6 @@ public interface ApplicationProperty<T> {
 	 *
 	 * @return The actual value deserialized from the string.
 	 */
-	public T deserialize( String aString );
+	T deserialize( String aString );
 
 }
