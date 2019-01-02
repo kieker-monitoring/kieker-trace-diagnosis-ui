@@ -180,6 +180,7 @@ public class MainView extends ViewBase<MainController> {
 		// Tab pane
 		{
 			ivTabPane = new TabPane( );
+			ivTabPane.setId( "mainTabPane" );
 			ivTabPane.setTabClosingPolicy( TabClosingPolicy.UNAVAILABLE );
 
 			VBox.setVgrow( ivTabPane, Priority.ALWAYS );

@@ -303,6 +303,7 @@ public class MainController extends ControllerBase<MainViewModel> {
 			stage.getIcons( ).add( icon );
 			dialogPane.getStylesheets( ).add( "/kieker/diagnosis/frontend/base/ui/Dialog.css" );
 			dialogPane.lookupButton( ButtonType.OK ).setId( "favoriteFilterDialogOk" );
+			dialogPane.lookupButton( ButtonType.CANCEL ).setId( "favoriteFilterDialogCancel" );
 			final Optional<String> result = textInputDialog.showAndWait( );
 
 			if ( result.isPresent( ) ) {

@@ -173,6 +173,7 @@ public final class AggregatedMethodDetailsPane extends TitledPane implements Sty
 
 			{
 				jumpToMethodsLink = new Hyperlink( );
+				jumpToMethodsLink.setId( "tabAggregatedMethodsJumpToMethods" );
 				jumpToMethodsLink.setText( RESOURCE_BUNDLE.getString( "jumpToMethods" ) );
 
 				GridPane.setColumnIndex( jumpToMethodsLink, 0 );

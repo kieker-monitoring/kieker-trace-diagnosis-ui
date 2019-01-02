@@ -16,8 +16,10 @@ import org.testfx.framework.junit.ApplicationTest;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Labeled;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeTableView;
 import javafx.stage.Stage;
@@ -96,9 +98,17 @@ public final class MainViewTestUI extends ApplicationTest {
 	@Test
 	public void testSaveAsFavorite( ) {
 		clickOn( "#tabTracesFilterHost" ).write( "host1" );
-		clickOn( "#tabTracesSaveAsFavorite" );
 
+		clickOn( "#tabTracesSaveAsFavorite" );
 		clickOn( ".dialog-pane .text-field" ).write( "Favorite 1" );
+		clickOn( "#favoriteFilterDialogOk" );
+
+		clickOn( "#tabTracesSaveAsFavorite" );
+		clickOn( ".dialog-pane .text-field" ).write( "Favorite 2" );
+		clickOn( "#favoriteFilterDialogCancel" );
+
+		clickOn( "#tabTracesSaveAsFavorite" );
+		clickOn( ".dialog-pane .text-field" ).write( "Favorite 3" );
 		clickOn( "#favoriteFilterDialogOk" );
 
 		clickOn( "#tabTracesFilterHost" ).eraseText( 5 );
@@ -139,6 +149,32 @@ public final class MainViewTestUI extends ApplicationTest {
 		// neither can the headless test environment.
 		// In this case we have to import the logs via code.
 		mainController.performImportLog( temporaryFolder.getRoot( ) );
+	}
+
+	@Test
+	public void testJumpToMethods( ) throws IOException {
+		loadBinaryDataIntoTemporaryFolder( );
+		importTemporaryFolder( );
+
+		clickOn( "#tabAggregatedMethods" );
+		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
+		clickOn( "#tabAggregatedMethodsJumpToMethods" );
+
+		final TabPane tabPane = lookup( "#mainTabPane" ).queryAs( TabPane.class );
+		assertThat( tabPane.getSelectionModel( ).getSelectedItem( ).getText( ), is( "Methodenaufrufe" ) );
+	}
+
+	@Test
+	public void testJumpToTrace( ) throws IOException {
+		loadBinaryDataIntoTemporaryFolder( );
+		importTemporaryFolder( );
+
+		clickOn( "#tabMethods" );
+		clickOn( lookup( "#tabMethodsTable" ).lookup( ".table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
+		clickOn( "#tabMethodsJumpToTrace" );
+
+		final TabPane tabPane = lookup( "#mainTabPane" ).queryAs( TabPane.class );
+		assertThat( tabPane.getSelectionModel( ).getSelectedItem( ).getText( ), is( "Traces" ) );
 	}
 
 }
