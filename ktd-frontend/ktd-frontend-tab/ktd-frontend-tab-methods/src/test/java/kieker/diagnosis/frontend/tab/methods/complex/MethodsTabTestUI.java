@@ -1,6 +1,6 @@
 package kieker.diagnosis.frontend.tab.methods.complex;
 
-import static org.hamcrest.collection.IsArrayWithSize.arrayWithSize;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -249,9 +249,9 @@ public final class MethodsTabTestUI extends ApplicationTest {
 
 		final CSVData csvData = dataHolder.getValue( );
 		assertThat( csvData, is( notNullValue( ) ) );
-		assertThat( csvData.getHeader( ), is( arrayWithSize( 6 ) ) );
-		assertThat( csvData.getValues( ), is( arrayWithSize( 6 ) ) );
-		assertThat( csvData.getValues( )[0], is( arrayWithSize( 4 ) ) );
+		assertThat( csvData.getHeaders( ), hasSize( 6 ) );
+		assertThat( csvData.getRows( ), hasSize( 4 ) );
+		assertThat( csvData.getRows( ).get( 0 ), hasSize( 6 ) );
 	}
 
 }

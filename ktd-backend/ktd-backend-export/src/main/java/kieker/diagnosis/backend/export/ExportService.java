@@ -19,6 +19,8 @@ package kieker.diagnosis.backend.export;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.inject.Singleton;
 
@@ -36,9 +38,9 @@ public class ExportService implements Service {
 	/**
 	 * Exports the given data into the given file as CSV data. The columns are separated with a semicolon.
 	 *
-	 * @param aFile
+	 * @param file
 	 *            The file in which the data should be written.
-	 * @param aCsvData
+	 * @param csvData
 	 *            The CSV data to be written.
 	 *
 	 * @throws BusinessException
@@ -46,29 +48,25 @@ public class ExportService implements Service {
 	 */
 	public void exportToCSV( final File file, final CSVData csvData ) throws BusinessException {
 		try ( final FileWriter fileWriter = new FileWriter( file ) ) {
-			writeHeader( fileWriter, csvData.getHeader( ) );
-			writeValues( fileWriter, csvData.getValues( ), csvData.getHeader( ) );
+			writeHeader( fileWriter, csvData.getHeaders( ) );
+			writeValues( fileWriter, csvData.getRows( ) );
 		} catch ( final IOException ex ) {
 			throw new BusinessException( ex );
 		}
 	}
 
-	private void writeHeader( final FileWriter fileWriter, final String[] header ) throws IOException {
-		final String headerLine = String.join( ";", header );
+	private void writeHeader( final FileWriter fileWriter, final List<String> headers ) throws IOException {
+		final String headerLine = String.join( ";", headers );
 		fileWriter.append( headerLine ).append( "\n" );
 	}
 
-	private void writeValues( final FileWriter fileWriter, final String[][] values, final String[] header ) throws IOException {
-		final int valuesSize = values.length > 0 ? values[0].length : 0;
-		for ( int rowIndex = 0; rowIndex < valuesSize; rowIndex++ ) {
-			for ( int columnIndex = 0; columnIndex < header.length; columnIndex++ ) {
-				if ( columnIndex != 0 ) {
-					fileWriter.append( ";" );
-				}
-				fileWriter.append( values[columnIndex][rowIndex] );
-			}
-			fileWriter.append( "\n" );
-		}
+	private void writeValues( final FileWriter fileWriter, final List<List<String>> rows ) throws IOException {
+		final List<String> rowLines = rows
+				.stream( )
+				.map( row -> String.join( ";", row ) )
+				.collect( Collectors.toList( ) );
+		final String csvString = String.join( "\n", rowLines );
+		fileWriter.append( csvString );
 	}
 
 }

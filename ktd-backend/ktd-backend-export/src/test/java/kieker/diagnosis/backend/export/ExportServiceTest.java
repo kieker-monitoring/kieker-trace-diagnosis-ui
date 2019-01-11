@@ -24,6 +24,7 @@ import static org.junit.Assert.assertThat;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Rule;
@@ -50,8 +51,10 @@ public final class ExportServiceTest {
 	public void testSimpleExport( ) throws IOException, BusinessException {
 		final File csvFile = temporaryFolder.newFile( );
 		final CSVData csvData = new CSVData( );
-		csvData.setHeader( new String[] { "Header 1", "Header 2" } );
-		csvData.setValues( new String[][] { { "A1", "A2" }, { "B1", "B2" } } );
+		csvData.addHeader( "Header 1" );
+		csvData.addHeader( "Header 2" );
+		csvData.addRow( Arrays.asList( "A1", "B1" ) );
+		csvData.addRow( Arrays.asList( "A2", "B2" ) );
 
 		final ExportService exportService = new ExportService( );
 		exportService.exportToCSV( csvFile, csvData );
@@ -64,8 +67,8 @@ public final class ExportServiceTest {
 	public void testExportWithoutData( ) throws IOException, BusinessException {
 		final File csvFile = temporaryFolder.newFile( );
 		final CSVData csvData = new CSVData( );
-		csvData.setHeader( new String[] { "Header 1", "Header 2" } );
-		csvData.setValues( new String[][] {} );
+		csvData.addHeader( "Header 1" );
+		csvData.addHeader( "Header 2" );
 
 		final ExportService exportService = new ExportService( );
 		exportService.exportToCSV( csvFile, csvData );

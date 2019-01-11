@@ -16,30 +16,28 @@
 
 package kieker.diagnosis.backend.export;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import lombok.Getter;
+
 /**
  * This is a data transfer object holding the necessary data for a CSV export.
  *
  * @author Nils Christian Ehmke
  */
+@Getter
 public final class CSVData {
 
-	private String[] header;
-	private String[][] values;
+	private final List<String> headers = new ArrayList<>( );
+	private final List<List<String>> rows = new ArrayList<>( );
 
-	public String[] getHeader( ) {
-		return header;
+	public void addHeader( final String header ) {
+		headers.add( header );
 	}
 
-	public void setHeader( final String[] header ) {
-		this.header = header;
-	}
-
-	public String[][] getValues( ) {
-		return values;
-	}
-
-	public void setValues( final String[][] values ) {
-		this.values = values;
+	public void addRow( final List<String> row ) {
+		rows.add( row );
 	}
 
 }

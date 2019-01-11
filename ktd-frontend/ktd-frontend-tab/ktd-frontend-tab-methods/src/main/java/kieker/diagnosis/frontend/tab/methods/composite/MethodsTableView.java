@@ -16,6 +16,8 @@
 
 package kieker.diagnosis.frontend.tab.methods.composite;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -209,22 +211,21 @@ public final class MethodsTableView extends TableView<MethodCall> implements Sty
 		final int columnSize = visibleColumns.size( );
 		final int itemsSize = getItems( ).size( );
 
-		final String[] headers = new String[columnSize];
+		final CSVData csvData = new CSVData( );
 		for ( int columnIndex = 0; columnIndex < columnSize; columnIndex++ ) {
-			headers[columnIndex] = visibleColumns.get( columnIndex ).getText( );
+			final String header = visibleColumns.get( columnIndex ).getText( );
+			csvData.addHeader( header );
 		}
 
-		final String[][] values = new String[columnSize][itemsSize];
 		for ( int rowIndex = 0; rowIndex < itemsSize; rowIndex++ ) {
+			final List<String> row = new ArrayList<>( );
 			for ( int columnIndex = 0; columnIndex < columnSize; columnIndex++ ) {
 				final Object cellData = visibleColumns.get( columnIndex ).getCellData( rowIndex );
-				values[columnIndex][rowIndex] = cellData.toString( );
+				row.add( cellData.toString( ) );
 			}
+			csvData.addRow( row );
 		}
 
-		final CSVData csvData = new CSVData( );
-		csvData.setHeader( headers );
-		csvData.setValues( values );
 		return csvData;
 	}
 
