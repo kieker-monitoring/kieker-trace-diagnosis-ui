@@ -133,6 +133,7 @@ public final class TraceDetailsPane extends TitledPane implements StylesheetMixi
 
 			{
 				exception = new TextField( );
+				exception.setId( "tabTracesDetailException" );
 				exception.setEditable( false );
 				exception.getStyleClass( ).add( "details" );
 

@@ -3,6 +3,9 @@ package kieker.diagnosis.frontend.tab.traces.complex;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
@@ -30,8 +33,7 @@ public final class TracesTabTestUI extends ApplicationTest {
 		final Injector injector = Guice.createInjector( new ServiceBaseModule( ) );
 
 		final MonitoringLogService monitoringLogService = injector.getInstance( MonitoringLogService.class );
-		monitoringLogService.addTraceRoot( createTrace1( ) );
-		monitoringLogService.addTraceRoot( createTrace2( ) );
+		createTraces( ).forEach( monitoringLogService::addTraceRoot );
 
 		final TracesTab tracesTab = new TracesTab( );
 		tracesTab.prepareRefresh( );
@@ -43,41 +45,128 @@ public final class TracesTabTestUI extends ApplicationTest {
 		stage.show( );
 	}
 
-	private MethodCall createTrace1( ) {
+	private List<MethodCall> createTraces( ) {
 		final MethodCall call1 = new MethodCall( );
+		call1.setTraceId( 1 );
 		call1.setHost( "host1" );
+		call1.setClazz( "class1" );
+		call1.setMethod( "method1" );
 
 		final MethodCall call2 = new MethodCall( );
+		call2.setTraceId( 2 );
 		call2.setHost( "host1" );
+		call2.setClazz( "class1" );
+		call2.setMethod( "method1" );
+		call2.setException( "exception" );
 
-		call1.addChild( call2 );
+		final MethodCall call3 = new MethodCall( );
+		call3.setTraceId( 3 );
+		call3.setHost( "host2" );
+		call3.setClazz( "class1" );
+		call3.setMethod( "method1" );
 
-		return call1;
-	}
+		final MethodCall call4 = new MethodCall( );
+		call4.setTraceId( 4 );
+		call4.setHost( "host3" );
+		call4.setClazz( "class3" );
+		call4.setMethod( "method3" );
+		call4.setDuration( 150L );
+		call4.setTimestamp( 1000L );
+		call4.setTraceId( 42L );
 
-	private MethodCall createTrace2( ) {
-		final MethodCall call1 = new MethodCall( );
-		call1.setHost( "host2" );
-
-		final MethodCall call2 = new MethodCall( );
-		call2.setHost( "host2" );
-
-		call1.addChild( call2 );
-
-		return call1;
+		return Arrays.asList( call1, call2, call3, call4 );
 	}
 
 	@Test
-	public void testMethodsView( ) {
-		final TreeTableView<?> treeTableView = lookup( "#tabTracesTreeTable" ).query( );
-		assertThat( treeTableView.getRoot( ).getChildren( ).size( ), is( 2 ) );
+	public void testNormalSearch( ) {
+		final TreeTableView<?> tableView = lookup( "#tabTracesTreeTable" ).query( );
+		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 4 ) );
 
 		clickOn( "#tabTracesFilterHost" ).write( "host1" );
+		clickOn( "#tabTracesFilterClass" ).write( "class1" );
+		clickOn( "#tabTracesFilterMethod" ).write( "method1" );
 		clickOn( "#tabTracesSearch" );
-		assertThat( treeTableView.getRoot( ).getChildren( ).size( ), is( 1 ) );
+		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 2 ) );
 
-		clickOn( lookup( ".tree-table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
+		clickOn( "#tabTracesFilterTraceId" ).write( "1" );
+		clickOn( "#tabTracesSearch" );
+		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 1 ) );
+
+		clickOn( "#tabTracesFilterTraceId" ).eraseText( 1 );
+		clickOn( "#tabTracesFilterException" ).write( "exception" );
+		clickOn( "#tabTracesSearch" );
+		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 1 ) );
+
+		clickOn( "#tabTracesFilterException" ).eraseText( 9 );
+		clickOn( "#tabTracesFilterSearchType" ).clickOn( "Nur fehlgeschlagene" );
+		clickOn( "#tabTracesSearch" );
+		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 1 ) );
+
+		clickOn( "#tabTracesFilterHost" ).eraseText( 5 );
+		clickOn( "#tabTracesFilterSearchType" ).clickOn( "Nur erfolgreiche" );
+		clickOn( "#tabTracesSearch" );
+		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 2 ) );
+	}
+
+	@Test
+	public void testDetailPanel( ) {
+		clickOn( lookup( "#tabTracesTreeTable" ).lookup( ".tree-table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
 		assertThat( lookup( "#tabTracesDetailHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
+		assertThat( lookup( "#tabTracesDetailException" ).queryTextInputControl( ).getText( ), is( "<Keine Daten verfügbar>" ) );
+
+		clickOn( lookup( "#tabTracesTreeTable" ).lookup( ".tree-table-row-cell" ).nth( 1 ).queryAs( Node.class ) );
+		assertThat( lookup( "#tabTracesDetailHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
+		assertThat( lookup( "#tabTracesDetailException" ).queryTextInputControl( ).getText( ), is( "exception" ) );
+	}
+
+	@Test
+	public void testSearchWithRegularExpressions( ) {
+		final TreeTableView<?> tableView = lookup( "#tabTracesTreeTable" ).query( );
+		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 4 ) );
+
+		clickOn( "#tabTracesFilterUseRegExpr" );
+
+		clickOn( "#tabTracesFilterHost" ).write( ".*1.*" );
+		clickOn( "#tabTracesFilterClass" ).write( "class1" );
+		clickOn( "#tabTracesFilterMethod" ).write( "m....d\\d" );
+		clickOn( "#tabTracesSearch" );
+		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 2 ) );
+
+		clickOn( "#tabTracesFilterException" ).write( "e.*" );
+		clickOn( "#tabTracesSearch" );
+		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 1 ) );
+
+		clickOn( "#tabTracesFilterException" ).eraseText( 9 );
+		clickOn( "#tabTracesFilterSearchType" ).clickOn( "Nur fehlgeschlagene" );
+		clickOn( "#tabTracesSearch" );
+		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 1 ) );
+	}
+
+	@Test
+	public void testSearchWithInvalidRegularExpressions( ) {
+		final TreeTableView<?> tableView = lookup( "#tabTracesTreeTable" ).query( );
+		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 4 ) );
+
+		clickOn( "#tabTracesFilterUseRegExpr" );
+
+		clickOn( "#tabTracesFilterHost" ).write( "(" );
+		clickOn( "#tabTracesSearch" );
+		clickOn( ".dialog-pane .button" );
+
+		clickOn( "#tabTracesFilterHost" ).eraseText( 1 );
+		clickOn( "#tabTracesFilterClass" ).write( "(" );
+		clickOn( "#tabTracesSearch" );
+		clickOn( ".dialog-pane .button" );
+
+		clickOn( "#tabTracesFilterClass" ).eraseText( 1 );
+		clickOn( "#tabTracesFilterMethod" ).write( "(" );
+		clickOn( "#tabTracesSearch" );
+		clickOn( ".dialog-pane .button" );
+
+		clickOn( "#tabTracesFilterMethod" ).eraseText( 1 );
+		clickOn( "#tabTracesFilterException" ).write( "(" );
+		clickOn( "#tabTracesSearch" );
+		clickOn( ".dialog-pane .button" );
 	}
 
 }

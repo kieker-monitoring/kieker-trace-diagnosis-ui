@@ -111,6 +111,7 @@ public final class TraceFilterPane extends TitledPane implements StringMixin, Ic
 
 				{
 					clazz = new TextField( );
+					clazz.setId( "tabTracesFilterClass" );
 					clazz.setPromptText( RESOURCE_BUNDLE.getString( "filterByClass" ) );
 					GridPane.setColumnIndex( clazz, columnIndex++ );
 					GridPane.setRowIndex( clazz, rowIndex );
@@ -121,6 +122,7 @@ public final class TraceFilterPane extends TitledPane implements StringMixin, Ic
 
 				{
 					method = new TextField( );
+					method.setId( "tabTracesFilterMethod" );
 					method.setPromptText( RESOURCE_BUNDLE.getString( "filterByMethod" ) );
 					GridPane.setColumnIndex( method, columnIndex++ );
 					GridPane.setRowIndex( method, rowIndex );
@@ -131,6 +133,7 @@ public final class TraceFilterPane extends TitledPane implements StringMixin, Ic
 
 				{
 					exception = new TextField( );
+					exception.setId( "tabTracesFilterException" );
 					exception.setPromptText( RESOURCE_BUNDLE.getString( "filterByException" ) );
 					GridPane.setColumnIndex( exception, columnIndex++ );
 					GridPane.setRowIndex( exception, rowIndex );
@@ -141,6 +144,7 @@ public final class TraceFilterPane extends TitledPane implements StringMixin, Ic
 
 				{
 					traceId = new LongTextField( );
+					traceId.setId( "tabTracesFilterTraceId" );
 					traceId.setPromptText( RESOURCE_BUNDLE.getString( "filterByTraceId" ) );
 					GridPane.setColumnIndex( traceId, columnIndex++ );
 					GridPane.setRowIndex( traceId, rowIndex );
@@ -200,6 +204,7 @@ public final class TraceFilterPane extends TitledPane implements StringMixin, Ic
 
 				{
 					searchType = new ComboBox<>( );
+					searchType.setId( "tabTracesFilterSearchType" );
 					searchType.setItems( FXCollections.observableArrayList( SearchType.values( ) ) );
 					searchType.setConverter( new EnumStringConverter<>( SearchType.class ) );
 					searchType.setMaxWidth( Double.POSITIVE_INFINITY );
@@ -220,6 +225,7 @@ public final class TraceFilterPane extends TitledPane implements StringMixin, Ic
 
 			{
 				useRegExpr = new CheckBox( );
+				useRegExpr.setId( "tabTracesFilterUseRegExpr" );
 				useRegExpr.setText( RESOURCE_BUNDLE.getString( "filterUseRegExpr" ) );
 
 				GridPane.setColumnIndex( useRegExpr, 1 );
