@@ -22,7 +22,6 @@ import com.google.inject.Guice;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import kieker.diagnosis.frontend.base.mixin.ImageMixin;
 import kieker.diagnosis.frontend.main.complex.MainPane;
@@ -36,29 +35,14 @@ public final class KiekerTraceDiagnosis extends Application implements ImageMixi
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( KiekerTraceDiagnosis.class.getCanonicalName( ) );
 
-	public static void main( final String[] aArgs ) {
-		Application.launch( aArgs );
+	public static void main( final String[] args ) {
+		Application.launch( args );
 	}
 
 	@Override
-	public void start( final Stage aPrimaryStage ) throws Exception {
+	public void start( final Stage primaryStage ) throws Exception {
 		startCdiContainer( );
-
-		// Prepare the stage and show the window
-		final MainPane mainPane = new MainPane( );
-		final Scene scene = new Scene( mainPane );
-		aPrimaryStage.setScene( scene );
-		aPrimaryStage.setMaximized( true );
-		aPrimaryStage.getIcons( ).add( createIcon( ) );
-		aPrimaryStage.setTitle( RESOURCE_BUNDLE.getString( "title" ) );
-
-		// Catch the default close event
-		aPrimaryStage.setOnCloseRequest( e -> {
-			e.consume( );
-			mainPane.performClose( );
-		} );
-
-		aPrimaryStage.show( );
+		prepareAndShowStage( primaryStage );
 	}
 
 	private void startCdiContainer( ) {
@@ -66,9 +50,23 @@ public final class KiekerTraceDiagnosis extends Application implements ImageMixi
 		Guice.createInjector( com.google.inject.Stage.PRODUCTION, module );
 	}
 
-	private Image createIcon( ) {
-		final String iconPath = RESOURCE_BUNDLE.getString( "icon" );
-		return loadImage( iconPath );
+	private void prepareAndShowStage( final Stage primaryStage ) {
+		final MainPane mainPane = new MainPane( );
+		catchDefaultCloseEventWithMainPane( primaryStage, mainPane );
+
+		primaryStage.setTitle( RESOURCE_BUNDLE.getString( "title" ) );
+		primaryStage.setScene( new Scene( mainPane ) );
+		primaryStage.getIcons( ).add( loadImage( "/kieker-logo.png" ) );
+		primaryStage.setMaximized( true );
+
+		primaryStage.show( );
+	}
+
+	private void catchDefaultCloseEventWithMainPane( final Stage primaryStage, final MainPane mainPane ) {
+		primaryStage.setOnCloseRequest( e -> {
+			e.consume( );
+			mainPane.performClose( );
+		} );
 	}
 
 }
