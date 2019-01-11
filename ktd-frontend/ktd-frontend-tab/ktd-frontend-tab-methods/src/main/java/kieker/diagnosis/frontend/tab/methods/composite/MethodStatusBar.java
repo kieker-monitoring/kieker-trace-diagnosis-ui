@@ -16,6 +16,7 @@
 
 package kieker.diagnosis.frontend.tab.methods.composite;
 
+import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -70,11 +71,15 @@ public final class MethodStatusBar extends HBox {
 	/**
 	 * Sets the value which is shown in the component.
 	 *
-	 * @param value
-	 *            The new value. Can also be {@code null}.
+	 * @param methodCalls
+	 *            The new number of method calls.
+	 * @param totalMethodCalls
+	 *            The new total number of method calls.
 	 */
-	public void setValue( final String value ) {
-		status.setText( value );
+	public void setValue( final int methodCalls, final int totalMethodCalls ) {
+		final NumberFormat decimalFormat = NumberFormat.getInstance( );
+		final String text = String.format( RESOURCE_BUNDLE.getString( "statusLabel" ), decimalFormat.format( methodCalls ), decimalFormat.format( totalMethodCalls ) );
+		status.setText( text );
 	}
 
 }

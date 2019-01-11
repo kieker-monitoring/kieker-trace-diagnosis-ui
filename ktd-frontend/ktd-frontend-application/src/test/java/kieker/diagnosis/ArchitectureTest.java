@@ -23,50 +23,15 @@ import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.data.MonitoringLogService;
 import kieker.diagnosis.backend.properties.ApplicationProperty;
 import kieker.diagnosis.backend.properties.PropertiesService;
-import kieker.diagnosis.frontend.base.ui.ControllerBase;
-import kieker.diagnosis.frontend.base.ui.ViewBase;
-import kieker.diagnosis.frontend.base.ui.ViewModelBase;
 
 public final class ArchitectureTest {
-
-	@Test
-	public void controllersShouldBeSingletons( ) {
-		final JavaClasses importedClasses = new ClassFileImporter( ).importPackages( "kieker.diagnosis" );
-
-		final ArchRule rule = classes( ).that( )
-				.areAssignableTo( ControllerBase.class ).and( ).dontHaveModifier( JavaModifier.ABSTRACT )
-				.should( ).beAnnotatedWith( Singleton.class );
-
-		rule.check( importedClasses );
-	}
-
-	@Test
-	public void viewsShouldBeSingletons( ) {
-		final JavaClasses importedClasses = new ClassFileImporter( ).importPackages( "kieker.diagnosis" );
-
-		final ArchRule rule = classes( ).that( )
-				.areAssignableTo( ViewBase.class ).and( ).dontHaveModifier( JavaModifier.ABSTRACT )
-				.should( ).beAnnotatedWith( Singleton.class );
-
-		rule.check( importedClasses );
-	}
-
-	@Test
-	public void viewModelsShouldBeSingletons( ) {
-		final JavaClasses importedClasses = new ClassFileImporter( ).importPackages( "kieker.diagnosis" );
-
-		final ArchRule rule = classes( ).that( )
-				.areAssignableTo( ViewModelBase.class ).and( ).dontHaveModifier( JavaModifier.ABSTRACT )
-				.should( ).beAnnotatedWith( Singleton.class );
-
-		rule.check( importedClasses );
-	}
 
 	@Test
 	public void servicesShouldHaveNoState( ) {
 		final JavaClasses importedClasses = new ClassFileImporter( ).importPackages( "kieker.diagnosis" );
 
-		// Currently MonitoringLogService and PropertiesService are an exception from the rule. We should change this in the future though.
+		// Currently MonitoringLogService and PropertiesService are an exception from the rule. We should change this in
+		// the future though.
 		final ArchRule rule = classes( ).that( )
 				.implement( Service.class ).and( ).areNotAssignableFrom( MonitoringLogService.class ).and( ).areNotAssignableFrom( PropertiesService.class )
 				.should( haveNoStatefulFields( ) );

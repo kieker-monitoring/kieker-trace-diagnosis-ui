@@ -21,7 +21,6 @@ import com.google.inject.AbstractModule;
 import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.backend.cache.CacheModule;
 import kieker.diagnosis.backend.monitoring.MonitoringModule;
-import kieker.diagnosis.frontend.base.FrontendBaseModule;
 
 /**
  * This is the Guice module for the application.
@@ -35,7 +34,6 @@ final class KiekerTraceDiagnosisModule extends AbstractModule {
 		install( new MonitoringModule( ) );
 		install( new CacheModule( ) );
 		install( new ServiceBaseModule( ) );
-		install( new FrontendBaseModule( ) );
 	}
 
 }

@@ -19,15 +19,13 @@ package kieker.diagnosis.frontend.application;
 import java.util.ResourceBundle;
 
 import com.google.inject.Guice;
-import com.google.inject.Injector;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import kieker.diagnosis.frontend.base.mixin.ImageMixin;
-import kieker.diagnosis.frontend.main.MainController;
-import kieker.diagnosis.frontend.main.MainView;
+import kieker.diagnosis.frontend.main.complex.MainPane;
 
 /**
  * This is the application's main class.
@@ -38,21 +36,17 @@ public final class KiekerTraceDiagnosis extends Application implements ImageMixi
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( KiekerTraceDiagnosis.class.getCanonicalName( ) );
 
-	private Injector injector;
-
 	public static void main( final String[] aArgs ) {
 		Application.launch( aArgs );
 	}
 
 	@Override
 	public void start( final Stage aPrimaryStage ) throws Exception {
-		injector = startCdiContainer( );
-		final MainView mainView = injector.getInstance( MainView.class );
-		final MainController mainController = injector.getInstance( MainController.class );
-		mainController.initialize( );
+		startCdiContainer( );
 
 		// Prepare the stage and show the window
-		final Scene scene = new Scene( mainView );
+		final MainPane mainPane = new MainPane( );
+		final Scene scene = new Scene( mainPane );
 		aPrimaryStage.setScene( scene );
 		aPrimaryStage.setMaximized( true );
 		aPrimaryStage.getIcons( ).add( createIcon( ) );
@@ -61,15 +55,15 @@ public final class KiekerTraceDiagnosis extends Application implements ImageMixi
 		// Catch the default close event
 		aPrimaryStage.setOnCloseRequest( e -> {
 			e.consume( );
-			mainController.performClose( );
+			mainPane.performClose( );
 		} );
 
 		aPrimaryStage.show( );
 	}
 
-	private Injector startCdiContainer( ) {
+	private void startCdiContainer( ) {
 		final KiekerTraceDiagnosisModule module = new KiekerTraceDiagnosisModule( );
-		return Guice.createInjector( com.google.inject.Stage.PRODUCTION, module );
+		Guice.createInjector( com.google.inject.Stage.PRODUCTION, module );
 	}
 
 	private Image createIcon( ) {

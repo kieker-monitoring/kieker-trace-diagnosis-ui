@@ -28,6 +28,7 @@ import javafx.scene.control.TableColumn.SortType;
 import javafx.scene.control.TableView;
 import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.MethodCall;
+import kieker.diagnosis.backend.export.CSVData;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.settings.ClassAppearance;
 import kieker.diagnosis.backend.settings.MethodAppearance;
@@ -202,8 +203,33 @@ public final class MethodsTableView extends TableView<MethodCall> implements Sty
 		getSelectionModel( ).selectedItemProperty( ).addListener( listener );
 	}
 
-	public TableColumn<MethodCall, String> getDurationColumn( ) {
-		return duration;
+	public CSVData getValueAsCsv( ) {
+		final ObservableList<TableColumn<MethodCall, ?>> visibleColumns = getVisibleLeafColumns( );
+
+		final int columnSize = visibleColumns.size( );
+		final int itemsSize = getItems( ).size( );
+
+		final String[] headers = new String[columnSize];
+		for ( int columnIndex = 0; columnIndex < columnSize; columnIndex++ ) {
+			headers[columnIndex] = visibleColumns.get( columnIndex ).getText( );
+		}
+
+		final String[][] values = new String[columnSize][itemsSize];
+		for ( int rowIndex = 0; rowIndex < itemsSize; rowIndex++ ) {
+			for ( int columnIndex = 0; columnIndex < columnSize; columnIndex++ ) {
+				final Object cellData = visibleColumns.get( columnIndex ).getCellData( rowIndex );
+				values[columnIndex][rowIndex] = cellData.toString( );
+			}
+		}
+
+		final CSVData csvData = new CSVData( );
+		csvData.setHeader( headers );
+		csvData.setValues( values );
+		return csvData;
+	}
+
+	public void setDurationSuffix( final String durationSuffixForRefresh ) {
+		duration.setText( RESOURCE_BUNDLE.getString( "columnDuration" ) + " " + durationSuffixForRefresh );
 	}
 
 }

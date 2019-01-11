@@ -36,6 +36,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import jfxtras.scene.control.LocalTimeTextField;
+import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.search.methods.MethodsFilter;
 import kieker.diagnosis.backend.search.methods.SearchType;
 import kieker.diagnosis.frontend.base.atom.LongTextField;
@@ -336,6 +337,24 @@ public final class MethodFilterPane extends TitledPane implements IconMixin, Str
 		filter.setTraceId( traceId.getValue( ) );
 
 		return filter;
+	}
+
+	/**
+	 * Sets the value which is shown in the component.
+	 *
+	 * @param value
+	 *            The new value. Must not be {@code null}.
+	 */
+	public void setValue( final AggregatedMethodCall value ) {
+		// We have to prepare a filter which matches only the method call
+		final MethodsFilter filter = new MethodsFilter( );
+		filter.setHost( value.getHost( ) );
+		filter.setClazz( value.getClazz( ) );
+		filter.setMethod( value.getMethod( ) );
+		filter.setException( value.getException( ) );
+		filter.setSearchType( value.getException( ) != null ? SearchType.ONLY_FAILED : SearchType.ONLY_SUCCESSFUL );
+
+		setValue( filter );
 	}
 
 	/**

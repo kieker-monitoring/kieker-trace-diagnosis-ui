@@ -36,6 +36,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import jfxtras.scene.control.LocalTimeTextField;
+import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.search.traces.SearchType;
 import kieker.diagnosis.backend.search.traces.TracesFilter;
 import kieker.diagnosis.frontend.base.atom.LongTextField;
@@ -355,6 +356,12 @@ public final class TraceFilterPane extends TitledPane implements StringMixin, Ic
 		filter.setTraceId( traceId.getValue( ) );
 
 		return filter;
+	}
+
+	public void setValue( final MethodCall value ) {
+		final TracesFilter filter = new TracesFilter( );
+		filter.setTraceId( value.getTraceId( ) );
+		setValue( filter );
 	}
 
 }

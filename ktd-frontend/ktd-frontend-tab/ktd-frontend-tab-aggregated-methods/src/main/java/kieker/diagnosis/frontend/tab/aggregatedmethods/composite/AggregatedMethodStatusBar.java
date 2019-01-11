@@ -16,6 +16,7 @@
 
 package kieker.diagnosis.frontend.tab.aggregatedmethods.composite;
 
+import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -66,13 +67,9 @@ public final class AggregatedMethodStatusBar extends HBox {
 		exportToCsvLink.setOnAction( value );
 	}
 
-	/**
-	 * Sets the value which is shown in the component.
-	 *
-	 * @param value
-	 *            The new value. Can also be {@code null}.
-	 */
-	public void setValue( final String value ) {
-		status.setText( value );
+	public void setValue( final int aMethods, final int aTotalMethods ) {
+		final NumberFormat decimalFormat = NumberFormat.getInstance( );
+		status.setText( String.format( RESOURCE_BUNDLE.getString( "statusLabel" ), decimalFormat.format( aMethods ), decimalFormat.format( aTotalMethods ) ) );
 	}
+
 }

@@ -16,113 +16,178 @@
 
 package kieker.diagnosis.frontend.main.composite;
 
+import java.io.File;
 import java.util.ResourceBundle;
+import java.util.function.BiConsumer;
 
-import com.google.inject.Inject;
-
+import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import kieker.diagnosis.frontend.tab.aggregatedmethods.AggregatedMethodsView;
-import kieker.diagnosis.frontend.tab.methods.MethodsView;
-import kieker.diagnosis.frontend.tab.statistics.StatisticsView;
-import kieker.diagnosis.frontend.tab.traces.TracesView;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
+import kieker.diagnosis.backend.base.exception.BusinessException;
+import kieker.diagnosis.backend.base.exception.BusinessRuntimeException;
+import kieker.diagnosis.backend.base.service.ServiceFactory;
+import kieker.diagnosis.backend.data.AggregatedMethodCall;
+import kieker.diagnosis.backend.data.MethodCall;
+import kieker.diagnosis.backend.export.CSVData;
+import kieker.diagnosis.backend.export.ExportService;
+import kieker.diagnosis.backend.properties.PropertiesService;
+import kieker.diagnosis.backend.search.aggregatedmethods.AggregatedMethodsFilter;
+import kieker.diagnosis.backend.search.methods.MethodsFilter;
+import kieker.diagnosis.backend.search.traces.TracesFilter;
+import kieker.diagnosis.frontend.base.mixin.ErrorHandlerMixin;
+import kieker.diagnosis.frontend.base.mixin.StylesheetMixin;
+import kieker.diagnosis.frontend.main.properties.LastExportPathProperty;
+import kieker.diagnosis.frontend.tab.aggregatedmethods.complex.AggregatedMethodsTab;
+import kieker.diagnosis.frontend.tab.methods.complex.MethodsTab;
+import kieker.diagnosis.frontend.tab.statistics.complex.StatisticsTab;
+import kieker.diagnosis.frontend.tab.traces.complex.TracesTab;
 
-public class MainTabPane extends TabPane {
+public class MainTabPane extends TabPane implements ErrorHandlerMixin, StylesheetMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MainTabPane.class.getName( ) );
 
-	private final TracesView tracesView;
-	private final MethodsView methodsView;
-	private final AggregatedMethodsView aggregatedMethodsView;
-	private final StatisticsView statisticsView;
+	private final TracesTab tracesTab = new TracesTab( );
+	private final MethodsTab methodsTab = new MethodsTab( );
+	private final AggregatedMethodsTab aggregatedMethodsTab = new AggregatedMethodsTab( );
+	private final StatisticsTab statisticsTab = new StatisticsTab( );
 
-	@Inject
-	public MainTabPane( final TracesView tracesView, final MethodsView methodsView, final AggregatedMethodsView aggregatedMethodsView, final StatisticsView statisticsView ) {
-		{
-			setTabClosingPolicy( TabClosingPolicy.UNAVAILABLE );
+	public MainTabPane( ) {
+		configureMainTabPane( );
 
-			{
-				this.tracesView = tracesView;
-				tracesView.initialize( );
+		configureTracesTab( );
+		getTabs( ).add( tracesTab );
 
-				final Tab tab = new Tab( );
-				tab.setId( "tabTraces" );
+		configureMethodsTab( );
+		getTabs( ).add( methodsTab );
 
-				tab.setText( RESOURCE_BUNDLE.getString( "traces" ) );
-				tab.setContent( tracesView );
+		configureAggregatedMethodsTab( );
+		getTabs( ).add( aggregatedMethodsTab );
 
-				getTabs( ).add( tab );
+		configureStatisticsTab( );
+		getTabs( ).add( statisticsTab );
+	}
 
-				// Only one default button is allowed - even if the other buttons are not
-				// visible. Therefore we have to set the default
-				// button property only for the current tab.
-				tracesView.defaultButtonProperty( ).bind( getSelectionModel( ).selectedItemProperty( ).isEqualTo( tab ) );
-			}
+	private void configureMainTabPane( ) {
+		setTabClosingPolicy( TabClosingPolicy.UNAVAILABLE );
+		addDefaultStylesheet( );
+	}
 
-			{
-				this.methodsView = methodsView;
-				methodsView.initialize( );
+	private void configureTracesTab( ) {
+		tracesTab.setId( "tabTraces" );
+		tracesTab.setText( RESOURCE_BUNDLE.getString( "traces" ) );
 
-				final Tab tab = new Tab( );
-				tab.setId( "tabMethods" );
+		// Only one default button is allowed - even if the other buttons are not
+		// visible. Therefore we have to set the default
+		// button property only for the current tab.
+		tracesTab.defaultButtonProperty( ).bind( getSelectionModel( ).selectedItemProperty( ).isEqualTo( tracesTab ) );
+	}
 
-				tab.setText( RESOURCE_BUNDLE.getString( "methods" ) );
-				tab.setContent( methodsView );
+	private void configureMethodsTab( ) {
+		methodsTab.setId( "tabMethods" );
+		methodsTab.setText( RESOURCE_BUNDLE.getString( "methods" ) );
+		methodsTab.setOnJumpToTrace( this::performJumpToTrace );
+		methodsTab.setOnExportToCSV( this::performExportToCSV );
 
-				getTabs( ).add( tab );
-				// Only one default button is allowed - even if the other buttons are not
-				// visible. Therefore we have to set the default
-				// button property only for the current tab.
-				methodsView.defaultButtonProperty( ).bind( getSelectionModel( ).selectedItemProperty( ).isEqualTo( tab ) );
-			}
+		// Only one default button is allowed - even if the other buttons are not
+		// visible. Therefore we have to set the default
+		// button property only for the current tab.
+		methodsTab.defaultButtonProperty( ).bind( getSelectionModel( ).selectedItemProperty( ).isEqualTo( methodsTab ) );
+	}
 
-			{
+	private void configureAggregatedMethodsTab( ) {
+		aggregatedMethodsTab.setId( "tabAggregatedMethods" );
+		aggregatedMethodsTab.setText( RESOURCE_BUNDLE.getString( "aggregatedMethods" ) );
+		aggregatedMethodsTab.setOnJumpToMethods( this::performJumpToMethods );
+		aggregatedMethodsTab.setOnExportToCSV( this::performExportToCSV );
 
-				this.aggregatedMethodsView = aggregatedMethodsView;
-				aggregatedMethodsView.initialize( );
+		// Only one default button is allowed - even if the other buttons are not
+		// visible. Therefore we have to set the default
+		// button property only for the current tab.
+		aggregatedMethodsTab.defaultButtonProperty( ).bind( getSelectionModel( ).selectedItemProperty( ).isEqualTo( aggregatedMethodsTab ) );
+	}
 
-				final Tab tab = new Tab( );
-				tab.setId( "tabAggregatedMethods" );
-
-				tab.setText( RESOURCE_BUNDLE.getString( "aggregatedMethods" ) );
-				tab.setContent( aggregatedMethodsView );
-
-				getTabs( ).add( tab );
-
-				// Only one default button is allowed - even if the other buttons are not
-				// visible. Therefore we have to set the default
-				// button property only for the current tab.
-				aggregatedMethodsView.defaultButtonProperty( ).bind( getSelectionModel( ).selectedItemProperty( ).isEqualTo( tab ) );
-			}
-
-			{
-
-				this.statisticsView = statisticsView;
-				statisticsView.initialize( );
-
-				final Tab tab = new Tab( );
-				tab.setId( "tabStatistics" );
-
-				tab.setText( RESOURCE_BUNDLE.getString( "statistics" ) );
-				tab.setContent( statisticsView );
-
-				getTabs( ).add( tab );
-			}
-		}
+	private void configureStatisticsTab( ) {
+		statisticsTab.setId( "tabStatistics" );
+		statisticsTab.setText( RESOURCE_BUNDLE.getString( "statistics" ) );
 	}
 
 	public void prepareRefresh( ) {
-		tracesView.prepareRefresh( );
-		methodsView.prepareRefresh( );
-		aggregatedMethodsView.prepareRefresh( );
-		statisticsView.prepareRefresh( );
+		tracesTab.prepareRefresh( );
+		methodsTab.prepareRefresh( );
+		aggregatedMethodsTab.prepareRefresh( );
+		statisticsTab.prepareRefresh( );
 	}
 
 	public void performRefresh( ) {
-		tracesView.performRefresh( );
-		methodsView.performRefresh( );
-		aggregatedMethodsView.performRefresh( );
-		statisticsView.performRefresh( );
+		tracesTab.performRefresh( );
+		methodsTab.performRefresh( );
+		aggregatedMethodsTab.performRefresh( );
+		statisticsTab.performRefresh( );
+	}
+
+	private void performJumpToTrace( final MethodCall value ) {
+		getSelectionModel( ).select( tracesTab );
+		tracesTab.setFilterValue( value );
+	}
+
+	private void performJumpToMethods( final AggregatedMethodCall value ) {
+		getSelectionModel( ).select( methodsTab );
+		methodsTab.setFilterValue( value );
+	}
+
+	private void performExportToCSV( final CSVData aCsvData ) {
+		try {
+
+			final FileChooser fileChooser = new FileChooser( );
+			fileChooser.setTitle( RESOURCE_BUNDLE.getString( "titleExportToCSV" ) );
+
+			// Set an initial directory if possible
+			final PropertiesService propertiesService = ServiceFactory.getService( PropertiesService.class );
+			final String lastExportPath = propertiesService.loadApplicationProperty( LastExportPathProperty.class );
+			final File lastExportDirectory = new File( lastExportPath );
+			if ( lastExportDirectory.isDirectory( ) ) {
+				fileChooser.setInitialDirectory( lastExportDirectory );
+			}
+
+			final File file = fileChooser.showSaveDialog( getWindow( ) );
+			if ( file != null ) {
+				// Remember the directory as initial directory for the next time
+				final File directory = file.getParentFile( );
+				if ( !lastExportDirectory.equals( directory ) ) {
+					propertiesService.saveApplicationProperty( LastExportPathProperty.class, directory.getAbsolutePath( ) );
+				}
+
+				final ExportService exportService = ServiceFactory.getService( ExportService.class );
+				exportService.exportToCSV( file, aCsvData );
+			}
+		} catch ( final BusinessException ex ) {
+			throw new BusinessRuntimeException( ex );
+		}
+	}
+
+	private Window getWindow( ) {
+		final Scene scene = getScene( );
+		return scene.getWindow( );
+	}
+
+	public void setOnSaveAsFavorite( final BiConsumer<Tab, Object> action ) {
+		tracesTab.setOnSaveAsFavorite( filter -> action.accept( tracesTab, filter ) );
+		methodsTab.setOnSaveAsFavorite( filter -> action.accept( methodsTab, filter ) );
+		aggregatedMethodsTab.setOnSaveAsFavorite( filter -> action.accept( aggregatedMethodsTab, filter ) );
+	}
+
+	public void showTab( final Tab tab, final Object filter ) {
+		getSelectionModel( ).select( tab );
+
+		if ( tab == tracesTab ) {
+			tracesTab.setFilterValue( (TracesFilter) filter );
+		} else if ( tab == methodsTab ) {
+			methodsTab.setFilterValue( (MethodsFilter) filter );
+		} else if ( tab == aggregatedMethodsTab ) {
+			aggregatedMethodsTab.setFilterValue( (AggregatedMethodsFilter) filter );
+		}
 	}
 
 }

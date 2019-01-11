@@ -28,6 +28,7 @@ import javafx.scene.control.TableColumn.SortType;
 import javafx.scene.control.TableView;
 import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
+import kieker.diagnosis.backend.export.CSVData;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.settings.ClassAppearance;
 import kieker.diagnosis.backend.settings.MethodAppearance;
@@ -273,24 +274,37 @@ public final class AggregatedMethodsTableView extends TableView<AggregatedMethod
 		getSelectionModel( ).selectedItemProperty( ).addListener( listener );
 	}
 
-	public TableColumn<AggregatedMethodCall, String> getColumnMinDuration( ) {
-		return minDuration;
+	public void setDurationSuffix( final String suffix ) {
+		minDuration.setText( RESOURCE_BUNDLE.getString( "columnMinDuration" ) + " " + suffix );
+		avgDuration.setText( RESOURCE_BUNDLE.getString( "columnAvgDuration" ) + " " + suffix );
+		medianDuration.setText( RESOURCE_BUNDLE.getString( "columnMedianDuration" ) + " " + suffix );
+		maxDuration.setText( RESOURCE_BUNDLE.getString( "columnMaxDuration" ) + " " + suffix );
+		totalDuration.setText( RESOURCE_BUNDLE.getString( "columnTotalDuration" ) + " " + suffix );
 	}
 
-	public TableColumn<AggregatedMethodCall, String> getColumnAvgDuration( ) {
-		return avgDuration;
-	}
+	public CSVData getValueAsCsv( ) {
+		final ObservableList<TableColumn<AggregatedMethodCall, ?>> visibleColumns = getVisibleLeafColumns( );
 
-	public TableColumn<AggregatedMethodCall, String> getColumnMedianDuration( ) {
-		return medianDuration;
-	}
+		final int columnSize = visibleColumns.size( );
+		final int itemsSize = getItems( ).size( );
 
-	public TableColumn<AggregatedMethodCall, String> getColumnMaxDuration( ) {
-		return maxDuration;
-	}
+		final String[] headers = new String[columnSize];
+		for ( int columnIndex = 0; columnIndex < columnSize; columnIndex++ ) {
+			headers[columnIndex] = visibleColumns.get( columnIndex ).getText( );
+		}
 
-	public TableColumn<AggregatedMethodCall, String> getColumnTotalDuration( ) {
-		return totalDuration;
+		final String[][] values = new String[columnSize][itemsSize];
+		for ( int rowIndex = 0; rowIndex < itemsSize; rowIndex++ ) {
+			for ( int columnIndex = 0; columnIndex < columnSize; columnIndex++ ) {
+				final Object cellData = visibleColumns.get( columnIndex ).getCellData( rowIndex );
+				values[columnIndex][rowIndex] = cellData.toString( );
+			}
+		}
+
+		final CSVData csvData = new CSVData( );
+		csvData.setHeader( headers );
+		csvData.setValues( values );
+		return csvData;
 	}
 
 }

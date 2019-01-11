@@ -16,6 +16,9 @@
 
 package kieker.diagnosis.frontend.tab.traces.composite;
 
+import java.text.NumberFormat;
+import java.util.ResourceBundle;
+
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -28,6 +31,7 @@ import javafx.scene.layout.Priority;
  */
 public final class TraceStatusBar extends HBox {
 
+	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( TraceStatusBar.class.getName( ) );
 	private final Label status;
 
 	public TraceStatusBar( ) {
@@ -49,4 +53,16 @@ public final class TraceStatusBar extends HBox {
 		status.setText( value );
 	}
 
+	/**
+	 * Sets the value which is shown in the component.
+	 *
+	 * @param methodCalls
+	 *            The new number of traces.
+	 * @param totalMethodCalls
+	 *            The new total number of traces.
+	 */
+	public void setValue( final int traces, final int totalTraces ) {
+		final NumberFormat decimalFormat = NumberFormat.getInstance( );
+		status.setText( String.format( RESOURCE_BUNDLE.getString( "statusLabel" ), decimalFormat.format( traces ), decimalFormat.format( totalTraces ) ) );
+	}
 }
