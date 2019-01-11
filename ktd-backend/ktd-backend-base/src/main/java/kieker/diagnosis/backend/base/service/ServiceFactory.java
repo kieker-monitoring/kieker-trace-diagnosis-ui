@@ -31,7 +31,7 @@ public final class ServiceFactory {
 	private static Injector injector;
 
 	private ServiceFactory( ) {
-		// Avoid instantiation
+		throw new AssertionError( "This class must not be instantiated." );
 	}
 
 	public static <S extends Service> S getService( final Class<S> serviceClass ) {

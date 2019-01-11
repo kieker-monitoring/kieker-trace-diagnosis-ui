@@ -18,7 +18,10 @@ package kieker.diagnosis.backend.base.common;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThat;
+
+import java.lang.reflect.Constructor;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,7 +40,7 @@ import com.google.inject.matcher.Matchers;
 public final class ClassUtilTest {
 
 	@Rule
-	public final ExpectedException ivExpectedException = ExpectedException.none( );
+	public final ExpectedException expectedException = ExpectedException.none( );
 
 	private final Injector injector = Guice.createInjector( new Module( ) );
 
@@ -65,6 +68,15 @@ public final class ClassUtilTest {
 		assertThat( realName, is( equalTo( NonProxiedClass.class.getName( ) ) ) );
 	}
 
+	@Test
+	public void instantiationShouldThrowException( ) throws ReflectiveOperationException {
+		final Constructor<ClassUtil> constructor = ClassUtil.class.getDeclaredConstructor( );
+		constructor.setAccessible( true );
+
+		expectedException.expectCause( instanceOf( AssertionError.class ) );
+		constructor.newInstance( );
+	}
+
 }
 
 class NonProxiedClass {
@@ -77,7 +89,7 @@ class Module extends AbstractModule {
 
 	@Override
 	protected void configure( ) {
-		bindInterceptor( Matchers.subclassesOf( ProxiedClass.class ), Matchers.any( ), aInvocation -> aInvocation.proceed( ) );
+		bindInterceptor( Matchers.subclassesOf( ProxiedClass.class ), Matchers.any( ), invocation -> invocation.proceed( ) );
 	}
 
 }

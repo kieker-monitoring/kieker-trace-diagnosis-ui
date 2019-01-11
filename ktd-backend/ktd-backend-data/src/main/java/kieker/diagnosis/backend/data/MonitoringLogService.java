@@ -35,7 +35,6 @@ import com.google.inject.Singleton;
 
 import kieker.diagnosis.backend.base.exception.BusinessException;
 import kieker.diagnosis.backend.base.exception.BusinessRuntimeException;
-import kieker.diagnosis.backend.base.exception.TechnicalException;
 import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.data.reader.AsciiFileReader;
 import kieker.diagnosis.backend.data.reader.BinaryFileReader;
@@ -108,7 +107,7 @@ public class MonitoringLogService implements Service {
 
 			throw new BusinessRuntimeException( ex );
 		} catch ( final Exception ex ) {
-			throw new TechnicalException( RESOURCES.getString( "errorMessageImportFailed" ), ex );
+			throw new RuntimeException( RESOURCES.getString( "errorMessageImportFailed" ), ex );
 		} finally {
 			// If necessary delete the temporary directory
 			if ( type == ImportType.ZIP_FILE && directory != null ) {

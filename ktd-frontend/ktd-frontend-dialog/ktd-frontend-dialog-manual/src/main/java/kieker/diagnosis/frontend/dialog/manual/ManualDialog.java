@@ -29,7 +29,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import kieker.diagnosis.backend.base.exception.TechnicalException;
 import kieker.diagnosis.frontend.base.mixin.DialogMixin;
 import kieker.diagnosis.frontend.base.mixin.ImageMixin;
 
@@ -87,7 +86,7 @@ public final class ManualDialog extends Alert implements DialogMixin, ImageMixin
 			final byte[] allBytes = cssStream.readAllBytes( );
 			documentation.append( new String( allBytes, Charset.forName( "UTF-8" ) ) );
 		} catch ( final IOException ex ) {
-			throw new TechnicalException( ex );
+			throw new RuntimeException( ex );
 		}
 	}
 
@@ -99,7 +98,7 @@ public final class ManualDialog extends Alert implements DialogMixin, ImageMixin
 			final byte[] allBytes = documentationStream.readAllBytes( );
 			documentation.append( new String( allBytes, Charset.forName( "ISO-8859-1" ) ) );
 		} catch ( final IOException ex ) {
-			throw new TechnicalException( ex );
+			throw new RuntimeException( ex );
 		}
 	}
 

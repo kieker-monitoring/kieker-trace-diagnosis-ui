@@ -26,7 +26,7 @@ import java.util.Objects;
 public final class ClassUtil {
 
 	private ClassUtil( ) {
-		// Avoid instantiation
+		throw new AssertionError( "This class must not be instantiated." );
 	}
 
 	/**
@@ -34,7 +34,7 @@ public final class ClassUtil {
 	 * returned. Otherwise the class itself will be returned.
 	 *
 	 * @param clazz
-	 *            The (potentially proxy) class. Must not be {@code null}.
+	 *            The (potentially proxied) class. Must not be {@code null}.
 	 *
 	 * @return The real class.
 	 *
@@ -56,7 +56,7 @@ public final class ClassUtil {
 	 * be returned. Otherwise the name of class itself will be returned.
 	 *
 	 * @param aClass
-	 *            The (potentially proxy) class. Must not be {@code null}.
+	 *            The (potentially proxied) class. Must not be {@code null}.
 	 *
 	 * @return The real class name.
 	 *
