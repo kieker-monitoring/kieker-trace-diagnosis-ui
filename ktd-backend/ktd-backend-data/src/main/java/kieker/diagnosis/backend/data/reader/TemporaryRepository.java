@@ -31,10 +31,10 @@ import com.carrotsearch.hppc.LongArrayList;
 import com.carrotsearch.hppc.LongObjectHashMap;
 import com.carrotsearch.hppc.LongObjectMap;
 
-import kieker.diagnosis.backend.base.exception.BusinessException;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.data.MonitoringLogService;
+import kieker.diagnosis.backend.data.exception.CorruptStreamException;
 import kieker.diagnosis.backend.monitoring.MonitoringProbe;
 import kieker.diagnosis.backend.monitoring.MonitoringUtil;
 
@@ -178,10 +178,10 @@ public final class TemporaryRepository {
 	 * repository. It performs the remaining calculation and transfers its data to the monitoring service (where still
 	 * necessary).
 	 *
-	 * @throws BusinessException
+	 * @throws CorruptStreamException
 	 *             If the monitoring log stream was somehow corrupted.
 	 */
-	public void finish( ) throws BusinessException {
+	public void finish( ) throws CorruptStreamException {
 		calculatePercentAndCollectMethods( );
 		aggregateMethods( );
 
@@ -191,7 +191,7 @@ public final class TemporaryRepository {
 		monitoringLogService.setIncompleteTraces( reconstructionMap.size( ) );
 
 		if ( streamCorrupt ) {
-			throw new BusinessException( RESOURCE_BUNDLE.getString( "errorMessageStreamCorrupt" ), exception );
+			throw new CorruptStreamException( RESOURCE_BUNDLE.getString( "errorMessageStreamCorrupt" ), exception );
 		}
 	}
 

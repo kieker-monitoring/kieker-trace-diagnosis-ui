@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 
 import com.google.inject.Singleton;
 
-import kieker.diagnosis.backend.base.exception.BusinessException;
 import kieker.diagnosis.backend.base.service.Service;
 
 /**
@@ -42,16 +41,14 @@ public class ExportService implements Service {
 	 *            The file in which the data should be written.
 	 * @param csvData
 	 *            The CSV data to be written.
-	 *
-	 * @throws BusinessException
-	 *             If an I/O error occurred while trying to export the data.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong while writing the data.
 	 */
-	public void exportToCSV( final File file, final CSVData csvData ) throws BusinessException {
+	public void exportToCSV( final File file, final CSVData csvData ) throws IOException {
 		try ( final FileWriter fileWriter = new FileWriter( file ) ) {
 			writeHeader( fileWriter, csvData.getHeaders( ) );
 			writeValues( fileWriter, csvData.getRows( ) );
-		} catch ( final IOException ex ) {
-			throw new BusinessException( ex );
 		}
 	}
 

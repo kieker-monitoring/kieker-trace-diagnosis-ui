@@ -23,6 +23,7 @@ import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.data.MonitoringLogService;
 import kieker.diagnosis.backend.properties.ApplicationProperty;
 import kieker.diagnosis.backend.properties.PropertiesService;
+import kieker.diagnosis.frontend.base.common.DelegateException;
 
 public final class ArchitectureTest {
 
@@ -98,6 +99,32 @@ public final class ArchitectureTest {
 				.should( ).beFreeOfCycles( );
 
 		rule.check( importedClasses );
+	}
+
+	@Test
+	public void delegateExceptionShouldNotBeUsedInTheBackend( ) {
+		final JavaClasses importedClasses = new ClassFileImporter( ).importPackages( "kieker.diagnosis" );
+
+		final ArchRule rule = classes( ).that( )
+				.resideInAnyPackage( "kieker.diagnosis.backend.." )
+				.should( notUseDelegateExceptions( ) );
+
+		rule.check( importedClasses );
+	}
+
+	private ArchCondition<JavaClass> notUseDelegateExceptions( ) {
+		return new ArchCondition<>( "not use DelegateExceptions" ) {
+
+			@Override
+			public void check( final JavaClass item, final ConditionEvents events ) {
+				item.getCallsFromSelf( )
+						.stream( )
+						.filter( access -> access.getTargetOwner( ).isAssignableTo( DelegateException.class ) )
+						.map( access -> String.format( "Class %s uses a DelegateException", access.getOriginOwner( ).getName( ) ) )
+						.map( message -> SimpleConditionEvent.violated( item, message ) )
+						.forEach( events::add );
+			}
+		};
 	}
 
 }

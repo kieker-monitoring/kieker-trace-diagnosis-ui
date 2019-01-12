@@ -17,6 +17,7 @@
 package kieker.diagnosis.frontend.main.composite;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
 
@@ -25,8 +26,6 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
-import kieker.diagnosis.backend.base.exception.BusinessException;
-import kieker.diagnosis.backend.base.exception.BusinessRuntimeException;
 import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.data.MethodCall;
@@ -36,6 +35,7 @@ import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.search.aggregatedmethods.AggregatedMethodsFilter;
 import kieker.diagnosis.backend.search.methods.MethodsFilter;
 import kieker.diagnosis.backend.search.traces.TracesFilter;
+import kieker.diagnosis.frontend.base.common.DelegateException;
 import kieker.diagnosis.frontend.base.mixin.StylesheetMixin;
 import kieker.diagnosis.frontend.main.properties.LastExportPathProperty;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.complex.AggregatedMethodsTab;
@@ -137,32 +137,31 @@ public class MainTabPane extends TabPane implements StylesheetMixin {
 	}
 
 	private void performExportToCSV( final CSVData aCsvData ) {
-		try {
+		final FileChooser fileChooser = new FileChooser( );
+		fileChooser.setTitle( RESOURCE_BUNDLE.getString( "titleExportToCSV" ) );
 
-			final FileChooser fileChooser = new FileChooser( );
-			fileChooser.setTitle( RESOURCE_BUNDLE.getString( "titleExportToCSV" ) );
+		// Set an initial directory if possible
+		final PropertiesService propertiesService = ServiceFactory.getService( PropertiesService.class );
+		final String lastExportPath = propertiesService.loadApplicationProperty( LastExportPathProperty.class );
+		final File lastExportDirectory = new File( lastExportPath );
+		if ( lastExportDirectory.isDirectory( ) ) {
+			fileChooser.setInitialDirectory( lastExportDirectory );
+		}
 
-			// Set an initial directory if possible
-			final PropertiesService propertiesService = ServiceFactory.getService( PropertiesService.class );
-			final String lastExportPath = propertiesService.loadApplicationProperty( LastExportPathProperty.class );
-			final File lastExportDirectory = new File( lastExportPath );
-			if ( lastExportDirectory.isDirectory( ) ) {
-				fileChooser.setInitialDirectory( lastExportDirectory );
+		final File file = fileChooser.showSaveDialog( getWindow( ) );
+		if ( file != null ) {
+			// Remember the directory as initial directory for the next time
+			final File directory = file.getParentFile( );
+			if ( !lastExportDirectory.equals( directory ) ) {
+				propertiesService.saveApplicationProperty( LastExportPathProperty.class, directory.getAbsolutePath( ) );
 			}
 
-			final File file = fileChooser.showSaveDialog( getWindow( ) );
-			if ( file != null ) {
-				// Remember the directory as initial directory for the next time
-				final File directory = file.getParentFile( );
-				if ( !lastExportDirectory.equals( directory ) ) {
-					propertiesService.saveApplicationProperty( LastExportPathProperty.class, directory.getAbsolutePath( ) );
-				}
-
-				final ExportService exportService = ServiceFactory.getService( ExportService.class );
+			final ExportService exportService = ServiceFactory.getService( ExportService.class );
+			try {
 				exportService.exportToCSV( file, aCsvData );
+			} catch ( final IOException ex ) {
+				throw new DelegateException( ex );
 			}
-		} catch ( final BusinessException ex ) {
-			throw new BusinessRuntimeException( ex );
 		}
 	}
 

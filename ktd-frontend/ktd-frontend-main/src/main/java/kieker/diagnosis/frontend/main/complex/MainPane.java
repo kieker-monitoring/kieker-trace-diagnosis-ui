@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Tab;
@@ -20,16 +21,18 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import kieker.diagnosis.backend.base.exception.BusinessException;
-import kieker.diagnosis.backend.base.exception.BusinessRuntimeException;
 import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.ImportType;
 import kieker.diagnosis.backend.data.MonitoringLogService;
+import kieker.diagnosis.backend.data.exception.CorruptStreamException;
+import kieker.diagnosis.backend.data.exception.ImportFailedException;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.settings.Settings;
 import kieker.diagnosis.backend.settings.SettingsService;
+import kieker.diagnosis.frontend.base.common.DelegateException;
 import kieker.diagnosis.frontend.base.common.ExceptionUtil;
 import kieker.diagnosis.frontend.base.mixin.StylesheetMixin;
+import kieker.diagnosis.frontend.dialog.alert.Alert;
 import kieker.diagnosis.frontend.dialog.progress.ProgressDialog;
 import kieker.diagnosis.frontend.dialog.settings.SettingsDialog;
 import kieker.diagnosis.frontend.main.composite.MainMenuBar;
@@ -174,35 +177,35 @@ public final class MainPane extends VBox implements StylesheetMixin {
 	}
 
 	public void performSaveAsFavorite( final Tab tab, final Object filter ) {
-		try {
-			final TextInputDialog textInputDialog = new TextInputDialog( );
-			textInputDialog.setTitle( RESOURCE_BUNDLE.getString( "newFilterFavorite" ) );
-			textInputDialog.setHeaderText( RESOURCE_BUNDLE.getString( "newFilterFavoriteName" ) );
+		final TextInputDialog textInputDialog = new TextInputDialog( );
+		textInputDialog.setTitle( RESOURCE_BUNDLE.getString( "newFilterFavorite" ) );
+		textInputDialog.setHeaderText( RESOURCE_BUNDLE.getString( "newFilterFavoriteName" ) );
 
-			final String iconPath = RESOURCE_BUNDLE.getString( "iconNewFavorite" );
-			final InputStream iconStream = getClass( ).getClassLoader( ).getResourceAsStream( iconPath );
-			final Image icon = new Image( iconStream );
-			final DialogPane dialogPane = textInputDialog.getDialogPane( );
-			final Stage stage = (Stage) dialogPane.getScene( ).getWindow( );
-			stage.getIcons( ).add( icon );
-			dialogPane.getStylesheets( ).add( "/kieker/diagnosis/frontend/base/ui/Dialog.css" );
-			dialogPane.lookupButton( ButtonType.OK ).setId( "favoriteFilterDialogOk" );
-			dialogPane.lookupButton( ButtonType.CANCEL ).setId( "favoriteFilterDialogCancel" );
-			final Optional<String> result = textInputDialog.showAndWait( );
+		final String iconPath = RESOURCE_BUNDLE.getString( "iconNewFavorite" );
+		final InputStream iconStream = getClass( ).getClassLoader( ).getResourceAsStream( iconPath );
+		final Image icon = new Image( iconStream );
+		final DialogPane dialogPane = textInputDialog.getDialogPane( );
+		final Stage stage = (Stage) dialogPane.getScene( ).getWindow( );
+		stage.getIcons( ).add( icon );
+		dialogPane.getStylesheets( ).add( "/kieker/diagnosis/frontend/base/ui/Dialog.css" );
+		dialogPane.lookupButton( ButtonType.OK ).setId( "favoriteFilterDialogOk" );
+		dialogPane.lookupButton( ButtonType.CANCEL ).setId( "favoriteFilterDialogCancel" );
+		final Optional<String> result = textInputDialog.showAndWait( );
 
-			if ( result.isPresent( ) ) {
-				final String text = result.get( );
+		if ( result.isPresent( ) ) {
+			final String text = result.get( );
 
-				// Check whether the text is valid
-				if ( text == null || text.trim( ).isEmpty( ) ) {
-					throw new BusinessException( RESOURCE_BUNDLE.getString( "errorEmptyFilterName" ) );
-				}
+			// Check whether the text is valid
+			if ( text == null || text.trim( ).isEmpty( ) ) {
+				final Alert alert = new Alert( AlertType.WARNING );
+				alert.setContentText( RESOURCE_BUNDLE.getString( "errorEmptyFilterName" ) );
+				alert.showAndWait( );
 
-				// Now we can add the favorite to the menu
-				menuBar.addFavorite( ( ) -> mainTabPane.showTab( tab, filter ), text );
+				return;
 			}
-		} catch ( final BusinessException ex ) {
-			throw new BusinessRuntimeException( ex );
+
+			// Now we can add the favorite to the menu
+			menuBar.addFavorite( ( ) -> mainTabPane.showTab( tab, filter ), text );
 		}
 	}
 
@@ -233,14 +236,13 @@ public final class MainPane extends VBox implements StylesheetMixin {
 
 			try {
 				// Load the monitoring log
-				BusinessRuntimeException exception = null;
+				Exception exception = null;
 				final MonitoringLogService monitoringLogService = ServiceFactory.getService( MonitoringLogService.class );
 				try {
 					monitoringLogService.importMonitoringLog( ivDirectoryOrFile, ivType );
-				} catch ( final BusinessRuntimeException ex ) {
-					// If a business exception occurs, we still want to refresh, but we also want to display the
-					// exception.
-					exception = ex;
+				} catch ( final CorruptStreamException | ImportFailedException ex ) {
+					// We still want to refresh, but we also want to display the exception.
+					exception = new DelegateException( ex );
 				}
 
 				// Now refresh everything

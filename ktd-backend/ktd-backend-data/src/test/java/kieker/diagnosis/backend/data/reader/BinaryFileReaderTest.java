@@ -26,8 +26,8 @@ import java.net.URL;
 
 import org.junit.Test;
 
-import kieker.diagnosis.backend.base.exception.BusinessException;
 import kieker.diagnosis.backend.data.MonitoringLogService;
+import kieker.diagnosis.backend.data.exception.CorruptStreamException;
 
 /**
  * Test class for the {@link BinaryFileReader}.
@@ -37,7 +37,7 @@ import kieker.diagnosis.backend.data.MonitoringLogService;
 public final class BinaryFileReaderTest {
 
 	@Test
-	public void testNormalLogs( ) throws URISyntaxException, IOException, BusinessException {
+	public void testNormalLogs( ) throws URISyntaxException, IOException, CorruptStreamException {
 		final MonitoringLogService monitoringLogService = new MonitoringLogService( );
 		final TemporaryRepository temporaryRepository = new TemporaryRepository( monitoringLogService );
 		final BinaryFileReader binaryFileReader = new BinaryFileReader( temporaryRepository );

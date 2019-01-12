@@ -20,6 +20,10 @@
 		</dependency>
 		<dependency>
 			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-frontend-dialog-alert</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
 			<artifactId>ktd-backend-settings</artifactId>
 		</dependency>
 		<dependency>

@@ -33,9 +33,9 @@ import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
 import com.google.inject.Singleton;
 
-import kieker.diagnosis.backend.base.exception.BusinessException;
-import kieker.diagnosis.backend.base.exception.BusinessRuntimeException;
 import kieker.diagnosis.backend.base.service.Service;
+import kieker.diagnosis.backend.data.exception.CorruptStreamException;
+import kieker.diagnosis.backend.data.exception.ImportFailedException;
 import kieker.diagnosis.backend.data.reader.AsciiFileReader;
 import kieker.diagnosis.backend.data.reader.BinaryFileReader;
 import kieker.diagnosis.backend.data.reader.Reader;
@@ -62,7 +62,7 @@ public class MonitoringLogService implements Service {
 	private int incompleteTraces;
 	private String directory;
 
-	public void importMonitoringLog( final File directoryOrFile, final ImportType type ) {
+	public void importMonitoringLog( final File directoryOrFile, final ImportType type ) throws CorruptStreamException, ImportFailedException {
 		final long tin = System.currentTimeMillis( );
 
 		File directory = null;
@@ -91,23 +91,23 @@ public class MonitoringLogService implements Service {
 
 			if ( !directoryImported ) {
 				// No reader felt responsible for the import directory. We inform the user.
-				throw new BusinessException( RESOURCES.getString( "errorMessageUnknownMonitoringLog" ) );
+				throw new ImportFailedException( RESOURCES.getString( "errorMessageUnknownMonitoringLog" ) );
 			}
 
 			if ( ignoredRecords > 0 && traceRoots.size( ) == 0 ) {
 				// No traces have been reconstructed and records have been ignored. We inform the user.
 				final String msg = String.format( RESOURCES.getString( "errorMessageNoTraceAndRecordsIgnored" ), ignoredRecords );
-				throw new BusinessException( msg );
+				throw new ImportFailedException( msg );
 			}
 
 			setDataAvailable( directoryOrFile, tin );
-		} catch ( final BusinessException ex ) {
-			// A business exception means, that something went wrong, but that the data is partially available
+		} catch ( final CorruptStreamException ex ) {
+			// This means, that something went wrong, but that the data is partially available
 			setDataAvailable( directoryOrFile, tin );
 
-			throw new BusinessRuntimeException( ex );
+			throw ex;
 		} catch ( final Exception ex ) {
-			throw new RuntimeException( RESOURCES.getString( "errorMessageImportFailed" ), ex );
+			throw new ImportFailedException( RESOURCES.getString( "errorMessageImportFailed" ), ex );
 		} finally {
 			// If necessary delete the temporary directory
 			if ( type == ImportType.ZIP_FILE && directory != null ) {

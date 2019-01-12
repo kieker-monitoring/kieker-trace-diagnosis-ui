@@ -81,12 +81,6 @@
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<excludes>
-						<!-- We don't want our (simple) custom exceptions to be tested. -->
-						<exclude>**/*Exception.*</exclude>
-					</excludes>
-				</configuration>
 			</plugin>
 		</plugins>
 

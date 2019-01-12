@@ -53,12 +53,8 @@ import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
-import kieker.diagnosis.backend.base.exception.BusinessException;
-import kieker.diagnosis.backend.base.exception.BusinessRuntimeException;
-import kieker.diagnosis.backend.data.AggregatedMethodCall;
-import kieker.diagnosis.backend.data.ImportType;
-import kieker.diagnosis.backend.data.MethodCall;
-import kieker.diagnosis.backend.data.MonitoringLogService;
+import kieker.diagnosis.backend.data.exception.CorruptStreamException;
+import kieker.diagnosis.backend.data.exception.ImportFailedException;
 
 /**
  * Test class for the {@link MonitoringLogService}.
@@ -87,12 +83,12 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	public void testEmptyDirectory( ) throws BusinessException {
+	public void testEmptyDirectory( ) throws CorruptStreamException, ImportFailedException {
 		// Import the directory
 		final File directory = ivTemporaryFolder.getRoot( );
 
 		// Make sure that an exception occurs
-		ivExpectedException.expect( BusinessRuntimeException.class );
+		ivExpectedException.expect( ImportFailedException.class );
 		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 	}
 
@@ -387,10 +383,9 @@ public class MonitoringLogServiceTest {
 		finishWriting( );
 
 		// Import the directory and make sure that a business exception occurs (because
-		// records
-		// where ignored, but no traces were reconstructed)
+		// records where ignored, but no traces were reconstructed)
 		final File directory = ivTemporaryFolder.getRoot( );
-		ivExpectedException.expect( BusinessRuntimeException.class );
+		ivExpectedException.expect( ImportFailedException.class );
 		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 	}
 
@@ -403,7 +398,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( );
 
 		// The import should not work
-		ivExpectedException.expect( RuntimeException.class );
+		ivExpectedException.expect( ImportFailedException.class );
 
 		// Import the directory
 		final File directory = ivTemporaryFolder.getRoot( );
@@ -439,7 +434,7 @@ public class MonitoringLogServiceTest {
 		assertThat( firstMethod.getException( ), is( "cause" ) );
 		assertThat( firstMethod.getTimestamp( ), is( 1L ) );
 		assertThat( firstMethod.getDuration( ), is( 3000000L ) );
-		assertThat( ( double ) firstMethod.getPercent( ), is( closeTo( 100.0, 0.01 ) ) );
+		assertThat( (double) firstMethod.getPercent( ), is( closeTo( 100.0, 0.01 ) ) );
 		assertThat( firstMethod.getTraceDepth( ), is( 2 ) );
 		assertThat( firstMethod.getTraceId( ), is( 1L ) );
 		assertThat( firstMethod.getTraceSize( ), is( 2 ) );
@@ -451,7 +446,7 @@ public class MonitoringLogServiceTest {
 		assertThat( secondMethod.getException( ), is( nullValue( ) ) );
 		assertThat( secondMethod.getTimestamp( ), is( 2L ) );
 		assertThat( secondMethod.getDuration( ), is( 500000L ) );
-		assertThat( ( double ) secondMethod.getPercent( ), is( closeTo( 16.66, 0.01 ) ) );
+		assertThat( (double) secondMethod.getPercent( ), is( closeTo( 16.66, 0.01 ) ) );
 		assertThat( secondMethod.getTraceDepth( ), is( 1 ) );
 		assertThat( secondMethod.getTraceId( ), is( 1L ) );
 		assertThat( secondMethod.getTraceSize( ), is( 1 ) );
@@ -459,7 +454,7 @@ public class MonitoringLogServiceTest {
 		assertThat( ivService.getTraceRoots( ).get( 0 ), is( firstMethod ) );
 	}
 
-	@SuppressWarnings( "deprecation" )
+	@SuppressWarnings ( "deprecation" )
 	private void writeRecord( final AbstractMonitoringRecord aRecord ) {
 		// Register the record name
 		final int recordKey = ivStringRegistry.get( aRecord.getClass( ).getName( ) );
@@ -484,7 +479,7 @@ public class MonitoringLogServiceTest {
 
 		final Object[] allStrings = ivStringRegistry.getAll( );
 		for ( final Object string : allStrings ) {
-			final int id = ivStringRegistry.get( ( String ) string );
+			final int id = ivStringRegistry.get( (String) string );
 			stringBuilder.append( "$" ).append( id ).append( "=" ).append( string ).append( "\n" );
 		}
 

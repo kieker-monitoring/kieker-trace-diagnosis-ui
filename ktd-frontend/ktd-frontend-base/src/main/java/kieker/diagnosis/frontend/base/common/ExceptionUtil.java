@@ -33,7 +33,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
-import kieker.diagnosis.backend.base.exception.BusinessRuntimeException;
 
 /**
  * A util class to handle exceptions
@@ -49,8 +48,9 @@ public class ExceptionUtil {
 	}
 
 	/**
-	 * This method handles an exception. The exception is logged and an error dialog is shown. If the exception is a {@link BusinessRuntimeException}, the error
-	 * is not logged and the error dialog indicates that the error is a business error.
+	 * This method handles an exception. The exception is logged and an error dialog is shown. If the exception is a
+	 * {@link BusinessRuntimeException}, the error is not logged and the error dialog indicates that the error is a
+	 * business error.
 	 *
 	 * @param aThrowable
 	 *            The exception to handle.
@@ -63,16 +63,15 @@ public class ExceptionUtil {
 	}
 
 	private static void showExceptionDialog( final Throwable aThrowable ) {
-		// Find out whether this is a business exception or not
-		final boolean isBusinessException = aThrowable instanceof BusinessRuntimeException;
-		final Throwable exception = isBusinessException ? aThrowable.getCause( ) : aThrowable;
-		final AlertType alertType = isBusinessException ? AlertType.WARNING : AlertType.ERROR;
+		final boolean isDelegateException = aThrowable instanceof DelegateException;
+		final Throwable exception = isDelegateException ? aThrowable.getCause( ) : aThrowable;
 
-		// Keep in mind that some controllers start a new thread. As this might also lead to exceptions, the whole dialog showing has to be performed in the
+		// Keep in mind that some controllers start a new thread. As this might also lead to exceptions, the whole
+		// dialog showing has to be performed in the
 		// JavaFX application thread.
 		final Runnable runnable = ( ) -> {
 			// Prepare the dialog
-			final Alert alert = new Alert( alertType );
+			final Alert alert = new Alert( AlertType.ERROR );
 			alert.setTitle( cvResourceBundle.getString( "errorTitle" ) );
 			alert.setHeaderText( cvResourceBundle.getString( "errorMessage" ) );
 			alert.setContentText( exception.getMessage( ) );
@@ -80,32 +79,30 @@ public class ExceptionUtil {
 			// Make sure that the alert dialog resizes to the required height (usually just necessary for Linux systems)
 			alert.getDialogPane( ).setMinHeight( Region.USE_PREF_SIZE );
 
-			if ( !isBusinessException ) {
-				// Convert the throwable into a string
-				final StringWriter sw = new StringWriter( );
-				final PrintWriter pw = new PrintWriter( sw );
-				exception.printStackTrace( pw );
-				final String exceptionText = sw.toString( );
+			// Convert the throwable into a string
+			final StringWriter sw = new StringWriter( );
+			final PrintWriter pw = new PrintWriter( sw );
+			exception.printStackTrace( pw );
+			final String exceptionText = sw.toString( );
 
-				// Prepare the remaining components
-				final Label label = new Label( cvResourceBundle.getString( "errorDescription" ) );
+			// Prepare the remaining components
+			final Label label = new Label( cvResourceBundle.getString( "errorDescription" ) );
 
-				final TextArea textArea = new TextArea( exceptionText );
-				textArea.setEditable( false );
-				textArea.setWrapText( true );
+			final TextArea textArea = new TextArea( exceptionText );
+			textArea.setEditable( false );
+			textArea.setWrapText( true );
 
-				textArea.setMaxWidth( Double.MAX_VALUE );
-				textArea.setMaxHeight( Double.MAX_VALUE );
-				GridPane.setVgrow( textArea, Priority.ALWAYS );
-				GridPane.setHgrow( textArea, Priority.ALWAYS );
+			textArea.setMaxWidth( Double.MAX_VALUE );
+			textArea.setMaxHeight( Double.MAX_VALUE );
+			GridPane.setVgrow( textArea, Priority.ALWAYS );
+			GridPane.setHgrow( textArea, Priority.ALWAYS );
 
-				final GridPane expContent = new GridPane( );
-				expContent.setMaxWidth( Double.MAX_VALUE );
-				expContent.add( label, 0, 0 );
-				expContent.add( textArea, 0, 1 );
+			final GridPane expContent = new GridPane( );
+			expContent.setMaxWidth( Double.MAX_VALUE );
+			expContent.add( label, 0, 0 );
+			expContent.add( textArea, 0, 1 );
 
-				alert.getDialogPane( ).setExpandableContent( expContent );
-			}
+			alert.getDialogPane( ).setExpandableContent( expContent );
 
 			// Add the logo
 			final String iconPath = cvResourceBundle.getString( "errorIcon" );
@@ -125,10 +122,11 @@ public class ExceptionUtil {
 		}
 	}
 
-	private static void logException( final Throwable aThrowable, final String aLoggerName ) {
-		if ( !( aThrowable instanceof BusinessRuntimeException ) ) {
-			LogManager.getLogger( aLoggerName ).error( cvResourceBundle.getString( "errorMessage" ), aThrowable );
-		}
+	private static void logException( final Throwable throwable, final String loggerName ) {
+		final boolean isDelegateException = throwable instanceof DelegateException;
+		final Throwable exception = isDelegateException ? throwable.getCause( ) : throwable;
+
+		LogManager.getLogger( loggerName ).error( cvResourceBundle.getString( "errorMessage" ), exception );
 	}
 
 }

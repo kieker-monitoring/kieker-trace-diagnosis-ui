@@ -17,8 +17,6 @@
 package kieker.diagnosis.backend.export;
 
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
@@ -31,8 +29,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
-
-import kieker.diagnosis.backend.base.exception.BusinessException;
 
 /**
  * This is a unit test for {@link ExportService}.
@@ -48,7 +44,7 @@ public final class ExportServiceTest {
 	public ExpectedException expectedException = ExpectedException.none( );
 
 	@Test
-	public void testSimpleExport( ) throws IOException, BusinessException {
+	public void testSimpleExport( ) throws IOException {
 		final File csvFile = temporaryFolder.newFile( );
 		final CSVData csvData = new CSVData( );
 		csvData.addHeader( "Header 1" );
@@ -64,7 +60,7 @@ public final class ExportServiceTest {
 	}
 
 	@Test
-	public void testExportWithoutData( ) throws IOException, BusinessException {
+	public void testExportWithoutData( ) throws IOException {
 		final File csvFile = temporaryFolder.newFile( );
 		final CSVData csvData = new CSVData( );
 		csvData.addHeader( "Header 1" );
@@ -78,11 +74,10 @@ public final class ExportServiceTest {
 	}
 
 	@Test
-	public void testExportOnDirectory( ) throws IOException, BusinessException {
+	public void testExportOnDirectory( ) throws IOException {
 		final ExportService exportService = new ExportService( );
 
-		expectedException.expect( BusinessException.class );
-		expectedException.expectCause( is( instanceOf( IOException.class ) ) );
+		expectedException.expect( IOException.class );
 		exportService.exportToCSV( temporaryFolder.getRoot( ), new CSVData( ) );
 	}
 
