@@ -103,41 +103,41 @@ public class FilterService implements Service {
 	 * This method conjuncts a given list of predicates. That means they are AND-linked. If the list is empty, an always
 	 * true predicate is returned.
 	 *
-	 * @param aPredicates
+	 * @param predicates
 	 *            The (possible empty) list of predicates.
 	 *
 	 * @return The conjuncted predicates.
 	 */
-	public <T> Predicate<T> conjunct( final List<Predicate<T>> aPredicates ) {
-		return aPredicates.stream( ).reduce( t -> true, Predicate::and );
+	public <T> Predicate<T> conjunct( final List<Predicate<T>> predicates ) {
+		return predicates.stream( ).reduce( t -> true, Predicate::and );
 	}
 
-	public <T> Predicate<T> createAfterTimePredicate( final Function<T, Long> aTimestampFunction, final LocalDate aLowerDate, final LocalTime aLowerTime ) {
-		if ( aLowerDate == null && aLowerTime == null ) {
+	public <T> Predicate<T> createAfterTimePredicate( final Function<T, Long> timestampFunction, final LocalDate lowerDate, final LocalTime lowerTime ) {
+		if ( lowerDate == null && lowerTime == null ) {
 			return t -> true;
 		}
 
 		return t -> {
 			// Get the date and time from the timestamp
-			final LocalDateTime localDateTime = getDateTime( aTimestampFunction, t );
+			final LocalDateTime localDateTime = getDateTime( timestampFunction, t );
 
 			// Compare the date
-			if ( aLowerDate != null ) {
+			if ( lowerDate != null ) {
 				final LocalDate localDate = localDateTime.toLocalDate( );
 
-				if ( localDate.isAfter( aLowerDate ) ) {
+				if ( localDate.isAfter( lowerDate ) ) {
 					return true;
 				}
-				if ( localDate.isBefore( aLowerDate ) ) {
+				if ( localDate.isBefore( lowerDate ) ) {
 					return false;
 				}
 			}
 
 			// Compare the time
-			if ( aLowerTime != null ) {
+			if ( lowerTime != null ) {
 				final LocalTime localTime = localDateTime.toLocalTime( );
 
-				if ( localTime.isBefore( aLowerTime ) ) {
+				if ( localTime.isBefore( lowerTime ) ) {
 					return false;
 				}
 
@@ -149,31 +149,31 @@ public class FilterService implements Service {
 		};
 	}
 
-	public <T> Predicate<T> createBeforeTimePredicate( final Function<T, Long> aTimestampFunction, final LocalDate aUpperDate, final LocalTime aUpperTime ) {
-		if ( aUpperDate == null && aUpperTime == null ) {
+	public <T> Predicate<T> createBeforeTimePredicate( final Function<T, Long> timestampFunction, final LocalDate upperDate, final LocalTime upperTime ) {
+		if ( upperDate == null && upperTime == null ) {
 			return t -> true;
 		} else {
 			return t -> {
 				// Get the date and time from the timestamp
-				final LocalDateTime localDateTime = getDateTime( aTimestampFunction, t );
+				final LocalDateTime localDateTime = getDateTime( timestampFunction, t );
 
 				// Compare the date
-				if ( aUpperDate != null ) {
+				if ( upperDate != null ) {
 					final LocalDate localDate = localDateTime.toLocalDate( );
 
-					if ( localDate.isBefore( aUpperDate ) ) {
+					if ( localDate.isBefore( upperDate ) ) {
 						return true;
 					}
-					if ( localDate.isAfter( aUpperDate ) ) {
+					if ( localDate.isAfter( upperDate ) ) {
 						return false;
 					}
 				}
 
 				// Compare the time
-				if ( aUpperTime != null ) {
+				if ( upperTime != null ) {
 					final LocalTime localTime = localDateTime.toLocalTime( );
 
-					if ( localTime.isAfter( aUpperTime ) ) {
+					if ( localTime.isAfter( upperTime ) ) {
 						return false;
 					}
 
@@ -186,8 +186,8 @@ public class FilterService implements Service {
 		}
 	}
 
-	private <T> LocalDateTime getDateTime( final Function<T, Long> aTimestampFunction, final T t ) {
-		final long timestamp = aTimestampFunction.apply( t );
+	private <T> LocalDateTime getDateTime( final Function<T, Long> timestampFunction, final T value ) {
+		final long timestamp = timestampFunction.apply( value );
 		final Instant instant = Instant.ofEpochMilli( timestamp );
 		return LocalDateTime.ofInstant( instant, ZoneId.systemDefault( ) ).truncatedTo( ChronoUnit.SECONDS );
 	}
