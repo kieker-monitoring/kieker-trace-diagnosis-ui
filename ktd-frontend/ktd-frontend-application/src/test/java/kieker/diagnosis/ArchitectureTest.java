@@ -68,6 +68,19 @@ public final class ArchitectureTest {
 	}
 
 	@Test
+	public void servicesShouldNotBeFinal( ) {
+		// Final classes cannot be proxied
+		final JavaClasses importedClasses = new ClassFileImporter( ).importPackages( "kieker.diagnosis" );
+
+		final ArchRule rule = classes( ).that( )
+				.implement( Service.class )
+				.should( )
+				.notHaveModifier( JavaModifier.FINAL );
+
+		rule.check( importedClasses );
+	}
+
+	@Test
 	public void applicationPropertiesShouldBeSingletons( ) {
 		final JavaClasses importedClasses = new ClassFileImporter( ).importPackages( "kieker.diagnosis" );
 
