@@ -57,7 +57,7 @@ public final class FilterServiceTest {
 
 	@Test
 	public void testCreateLongPredicateWithNull( ) {
-		final Predicate<Long> predicate = filterService.createLongPredicate( e -> e, null );
+		final Predicate<Long> predicate = filterService.createLongPredicate( null, null );
 		assertThat( predicate.test( null ), is( true ) );
 	}
 
@@ -81,7 +81,7 @@ public final class FilterServiceTest {
 
 	@Test
 	public void testCreateStringPredicateWithNull( ) {
-		final Predicate<String> predicate = filterService.createStringPredicate( e -> e, null, false );
+		final Predicate<String> predicate = filterService.createStringPredicate(null, null, false );
 		assertThat( predicate.test( null ), is( true ) );
 	}
 

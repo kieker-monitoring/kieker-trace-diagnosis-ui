@@ -28,7 +28,8 @@ import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.cache.UseCache;
 
 /**
- * The {@link PatternService} is responsible for validating and compiling regular expressions. Some of the methods are cached.
+ * The {@link PatternService} is responsible for validating and compiling regular expressions. Some of the methods are
+ * cached.
  *
  * @author Nils Christian Ehmke
  */
@@ -38,19 +39,21 @@ public class PatternService implements Service {
 	private static final Logger LOGGER = LogManager.getLogger( PatternService.class );
 
 	/**
-	 * Checks whether the given pattern is valid. In other words: Is the pattern compilable by {@link #compilePattern(String)}. This method is cached.
+	 * Checks whether the given pattern is valid. In other words: Is the pattern compilable by
+	 * {@link #compilePattern(String)}? This method is cached.
 	 *
-	 * @param aPattern The pattern to check.
+	 * @param pattern
+	 *            The pattern to check.
 	 *
 	 * @return true if and only if the pattern is valid.
 	 */
-	@UseCache( cacheName = "validPattern" )
-	public boolean isValidPattern( final String aPattern ) {
+	@UseCache ( cacheName = "validPattern" )
+	public boolean isValidPattern( final String pattern ) {
 		try {
-			Pattern.compile( aPattern );
+			Pattern.compile( pattern );
 			return true;
 		} catch ( final PatternSyntaxException | NullPointerException ex ) {
-			LOGGER.debug( ( ) -> String.format( "Pattern \"%s\" is invalid", aPattern ), ex );
+			LOGGER.debug( ( ) -> String.format( "Pattern \"%s\" is invalid", pattern ), ex );
 
 			return false;
 		}
@@ -59,13 +62,17 @@ public class PatternService implements Service {
 	/**
 	 * Compiles the given pattern. This method is cached.
 	 *
-	 * @param aPattern The pattern to compile.
+	 * @param pattern
+	 *            The pattern to compile.
 	 *
 	 * @return The compiled pattern.
+	 *
+	 * @throws PatternSyntaxException
+	 *             If the pattern is invalid.
 	 */
-	@UseCache( cacheName = "pattern" )
-	public Pattern compilePattern( final String aPattern ) {
-		return Pattern.compile( aPattern );
+	@UseCache ( cacheName = "pattern" )
+	public Pattern compilePattern( final String pattern ) {
+		return Pattern.compile( pattern );
 	}
 
 }

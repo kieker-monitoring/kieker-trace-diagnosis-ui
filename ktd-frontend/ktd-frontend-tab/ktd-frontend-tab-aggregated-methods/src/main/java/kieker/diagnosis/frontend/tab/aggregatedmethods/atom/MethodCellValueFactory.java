@@ -27,18 +27,22 @@ import kieker.diagnosis.backend.settings.MethodAppearance;
 import kieker.diagnosis.backend.settings.properties.MethodAppearanceProperty;
 
 /**
- * This is a cell factory for a table which shows the method of a method call in the configured manner.
+ * This is a cell factory for a table which shows the method of an {@link AggregatedMethodCall} in the configured
+ * manner.
  *
  * @author Nils Christian Ehmke
  */
-public class MethodCellValueFactory implements Callback<CellDataFeatures<AggregatedMethodCall, String>, ObservableValue<String>> {
+public final class MethodCellValueFactory implements Callback<CellDataFeatures<AggregatedMethodCall, String>, ObservableValue<String>> {
 
-	private final PropertiesService ivPropertiesService = ServiceFactory.getService( PropertiesService.class );
+	private final PropertiesService propertiesService = ServiceFactory.getService( PropertiesService.class );
 
 	@Override
-	public ObservableValue<String> call( final CellDataFeatures<AggregatedMethodCall, String> aParam ) {
-		final MethodAppearance methodAppearance = ivPropertiesService.loadApplicationProperty( MethodAppearanceProperty.class );
-		return new ReadOnlyObjectWrapper<>( methodAppearance.convert( aParam.getValue( ).getMethod( ) ) );
+	public ObservableValue<String> call( final CellDataFeatures<AggregatedMethodCall, String> cellDataFeatures ) {
+		final MethodAppearance methodAppearance = propertiesService.loadApplicationProperty( MethodAppearanceProperty.class );
+		final String method = cellDataFeatures.getValue( ).getMethod( );
+		final String convertedMethodString = methodAppearance.convert( method );
+
+		return new ReadOnlyObjectWrapper<>( convertedMethodString );
 	}
 
 }

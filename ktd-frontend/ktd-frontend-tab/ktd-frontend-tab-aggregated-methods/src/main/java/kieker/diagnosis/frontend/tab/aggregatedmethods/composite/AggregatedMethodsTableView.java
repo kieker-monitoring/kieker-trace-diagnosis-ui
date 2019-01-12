@@ -63,7 +63,7 @@ public final class AggregatedMethodsTableView extends TableView<AggregatedMethod
 
 	public AggregatedMethodsTableView( ) {
 		setTableMenuButtonVisible( true );
-		setRowFactory( aParam -> new StyledRow( ) );
+		setRowFactory( aParam -> new StyledRow( "failed" ) );
 
 		final Label placeholder = new Label( );
 		placeholder.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
@@ -106,8 +106,7 @@ public final class AggregatedMethodsTableView extends TableView<AggregatedMethod
 		}
 
 		{
-			final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( );
-			cellValueFactory.setGetter( AggregatedMethodCall::getMinDuration );
+			final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getMinDuration );
 
 			minDuration = new TableColumn<>( );
 			minDuration.setCellValueFactory( cellValueFactory );
@@ -118,8 +117,7 @@ public final class AggregatedMethodsTableView extends TableView<AggregatedMethod
 		}
 
 		{
-			final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( );
-			cellValueFactory.setGetter( AggregatedMethodCall::getAvgDuration );
+			final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getAvgDuration );
 
 			avgDuration = new TableColumn<>( );
 			avgDuration.setCellValueFactory( cellValueFactory );
@@ -130,8 +128,7 @@ public final class AggregatedMethodsTableView extends TableView<AggregatedMethod
 		}
 
 		{
-			final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( );
-			cellValueFactory.setGetter( AggregatedMethodCall::getMedianDuration );
+			final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getMedianDuration );
 
 			medianDuration = new TableColumn<>( );
 			medianDuration.setCellValueFactory( cellValueFactory );
@@ -142,8 +139,7 @@ public final class AggregatedMethodsTableView extends TableView<AggregatedMethod
 		}
 
 		{
-			final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( );
-			cellValueFactory.setGetter( AggregatedMethodCall::getMaxDuration );
+			final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getMaxDuration );
 
 			maxDuration = new TableColumn<>( );
 			maxDuration.setCellValueFactory( cellValueFactory );
@@ -154,8 +150,7 @@ public final class AggregatedMethodsTableView extends TableView<AggregatedMethod
 		}
 
 		{
-			final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( );
-			cellValueFactory.setGetter( AggregatedMethodCall::getTotalDuration );
+			final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getTotalDuration );
 
 			totalDuration = new TableColumn<>( );
 			totalDuration.setCellValueFactory( cellValueFactory );

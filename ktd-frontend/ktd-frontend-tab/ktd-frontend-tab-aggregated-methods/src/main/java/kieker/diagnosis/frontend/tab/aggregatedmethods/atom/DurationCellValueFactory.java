@@ -29,24 +29,34 @@ import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.settings.properties.TimeUnitProperty;
 
 /**
- * This is a cell factory for a table which shows the duration of a method call in the configured manner.
+ * This is a cell factory for a table which shows the duration of an {@link AggregatedMethodCall} in the configured
+ * manner.
  *
  * @author Nils Christian Ehmke
  */
-public class DurationCellValueFactory implements Callback<CellDataFeatures<AggregatedMethodCall, String>, ObservableValue<String>> {
+public final class DurationCellValueFactory implements Callback<CellDataFeatures<AggregatedMethodCall, String>, ObservableValue<String>> {
 
-	private final PropertiesService ivPropertiesService = ServiceFactory.getService( PropertiesService.class );
+	private final PropertiesService propertiesService = ServiceFactory.getService( PropertiesService.class );
+	private final Function<AggregatedMethodCall, Long> getter;
 
-	private Function<AggregatedMethodCall, Long> ivGetter;
-
-	public void setGetter( final Function<AggregatedMethodCall, Long> aGetter ) {
-		ivGetter = aGetter;
+	/**
+	 * Creates a new instance of this class.
+	 *
+	 * @param getter
+	 *            The getter which is used to retrieve the corresponding duration value from the
+	 *            {@link AggregatedMethodCall}.
+	 */
+	public DurationCellValueFactory( final Function<AggregatedMethodCall, Long> getter ) {
+		this.getter = getter;
 	}
 
 	@Override
-	public ObservableValue<String> call( final CellDataFeatures<AggregatedMethodCall, String> aParam ) {
-		final TimeUnit timeUnit = ivPropertiesService.loadApplicationProperty( TimeUnitProperty.class );
-		return new ReadOnlyStringWrapper( Long.toString( timeUnit.convert( ivGetter.apply( aParam.getValue( ) ), TimeUnit.NANOSECONDS ) ).intern( ) );
+	public ObservableValue<String> call( final CellDataFeatures<AggregatedMethodCall, String> cellDataFeatures ) {
+		final TimeUnit timeUnit = propertiesService.loadApplicationProperty( TimeUnitProperty.class );
+		final Long duration = getter.apply( cellDataFeatures.getValue( ) );
+		final String convertedDurationString = Long.toString( timeUnit.convert( duration, TimeUnit.NANOSECONDS ) ).intern( );
+
+		return new ReadOnlyStringWrapper( convertedDurationString );
 	}
 
 }

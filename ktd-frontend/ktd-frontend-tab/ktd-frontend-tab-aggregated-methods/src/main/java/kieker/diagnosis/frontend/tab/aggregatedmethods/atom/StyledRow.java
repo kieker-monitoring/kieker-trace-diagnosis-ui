@@ -20,20 +20,33 @@ import javafx.scene.control.TableRow;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 
 /**
- * This is a row for a table which is aware of a method call being failed. If the method call has an exception, it is styled accordingly.
+ * This is a row for a table which is aware of an {@link AggregatedMethodCall} being failed. If the method call has an
+ * exception, it is styled accordingly.
  *
  * @author Nils Christian Ehmke
  */
 public final class StyledRow extends TableRow<AggregatedMethodCall> {
 
+	private final String styleClass;
+
+	/**
+	 * Creates a new instance of this class.
+	 *
+	 * @param styleClass
+	 *            The style class which is added if the method call has an exception.
+	 */
+	public StyledRow( final String styleClass ) {
+		this.styleClass = styleClass;
+	}
+
 	@Override
-	protected void updateItem( final AggregatedMethodCall aItem, final boolean aEmpty ) {
-		super.updateItem( aItem, aEmpty );
+	protected void updateItem( final AggregatedMethodCall methodCall, final boolean empty ) {
+		super.updateItem( methodCall, empty );
 
-		getStyleClass( ).remove( "failed" );
+		getStyleClass( ).remove( styleClass );
 
-		if ( aItem != null && aItem.getException( ) != null ) {
-			getStyleClass( ).add( "failed" );
+		if ( methodCall != null && methodCall.getException( ) != null ) {
+			getStyleClass( ).add( styleClass );
 		}
 	}
 
