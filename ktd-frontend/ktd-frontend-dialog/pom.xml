@@ -20,6 +20,7 @@
 		<module>ktd-frontend-dialog-monitoring</module>
 		<module>ktd-frontend-dialog-settings</module>
 		<module>ktd-frontend-dialog-progress</module>
+		<module>ktd-frontend-dialog-alert</module>
 	</modules>
 	
 </project>

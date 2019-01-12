@@ -11,7 +11,7 @@
 		<relativePath>../../../ktd-parent</relativePath>
 	</parent>
 
-	<artifactId>ktd-frontend-tab-methods</artifactId>
+	<artifactId>ktd-frontend-dialog-alert</artifactId>
 
 	<dependencies>
 		<dependency>
@@ -19,45 +19,8 @@
 			<artifactId>ktd-frontend-base</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.kieker-monitoring</groupId>
-			<artifactId>ktd-frontend-dialog-alert</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.kieker-monitoring</groupId>
-			<artifactId>ktd-backend-data</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.kieker-monitoring</groupId>
-			<artifactId>ktd-backend-pattern</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.kieker-monitoring</groupId>
-			<artifactId>ktd-backend-settings</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.kieker-monitoring</groupId>
-			<artifactId>ktd-backend-export</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.kieker-monitoring</groupId>
-			<artifactId>ktd-backend-search</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jfxtras</groupId>
-			<artifactId>jfxtras-controls</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jfxtras</groupId>
-			<artifactId>jfxtras-common</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

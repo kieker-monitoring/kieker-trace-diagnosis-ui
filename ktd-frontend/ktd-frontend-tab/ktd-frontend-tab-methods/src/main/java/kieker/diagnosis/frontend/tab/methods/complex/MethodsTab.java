@@ -7,11 +7,10 @@ import java.util.function.Consumer;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import kieker.diagnosis.backend.base.exception.BusinessException;
-import kieker.diagnosis.backend.base.exception.BusinessRuntimeException;
 import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.data.MethodCall;
@@ -20,13 +19,13 @@ import kieker.diagnosis.backend.pattern.PatternService;
 import kieker.diagnosis.backend.search.methods.MethodsFilter;
 import kieker.diagnosis.backend.search.methods.MethodsService;
 import kieker.diagnosis.backend.settings.SettingsService;
-import kieker.diagnosis.frontend.base.mixin.ErrorHandlerMixin;
+import kieker.diagnosis.frontend.dialog.alert.Alert;
 import kieker.diagnosis.frontend.tab.methods.composite.MethodDetailsPane;
 import kieker.diagnosis.frontend.tab.methods.composite.MethodFilterPane;
 import kieker.diagnosis.frontend.tab.methods.composite.MethodStatusBar;
 import kieker.diagnosis.frontend.tab.methods.composite.MethodsTableView;
 
-public final class MethodsTab extends Tab implements ErrorHandlerMixin {
+public final class MethodsTab extends Tab {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MethodsTab.class.getName( ) );
 
@@ -63,8 +62,8 @@ public final class MethodsTab extends Tab implements ErrorHandlerMixin {
 	}
 
 	private void configureFilterPane( ) {
-		filterPane.setOnSearch( e -> executeAction( this::performSearch ) );
-		filterPane.setOnSaveAsFavorite( e -> executeAction( this::performSaveAsFavorite ) );
+		filterPane.setOnSearch( e -> performSearch( ) );
+		filterPane.setOnSaveAsFavorite( e -> performSaveAsFavorite( ) );
 	}
 
 	private void configureMethodsTableView( ) {
@@ -75,11 +74,11 @@ public final class MethodsTab extends Tab implements ErrorHandlerMixin {
 	}
 
 	private void configureDetailsPane( ) {
-		detailsPane.setOnJumpToTrace( e -> executeAction( this::performJumpToTrace ) );
+		detailsPane.setOnJumpToTrace( e -> performJumpToTrace( ) );
 	}
 
 	private void configureStatusBar( ) {
-		statusBar.setOnExportToCsv( e -> executeAction( this::performExportToCSV ) );
+		statusBar.setOnExportToCsv( e -> performExportToCSV( ) );
 
 		VBox.setMargin( statusBar, new Insets( 5 ) );
 	}
@@ -92,47 +91,61 @@ public final class MethodsTab extends Tab implements ErrorHandlerMixin {
 
 	private void performSearch( ) {
 		final MethodsFilter filter = filterPane.getValue( );
-		checkFilter( filter );
+		if ( checkFilter( filter ) ) {
+			final MethodsService methodsService = ServiceFactory.getService( MethodsService.class );
+			final List<MethodCall> methods = methodsService.searchMethods( filter );
+			final int totalMethods = methodsService.countMethods( );
 
-		final MethodsService methodsService = ServiceFactory.getService( MethodsService.class );
-		final List<MethodCall> methods = methodsService.searchMethods( filter );
-		final int totalMethods = methodsService.countMethods( );
+			methodsTableView.setItems( FXCollections.observableList( methods ) );
+			methodsTableView.refresh( );
 
-		methodsTableView.setItems( FXCollections.observableList( methods ) );
-		methodsTableView.refresh( );
-
-		statusBar.setValue( methods.size( ), totalMethods );
+			statusBar.setValue( methods.size( ), totalMethods );
+		}
 	}
 
 	private void performSaveAsFavorite( ) {
 		if ( onSaveAsFavorite != null ) {
 			final MethodsFilter filter = filterPane.getValue( );
-			checkFilter( filter );
-			onSaveAsFavorite.accept( filter );
+			if ( checkFilter( filter ) ) {
+				onSaveAsFavorite.accept( filter );
+			}
 		}
 	}
 
-	private void checkFilter( final MethodsFilter filter ) {
+	private boolean checkFilter( final MethodsFilter filter ) {
 		// If we are using regular expressions, we should check them
 		if ( filter.isUseRegExpr( ) ) {
 			final PatternService patternService = ServiceFactory.getService( PatternService.class );
 
+			final StringBuilder strBuilder = new StringBuilder( );
+
 			if ( !( patternService.isValidPattern( filter.getHost( ) ) || filter.getHost( ) == null ) ) {
-				throw new BusinessRuntimeException( new BusinessException( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getHost( ) ) ) );
+				strBuilder.append( "\n* " ).append( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getHost( ) ) );
 			}
 
 			if ( !( patternService.isValidPattern( filter.getClazz( ) ) || filter.getClazz( ) == null ) ) {
-				throw new BusinessRuntimeException( new BusinessException( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getClazz( ) ) ) );
+				strBuilder.append( "\n* " ).append( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getClazz( ) ) );
 			}
 
 			if ( !( patternService.isValidPattern( filter.getMethod( ) ) || filter.getMethod( ) == null ) ) {
-				throw new BusinessRuntimeException( new BusinessException( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getMethod( ) ) ) );
+				strBuilder.append( "\n* " ).append( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getMethod( ) ) );
 			}
 
 			if ( !( patternService.isValidPattern( filter.getException( ) ) || filter.getException( ) == null ) ) {
-				throw new BusinessRuntimeException( new BusinessException( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getException( ) ) ) );
+				strBuilder.append( "\n* " ).append( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getException( ) ) );
+			}
+
+			if ( strBuilder.length( ) > 0 ) {
+				final Alert alert = new Alert( AlertType.WARNING );
+				final String msg = RESOURCE_BUNDLE.getString( "errorMessageInvalidInput" ) + strBuilder.toString( );
+				alert.setContentText( msg );
+				alert.showAndWait( );
+
+				return false;
 			}
 		}
+
+		return true;
 	}
 
 	public void setOnSaveAsFavorite( final Consumer<MethodsFilter> consumer ) {

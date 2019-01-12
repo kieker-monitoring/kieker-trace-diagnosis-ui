@@ -29,7 +29,6 @@ import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.settings.Settings;
 import kieker.diagnosis.backend.settings.SettingsService;
 import kieker.diagnosis.frontend.base.common.ExceptionUtil;
-import kieker.diagnosis.frontend.base.mixin.ErrorHandlerMixin;
 import kieker.diagnosis.frontend.base.mixin.StylesheetMixin;
 import kieker.diagnosis.frontend.dialog.progress.ProgressDialog;
 import kieker.diagnosis.frontend.dialog.settings.SettingsDialog;
@@ -37,7 +36,7 @@ import kieker.diagnosis.frontend.main.composite.MainMenuBar;
 import kieker.diagnosis.frontend.main.composite.MainTabPane;
 import kieker.diagnosis.frontend.main.properties.LastImportPathProperty;
 
-public final class MainPane extends VBox implements ErrorHandlerMixin, StylesheetMixin {
+public final class MainPane extends VBox implements StylesheetMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MainPane.class.getName( ) );
 
@@ -53,11 +52,11 @@ public final class MainPane extends VBox implements ErrorHandlerMixin, Styleshee
 	}
 
 	private void configureMenuBar( ) {
-		menuBar.setOnSettings( ( ) -> executeAction( this::performSettings ) );
-		menuBar.setOnImportLog( ( ) -> executeAction( this::performImportLog ) );
-		menuBar.setOnImportLogFromZip( ( ) -> executeAction( this::performImportLogFromZip ) );
+		menuBar.setOnSettings( ( ) -> performSettings( ) );
+		menuBar.setOnImportLog( ( ) -> performImportLog( ) );
+		menuBar.setOnImportLogFromZip( ( ) -> performImportLogFromZip( ) );
 
-		mainTabPane.setOnSaveAsFavorite( ( tab, filter ) -> executeAction( ( ) -> performSaveAsFavorite( tab, filter ) ) );
+		mainTabPane.setOnSaveAsFavorite( ( tab, filter ) -> performSaveAsFavorite( tab, filter ) );
 	}
 
 	private void configureMainPane( ) {

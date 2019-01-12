@@ -23,6 +23,7 @@ import com.google.inject.Guice;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import kieker.diagnosis.frontend.base.common.ExceptionUtil;
 import kieker.diagnosis.frontend.base.mixin.ImageMixin;
 import kieker.diagnosis.frontend.main.complex.MainPane;
 
@@ -41,8 +42,13 @@ public final class KiekerTraceDiagnosis extends Application implements ImageMixi
 
 	@Override
 	public void start( final Stage primaryStage ) throws Exception {
+		initializeExceptionHandling( );
 		startCdiContainer( );
 		prepareAndShowStage( primaryStage );
+	}
+
+	private void initializeExceptionHandling( ) {
+		Thread.setDefaultUncaughtExceptionHandler( ( thread, throwable ) -> ExceptionUtil.handleException( throwable, KiekerTraceDiagnosis.class.getCanonicalName( ) ) );
 	}
 
 	private void startCdiContainer( ) {

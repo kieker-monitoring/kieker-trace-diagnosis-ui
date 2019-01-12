@@ -6,24 +6,23 @@ import java.util.function.Consumer;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import kieker.diagnosis.backend.base.exception.BusinessException;
-import kieker.diagnosis.backend.base.exception.BusinessRuntimeException;
 import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.pattern.PatternService;
 import kieker.diagnosis.backend.search.traces.TracesFilter;
 import kieker.diagnosis.backend.search.traces.TracesService;
 import kieker.diagnosis.backend.settings.SettingsService;
-import kieker.diagnosis.frontend.base.mixin.ErrorHandlerMixin;
+import kieker.diagnosis.frontend.dialog.alert.Alert;
 import kieker.diagnosis.frontend.tab.traces.composite.TraceDetailsPane;
 import kieker.diagnosis.frontend.tab.traces.composite.TraceFilterPane;
 import kieker.diagnosis.frontend.tab.traces.composite.TraceStatusBar;
 import kieker.diagnosis.frontend.tab.traces.composite.TracesTreeTableView;
 
-public final class TracesTab extends Tab implements ErrorHandlerMixin {
+public final class TracesTab extends Tab {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( TracesTab.class.getName( ) );
 
@@ -56,8 +55,8 @@ public final class TracesTab extends Tab implements ErrorHandlerMixin {
 	}
 
 	private void configureFilterPane( ) {
-		filterPane.setOnSearch( e -> executeAction( this::performSearch ) );
-		filterPane.setOnSaveAsFavorite( e -> executeAction( this::performSaveAsFavorite ) );
+		filterPane.setOnSearch( e -> performSearch( ) );
+		filterPane.setOnSaveAsFavorite( e -> performSaveAsFavorite( ) );
 	}
 
 	private void configureTreeTableView( ) {
@@ -90,23 +89,25 @@ public final class TracesTab extends Tab implements ErrorHandlerMixin {
 	private void performSearch( ) {
 		// Get the filter input from the user
 		final TracesFilter filter = filterPane.getValue( );
-		checkFilter( filter );
+		if ( checkFilter( filter ) ) {
 
-		// Find the trace roots to display
-		final TracesService tracesService = ServiceFactory.getService( TracesService.class );
-		final List<MethodCall> traceRoots = tracesService.searchTraces( filter );
-		final int totalTraces = tracesService.countTraces( );
+			// Find the trace roots to display
+			final TracesService tracesService = ServiceFactory.getService( TracesService.class );
+			final List<MethodCall> traceRoots = tracesService.searchTraces( filter );
+			final int totalTraces = tracesService.countTraces( );
 
-		// Update the view
-		treeTableView.setItems( traceRoots );
-		statusBar.setValue( traceRoots.size( ), totalTraces );
+			// Update the view
+			treeTableView.setItems( traceRoots );
+			statusBar.setValue( traceRoots.size( ), totalTraces );
+		}
 	}
 
 	private void performSaveAsFavorite( ) {
 		if ( onSaveAsFavorite != null ) {
 			final TracesFilter filter = filterPane.getValue( );
-			checkFilter( filter );
-			onSaveAsFavorite.accept( filter );
+			if ( checkFilter( filter ) ) {
+				onSaveAsFavorite.accept( filter );
+			}
 		}
 	}
 
@@ -134,27 +135,40 @@ public final class TracesTab extends Tab implements ErrorHandlerMixin {
 		treeTableView.setDurationSuffix( durationSuffixForRefresh );
 	}
 
-	private void checkFilter( final TracesFilter filter ) {
+	private boolean checkFilter( final TracesFilter filter ) {
 		// If we are using regular expressions, we should check them
 		if ( filter.isUseRegExpr( ) ) {
 			final PatternService patternService = ServiceFactory.getService( PatternService.class );
 
+			final StringBuilder strBuilder = new StringBuilder( );
+
 			if ( !( patternService.isValidPattern( filter.getHost( ) ) || filter.getHost( ) == null ) ) {
-				throw new BusinessRuntimeException( new BusinessException( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getHost( ) ) ) );
+				strBuilder.append( "\n* " ).append( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getHost( ) ) );
 			}
 
 			if ( !( patternService.isValidPattern( filter.getClazz( ) ) || filter.getClazz( ) == null ) ) {
-				throw new BusinessRuntimeException( new BusinessException( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getClazz( ) ) ) );
+				strBuilder.append( "\n* " ).append( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getClazz( ) ) );
 			}
 
 			if ( !( patternService.isValidPattern( filter.getMethod( ) ) || filter.getMethod( ) == null ) ) {
-				throw new BusinessRuntimeException( new BusinessException( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getMethod( ) ) ) );
+				strBuilder.append( "\n* " ).append( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getMethod( ) ) );
 			}
 
 			if ( !( patternService.isValidPattern( filter.getException( ) ) || filter.getException( ) == null ) ) {
-				throw new BusinessRuntimeException( new BusinessException( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getException( ) ) ) );
+				strBuilder.append( "\n* " ).append( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getException( ) ) );
+			}
+
+			if ( strBuilder.length( ) > 0 ) {
+				final Alert alert = new Alert( AlertType.WARNING );
+				final String msg = RESOURCE_BUNDLE.getString( "errorMessageInvalidInput" ) + strBuilder.toString( );
+				alert.setContentText( msg );
+				alert.showAndWait( );
+
+				return false;
 			}
 		}
+
+		return true;
 	}
 
 	public void setOnSaveAsFavorite( final Consumer<TracesFilter> onSaveAsFavorite ) {

@@ -7,11 +7,10 @@ import java.util.function.Consumer;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import kieker.diagnosis.backend.base.exception.BusinessException;
-import kieker.diagnosis.backend.base.exception.BusinessRuntimeException;
 import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.export.CSVData;
@@ -19,13 +18,13 @@ import kieker.diagnosis.backend.pattern.PatternService;
 import kieker.diagnosis.backend.search.aggregatedmethods.AggregatedMethodsFilter;
 import kieker.diagnosis.backend.search.aggregatedmethods.AggregatedMethodsService;
 import kieker.diagnosis.backend.settings.SettingsService;
-import kieker.diagnosis.frontend.base.mixin.ErrorHandlerMixin;
+import kieker.diagnosis.frontend.dialog.alert.Alert;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.composite.AggregatedMethodDetailsPane;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.composite.AggregatedMethodFilterPane;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.composite.AggregatedMethodStatusBar;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.composite.AggregatedMethodsTableView;
 
-public final class AggregatedMethodsTab extends Tab implements ErrorHandlerMixin {
+public final class AggregatedMethodsTab extends Tab {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( AggregatedMethodsTab.class.getName( ) );
 
@@ -62,8 +61,8 @@ public final class AggregatedMethodsTab extends Tab implements ErrorHandlerMixin
 	}
 
 	private void configureFilterPane( ) {
-		filterPane.setOnSearch( e -> executeAction( this::performSearch ) );
-		filterPane.setOnSaveAsFavorite( e -> executeAction( this::performSaveAsFavorite ) );
+		filterPane.setOnSearch( e -> performSearch( ) );
+		filterPane.setOnSaveAsFavorite( e -> performSaveAsFavorite( ) );
 	}
 
 	private void configureMethodsTableView( ) {
@@ -74,11 +73,11 @@ public final class AggregatedMethodsTab extends Tab implements ErrorHandlerMixin
 	}
 
 	private void configureDetailsPane( ) {
-		detailsPane.setOnJumpToMethods( e -> executeAction( this::performJumpToMethods ) );
+		detailsPane.setOnJumpToMethods( e -> performJumpToMethods( ) );
 	}
 
 	private void configureStatusBar( ) {
-		statusBar.setOnExportToCsv( e -> executeAction( this::performExportToCSV ) );
+		statusBar.setOnExportToCsv( e -> performExportToCSV( ) );
 
 		VBox.setMargin( statusBar, new Insets( 5 ) );
 	}
@@ -122,16 +121,17 @@ public final class AggregatedMethodsTab extends Tab implements ErrorHandlerMixin
 	public void performSearch( ) {
 		// Get the filter input from the user
 		final AggregatedMethodsFilter filter = filterPane.getValue( );
-		checkFilter( filter );
+		if ( checkFilter( filter ) ) {
 
-		// Find the methods to display
-		final AggregatedMethodsService methodsService = ServiceFactory.getService( AggregatedMethodsService.class );
-		final List<AggregatedMethodCall> methods = methodsService.searchMethods( filter );
-		final int totalMethods = methodsService.countMethods( );
+			// Find the methods to display
+			final AggregatedMethodsService methodsService = ServiceFactory.getService( AggregatedMethodsService.class );
+			final List<AggregatedMethodCall> methods = methodsService.searchMethods( filter );
+			final int totalMethods = methodsService.countMethods( );
 
-		// Update the view
-		methodsTableView.setItems( FXCollections.observableList( methods ) );
-		statusBar.setValue( methods.size( ), totalMethods );
+			// Update the view
+			methodsTableView.setItems( FXCollections.observableList( methods ) );
+			statusBar.setValue( methods.size( ), totalMethods );
+		}
 	}
 
 	public void setOnSaveAsFavorite( final Consumer<AggregatedMethodsFilter> action ) {
@@ -140,31 +140,45 @@ public final class AggregatedMethodsTab extends Tab implements ErrorHandlerMixin
 
 	public void performSaveAsFavorite( ) {
 		final AggregatedMethodsFilter filter = filterPane.getValue( );
-		checkFilter( filter );
-		onSaveAsFavorite.accept( filter );
+		if ( checkFilter( filter ) ) {
+			onSaveAsFavorite.accept( filter );
+		}
 	}
 
-	private void checkFilter( final AggregatedMethodsFilter filter ) {
+	private boolean checkFilter( final AggregatedMethodsFilter filter ) {
 		// If we are using regular expressions, we should check them
 		if ( filter.isUseRegExpr( ) ) {
 			final PatternService patternService = ServiceFactory.getService( PatternService.class );
 
+			final StringBuilder strBuilder = new StringBuilder( );
+
 			if ( !( patternService.isValidPattern( filter.getHost( ) ) || filter.getHost( ) == null ) ) {
-				throw new BusinessRuntimeException( new BusinessException( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getHost( ) ) ) );
+				strBuilder.append( "\n* " ).append( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getHost( ) ) );
 			}
 
 			if ( !( patternService.isValidPattern( filter.getClazz( ) ) || filter.getClazz( ) == null ) ) {
-				throw new BusinessRuntimeException( new BusinessException( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getClazz( ) ) ) );
+				strBuilder.append( "\n* " ).append( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getClazz( ) ) );
 			}
 
 			if ( !( patternService.isValidPattern( filter.getMethod( ) ) || filter.getMethod( ) == null ) ) {
-				throw new BusinessRuntimeException( new BusinessException( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getMethod( ) ) ) );
+				strBuilder.append( "\n* " ).append( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getMethod( ) ) );
 			}
 
 			if ( !( patternService.isValidPattern( filter.getException( ) ) || filter.getException( ) == null ) ) {
-				throw new BusinessRuntimeException( new BusinessException( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getException( ) ) ) );
+				strBuilder.append( "\n* " ).append( String.format( RESOURCE_BUNDLE.getString( "errorMessageRegExpr" ), filter.getException( ) ) );
+			}
+
+			if ( strBuilder.length( ) > 0 ) {
+				final Alert alert = new Alert( AlertType.WARNING );
+				final String msg = RESOURCE_BUNDLE.getString( "errorMessageInvalidInput" ) + strBuilder.toString( );
+				alert.setContentText( msg );
+				alert.showAndWait( );
+
+				return false;
 			}
 		}
+
+		return true;
 	}
 
 	public void setOnJumpToMethods( final Consumer<AggregatedMethodCall> action ) {

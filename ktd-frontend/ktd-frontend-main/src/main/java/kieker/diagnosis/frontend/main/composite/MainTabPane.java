@@ -36,7 +36,6 @@ import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.search.aggregatedmethods.AggregatedMethodsFilter;
 import kieker.diagnosis.backend.search.methods.MethodsFilter;
 import kieker.diagnosis.backend.search.traces.TracesFilter;
-import kieker.diagnosis.frontend.base.mixin.ErrorHandlerMixin;
 import kieker.diagnosis.frontend.base.mixin.StylesheetMixin;
 import kieker.diagnosis.frontend.main.properties.LastExportPathProperty;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.complex.AggregatedMethodsTab;
@@ -44,7 +43,7 @@ import kieker.diagnosis.frontend.tab.methods.complex.MethodsTab;
 import kieker.diagnosis.frontend.tab.statistics.complex.StatisticsTab;
 import kieker.diagnosis.frontend.tab.traces.complex.TracesTab;
 
-public class MainTabPane extends TabPane implements ErrorHandlerMixin, StylesheetMixin {
+public class MainTabPane extends TabPane implements StylesheetMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MainTabPane.class.getName( ) );
 

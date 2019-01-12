@@ -24,14 +24,13 @@ import kieker.diagnosis.backend.monitoring.MonitoringService;
 import kieker.diagnosis.backend.monitoring.Status;
 import kieker.diagnosis.backend.properties.DevelopmentModeProperty;
 import kieker.diagnosis.backend.properties.PropertiesService;
-import kieker.diagnosis.frontend.base.mixin.ErrorHandlerMixin;
 import kieker.diagnosis.frontend.base.mixin.IconMixin;
 import kieker.diagnosis.frontend.dialog.about.AboutDialog;
 import kieker.diagnosis.frontend.dialog.manual.ManualDialog;
 import kieker.diagnosis.frontend.dialog.monitoring.MonitoringDialog;
 import kieker.diagnosis.frontend.main.properties.CloseWithoutPromptProperty;
 
-public final class MainMenuBar extends MenuBar implements IconMixin, ErrorHandlerMixin {
+public final class MainMenuBar extends MenuBar implements IconMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MainMenuBar.class.getName( ) );
 
@@ -78,7 +77,7 @@ public final class MainMenuBar extends MenuBar implements IconMixin, ErrorHandle
 				final MenuItem menuItem = new MenuItem( );
 				menuItem.setId( "menuItemMonitoringSettings" );
 				menuItem.setText( RESOURCE_BUNDLE.getString( "monitoring" ) );
-				menuItem.setOnAction( e -> executeAction( this::performMonitoring ) );
+				menuItem.setOnAction( e -> performMonitoring( ) );
 				menuItem.setGraphic( createIcon( Icon.CHART ) );
 
 				menu.getItems( ).add( menuItem );
@@ -105,7 +104,7 @@ public final class MainMenuBar extends MenuBar implements IconMixin, ErrorHandle
 				final MenuItem menuItem = new MenuItem( );
 				menuItem.setId( "menuFileClose" );
 				menuItem.setText( RESOURCE_BUNDLE.getString( "close" ) );
-				menuItem.setOnAction( ( e ) -> executeAction( this::performClose ) );
+				menuItem.setOnAction( ( e ) -> performClose( ) );
 				menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+X" ) );
 				menuItem.setGraphic( createIcon( Icon.TIMES ) );
 
@@ -139,7 +138,7 @@ public final class MainMenuBar extends MenuBar implements IconMixin, ErrorHandle
 				final MenuItem menuItem = new MenuItem( );
 				menuItem.setId( "menuItemManual" );
 				menuItem.setText( RESOURCE_BUNDLE.getString( "documentation" ) );
-				menuItem.setOnAction( e -> executeAction( this::performDocumentation ) );
+				menuItem.setOnAction( e -> performDocumentation( ) );
 				menuItem.setAccelerator( KeyCombination.keyCombination( "F1" ) );
 				menuItem.setGraphic( createIcon( Icon.QUESTION_CIRCLE ) );
 
@@ -156,7 +155,7 @@ public final class MainMenuBar extends MenuBar implements IconMixin, ErrorHandle
 				final MenuItem menuItem = new MenuItem( );
 				menuItem.setId( "menuItemAbout" );
 				menuItem.setText( RESOURCE_BUNDLE.getString( "about" ) );
-				menuItem.setOnAction( e -> executeAction( this::performAbout ) );
+				menuItem.setOnAction( e -> performAbout( ) );
 				menuItem.setGraphic( createIcon( Icon.INFO_CIRCLE ) );
 
 				menu.getItems( ).add( menuItem );
