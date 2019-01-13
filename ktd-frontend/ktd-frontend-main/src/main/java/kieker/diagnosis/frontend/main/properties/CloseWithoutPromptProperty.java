@@ -21,6 +21,8 @@ import com.google.inject.Singleton;
 import kieker.diagnosis.backend.properties.BooleanApplicationProperty;
 
 /**
+ * This application property determines whether the application is closed without prompt.
+ *
  * @author Nils Christian Ehmke
  */
 @Singleton

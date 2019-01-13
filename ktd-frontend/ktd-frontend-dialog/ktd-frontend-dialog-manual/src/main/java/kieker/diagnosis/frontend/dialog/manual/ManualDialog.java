@@ -82,7 +82,7 @@ public final class ManualDialog extends Alert implements DialogMixin, ImageMixin
 	}
 
 	private void appendBootstrapCSS( final StringBuilder documentation ) {
-		try ( final InputStream cssStream = getClass( ).getResourceAsStream( "html/css/bootstrap.min.css" ) ) {
+		try ( InputStream cssStream = getClass( ).getResourceAsStream( "html/css/bootstrap.min.css" ) ) {
 			final byte[] allBytes = cssStream.readAllBytes( );
 			documentation.append( new String( allBytes, Charset.forName( "UTF-8" ) ) );
 		} catch ( final IOException ex ) {
@@ -94,7 +94,7 @@ public final class ManualDialog extends Alert implements DialogMixin, ImageMixin
 		final Locale locale = Locale.getDefault( );
 		final String suffix = locale == Locale.GERMAN || locale == Locale.GERMANY ? "_de" : "";
 
-		try ( final InputStream documentationStream = getClass( ).getResourceAsStream( "html/manual" + suffix + ".html" ) ) {
+		try ( InputStream documentationStream = getClass( ).getResourceAsStream( "html/manual" + suffix + ".html" ) ) {
 			final byte[] allBytes = documentationStream.readAllBytes( );
 			documentation.append( new String( allBytes, Charset.forName( "ISO-8859-1" ) ) );
 		} catch ( final IOException ex ) {

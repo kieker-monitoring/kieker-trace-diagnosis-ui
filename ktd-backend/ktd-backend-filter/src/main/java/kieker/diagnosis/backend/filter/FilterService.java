@@ -54,6 +54,9 @@ public class FilterService implements Service {
 	 * @param value
 	 *            The value which should be checked for equality.
 	 *
+	 * @param <T>
+	 *            The original type.
+	 *
 	 * @return A new predicate.
 	 */
 	public <T> Predicate<T> createLongPredicate( final Function<T, Long> getter, final Long value ) {
@@ -74,6 +77,9 @@ public class FilterService implements Service {
 	 *            The value which should be checked for equality.
 	 * @param useRegExpr
 	 *            Whether the value is actually a pattern.
+	 *
+	 * @param <T>
+	 *            The original type.
 	 *
 	 * @return A new predicate.
 	 */
@@ -105,7 +111,10 @@ public class FilterService implements Service {
 	 *
 	 * @param predicates
 	 *            The (possible empty) list of predicates.
-	 *
+	 * 
+	 * @param <T>
+	 *            The original type.
+	 * 
 	 * @return The conjuncted predicates.
 	 */
 	public <T> Predicate<T> conjunct( final List<Predicate<T>> predicates ) {

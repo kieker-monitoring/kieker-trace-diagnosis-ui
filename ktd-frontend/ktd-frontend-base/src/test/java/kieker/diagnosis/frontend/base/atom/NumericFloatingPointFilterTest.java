@@ -25,7 +25,6 @@ import static org.mockito.Mockito.when;
 import org.junit.Test;
 
 import javafx.scene.control.TextFormatter.Change;
-import kieker.diagnosis.frontend.base.atom.NumericFloatingPointFilter;
 
 /**
  * Test class for the {@link NumericFloatingPointFilter}.

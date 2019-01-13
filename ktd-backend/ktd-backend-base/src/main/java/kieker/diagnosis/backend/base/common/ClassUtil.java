@@ -55,7 +55,7 @@ public final class ClassUtil {
 	 * Retrieves the real name of the given class. If the given class is a proxy class, the name of the super class will
 	 * be returned. Otherwise the name of class itself will be returned.
 	 *
-	 * @param aClass
+	 * @param clazz
 	 *            The (potentially proxied) class. Must not be {@code null}.
 	 *
 	 * @return The real class name.

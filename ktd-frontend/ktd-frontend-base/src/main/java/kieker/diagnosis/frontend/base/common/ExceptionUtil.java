@@ -35,11 +35,11 @@ import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
 /**
- * A util class to handle exceptions
+ * A util class to handle exceptions.
  *
  * @author Nils Christian Ehmke
  */
-public class ExceptionUtil {
+public final class ExceptionUtil {
 
 	private static final ResourceBundle cvResourceBundle = ResourceBundle.getBundle( ExceptionUtil.class.getName( ) );
 

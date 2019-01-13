@@ -30,7 +30,6 @@ import javafx.stage.Stage;
 import kieker.diagnosis.backend.monitoring.MonitoringConfiguration;
 import kieker.diagnosis.backend.monitoring.MonitoringService;
 import kieker.diagnosis.backend.monitoring.Status;
-import kieker.diagnosis.frontend.dialog.monitoring.MonitoringDialog;
 
 /**
  * This is a UI test which checks that the monitoring dialog is working as expected.

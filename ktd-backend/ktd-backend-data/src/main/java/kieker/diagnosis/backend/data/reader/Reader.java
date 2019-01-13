@@ -55,7 +55,7 @@ public abstract class Reader {
 	 * Reads the Kieker mapping file from the given directory. If the directory contains no such mapping file, an empty
 	 * map is returned.
 	 *
-	 * @param aDirectory
+	 * @param directory
 	 *            The directory from which the mapping file should be read.
 	 *
 	 * @return The mapping between the keys and the Strings.
@@ -102,9 +102,9 @@ public abstract class Reader {
 	 * Delivers a list of all directories, which contain at least one file for each of the given extensions. The search
 	 * is performed recursive.
 	 *
-	 * @param aDirectory
+	 * @param directory
 	 *            The root directory.
-	 * @param aExtensions
+	 * @param extensions
 	 *            The extensions to search for.
 	 *
 	 * @return The resulting list of directories.
@@ -148,9 +148,9 @@ public abstract class Reader {
 	/**
 	 * Delivers a list of all files with the given extension. The search is performed non-recursive.
 	 *
-	 * @param aDirectory
+	 * @param directory
 	 *            The root directory.
-	 * @param aExtension
+	 * @param extension
 	 *            The extension to search for.
 	 *
 	 * @return The resulting list of files.

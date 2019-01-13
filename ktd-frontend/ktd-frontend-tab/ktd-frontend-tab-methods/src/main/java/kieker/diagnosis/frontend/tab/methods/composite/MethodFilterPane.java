@@ -317,6 +317,24 @@ public final class MethodFilterPane extends TitledPane implements IconMixin, Str
 	}
 
 	/**
+	 * Sets the value which is shown in the component.
+	 *
+	 * @param value
+	 *            The new value. Must not be {@code null}.
+	 */
+	public void setValue( final AggregatedMethodCall value ) {
+		// We have to prepare a filter which matches only the method call
+		final MethodsFilter filter = new MethodsFilter( );
+		filter.setHost( value.getHost( ) );
+		filter.setClazz( value.getClazz( ) );
+		filter.setMethod( value.getMethod( ) );
+		filter.setException( value.getException( ) );
+		filter.setSearchType( value.getException( ) != null ? SearchType.ONLY_FAILED : SearchType.ONLY_SUCCESSFUL );
+
+		setValue( filter );
+	}
+
+	/**
 	 * Returns the current value of the component.
 	 *
 	 * @return The current value.
@@ -340,25 +358,9 @@ public final class MethodFilterPane extends TitledPane implements IconMixin, Str
 	}
 
 	/**
-	 * Sets the value which is shown in the component.
-	 *
-	 * @param value
-	 *            The new value. Must not be {@code null}.
-	 */
-	public void setValue( final AggregatedMethodCall value ) {
-		// We have to prepare a filter which matches only the method call
-		final MethodsFilter filter = new MethodsFilter( );
-		filter.setHost( value.getHost( ) );
-		filter.setClazz( value.getClazz( ) );
-		filter.setMethod( value.getMethod( ) );
-		filter.setException( value.getException( ) );
-		filter.setSearchType( value.getException( ) != null ? SearchType.ONLY_FAILED : SearchType.ONLY_SUCCESSFUL );
-
-		setValue( filter );
-	}
-
-	/**
 	 * Returns the default button property of the search button.
+	 *
+	 * @return The default button property.
 	 */
 	public BooleanProperty defaultButtonProperty( ) {
 		return searchButton.defaultButtonProperty( );

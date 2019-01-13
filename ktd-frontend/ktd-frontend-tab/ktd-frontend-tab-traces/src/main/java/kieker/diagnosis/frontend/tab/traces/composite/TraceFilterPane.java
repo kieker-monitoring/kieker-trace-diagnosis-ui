@@ -314,6 +314,8 @@ public final class TraceFilterPane extends TitledPane implements StringMixin, Ic
 
 	/**
 	 * Returns the default button property of the search button.
+	 *
+	 * @return The default button property.
 	 */
 	public BooleanProperty defaultButtonProperty( ) {
 		return searchButton.defaultButtonProperty( );
@@ -325,19 +327,25 @@ public final class TraceFilterPane extends TitledPane implements StringMixin, Ic
 	 * @param value
 	 *            The new value. Must not be {@code null}.
 	 */
-	public void setValue( final TracesFilter filter ) {
-		host.setText( filter.getHost( ) );
-		clazz.setText( filter.getClazz( ) );
-		method.setText( filter.getMethod( ) );
-		exception.setText( filter.getException( ) );
-		traceId.setText( filter.getTraceId( ) != null ? Long.toString( filter.getTraceId( ) ) : null );
-		useRegExpr.setSelected( filter.isUseRegExpr( ) );
-		seachWholeTrace.setSelected( filter.isSearchWholeTrace( ) );
-		lowerDate.setValue( filter.getLowerDate( ) );
-		lowerTime.setLocalTime( filter.getLowerTime( ) );
-		upperDate.setValue( filter.getUpperDate( ) );
-		upperTime.setLocalTime( filter.getUpperTime( ) );
-		searchType.setValue( filter.getSearchType( ) );
+	public void setValue( final TracesFilter value ) {
+		host.setText( value.getHost( ) );
+		clazz.setText( value.getClazz( ) );
+		method.setText( value.getMethod( ) );
+		exception.setText( value.getException( ) );
+		traceId.setText( value.getTraceId( ) != null ? Long.toString( value.getTraceId( ) ) : null );
+		useRegExpr.setSelected( value.isUseRegExpr( ) );
+		seachWholeTrace.setSelected( value.isSearchWholeTrace( ) );
+		lowerDate.setValue( value.getLowerDate( ) );
+		lowerTime.setLocalTime( value.getLowerTime( ) );
+		upperDate.setValue( value.getUpperDate( ) );
+		upperTime.setLocalTime( value.getUpperTime( ) );
+		searchType.setValue( value.getSearchType( ) );
+	}
+
+	public void setValue( final MethodCall value ) {
+		final TracesFilter filter = new TracesFilter( );
+		filter.setTraceId( value.getTraceId( ) );
+		setValue( filter );
 	}
 
 	/**
@@ -362,12 +370,6 @@ public final class TraceFilterPane extends TitledPane implements StringMixin, Ic
 		filter.setTraceId( traceId.getValue( ) );
 
 		return filter;
-	}
-
-	public void setValue( final MethodCall value ) {
-		final TracesFilter filter = new TracesFilter( );
-		filter.setTraceId( value.getTraceId( ) );
-		setValue( filter );
 	}
 
 }

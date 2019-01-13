@@ -1,17 +1,17 @@
-/*************************************************************************** 
- * Copyright 2015-2019 Kieker Project (http://kieker-monitoring.net)         
- *                                                                           
- * Licensed under the Apache License, Version 2.0 (the "License");           
- * you may not use this file except in compliance with the License.          
- * You may obtain a copy of the License at                                   
- *                                                                           
- *     http://www.apache.org/licenses/LICENSE-2.0                            
- *                                                                           
- * Unless required by applicable law or agreed to in writing, software       
- * distributed under the License is distributed on an "AS IS" BASIS,         
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  
- * See the License for the specific language governing permissions and       
- * limitations under the License.                                            
+/***************************************************************************
+ * Copyright 2015-2019 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  ***************************************************************************/
 
 package kieker.diagnosis.frontend.base.ui;
@@ -21,14 +21,14 @@ import java.util.ResourceBundle;
 import javafx.util.StringConverter;
 
 /**
- * This is an implementation of a {@link StringConverter} to convert an enum value to a string representation and vice versa. A resource bundle with the name of
- * the enum has to be available in the classpath. It is also recommended, that each enum value has a different locale string. {@code null} values are mapped to
- * the empty string and vice versa.
+ * This is an implementation of a {@link StringConverter} to convert an enum value to a string representation and vice
+ * versa. A resource bundle with the name of the enum has to be available in the classpath. It is also recommended, that
+ * each enum value has a different locale string. {@code null} values are mapped to the empty string and vice versa.
+ *
+ * @author Nils Christian Ehmke
  *
  * @param <E>
  *            The type of the enum.
- *
- * @author Nils Christian Ehmke
  */
 public final class EnumStringConverter<E extends Enum<?>> extends StringConverter<E> {
 

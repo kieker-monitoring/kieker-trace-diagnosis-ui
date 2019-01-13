@@ -104,7 +104,7 @@ public final class MonitoringDialog extends Dialog<MonitoringConfiguration> impl
 			statusField.setId( "monitoringDialogStatus" );
 			statusField.setMaxWidth( Double.POSITIVE_INFINITY );
 			statusField.textProperty( ).bindBidirectional( ivStatus, new EnumStringConverter<>( Status.class ) );
-			ivStatus.addListener( ( ChangeListener<Status> ) ( observable, oldStatus, newStatus ) -> {
+			ivStatus.addListener( (ChangeListener<Status>) ( observable, oldStatus, newStatus ) -> {
 				final List<String> style = getStatusStyle( newStatus );
 				statusField.getStyleClass( ).setAll( style );
 			} );
@@ -317,18 +317,18 @@ public final class MonitoringDialog extends Dialog<MonitoringConfiguration> impl
 	}
 
 	private List<String> getStatusStyle( final Status aStatus ) {
-		String style;
+		final String style;
 
 		switch ( aStatus ) {
-		case RUNNING:
-			style = "monitoringRunning";
+			case RUNNING:
+				style = "monitoringRunning";
 			break;
-		case TERMINATED:
-			style = "monitoringTerminated";
+			case TERMINATED:
+				style = "monitoringTerminated";
 			break;
-		case NO_MONITORING:
-		default:
-			style = "noMonitoringStarted";
+			case NO_MONITORING:
+			default:
+				style = "noMonitoringStarted";
 			break;
 
 		}

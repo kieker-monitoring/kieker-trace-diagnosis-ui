@@ -242,6 +242,8 @@ public final class AggregatedMethodFilterPane extends TitledPane implements Stri
 
 	/**
 	 * Returns the default button property of the search button.
+	 *
+	 * @return The default button property.
 	 */
 	public BooleanProperty defaultButtonProperty( ) {
 		return searchButton.defaultButtonProperty( );

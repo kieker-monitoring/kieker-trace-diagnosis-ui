@@ -25,7 +25,6 @@ import org.testfx.framework.junit.ApplicationTest;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import kieker.diagnosis.frontend.dialog.manual.ManualDialog;
 
 /**
  * This is a UI test which checks that the manual dialog is working as expected.

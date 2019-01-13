@@ -46,13 +46,18 @@ public class PropertiesService implements Service {
 	private Injector ivInjector;
 
 	/**
-	 * Delivers the value of the given application property or its default value, if the property has not been set yet. This method is cached.
+	 * Delivers the value of the given application property or its default value, if the property has not been set yet.
+	 * This method is cached.
 	 *
-	 * @param aPropertyClass The property.
+	 * @param aPropertyClass
+	 *            The property.
+	 *
+	 * @param <T>
+	 *            The type of the property.
 	 *
 	 * @return The value of the given property.
 	 */
-	@UseCache( cacheName = "applicationProperties" )
+	@UseCache ( cacheName = "applicationProperties" )
 	public <T> T loadApplicationProperty( final Class<? extends ApplicationProperty<T>> aPropertyClass ) {
 		final ApplicationProperty<T> property = getProperty( aPropertyClass );
 		final String key = property.getKey( );
@@ -67,10 +72,14 @@ public class PropertiesService implements Service {
 	/**
 	 * Saves the given application property.
 	 *
-	 * @param aPropertyClass The property.
-	 * @param aValue         The new value of the property.
+	 * @param aPropertyClass
+	 *            The property.
+	 * @param aValue
+	 *            The new value of the property.
+	 * @param <T>
+	 *            The type of the property.
 	 */
-	@InvalidateCache( cacheName = "applicationProperties", keyParameter = 0 )
+	@InvalidateCache ( cacheName = "applicationProperties", keyParameter = 0 )
 	public <T> void saveApplicationProperty( final Class<? extends ApplicationProperty<T>> aPropertyClass, final T aValue ) {
 		final ApplicationProperty<T> property = getProperty( aPropertyClass );
 		final String key = property.getKey( );
@@ -94,11 +103,15 @@ public class PropertiesService implements Service {
 	/**
 	 * Delivers the value of the given system property. This method is cached.
 	 *
-	 * @param aPropertyClass The property.
+	 * @param aPropertyClass
+	 *            The property.
+	 *
+	 * @param <T>
+	 *            The type of the property.
 	 *
 	 * @return The value of the given property.
 	 */
-	@UseCache( cacheName = "systemProperties" )
+	@UseCache ( cacheName = "systemProperties" )
 	public <T> T loadSystemProperty( final Class<? extends SystemProperty<T>> aPropertyClass ) {
 		final SystemProperty<T> property = getProperty( aPropertyClass );
 		final String key = property.getKey( );

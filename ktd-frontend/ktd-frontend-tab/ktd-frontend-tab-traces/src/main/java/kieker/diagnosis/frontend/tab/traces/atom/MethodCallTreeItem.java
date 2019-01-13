@@ -1,17 +1,17 @@
-/*************************************************************************** 
- * Copyright 2015-2019 Kieker Project (http://kieker-monitoring.net)         
- *                                                                           
- * Licensed under the Apache License, Version 2.0 (the "License");           
- * you may not use this file except in compliance with the License.          
- * You may obtain a copy of the License at                                   
- *                                                                           
- *     http://www.apache.org/licenses/LICENSE-2.0                            
- *                                                                           
- * Unless required by applicable law or agreed to in writing, software       
- * distributed under the License is distributed on an "AS IS" BASIS,         
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  
- * See the License for the specific language governing permissions and       
- * limitations under the License.                                            
+/***************************************************************************
+ * Copyright 2015-2019 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  ***************************************************************************/
 
 package kieker.diagnosis.frontend.tab.traces.atom;
@@ -26,8 +26,8 @@ import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.frontend.tab.traces.aggregator.Aggregator;
 
 /**
- * This is an item for a tree table, which contains a method call. The children are loaded in a lazy way. The item enriches and aggregates the children based on
- * the current application settings.
+ * This is an item for a tree table, which contains a method call. The children are loaded in a lazy way. The item
+ * enriches and aggregates the children based on the current application settings.
  *
  * @author Nils Christian Ehmke
  */
@@ -57,7 +57,7 @@ public final class MethodCallTreeItem extends TreeItem<MethodCall> {
 	}
 
 	@Override
-	public final ObservableList<TreeItem<MethodCall>> getChildren( ) {
+	public ObservableList<TreeItem<MethodCall>> getChildren( ) {
 		// Initialize the children in a lazy way.
 		if ( !ivChildrenInitialized ) {
 			ivChildrenInitialized = true;
@@ -68,7 +68,7 @@ public final class MethodCallTreeItem extends TreeItem<MethodCall> {
 	}
 
 	@Override
-	public final boolean isLeaf( ) {
+	public boolean isLeaf( ) {
 		return getValue( ).getChildren( ).isEmpty( );
 	}
 

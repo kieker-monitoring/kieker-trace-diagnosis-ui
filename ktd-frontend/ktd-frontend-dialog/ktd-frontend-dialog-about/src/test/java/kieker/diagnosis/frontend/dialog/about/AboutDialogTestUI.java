@@ -27,7 +27,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Labeled;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import kieker.diagnosis.frontend.dialog.about.AboutDialog;
 
 /**
  * This is a UI test which checks that the about dialog is working as expected.
