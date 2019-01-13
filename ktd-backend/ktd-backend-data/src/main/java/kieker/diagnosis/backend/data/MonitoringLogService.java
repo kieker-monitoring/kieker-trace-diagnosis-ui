@@ -172,6 +172,10 @@ public class MonitoringLogService implements Service {
 		processDuration = duration;
 	}
 
+	public void setDataAvailable( final boolean dataAvailable ) {
+		this.dataAvailable = dataAvailable;
+	}
+
 	private void clear( ) {
 		dataAvailable = false;
 		traceRoots.clear( );
@@ -241,10 +245,6 @@ public class MonitoringLogService implements Service {
 
 	public void setIncompleteTraces( final int incompleteTraces ) {
 		this.incompleteTraces = incompleteTraces;
-	}
-
-	public void setDataAvailable( final boolean dataAvailable ) {
-		this.dataAvailable = dataAvailable;
 	}
 
 	public String getDirectory( ) {
