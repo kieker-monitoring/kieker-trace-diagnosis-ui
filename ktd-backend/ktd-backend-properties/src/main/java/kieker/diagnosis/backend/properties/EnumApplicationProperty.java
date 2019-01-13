@@ -19,10 +19,10 @@ package kieker.diagnosis.backend.properties;
 /**
  * A convenient base class for {@link ApplicationProperty application properties} of enum types.
  *
+ * @author Nils Christian Ehmke
+ *
  * @param <T>
  *            The enum type.
- *
- * @author Nils Christian Ehmke
  */
 public abstract class EnumApplicationProperty<T extends Enum<T>> implements ApplicationProperty<T> {
 

@@ -22,6 +22,8 @@ import kieker.diagnosis.backend.properties.EnumApplicationProperty;
 import kieker.diagnosis.backend.settings.MethodAppearance;
 
 /**
+ * The application property for the type of the method call appearance.
+ *
  * @author Nils Christian Ehmke
  */
 @Singleton

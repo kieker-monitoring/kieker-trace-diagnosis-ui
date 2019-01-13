@@ -21,6 +21,8 @@ import com.google.inject.Singleton;
 import kieker.diagnosis.backend.properties.BooleanApplicationProperty;
 
 /**
+ * The application property which determines whether the unmonitored time is shown or not.
+ *
  * @author Nils Christian Ehmke
  */
 @Singleton

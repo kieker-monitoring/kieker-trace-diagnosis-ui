@@ -36,6 +36,8 @@ import java.lang.annotation.Target;
 public @interface UseCache {
 
 	/**
+	 * The name of the cache.
+	 *
 	 * @return The name of the cache.
 	 */
 	String cacheName();

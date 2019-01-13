@@ -18,7 +18,7 @@ package kieker.diagnosis.backend.properties;
 
 /**
  * Classes implementing this interface can be considered system properties. They are loaded via
- * {@link System#getProperty(String) and can not be modified during runtime. Classes implementing this interface should
+ * {@link System#getProperty(String)} and can not be modified during runtime. Classes implementing this interface should
  * be annotated with {@link Property}.
  *
  * @author Nils Christian Ehmke

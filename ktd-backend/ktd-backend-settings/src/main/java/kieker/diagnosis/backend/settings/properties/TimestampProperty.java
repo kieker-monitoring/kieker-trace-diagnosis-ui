@@ -22,6 +22,8 @@ import kieker.diagnosis.backend.properties.EnumApplicationProperty;
 import kieker.diagnosis.backend.settings.TimestampAppearance;
 
 /**
+ * The application property for the type of the timestamp appearance.
+ *
  * @author Nils Christian Ehmke
  */
 @Singleton

@@ -29,10 +29,10 @@ import com.google.common.cache.CacheBuilder;
  * This interceptor is responsible for handling the caching of method calls to services. It handles the {@link UseCache}
  * and {@link InvalidateCache} annotations.
  *
+ * @author Nils Christian Ehmke
+ *
  * @see UseCache
  * @see InvalidateCache
- *
- * @author Nils Christian Ehmke
  */
 public final class CacheInterceptor implements MethodInterceptor {
 

@@ -23,6 +23,8 @@ import com.google.inject.Singleton;
 import kieker.diagnosis.backend.properties.EnumApplicationProperty;
 
 /**
+ * The application property for time unit.
+ *
  * @author Nils Christian Ehmke
  */
 @Singleton

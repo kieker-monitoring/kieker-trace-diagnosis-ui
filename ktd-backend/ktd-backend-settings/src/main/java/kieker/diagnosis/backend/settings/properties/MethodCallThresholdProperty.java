@@ -21,6 +21,8 @@ import com.google.inject.Singleton;
 import kieker.diagnosis.backend.properties.FloatApplicationProperty;
 
 /**
+ * The application property for the method call threshold.
+ *
  * @author Nils Christian Ehmke
  */
 @Singleton

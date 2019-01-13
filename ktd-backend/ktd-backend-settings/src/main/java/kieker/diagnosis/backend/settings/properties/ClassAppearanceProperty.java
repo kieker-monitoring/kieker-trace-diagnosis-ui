@@ -22,6 +22,8 @@ import kieker.diagnosis.backend.properties.EnumApplicationProperty;
 import kieker.diagnosis.backend.settings.ClassAppearance;
 
 /**
+ * The application property for the type of the class appearance.
+ *
  * @author Nils Christian Ehmke
  */
 @Singleton

@@ -36,11 +36,15 @@ import java.lang.annotation.Target;
 public @interface InvalidateCache {
 
 	/**
+	 * The name of the cache.
+	 *
 	 * @return The name of the cache.
 	 */
 	String cacheName();
 
 	/**
+	 * The key parameter.
+	 *
 	 * @return Determines which parameter of the method is the key.
 	 */
 	int keyParameter();

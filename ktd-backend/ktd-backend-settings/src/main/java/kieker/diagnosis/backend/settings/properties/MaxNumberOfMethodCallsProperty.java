@@ -21,6 +21,8 @@ import com.google.inject.Singleton;
 import kieker.diagnosis.backend.properties.IntegerApplicationProperty;
 
 /**
+ * The application property for the maximal number of method calls in a trace.
+ *
  * @author Nils Christian Ehmke
  */
 @Singleton

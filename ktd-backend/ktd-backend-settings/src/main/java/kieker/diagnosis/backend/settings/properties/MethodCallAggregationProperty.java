@@ -22,6 +22,8 @@ import kieker.diagnosis.backend.properties.EnumApplicationProperty;
 import kieker.diagnosis.backend.settings.MethodCallAggregation;
 
 /**
+ * The application property for the type of the method call aggregation.
+ *
  * @author Nils Christian Ehmke
  */
 @Singleton
