@@ -64,7 +64,8 @@ public class SettingsService implements Service {
 	/**
 	 * This method saves the given application settings.
 	 *
-	 * @param aSettings The new settings.
+	 * @param aSettings
+	 *            The new settings.
 	 */
 	public void saveSettings( final Settings aSettings ) {
 		propertiesService.saveApplicationProperty( TimestampProperty.class, aSettings.getTimestampAppearance( ) );
@@ -78,39 +79,40 @@ public class SettingsService implements Service {
 	}
 
 	/**
-	 * This method returns a suitable suffix for durations depending on the current settings. The suffix is of the form {@code [ms]} for milliseconds for example.
+	 * This method returns a suitable suffix for durations depending on the current settings. The suffix is of the form
+	 * {@code [ms]} for milliseconds for example.
 	 *
 	 * @return The current duration suffix.
 	 */
 	public String getCurrentDurationSuffix( ) {
 		final TimeUnit timeUnit = propertiesService.loadApplicationProperty( TimeUnitProperty.class );
 
-		String suffix;
+		final String suffix;
 
 		switch ( timeUnit ) {
-		case DAYS:
-			suffix = "[d]";
+			case DAYS:
+				suffix = "[d]";
 			break;
-		case HOURS:
-			suffix = "[h]";
+			case HOURS:
+				suffix = "[h]";
 			break;
-		case MICROSECONDS:
-			suffix = "[µs]";
+			case MICROSECONDS:
+				suffix = "[µs]";
 			break;
-		case MILLISECONDS:
-			suffix = "[ms]";
+			case MILLISECONDS:
+				suffix = "[ms]";
 			break;
-		case MINUTES:
-			suffix = "[m]";
+			case MINUTES:
+				suffix = "[m]";
 			break;
-		case NANOSECONDS:
-			suffix = "[ns]";
+			case NANOSECONDS:
+				suffix = "[ns]";
 			break;
-		case SECONDS:
-			suffix = "[s]";
+			case SECONDS:
+				suffix = "[s]";
 			break;
-		default:
-			suffix = null;
+			default:
+				suffix = null;
 			break;
 
 		}

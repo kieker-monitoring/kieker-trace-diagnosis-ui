@@ -26,6 +26,10 @@ public final class ServiceMockModule extends AbstractModule {
 
 	private final Map<Class<?>, Object> mockMap;
 
+	public ServiceMockModule( final Map<Class<?>, Object> mockMap ) {
+		this.mockMap = mockMap;
+	}
+
 	public <T> ServiceMockModule( final Class<T> mockClass, final T mockObject ) {
 		this( createMockMap( mockClass, mockObject ) );
 	}
@@ -34,10 +38,6 @@ public final class ServiceMockModule extends AbstractModule {
 		final Map<Class<?>, Object> mockMap = new HashMap<>( );
 		mockMap.put( mockClass, mockObject );
 		return mockMap;
-	}
-
-	public ServiceMockModule( final Map<Class<?>, Object> mockMap ) {
-		this.mockMap = mockMap;
 	}
 
 	@Override

@@ -225,7 +225,7 @@ public final class BinaryFileReader extends Reader {
 	}
 
 	private void readUnknownRecord( final ByteBuffer aByteBuffer, final int aRecordKey ) {
-		byte size;
+		final byte size;
 
 		if ( !ignoredRecordsSizeMap.containsKey( aRecordKey ) ) {
 			final String recordName = ivStringMapping.get( aRecordKey );
