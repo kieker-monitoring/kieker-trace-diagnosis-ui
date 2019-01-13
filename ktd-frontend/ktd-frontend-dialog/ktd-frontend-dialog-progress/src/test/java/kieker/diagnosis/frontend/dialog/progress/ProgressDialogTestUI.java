@@ -30,7 +30,7 @@ import javafx.stage.Stage;
  *
  * @author Nils Christian Ehmke
  */
-public final class ProgressDialogTest extends ApplicationTest {
+public final class ProgressDialogTestUI extends ApplicationTest {
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
