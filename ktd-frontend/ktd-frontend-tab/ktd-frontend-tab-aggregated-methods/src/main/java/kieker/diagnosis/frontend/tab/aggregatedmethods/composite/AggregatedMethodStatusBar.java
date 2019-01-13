@@ -36,25 +36,25 @@ public final class AggregatedMethodStatusBar extends HBox {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( AggregatedMethodStatusBar.class.getName( ) );
 
-	private final Label status;
-	private final Hyperlink exportToCsvLink;
+	private final Label statusField = new Label( );
+	private final Hyperlink exportToCsvLink = new Hyperlink( );
 
 	public AggregatedMethodStatusBar( ) {
-		{
-			status = new Label( );
-			status.setMaxWidth( Double.POSITIVE_INFINITY );
-			HBox.setHgrow( status, Priority.ALWAYS );
-			HBox.setMargin( status, new Insets( 5, 0, 0, 0 ) );
+		configureStatusField( );
+		getChildren( ).add( statusField );
 
-			getChildren( ).add( status );
-		}
+		configureExportToCsvLink( );
+		getChildren( ).add( exportToCsvLink );
+	}
 
-		{
-			exportToCsvLink = new Hyperlink( );
-			exportToCsvLink.setText( RESOURCE_BUNDLE.getString( "exportToCSV" ) );
+	private void configureStatusField( ) {
+		statusField.setMaxWidth( Double.POSITIVE_INFINITY );
+		HBox.setHgrow( statusField, Priority.ALWAYS );
+		HBox.setMargin( statusField, new Insets( 5, 0, 0, 0 ) );
+	}
 
-			getChildren( ).add( exportToCsvLink );
-		}
+	private void configureExportToCsvLink( ) {
+		exportToCsvLink.setText( RESOURCE_BUNDLE.getString( "exportToCSV" ) );
 	}
 
 	/**
@@ -67,9 +67,18 @@ public final class AggregatedMethodStatusBar extends HBox {
 		exportToCsvLink.setOnAction( value );
 	}
 
-	public void setValue( final int aMethods, final int aTotalMethods ) {
+	/**
+	 * Sets the value which is displayed in the component.
+	 * 
+	 * @param methods
+	 *            The number of methods.
+	 * @param totalMethods
+	 *            The total number of methods.
+	 */
+	public void setValue( final int methods, final int totalMethods ) {
 		final NumberFormat decimalFormat = NumberFormat.getInstance( );
-		status.setText( String.format( RESOURCE_BUNDLE.getString( "statusLabel" ), decimalFormat.format( aMethods ), decimalFormat.format( aTotalMethods ) ) );
+		final String text = String.format( RESOURCE_BUNDLE.getString( "statusLabel" ), decimalFormat.format( methods ), decimalFormat.format( totalMethods ) );
+		statusField.setText( text );
 	}
 
 }
