@@ -88,7 +88,7 @@ public final class AsciiFileReader extends Reader {
 		final MonitoringProbe probe = MonitoringUtil.createMonitoringProbe( getClass( ), "readNonRecursiveFromDirectory(java.io.File)" );
 
 		try {
-			temporaryRepository.clearBeforeNextDirectory( );
+			getTemporaryRepository( ).clearBeforeNextDirectory( );
 
 			ivStringMapping = readMappingFile( aDirectory );
 			extractImportKeysFromMapping( );
@@ -113,7 +113,7 @@ public final class AsciiFileReader extends Reader {
 		ivTraceMetadataKey = -1;
 		ivKiekerMetadataRecordKey = -1;
 
-		ivStringMapping.forEach( ( Consumer<IntObjectCursor<String>> ) aCursor -> {
+		ivStringMapping.forEach( (Consumer<IntObjectCursor<String>>) aCursor -> {
 			final int key = aCursor.key;
 			final String value = aCursor.value;
 
@@ -157,12 +157,12 @@ public final class AsciiFileReader extends Reader {
 						readKiekerMetadataRecord( remainingLine );
 					} else {
 						// Skip the line
-						temporaryRepository.processIgnoredRecord( );
+						getTemporaryRepository( ).processIgnoredRecord( );
 					}
 				}
 			}
 
-			temporaryRepository.processProcessedBytes( Files.size( aAsciiFile ) );
+			getTemporaryRepository( ).processProcessedBytes( Files.size( aAsciiFile ) );
 		} catch ( final Throwable t ) {
 			probe.fail( t );
 			throw t;
@@ -178,7 +178,7 @@ public final class AsciiFileReader extends Reader {
 			final long traceId = Long.parseLong( matcher.group( 2 ) ); // Trace Id
 			// The rest is ignored
 
-			temporaryRepository.processBeforeOperationEvent( timestamp, traceId );
+			getTemporaryRepository( ).processBeforeOperationEvent( timestamp, traceId );
 		}
 	}
 
@@ -193,7 +193,7 @@ public final class AsciiFileReader extends Reader {
 			final String methodName = matcher.group( 3 ); // Method name
 			final String clazz = matcher.group( 4 ); // Class name
 
-			temporaryRepository.processAfterOperationEvent( timestamp, traceId, methodName, clazz );
+			getTemporaryRepository( ).processAfterOperationEvent( timestamp, traceId, methodName, clazz );
 		}
 	}
 
@@ -209,7 +209,7 @@ public final class AsciiFileReader extends Reader {
 			final String clazz = matcher.group( 4 ); // Class name
 			final String exception = matcher.group( 5 );
 
-			final MethodCall methodCall = temporaryRepository.processAfterOperationEvent( timestamp, traceId, methodName, clazz );
+			final MethodCall methodCall = getTemporaryRepository( ).processAfterOperationEvent( timestamp, traceId, methodName, clazz );
 			if ( methodCall != null ) {
 				methodCall.setException( exception );
 			}
@@ -225,7 +225,7 @@ public final class AsciiFileReader extends Reader {
 			final String host = matcher.group( 2 ); // Hostname
 			// The rest is ignored
 
-			temporaryRepository.processTraceMetadata( traceId, host );
+			getTemporaryRepository( ).processTraceMetadata( traceId, host );
 		}
 	}
 
@@ -235,7 +235,7 @@ public final class AsciiFileReader extends Reader {
 			final String timeUnitName = matcher.group( 1 ); // Time unit
 			// The rest is ignored
 
-			temporaryRepository.processSourceTimeUnit( timeUnitName );
+			getTemporaryRepository( ).processSourceTimeUnit( timeUnitName );
 		}
 	}
 

@@ -137,12 +137,12 @@ public class MonitoringLogService implements Service {
 	private File extractZIPFile( final File file ) throws ZipException, IOException {
 		final File tempDirectory = Files.createTempDir( );
 
-		try ( final ZipFile zipFile = new ZipFile( file ) ) {
+		try ( ZipFile zipFile = new ZipFile( file ) ) {
 			final Enumeration<? extends ZipEntry> zipEntries = zipFile.entries( );
 			while ( zipEntries.hasMoreElements( ) ) {
 				final ZipEntry zipEntry = zipEntries.nextElement( );
 				try ( InputStream inputStream = zipFile.getInputStream( zipEntry ) ) {
-					try ( final FileOutputStream outputStream = new FileOutputStream( new File( tempDirectory, zipEntry.getName( ) ) ) ) {
+					try ( FileOutputStream outputStream = new FileOutputStream( new File( tempDirectory, zipEntry.getName( ) ) ) ) {
 						ByteStreams.copy( inputStream, outputStream );
 					}
 				}

@@ -41,15 +41,15 @@ public abstract class Reader {
 
 	private static final Pattern MAPPING_FILE_PATTERN = Pattern.compile( "\\$(\\d*)=(.*)" );
 
-	protected final TemporaryRepository temporaryRepository;
+	private final TemporaryRepository temporaryRepository;
 
 	public Reader( final TemporaryRepository temporaryRepository ) {
 		this.temporaryRepository = temporaryRepository;
 	}
 
-	public abstract void readFromDirectory( final File directory ) throws IOException;
+	public abstract void readFromDirectory( File directory ) throws IOException;
 
-	public abstract boolean shouldBeExecuted( final File directory ) throws IOException;
+	public abstract boolean shouldBeExecuted( File directory ) throws IOException;
 
 	/**
 	 * Reads the Kieker mapping file from the given directory. If the directory contains no such mapping file, an empty
@@ -170,6 +170,10 @@ public abstract class Reader {
 		} finally {
 			probe.stop( );
 		}
+	}
+
+	protected TemporaryRepository getTemporaryRepository( ) {
+		return temporaryRepository;
 	}
 
 }

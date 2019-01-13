@@ -16,7 +16,7 @@
 
 package kieker.diagnosis.backend.monitoring;
 
-public class MonitoringUtil {
+public final class MonitoringUtil {
 
 	private static volatile MonitoringProbeFactory cvMonitoringProbeFactory = new NoOpMonitoringProbeFactory( );
 

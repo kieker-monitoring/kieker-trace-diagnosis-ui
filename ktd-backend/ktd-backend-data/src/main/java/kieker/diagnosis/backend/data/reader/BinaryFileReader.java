@@ -87,7 +87,7 @@ public final class BinaryFileReader extends Reader {
 		final MonitoringProbe probe = MonitoringUtil.createMonitoringProbe( getClass( ), "readNonRecursiveFromDirectory(java.io.File)" );
 
 		try {
-			temporaryRepository.clearBeforeNextDirectory( );
+			getTemporaryRepository( ).clearBeforeNextDirectory( );
 			ignoredRecordsSizeMap.clear( );
 
 			ivStringMapping = readMappingFile( aDirectory );
@@ -160,10 +160,10 @@ public final class BinaryFileReader extends Reader {
 				}
 			} catch ( final BufferUnderflowException | IllegalArgumentException ex ) {
 				// The stream is incomplete. We still want to terminate the whole import in a useful manner.
-				temporaryRepository.processException( ex );
+				getTemporaryRepository( ).processException( ex );
 			}
 
-			temporaryRepository.processProcessedBytes( binaryContent.length );
+			getTemporaryRepository( ).processProcessedBytes( binaryContent.length );
 		} catch ( final Throwable t ) {
 			probe.fail( t );
 			throw t;
@@ -181,7 +181,7 @@ public final class BinaryFileReader extends Reader {
 		final long traceId = aByteBuffer.getLong( ); // Trace Id
 		skipBytes( (byte) ( 3 * 4 ), aByteBuffer ); // Ignore order index, method name and class name
 
-		temporaryRepository.processBeforeOperationEvent( timestamp, traceId );
+		getTemporaryRepository( ).processBeforeOperationEvent( timestamp, traceId );
 	}
 
 	private MethodCall readAfterOperationEvent( final ByteBuffer aByteBuffer ) {
@@ -191,7 +191,7 @@ public final class BinaryFileReader extends Reader {
 		final String methodName = ivStringMapping.get( aByteBuffer.getInt( ) ); // Method name
 		final String clazz = ivStringMapping.get( aByteBuffer.getInt( ) ); // Class name
 
-		return temporaryRepository.processAfterOperationEvent( timestamp, traceId, methodName, clazz );
+		return getTemporaryRepository( ).processAfterOperationEvent( timestamp, traceId, methodName, clazz );
 	}
 
 	private void readAfterOperationFailedEvent( final ByteBuffer aByteBuffer ) {
@@ -213,7 +213,7 @@ public final class BinaryFileReader extends Reader {
 		final String host = ivStringMapping.get( aByteBuffer.getInt( ) ); // Hostname
 		skipBytes( (byte) ( 8 + 4 ), aByteBuffer ); // Ignore parent trace Id and parent order Id
 
-		temporaryRepository.processTraceMetadata( traceId, host );
+		getTemporaryRepository( ).processTraceMetadata( traceId, host );
 	}
 
 	private void readKiekerMetadataRecord( final ByteBuffer aByteBuffer ) {
@@ -221,7 +221,7 @@ public final class BinaryFileReader extends Reader {
 		final String timeUnitName = ivStringMapping.get( aByteBuffer.getInt( ) ); // Time unit
 		skipBytes( (byte) 8, aByteBuffer ); // Ignore the number of records
 
-		temporaryRepository.processSourceTimeUnit( timeUnitName );
+		getTemporaryRepository( ).processSourceTimeUnit( timeUnitName );
 	}
 
 	private void readUnknownRecord( final ByteBuffer aByteBuffer, final int aRecordKey ) {
@@ -243,7 +243,7 @@ public final class BinaryFileReader extends Reader {
 			size = ignoredRecordsSizeMap.get( aRecordKey );
 		}
 
-		temporaryRepository.processIgnoredRecord( );
+		getTemporaryRepository( ).processIgnoredRecord( );
 		skipBytes( size, aByteBuffer );
 	}
 

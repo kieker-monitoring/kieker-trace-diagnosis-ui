@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  */
 final class SimpleEnumApplicationProperty extends EnumApplicationProperty<TimeUnit> {
 
-	public SimpleEnumApplicationProperty( ) {
+	SimpleEnumApplicationProperty( ) {
 		super( TimeUnit.class );
 	}
 

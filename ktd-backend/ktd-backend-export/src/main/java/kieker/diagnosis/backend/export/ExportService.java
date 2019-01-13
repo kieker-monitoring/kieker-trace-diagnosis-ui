@@ -41,12 +41,12 @@ public class ExportService implements Service {
 	 *            The file in which the data should be written.
 	 * @param csvData
 	 *            The CSV data to be written.
-	 * 
+	 *
 	 * @throws IOException
 	 *             If something went wrong while writing the data.
 	 */
 	public void exportToCSV( final File file, final CSVData csvData ) throws IOException {
-		try ( final FileWriter fileWriter = new FileWriter( file ) ) {
+		try ( FileWriter fileWriter = new FileWriter( file ) ) {
 			writeHeader( fileWriter, csvData.getHeaders( ) );
 			writeValues( fileWriter, csvData.getRows( ) );
 		}

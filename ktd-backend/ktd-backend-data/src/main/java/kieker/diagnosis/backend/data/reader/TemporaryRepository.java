@@ -318,7 +318,7 @@ public final class TemporaryRepository {
 		private final MethodCall methodCall;
 		private int ivHash;
 
-		public AggregationKey( final String host, final String clazz, final String method, final String exception, final MethodCall methodCall ) {
+		AggregationKey( final String host, final String clazz, final String method, final String exception, final MethodCall methodCall ) {
 			this.host = host;
 			this.clazz = clazz;
 			this.method = method;
