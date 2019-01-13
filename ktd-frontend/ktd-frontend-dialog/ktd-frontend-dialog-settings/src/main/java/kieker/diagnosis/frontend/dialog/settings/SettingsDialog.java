@@ -53,14 +53,31 @@ public final class SettingsDialog extends Dialog<Settings> implements DialogMixi
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( SettingsDialog.class.getCanonicalName( ) );
 
-	private final ObjectProperty<TimestampAppearance> ivTimestampAppearance = new SimpleObjectProperty<>( );
-	private final ObjectProperty<TimeUnit> ivTimeUnit = new SimpleObjectProperty<>( );
-	private final ObjectProperty<ClassAppearance> ivClassAppearance = new SimpleObjectProperty<>( );
-	private final ObjectProperty<MethodAppearance> ivMethodAppearance = new SimpleObjectProperty<>( );
-	private final BooleanProperty ivShowUnmonitoredTimeProperty = new SimpleBooleanProperty( );
-	private final ObjectProperty<MethodCallAggregation> ivMethodCallAggregation = new SimpleObjectProperty<>( );
-	private final ObjectProperty<Integer> ivMaxNumberOfMethodCalls = new SimpleObjectProperty<>( );
-	private final ObjectProperty<Float> ivMethodCallThreshold = new SimpleObjectProperty<>( );
+	private final ObjectProperty<TimestampAppearance> timestampAppearance = new SimpleObjectProperty<>( );
+	private final ObjectProperty<TimeUnit> timeUnit = new SimpleObjectProperty<>( );
+	private final ObjectProperty<ClassAppearance> classAppearance = new SimpleObjectProperty<>( );
+	private final ObjectProperty<MethodAppearance> methodAppearance = new SimpleObjectProperty<>( );
+	private final BooleanProperty showUnmonitoredTimeProperty = new SimpleBooleanProperty( );
+	private final ObjectProperty<MethodCallAggregation> methodCallAggregation = new SimpleObjectProperty<>( );
+	private final ObjectProperty<Integer> maxNumberOfMethodCalls = new SimpleObjectProperty<>( );
+	private final ObjectProperty<Float> methodCallThreshold = new SimpleObjectProperty<>( );
+
+	private final Label timestampAppearanceLabel = new Label( );
+	private final ComboBox<TimestampAppearance> timestampAppearanceField = new ComboBox<>( );
+	private final Label timeUnitLabel = new Label( );
+	private final ComboBox<TimeUnit> timeUnitField = new ComboBox<>( );
+	private final Label classesLabel = new Label( );
+	private final ComboBox<ClassAppearance> classesField = new ComboBox<>( );
+	private final Label methodsLabel = new Label( );
+	private final ComboBox<MethodAppearance> methodsField = new ComboBox<>( );
+	private final Label showUnmonitoredTimeLabel = new Label( );
+	private final CheckBox showUnmonitoredTimeField = new CheckBox( );
+	private final Label methodCallAggregationLabel = new Label( );
+	private final ComboBox<MethodCallAggregation> methodCallAggregationField = new ComboBox<>( );
+	private final Label maxNumberOfCallsLabel = new Label( );
+	private final IntegerTextField maxNumberOfCallsField = new IntegerTextField( );
+	private final Label methodCallThresholdLabel = new Label( );
+	private final FloatTextField methodCallThresholdField = new FloatTextField( );
 
 	public SettingsDialog( ) {
 		configureDialog( );
@@ -85,229 +102,147 @@ public final class SettingsDialog extends Dialog<Settings> implements DialogMixi
 		vBox.setSpacing( 10 );
 		getDialogPane( ).setContent( vBox );
 
-		{
-			final TitledPane titledPane = new TitledPane( );
-			titledPane.setCollapsible( false );
-			titledPane.setText( RESOURCE_BUNDLE.getString( "appearance" ) );
+		addAppearancePane( vBox );
+		addAggregateMethodCallsPane( vBox );
+	}
 
-			{
-				final GridPane gridPane = new GridPane( );
-				gridPane.setVgap( 5 );
-				gridPane.setHgap( 5 );
+	private void addAppearancePane( final VBox vBox ) {
+		final TitledPane appearanceTitledPane = new TitledPane( );
+		appearanceTitledPane.setCollapsible( false );
+		appearanceTitledPane.setText( RESOURCE_BUNDLE.getString( "appearance" ) );
 
-				int rowIndex = 0;
+		final GridPane appearanceGridPane = new GridPane( );
+		appearanceGridPane.setVgap( 5 );
+		appearanceGridPane.setHgap( 5 );
 
-				{
-					final Label label = new Label( );
-					label.setText( RESOURCE_BUNDLE.getString( "timestamp" ) );
+		int rowIndex = 0;
 
-					GridPane.setRowIndex( label, rowIndex );
-					GridPane.setColumnIndex( label, 1 );
+		configureTimestampAppearanceLabelAndField( );
+		appearanceGridPane.add( timestampAppearanceLabel, 1, rowIndex );
+		appearanceGridPane.add( timestampAppearanceField, 2, rowIndex++ );
 
-					gridPane.getChildren( ).add( label );
-				}
+		configureTimeUnitLabelAndField( );
+		appearanceGridPane.add( timeUnitLabel, 1, rowIndex );
+		appearanceGridPane.add( timeUnitField, 2, rowIndex++ );
 
-				{
-					final ComboBox<TimestampAppearance> timestampAppearanceField = new ComboBox<>( );
-					timestampAppearanceField.setItems( FXCollections.observableArrayList( TimestampAppearance.values( ) ) );
-					timestampAppearanceField.setValue( TimestampAppearance.DATE_AND_TIME );
-					timestampAppearanceField.setConverter( new EnumStringConverter<>( TimestampAppearance.class ) );
-					timestampAppearanceField.setMaxWidth( Double.POSITIVE_INFINITY );
-					timestampAppearanceField.valueProperty( ).bindBidirectional( ivTimestampAppearance );
+		configureClassesLabelAndField( );
+		appearanceGridPane.add( classesLabel, 1, rowIndex );
+		appearanceGridPane.add( classesField, 2, rowIndex++ );
 
-					GridPane.setRowIndex( timestampAppearanceField, rowIndex++ );
-					GridPane.setColumnIndex( timestampAppearanceField, 2 );
+		configureMethodsLabelAndField( );
+		appearanceGridPane.add( methodsLabel, 1, rowIndex );
+		appearanceGridPane.add( methodsField, 2, rowIndex++ );
 
-					gridPane.getChildren( ).add( timestampAppearanceField );
-				}
+		configureShowUnmonitoredTimeLabelAndField( );
+		appearanceGridPane.add( showUnmonitoredTimeLabel, 1, rowIndex );
+		appearanceGridPane.add( showUnmonitoredTimeField, 2, rowIndex++ );
 
-				{
-					final Label label = new Label( );
-					label.setText( RESOURCE_BUNDLE.getString( "timeunit" ) );
+		appearanceTitledPane.setContent( appearanceGridPane );
 
-					GridPane.setRowIndex( label, rowIndex );
-					GridPane.setColumnIndex( label, 1 );
+		vBox.getChildren( ).add( appearanceTitledPane );
+	}
 
-					gridPane.getChildren( ).add( label );
-				}
+	private void addAggregateMethodCallsPane( final VBox vBox ) {
+		final TitledPane aggregateMethodCallsTitledPane = new TitledPane( );
+		aggregateMethodCallsTitledPane.setCollapsible( false );
+		aggregateMethodCallsTitledPane.setText( RESOURCE_BUNDLE.getString( "aggregateMethodCalls" ) );
 
-				{
-					final ComboBox<TimeUnit> timeUnitField = new ComboBox<>( );
-					timeUnitField.setItems( FXCollections.observableArrayList( TimeUnit.values( ) ) );
-					timeUnitField.setConverter( new EnumStringConverter<>( TimeUnit.class ) );
-					timeUnitField.setMaxWidth( Double.POSITIVE_INFINITY );
-					timeUnitField.valueProperty( ).bindBidirectional( ivTimeUnit );
+		final GridPane aggregateMethodCallsGridPane = new GridPane( );
+		aggregateMethodCallsGridPane.setVgap( 5 );
+		aggregateMethodCallsGridPane.setHgap( 5 );
 
-					GridPane.setRowIndex( timeUnitField, rowIndex++ );
-					GridPane.setColumnIndex( timeUnitField, 2 );
+		int rowIndex = 0;
 
-					gridPane.getChildren( ).add( timeUnitField );
-				}
+		configureMethodCallAggregationLabelAndField( );
+		aggregateMethodCallsGridPane.add( methodCallAggregationLabel, 1, rowIndex );
+		aggregateMethodCallsGridPane.add( methodCallAggregationField, 2, rowIndex++ );
 
-				{
-					final Label label = new Label( );
-					label.setText( RESOURCE_BUNDLE.getString( "classes" ) );
+		configureMaxNumberOfCallsLabelAndField( );
+		aggregateMethodCallsGridPane.add( maxNumberOfCallsLabel, 1, rowIndex );
+		aggregateMethodCallsGridPane.add( maxNumberOfCallsField, 2, rowIndex++ );
 
-					GridPane.setRowIndex( label, rowIndex );
-					GridPane.setColumnIndex( label, 1 );
+		configureMethodCallThresholdLabelAndField( );
+		aggregateMethodCallsGridPane.add( methodCallThresholdLabel, 1, rowIndex );
+		aggregateMethodCallsGridPane.add( methodCallThresholdField, 2, rowIndex++ );
 
-					gridPane.getChildren( ).add( label );
-				}
+		aggregateMethodCallsTitledPane.setContent( aggregateMethodCallsGridPane );
 
-				{
-					final ComboBox<ClassAppearance> classesField = new ComboBox<>( );
-					classesField.setItems( FXCollections.observableArrayList( ClassAppearance.values( ) ) );
-					classesField.setConverter( new EnumStringConverter<>( ClassAppearance.class ) );
-					classesField.setMaxWidth( Double.POSITIVE_INFINITY );
-					classesField.valueProperty( ).bindBidirectional( ivClassAppearance );
+		vBox.getChildren( ).add( aggregateMethodCallsTitledPane );
+	}
 
-					GridPane.setRowIndex( classesField, rowIndex++ );
-					GridPane.setColumnIndex( classesField, 2 );
+	private void configureMaxNumberOfCallsLabelAndField( ) {
+		maxNumberOfCallsLabel.setText( RESOURCE_BUNDLE.getString( "maxNumberOfMethodCalls" ) );
 
-					gridPane.getChildren( ).add( classesField );
-				}
+		maxNumberOfCallsField.setId( "settingsDialogMaxMethodCalls" );
 
-				{
-					final Label label = new Label( );
-					label.setText( RESOURCE_BUNDLE.getString( "methods" ) );
+		final ReadOnlyObjectProperty<MethodCallAggregation> property = methodCallAggregationField.getSelectionModel( ).selectedItemProperty( );
+		maxNumberOfCallsField.disableProperty( ).bind( property.isEqualTo( MethodCallAggregation.NONE ).or( property.isEqualTo( MethodCallAggregation.BY_THRESHOLD ) ) );
+		maxNumberOfCallsField.valueProperty( ).bindBidirectional( maxNumberOfMethodCalls );
+	}
 
-					GridPane.setRowIndex( label, rowIndex );
-					GridPane.setColumnIndex( label, 1 );
+	private void configureMethodCallAggregationLabelAndField( ) {
+		methodCallAggregationLabel.setText( RESOURCE_BUNDLE.getString( "methodCallAggregation" ) );
 
-					gridPane.getChildren( ).add( label );
-				}
+		methodCallAggregationField.setItems( FXCollections.observableArrayList( MethodCallAggregation.values( ) ) );
+		methodCallAggregationField.setConverter( new EnumStringConverter<>( MethodCallAggregation.class ) );
+		methodCallAggregationField.setMaxWidth( Double.POSITIVE_INFINITY );
+		methodCallAggregationField.valueProperty( ).bindBidirectional( methodCallAggregation );
 
-				{
-					final ComboBox<MethodAppearance> methodsField = new ComboBox<>( );
-					methodsField.setItems( FXCollections.observableArrayList( MethodAppearance.values( ) ) );
-					methodsField.setConverter( new EnumStringConverter<>( MethodAppearance.class ) );
-					methodsField.setMaxWidth( Double.POSITIVE_INFINITY );
-					methodsField.valueProperty( ).bindBidirectional( ivMethodAppearance );
+		GridPane.setHgrow( methodCallAggregationField, Priority.ALWAYS );
+	}
 
-					GridPane.setRowIndex( methodsField, rowIndex++ );
-					GridPane.setColumnIndex( methodsField, 2 );
-					GridPane.setHgrow( methodsField, Priority.ALWAYS );
+	private void configureMethodCallThresholdLabelAndField( ) {
+		methodCallThresholdLabel.setText( RESOURCE_BUNDLE.getString( "methodCallThreshold" ) );
 
-					gridPane.getChildren( ).add( methodsField );
-				}
+		methodCallThresholdField.setId( "settingsDialogMethodCallThreshold" );
+		methodCallThresholdField.valueProperty( ).bindBidirectional( methodCallThreshold );
+		final ReadOnlyObjectProperty<MethodCallAggregation> selectedItemProperty = methodCallAggregationField.getSelectionModel( ).selectedItemProperty( );
+		methodCallThresholdField.disableProperty( ).bind( selectedItemProperty.isEqualTo( MethodCallAggregation.BY_THRESHOLD ).not( ) );
+	}
 
-				{
-					final Label label = new Label( );
-					label.setText( RESOURCE_BUNDLE.getString( "showUnmonitoredTime" ) );
+	private void configureShowUnmonitoredTimeLabelAndField( ) {
+		showUnmonitoredTimeLabel.setText( RESOURCE_BUNDLE.getString( "showUnmonitoredTime" ) );
 
-					GridPane.setRowIndex( label, rowIndex );
-					GridPane.setColumnIndex( label, 1 );
+		showUnmonitoredTimeField.selectedProperty( ).bindBidirectional( showUnmonitoredTimeProperty );
+	}
 
-					gridPane.getChildren( ).add( label );
-				}
+	private void configureMethodsLabelAndField( ) {
+		methodsLabel.setText( RESOURCE_BUNDLE.getString( "methods" ) );
 
-				{
-					final CheckBox showUnmonitoredTimeField = new CheckBox( );
+		methodsField.setItems( FXCollections.observableArrayList( MethodAppearance.values( ) ) );
+		methodsField.setConverter( new EnumStringConverter<>( MethodAppearance.class ) );
+		methodsField.setMaxWidth( Double.POSITIVE_INFINITY );
+		methodsField.valueProperty( ).bindBidirectional( methodAppearance );
 
-					GridPane.setRowIndex( showUnmonitoredTimeField, rowIndex++ );
-					GridPane.setColumnIndex( showUnmonitoredTimeField, 2 );
+		GridPane.setHgrow( methodsField, Priority.ALWAYS );
+	}
 
-					gridPane.getChildren( ).add( showUnmonitoredTimeField );
+	private void configureClassesLabelAndField( ) {
+		classesLabel.setText( RESOURCE_BUNDLE.getString( "classes" ) );
 
-					showUnmonitoredTimeField.selectedProperty( ).bindBidirectional( ivShowUnmonitoredTimeProperty );
-				}
+		classesField.setItems( FXCollections.observableArrayList( ClassAppearance.values( ) ) );
+		classesField.setConverter( new EnumStringConverter<>( ClassAppearance.class ) );
+		classesField.setMaxWidth( Double.POSITIVE_INFINITY );
+		classesField.valueProperty( ).bindBidirectional( classAppearance );
+	}
 
-				titledPane.setContent( gridPane );
-			}
+	private void configureTimeUnitLabelAndField( ) {
+		timeUnitLabel.setText( RESOURCE_BUNDLE.getString( "timeunit" ) );
 
-			vBox.getChildren( ).add( titledPane );
-		}
+		timeUnitField.setItems( FXCollections.observableArrayList( TimeUnit.values( ) ) );
+		timeUnitField.setConverter( new EnumStringConverter<>( TimeUnit.class ) );
+		timeUnitField.setMaxWidth( Double.POSITIVE_INFINITY );
+		timeUnitField.valueProperty( ).bindBidirectional( timeUnit );
+	}
 
-		{
-			final TitledPane titledPane = new TitledPane( );
-			titledPane.setCollapsible( false );
-			titledPane.setText( RESOURCE_BUNDLE.getString( "aggregateMethodCalls" ) );
+	private void configureTimestampAppearanceLabelAndField( ) {
+		timestampAppearanceLabel.setText( RESOURCE_BUNDLE.getString( "timestamp" ) );
 
-			{
-				final GridPane gridPane = new GridPane( );
-				gridPane.setVgap( 5 );
-				gridPane.setHgap( 5 );
-
-				int rowIndex = 0;
-
-				{
-					final Label label = new Label( );
-					label.setText( RESOURCE_BUNDLE.getString( "methodCallAggregation" ) );
-
-					GridPane.setRowIndex( label, rowIndex );
-					GridPane.setColumnIndex( label, 1 );
-
-					gridPane.getChildren( ).add( label );
-				}
-
-				final ComboBox<MethodCallAggregation> methodCallAggregationField = new ComboBox<>( );
-				{
-					methodCallAggregationField.setItems( FXCollections.observableArrayList( MethodCallAggregation.values( ) ) );
-					methodCallAggregationField.setConverter( new EnumStringConverter<>( MethodCallAggregation.class ) );
-					methodCallAggregationField.setMaxWidth( Double.POSITIVE_INFINITY );
-					methodCallAggregationField.valueProperty( ).bindBidirectional( ivMethodCallAggregation );
-
-					GridPane.setRowIndex( methodCallAggregationField, rowIndex++ );
-					GridPane.setColumnIndex( methodCallAggregationField, 2 );
-					GridPane.setHgrow( methodCallAggregationField, Priority.ALWAYS );
-
-					gridPane.getChildren( ).add( methodCallAggregationField );
-				}
-
-				{
-					final Label label = new Label( );
-					label.setText( RESOURCE_BUNDLE.getString( "maxNumberOfMethodCalls" ) );
-
-					GridPane.setRowIndex( label, rowIndex );
-					GridPane.setColumnIndex( label, 1 );
-
-					gridPane.getChildren( ).add( label );
-				}
-
-				{
-					final IntegerTextField maxNumberOfCallsField = new IntegerTextField( );
-					maxNumberOfCallsField.setId( "settingsDialogMaxMethodCalls" );
-
-					final ReadOnlyObjectProperty<MethodCallAggregation> property = methodCallAggregationField.getSelectionModel( ).selectedItemProperty( );
-					maxNumberOfCallsField.disableProperty( )
-							.bind( property.isEqualTo( MethodCallAggregation.NONE ).or( property.isEqualTo( MethodCallAggregation.BY_THRESHOLD ) ) );
-					maxNumberOfCallsField.valueProperty( ).bindBidirectional( ivMaxNumberOfMethodCalls );
-
-					GridPane.setRowIndex( maxNumberOfCallsField, rowIndex++ );
-					GridPane.setColumnIndex( maxNumberOfCallsField, 2 );
-
-					gridPane.getChildren( ).add( maxNumberOfCallsField );
-				}
-
-				{
-					final Label label = new Label( );
-					label.setText( RESOURCE_BUNDLE.getString( "methodCallThreshold" ) );
-
-					GridPane.setRowIndex( label, rowIndex );
-					GridPane.setColumnIndex( label, 1 );
-
-					gridPane.getChildren( ).add( label );
-				}
-
-				{
-					final FloatTextField methodCallThresholdField = new FloatTextField( );
-					methodCallThresholdField.setId( "settingsDialogMethodCallThreshold" );
-					methodCallThresholdField.valueProperty( ).bindBidirectional( ivMethodCallThreshold );
-					final ReadOnlyObjectProperty<MethodCallAggregation> selectedItemProperty = methodCallAggregationField.getSelectionModel( ).selectedItemProperty( );
-					methodCallThresholdField.disableProperty( ).bind( selectedItemProperty.isEqualTo( MethodCallAggregation.BY_THRESHOLD ).not( ) );
-
-					GridPane.setRowIndex( methodCallThresholdField, rowIndex++ );
-					GridPane.setColumnIndex( methodCallThresholdField, 2 );
-
-					gridPane.getChildren( ).add( methodCallThresholdField );
-				}
-
-				titledPane.setContent( gridPane );
-			}
-
-			vBox.getChildren( ).add( titledPane );
-		}
-
+		timestampAppearanceField.setItems( FXCollections.observableArrayList( TimestampAppearance.values( ) ) );
+		timestampAppearanceField.setValue( TimestampAppearance.DATE_AND_TIME );
+		timestampAppearanceField.setConverter( new EnumStringConverter<>( TimestampAppearance.class ) );
+		timestampAppearanceField.setMaxWidth( Double.POSITIVE_INFINITY );
+		timestampAppearanceField.valueProperty( ).bindBidirectional( timestampAppearance );
 	}
 
 	private void configureResultConverter( ) {
@@ -315,26 +250,26 @@ public final class SettingsDialog extends Dialog<Settings> implements DialogMixi
 	}
 
 	public void setValue( final Settings settings ) {
-		ivTimestampAppearance.setValue( settings.getTimestampAppearance( ) );
-		ivTimeUnit.setValue( settings.getTimeUnit( ) );
-		ivClassAppearance.setValue( settings.getClassAppearance( ) );
-		ivMethodAppearance.setValue( settings.getMethodAppearance( ) );
-		ivShowUnmonitoredTimeProperty.setValue( settings.isShowUnmonitoredTimeProperty( ) );
-		ivMethodCallAggregation.setValue( settings.getMethodCallAggregation( ) );
-		ivMaxNumberOfMethodCalls.setValue( settings.getMaxNumberOfMethodCalls( ) );
-		ivMethodCallThreshold.setValue( settings.getMethodCallThreshold( ) );
+		timestampAppearance.setValue( settings.getTimestampAppearance( ) );
+		timeUnit.setValue( settings.getTimeUnit( ) );
+		classAppearance.setValue( settings.getClassAppearance( ) );
+		methodAppearance.setValue( settings.getMethodAppearance( ) );
+		showUnmonitoredTimeProperty.setValue( settings.isShowUnmonitoredTimeProperty( ) );
+		methodCallAggregation.setValue( settings.getMethodCallAggregation( ) );
+		maxNumberOfMethodCalls.setValue( settings.getMaxNumberOfMethodCalls( ) );
+		methodCallThreshold.setValue( settings.getMethodCallThreshold( ) );
 	}
 
 	public Settings getValue( ) {
 		return Settings.builder( )
-				.timestampAppearance( ivTimestampAppearance.getValue( ) )
-				.timeUnit( ivTimeUnit.getValue( ) )
-				.classAppearance( ivClassAppearance.getValue( ) )
-				.methodAppearance( ivMethodAppearance.getValue( ) )
-				.showUnmonitoredTimeProperty( ivShowUnmonitoredTimeProperty.getValue( ) )
-				.methodCallAggregation( ivMethodCallAggregation.getValue( ) )
-				.maxNumberOfMethodCalls( ivMaxNumberOfMethodCalls.getValue( ) )
-				.methodCallThreshold( ivMethodCallThreshold.getValue( ) )
+				.timestampAppearance( timestampAppearance.getValue( ) )
+				.timeUnit( timeUnit.getValue( ) )
+				.classAppearance( classAppearance.getValue( ) )
+				.methodAppearance( methodAppearance.getValue( ) )
+				.showUnmonitoredTimeProperty( showUnmonitoredTimeProperty.getValue( ) )
+				.methodCallAggregation( methodCallAggregation.getValue( ) )
+				.maxNumberOfMethodCalls( maxNumberOfMethodCalls.getValue( ) )
+				.methodCallThreshold( methodCallThreshold.getValue( ) )
 				.build( );
 	}
 
@@ -352,13 +287,13 @@ public final class SettingsDialog extends Dialog<Settings> implements DialogMixi
 		boolean inputValid = true;
 		String errorMessage = "";
 
-		final Float methodCallThreshold = ivMethodCallThreshold.getValue( );
+		final Float methodCallThreshold = this.methodCallThreshold.getValue( );
 		if ( methodCallThreshold == null || methodCallThreshold <= 0.0f || methodCallThreshold >= 100.0 ) {
 			inputValid = false;
 			errorMessage = RESOURCE_BUNDLE.getString( "errorThresholdRange" );
 		}
 
-		final Integer maxNumberOfMethodCalls = ivMaxNumberOfMethodCalls.getValue( );
+		final Integer maxNumberOfMethodCalls = this.maxNumberOfMethodCalls.getValue( );
 		if ( maxNumberOfMethodCalls == null || maxNumberOfMethodCalls <= 0 ) {
 			inputValid = false;
 			errorMessage = RESOURCE_BUNDLE.getString( "errorMaxNumberOfMethodCallsRange" );

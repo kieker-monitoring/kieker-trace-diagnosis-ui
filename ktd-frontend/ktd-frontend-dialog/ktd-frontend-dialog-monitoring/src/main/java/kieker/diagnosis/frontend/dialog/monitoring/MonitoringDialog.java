@@ -29,7 +29,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
@@ -49,19 +48,38 @@ import kieker.diagnosis.frontend.base.atom.IntegerTextField;
 import kieker.diagnosis.frontend.base.mixin.DialogMixin;
 import kieker.diagnosis.frontend.base.mixin.ImageMixin;
 import kieker.diagnosis.frontend.base.ui.EnumStringConverter;
+import kieker.diagnosis.frontend.dialog.alert.Alert;
 
 public final class MonitoringDialog extends Dialog<MonitoringConfiguration> implements DialogMixin, ImageMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MonitoringDialog.class.getCanonicalName( ) );
 
-	private final StringProperty ivOutputDirectory = new SimpleStringProperty( );
-	private final BooleanProperty ivActive = new SimpleBooleanProperty( );
-	private final ObjectProperty<Timer> ivTimer = new SimpleObjectProperty<>( );
-	private final ObjectProperty<Writer> ivWriter = new SimpleObjectProperty<>( );
-	private final ObjectProperty<Integer> ivMaxEntriesPerFile = new SimpleObjectProperty<>( );
-	private final ObjectProperty<Integer> ivQueueSize = new SimpleObjectProperty<>( );
-	private final ObjectProperty<Integer> ivBuffer = new SimpleObjectProperty<>( );
-	private final ObjectProperty<Status> ivStatus = new SimpleObjectProperty<>( );
+	private final StringProperty outputDirectory = new SimpleStringProperty( );
+	private final BooleanProperty active = new SimpleBooleanProperty( );
+	private final ObjectProperty<Timer> timer = new SimpleObjectProperty<>( );
+	private final ObjectProperty<Writer> writer = new SimpleObjectProperty<>( );
+	private final ObjectProperty<Integer> maxEntriesPerFile = new SimpleObjectProperty<>( );
+	private final ObjectProperty<Integer> queueSize = new SimpleObjectProperty<>( );
+	private final ObjectProperty<Integer> buffer = new SimpleObjectProperty<>( );
+	private final ObjectProperty<Status> status = new SimpleObjectProperty<>( );
+
+	private final GridPane gridPane = new GridPane( );
+	private final Label statusLabel = new Label( );
+	private final Label statusField = new Label( );
+	private final Label activeLabel = new Label( );
+	private final CheckBox activeField = new CheckBox( );
+	private final Label outputDirectoryLabel = new Label( );
+	private final TextField outputDirectoryField = new TextField( );
+	private final Label timerLabel = new Label( );
+	private final ComboBox<Timer> timerField = new ComboBox<>( );
+	private final Label writerLabel = new Label( );
+	private final ComboBox<Writer> writerField = new ComboBox<>( );
+	private final Label maxEntriesPerFileLabel = new Label( );
+	private final IntegerTextField maxEntriesPerFileField = new IntegerTextField( );
+	private final Label queueSizeLabel = new Label( );
+	private final IntegerTextField queueSizeField = new IntegerTextField( );
+	private final Label bufferLabel = new Label( );
+	private final IntegerTextField bufferField = new IntegerTextField( );
 
 	public MonitoringDialog( ) {
 		configureDialog( );
@@ -82,196 +100,119 @@ public final class MonitoringDialog extends Dialog<MonitoringConfiguration> impl
 	}
 
 	private void addComponents( ) {
-		final GridPane gridPane = new GridPane( );
-		VBox.setMargin( gridPane, new Insets( 10, 10, 0, 10 ) );
-		gridPane.setVgap( 5 );
-		gridPane.setHgap( 5 );
+		configureGridPane( );
+		getDialogPane( ).setContent( gridPane );
 
 		int rowIndex = 0;
 
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "status" ) );
+		configureStatusLabelAndField( );
+		gridPane.add( statusLabel, 1, rowIndex );
+		gridPane.add( statusField, 2, rowIndex++ );
 
-			GridPane.setRowIndex( label, rowIndex );
-			GridPane.setColumnIndex( label, 1 );
+		configureActiveLabelAndField( );
+		gridPane.add( activeLabel, 1, rowIndex );
+		gridPane.add( activeField, 2, rowIndex++ );
 
-			gridPane.getChildren( ).add( label );
-		}
+		configureOutputDirectoryLabelAndField( );
+		gridPane.add( outputDirectoryLabel, 1, rowIndex );
+		gridPane.add( outputDirectoryField, 2, rowIndex++ );
 
-		{
-			final Label statusField = new Label( );
-			statusField.setId( "monitoringDialogStatus" );
-			statusField.setMaxWidth( Double.POSITIVE_INFINITY );
-			statusField.textProperty( ).bindBidirectional( ivStatus, new EnumStringConverter<>( Status.class ) );
-			ivStatus.addListener( (ChangeListener<Status>) ( observable, oldStatus, newStatus ) -> {
-				final List<String> style = getStatusStyle( newStatus );
-				statusField.getStyleClass( ).setAll( style );
-			} );
+		configureTimerLabelAndField( );
+		gridPane.add( timerLabel, 1, rowIndex );
+		gridPane.add( timerField, 2, rowIndex++ );
 
-			GridPane.setRowIndex( statusField, rowIndex++ );
-			GridPane.setColumnIndex( statusField, 2 );
-			GridPane.setHgrow( statusField, Priority.ALWAYS );
+		configureWriterLabelAndField( );
+		gridPane.add( writerLabel, 1, rowIndex );
+		gridPane.add( writerField, 2, rowIndex++ );
 
-			gridPane.getChildren( ).add( statusField );
-		}
+		configureMaxEntriesPerFileLabelAndField( );
+		gridPane.add( maxEntriesPerFileLabel, 1, rowIndex );
+		gridPane.add( maxEntriesPerFileField, 2, rowIndex++ );
 
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "active" ) );
+		configureQueueSizeLabelAndField( );
+		gridPane.add( queueSizeLabel, 1, rowIndex );
+		gridPane.add( queueSizeField, 2, rowIndex++ );
 
-			GridPane.setRowIndex( label, rowIndex );
-			GridPane.setColumnIndex( label, 1 );
+		configureBufferLabelAndField( gridPane, rowIndex );
+		gridPane.add( bufferLabel, 1, rowIndex );
+		gridPane.add( bufferField, 2, rowIndex++ );
+	}
 
-			gridPane.getChildren( ).add( label );
-		}
+	private void configureGridPane( ) {
+		VBox.setMargin( gridPane, new Insets( 10, 10, 0, 10 ) );
+		gridPane.setVgap( 5 );
+		gridPane.setHgap( 5 );
+	}
 
-		{
-			final CheckBox activeField = new CheckBox( );
-			activeField.setId( "monitoringDialogActive" );
-			activeField.setMaxWidth( Double.POSITIVE_INFINITY );
-			activeField.selectedProperty( ).bindBidirectional( ivActive );
+	private void configureStatusLabelAndField( ) {
+		statusLabel.setText( RESOURCE_BUNDLE.getString( "status" ) );
 
-			GridPane.setRowIndex( activeField, rowIndex++ );
-			GridPane.setColumnIndex( activeField, 2 );
+		statusField.setId( "monitoringDialogStatus" );
+		statusField.setMaxWidth( Double.POSITIVE_INFINITY );
+		statusField.textProperty( ).bindBidirectional( status, new EnumStringConverter<>( Status.class ) );
+		status.addListener( (ChangeListener<Status>) ( observable, oldStatus, newStatus ) -> {
+			final List<String> style = getStatusStyle( newStatus );
+			statusField.getStyleClass( ).setAll( style );
+		} );
 
-			gridPane.getChildren( ).add( activeField );
-		}
+		GridPane.setHgrow( statusField, Priority.ALWAYS );
+	}
 
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "outputDirectory" ) );
+	private void configureActiveLabelAndField( ) {
+		activeLabel.setText( RESOURCE_BUNDLE.getString( "active" ) );
 
-			GridPane.setRowIndex( label, rowIndex );
-			GridPane.setColumnIndex( label, 1 );
+		activeField.setId( "monitoringDialogActive" );
+		activeField.setMaxWidth( Double.POSITIVE_INFINITY );
+		activeField.selectedProperty( ).bindBidirectional( active );
+	}
 
-			gridPane.getChildren( ).add( label );
-		}
+	private void configureOutputDirectoryLabelAndField( ) {
+		outputDirectoryLabel.setText( RESOURCE_BUNDLE.getString( "outputDirectory" ) );
 
-		{
-			final TextField outputDirectoryField = new TextField( );
-			outputDirectoryField.setMaxWidth( Double.POSITIVE_INFINITY );
-			outputDirectoryField.textProperty( ).bindBidirectional( ivOutputDirectory );
+		outputDirectoryField.setMaxWidth( Double.POSITIVE_INFINITY );
+		outputDirectoryField.textProperty( ).bindBidirectional( outputDirectory );
+	}
 
-			GridPane.setRowIndex( outputDirectoryField, rowIndex++ );
-			GridPane.setColumnIndex( outputDirectoryField, 2 );
+	private void configureTimerLabelAndField( ) {
+		timerLabel.setText( RESOURCE_BUNDLE.getString( "timer" ) );
 
-			gridPane.getChildren( ).add( outputDirectoryField );
-		}
+		timerField.setMaxWidth( Double.POSITIVE_INFINITY );
+		timerField.setConverter( new EnumStringConverter<>( Timer.class ) );
+		timerField.valueProperty( ).bindBidirectional( timer );
+		timerField.setItems( FXCollections.observableArrayList( Timer.values( ) ) );
+	}
 
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "timer" ) );
+	private void configureWriterLabelAndField( ) {
+		writerLabel.setText( RESOURCE_BUNDLE.getString( "writer" ) );
 
-			GridPane.setRowIndex( label, rowIndex );
-			GridPane.setColumnIndex( label, 1 );
+		writerField.setMaxWidth( Double.POSITIVE_INFINITY );
+		writerField.setConverter( new EnumStringConverter<>( Writer.class ) );
+		writerField.valueProperty( ).bindBidirectional( writer );
+		writerField.setItems( FXCollections.observableArrayList( Writer.values( ) ) );
+	}
 
-			gridPane.getChildren( ).add( label );
-		}
+	private void configureMaxEntriesPerFileLabelAndField( ) {
+		maxEntriesPerFileLabel.setText( RESOURCE_BUNDLE.getString( "maxEntriesPerFile" ) );
 
-		{
-			final ComboBox<Timer> timerField = new ComboBox<>( );
-			timerField.setMaxWidth( Double.POSITIVE_INFINITY );
-			timerField.setConverter( new EnumStringConverter<>( Timer.class ) );
-			timerField.valueProperty( ).bindBidirectional( ivTimer );
-			timerField.setItems( FXCollections.observableArrayList( Timer.values( ) ) );
+		maxEntriesPerFileField.setId( "monitoringDialogMaxEntriesPerFile" );
+		maxEntriesPerFileField.setMaxWidth( Double.POSITIVE_INFINITY );
+		maxEntriesPerFileField.valueProperty( ).bindBidirectional( maxEntriesPerFile );
+	}
 
-			GridPane.setRowIndex( timerField, rowIndex++ );
-			GridPane.setColumnIndex( timerField, 2 );
+	private void configureQueueSizeLabelAndField( ) {
+		queueSizeLabel.setText( RESOURCE_BUNDLE.getString( "queueSize" ) );
 
-			gridPane.getChildren( ).add( timerField );
-		}
+		queueSizeField.setId( "monitoringDialogQueueSize" );
+		queueSizeField.setMaxWidth( Double.POSITIVE_INFINITY );
+		queueSizeField.valueProperty( ).bindBidirectional( queueSize );
+	}
 
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "writer" ) );
+	private void configureBufferLabelAndField( final GridPane gridPane, final int rowIndex ) {
+		bufferLabel.setText( RESOURCE_BUNDLE.getString( "buffer" ) );
 
-			GridPane.setRowIndex( label, rowIndex );
-			GridPane.setColumnIndex( label, 1 );
-
-			gridPane.getChildren( ).add( label );
-		}
-
-		{
-			final ComboBox<Writer> writerField = new ComboBox<>( );
-			writerField.setMaxWidth( Double.POSITIVE_INFINITY );
-			writerField.setConverter( new EnumStringConverter<>( Writer.class ) );
-			writerField.valueProperty( ).bindBidirectional( ivWriter );
-			writerField.setItems( FXCollections.observableArrayList( Writer.values( ) ) );
-
-			GridPane.setRowIndex( writerField, rowIndex++ );
-			GridPane.setColumnIndex( writerField, 2 );
-
-			gridPane.getChildren( ).add( writerField );
-		}
-
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "maxEntriesPerFile" ) );
-
-			GridPane.setRowIndex( label, rowIndex );
-			GridPane.setColumnIndex( label, 1 );
-
-			gridPane.getChildren( ).add( label );
-		}
-
-		{
-			final IntegerTextField maxEntriesPerFileField = new IntegerTextField( );
-			maxEntriesPerFileField.setId( "monitoringDialogMaxEntriesPerFile" );
-			maxEntriesPerFileField.setMaxWidth( Double.POSITIVE_INFINITY );
-			maxEntriesPerFileField.valueProperty( ).bindBidirectional( ivMaxEntriesPerFile );
-
-			GridPane.setRowIndex( maxEntriesPerFileField, rowIndex++ );
-			GridPane.setColumnIndex( maxEntriesPerFileField, 2 );
-
-			gridPane.getChildren( ).add( maxEntriesPerFileField );
-		}
-
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "queueSize" ) );
-
-			GridPane.setRowIndex( label, rowIndex );
-			GridPane.setColumnIndex( label, 1 );
-
-			gridPane.getChildren( ).add( label );
-		}
-
-		{
-			final IntegerTextField queueSizeField = new IntegerTextField( );
-			queueSizeField.setId( "monitoringDialogQueueSize" );
-			queueSizeField.setMaxWidth( Double.POSITIVE_INFINITY );
-			queueSizeField.valueProperty( ).bindBidirectional( ivQueueSize );
-
-			GridPane.setRowIndex( queueSizeField, rowIndex++ );
-			GridPane.setColumnIndex( queueSizeField, 2 );
-
-			gridPane.getChildren( ).add( queueSizeField );
-		}
-
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "buffer" ) );
-
-			GridPane.setRowIndex( label, rowIndex );
-			GridPane.setColumnIndex( label, 1 );
-
-			gridPane.getChildren( ).add( label );
-		}
-
-		{
-			final IntegerTextField bufferField = new IntegerTextField( );
-			bufferField.setId( "monitoringDialogBufferSize" );
-			bufferField.setMaxWidth( Double.POSITIVE_INFINITY );
-			bufferField.valueProperty( ).bindBidirectional( ivBuffer );
-
-			GridPane.setRowIndex( bufferField, rowIndex++ );
-			GridPane.setColumnIndex( bufferField, 2 );
-
-			gridPane.getChildren( ).add( bufferField );
-		}
-
-		getDialogPane( ).setContent( gridPane );
+		bufferField.setId( "monitoringDialogBufferSize" );
+		bufferField.setMaxWidth( Double.POSITIVE_INFINITY );
+		bufferField.valueProperty( ).bindBidirectional( buffer );
 	}
 
 	private void configureResultConverter( ) {
@@ -291,17 +232,17 @@ public final class MonitoringDialog extends Dialog<MonitoringConfiguration> impl
 	private boolean inputValid( ) {
 		boolean inputValid = true;
 
-		final Integer maxEntriesPerFile = ivMaxEntriesPerFile.get( );
-		if ( maxEntriesPerFile == null || ivMaxEntriesPerFile.get( ) <= 0 ) {
+		final Integer maxEntriesPerFile = this.maxEntriesPerFile.get( );
+		if ( maxEntriesPerFile == null || this.maxEntriesPerFile.get( ) <= 0 ) {
 			inputValid = false;
 		}
 
-		final Integer queueSize = ivQueueSize.get( );
+		final Integer queueSize = this.queueSize.get( );
 		if ( queueSize == null || queueSize <= 0 ) {
 			inputValid = false;
 		}
 
-		final Integer buffer = ivBuffer.get( );
+		final Integer buffer = this.buffer.get( );
 		if ( buffer == null || buffer <= 0 ) {
 			inputValid = false;
 		}
@@ -337,29 +278,29 @@ public final class MonitoringDialog extends Dialog<MonitoringConfiguration> impl
 	}
 
 	public void setValue( final MonitoringConfiguration monitoringConfiguration ) {
-		ivActive.setValue( monitoringConfiguration.isActive( ) );
-		ivOutputDirectory.setValue( monitoringConfiguration.getOutputDirectory( ) );
-		ivTimer.setValue( monitoringConfiguration.getTimer( ) );
-		ivWriter.setValue( monitoringConfiguration.getWriter( ) );
-		ivMaxEntriesPerFile.setValue( monitoringConfiguration.getMaxEntriesPerFile( ) );
-		ivQueueSize.setValue( monitoringConfiguration.getQueueSize( ) );
-		ivBuffer.setValue( monitoringConfiguration.getBuffer( ) );
+		active.setValue( monitoringConfiguration.isActive( ) );
+		outputDirectory.setValue( monitoringConfiguration.getOutputDirectory( ) );
+		timer.setValue( monitoringConfiguration.getTimer( ) );
+		writer.setValue( monitoringConfiguration.getWriter( ) );
+		maxEntriesPerFile.setValue( monitoringConfiguration.getMaxEntriesPerFile( ) );
+		queueSize.setValue( monitoringConfiguration.getQueueSize( ) );
+		buffer.setValue( monitoringConfiguration.getBuffer( ) );
 	}
 
 	public void setStatus( final Status status ) {
-		ivStatus.setValue( status );
+		this.status.setValue( status );
 	}
 
 	public MonitoringConfiguration getValue( ) {
 		final MonitoringConfiguration monitoringConfiguration = new MonitoringConfiguration( );
 
-		monitoringConfiguration.setActive( ivActive.getValue( ) );
-		monitoringConfiguration.setOutputDirectory( ivOutputDirectory.getValue( ) );
-		monitoringConfiguration.setTimer( ivTimer.getValue( ) );
-		monitoringConfiguration.setWriter( ivWriter.getValue( ) );
-		monitoringConfiguration.setMaxEntriesPerFile( ivMaxEntriesPerFile.getValue( ) );
-		monitoringConfiguration.setQueueSize( ivQueueSize.getValue( ) );
-		monitoringConfiguration.setBuffer( ivBuffer.getValue( ) );
+		monitoringConfiguration.setActive( active.getValue( ) );
+		monitoringConfiguration.setOutputDirectory( outputDirectory.getValue( ) );
+		monitoringConfiguration.setTimer( timer.getValue( ) );
+		monitoringConfiguration.setWriter( writer.getValue( ) );
+		monitoringConfiguration.setMaxEntriesPerFile( maxEntriesPerFile.getValue( ) );
+		monitoringConfiguration.setQueueSize( queueSize.getValue( ) );
+		monitoringConfiguration.setBuffer( buffer.getValue( ) );
 
 		return monitoringConfiguration;
 	}
