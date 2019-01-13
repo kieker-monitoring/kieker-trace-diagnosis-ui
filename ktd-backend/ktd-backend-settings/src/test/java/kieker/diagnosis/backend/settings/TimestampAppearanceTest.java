@@ -21,8 +21,6 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import kieker.diagnosis.backend.settings.TimestampAppearance;
-
 /**
  * Test class for the {@link TimestampAppearance}.
  *

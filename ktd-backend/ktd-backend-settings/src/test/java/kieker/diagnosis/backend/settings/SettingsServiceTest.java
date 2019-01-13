@@ -31,12 +31,6 @@ import com.google.inject.Injector;
 
 import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.backend.properties.PropertiesService;
-import kieker.diagnosis.backend.settings.ClassAppearance;
-import kieker.diagnosis.backend.settings.MethodAppearance;
-import kieker.diagnosis.backend.settings.MethodCallAggregation;
-import kieker.diagnosis.backend.settings.Settings;
-import kieker.diagnosis.backend.settings.SettingsService;
-import kieker.diagnosis.backend.settings.TimestampAppearance;
 import kieker.diagnosis.backend.settings.properties.TimeUnitProperty;
 
 /**

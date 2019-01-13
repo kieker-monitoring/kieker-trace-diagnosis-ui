@@ -26,9 +26,6 @@ import org.junit.Test;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import kieker.diagnosis.backend.properties.DevelopmentModeProperty;
-import kieker.diagnosis.backend.properties.PropertiesService;
-
 /**
  * Test class for {@link PropertiesService}.
  *

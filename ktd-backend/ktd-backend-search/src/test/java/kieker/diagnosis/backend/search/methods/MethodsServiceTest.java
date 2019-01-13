@@ -32,9 +32,6 @@ import com.google.inject.Injector;
 import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.data.MonitoringLogService;
-import kieker.diagnosis.backend.search.methods.MethodsFilter;
-import kieker.diagnosis.backend.search.methods.MethodsService;
-import kieker.diagnosis.backend.search.methods.SearchType;
 
 /**
  * Test class for the {@link MethodsService}.

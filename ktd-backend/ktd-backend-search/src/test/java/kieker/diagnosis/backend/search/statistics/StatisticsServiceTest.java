@@ -35,8 +35,6 @@ import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.data.MonitoringLogService;
 import kieker.diagnosis.backend.search.ServiceMockModule;
-import kieker.diagnosis.backend.search.statistics.Statistics;
-import kieker.diagnosis.backend.search.statistics.StatisticsService;
 
 /**
  * Test class for the {@link StatisticsService}.

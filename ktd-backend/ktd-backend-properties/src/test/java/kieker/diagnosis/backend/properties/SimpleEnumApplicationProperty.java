@@ -18,8 +18,6 @@ package kieker.diagnosis.backend.properties;
 
 import java.util.concurrent.TimeUnit;
 
-import kieker.diagnosis.backend.properties.EnumApplicationProperty;
-
 /**
  * Class to test the behavior of the properties.
  *

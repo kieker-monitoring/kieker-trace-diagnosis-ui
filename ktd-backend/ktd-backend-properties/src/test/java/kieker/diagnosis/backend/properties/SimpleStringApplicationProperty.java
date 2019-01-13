@@ -18,8 +18,6 @@ package kieker.diagnosis.backend.properties;
 
 import com.google.inject.Singleton;
 
-import kieker.diagnosis.backend.properties.StringApplicationProperty;
-
 /**
  * Class to test the behavior of the properties.
  *

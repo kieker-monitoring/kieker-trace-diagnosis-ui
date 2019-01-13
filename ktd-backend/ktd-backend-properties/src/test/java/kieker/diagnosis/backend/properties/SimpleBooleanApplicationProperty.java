@@ -16,8 +16,6 @@
 
 package kieker.diagnosis.backend.properties;
 
-import kieker.diagnosis.backend.properties.BooleanApplicationProperty;
-
 /**
  * Class to test the behavior of the properties.
  *

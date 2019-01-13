@@ -22,8 +22,6 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import kieker.diagnosis.backend.settings.ClassAppearance;
-
 /**
  * Test class for the {@link ClassAppearance}.
  *
