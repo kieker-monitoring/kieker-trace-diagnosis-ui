@@ -7,7 +7,11 @@ pipeline {
 	environment {
 		DOCKER_CONTAINER = 'openjdk:11-jdk-slim'
 	}
-	
+
+  options {
+    timeout(time: 15, unit: 'MINUTES')
+  }
+
 	stages {
 		
 		stage('Docker Pull') {
