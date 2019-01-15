@@ -16,12 +16,15 @@
 
 package kieker.diagnosis.frontend.tab.aggregatedmethods.complex;
 
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -29,6 +32,8 @@ import org.testfx.framework.junit.ApplicationTest;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
@@ -37,11 +42,12 @@ import javafx.stage.Stage;
 import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.data.MonitoringLogService;
+import kieker.diagnosis.backend.export.CSVData;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.settings.properties.TimeUnitProperty;
 
 /**
- * This is a UI test which checks that the aggregated methods view is working as expected.
+ * This is a UI test which checks that the aggregated methods tab is working as expected.
  *
  * @author Nils Christian Ehmke
  */
@@ -229,6 +235,21 @@ public final class AggregatedMethodsTabTestUI extends ApplicationTest {
 		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 9 ).queryAs( Node.class ) );
 		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 9 ).queryAs( Node.class ) );
 		assertThat( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-cell" ).nth( 8 ).queryLabeled( ).getText( ), is( "500" ) );
+	}
+
+	@Test
+	public void testExportToCsv( ) {
+		final Property<CSVData> dataHolder = new SimpleObjectProperty<>( );
+		final Consumer<CSVData> action = csvData -> dataHolder.setValue( csvData );
+		methodsTab.setOnExportToCSV( action );
+
+		clickOn( "#aggregatedMethodCallTabExportToCsv" );
+
+		final CSVData csvData = dataHolder.getValue( );
+		assertThat( csvData, is( notNullValue( ) ) );
+		assertThat( csvData.getHeaders( ), hasSize( 9 ) );
+		assertThat( csvData.getRows( ), hasSize( 4 ) );
+		assertThat( csvData.getRows( ).get( 0 ), hasSize( 9 ) );
 	}
 
 }

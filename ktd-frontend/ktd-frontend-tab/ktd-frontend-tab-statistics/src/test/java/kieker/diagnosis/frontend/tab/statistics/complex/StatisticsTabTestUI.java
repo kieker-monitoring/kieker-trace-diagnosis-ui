@@ -38,11 +38,11 @@ import kieker.diagnosis.backend.search.statistics.Statistics;
 import kieker.diagnosis.backend.search.statistics.StatisticsService;
 
 /**
- * This is a UI test which checks that the statistics view is working as expected.
+ * This is a UI test which checks that the statistics tab is working as expected.
  *
  * @author Nils Christian Ehmke
  */
-public final class StatisticsViewTestUI extends ApplicationTest {
+public final class StatisticsTabTestUI extends ApplicationTest {
 
 	private StatisticsService statisticsService;
 	private StatisticsTab statisticsTab;

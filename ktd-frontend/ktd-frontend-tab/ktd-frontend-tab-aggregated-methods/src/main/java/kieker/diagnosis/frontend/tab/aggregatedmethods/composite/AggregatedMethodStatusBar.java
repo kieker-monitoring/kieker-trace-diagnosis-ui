@@ -61,6 +61,7 @@ public final class AggregatedMethodStatusBar extends HBox {
 
 	private Node createExportToCsvLink( ) {
 		exportToCsvLink = new Hyperlink( );
+		exportToCsvLink.setId( "aggregatedMethodCallTabExportToCsv" );
 
 		exportToCsvLink.setText( RESOURCE_BUNDLE.getString( "exportToCSV" ) );
 
