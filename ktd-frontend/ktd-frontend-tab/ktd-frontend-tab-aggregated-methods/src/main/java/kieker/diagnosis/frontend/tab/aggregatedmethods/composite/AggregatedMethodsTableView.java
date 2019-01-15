@@ -24,10 +24,12 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.SortType;
 import javafx.scene.control.TableView;
+import javafx.util.Callback;
 import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.export.CSVData;
@@ -55,115 +57,144 @@ public final class AggregatedMethodsTableView extends TableView<AggregatedMethod
 	private TableColumn<AggregatedMethodCall, String> host;
 	private TableColumn<AggregatedMethodCall, String> clazz;
 	private TableColumn<AggregatedMethodCall, String> method;
-	private final TableColumn<AggregatedMethodCall, String> minDuration;
-	private final TableColumn<AggregatedMethodCall, String> avgDuration;
-	private final TableColumn<AggregatedMethodCall, String> medianDuration;
-	private final TableColumn<AggregatedMethodCall, String> maxDuration;
-	private final TableColumn<AggregatedMethodCall, String> totalDuration;
+	private TableColumn<AggregatedMethodCall, String> minDuration;
+	private TableColumn<AggregatedMethodCall, String> avgDuration;
+	private TableColumn<AggregatedMethodCall, String> medianDuration;
+	private TableColumn<AggregatedMethodCall, String> maxDuration;
+	private TableColumn<AggregatedMethodCall, String> totalDuration;
 
 	public AggregatedMethodsTableView( ) {
+		createControl( );
+	}
+
+	private void createControl( ) {
 		setTableMenuButtonVisible( true );
 		setRowFactory( aParam -> new StyledRow( "failed" ) );
+		setPlaceholder( createPlaceholder( ) );
 
+		getColumns( ).add( createCountTableColumn( ) );
+		getColumns( ).add( createHostTableColumn( ) );
+		getColumns( ).add( createClassTableColumn( ) );
+		getColumns( ).add( createMethodTableColumn( ) );
+		getColumns( ).add( createMinDurationTableColumn( ) );
+		getColumns( ).add( createAvgDurationTableColumn( ) );
+		getColumns( ).add( createMedianDurationTableColumn( ) );
+		getColumns( ).add( createMaxDurationTableColumn( ) );
+		getColumns( ).add( createTotalDurationTableColumn( ) );
+
+		// The default sorting is a little bit too slow. We use a custom sort policy which sorts the data directly.
+		setSortPolicy( createSortPolicy( ) );
+
+		addDefaultStylesheet( );
+	}
+
+	private Node createPlaceholder( ) {
 		final Label placeholder = new Label( );
+
 		placeholder.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-		setPlaceholder( placeholder );
 
-		{
-			count = new TableColumn<>( );
-			count.setCellValueFactory( aParam -> new ReadOnlyStringWrapper( Integer.toString( aParam.getValue( ).getCount( ) ).intern( ) ) );
-			count.setText( RESOURCE_BUNDLE.getString( "columnCount" ) );
-			count.setPrefWidth( 100 );
+		return placeholder;
+	}
 
-			getColumns( ).add( count );
-		}
+	private TableColumn<AggregatedMethodCall, ?> createCountTableColumn( ) {
+		count = new TableColumn<>( );
 
-		{
-			host = new TableColumn<>( );
-			host.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getHost( ) ) );
-			host.setText( RESOURCE_BUNDLE.getString( "columnHost" ) );
-			host.setPrefWidth( 100 );
+		count.setCellValueFactory( aParam -> new ReadOnlyStringWrapper( Integer.toString( aParam.getValue( ).getCount( ) ).intern( ) ) );
+		count.setText( RESOURCE_BUNDLE.getString( "columnCount" ) );
+		count.setPrefWidth( 100 );
 
-			getColumns( ).add( host );
-		}
+		return count;
+	}
 
-		{
-			clazz = new TableColumn<>( );
-			clazz.setCellValueFactory( new ClassCellValueFactory( ) );
-			clazz.setText( RESOURCE_BUNDLE.getString( "columnClass" ) );
-			clazz.setPrefWidth( 200 );
+	private TableColumn<AggregatedMethodCall, ?> createHostTableColumn( ) {
+		host = new TableColumn<>( );
 
-			getColumns( ).add( clazz );
-		}
+		host.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getHost( ) ) );
+		host.setText( RESOURCE_BUNDLE.getString( "columnHost" ) );
+		host.setPrefWidth( 100 );
 
-		{
-			method = new TableColumn<>( );
-			method.setCellValueFactory( new MethodCellValueFactory( ) );
-			method.setText( RESOURCE_BUNDLE.getString( "columnMethod" ) );
-			method.setPrefWidth( 400 );
+		return host;
+	}
 
-			getColumns( ).add( method );
-		}
+	private TableColumn<AggregatedMethodCall, ?> createClassTableColumn( ) {
+		clazz = new TableColumn<>( );
 
-		{
-			final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getMinDuration );
+		clazz.setCellValueFactory( new ClassCellValueFactory( ) );
+		clazz.setText( RESOURCE_BUNDLE.getString( "columnClass" ) );
+		clazz.setPrefWidth( 200 );
 
-			minDuration = new TableColumn<>( );
-			minDuration.setCellValueFactory( cellValueFactory );
-			minDuration.setText( RESOURCE_BUNDLE.getString( "columnMinDuration" ) );
-			minDuration.setPrefWidth( 150 );
+		return clazz;
+	}
 
-			getColumns( ).add( minDuration );
-		}
+	private TableColumn<AggregatedMethodCall, ?> createMethodTableColumn( ) {
+		method = new TableColumn<>( );
 
-		{
-			final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getAvgDuration );
+		method.setCellValueFactory( new MethodCellValueFactory( ) );
+		method.setText( RESOURCE_BUNDLE.getString( "columnMethod" ) );
+		method.setPrefWidth( 400 );
 
-			avgDuration = new TableColumn<>( );
-			avgDuration.setCellValueFactory( cellValueFactory );
-			avgDuration.setText( RESOURCE_BUNDLE.getString( "columnAvgDuration" ) );
-			avgDuration.setPrefWidth( 200 );
+		return method;
+	}
 
-			getColumns( ).add( avgDuration );
-		}
+	private TableColumn<AggregatedMethodCall, ?> createMinDurationTableColumn( ) {
+		final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getMinDuration );
 
-		{
-			final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getMedianDuration );
+		minDuration = new TableColumn<>( );
+		minDuration.setCellValueFactory( cellValueFactory );
+		minDuration.setText( RESOURCE_BUNDLE.getString( "columnMinDuration" ) );
+		minDuration.setPrefWidth( 150 );
 
-			medianDuration = new TableColumn<>( );
-			medianDuration.setCellValueFactory( cellValueFactory );
-			medianDuration.setText( RESOURCE_BUNDLE.getString( "columnMedianDuration" ) );
-			medianDuration.setPrefWidth( 150 );
+		return minDuration;
+	}
 
-			getColumns( ).add( medianDuration );
-		}
+	private TableColumn<AggregatedMethodCall, ?> createAvgDurationTableColumn( ) {
+		final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getAvgDuration );
 
-		{
-			final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getMaxDuration );
+		avgDuration = new TableColumn<>( );
+		avgDuration.setCellValueFactory( cellValueFactory );
+		avgDuration.setText( RESOURCE_BUNDLE.getString( "columnAvgDuration" ) );
+		avgDuration.setPrefWidth( 200 );
 
-			maxDuration = new TableColumn<>( );
-			maxDuration.setCellValueFactory( cellValueFactory );
-			maxDuration.setText( RESOURCE_BUNDLE.getString( "columnMaxDuration" ) );
-			maxDuration.setPrefWidth( 150 );
+		return avgDuration;
+	}
 
-			getColumns( ).add( maxDuration );
-		}
+	private TableColumn<AggregatedMethodCall, ?> createMedianDurationTableColumn( ) {
+		final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getMedianDuration );
 
-		{
-			final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getTotalDuration );
+		medianDuration = new TableColumn<>( );
+		medianDuration.setCellValueFactory( cellValueFactory );
+		medianDuration.setText( RESOURCE_BUNDLE.getString( "columnMedianDuration" ) );
+		medianDuration.setPrefWidth( 150 );
 
-			totalDuration = new TableColumn<>( );
-			totalDuration.setCellValueFactory( cellValueFactory );
-			totalDuration.setText( RESOURCE_BUNDLE.getString( "columnTotalDuration" ) );
-			totalDuration.setPrefWidth( 150 );
+		return medianDuration;
+	}
 
-			getColumns( ).add( totalDuration );
-		}
+	private TableColumn<AggregatedMethodCall, ?> createMaxDurationTableColumn( ) {
+		final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getMaxDuration );
 
-		// The default sorting is a little bit too slow. Therefore we use a custom sort policy which sorts directly
-		// the data.
+		maxDuration = new TableColumn<>( );
+		maxDuration.setCellValueFactory( cellValueFactory );
+		maxDuration.setText( RESOURCE_BUNDLE.getString( "columnMaxDuration" ) );
+		maxDuration.setPrefWidth( 150 );
+
+		return maxDuration;
+	}
+
+	private TableColumn<AggregatedMethodCall, ?> createTotalDurationTableColumn( ) {
+		final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getTotalDuration );
+
+		totalDuration = new TableColumn<>( );
+		totalDuration.setCellValueFactory( cellValueFactory );
+		totalDuration.setText( RESOURCE_BUNDLE.getString( "columnTotalDuration" ) );
+		totalDuration.setPrefWidth( 150 );
+
+		return totalDuration;
+	}
+
+	private Callback<TableView<AggregatedMethodCall>, Boolean> createSortPolicy( ) {
 		final PropertiesService propertiesService = ServiceFactory.getService( PropertiesService.class );
-		setSortPolicy( param -> {
+
+		return param -> {
 			final ObservableList<TableColumn<AggregatedMethodCall, ?>> sortOrder = param.getSortOrder( );
 
 			if ( sortOrder.size( ) == 1 ) {
@@ -256,9 +287,7 @@ public final class AggregatedMethodsTableView extends TableView<AggregatedMethod
 			}
 
 			return true;
-		} );
-
-		addDefaultStylesheet( );
+		};
 	}
 
 	/**

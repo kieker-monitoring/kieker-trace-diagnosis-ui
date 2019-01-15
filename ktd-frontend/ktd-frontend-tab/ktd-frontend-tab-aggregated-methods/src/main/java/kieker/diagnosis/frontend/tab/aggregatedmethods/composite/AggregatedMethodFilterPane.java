@@ -23,6 +23,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -48,143 +49,146 @@ public final class AggregatedMethodFilterPane extends TitledPane implements Stri
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( AggregatedMethodFilterPane.class.getName( ) );
 
-	private final TextField host;
-	private final TextField clazz;
-	private final TextField method;
-	private final TextField exception;
-	private final CheckBox useRegExpr;
-	private final ComboBox<SearchType> searchType;
+	private TextField host;
+	private TextField clazz;
+	private TextField method;
+	private TextField exception;
+	private CheckBox useRegExpr;
+	private ComboBox<SearchType> searchType;
 
-	private final Button searchButton;
-	private final Hyperlink saveAsFavoriteLink;
+	private Button searchButton;
+	private Hyperlink saveAsFavoriteLink;
 
 	public AggregatedMethodFilterPane( ) {
-		setText( RESOURCE_BUNDLE.getString( "filterTitle" ) );
+		createControl( );
+	}
 
-		final GridPane outerGridPane = new GridPane( );
-		outerGridPane.setHgap( 5 );
-		outerGridPane.setVgap( 5 );
+	private void createControl( ) {
+		setText( RESOURCE_BUNDLE.getString( "filterTitle" ) );
+		setContent( createOuterGridPane( ) );
+	}
+
+	private Node createOuterGridPane( ) {
+		final GridPane gridPane = new GridPane( );
+		gridPane.setHgap( 5 );
+		gridPane.setVgap( 5 );
 
 		for ( int i = 0; i < 2; i++ ) {
 			final RowConstraints constraint = new RowConstraints( );
 			constraint.setPercentHeight( 100.0 / 2 );
-			outerGridPane.getRowConstraints( ).add( constraint );
+			gridPane.getRowConstraints( ).add( constraint );
 		}
 
-		{
-			final GridPane gridPane = new GridPane( );
-			gridPane.setHgap( 5 );
-			gridPane.setVgap( 5 );
+		gridPane.add( createInputFieldsGridPane( ), 0, 0 );
+		gridPane.add( createSaveAsFavoriteLink( ), 0, 1 );
+		gridPane.add( createUseRegularExpressionField( ), 1, 0 );
+		gridPane.add( createSearchButton( ), 1, 1 );
 
-			for ( int i = 0; i < 5; i++ ) {
-				final ColumnConstraints constraint = new ColumnConstraints( );
-				constraint.setPercentWidth( 100.0 / 5 );
-				gridPane.getColumnConstraints( ).add( constraint );
-			}
+		return gridPane;
+	}
 
-			int columnIndex = 0;
+	private Node createInputFieldsGridPane( ) {
+		final GridPane gridPane = new GridPane( );
 
-			{
-				host = new TextField( );
-				host.setId( "tabAggregatedMethodsFilterHost" );
-				host.setPromptText( RESOURCE_BUNDLE.getString( "filterByHost" ) );
-				GridPane.setColumnIndex( host, columnIndex++ );
-				GridPane.setRowIndex( host, 0 );
-				GridPane.setHgrow( host, Priority.ALWAYS );
+		gridPane.setHgap( 5 );
+		gridPane.setVgap( 5 );
 
-				gridPane.getChildren( ).add( host );
-			}
-
-			{
-				clazz = new TextField( );
-				clazz.setId( "tabAggregatedMethodsFilterClass" );
-				clazz.setPromptText( RESOURCE_BUNDLE.getString( "filterByClass" ) );
-				GridPane.setColumnIndex( clazz, columnIndex++ );
-				GridPane.setRowIndex( clazz, 0 );
-				GridPane.setHgrow( clazz, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( clazz );
-			}
-
-			{
-				method = new TextField( );
-				method.setId( "tabAggregatedMethodsFilterMethod" );
-				method.setPromptText( RESOURCE_BUNDLE.getString( "filterByMethod" ) );
-				GridPane.setColumnIndex( method, columnIndex++ );
-				GridPane.setRowIndex( method, 0 );
-				GridPane.setHgrow( method, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( method );
-			}
-
-			{
-				exception = new TextField( );
-				exception.setId( "tabAggregatedMethodsFilterException" );
-				exception.setPromptText( RESOURCE_BUNDLE.getString( "filterByException" ) );
-				GridPane.setColumnIndex( exception, columnIndex++ );
-				GridPane.setRowIndex( exception, 0 );
-				GridPane.setHgrow( exception, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( exception );
-			}
-
-			{
-				searchType = new ComboBox<>( );
-				searchType.setId( "tabAggregatedMethodsFilterSearchType" );
-				searchType.setItems( FXCollections.observableArrayList( SearchType.values( ) ) );
-				searchType.setConverter( new EnumStringConverter<>( SearchType.class ) );
-				searchType.setMaxWidth( Double.POSITIVE_INFINITY );
-
-				GridPane.setColumnIndex( searchType, columnIndex++ );
-				GridPane.setRowIndex( searchType, 0 );
-
-				gridPane.getChildren( ).add( searchType );
-			}
-
-			GridPane.setColumnIndex( gridPane, 0 );
-			GridPane.setRowIndex( gridPane, 0 );
-			GridPane.setHgrow( gridPane, Priority.ALWAYS );
-
-			outerGridPane.getChildren( ).add( gridPane );
+		for ( int i = 0; i < 5; i++ ) {
+			final ColumnConstraints constraint = new ColumnConstraints( );
+			constraint.setPercentWidth( 100.0 / 5 );
+			gridPane.getColumnConstraints( ).add( constraint );
 		}
 
-		{
-			saveAsFavoriteLink = new Hyperlink( );
-			saveAsFavoriteLink.setText( RESOURCE_BUNDLE.getString( "saveAsFavorite" ) );
+		gridPane.add( createHostField( ), 0, 0 );
+		gridPane.add( createClassField( ), 1, 0 );
+		gridPane.add( createMethodField( ), 2, 0 );
+		gridPane.add( createExceptionField( ), 3, 0 );
+		gridPane.add( createSearchTypeField( ), 4, 0 );
 
-			GridPane.setColumnIndex( saveAsFavoriteLink, 0 );
-			GridPane.setRowIndex( saveAsFavoriteLink, 1 );
+		GridPane.setHgrow( gridPane, Priority.ALWAYS );
 
-			outerGridPane.getChildren( ).add( saveAsFavoriteLink );
-		}
+		return gridPane;
+	}
 
-		{
-			useRegExpr = new CheckBox( );
-			useRegExpr.setId( "tabAggregatedMethodsFilterUseRegExpr" );
-			useRegExpr.setText( RESOURCE_BUNDLE.getString( "filterUseRegExpr" ) );
+	private Node createHostField( ) {
+		host = new TextField( );
 
-			GridPane.setColumnIndex( useRegExpr, 1 );
-			GridPane.setRowIndex( useRegExpr, 0 );
-			GridPane.setValignment( useRegExpr, VPos.CENTER );
+		host.setId( "tabAggregatedMethodsFilterHost" );
+		host.setPromptText( RESOURCE_BUNDLE.getString( "filterByHost" ) );
+		GridPane.setHgrow( host, Priority.ALWAYS );
 
-			outerGridPane.getChildren( ).add( useRegExpr );
-		}
+		return host;
+	}
 
-		{
-			searchButton = new Button( );
-			searchButton.setId( "tabAggregatedMethodsSearch" );
-			searchButton.setText( RESOURCE_BUNDLE.getString( "search" ) );
-			searchButton.setMinWidth( 140 );
-			searchButton.setMaxWidth( Double.POSITIVE_INFINITY );
-			searchButton.setGraphic( createIcon( Icon.SEARCH ) );
+	private Node createClassField( ) {
+		clazz = new TextField( );
 
-			GridPane.setColumnIndex( searchButton, 1 );
-			GridPane.setRowIndex( searchButton, 1 );
+		clazz.setId( "tabAggregatedMethodsFilterClass" );
+		clazz.setPromptText( RESOURCE_BUNDLE.getString( "filterByClass" ) );
+		GridPane.setHgrow( clazz, Priority.ALWAYS );
 
-			outerGridPane.getChildren( ).add( searchButton );
-		}
+		return clazz;
+	}
 
-		setContent( outerGridPane );
+	private Node createMethodField( ) {
+		method = new TextField( );
+
+		method.setId( "tabAggregatedMethodsFilterMethod" );
+		method.setPromptText( RESOURCE_BUNDLE.getString( "filterByMethod" ) );
+		GridPane.setHgrow( method, Priority.ALWAYS );
+
+		return method;
+	}
+
+	private Node createExceptionField( ) {
+		exception = new TextField( );
+
+		exception.setId( "tabAggregatedMethodsFilterException" );
+		exception.setPromptText( RESOURCE_BUNDLE.getString( "filterByException" ) );
+		GridPane.setHgrow( exception, Priority.ALWAYS );
+
+		return exception;
+	}
+
+	private Node createSearchTypeField( ) {
+		searchType = new ComboBox<>( );
+
+		searchType.setId( "tabAggregatedMethodsFilterSearchType" );
+		searchType.setItems( FXCollections.observableArrayList( SearchType.values( ) ) );
+		searchType.setConverter( new EnumStringConverter<>( SearchType.class ) );
+		searchType.setMaxWidth( Double.POSITIVE_INFINITY );
+
+		return searchType;
+	}
+
+	private Node createSaveAsFavoriteLink( ) {
+		saveAsFavoriteLink = new Hyperlink( );
+		saveAsFavoriteLink.setText( RESOURCE_BUNDLE.getString( "saveAsFavorite" ) );
+
+		return saveAsFavoriteLink;
+	}
+
+	private Node createUseRegularExpressionField( ) {
+		useRegExpr = new CheckBox( );
+
+		useRegExpr.setId( "tabAggregatedMethodsFilterUseRegExpr" );
+		useRegExpr.setText( RESOURCE_BUNDLE.getString( "filterUseRegExpr" ) );
+
+		GridPane.setValignment( useRegExpr, VPos.CENTER );
+
+		return useRegExpr;
+	}
+
+	private Node createSearchButton( ) {
+		searchButton = new Button( );
+
+		searchButton.setId( "tabAggregatedMethodsSearch" );
+		searchButton.setText( RESOURCE_BUNDLE.getString( "search" ) );
+		searchButton.setMinWidth( 140 );
+		searchButton.setMaxWidth( Double.POSITIVE_INFINITY );
+		searchButton.setGraphic( createIcon( Icon.SEARCH ) );
+
+		return searchButton;
 	}
 
 	/**

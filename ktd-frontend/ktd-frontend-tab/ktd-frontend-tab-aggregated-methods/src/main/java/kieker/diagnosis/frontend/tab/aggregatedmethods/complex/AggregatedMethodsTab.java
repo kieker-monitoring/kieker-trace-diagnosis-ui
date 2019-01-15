@@ -23,6 +23,7 @@ import java.util.function.Consumer;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.Priority;
@@ -44,10 +45,10 @@ public final class AggregatedMethodsTab extends Tab {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( AggregatedMethodsTab.class.getName( ) );
 
-	private final AggregatedMethodFilterPane filterPane = new AggregatedMethodFilterPane( );
-	private final AggregatedMethodsTableView methodsTableView = new AggregatedMethodsTableView( );
-	private final AggregatedMethodDetailsPane detailsPane = new AggregatedMethodDetailsPane( );
-	private final AggregatedMethodStatusBar statusBar = new AggregatedMethodStatusBar( );
+	private AggregatedMethodFilterPane filterPane;
+	private AggregatedMethodsTableView methodsTableView;
+	private AggregatedMethodDetailsPane detailsPane;
+	private AggregatedMethodStatusBar statusBar;
 
 	private List<AggregatedMethodCall> methodsForRefresh;
 	private int totalMethodsForRefresh;
@@ -58,44 +59,61 @@ public final class AggregatedMethodsTab extends Tab {
 	private Consumer<CSVData> onExportToCSV;
 
 	public AggregatedMethodsTab( ) {
-		final VBox vbox = new VBox( );
-		setContent( vbox );
-
-		configureFilterPane( );
-		vbox.getChildren( ).add( filterPane );
-
-		configureMethodsTableView( );
-		vbox.getChildren( ).add( methodsTableView );
-
-		configureDetailsPane( );
-		vbox.getChildren( ).add( detailsPane );
-
-		configureStatusBar( );
-		vbox.getChildren( ).add( statusBar );
-
+		createControl( );
 		performInitialize( );
 	}
 
-	private void configureFilterPane( ) {
-		filterPane.setOnSearch( e -> performSearch( ) );
-		filterPane.setOnSaveAsFavorite( e -> performSaveAsFavorite( ) );
+	private void createControl( ) {
+		setContent( createVBox( ) );
 	}
 
-	private void configureMethodsTableView( ) {
+	private VBox createVBox( ) {
+		final VBox vbox = new VBox( );
+
+		vbox.getChildren( ).add( createFilterPane( ) );
+		vbox.getChildren( ).add( createMethodsTableView( ) );
+		vbox.getChildren( ).add( createDetailsPane( ) );
+		vbox.getChildren( ).add( createStatusBar( ) );
+
+		return vbox;
+	}
+
+	private Node createFilterPane( ) {
+		filterPane = new AggregatedMethodFilterPane( );
+
+		filterPane.setOnSearch( e -> performSearch( ) );
+		filterPane.setOnSaveAsFavorite( e -> performSaveAsFavorite( ) );
+
+		return filterPane;
+	}
+
+	private Node createMethodsTableView( ) {
+		methodsTableView = new AggregatedMethodsTableView( );
+
 		methodsTableView.setId( "tabAggregatedMethodsTable" );
 		methodsTableView.addSelectionChangeListener( ( aObservable, aOldValue, aNewValue ) -> detailsPane.setValue( aNewValue ) );
 
 		VBox.setVgrow( methodsTableView, Priority.ALWAYS );
+
+		return methodsTableView;
 	}
 
-	private void configureDetailsPane( ) {
+	private Node createDetailsPane( ) {
+		detailsPane = new AggregatedMethodDetailsPane( );
+
 		detailsPane.setOnJumpToMethods( e -> performJumpToMethods( ) );
+
+		return detailsPane;
 	}
 
-	private void configureStatusBar( ) {
+	private Node createStatusBar( ) {
+		statusBar = new AggregatedMethodStatusBar( );
+
 		statusBar.setOnExportToCsv( e -> performExportToCSV( ) );
 
 		VBox.setMargin( statusBar, new Insets( 5 ) );
+
+		return statusBar;
 	}
 
 	private void performInitialize( ) {

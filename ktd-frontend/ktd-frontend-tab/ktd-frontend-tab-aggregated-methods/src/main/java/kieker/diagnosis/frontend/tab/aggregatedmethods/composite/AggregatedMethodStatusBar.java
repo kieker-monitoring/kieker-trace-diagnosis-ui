@@ -22,6 +22,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -36,25 +37,34 @@ public final class AggregatedMethodStatusBar extends HBox {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( AggregatedMethodStatusBar.class.getName( ) );
 
-	private final Label statusField = new Label( );
-	private final Hyperlink exportToCsvLink = new Hyperlink( );
+	private Label statusField;
+	private Hyperlink exportToCsvLink;
 
 	public AggregatedMethodStatusBar( ) {
-		configureStatusField( );
-		getChildren( ).add( statusField );
-
-		configureExportToCsvLink( );
-		getChildren( ).add( exportToCsvLink );
+		createControl( );
 	}
 
-	private void configureStatusField( ) {
+	private void createControl( ) {
+		getChildren( ).add( createStatusField( ) );
+		getChildren( ).add( createExportToCsvLink( ) );
+	}
+
+	private Node createStatusField( ) {
+		statusField = new Label( );
+
 		statusField.setMaxWidth( Double.POSITIVE_INFINITY );
 		HBox.setHgrow( statusField, Priority.ALWAYS );
 		HBox.setMargin( statusField, new Insets( 5, 0, 0, 0 ) );
+
+		return statusField;
 	}
 
-	private void configureExportToCsvLink( ) {
+	private Node createExportToCsvLink( ) {
+		exportToCsvLink = new Hyperlink( );
+
 		exportToCsvLink.setText( RESOURCE_BUNDLE.getString( "exportToCSV" ) );
+
+		return exportToCsvLink;
 	}
 
 	/**
@@ -69,7 +79,7 @@ public final class AggregatedMethodStatusBar extends HBox {
 
 	/**
 	 * Sets the value which is displayed in the component.
-	 * 
+	 *
 	 * @param methods
 	 *            The number of methods.
 	 * @param totalMethods

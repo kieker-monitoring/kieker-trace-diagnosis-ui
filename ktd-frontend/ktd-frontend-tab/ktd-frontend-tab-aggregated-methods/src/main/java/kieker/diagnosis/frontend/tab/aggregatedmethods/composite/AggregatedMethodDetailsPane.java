@@ -21,6 +21,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -39,268 +40,275 @@ public final class AggregatedMethodDetailsPane extends TitledPane implements Sty
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( AggregatedMethodDetailsPane.class.getName( ) );
 
-	private final TextField count;
-	private final TextField host;
-	private final TextField clazz;
-	private final TextField method;
-	private final TextField exception;
-	private final TextField minDuration;
-	private final TextField avgDuration;
-	private final TextField medianDuration;
-	private final TextField maxDuration;
-	private final TextField totalDuration;
+	private TextField count;
+	private TextField host;
+	private TextField clazz;
+	private TextField method;
+	private TextField exception;
+	private TextField minDuration;
+	private TextField avgDuration;
+	private TextField medianDuration;
+	private TextField maxDuration;
+	private TextField totalDuration;
 
 	private Hyperlink jumpToMethodsLink;
 
 	public AggregatedMethodDetailsPane( ) {
+		createControl( );
+	}
+
+	private void createControl( ) {
 		setText( RESOURCE_BUNDLE.getString( "detailTitle" ) );
-
-		{
-			final GridPane gridPane = new GridPane( );
-
-			int rowIndex = 0;
-
-			{
-				final Label label = new Label( );
-				label.setText( RESOURCE_BUNDLE.getString( "labelCount" ) );
-
-				GridPane.setColumnIndex( label, 0 );
-				GridPane.setRowIndex( label, rowIndex );
-
-				gridPane.getChildren( ).add( label );
-			}
-			{
-				count = new TextField( );
-				count.setEditable( false );
-				count.getStyleClass( ).add( "details" );
-
-				GridPane.setColumnIndex( count, 1 );
-				GridPane.setRowIndex( count, rowIndex++ );
-				GridPane.setHgrow( count, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( count );
-			}
-
-			{
-				final Label label = new Label( );
-				label.setText( RESOURCE_BUNDLE.getString( "labelHost" ) );
-
-				GridPane.setColumnIndex( label, 0 );
-				GridPane.setRowIndex( label, rowIndex );
-
-				gridPane.getChildren( ).add( label );
-			}
-
-			{
-				host = new TextField( );
-				host.setId( "tabAggregatedMethodsDetailHost" );
-				host.setEditable( false );
-				host.getStyleClass( ).add( "details" );
-
-				GridPane.setColumnIndex( host, 1 );
-				GridPane.setRowIndex( host, rowIndex++ );
-				GridPane.setHgrow( host, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( host );
-			}
-
-			{
-				final Label label = new Label( );
-				label.setText( RESOURCE_BUNDLE.getString( "labelClass" ) );
-
-				GridPane.setColumnIndex( label, 0 );
-				GridPane.setRowIndex( label, rowIndex );
-
-				gridPane.getChildren( ).add( label );
-			}
-
-			{
-				clazz = new TextField( );
-				clazz.setEditable( false );
-				clazz.getStyleClass( ).add( "details" );
-
-				GridPane.setColumnIndex( clazz, 1 );
-				GridPane.setRowIndex( clazz, rowIndex++ );
-				GridPane.setHgrow( clazz, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( clazz );
-			}
-
-			{
-				final Label label = new Label( );
-				label.setText( RESOURCE_BUNDLE.getString( "labelMethod" ) );
-
-				GridPane.setColumnIndex( label, 0 );
-				GridPane.setRowIndex( label, rowIndex );
-
-				gridPane.getChildren( ).add( label );
-			}
-
-			{
-				method = new TextField( );
-				method.setEditable( false );
-				method.getStyleClass( ).add( "details" );
-
-				GridPane.setColumnIndex( method, 1 );
-				GridPane.setRowIndex( method, rowIndex++ );
-				GridPane.setHgrow( method, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( method );
-			}
-
-			{
-				final Label label = new Label( );
-				label.setText( RESOURCE_BUNDLE.getString( "labelException" ) );
-
-				GridPane.setColumnIndex( label, 0 );
-				GridPane.setRowIndex( label, rowIndex );
-
-				gridPane.getChildren( ).add( label );
-			}
-
-			{
-				exception = new TextField( );
-				exception.setId( "tabAggregatedMethodsDetailException" );
-				exception.setEditable( false );
-				exception.getStyleClass( ).add( "details" );
-
-				GridPane.setColumnIndex( exception, 1 );
-				GridPane.setRowIndex( exception, rowIndex++ );
-				GridPane.setHgrow( exception, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( exception );
-			}
-
-			{
-				jumpToMethodsLink = new Hyperlink( );
-				jumpToMethodsLink.setId( "tabAggregatedMethodsJumpToMethods" );
-				jumpToMethodsLink.setText( RESOURCE_BUNDLE.getString( "jumpToMethods" ) );
-
-				GridPane.setColumnIndex( jumpToMethodsLink, 0 );
-				GridPane.setColumnSpan( jumpToMethodsLink, 2 );
-				GridPane.setRowIndex( jumpToMethodsLink, rowIndex++ );
-				GridPane.setHgrow( jumpToMethodsLink, Priority.ALWAYS );
-				GridPane.setMargin( jumpToMethodsLink, new Insets( 0, 0, 0, -5 ) );
-
-				gridPane.getChildren( ).add( jumpToMethodsLink );
-			}
-
-			rowIndex = 0;
-
-			{
-				final Label label = new Label( );
-				label.setText( RESOURCE_BUNDLE.getString( "labelMinDuration" ) );
-
-				GridPane.setColumnIndex( label, 2 );
-				GridPane.setRowIndex( label, rowIndex );
-
-				gridPane.getChildren( ).add( label );
-			}
-
-			{
-				minDuration = new TextField( );
-				minDuration.setEditable( false );
-				minDuration.getStyleClass( ).add( "details" );
-
-				GridPane.setColumnIndex( minDuration, 3 );
-				GridPane.setRowIndex( minDuration, rowIndex++ );
-				GridPane.setHgrow( minDuration, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( minDuration );
-			}
-
-			{
-				final Label label = new Label( );
-				label.setText( RESOURCE_BUNDLE.getString( "labelAvgDuration" ) );
-
-				GridPane.setColumnIndex( label, 2 );
-				GridPane.setRowIndex( label, rowIndex );
-
-				gridPane.getChildren( ).add( label );
-			}
-
-			{
-				avgDuration = new TextField( );
-				avgDuration.setEditable( false );
-				avgDuration.getStyleClass( ).add( "details" );
-
-				GridPane.setColumnIndex( avgDuration, 3 );
-				GridPane.setRowIndex( avgDuration, rowIndex++ );
-				GridPane.setHgrow( avgDuration, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( avgDuration );
-			}
-
-			{
-				final Label label = new Label( );
-				label.setText( RESOURCE_BUNDLE.getString( "labelMedianDuration" ) );
-
-				GridPane.setColumnIndex( label, 2 );
-				GridPane.setRowIndex( label, rowIndex );
-
-				gridPane.getChildren( ).add( label );
-			}
-
-			{
-				medianDuration = new TextField( );
-				medianDuration.setEditable( false );
-				medianDuration.getStyleClass( ).add( "details" );
-
-				GridPane.setColumnIndex( medianDuration, 3 );
-				GridPane.setRowIndex( medianDuration, rowIndex++ );
-				GridPane.setHgrow( medianDuration, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( medianDuration );
-			}
-
-			{
-				final Label label = new Label( );
-				label.setText( RESOURCE_BUNDLE.getString( "labelMaxDuration" ) );
-
-				GridPane.setColumnIndex( label, 2 );
-				GridPane.setRowIndex( label, rowIndex );
-
-				gridPane.getChildren( ).add( label );
-			}
-
-			{
-				maxDuration = new TextField( );
-				maxDuration.setEditable( false );
-				maxDuration.getStyleClass( ).add( "details" );
-
-				GridPane.setColumnIndex( maxDuration, 3 );
-				GridPane.setRowIndex( maxDuration, rowIndex++ );
-				GridPane.setHgrow( maxDuration, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( maxDuration );
-			}
-
-			{
-				final Label label = new Label( );
-				label.setText( RESOURCE_BUNDLE.getString( "labelTotalDuration" ) );
-
-				GridPane.setColumnIndex( label, 2 );
-				GridPane.setRowIndex( label, rowIndex );
-
-				gridPane.getChildren( ).add( label );
-			}
-
-			{
-				totalDuration = new TextField( );
-				totalDuration.setEditable( false );
-				totalDuration.getStyleClass( ).add( "details" );
-
-				GridPane.setColumnIndex( totalDuration, 3 );
-				GridPane.setRowIndex( totalDuration, rowIndex++ );
-				GridPane.setHgrow( totalDuration, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( totalDuration );
-			}
-
-			setContent( gridPane );
-		}
-
 		addDefaultStylesheet( );
+
+		setContent( createGridPane( ) );
+	}
+
+	private Node createGridPane( ) {
+		final GridPane gridPane = new GridPane( );
+
+		int rowIndex = 0;
+
+		gridPane.add( createCountLabel( ), 0, rowIndex );
+		gridPane.add( createCountField( ), 1, rowIndex++ );
+
+		gridPane.add( createHostLabel( ), 0, rowIndex );
+		gridPane.add( createHostField( ), 1, rowIndex++ );
+
+		gridPane.add( createClassLabel( ), 0, rowIndex );
+		gridPane.add( createClassField( ), 1, rowIndex++ );
+
+		gridPane.add( createMethodLabel( ), 0, rowIndex );
+		gridPane.add( createMethodField( ), 1, rowIndex++ );
+
+		gridPane.add( createExceptionLabel( ), 0, rowIndex );
+		gridPane.add( createExceptionField( ), 1, rowIndex++ );
+
+		gridPane.add( createJumpToMethodsLink( ), 0, rowIndex, 2, 1 );
+
+		rowIndex = 0;
+
+		gridPane.add( createMinDurationLabel( ), 2, rowIndex );
+		gridPane.add( createMinDurationField( ), 3, rowIndex++ );
+
+		gridPane.add( createAvgDurationLabel( ), 2, rowIndex );
+		gridPane.add( createAvgDurationField( ), 3, rowIndex++ );
+
+		gridPane.add( createMedianDurationLabel( ), 2, rowIndex );
+		gridPane.add( createMedianDurationField( ), 3, rowIndex++ );
+
+		gridPane.add( createMaxDurationLabel( ), 2, rowIndex );
+		gridPane.add( createMaxDurationField( ), 3, rowIndex++ );
+
+		gridPane.add( createTotalDurationLabel( ), 2, rowIndex );
+		gridPane.add( createTotalDurationField( ), 3, rowIndex++ );
+
+		return gridPane;
+	}
+
+	private Node createCountLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "labelCount" ) );
+
+		return label;
+	}
+
+	private Node createCountField( ) {
+		count = new TextField( );
+
+		count.setEditable( false );
+		count.getStyleClass( ).add( "details" );
+
+		GridPane.setHgrow( count, Priority.ALWAYS );
+
+		return count;
+	}
+
+	private Node createHostLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "labelHost" ) );
+
+		return label;
+	}
+
+	private Node createHostField( ) {
+		host = new TextField( );
+
+		host.setId( "tabAggregatedMethodsDetailHost" );
+		host.setEditable( false );
+		host.getStyleClass( ).add( "details" );
+
+		GridPane.setHgrow( host, Priority.ALWAYS );
+
+		return host;
+	}
+
+	private Node createClassLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "labelClass" ) );
+
+		return label;
+	}
+
+	private Node createClassField( ) {
+		clazz = new TextField( );
+
+		clazz.setEditable( false );
+		clazz.getStyleClass( ).add( "details" );
+
+		GridPane.setHgrow( clazz, Priority.ALWAYS );
+
+		return clazz;
+	}
+
+	private Node createMethodLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "labelMethod" ) );
+
+		return label;
+	}
+
+	private Node createMethodField( ) {
+		method = new TextField( );
+
+		method.setEditable( false );
+		method.getStyleClass( ).add( "details" );
+
+		GridPane.setHgrow( method, Priority.ALWAYS );
+
+		return method;
+	}
+
+	private Node createExceptionLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "labelException" ) );
+
+		return label;
+
+	}
+
+	private Node createExceptionField( ) {
+		exception = new TextField( );
+
+		exception.setId( "tabAggregatedMethodsDetailException" );
+		exception.setEditable( false );
+		exception.getStyleClass( ).add( "details" );
+
+		GridPane.setHgrow( exception, Priority.ALWAYS );
+
+		return exception;
+	}
+
+	private Node createJumpToMethodsLink( ) {
+		jumpToMethodsLink = new Hyperlink( );
+
+		jumpToMethodsLink.setId( "tabAggregatedMethodsJumpToMethods" );
+		jumpToMethodsLink.setText( RESOURCE_BUNDLE.getString( "jumpToMethods" ) );
+
+		GridPane.setHgrow( jumpToMethodsLink, Priority.ALWAYS );
+		GridPane.setMargin( jumpToMethodsLink, new Insets( 0, 0, 0, -5 ) );
+
+		return jumpToMethodsLink;
+	}
+
+	private Node createMinDurationLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "labelMinDuration" ) );
+
+		return label;
+	}
+
+	private Node createMinDurationField( ) {
+		minDuration = new TextField( );
+
+		minDuration.setEditable( false );
+		minDuration.getStyleClass( ).add( "details" );
+
+		GridPane.setHgrow( minDuration, Priority.ALWAYS );
+
+		return minDuration;
+	}
+
+	private Node createAvgDurationLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "labelAvgDuration" ) );
+
+		return label;
+	}
+
+	private Node createAvgDurationField( ) {
+		avgDuration = new TextField( );
+
+		avgDuration.setEditable( false );
+		avgDuration.getStyleClass( ).add( "details" );
+
+		GridPane.setHgrow( avgDuration, Priority.ALWAYS );
+
+		return avgDuration;
+	}
+
+	private Node createMedianDurationLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "labelMedianDuration" ) );
+
+		return label;
+	}
+
+	private Node createMedianDurationField( ) {
+		medianDuration = new TextField( );
+
+		medianDuration.setEditable( false );
+		medianDuration.getStyleClass( ).add( "details" );
+
+		GridPane.setHgrow( medianDuration, Priority.ALWAYS );
+
+		return medianDuration;
+	}
+
+	private Node createMaxDurationLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "labelMaxDuration" ) );
+
+		return label;
+	}
+
+	private Node createMaxDurationField( ) {
+		maxDuration = new TextField( );
+
+		maxDuration.setEditable( false );
+		maxDuration.getStyleClass( ).add( "details" );
+
+		GridPane.setHgrow( maxDuration, Priority.ALWAYS );
+
+		return maxDuration;
+	}
+
+	private Node createTotalDurationLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "labelTotalDuration" ) );
+
+		return label;
+	}
+
+	private Node createTotalDurationField( ) {
+		totalDuration = new TextField( );
+
+		totalDuration.setEditable( false );
+		totalDuration.getStyleClass( ).add( "details" );
+
+		GridPane.setHgrow( totalDuration, Priority.ALWAYS );
+
+		return totalDuration;
 	}
 
 	/**
