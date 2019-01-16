@@ -62,91 +62,109 @@ public final class TracesTreeTableView extends TreeTableView<MethodCall> impleme
 		setShowRoot( false );
 		setTableMenuButtonVisible( true );
 		setRowFactory( aParam -> new StyledRow( ) );
-
 		setPlaceholder( createPlaceholder( ) );
 
-		{
-			final TreeTableColumn<MethodCall, String> column = new TreeTableColumn<>( );
-			column.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getValue( ).getHost( ) ) );
-			column.setText( RESOURCE_BUNDLE.getString( "columnHost" ) );
-			column.setPrefWidth( 100 );
-
-			getColumns( ).add( column );
-		}
-
-		{
-			final TreeTableColumn<MethodCall, String> column = new TreeTableColumn<>( );
-			column.setCellValueFactory( new ClassCellValueFactory( ) );
-			column.setText( RESOURCE_BUNDLE.getString( "columnClass" ) );
-			column.setPrefWidth( 200 );
-
-			getColumns( ).add( column );
-		}
-
-		{
-			final TreeTableColumn<MethodCall, String> column = new TreeTableColumn<>( );
-			column.setCellValueFactory( new MethodCellValueFactory( ) );
-			column.setText( RESOURCE_BUNDLE.getString( "columnMethod" ) );
-			column.setPrefWidth( 400 );
-
-			getColumns( ).add( column );
-		}
-
-		{
-			final TreeTableColumn<MethodCall, Integer> column = new TreeTableColumn<>( );
-			column.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getValue( ).getTraceDepth( ) ) );
-			column.setText( RESOURCE_BUNDLE.getString( "columnTraceDepth" ) );
-			column.setPrefWidth( 100 );
-
-			getColumns( ).add( column );
-		}
-
-		{
-			final TreeTableColumn<MethodCall, Integer> column = new TreeTableColumn<>( );
-			column.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getValue( ).getTraceSize( ) ) );
-			column.setText( RESOURCE_BUNDLE.getString( "columnTraceSize" ) );
-			column.setPrefWidth( 100 );
-
-			getColumns( ).add( column );
-		}
-
-		{
-			final TreeTableColumn<MethodCall, Float> column = new TreeTableColumn<>( );
-			column.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getValue( ).getPercent( ) ) );
-			column.setText( RESOURCE_BUNDLE.getString( "columnPercent" ) );
-			column.setPrefWidth( 100 );
-
-			getColumns( ).add( column );
-		}
-
-		{
-			durationColumn = new TreeTableColumn<>( );
-			durationColumn.setCellValueFactory( new DurationCellValueFactory( ) );
-			durationColumn.setText( RESOURCE_BUNDLE.getString( "columnDuration" ) );
-			durationColumn.setPrefWidth( 150 );
-
-			getColumns( ).add( durationColumn );
-		}
-
-		{
-			final TreeTableColumn<MethodCall, String> column = new TreeTableColumn<>( );
-			column.setCellValueFactory( new TimestampCellValueFactory( ) );
-			column.setText( RESOURCE_BUNDLE.getString( "columnTimestamp" ) );
-			column.setPrefWidth( 150 );
-
-			getColumns( ).add( column );
-		}
-
-		{
-			final TreeTableColumn<MethodCall, Long> column = new TreeTableColumn<>( );
-			column.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getValue( ).getTraceId( ) ) );
-			column.setText( RESOURCE_BUNDLE.getString( "columnTraceId" ) );
-			column.setPrefWidth( 150 );
-
-			getColumns( ).add( column );
-		}
+		getColumns( ).add( createHostTreeTableColumn( ) );
+		getColumns( ).add( createClassTreeTableColumn( ) );
+		getColumns( ).add( createMethodTreeTableColumn( ) );
+		getColumns( ).add( createTraceDepthTreeTableColumn( ) );
+		getColumns( ).add( createTraceSizeTreeTableColumn( ) );
+		getColumns( ).add( createPercentTreeTableColumn( ) );
+		getColumns( ).add( createDurationTreeTableColumn( ) );
+		getColumns( ).add( createTimestampTreeTableColumn( ) );
+		getColumns( ).add( createTraceIdTreeTableColumn( ) );
 
 		addDefaultStylesheet( );
+	}
+
+	private TreeTableColumn<MethodCall, String> createHostTreeTableColumn( ) {
+		final TreeTableColumn<MethodCall, String> column = new TreeTableColumn<>( );
+
+		column.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getValue( ).getHost( ) ) );
+		column.setText( RESOURCE_BUNDLE.getString( "columnHost" ) );
+		column.setPrefWidth( 100 );
+
+		return column;
+	}
+
+	private TreeTableColumn<MethodCall, String> createClassTreeTableColumn( ) {
+		final TreeTableColumn<MethodCall, String> column = new TreeTableColumn<>( );
+
+		column.setCellValueFactory( new ClassCellValueFactory( ) );
+		column.setText( RESOURCE_BUNDLE.getString( "columnClass" ) );
+		column.setPrefWidth( 200 );
+
+		return column;
+	}
+
+	private TreeTableColumn<MethodCall, String> createMethodTreeTableColumn( ) {
+		final TreeTableColumn<MethodCall, String> column = new TreeTableColumn<>( );
+
+		column.setCellValueFactory( new MethodCellValueFactory( ) );
+		column.setText( RESOURCE_BUNDLE.getString( "columnMethod" ) );
+		column.setPrefWidth( 400 );
+
+		return column;
+	}
+
+	private TreeTableColumn<MethodCall, Integer> createTraceDepthTreeTableColumn( ) {
+		final TreeTableColumn<MethodCall, Integer> column = new TreeTableColumn<>( );
+
+		column.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getValue( ).getTraceDepth( ) ) );
+		column.setText( RESOURCE_BUNDLE.getString( "columnTraceDepth" ) );
+		column.setPrefWidth( 100 );
+
+		return column;
+	}
+
+	private TreeTableColumn<MethodCall, Integer> createTraceSizeTreeTableColumn( ) {
+		final TreeTableColumn<MethodCall, Integer> column = new TreeTableColumn<>( );
+
+		column.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getValue( ).getTraceSize( ) ) );
+		column.setText( RESOURCE_BUNDLE.getString( "columnTraceSize" ) );
+		column.setPrefWidth( 100 );
+
+		return column;
+	}
+
+	private TreeTableColumn<MethodCall, Float> createPercentTreeTableColumn( ) {
+		final TreeTableColumn<MethodCall, Float> column = new TreeTableColumn<>( );
+
+		column.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getValue( ).getPercent( ) ) );
+		column.setText( RESOURCE_BUNDLE.getString( "columnPercent" ) );
+		column.setPrefWidth( 100 );
+
+		return column;
+	}
+
+	private TreeTableColumn<MethodCall, Long> createDurationTreeTableColumn( ) {
+		durationColumn = new TreeTableColumn<>( );
+
+		durationColumn.setCellValueFactory( new DurationCellValueFactory( ) );
+		durationColumn.setText( RESOURCE_BUNDLE.getString( "columnDuration" ) );
+		durationColumn.setPrefWidth( 150 );
+
+		return durationColumn;
+	}
+
+	private TreeTableColumn<MethodCall, String> createTimestampTreeTableColumn( ) {
+		final TreeTableColumn<MethodCall, String> column = new TreeTableColumn<>( );
+
+		column.setCellValueFactory( new TimestampCellValueFactory( ) );
+		column.setText( RESOURCE_BUNDLE.getString( "columnTimestamp" ) );
+		column.setPrefWidth( 150 );
+
+		return column;
+	}
+
+	private TreeTableColumn<MethodCall, Long> createTraceIdTreeTableColumn( ) {
+		final TreeTableColumn<MethodCall, Long> column = new TreeTableColumn<>( );
+
+		column.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getValue( ).getTraceId( ) ) );
+		column.setText( RESOURCE_BUNDLE.getString( "columnTraceId" ) );
+		column.setPrefWidth( 150 );
+
+		return column;
 	}
 
 	private Label createPlaceholder( ) {

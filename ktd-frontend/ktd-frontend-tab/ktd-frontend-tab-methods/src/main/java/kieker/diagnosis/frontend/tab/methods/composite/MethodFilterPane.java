@@ -90,10 +90,10 @@ public final class MethodFilterPane extends TitledPane implements IconMixin, Str
 			gridPane.getRowConstraints( ).add( constraint );
 		}
 
-		gridPane.add( createInputFieldsGridPane( ), 0, 0 );
+		gridPane.add( createInputFieldsGridPane( ), 0, 0, 1, 2 );
 		gridPane.add( createSaveAsFavoriteLink( ), 0, 2 );
 		gridPane.add( createUseRegularExpressionField( ), 1, 0 );
-		gridPane.add( createSearchButton( ), 1, 1 );
+		gridPane.add( createSearchButton( ), 1, 2 );
 
 		return gridPane;
 	}
