@@ -75,8 +75,6 @@ public final class MainPane extends VBox implements StylesheetMixin {
 		menuBar.setOnImportLog( ( ) -> performImportLog( ) );
 		menuBar.setOnImportLogFromZip( ( ) -> performImportLogFromZip( ) );
 
-		mainTabPane.setOnSaveAsFavorite( ( tab, filter ) -> performSaveAsFavorite( tab, filter ) );
-
 		return menuBar;
 	}
 
@@ -86,6 +84,7 @@ public final class MainPane extends VBox implements StylesheetMixin {
 		loadFonts( );
 		addDefaultStylesheet( );
 		mainTabPane.setId( "mainTabPane" );
+		mainTabPane.setOnSaveAsFavorite( ( tab, filter ) -> performSaveAsFavorite( tab, filter ) );
 
 		VBox.setVgrow( mainTabPane, Priority.ALWAYS );
 
