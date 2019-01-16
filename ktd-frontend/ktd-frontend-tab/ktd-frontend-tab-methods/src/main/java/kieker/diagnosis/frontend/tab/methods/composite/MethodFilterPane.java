@@ -23,6 +23,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -75,209 +76,211 @@ public final class MethodFilterPane extends TitledPane implements IconMixin, Str
 
 	private void createControl( ) {
 		setText( RESOURCE_BUNDLE.getString( "filterTitle" ) );
+		setContent( createOuterGridPane( ) );
+	}
 
-		final GridPane outerGridPane = new GridPane( );
-		outerGridPane.setHgap( 5 );
-		outerGridPane.setVgap( 5 );
+	private Node createOuterGridPane( ) {
+		final GridPane gridPane = new GridPane( );
+		gridPane.setHgap( 5 );
+		gridPane.setVgap( 5 );
 
 		for ( int i = 0; i < 3; i++ ) {
 			final RowConstraints constraint = new RowConstraints( );
 			constraint.setPercentHeight( 100.0 / 3 );
-			outerGridPane.getRowConstraints( ).add( constraint );
+			gridPane.getRowConstraints( ).add( constraint );
 		}
 
-		{
-			final GridPane gridPane = new GridPane( );
-			gridPane.setHgap( 5 );
-			gridPane.setVgap( 5 );
+		gridPane.add( createInputFieldsGridPane( ), 0, 0 );
+		gridPane.add( createSaveAsFavoriteLink( ), 0, 2 );
+		gridPane.add( createUseRegularExpressionField( ), 1, 0 );
+		gridPane.add( createSearchButton( ), 1, 1 );
 
-			for ( int i = 0; i < 5; i++ ) {
-				final ColumnConstraints constraint = new ColumnConstraints( );
-				constraint.setPercentWidth( 100.0 / 5 );
-				gridPane.getColumnConstraints( ).add( constraint );
-			}
+		return gridPane;
+	}
 
-			int columnIndex = 0;
-			int rowIndex = 0;
+	private Node createInputFieldsGridPane( ) {
+		final GridPane gridPane = new GridPane( );
+		gridPane.setHgap( 5 );
+		gridPane.setVgap( 5 );
 
-			{
-				host = new TextField( );
-				host.setId( "tabMethodsFilterHost" );
-				host.setPromptText( RESOURCE_BUNDLE.getString( "filterByHost" ) );
-				GridPane.setColumnIndex( host, columnIndex++ );
-				GridPane.setRowIndex( host, rowIndex );
-				GridPane.setHgrow( host, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( host );
-			}
-
-			{
-				clazz = new TextField( );
-				clazz.setId( "tabMethodsFilterClass" );
-				clazz.setPromptText( RESOURCE_BUNDLE.getString( "filterByClass" ) );
-				GridPane.setColumnIndex( clazz, columnIndex++ );
-				GridPane.setRowIndex( clazz, rowIndex );
-				GridPane.setHgrow( clazz, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( clazz );
-			}
-
-			{
-				method = new TextField( );
-				method.setId( "tabMethodsFilterMethod" );
-				method.setPromptText( RESOURCE_BUNDLE.getString( "filterByMethod" ) );
-				GridPane.setColumnIndex( method, columnIndex++ );
-				GridPane.setRowIndex( method, rowIndex );
-				GridPane.setHgrow( method, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( method );
-			}
-
-			{
-				exception = new TextField( );
-				exception.setId( "tabMethodsFilterException" );
-				exception.setPromptText( RESOURCE_BUNDLE.getString( "filterByException" ) );
-				GridPane.setColumnIndex( exception, columnIndex++ );
-				GridPane.setRowIndex( exception, rowIndex );
-				GridPane.setHgrow( exception, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( exception );
-			}
-
-			{
-				traceId = new LongTextField( );
-				traceId.setPromptText( RESOURCE_BUNDLE.getString( "filterByTraceId" ) );
-				GridPane.setColumnIndex( traceId, columnIndex++ );
-				GridPane.setRowIndex( traceId, rowIndex );
-				GridPane.setHgrow( traceId, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( traceId );
-			}
-
-			columnIndex = 0;
-			rowIndex++;
-
-			{
-				lowerDate = new DatePicker( );
-				lowerDate.setPromptText( RESOURCE_BUNDLE.getString( "filterByLowerDate" ) );
-				lowerDate.setMaxWidth( Double.POSITIVE_INFINITY );
-
-				GridPane.setColumnIndex( lowerDate, columnIndex++ );
-				GridPane.setRowIndex( lowerDate, rowIndex );
-				GridPane.setHgrow( lowerDate, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( lowerDate );
-			}
-
-			{
-				lowerTime = new LocalTimeTextField( );
-				lowerTime.setPromptText( RESOURCE_BUNDLE.getString( "filterByLowerTime" ) );
-
-				GridPane.setColumnIndex( lowerTime, columnIndex++ );
-				GridPane.setRowIndex( lowerTime, rowIndex );
-				GridPane.setHgrow( lowerTime, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( lowerTime );
-			}
-
-			{
-				upperDate = new DatePicker( );
-				upperDate.setPromptText( RESOURCE_BUNDLE.getString( "filterByUpperDate" ) );
-				upperDate.setMaxWidth( Double.POSITIVE_INFINITY );
-
-				GridPane.setColumnIndex( upperDate, columnIndex++ );
-				GridPane.setRowIndex( upperDate, rowIndex );
-				GridPane.setHgrow( upperDate, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( upperDate );
-			}
-
-			{
-				upperTime = new LocalTimeTextField( );
-				upperTime.setPromptText( RESOURCE_BUNDLE.getString( "filterByUpperTime" ) );
-
-				GridPane.setColumnIndex( upperTime, columnIndex++ );
-				GridPane.setRowIndex( upperTime, rowIndex );
-				GridPane.setHgrow( upperTime, Priority.ALWAYS );
-
-				gridPane.getChildren( ).add( upperTime );
-			}
-
-			{
-				searchType = new ComboBox<>( );
-				searchType.setId( "tabMethodsFilterSearchType" );
-				searchType.setItems( FXCollections.observableArrayList( SearchType.values( ) ) );
-				searchType.setConverter( new EnumStringConverter<>( SearchType.class ) );
-				searchType.setMaxWidth( Double.POSITIVE_INFINITY );
-
-				GridPane.setColumnIndex( searchType, columnIndex++ );
-				GridPane.setRowIndex( searchType, rowIndex );
-
-				gridPane.getChildren( ).add( searchType );
-			}
-
-			GridPane.setColumnIndex( gridPane, 0 );
-			GridPane.setRowIndex( gridPane, 0 );
-			GridPane.setRowSpan( gridPane, 2 );
-			GridPane.setHgrow( gridPane, Priority.ALWAYS );
-
-			outerGridPane.getChildren( ).add( gridPane );
+		for ( int i = 0; i < 5; i++ ) {
+			final ColumnConstraints constraint = new ColumnConstraints( );
+			constraint.setPercentWidth( 100.0 / 5 );
+			gridPane.getColumnConstraints( ).add( constraint );
 		}
 
-		{
-			saveAsFavoriteLink = new Hyperlink( );
-			saveAsFavoriteLink.setId( "tabMethodsFilteSaveAsFavorite" );
-			saveAsFavoriteLink.setText( RESOURCE_BUNDLE.getString( "saveAsFavorite" ) );
+		gridPane.add( createHostField( ), 0, 0 );
+		gridPane.add( createClassField( ), 1, 0 );
+		gridPane.add( createMethodField( ), 2, 0 );
+		gridPane.add( createExceptionField( ), 3, 0 );
+		gridPane.add( createTraceIdField( ), 4, 0 );
 
-			GridPane.setColumnIndex( saveAsFavoriteLink, 0 );
-			GridPane.setRowIndex( saveAsFavoriteLink, 2 );
+		gridPane.add( createLowerDateField( ), 0, 1 );
+		gridPane.add( createLowerTimeField( ), 1, 1 );
+		gridPane.add( createUpperDateField( ), 2, 1 );
+		gridPane.add( createUpperTimeField( ), 3, 1 );
+		gridPane.add( createSearchTypeField( ), 4, 1 );
 
-			outerGridPane.getChildren( ).add( saveAsFavoriteLink );
-		}
+		GridPane.setColumnIndex( gridPane, 0 );
+		GridPane.setRowIndex( gridPane, 0 );
+		GridPane.setRowSpan( gridPane, 2 );
+		GridPane.setHgrow( gridPane, Priority.ALWAYS );
 
-		{
-			useRegExpr = new CheckBox( );
-			useRegExpr.setId( "tabMethodsFilterUseRegExpr" );
-			useRegExpr.setText( RESOURCE_BUNDLE.getString( "filterUseRegExpr" ) );
+		return gridPane;
+	}
 
-			GridPane.setColumnIndex( useRegExpr, 1 );
-			GridPane.setRowIndex( useRegExpr, 0 );
-			GridPane.setValignment( useRegExpr, VPos.CENTER );
+	private Node createHostField( ) {
+		host = new TextField( );
 
-			outerGridPane.getChildren( ).add( useRegExpr );
-		}
+		host.setId( "tabMethodsFilterHost" );
+		host.setPromptText( RESOURCE_BUNDLE.getString( "filterByHost" ) );
 
-		{
-			searchButton = new Button( );
-			searchButton.setId( "tabMethodsSearch" );
-			searchButton.setText( RESOURCE_BUNDLE.getString( "search" ) );
-			searchButton.setMinWidth( 140 );
-			searchButton.setMaxWidth( Double.POSITIVE_INFINITY );
-			searchButton.setGraphic( createIcon( Icon.SEARCH ) );
+		GridPane.setHgrow( host, Priority.ALWAYS );
 
-			GridPane.setColumnIndex( searchButton, 1 );
-			GridPane.setRowIndex( searchButton, 2 );
+		return host;
+	}
 
-			outerGridPane.getChildren( ).add( searchButton );
-		}
+	private Node createClassField( ) {
+		clazz = new TextField( );
 
-		{
-			// The CalendarTimeTextField doesn't recognize the default button
+		clazz.setId( "tabMethodsFilterClass" );
+		clazz.setPromptText( RESOURCE_BUNDLE.getString( "filterByClass" ) );
 
-			lowerTime.setOnKeyReleased( e -> {
-				if ( e.getCode( ) == KeyCode.ENTER ) {
-					searchButton.fire( );
-				}
-			} );
+		GridPane.setHgrow( clazz, Priority.ALWAYS );
 
-			upperTime.setOnKeyReleased( e -> {
-				if ( e.getCode( ) == KeyCode.ENTER ) {
-					searchButton.fire( );
-				}
-			} );
-		}
+		return clazz;
+	}
 
-		setContent( outerGridPane );
+	private Node createMethodField( ) {
+		method = new TextField( );
+
+		method.setId( "tabMethodsFilterMethod" );
+		method.setPromptText( RESOURCE_BUNDLE.getString( "filterByMethod" ) );
+
+		GridPane.setHgrow( method, Priority.ALWAYS );
+
+		return method;
+	}
+
+	private Node createExceptionField( ) {
+		exception = new TextField( );
+
+		exception.setId( "tabMethodsFilterException" );
+		exception.setPromptText( RESOURCE_BUNDLE.getString( "filterByException" ) );
+
+		GridPane.setHgrow( exception, Priority.ALWAYS );
+
+		return exception;
+	}
+
+	private Node createTraceIdField( ) {
+		traceId = new LongTextField( );
+
+		traceId.setPromptText( RESOURCE_BUNDLE.getString( "filterByTraceId" ) );
+		GridPane.setHgrow( traceId, Priority.ALWAYS );
+
+		return traceId;
+	}
+
+	private Node createLowerDateField( ) {
+		lowerDate = new DatePicker( );
+
+		lowerDate.setPromptText( RESOURCE_BUNDLE.getString( "filterByLowerDate" ) );
+		lowerDate.setMaxWidth( Double.POSITIVE_INFINITY );
+
+		GridPane.setHgrow( lowerDate, Priority.ALWAYS );
+
+		return lowerDate;
+	}
+
+	private Node createLowerTimeField( ) {
+		lowerTime = new LocalTimeTextField( );
+
+		lowerTime.setPromptText( RESOURCE_BUNDLE.getString( "filterByLowerTime" ) );
+
+		// The CalendarTimeTextField doesn't recognize the default button
+
+		lowerTime.setOnKeyReleased( e -> {
+			if ( e.getCode( ) == KeyCode.ENTER ) {
+				searchButton.fire( );
+			}
+		} );
+
+		GridPane.setHgrow( lowerTime, Priority.ALWAYS );
+
+		return lowerTime;
+	}
+
+	private Node createUpperDateField( ) {
+		upperDate = new DatePicker( );
+
+		upperDate.setPromptText( RESOURCE_BUNDLE.getString( "filterByUpperDate" ) );
+		upperDate.setMaxWidth( Double.POSITIVE_INFINITY );
+
+		GridPane.setHgrow( upperDate, Priority.ALWAYS );
+
+		return upperDate;
+	}
+
+	private Node createUpperTimeField( ) {
+		upperTime = new LocalTimeTextField( );
+
+		upperTime.setPromptText( RESOURCE_BUNDLE.getString( "filterByUpperTime" ) );
+
+		// The CalendarTimeTextField doesn't recognize the default button
+
+		upperTime.setOnKeyReleased( e -> {
+			if ( e.getCode( ) == KeyCode.ENTER ) {
+				searchButton.fire( );
+			}
+		} );
+
+		GridPane.setHgrow( upperTime, Priority.ALWAYS );
+
+		return upperTime;
+	}
+
+	private Node createSearchTypeField( ) {
+		searchType = new ComboBox<>( );
+
+		searchType.setId( "tabMethodsFilterSearchType" );
+		searchType.setItems( FXCollections.observableArrayList( SearchType.values( ) ) );
+		searchType.setConverter( new EnumStringConverter<>( SearchType.class ) );
+		searchType.setMaxWidth( Double.POSITIVE_INFINITY );
+
+		return searchType;
+	}
+
+	private Node createSaveAsFavoriteLink( ) {
+		saveAsFavoriteLink = new Hyperlink( );
+
+		saveAsFavoriteLink.setId( "tabMethodsFilteSaveAsFavorite" );
+		saveAsFavoriteLink.setText( RESOURCE_BUNDLE.getString( "saveAsFavorite" ) );
+
+		return saveAsFavoriteLink;
+	}
+
+	private Node createUseRegularExpressionField( ) {
+		useRegExpr = new CheckBox( );
+
+		useRegExpr.setId( "tabMethodsFilterUseRegExpr" );
+		useRegExpr.setText( RESOURCE_BUNDLE.getString( "filterUseRegExpr" ) );
+
+		GridPane.setValignment( useRegExpr, VPos.CENTER );
+
+		return useRegExpr;
+	}
+
+	private Node createSearchButton( ) {
+		searchButton = new Button( );
+
+		searchButton.setId( "tabMethodsSearch" );
+		searchButton.setText( RESOURCE_BUNDLE.getString( "search" ) );
+		searchButton.setMinWidth( 140 );
+		searchButton.setMaxWidth( Double.POSITIVE_INFINITY );
+		searchButton.setGraphic( createIcon( Icon.SEARCH ) );
+
+		return searchButton;
 	}
 
 	/**
