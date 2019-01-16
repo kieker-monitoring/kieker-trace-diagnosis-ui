@@ -21,6 +21,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -55,185 +56,184 @@ public final class MethodDetailsPane extends TitledPane implements StylesheetMix
 
 	private void createControl( ) {
 		setText( RESOURCE_BUNDLE.getString( "detailTitle" ) );
+		setContent( createGridPane( ) );
+		addDefaultStylesheet( );
+	}
 
+	private Node createGridPane( ) {
 		final GridPane gridPane = new GridPane( );
 
 		int rowIndex = 0;
 
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "labelHost" ) );
+		gridPane.add( createHostLabel( ), 0, rowIndex );
+		gridPane.add( createHostField( ), 1, rowIndex++ );
 
-			GridPane.setColumnIndex( label, 0 );
-			GridPane.setRowIndex( label, rowIndex );
+		gridPane.add( createClassLabel( ), 0, rowIndex );
+		gridPane.add( createClassField( ), 1, rowIndex++ );
 
-			gridPane.getChildren( ).add( label );
-		}
+		gridPane.add( createMethodLabel( ), 0, rowIndex );
+		gridPane.add( createMethodField( ), 1, rowIndex++ );
 
-		{
-			host = new TextField( );
-			host.setId( "tabMethodsDetailHost" );
-			host.setEditable( false );
-			host.getStyleClass( ).add( "details" );
+		gridPane.add( createExceptionLabel( ), 0, rowIndex );
+		gridPane.add( createExceptionField( ), 1, rowIndex++ );
 
-			GridPane.setColumnIndex( host, 1 );
-			GridPane.setRowIndex( host, rowIndex++ );
-			GridPane.setHgrow( host, Priority.ALWAYS );
-
-			gridPane.getChildren( ).add( host );
-		}
-
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "labelClass" ) );
-
-			GridPane.setColumnIndex( label, 0 );
-			GridPane.setRowIndex( label, rowIndex );
-
-			gridPane.getChildren( ).add( label );
-		}
-
-		{
-			clazz = new TextField( );
-			clazz.setEditable( false );
-			clazz.getStyleClass( ).add( "details" );
-
-			GridPane.setColumnIndex( clazz, 1 );
-			GridPane.setRowIndex( clazz, rowIndex++ );
-			GridPane.setHgrow( clazz, Priority.ALWAYS );
-
-			gridPane.getChildren( ).add( clazz );
-		}
-
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "labelMethod" ) );
-
-			GridPane.setColumnIndex( label, 0 );
-			GridPane.setRowIndex( label, rowIndex );
-
-			gridPane.getChildren( ).add( label );
-		}
-
-		{
-			method = new TextField( );
-			method.setEditable( false );
-			method.getStyleClass( ).add( "details" );
-
-			GridPane.setColumnIndex( method, 1 );
-			GridPane.setRowIndex( method, rowIndex++ );
-			GridPane.setHgrow( method, Priority.ALWAYS );
-
-			gridPane.getChildren( ).add( method );
-		}
-
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "labelException" ) );
-
-			GridPane.setColumnIndex( label, 0 );
-			GridPane.setRowIndex( label, rowIndex );
-
-			gridPane.getChildren( ).add( label );
-		}
-
-		{
-			exception = new TextField( );
-			exception.setId( "tabMethodsDetailException" );
-			exception.setEditable( false );
-			exception.getStyleClass( ).add( "details" );
-
-			GridPane.setColumnIndex( exception, 1 );
-			GridPane.setRowIndex( exception, rowIndex++ );
-			GridPane.setHgrow( exception, Priority.ALWAYS );
-
-			gridPane.getChildren( ).add( exception );
-		}
-
-		{
-			jumpToTraceLink = new Hyperlink( );
-			jumpToTraceLink.setId( "tabMethodsJumpToTrace" );
-			jumpToTraceLink.setText( RESOURCE_BUNDLE.getString( "jumpToTrace" ) );
-
-			GridPane.setColumnIndex( jumpToTraceLink, 0 );
-			GridPane.setColumnSpan( jumpToTraceLink, 2 );
-			GridPane.setRowIndex( jumpToTraceLink, rowIndex++ );
-			GridPane.setHgrow( jumpToTraceLink, Priority.ALWAYS );
-			GridPane.setMargin( jumpToTraceLink, new Insets( 0, 0, 0, -5 ) );
-
-			gridPane.getChildren( ).add( jumpToTraceLink );
-		}
+		gridPane.add( createJumpToTraceLink( ), 0, rowIndex, 2, 1 );
 
 		rowIndex = 0;
 
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "labelDuration" ) );
+		gridPane.add( createDurationLabel( ), 2, rowIndex );
+		gridPane.add( createDurationField( ), 3, rowIndex++ );
 
-			GridPane.setColumnIndex( label, 2 );
-			GridPane.setRowIndex( label, rowIndex );
+		gridPane.add( createTimestampLabel( ), 2, rowIndex );
+		gridPane.add( createTimestampField( ), 3, rowIndex++ );
 
-			gridPane.getChildren( ).add( label );
-		}
+		gridPane.add( createTraceIdLabel( ), 2, rowIndex );
+		gridPane.add( createTraceIdField( ), 3, rowIndex++ );
 
-		{
-			duration = new TextField( );
-			duration.setEditable( false );
-			duration.getStyleClass( ).add( "details" );
+		return gridPane;
+	}
 
-			GridPane.setColumnIndex( duration, 3 );
-			GridPane.setRowIndex( duration, rowIndex++ );
-			GridPane.setHgrow( duration, Priority.ALWAYS );
+	private Node createHostLabel( ) {
+		final Label label = new Label( );
 
-			gridPane.getChildren( ).add( duration );
-		}
+		label.setText( RESOURCE_BUNDLE.getString( "labelHost" ) );
 
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "labelTimestamp" ) );
+		return label;
+	}
 
-			GridPane.setColumnIndex( label, 2 );
-			GridPane.setRowIndex( label, rowIndex );
+	private Node createHostField( ) {
+		host = new TextField( );
 
-			gridPane.getChildren( ).add( label );
-		}
+		host.setId( "tabMethodsDetailHost" );
+		host.setEditable( false );
+		host.getStyleClass( ).add( "details" );
+		GridPane.setHgrow( host, Priority.ALWAYS );
 
-		{
-			timestamp = new TextField( );
-			timestamp.setEditable( false );
-			timestamp.getStyleClass( ).add( "details" );
+		return host;
+	}
 
-			GridPane.setColumnIndex( timestamp, 3 );
-			GridPane.setRowIndex( timestamp, rowIndex++ );
-			GridPane.setHgrow( timestamp, Priority.ALWAYS );
+	private Node createClassLabel( ) {
+		final Label label = new Label( );
 
-			gridPane.getChildren( ).add( timestamp );
-		}
+		label.setText( RESOURCE_BUNDLE.getString( "labelClass" ) );
 
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "labelTraceId" ) );
+		return label;
+	}
 
-			GridPane.setColumnIndex( label, 2 );
-			GridPane.setRowIndex( label, rowIndex );
+	private Node createClassField( ) {
+		clazz = new TextField( );
 
-			gridPane.getChildren( ).add( label );
-		}
+		clazz.setEditable( false );
+		clazz.getStyleClass( ).add( "details" );
+		GridPane.setHgrow( clazz, Priority.ALWAYS );
 
-		{
-			traceId = new TextField( );
-			traceId.setEditable( false );
-			traceId.getStyleClass( ).add( "details" );
+		return clazz;
+	}
 
-			GridPane.setColumnIndex( traceId, 3 );
-			GridPane.setRowIndex( traceId, rowIndex++ );
-			GridPane.setHgrow( traceId, Priority.ALWAYS );
+	private Node createMethodLabel( ) {
+		final Label label = new Label( );
 
-			gridPane.getChildren( ).add( traceId );
-		}
+		label.setText( RESOURCE_BUNDLE.getString( "labelMethod" ) );
 
-		setContent( gridPane );
-		addDefaultStylesheet( );
+		return label;
+	}
+
+	private Node createMethodField( ) {
+		method = new TextField( );
+
+		method.setEditable( false );
+		method.getStyleClass( ).add( "details" );
+		GridPane.setHgrow( method, Priority.ALWAYS );
+
+		return method;
+	}
+
+	private Node createExceptionLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "labelException" ) );
+
+		return label;
+	}
+
+	private Node createExceptionField( ) {
+		exception = new TextField( );
+
+		exception.setId( "tabMethodsDetailException" );
+		exception.setEditable( false );
+		exception.getStyleClass( ).add( "details" );
+		GridPane.setHgrow( exception, Priority.ALWAYS );
+
+		return exception;
+	}
+
+	private Node createJumpToTraceLink( ) {
+		jumpToTraceLink = new Hyperlink( );
+
+		jumpToTraceLink.setId( "tabMethodsJumpToTrace" );
+		jumpToTraceLink.setText( RESOURCE_BUNDLE.getString( "jumpToTrace" ) );
+
+		GridPane.setHgrow( jumpToTraceLink, Priority.ALWAYS );
+		GridPane.setMargin( jumpToTraceLink, new Insets( 0, 0, 0, -5 ) );
+
+		return jumpToTraceLink;
+	}
+
+	private Node createTraceIdField( ) {
+		traceId = new TextField( );
+
+		traceId.setEditable( false );
+		traceId.getStyleClass( ).add( "details" );
+
+		GridPane.setHgrow( traceId, Priority.ALWAYS );
+
+		return traceId;
+	}
+
+	private Node createTraceIdLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "labelTraceId" ) );
+
+		return label;
+	}
+
+	private Node createTimestampField( ) {
+		timestamp = new TextField( );
+
+		timestamp.setEditable( false );
+		timestamp.getStyleClass( ).add( "details" );
+
+		GridPane.setHgrow( timestamp, Priority.ALWAYS );
+
+		return timestamp;
+	}
+
+	private Node createTimestampLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "labelTimestamp" ) );
+
+		return label;
+	}
+
+	private Node createDurationField( ) {
+		duration = new TextField( );
+
+		duration.setEditable( false );
+		duration.getStyleClass( ).add( "details" );
+
+		GridPane.setHgrow( duration, Priority.ALWAYS );
+
+		return duration;
+	}
+
+	private Node createDurationLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "labelDuration" ) );
+
+		return label;
 	}
 
 	/**

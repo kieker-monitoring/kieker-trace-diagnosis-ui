@@ -67,67 +67,79 @@ public final class MethodsTableView extends TableView<MethodCall> implements Sty
 	private void createControl( ) {
 		setTableMenuButtonVisible( true );
 		setRowFactory( aParam -> new StyledRow( ) );
-
 		setPlaceholder( createPlaceholder( ) );
 
-		{
-			host = new TableColumn<>( );
-			host.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getHost( ) ) );
-			host.setText( RESOURCE_BUNDLE.getString( "columnHost" ) );
-			host.setPrefWidth( 100 );
-
-			getColumns( ).add( host );
-		}
-
-		{
-			clazz = new TableColumn<>( );
-			clazz.setCellValueFactory( new ClassCellValueFactory( ) );
-			clazz.setText( RESOURCE_BUNDLE.getString( "columnClass" ) );
-			clazz.setPrefWidth( 200 );
-
-			getColumns( ).add( clazz );
-		}
-
-		{
-			method = new TableColumn<>( );
-			method.setCellValueFactory( new MethodCellValueFactory( ) );
-			method.setText( RESOURCE_BUNDLE.getString( "columnMethod" ) );
-			method.setPrefWidth( 400 );
-
-			getColumns( ).add( method );
-		}
-
-		{
-			duration = new TableColumn<>( );
-			duration.setCellValueFactory( new DurationCellValueFactory( ) );
-			duration.setText( RESOURCE_BUNDLE.getString( "columnDuration" ) );
-			duration.setPrefWidth( 150 );
-
-			getColumns( ).add( duration );
-		}
-
-		{
-			timestamp = new TableColumn<>( );
-			timestamp.setCellValueFactory( new TimestampCellValueFactory( ) );
-			timestamp.setText( RESOURCE_BUNDLE.getString( "columnTimestamp" ) );
-			timestamp.setPrefWidth( 150 );
-
-			getColumns( ).add( timestamp );
-		}
-
-		{
-			traceId = new TableColumn<>( );
-			traceId.setCellValueFactory( aParam -> new ReadOnlyStringWrapper( Long.toString( aParam.getValue( ).getTraceId( ) ).intern( ) ) );
-			traceId.setText( RESOURCE_BUNDLE.getString( "columnTraceId" ) );
-			traceId.setPrefWidth( 150 );
-
-			getColumns( ).add( traceId );
-		}
+		getColumns( ).add( createHostTableColumn( ) );
+		getColumns( ).add( createClassTableColumn( ) );
+		getColumns( ).add( createMethodTableColumn( ) );
+		getColumns( ).add( createDurationTableColumn( ) );
+		getColumns( ).add( createTimestampTableColumn( ) );
+		getColumns( ).add( createTraceIdTableColumn( ) );
 
 		// The default sorting is a little bit too slow.We use a custom sort policy which sorts the data directly.
 		setSortPolicy( createSortPolicy( ) );
 
 		addDefaultStylesheet( );
+	}
+
+	private TableColumn<MethodCall, ?> createHostTableColumn( ) {
+		host = new TableColumn<>( );
+
+		host.setCellValueFactory( aParam -> new ReadOnlyObjectWrapper<>( aParam.getValue( ).getHost( ) ) );
+		host.setText( RESOURCE_BUNDLE.getString( "columnHost" ) );
+		host.setPrefWidth( 100 );
+
+		return host;
+	}
+
+	private TableColumn<MethodCall, ?> createClassTableColumn( ) {
+		clazz = new TableColumn<>( );
+
+		clazz.setCellValueFactory( new ClassCellValueFactory( ) );
+		clazz.setText( RESOURCE_BUNDLE.getString( "columnClass" ) );
+		clazz.setPrefWidth( 200 );
+
+		return clazz;
+	}
+
+	private TableColumn<MethodCall, ?> createMethodTableColumn( ) {
+		method = new TableColumn<>( );
+
+		method.setCellValueFactory( new MethodCellValueFactory( ) );
+		method.setText( RESOURCE_BUNDLE.getString( "columnMethod" ) );
+		method.setPrefWidth( 400 );
+
+		return method;
+	}
+
+	private TableColumn<MethodCall, ?> createDurationTableColumn( ) {
+		duration = new TableColumn<>( );
+
+		duration.setCellValueFactory( new DurationCellValueFactory( ) );
+		duration.setText( RESOURCE_BUNDLE.getString( "columnDuration" ) );
+		duration.setPrefWidth( 150 );
+
+		return duration;
+	}
+
+	private TableColumn<MethodCall, ?> createTimestampTableColumn( ) {
+		timestamp = new TableColumn<>( );
+
+		timestamp.setCellValueFactory( new TimestampCellValueFactory( ) );
+		timestamp.setText( RESOURCE_BUNDLE.getString( "columnTimestamp" ) );
+		timestamp.setPrefWidth( 150 );
+
+		return timestamp;
+	}
+
+	private TableColumn<MethodCall, ?> createTraceIdTableColumn( ) {
+		traceId = new TableColumn<>( );
+
+		traceId.setCellValueFactory( aParam -> new ReadOnlyStringWrapper( Long.toString( aParam.getValue( ).getTraceId( ) ).intern( ) ) );
+		traceId.setText( RESOURCE_BUNDLE.getString( "columnTraceId" ) );
+		traceId.setPrefWidth( 150 );
+
+		return traceId;
 	}
 
 	private Label createPlaceholder( ) {
