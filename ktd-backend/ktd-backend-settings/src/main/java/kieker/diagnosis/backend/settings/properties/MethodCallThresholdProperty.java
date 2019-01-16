@@ -26,7 +26,7 @@ import kieker.diagnosis.backend.properties.FloatApplicationProperty;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class MethodCallThresholdProperty extends FloatApplicationProperty {
+public final class MethodCallThresholdProperty extends FloatApplicationProperty {
 
 	@Override
 	public String getKey( ) {

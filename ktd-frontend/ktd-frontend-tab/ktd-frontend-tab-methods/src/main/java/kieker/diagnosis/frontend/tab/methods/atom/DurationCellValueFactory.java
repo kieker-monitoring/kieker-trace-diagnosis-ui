@@ -32,7 +32,7 @@ import kieker.diagnosis.backend.settings.properties.TimeUnitProperty;
  *
  * @author Nils Christian Ehmke
  */
-public class DurationCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>> {
+public final class DurationCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>> {
 
 	private final PropertiesService ivPropertiesService = ServiceFactory.getService( PropertiesService.class );
 

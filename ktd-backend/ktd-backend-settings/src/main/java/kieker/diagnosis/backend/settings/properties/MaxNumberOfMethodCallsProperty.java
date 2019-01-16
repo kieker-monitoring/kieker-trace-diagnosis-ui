@@ -26,7 +26,7 @@ import kieker.diagnosis.backend.properties.IntegerApplicationProperty;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class MaxNumberOfMethodCallsProperty extends IntegerApplicationProperty {
+public final class MaxNumberOfMethodCallsProperty extends IntegerApplicationProperty {
 
 	@Override
 	public String getKey( ) {

@@ -31,7 +31,7 @@ import kieker.diagnosis.backend.settings.properties.MethodAppearanceProperty;
  *
  * @author Nils Christian Ehmke
  */
-public class MethodCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>> {
+public final class MethodCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>> {
 
 	private final PropertiesService ivPropertiesService = ServiceFactory.getService( PropertiesService.class );
 

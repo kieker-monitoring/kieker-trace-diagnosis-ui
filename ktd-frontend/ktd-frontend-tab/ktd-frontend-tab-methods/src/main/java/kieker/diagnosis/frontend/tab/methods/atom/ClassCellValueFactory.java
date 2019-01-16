@@ -29,13 +29,13 @@ import kieker.diagnosis.backend.settings.ClassAppearance;
 import kieker.diagnosis.backend.settings.properties.ClassAppearanceProperty;
 
 /**
- * This is a cell factory for a table which shows the class of a method call in the configured manner. It has to be in the CDI context, as it has to have access
- * to the application properties.
+ * This is a cell factory for a table which shows the class of a method call in the configured manner. It has to be in
+ * the CDI context, as it has to have access to the application properties.
  *
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class ClassCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>> {
+public final class ClassCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>> {
 
 	private final PropertiesService ivPropertiesService = ServiceFactory.getService( PropertiesService.class );
 

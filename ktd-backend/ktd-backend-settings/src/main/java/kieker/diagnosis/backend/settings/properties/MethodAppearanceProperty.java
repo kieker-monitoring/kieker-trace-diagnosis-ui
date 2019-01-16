@@ -27,7 +27,7 @@ import kieker.diagnosis.backend.settings.MethodAppearance;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class MethodAppearanceProperty extends EnumApplicationProperty<MethodAppearance> {
+public final class MethodAppearanceProperty extends EnumApplicationProperty<MethodAppearance> {
 
 	public MethodAppearanceProperty( ) {
 		super( MethodAppearance.class );

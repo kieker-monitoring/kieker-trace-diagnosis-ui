@@ -16,7 +16,7 @@
 
 package kieker.diagnosis.backend.monitoring;
 
-public class DefaultMonitoringProbeFactory implements MonitoringProbeFactory {
+public final class DefaultMonitoringProbeFactory implements MonitoringProbeFactory {
 
 	@Override
 	public MonitoringProbe createMonitoringProbe( final Class<?> aClass, final String aMethod ) {

@@ -31,7 +31,7 @@ import kieker.diagnosis.backend.settings.properties.TimestampProperty;
  *
  * @author Nils Christian Ehmke
  */
-public class TimestampCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>> {
+public final class TimestampCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>> {
 
 	private final PropertiesService ivPropertiesService = ServiceFactory.getService( PropertiesService.class );
 

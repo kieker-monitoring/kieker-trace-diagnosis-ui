@@ -43,7 +43,7 @@ import kieker.diagnosis.frontend.tab.methods.complex.MethodsTab;
 import kieker.diagnosis.frontend.tab.statistics.complex.StatisticsTab;
 import kieker.diagnosis.frontend.tab.traces.complex.TracesTab;
 
-public class MainTabPane extends TabPane implements StylesheetMixin {
+public final class MainTabPane extends TabPane implements StylesheetMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MainTabPane.class.getName( ) );
 

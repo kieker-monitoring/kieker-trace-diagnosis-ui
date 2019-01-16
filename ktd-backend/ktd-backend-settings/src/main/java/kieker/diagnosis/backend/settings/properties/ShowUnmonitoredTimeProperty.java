@@ -26,7 +26,7 @@ import kieker.diagnosis.backend.properties.BooleanApplicationProperty;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class ShowUnmonitoredTimeProperty extends BooleanApplicationProperty {
+public final class ShowUnmonitoredTimeProperty extends BooleanApplicationProperty {
 
 	@Override
 	public Boolean getDefaultValue( ) {

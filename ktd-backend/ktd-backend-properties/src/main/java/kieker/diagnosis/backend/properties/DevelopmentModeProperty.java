@@ -24,7 +24,7 @@ import com.google.inject.Singleton;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class DevelopmentModeProperty extends BooleanSystemProperty {
+public final class DevelopmentModeProperty extends BooleanSystemProperty {
 
 	@Override
 	public String getKey( ) {

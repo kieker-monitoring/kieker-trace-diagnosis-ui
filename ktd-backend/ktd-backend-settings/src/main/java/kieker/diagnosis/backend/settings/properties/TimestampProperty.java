@@ -27,7 +27,7 @@ import kieker.diagnosis.backend.settings.TimestampAppearance;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class TimestampProperty extends EnumApplicationProperty<TimestampAppearance> {
+public final class TimestampProperty extends EnumApplicationProperty<TimestampAppearance> {
 
 	public TimestampProperty( ) {
 		super( TimestampAppearance.class );

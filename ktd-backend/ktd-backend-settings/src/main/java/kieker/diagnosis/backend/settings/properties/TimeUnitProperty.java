@@ -28,7 +28,7 @@ import kieker.diagnosis.backend.properties.EnumApplicationProperty;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class TimeUnitProperty extends EnumApplicationProperty<TimeUnit> {
+public final class TimeUnitProperty extends EnumApplicationProperty<TimeUnit> {
 
 	public TimeUnitProperty( ) {
 		super( TimeUnit.class );

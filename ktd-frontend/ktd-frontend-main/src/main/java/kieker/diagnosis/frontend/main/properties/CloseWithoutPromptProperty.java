@@ -26,7 +26,7 @@ import kieker.diagnosis.backend.properties.BooleanApplicationProperty;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class CloseWithoutPromptProperty extends BooleanApplicationProperty {
+public final class CloseWithoutPromptProperty extends BooleanApplicationProperty {
 
 	@Override
 	public Boolean getDefaultValue( ) {

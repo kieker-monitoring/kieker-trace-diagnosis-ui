@@ -26,7 +26,7 @@ import kieker.diagnosis.backend.properties.StringApplicationProperty;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class LastImportPathProperty extends StringApplicationProperty {
+public final class LastImportPathProperty extends StringApplicationProperty {
 
 	@Override
 	public String getKey( ) {

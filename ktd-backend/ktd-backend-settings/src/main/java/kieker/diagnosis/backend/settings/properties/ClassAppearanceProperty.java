@@ -27,7 +27,7 @@ import kieker.diagnosis.backend.settings.ClassAppearance;
  * @author Nils Christian Ehmke
  */
 @Singleton
-public class ClassAppearanceProperty extends EnumApplicationProperty<ClassAppearance> {
+public final class ClassAppearanceProperty extends EnumApplicationProperty<ClassAppearance> {
 
 	public ClassAppearanceProperty( ) {
 		super( ClassAppearance.class );

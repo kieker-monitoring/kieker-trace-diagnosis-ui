@@ -16,7 +16,7 @@
 
 package kieker.diagnosis.backend.monitoring;
 
-public class NoOpMonitoringProbeFactory implements MonitoringProbeFactory {
+public final class NoOpMonitoringProbeFactory implements MonitoringProbeFactory {
 
 	private static final MonitoringProbe NO_OP_MONITORING_PROBE = new NoOpMonitoringProbe( );
 
