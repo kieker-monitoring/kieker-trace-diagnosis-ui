@@ -28,6 +28,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.SortType;
 import javafx.scene.control.TableView;
+import javafx.util.Callback;
 import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.export.CSVData;
@@ -52,20 +53,22 @@ public final class MethodsTableView extends TableView<MethodCall> implements Sty
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MethodsTableView.class.getName( ) );
 
-	private final TableColumn<MethodCall, String> host;
-	private final TableColumn<MethodCall, String> clazz;
-	private final TableColumn<MethodCall, String> method;
-	private final TableColumn<MethodCall, String> duration;
-	private final TableColumn<MethodCall, String> timestamp;
-	private final TableColumn<MethodCall, String> traceId;
+	private TableColumn<MethodCall, String> host;
+	private TableColumn<MethodCall, String> clazz;
+	private TableColumn<MethodCall, String> method;
+	private TableColumn<MethodCall, String> duration;
+	private TableColumn<MethodCall, String> timestamp;
+	private TableColumn<MethodCall, String> traceId;
 
 	public MethodsTableView( ) {
+		createControl( );
+	}
+
+	private void createControl( ) {
 		setTableMenuButtonVisible( true );
 		setRowFactory( aParam -> new StyledRow( ) );
 
-		final Label placeholder = new Label( );
-		placeholder.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-		setPlaceholder( placeholder );
+		setPlaceholder( createPlaceholder( ) );
 
 		{
 			host = new TableColumn<>( );
@@ -121,10 +124,24 @@ public final class MethodsTableView extends TableView<MethodCall> implements Sty
 			getColumns( ).add( traceId );
 		}
 
-		// The default sorting is a little bit too slow. Therefore we use a custom sort policy which sorts directly
-		// the data.
+		// The default sorting is a little bit too slow.We use a custom sort policy which sorts the data directly.
+		setSortPolicy( createSortPolicy( ) );
+
+		addDefaultStylesheet( );
+	}
+
+	private Label createPlaceholder( ) {
+		final Label placeholder = new Label( );
+
+		placeholder.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+
+		return placeholder;
+	}
+
+	private Callback<TableView<MethodCall>, Boolean> createSortPolicy( ) {
 		final PropertiesService propertiesService = ServiceFactory.getService( PropertiesService.class );
-		setSortPolicy( param -> {
+
+		return param -> {
 			final ObservableList<TableColumn<MethodCall, ?>> sortOrder = param.getSortOrder( );
 
 			if ( sortOrder.size( ) == 1 ) {
@@ -190,9 +207,7 @@ public final class MethodsTableView extends TableView<MethodCall> implements Sty
 			}
 
 			return true;
-		} );
-
-		addDefaultStylesheet( );
+		};
 	}
 
 	/**

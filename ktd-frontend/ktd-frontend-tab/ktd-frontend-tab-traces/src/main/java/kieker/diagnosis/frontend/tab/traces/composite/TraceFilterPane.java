@@ -53,24 +53,28 @@ public final class TraceFilterPane extends TitledPane implements StringMixin, Ic
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( TraceFilterPane.class.getName( ) );
 
-	private final TextField host;
-	private final TextField clazz;
-	private final TextField method;
-	private final TextField exception;
-	private final LongTextField traceId;
-	private final CheckBox useRegExpr;
+	private TextField host;
+	private TextField clazz;
+	private TextField method;
+	private TextField exception;
+	private LongTextField traceId;
+	private CheckBox useRegExpr;
 
-	private final DatePicker lowerDate;
-	private final LocalTimeTextField lowerTime;
-	private final DatePicker upperDate;
-	private final LocalTimeTextField upperTime;
-	private final CheckBox seachWholeTrace;
-	private final ComboBox<SearchType> searchType;
+	private DatePicker lowerDate;
+	private LocalTimeTextField lowerTime;
+	private DatePicker upperDate;
+	private LocalTimeTextField upperTime;
+	private CheckBox seachWholeTrace;
+	private ComboBox<SearchType> searchType;
 
-	private final Button searchButton;
-	private final Hyperlink saveAsFavoriteLink;
+	private Button searchButton;
+	private Hyperlink saveAsFavoriteLink;
 
 	public TraceFilterPane( ) {
+		createControl( );
+	}
+
+	private void createControl( ) {
 		setText( RESOURCE_BUNDLE.getString( "filterTitle" ) );
 
 		{

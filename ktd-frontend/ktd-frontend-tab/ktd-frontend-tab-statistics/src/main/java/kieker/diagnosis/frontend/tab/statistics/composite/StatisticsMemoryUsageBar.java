@@ -21,43 +21,58 @@ import java.lang.management.MemoryMXBean;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
-import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public final class StatisticsMemoryUsageBar extends TitledPane {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( StatisticsMemoryUsageBar.class.getName( ) );
-	private final ProgressBar progressBar = new ProgressBar( );
-	private final Text progressText = new Text( );
+
+	private ProgressBar progressBar;
+	private Text progressText;
 
 	public StatisticsMemoryUsageBar( ) {
-		setText( RESOURCE_BUNDLE.getString( "memoryUsage" ) );
-		setCollapsible( false );
-
-		final StackPane stackPane = new StackPane( );
-		VBox.setMargin( stackPane, new Insets( 2 ) );
-
-		configureProgressBar( );
-		stackPane.getChildren( ).add( progressBar );
-
-		stackPane.getChildren( ).add( progressText );
-
-		setContent( stackPane );
+		createControl( );
 		startUpdateThread( );
 	}
 
-	private void configureProgressBar( ) {
+	private void createControl( ) {
+		setText( RESOURCE_BUNDLE.getString( "memoryUsage" ) );
+		setCollapsible( false );
+
+		setContent( createStackPane( ) );
+	}
+
+	private StackPane createStackPane( ) {
+		final StackPane stackPane = new StackPane( );
+
+		stackPane.getChildren( ).add( createProgressBar( ) );
+		stackPane.getChildren( ).add( createProgressText( ) );
+
+		return stackPane;
+	}
+
+	private Node createProgressBar( ) {
+		progressBar = new ProgressBar( );
+
 		progressBar.setMaxWidth( Double.POSITIVE_INFINITY );
 		progressBar.setPrefHeight( 30 );
+
+		return progressBar;
+	}
+
+	private Node createProgressText( ) {
+		progressText = new Text( );
+
+		return progressText;
 	}
 
 	private void startUpdateThread( ) {
 		final Thread thread = new Thread( ( ) -> {
-			while ( true ) {
+			while ( !Thread.interrupted( ) ) {
 				final MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean( );
 				final long usedHeap = memoryMXBean.getHeapMemoryUsage( ).getUsed( ) / 1024 / 1024;
 				final long committedHeap = memoryMXBean.getHeapMemoryUsage( ).getCommitted( ) / 1024 / 1024;
@@ -69,7 +84,7 @@ public final class StatisticsMemoryUsageBar extends TitledPane {
 				try {
 					Thread.sleep( 2500 );
 				} catch ( final InterruptedException ex ) {
-					// Can be ignored
+					Thread.currentThread( ).interrupt( );
 				}
 			}
 		} );
@@ -78,7 +93,7 @@ public final class StatisticsMemoryUsageBar extends TitledPane {
 		thread.start( );
 	}
 
-	public void setValue( final long aCurrentMegaByte, final long aTotalMegaByte ) {
+	private void setValue( final long aCurrentMegaByte, final long aTotalMegaByte ) {
 		progressBar.setProgress( 1.0 * aCurrentMegaByte / aTotalMegaByte );
 		progressText.setText( String.format( "%d / %d [MB]", aCurrentMegaByte, aTotalMegaByte ) );
 	}

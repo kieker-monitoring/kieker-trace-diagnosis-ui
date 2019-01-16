@@ -20,6 +20,7 @@ import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -32,15 +33,24 @@ import javafx.scene.layout.Priority;
 public final class TraceStatusBar extends HBox {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( TraceStatusBar.class.getName( ) );
-	private final Label status;
+	private Label status;
 
 	public TraceStatusBar( ) {
+		createControl( );
+	}
+
+	private void createControl( ) {
+		getChildren( ).add( createStatusLabel( ) );
+	}
+
+	private Node createStatusLabel( ) {
 		status = new Label( );
+
 		status.setMaxWidth( Double.POSITIVE_INFINITY );
 		HBox.setHgrow( status, Priority.ALWAYS );
 		HBox.setMargin( status, new Insets( 5, 0, 0, 0 ) );
 
-		getChildren( ).add( status );
+		return status;
 	}
 
 	/**

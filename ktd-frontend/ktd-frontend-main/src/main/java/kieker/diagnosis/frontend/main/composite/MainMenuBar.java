@@ -58,127 +58,139 @@ public final class MainMenuBar extends MenuBar implements IconMixin {
 	private Menu favoritesMenu;
 
 	public MainMenuBar( ) {
-		{
-			final Menu menu = new Menu( );
-			menu.setText( RESOURCE_BUNDLE.getString( "file" ) );
-			menu.setId( "menuFile" );
+		createControl( );
+	}
 
-			{
-				final MenuItem menuItem = new MenuItem( );
-				menuItem.setText( RESOURCE_BUNDLE.getString( "importLog" ) );
-				menuItem.setOnAction( ( e ) -> performImportLog( ) );
-				menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+O" ) );
-				menuItem.setGraphic( createIcon( Icon.FOLDER_OPEN ) );
+	private void createControl( ) {
+		getMenus( ).add( createFileMenu( ) );
+		getMenus( ).add( createFavoritesMenu( ) );
+		getMenus( ).add( createHelpMenu( ) );
+	}
 
-				menu.getItems( ).add( menuItem );
-			}
+	private Menu createFileMenu( ) {
+		final Menu menu = new Menu( );
 
-			{
-				final MenuItem menuItem = new MenuItem( );
-				menuItem.setText( RESOURCE_BUNDLE.getString( "importLogFromZip" ) );
-				menuItem.setOnAction( ( e ) -> performImportLogFromZip( ) );
-				menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+Z" ) );
-				menuItem.setGraphic( createIcon( Icon.ZIP_ARCHIVE ) );
+		menu.setText( RESOURCE_BUNDLE.getString( "file" ) );
+		menu.setId( "menuFile" );
 
-				menu.getItems( ).add( menuItem );
-			}
+		menu.getItems( ).add( createImportMonitoringLogMenuItem( ) );
+		menu.getItems( ).add( createImportMonitoringZipMenuItem( ) );
+		menu.getItems( ).add( new SeparatorMenuItem( ) );
+		menu.getItems( ).add( createMonitoringMenuItem( ) );
+		menu.getItems( ).add( createSettingsMenuItem( ) );
+		menu.getItems( ).add( new SeparatorMenuItem( ) );
+		menu.getItems( ).add( createCloseMenuItem( ) );
 
-			{
-				final SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem( );
+		return menu;
+	}
 
-				menu.getItems( ).add( separatorMenuItem );
-			}
+	private MenuItem createImportMonitoringLogMenuItem( ) {
+		final MenuItem menuItem = new MenuItem( );
 
-			{
-				final MenuItem menuItem = new MenuItem( );
-				menuItem.setId( "menuItemMonitoringSettings" );
-				menuItem.setText( RESOURCE_BUNDLE.getString( "monitoring" ) );
-				menuItem.setOnAction( e -> performMonitoring( ) );
-				menuItem.setGraphic( createIcon( Icon.CHART ) );
+		menuItem.setText( RESOURCE_BUNDLE.getString( "importLog" ) );
+		menuItem.setOnAction( ( e ) -> performImportLog( ) );
+		menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+O" ) );
+		menuItem.setGraphic( createIcon( Icon.FOLDER_OPEN ) );
 
-				menu.getItems( ).add( menuItem );
-			}
+		return menuItem;
+	}
 
-			{
-				final MenuItem menuItem = new MenuItem( );
-				menuItem.setId( "menuItemSettings" );
-				menuItem.setText( RESOURCE_BUNDLE.getString( "settings" ) );
-				menuItem.setOnAction( e -> performSettings( ) );
-				menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+S" ) );
-				menuItem.setGraphic( createIcon( Icon.COGS ) );
+	private MenuItem createImportMonitoringZipMenuItem( ) {
+		final MenuItem menuItem = new MenuItem( );
+		menuItem.setText( RESOURCE_BUNDLE.getString( "importLogFromZip" ) );
+		menuItem.setOnAction( ( e ) -> performImportLogFromZip( ) );
+		menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+Z" ) );
+		menuItem.setGraphic( createIcon( Icon.ZIP_ARCHIVE ) );
+		return menuItem;
+	}
 
-				menu.getItems( ).add( menuItem );
-			}
+	private MenuItem createMonitoringMenuItem( ) {
+		final MenuItem menuItem = new MenuItem( );
+		menuItem.setId( "menuItemMonitoringSettings" );
+		menuItem.setText( RESOURCE_BUNDLE.getString( "monitoring" ) );
+		menuItem.setOnAction( e -> performMonitoring( ) );
+		menuItem.setGraphic( createIcon( Icon.CHART ) );
+		return menuItem;
+	}
 
-			{
-				final SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem( );
+	private MenuItem createSettingsMenuItem( ) {
+		final MenuItem menuItem = new MenuItem( );
 
-				menu.getItems( ).add( separatorMenuItem );
-			}
+		menuItem.setId( "menuItemSettings" );
+		menuItem.setText( RESOURCE_BUNDLE.getString( "settings" ) );
+		menuItem.setOnAction( e -> performSettings( ) );
+		menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+S" ) );
+		menuItem.setGraphic( createIcon( Icon.COGS ) );
 
-			{
-				final MenuItem menuItem = new MenuItem( );
-				menuItem.setId( "menuFileClose" );
-				menuItem.setText( RESOURCE_BUNDLE.getString( "close" ) );
-				menuItem.setOnAction( ( e ) -> performClose( ) );
-				menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+X" ) );
-				menuItem.setGraphic( createIcon( Icon.TIMES ) );
+		return menuItem;
+	}
 
-				menu.getItems( ).add( menuItem );
-			}
+	private MenuItem createCloseMenuItem( ) {
+		final MenuItem menuItem = new MenuItem( );
 
-			getMenus( ).add( menu );
+		menuItem.setId( "menuFileClose" );
+		menuItem.setText( RESOURCE_BUNDLE.getString( "close" ) );
+		menuItem.setOnAction( ( e ) -> performClose( ) );
+		menuItem.setAccelerator( KeyCombination.keyCombination( "Ctrl+X" ) );
+		menuItem.setGraphic( createIcon( Icon.TIMES ) );
 
-			{
-				favoritesMenu = new Menu( );
-				favoritesMenu.setId( "menuFavorites" );
-				favoritesMenu.setText( RESOURCE_BUNDLE.getString( "favorites" ) );
+		return menuItem;
+	}
 
-				{
-					final MenuItem menuItem = new MenuItem( );
-					menuItem.setText( RESOURCE_BUNDLE.getString( "noFavoritesAvailable" ) );
-					menuItem.setDisable( true );
+	private Menu createFavoritesMenu( ) {
+		favoritesMenu = new Menu( );
 
-					favoritesMenu.getItems( ).add( menuItem );
-				}
+		favoritesMenu.setId( "menuFavorites" );
+		favoritesMenu.setText( RESOURCE_BUNDLE.getString( "favorites" ) );
 
-				getMenus( ).add( favoritesMenu );
-			}
-		}
-		{
-			final Menu menu = new Menu( );
-			menu.setId( "menuHelp" );
-			menu.setText( RESOURCE_BUNDLE.getString( "help" ) );
+		favoritesMenu.getItems( ).add( createNoFavoritesAvailableMenuItem( ) );
 
-			{
-				final MenuItem menuItem = new MenuItem( );
-				menuItem.setId( "menuItemManual" );
-				menuItem.setText( RESOURCE_BUNDLE.getString( "documentation" ) );
-				menuItem.setOnAction( e -> performDocumentation( ) );
-				menuItem.setAccelerator( KeyCombination.keyCombination( "F1" ) );
-				menuItem.setGraphic( createIcon( Icon.QUESTION_CIRCLE ) );
+		return favoritesMenu;
+	}
 
-				menu.getItems( ).add( menuItem );
-			}
+	private MenuItem createNoFavoritesAvailableMenuItem( ) {
+		final MenuItem menuItem = new MenuItem( );
 
-			{
-				final SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem( );
+		menuItem.setText( RESOURCE_BUNDLE.getString( "noFavoritesAvailable" ) );
+		menuItem.setDisable( true );
 
-				menu.getItems( ).add( separatorMenuItem );
-			}
+		return menuItem;
+	}
 
-			{
-				final MenuItem menuItem = new MenuItem( );
-				menuItem.setId( "menuItemAbout" );
-				menuItem.setText( RESOURCE_BUNDLE.getString( "about" ) );
-				menuItem.setOnAction( e -> performAbout( ) );
-				menuItem.setGraphic( createIcon( Icon.INFO_CIRCLE ) );
+	private Menu createHelpMenu( ) {
+		final Menu menu = new Menu( );
 
-				menu.getItems( ).add( menuItem );
-			}
+		menu.setId( "menuHelp" );
+		menu.setText( RESOURCE_BUNDLE.getString( "help" ) );
 
-			getMenus( ).add( menu );
-		}
+		menu.getItems( ).add( createDocumentationMenuItem( ) );
+		menu.getItems( ).add( new SeparatorMenuItem( ) );
+		menu.getItems( ).add( createAboutMenuItem( ) );
+
+		return menu;
+	}
+
+	private MenuItem createDocumentationMenuItem( ) {
+		final MenuItem menuItem = new MenuItem( );
+
+		menuItem.setId( "menuItemManual" );
+		menuItem.setText( RESOURCE_BUNDLE.getString( "documentation" ) );
+		menuItem.setOnAction( e -> performDocumentation( ) );
+		menuItem.setAccelerator( KeyCombination.keyCombination( "F1" ) );
+		menuItem.setGraphic( createIcon( Icon.QUESTION_CIRCLE ) );
+
+		return menuItem;
+	}
+
+	private MenuItem createAboutMenuItem( ) {
+		final MenuItem menuItem = new MenuItem( );
+
+		menuItem.setId( "menuItemAbout" );
+		menuItem.setText( RESOURCE_BUNDLE.getString( "about" ) );
+		menuItem.setOnAction( e -> performAbout( ) );
+		menuItem.setGraphic( createIcon( Icon.INFO_CIRCLE ) );
+
+		return menuItem;
 	}
 
 	private void performAbout( ) {

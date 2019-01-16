@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -59,31 +60,36 @@ public final class MainPane extends VBox implements StylesheetMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MainPane.class.getName( ) );
 
-	private final MainMenuBar menuBar = new MainMenuBar( );
-	private final MainTabPane mainTabPane = new MainTabPane( );
+	private MainMenuBar menuBar;
+	private MainTabPane mainTabPane;
 
 	public MainPane( ) {
-		configureMenuBar( );
-		getChildren( ).add( menuBar );
-
-		configureMainPane( );
-		getChildren( ).add( mainTabPane );
+		getChildren( ).add( createMenuBar( ) );
+		getChildren( ).add( createMainPane( ) );
 	}
 
-	private void configureMenuBar( ) {
+	private Node createMenuBar( ) {
+		menuBar = new MainMenuBar( );
+
 		menuBar.setOnSettings( ( ) -> performSettings( ) );
 		menuBar.setOnImportLog( ( ) -> performImportLog( ) );
 		menuBar.setOnImportLogFromZip( ( ) -> performImportLogFromZip( ) );
 
 		mainTabPane.setOnSaveAsFavorite( ( tab, filter ) -> performSaveAsFavorite( tab, filter ) );
+
+		return menuBar;
 	}
 
-	private void configureMainPane( ) {
+	private Node createMainPane( ) {
+		mainTabPane = new MainTabPane( );
+
 		loadFonts( );
 		addDefaultStylesheet( );
 		mainTabPane.setId( "mainTabPane" );
 
 		VBox.setVgrow( mainTabPane, Priority.ALWAYS );
+
+		return mainTabPane;
 	}
 
 	private void loadFonts( ) {

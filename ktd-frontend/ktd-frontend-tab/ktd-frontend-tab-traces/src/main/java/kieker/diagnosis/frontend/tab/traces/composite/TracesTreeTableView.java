@@ -55,13 +55,15 @@ public final class TracesTreeTableView extends TreeTableView<MethodCall> impleme
 	private TreeTableColumn<MethodCall, Long> durationColumn;
 
 	public TracesTreeTableView( ) {
+		createControl( );
+	}
+
+	private void createControl( ) {
 		setShowRoot( false );
 		setTableMenuButtonVisible( true );
 		setRowFactory( aParam -> new StyledRow( ) );
 
-		final Label placeholder = new Label( );
-		placeholder.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-		setPlaceholder( placeholder );
+		setPlaceholder( createPlaceholder( ) );
 
 		{
 			final TreeTableColumn<MethodCall, String> column = new TreeTableColumn<>( );
@@ -145,6 +147,14 @@ public final class TracesTreeTableView extends TreeTableView<MethodCall> impleme
 		}
 
 		addDefaultStylesheet( );
+	}
+
+	private Label createPlaceholder( ) {
+		final Label placeholder = new Label( );
+
+		placeholder.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+
+		return placeholder;
 	}
 
 	/**

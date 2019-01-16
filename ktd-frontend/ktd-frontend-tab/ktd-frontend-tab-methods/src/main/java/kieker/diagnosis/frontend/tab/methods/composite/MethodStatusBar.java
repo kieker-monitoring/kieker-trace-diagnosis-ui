@@ -22,6 +22,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -36,26 +37,35 @@ public final class MethodStatusBar extends HBox {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MethodStatusBar.class.getName( ) );
 
-	private final Label status;
-	private final Hyperlink exportToCsvLink;
+	private Label status;
+	private Hyperlink exportToCsvLink;
 
 	public MethodStatusBar( ) {
-		{
-			status = new Label( );
-			status.setMaxWidth( Double.POSITIVE_INFINITY );
-			HBox.setHgrow( status, Priority.ALWAYS );
-			HBox.setMargin( status, new Insets( 5, 0, 0, 0 ) );
+		createControl( );
+	}
 
-			getChildren( ).add( status );
-		}
+	private void createControl( ) {
+		getChildren( ).add( createStatusLabel( ) );
+		getChildren( ).add( createExportToCsvLink( ) );
+	}
 
-		{
-			exportToCsvLink = new Hyperlink( );
-			exportToCsvLink.setId( "methodCallTabExportToCsv" );
-			exportToCsvLink.setText( RESOURCE_BUNDLE.getString( "exportToCSV" ) );
+	private Node createStatusLabel( ) {
+		status = new Label( );
 
-			getChildren( ).add( exportToCsvLink );
-		}
+		status.setMaxWidth( Double.POSITIVE_INFINITY );
+		HBox.setHgrow( status, Priority.ALWAYS );
+		HBox.setMargin( status, new Insets( 5, 0, 0, 0 ) );
+
+		return status;
+	}
+
+	private Node createExportToCsvLink( ) {
+		exportToCsvLink = new Hyperlink( );
+
+		exportToCsvLink.setId( "methodCallTabExportToCsv" );
+		exportToCsvLink.setText( RESOURCE_BUNDLE.getString( "exportToCSV" ) );
+
+		return exportToCsvLink;
 	}
 
 	/**

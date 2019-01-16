@@ -39,17 +39,21 @@ public final class MethodDetailsPane extends TitledPane implements StylesheetMix
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MethodDetailsPane.class.getName( ) );
 
-	private final TextField host;
-	private final TextField clazz;
-	private final TextField method;
-	private final TextField exception;
-	private final TextField duration;
-	private final TextField timestamp;
-	private final TextField traceId;
+	private TextField host;
+	private TextField clazz;
+	private TextField method;
+	private TextField exception;
+	private TextField duration;
+	private TextField timestamp;
+	private TextField traceId;
 
-	private final Hyperlink jumpToTraceLink;
+	private Hyperlink jumpToTraceLink;
 
 	public MethodDetailsPane( ) {
+		createControl( );
+	}
+
+	private void createControl( ) {
 		setText( RESOURCE_BUNDLE.getString( "detailTitle" ) );
 
 		final GridPane gridPane = new GridPane( );

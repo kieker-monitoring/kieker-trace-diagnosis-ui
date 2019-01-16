@@ -33,20 +33,24 @@ public final class StatisticsPane extends GridPane implements StylesheetMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( StatisticsPane.class.getName( ) );
 
-	private final TextField ivProcessedBytes;
-	private final TextField ivProcessDuration;
-	private final TextField ivProcessSpeed;
-	private final TextField ivIgnoredRecords;
-	private final TextField ivDanglingRecords;
-	private final TextField ivIncompleteTraces;
-	private final TextField ivMethods;
-	private final TextField ivAggregatedMethods;
-	private final TextField ivTraces;
-	private final TextField ivBeginnOfMonitoring;
-	private final TextField ivEndOfMonitoring;
-	private final TextField ivDirectory;
+	private TextField ivProcessedBytes;
+	private TextField ivProcessDuration;
+	private TextField ivProcessSpeed;
+	private TextField ivIgnoredRecords;
+	private TextField ivDanglingRecords;
+	private TextField ivIncompleteTraces;
+	private TextField ivMethods;
+	private TextField ivAggregatedMethods;
+	private TextField ivTraces;
+	private TextField ivBeginnOfMonitoring;
+	private TextField ivEndOfMonitoring;
+	private TextField ivDirectory;
 
 	public StatisticsPane( ) {
+		createControl( );
+	}
+
+	private void createControl( ) {
 		setPadding( new Insets( 5 ) );
 
 		int rowIndex = 0;

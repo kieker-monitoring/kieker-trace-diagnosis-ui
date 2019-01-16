@@ -53,7 +53,12 @@ public class MainTabPane extends TabPane implements StylesheetMixin {
 	private final StatisticsTab statisticsTab = new StatisticsTab( );
 
 	public MainTabPane( ) {
-		configureMainTabPane( );
+		createControl( );
+	}
+
+	private void createControl( ) {
+		setTabClosingPolicy( TabClosingPolicy.UNAVAILABLE );
+		addDefaultStylesheet( );
 
 		configureTracesTab( );
 		getTabs( ).add( tracesTab );
@@ -66,11 +71,6 @@ public class MainTabPane extends TabPane implements StylesheetMixin {
 
 		configureStatisticsTab( );
 		getTabs( ).add( statisticsTab );
-	}
-
-	private void configureMainTabPane( ) {
-		setTabClosingPolicy( TabClosingPolicy.UNAVAILABLE );
-		addDefaultStylesheet( );
 	}
 
 	private void configureTracesTab( ) {

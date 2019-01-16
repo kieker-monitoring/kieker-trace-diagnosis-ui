@@ -18,6 +18,7 @@ package kieker.diagnosis.frontend.tab.statistics.complex;
 
 import java.util.Optional;
 
+import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -29,21 +30,38 @@ import kieker.diagnosis.frontend.tab.statistics.composite.StatisticsPane;
 
 public final class StatisticsTab extends Tab {
 
-	private final StatisticsPane statisticsPane = new StatisticsPane( );
-	private final StatisticsMemoryUsageBar memoryUsageBar = new StatisticsMemoryUsageBar( );
+	private StatisticsPane statisticsPane;
+	private StatisticsMemoryUsageBar memoryUsageBar;
 
 	private Optional<Statistics> statisticsForRefresh;
 
 	public StatisticsTab( ) {
-		final VBox vbox = new VBox( );
-		setContent( vbox );
-
-		VBox.setVgrow( statisticsPane, Priority.ALWAYS );
-		vbox.getChildren( ).add( statisticsPane );
-
-		vbox.getChildren( ).add( memoryUsageBar );
+		createControl( );
 
 		initialize( );
+	}
+
+	private void createControl( ) {
+		final VBox vbox = new VBox( );
+
+		vbox.getChildren( ).add( createStatisticsPane( ) );
+		vbox.getChildren( ).add( createMemoryUsageBar( ) );
+
+		setContent( vbox );
+	}
+
+	private Node createStatisticsPane( ) {
+		statisticsPane = new StatisticsPane( );
+
+		VBox.setVgrow( statisticsPane, Priority.ALWAYS );
+
+		return statisticsPane;
+	}
+
+	private Node createMemoryUsageBar( ) {
+		memoryUsageBar = new StatisticsMemoryUsageBar( );
+
+		return memoryUsageBar;
 	}
 
 	private void initialize( ) {

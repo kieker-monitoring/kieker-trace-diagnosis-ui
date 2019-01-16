@@ -23,6 +23,7 @@ import java.util.function.Consumer;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.Priority;
@@ -45,10 +46,10 @@ public final class MethodsTab extends Tab {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MethodsTab.class.getName( ) );
 
-	private final MethodFilterPane filterPane = new MethodFilterPane( );
-	private final MethodsTableView methodsTableView = new MethodsTableView( );
-	private final MethodDetailsPane detailsPane = new MethodDetailsPane( );
-	private final MethodStatusBar statusBar = new MethodStatusBar( );
+	private MethodFilterPane filterPane;
+	private MethodsTableView methodsTableView;
+	private MethodDetailsPane detailsPane;
+	private MethodStatusBar statusBar;
 
 	private Consumer<CSVData> onExportToCSV;
 	private Consumer<MethodCall> onJumpToTrace;
@@ -59,44 +60,60 @@ public final class MethodsTab extends Tab {
 	private String durationSuffixForRefresh;
 
 	public MethodsTab( ) {
-		final VBox vbox = new VBox( );
-		setContent( vbox );
-
-		configureFilterPane( );
-		vbox.getChildren( ).add( filterPane );
-
-		configureMethodsTableView( );
-		vbox.getChildren( ).add( methodsTableView );
-
-		configureDetailsPane( );
-		vbox.getChildren( ).add( detailsPane );
-
-		configureStatusBar( );
-		vbox.getChildren( ).add( statusBar );
-
+		createControl( );
 		performInitialize( );
 	}
 
-	private void configureFilterPane( ) {
-		filterPane.setOnSearch( e -> performSearch( ) );
-		filterPane.setOnSaveAsFavorite( e -> performSaveAsFavorite( ) );
+	private void createControl( ) {
+		setContent( createVBox( ) );
 	}
 
-	private void configureMethodsTableView( ) {
+	private VBox createVBox( ) {
+		final VBox vbox = new VBox( );
+
+		vbox.getChildren( ).add( createFilterPane( ) );
+		vbox.getChildren( ).add( createMethodsTableView( ) );
+		vbox.getChildren( ).add( createDetailsPane( ) );
+		vbox.getChildren( ).add( createStatusBar( ) );
+
+		return vbox;
+	}
+
+	private Node createFilterPane( ) {
+		filterPane = new MethodFilterPane( );
+
+		filterPane.setOnSearch( e -> performSearch( ) );
+		filterPane.setOnSaveAsFavorite( e -> performSaveAsFavorite( ) );
+
+		return filterPane;
+	}
+
+	private Node createMethodsTableView( ) {
+		methodsTableView = new MethodsTableView( );
+
 		methodsTableView.setId( "tabMethodsTable" );
 		methodsTableView.addSelectionChangeListener( ( observable, oldValue, newValue ) -> detailsPane.setValue( newValue ) );
 
 		VBox.setVgrow( methodsTableView, Priority.ALWAYS );
+
+		return methodsTableView;
 	}
 
-	private void configureDetailsPane( ) {
+	private Node createDetailsPane( ) {
+		detailsPane = new MethodDetailsPane( );
+
 		detailsPane.setOnJumpToTrace( e -> performJumpToTrace( ) );
+
+		return detailsPane;
 	}
 
-	private void configureStatusBar( ) {
-		statusBar.setOnExportToCsv( e -> performExportToCSV( ) );
+	private Node createStatusBar( ) {
+		statusBar = new MethodStatusBar( );
 
+		statusBar.setOnExportToCsv( e -> performExportToCSV( ) );
 		VBox.setMargin( statusBar, new Insets( 5 ) );
+
+		return statusBar;
 	}
 
 	private void performInitialize( ) {

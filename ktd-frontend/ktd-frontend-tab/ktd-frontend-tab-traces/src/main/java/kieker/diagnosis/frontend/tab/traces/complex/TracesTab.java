@@ -53,6 +53,11 @@ public final class TracesTab extends Tab {
 	private String durationSuffixForRefresh;
 
 	public TracesTab( ) {
+		createControl( );
+		performInitialize( );
+	}
+
+	private void createControl( ) {
 		final VBox vbox = new VBox( );
 		setContent( vbox );
 
@@ -66,8 +71,6 @@ public final class TracesTab extends Tab {
 
 		configureStatusBar( );
 		vbox.getChildren( ).add( statusBar );
-
-		performInitialize( );
 	}
 
 	private void configureFilterPane( ) {

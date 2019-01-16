@@ -35,18 +35,22 @@ public final class TraceDetailsPane extends TitledPane implements StylesheetMixi
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( TraceDetailsPane.class.getName( ) );
 
-	private final TextField host;
-	private final TextField clazz;
-	private final TextField method;
-	private final TextField exception;
-	private final TextField traceDepth;
-	private final TextField traceSize;
-	private final TextField duration;
-	private final TextField percent;
-	private final TextField timestamp;
-	private final TextField traceId;
+	private TextField host;
+	private TextField clazz;
+	private TextField method;
+	private TextField exception;
+	private TextField traceDepth;
+	private TextField traceSize;
+	private TextField duration;
+	private TextField percent;
+	private TextField timestamp;
+	private TextField traceId;
 
 	public TraceDetailsPane( ) {
+		createControl( );
+	}
+
+	private void createControl( ) {
 		setText( RESOURCE_BUNDLE.getString( "detailTitle" ) );
 
 		{
