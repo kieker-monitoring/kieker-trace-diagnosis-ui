@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
@@ -33,18 +34,18 @@ public final class StatisticsPane extends GridPane implements StylesheetMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( StatisticsPane.class.getName( ) );
 
-	private TextField ivProcessedBytes;
-	private TextField ivProcessDuration;
-	private TextField ivProcessSpeed;
-	private TextField ivIgnoredRecords;
-	private TextField ivDanglingRecords;
-	private TextField ivIncompleteTraces;
-	private TextField ivMethods;
-	private TextField ivAggregatedMethods;
-	private TextField ivTraces;
-	private TextField ivBeginnOfMonitoring;
-	private TextField ivEndOfMonitoring;
-	private TextField ivDirectory;
+	private TextField processedBytes;
+	private TextField processDuration;
+	private TextField processSpeed;
+	private TextField ignoredRecords;
+	private TextField danglingRecords;
+	private TextField incompleteTraces;
+	private TextField methods;
+	private TextField aggregatedMethods;
+	private TextField traces;
+	private TextField beginOfMonitoring;
+	private TextField endOfMonitoring;
+	private TextField directory;
 
 	public StatisticsPane( ) {
 		createControl( );
@@ -55,320 +56,299 @@ public final class StatisticsPane extends GridPane implements StylesheetMixin {
 
 		int rowIndex = 0;
 
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "directory" ) );
+		add( createDirectoryLabel( ), 0, rowIndex );
+		add( createDirectoryField( ), 1, rowIndex++ );
 
-			GridPane.setColumnIndex( label, 0 );
-			GridPane.setRowIndex( label, rowIndex );
+		add( createProcessedBytesLabel( ), 0, rowIndex );
+		add( createProcessedBytesField( ), 1, rowIndex++ );
 
-			getChildren( ).add( label );
-		}
+		add( createProcessDurationLabel( ), 0, rowIndex );
+		add( createProcessDurationField( ), 1, rowIndex++ );
 
-		{
-			ivDirectory = new TextField( );
-			ivDirectory.setEditable( false );
+		add( createProcessSpeedLabel( ), 0, rowIndex );
+		add( createProcessSpeedField( ), 1, rowIndex++ );
 
-			GridPane.setColumnIndex( ivDirectory, 1 );
-			GridPane.setRowIndex( ivDirectory, rowIndex++ );
-			GridPane.setHgrow( ivDirectory, Priority.ALWAYS );
+		add( new Separator( ), 0, rowIndex++, 2, 1 );
 
-			getChildren( ).add( ivDirectory );
-		}
+		add( createBeginOfMonitoringLabel( ), 0, rowIndex );
+		add( createBeginOfMonitoringField( ), 1, rowIndex++ );
 
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "processedBytes" ) );
+		add( createEndOfMonitoringLabel( ), 0, rowIndex );
+		add( createEndOfMonitoringField( ), 1, rowIndex++ );
 
-			GridPane.setColumnIndex( label, 0 );
-			GridPane.setRowIndex( label, rowIndex );
+		add( new Separator( ), 0, rowIndex++, 2, 1 );
 
-			getChildren( ).add( label );
-		}
+		add( createTracesLabe( ), 0, rowIndex );
+		add( createTracesField( ), 1, rowIndex++ );
 
-		{
-			ivProcessedBytes = new TextField( );
-			ivProcessedBytes.setId( "statisticsProcessedBytes" );
-			ivProcessedBytes.setEditable( false );
+		add( createMethodsLabel( ), 0, rowIndex );
+		add( createMethodsField( ), 1, rowIndex++ );
 
-			GridPane.setColumnIndex( ivProcessedBytes, 1 );
-			GridPane.setRowIndex( ivProcessedBytes, rowIndex++ );
-			GridPane.setHgrow( ivProcessedBytes, Priority.ALWAYS );
+		add( createAggregatedMethodsLabel( ), 0, rowIndex );
+		add( createAggregatedMethodsField( ), 1, rowIndex++ );
 
-			getChildren( ).add( ivProcessedBytes );
-		}
+		add( new Separator( ), 0, rowIndex++, 2, 1 );
 
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "processDuration" ) );
+		add( createIgnoredRecordsLabel( ), 0, rowIndex );
+		add( createIgnoredRecordsField( ), 1, rowIndex++ );
 
-			GridPane.setColumnIndex( label, 0 );
-			GridPane.setRowIndex( label, rowIndex );
+		add( createDanglingRecordsLabel( ), 0, rowIndex );
+		add( createDanglingRecordsField( ), 1, rowIndex++ );
 
-			getChildren( ).add( label );
-		}
-
-		{
-			ivProcessDuration = new TextField( );
-			ivProcessDuration.setId( "statisticsProcessDuration" );
-			ivProcessDuration.setEditable( false );
-
-			GridPane.setColumnIndex( ivProcessDuration, 1 );
-			GridPane.setRowIndex( ivProcessDuration, rowIndex++ );
-			GridPane.setHgrow( ivProcessDuration, Priority.ALWAYS );
-
-			getChildren( ).add( ivProcessDuration );
-		}
-
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "processSpeed" ) );
-
-			GridPane.setColumnIndex( label, 0 );
-			GridPane.setRowIndex( label, rowIndex );
-
-			getChildren( ).add( label );
-		}
-
-		{
-			ivProcessSpeed = new TextField( );
-			ivProcessSpeed.setId( "statisticsProcessSpeed" );
-			ivProcessSpeed.setEditable( false );
-
-			GridPane.setColumnIndex( ivProcessSpeed, 1 );
-			GridPane.setRowIndex( ivProcessSpeed, rowIndex++ );
-			GridPane.setHgrow( ivProcessSpeed, Priority.ALWAYS );
-
-			getChildren( ).add( ivProcessSpeed );
-		}
-
-		{
-			final Separator separator = new Separator( );
-
-			GridPane.setColumnIndex( separator, 0 );
-			GridPane.setRowIndex( separator, rowIndex++ );
-			GridPane.setColumnSpan( separator, 2 );
-
-			getChildren( ).add( separator );
-		}
-
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "beginnOfMonitoring" ) );
-
-			GridPane.setColumnIndex( label, 0 );
-			GridPane.setRowIndex( label, rowIndex );
-
-			getChildren( ).add( label );
-		}
-
-		{
-			ivBeginnOfMonitoring = new TextField( );
-			ivBeginnOfMonitoring.setEditable( false );
-
-			GridPane.setColumnIndex( ivBeginnOfMonitoring, 1 );
-			GridPane.setRowIndex( ivBeginnOfMonitoring, rowIndex++ );
-			GridPane.setHgrow( ivBeginnOfMonitoring, Priority.ALWAYS );
-
-			getChildren( ).add( ivBeginnOfMonitoring );
-		}
-
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "endOfMonitoring" ) );
-
-			GridPane.setColumnIndex( label, 0 );
-			GridPane.setRowIndex( label, rowIndex );
-
-			getChildren( ).add( label );
-		}
-
-		{
-			ivEndOfMonitoring = new TextField( );
-			ivEndOfMonitoring.setEditable( false );
-
-			GridPane.setColumnIndex( ivEndOfMonitoring, 1 );
-			GridPane.setRowIndex( ivEndOfMonitoring, rowIndex++ );
-			GridPane.setHgrow( ivEndOfMonitoring, Priority.ALWAYS );
-
-			getChildren( ).add( ivEndOfMonitoring );
-		}
-
-		{
-			final Separator separator = new Separator( );
-
-			GridPane.setColumnIndex( separator, 0 );
-			GridPane.setRowIndex( separator, rowIndex++ );
-			GridPane.setColumnSpan( separator, 2 );
-
-			getChildren( ).add( separator );
-		}
-
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "traces" ) );
-
-			GridPane.setColumnIndex( label, 0 );
-			GridPane.setRowIndex( label, rowIndex );
-
-			getChildren( ).add( label );
-		}
-
-		{
-			ivTraces = new TextField( );
-			ivTraces.setEditable( false );
-
-			GridPane.setColumnIndex( ivTraces, 1 );
-			GridPane.setRowIndex( ivTraces, rowIndex++ );
-			GridPane.setHgrow( ivTraces, Priority.ALWAYS );
-
-			getChildren( ).add( ivTraces );
-		}
-
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "methods" ) );
-
-			GridPane.setColumnIndex( label, 0 );
-			GridPane.setRowIndex( label, rowIndex );
-
-			getChildren( ).add( label );
-		}
-
-		{
-			ivMethods = new TextField( );
-			ivMethods.setEditable( false );
-
-			GridPane.setColumnIndex( ivMethods, 1 );
-			GridPane.setRowIndex( ivMethods, rowIndex++ );
-			GridPane.setHgrow( ivMethods, Priority.ALWAYS );
-
-			getChildren( ).add( ivMethods );
-		}
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "aggregatedMethods" ) );
-
-			GridPane.setColumnIndex( label, 0 );
-			GridPane.setRowIndex( label, rowIndex );
-
-			getChildren( ).add( label );
-		}
-
-		{
-			ivAggregatedMethods = new TextField( );
-			ivAggregatedMethods.setEditable( false );
-
-			GridPane.setColumnIndex( ivAggregatedMethods, 1 );
-			GridPane.setRowIndex( ivAggregatedMethods, rowIndex++ );
-			GridPane.setHgrow( ivAggregatedMethods, Priority.ALWAYS );
-
-			getChildren( ).add( ivAggregatedMethods );
-		}
-
-		{
-			final Separator separator = new Separator( );
-
-			GridPane.setColumnIndex( separator, 0 );
-			GridPane.setRowIndex( separator, rowIndex++ );
-			GridPane.setColumnSpan( separator, 2 );
-
-			getChildren( ).add( separator );
-		}
-
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "ignoredRecords" ) );
-
-			GridPane.setColumnIndex( label, 0 );
-			GridPane.setRowIndex( label, rowIndex );
-
-			getChildren( ).add( label );
-		}
-
-		{
-			ivIgnoredRecords = new TextField( );
-			ivIgnoredRecords.setEditable( false );
-
-			GridPane.setColumnIndex( ivIgnoredRecords, 1 );
-			GridPane.setRowIndex( ivIgnoredRecords, rowIndex++ );
-			GridPane.setHgrow( ivIgnoredRecords, Priority.ALWAYS );
-
-			getChildren( ).add( ivIgnoredRecords );
-		}
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "danglingRecords" ) );
-
-			GridPane.setColumnIndex( label, 0 );
-			GridPane.setRowIndex( label, rowIndex );
-
-			getChildren( ).add( label );
-		}
-
-		{
-			ivDanglingRecords = new TextField( );
-			ivDanglingRecords.setEditable( false );
-
-			GridPane.setColumnIndex( ivDanglingRecords, 1 );
-			GridPane.setRowIndex( ivDanglingRecords, rowIndex++ );
-			GridPane.setHgrow( ivDanglingRecords, Priority.ALWAYS );
-
-			getChildren( ).add( ivDanglingRecords );
-		}
-		{
-			final Label label = new Label( );
-			label.setText( RESOURCE_BUNDLE.getString( "incompleteTraces" ) );
-
-			GridPane.setColumnIndex( label, 0 );
-			GridPane.setRowIndex( label, rowIndex );
-
-			getChildren( ).add( label );
-		}
-
-		{
-			ivIncompleteTraces = new TextField( );
-			ivIncompleteTraces.setEditable( false );
-
-			GridPane.setColumnIndex( ivIncompleteTraces, 1 );
-			GridPane.setRowIndex( ivIncompleteTraces, rowIndex++ );
-			GridPane.setHgrow( ivIncompleteTraces, Priority.ALWAYS );
-
-			getChildren( ).add( ivIncompleteTraces );
-		}
+		add( createIncompleteTracesLabel( ), 0, rowIndex );
+		add( createIncompleteTracesField( ), 1, rowIndex++ );
 
 		addDefaultStylesheet( );
+	}
+
+	private Node createDirectoryLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "directory" ) );
+
+		return label;
+	}
+
+	private Node createDirectoryField( ) {
+		directory = new TextField( );
+
+		directory.setEditable( false );
+
+		GridPane.setHgrow( directory, Priority.ALWAYS );
+
+		return directory;
+	}
+
+	private Node createProcessedBytesLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "processedBytes" ) );
+
+		return label;
+	}
+
+	private Node createProcessedBytesField( ) {
+		processedBytes = new TextField( );
+
+		processedBytes.setId( "statisticsProcessedBytes" );
+		processedBytes.setEditable( false );
+
+		GridPane.setHgrow( processedBytes, Priority.ALWAYS );
+
+		return processedBytes;
+	}
+
+	private Node createProcessDurationLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "processDuration" ) );
+
+		return label;
+	}
+
+	private Node createProcessDurationField( ) {
+		processDuration = new TextField( );
+
+		processDuration.setId( "statisticsProcessDuration" );
+		processDuration.setEditable( false );
+
+		GridPane.setHgrow( processDuration, Priority.ALWAYS );
+
+		return processDuration;
+	}
+
+	private Node createProcessSpeedLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "processSpeed" ) );
+
+		return label;
+	}
+
+	private Node createProcessSpeedField( ) {
+		processSpeed = new TextField( );
+
+		processSpeed.setId( "statisticsProcessSpeed" );
+		processSpeed.setEditable( false );
+
+		GridPane.setHgrow( processSpeed, Priority.ALWAYS );
+
+		return processSpeed;
+	}
+
+	private Node createBeginOfMonitoringLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "beginnOfMonitoring" ) );
+
+		return label;
+	}
+
+	private Node createBeginOfMonitoringField( ) {
+		beginOfMonitoring = new TextField( );
+
+		beginOfMonitoring.setEditable( false );
+
+		GridPane.setHgrow( beginOfMonitoring, Priority.ALWAYS );
+
+		return beginOfMonitoring;
+	}
+
+	private Node createEndOfMonitoringLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "endOfMonitoring" ) );
+
+		return label;
+	}
+
+	private Node createEndOfMonitoringField( ) {
+		endOfMonitoring = new TextField( );
+
+		endOfMonitoring.setEditable( false );
+
+		GridPane.setHgrow( endOfMonitoring, Priority.ALWAYS );
+
+		return endOfMonitoring;
+	}
+
+	private Node createTracesLabe( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "traces" ) );
+
+		return label;
+	}
+
+	private Node createTracesField( ) {
+		traces = new TextField( );
+
+		traces.setEditable( false );
+
+		GridPane.setHgrow( traces, Priority.ALWAYS );
+
+		return traces;
+	}
+
+	private Node createMethodsLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "methods" ) );
+
+		return label;
+	}
+
+	private Node createMethodsField( ) {
+		methods = new TextField( );
+
+		methods.setEditable( false );
+
+		GridPane.setHgrow( methods, Priority.ALWAYS );
+
+		return methods;
+	}
+
+	private Node createAggregatedMethodsLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "aggregatedMethods" ) );
+
+		return label;
+	}
+
+	private Node createAggregatedMethodsField( ) {
+		aggregatedMethods = new TextField( );
+
+		aggregatedMethods.setEditable( false );
+
+		GridPane.setHgrow( aggregatedMethods, Priority.ALWAYS );
+
+		return aggregatedMethods;
+	}
+
+	private Node createIgnoredRecordsLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "ignoredRecords" ) );
+
+		return label;
+	}
+
+	private Node createIgnoredRecordsField( ) {
+		ignoredRecords = new TextField( );
+
+		ignoredRecords.setEditable( false );
+
+		GridPane.setHgrow( ignoredRecords, Priority.ALWAYS );
+
+		return ignoredRecords;
+	}
+
+	private Node createDanglingRecordsLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "danglingRecords" ) );
+
+		return label;
+	}
+
+	private Node createDanglingRecordsField( ) {
+		danglingRecords = new TextField( );
+
+		danglingRecords.setEditable( false );
+
+		GridPane.setHgrow( danglingRecords, Priority.ALWAYS );
+
+		return danglingRecords;
+	}
+
+	private Node createIncompleteTracesLabel( ) {
+		final Label label = new Label( );
+
+		label.setText( RESOURCE_BUNDLE.getString( "incompleteTraces" ) );
+
+		return label;
+	}
+
+	private Node createIncompleteTracesField( ) {
+		incompleteTraces = new TextField( );
+
+		incompleteTraces.setEditable( false );
+
+		GridPane.setHgrow( incompleteTraces, Priority.ALWAYS );
+
+		return incompleteTraces;
 	}
 
 	public void setValue( final Optional<Statistics> aStatistics ) {
 		aStatistics.ifPresentOrElse( statistics -> {
 			final NumberFormat decimalFormat = NumberFormat.getInstance( );
 
-			ivProcessedBytes.setText( convertToByteString( statistics.getProcessedBytes( ) ) );
-			ivProcessDuration.setText( convertToDurationString( statistics.getProcessDuration( ) ) );
-			ivProcessSpeed.setText( convertToSpeedString( statistics.getProcessSpeed( ) ) );
-			ivMethods.setText( decimalFormat.format( statistics.getMethods( ) ) );
-			ivAggregatedMethods.setText( decimalFormat.format( statistics.getAggregatedMethods( ) ) );
-			ivTraces.setText( decimalFormat.format( statistics.getTraces( ) ) );
-			ivIgnoredRecords.setText( decimalFormat.format( statistics.getIgnoredRecords( ) ) );
-			ivDanglingRecords.setText( decimalFormat.format( statistics.getDanglingRecords( ) ) );
-			ivIncompleteTraces.setText( decimalFormat.format( statistics.getIncompleteTraces( ) ) );
-			ivBeginnOfMonitoring.setText( statistics.getBeginnOfMonitoring( ) );
-			ivEndOfMonitoring.setText( statistics.getEndOfMonitoring( ) );
-			ivDirectory.setText( statistics.getDirectory( ) );
+			processedBytes.setText( convertToByteString( statistics.getProcessedBytes( ) ) );
+			processDuration.setText( convertToDurationString( statistics.getProcessDuration( ) ) );
+			processSpeed.setText( convertToSpeedString( statistics.getProcessSpeed( ) ) );
+			methods.setText( decimalFormat.format( statistics.getMethods( ) ) );
+			aggregatedMethods.setText( decimalFormat.format( statistics.getAggregatedMethods( ) ) );
+			traces.setText( decimalFormat.format( statistics.getTraces( ) ) );
+			ignoredRecords.setText( decimalFormat.format( statistics.getIgnoredRecords( ) ) );
+			danglingRecords.setText( decimalFormat.format( statistics.getDanglingRecords( ) ) );
+			incompleteTraces.setText( decimalFormat.format( statistics.getIncompleteTraces( ) ) );
+			beginOfMonitoring.setText( statistics.getBeginnOfMonitoring( ) );
+			endOfMonitoring.setText( statistics.getEndOfMonitoring( ) );
+			directory.setText( statistics.getDirectory( ) );
 		}, ( ) -> {
-			ivProcessedBytes.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			ivProcessDuration.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			ivProcessSpeed.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			ivMethods.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			ivAggregatedMethods.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			ivTraces.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			ivIgnoredRecords.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			ivDanglingRecords.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			ivIncompleteTraces.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			ivBeginnOfMonitoring.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			ivEndOfMonitoring.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			ivDirectory.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+			processedBytes.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+			processDuration.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+			processSpeed.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+			methods.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+			aggregatedMethods.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+			traces.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+			ignoredRecords.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+			danglingRecords.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+			incompleteTraces.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+			beginOfMonitoring.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+			endOfMonitoring.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+			directory.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
 		} );
 	}
 

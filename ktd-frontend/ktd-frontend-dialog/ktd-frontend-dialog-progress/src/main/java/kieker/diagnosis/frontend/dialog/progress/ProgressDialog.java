@@ -19,10 +19,9 @@ package kieker.diagnosis.frontend.dialog.progress;
 import java.io.InputStream;
 import java.util.ResourceBundle;
 
-import com.google.inject.Singleton;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
@@ -39,16 +38,18 @@ import javafx.stage.Window;
  *
  * @author Nils Christian Ehmke
  */
-@Singleton
-public class ProgressDialog extends VBox {
+public final class ProgressDialog extends VBox {
 
-	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle( getClass( ).getName( ) );
+	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle( ProgressDialog.class.getCanonicalName( ) );
 
-	private final ProgressIndicator ivProgressIndicator;
-
-	private Label ivLabel;
+	private ProgressIndicator progressIndicator;
+	private Label label;
 
 	public ProgressDialog( ) {
+		createControl( );
+	}
+
+	private void createControl( ) {
 		setAlignment( Pos.CENTER );
 		setPadding( new Insets( 5 ) );
 		setSpacing( 10 );
@@ -56,21 +57,24 @@ public class ProgressDialog extends VBox {
 		setPrefHeight( 100 );
 		setPrefWidth( 250 );
 
-		{
-			ivProgressIndicator = new ProgressIndicator( );
-
-			getChildren( ).add( ivProgressIndicator );
-		}
-
-		{
-			ivLabel = new Label( );
-			ivLabel.setId( "progressDialogMessage" );
-			VBox.setVgrow( ivLabel, Priority.ALWAYS );
-
-			getChildren( ).add( ivLabel );
-		}
+		getChildren( ).add( createProgressIndicator( ) );
+		getChildren( ).add( createLabel( ) );
 
 		getStylesheets( ).add( "/kieker/diagnosis/frontend/base/ui/Dialog.css" );
+	}
+
+	private Node createProgressIndicator( ) {
+		progressIndicator = new ProgressIndicator( );
+		return progressIndicator;
+	}
+
+	private Node createLabel( ) {
+		label = new Label( );
+
+		label.setId( "progressDialogMessage" );
+		VBox.setVgrow( label, Priority.ALWAYS );
+
+		return label;
 	}
 
 	public void open( final Window aParent ) {
@@ -109,12 +113,12 @@ public class ProgressDialog extends VBox {
 	}
 
 	public void setMessage( final String aMessage ) {
-		ivLabel.setText( aMessage );
+		label.setText( aMessage );
 		layout( );
 	}
 
 	public void setProgress( final double aProgress ) {
-		ivProgressIndicator.setProgress( aProgress );
+		progressIndicator.setProgress( aProgress );
 	}
 
 }
