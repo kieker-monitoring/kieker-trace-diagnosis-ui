@@ -61,10 +61,7 @@
       <property name="suppressLoadErrors" value="true"/>
     </module>
     <module name="JavadocTagContinuationIndentation"/>
-    <module name="AvoidNestedBlocks">
-      <property name="severity" value="ignore"/>
-      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
-    </module>
+    <module name="AvoidNestedBlocks"/>
     <module name="EmptyBlock">
       <property name="option" value="text"/>
     </module>

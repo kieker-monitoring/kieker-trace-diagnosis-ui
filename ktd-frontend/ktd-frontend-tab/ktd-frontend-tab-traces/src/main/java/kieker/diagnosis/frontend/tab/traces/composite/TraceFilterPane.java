@@ -114,140 +114,141 @@ public final class TraceFilterPane extends TitledPane implements StringMixin, Ic
 		int columnIndex = 0;
 		int rowIndex = 0;
 
-		{
-			host = new TextField( );
-			host.setId( "tabTracesFilterHost" );
-			host.setPromptText( RESOURCE_BUNDLE.getString( "filterByHost" ) );
-			GridPane.setColumnIndex( host, columnIndex++ );
-			GridPane.setRowIndex( host, rowIndex );
-			GridPane.setHgrow( host, Priority.ALWAYS );
-
-			gridPane.getChildren( ).add( host );
-		}
-
-		{
-			clazz = new TextField( );
-			clazz.setId( "tabTracesFilterClass" );
-			clazz.setPromptText( RESOURCE_BUNDLE.getString( "filterByClass" ) );
-			GridPane.setColumnIndex( clazz, columnIndex++ );
-			GridPane.setRowIndex( clazz, rowIndex );
-			GridPane.setHgrow( clazz, Priority.ALWAYS );
-
-			gridPane.getChildren( ).add( clazz );
-		}
-
-		{
-			method = new TextField( );
-			method.setId( "tabTracesFilterMethod" );
-			method.setPromptText( RESOURCE_BUNDLE.getString( "filterByMethod" ) );
-			GridPane.setColumnIndex( method, columnIndex++ );
-			GridPane.setRowIndex( method, rowIndex );
-			GridPane.setHgrow( method, Priority.ALWAYS );
-
-			gridPane.getChildren( ).add( method );
-		}
-
-		{
-			exception = new TextField( );
-			exception.setId( "tabTracesFilterException" );
-			exception.setPromptText( RESOURCE_BUNDLE.getString( "filterByException" ) );
-			GridPane.setColumnIndex( exception, columnIndex++ );
-			GridPane.setRowIndex( exception, rowIndex );
-			GridPane.setHgrow( exception, Priority.ALWAYS );
-
-			gridPane.getChildren( ).add( exception );
-		}
-
-		{
-			traceId = new LongTextField( );
-			traceId.setId( "tabTracesFilterTraceId" );
-			traceId.setPromptText( RESOURCE_BUNDLE.getString( "filterByTraceId" ) );
-			GridPane.setColumnIndex( traceId, columnIndex++ );
-			GridPane.setRowIndex( traceId, rowIndex );
-			GridPane.setHgrow( traceId, Priority.ALWAYS );
-
-			gridPane.getChildren( ).add( traceId );
-		}
+		gridPane.add( createHostField( ), columnIndex++, rowIndex );
+		gridPane.add( createClassField( ), columnIndex++, rowIndex );
+		gridPane.add( createMethodField( ), columnIndex++, rowIndex );
+		gridPane.add( createExceptionField( ), columnIndex++, rowIndex );
+		gridPane.add( createTraceIdField( ), columnIndex++, rowIndex );
 
 		columnIndex = 0;
 		rowIndex++;
 
-		{
-			lowerDate = new DatePicker( );
-			lowerDate.setPromptText( RESOURCE_BUNDLE.getString( "filterByLowerDate" ) );
-			lowerDate.setMaxWidth( Double.POSITIVE_INFINITY );
-
-			GridPane.setColumnIndex( lowerDate, columnIndex++ );
-			GridPane.setRowIndex( lowerDate, rowIndex );
-			GridPane.setHgrow( lowerDate, Priority.ALWAYS );
-
-			gridPane.getChildren( ).add( lowerDate );
-		}
-
-		{
-			lowerTime = new LocalTimeTextField( );
-			lowerTime.setPromptText( RESOURCE_BUNDLE.getString( "filterByLowerTime" ) );
-
-			// The CalendarTimeTextField doesn't recognize the default button
-			lowerTime.setOnKeyReleased( e -> {
-				if ( e.getCode( ) == KeyCode.ENTER ) {
-					searchButton.fire( );
-				}
-			} );
-
-			GridPane.setColumnIndex( lowerTime, columnIndex++ );
-			GridPane.setRowIndex( lowerTime, rowIndex );
-			GridPane.setHgrow( lowerTime, Priority.ALWAYS );
-
-			gridPane.getChildren( ).add( lowerTime );
-		}
-
-		{
-			upperDate = new DatePicker( );
-			upperDate.setPromptText( RESOURCE_BUNDLE.getString( "filterByUpperDate" ) );
-			upperDate.setMaxWidth( Double.POSITIVE_INFINITY );
-
-			GridPane.setColumnIndex( upperDate, columnIndex++ );
-			GridPane.setRowIndex( upperDate, rowIndex );
-			GridPane.setHgrow( upperDate, Priority.ALWAYS );
-
-			gridPane.getChildren( ).add( upperDate );
-		}
-
-		{
-			upperTime = new LocalTimeTextField( );
-			upperTime.setPromptText( RESOURCE_BUNDLE.getString( "filterByUpperTime" ) );
-
-			// The CalendarTimeTextField doesn't recognize the default butto
-			upperTime.setOnKeyReleased( e -> {
-				if ( e.getCode( ) == KeyCode.ENTER ) {
-					searchButton.fire( );
-				}
-			} );
-
-			GridPane.setColumnIndex( upperTime, columnIndex++ );
-			GridPane.setRowIndex( upperTime, rowIndex );
-			GridPane.setHgrow( upperTime, Priority.ALWAYS );
-
-			gridPane.getChildren( ).add( upperTime );
-		}
-
-		{
-			searchType = new ComboBox<>( );
-			searchType.setId( "tabTracesFilterSearchType" );
-			searchType.setItems( FXCollections.observableArrayList( SearchType.values( ) ) );
-			searchType.setConverter( new EnumStringConverter<>( SearchType.class ) );
-			searchType.setMaxWidth( Double.POSITIVE_INFINITY );
-
-			GridPane.setColumnIndex( searchType, columnIndex++ );
-			GridPane.setRowIndex( searchType, rowIndex );
-
-			gridPane.getChildren( ).add( searchType );
-		}
+		gridPane.add( createLowerDateField( ), columnIndex++, rowIndex );
+		gridPane.add( createLowerTimeField( ), columnIndex++, rowIndex );
+		gridPane.add( createUpperDateField( ), columnIndex++, rowIndex );
+		gridPane.add( createUpperTimeField( ), columnIndex++, rowIndex );
+		gridPane.add( createSearchTypeField( ), columnIndex++, rowIndex );
 
 		GridPane.setHgrow( gridPane, Priority.ALWAYS );
 
 		return gridPane;
+	}
+
+	private Node createHostField( ) {
+		host = new TextField( );
+
+		host.setId( "tabTracesFilterHost" );
+		host.setPromptText( RESOURCE_BUNDLE.getString( "filterByHost" ) );
+		GridPane.setHgrow( host, Priority.ALWAYS );
+
+		return host;
+	}
+
+	private Node createClassField( ) {
+		clazz = new TextField( );
+
+		clazz.setId( "tabTracesFilterClass" );
+		clazz.setPromptText( RESOURCE_BUNDLE.getString( "filterByClass" ) );
+		GridPane.setHgrow( clazz, Priority.ALWAYS );
+
+		return clazz;
+	}
+
+	private Node createMethodField( ) {
+		method = new TextField( );
+
+		method.setId( "tabTracesFilterMethod" );
+		method.setPromptText( RESOURCE_BUNDLE.getString( "filterByMethod" ) );
+		GridPane.setHgrow( method, Priority.ALWAYS );
+
+		return method;
+	}
+
+	private Node createExceptionField( ) {
+		exception = new TextField( );
+
+		exception.setId( "tabTracesFilterException" );
+		exception.setPromptText( RESOURCE_BUNDLE.getString( "filterByException" ) );
+		GridPane.setHgrow( exception, Priority.ALWAYS );
+
+		return exception;
+	}
+
+	private Node createTraceIdField( ) {
+		traceId = new LongTextField( );
+
+		traceId.setId( "tabTracesFilterTraceId" );
+		traceId.setPromptText( RESOURCE_BUNDLE.getString( "filterByTraceId" ) );
+		GridPane.setHgrow( traceId, Priority.ALWAYS );
+
+		return traceId;
+	}
+
+	private Node createLowerDateField( ) {
+		lowerDate = new DatePicker( );
+
+		lowerDate.setPromptText( RESOURCE_BUNDLE.getString( "filterByLowerDate" ) );
+		lowerDate.setMaxWidth( Double.POSITIVE_INFINITY );
+
+		GridPane.setHgrow( lowerDate, Priority.ALWAYS );
+
+		return lowerDate;
+	}
+
+	private Node createLowerTimeField( ) {
+		lowerTime = new LocalTimeTextField( );
+
+		lowerTime.setPromptText( RESOURCE_BUNDLE.getString( "filterByLowerTime" ) );
+
+		// The CalendarTimeTextField doesn't recognize the default button
+		lowerTime.setOnKeyReleased( e -> {
+			if ( e.getCode( ) == KeyCode.ENTER ) {
+				searchButton.fire( );
+			}
+		} );
+
+		GridPane.setHgrow( lowerTime, Priority.ALWAYS );
+
+		return lowerTime;
+	}
+
+	private Node createUpperDateField( ) {
+		upperDate = new DatePicker( );
+
+		upperDate.setPromptText( RESOURCE_BUNDLE.getString( "filterByUpperDate" ) );
+		upperDate.setMaxWidth( Double.POSITIVE_INFINITY );
+
+		GridPane.setHgrow( upperDate, Priority.ALWAYS );
+
+		return upperDate;
+	}
+
+	private Node createUpperTimeField( ) {
+		upperTime = new LocalTimeTextField( );
+
+		upperTime.setPromptText( RESOURCE_BUNDLE.getString( "filterByUpperTime" ) );
+
+		// The CalendarTimeTextField doesn't recognize the default butto
+		upperTime.setOnKeyReleased( e -> {
+			if ( e.getCode( ) == KeyCode.ENTER ) {
+				searchButton.fire( );
+			}
+		} );
+
+		GridPane.setHgrow( upperTime, Priority.ALWAYS );
+
+		return upperTime;
+	}
+
+	private Node createSearchTypeField( ) {
+		searchType = new ComboBox<>( );
+
+		searchType.setId( "tabTracesFilterSearchType" );
+		searchType.setItems( FXCollections.observableArrayList( SearchType.values( ) ) );
+		searchType.setConverter( new EnumStringConverter<>( SearchType.class ) );
+		searchType.setMaxWidth( Double.POSITIVE_INFINITY );
+
+		return searchType;
 	}
 
 	private Node createUseRegularExpressionField( ) {
