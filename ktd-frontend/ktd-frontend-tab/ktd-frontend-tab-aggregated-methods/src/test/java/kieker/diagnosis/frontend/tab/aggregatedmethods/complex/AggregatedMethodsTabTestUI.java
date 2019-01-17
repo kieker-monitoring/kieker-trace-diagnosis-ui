@@ -20,6 +20,10 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,6 +48,7 @@ import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.data.MonitoringLogService;
 import kieker.diagnosis.backend.export.CSVData;
 import kieker.diagnosis.backend.properties.PropertiesService;
+import kieker.diagnosis.backend.search.aggregatedmethods.AggregatedMethodsFilter;
 import kieker.diagnosis.backend.settings.properties.TimeUnitProperty;
 
 /**
@@ -235,6 +240,36 @@ public final class AggregatedMethodsTabTestUI extends ApplicationTest {
 		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 9 ).queryAs( Node.class ) );
 		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 9 ).queryAs( Node.class ) );
 		assertThat( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-cell" ).nth( 8 ).queryLabeled( ).getText( ), is( "500" ) );
+	}
+
+	@Test
+	public void testSaveAsFavorite( ) {
+		final Property<AggregatedMethodsFilter> filterHolder = new SimpleObjectProperty<>( );
+		final Consumer<AggregatedMethodsFilter> action = filterHolder::setValue;
+		methodsTab.setOnSaveAsFavorite( action );
+
+		clickOn( "#tabAggregatedMethodsFilterHost" ).write( "host1" );
+		clickOn( "#tabAggregatedMethodsFilteSaveAsFavorite" );
+		clickOn( "#tabAggregatedMethodsFilterHost" ).eraseText( 5 );
+
+		assertThat( filterHolder.getValue( ), is( notNullValue( ) ) );
+		interact( ( ) -> methodsTab.setFilterValue( filterHolder.getValue( ) ) );
+
+		assertThat( lookup( "#tabAggregatedMethodsFilterHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
+	}
+
+	@Test
+	public void testJumpToMethods( ) {
+		@SuppressWarnings ( "unchecked" )
+		final Consumer<AggregatedMethodCall> action = mock( Consumer.class );
+		methodsTab.setOnJumpToMethods( action );
+
+		clickOn( "#tabAggregatedMethodsJumpToMethods" );
+		verify( action, never( ) ).accept( any( ) );
+
+		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
+		clickOn( "#tabAggregatedMethodsJumpToMethods" );
+		verify( action ).accept( any( ) );
 	}
 
 	@Test

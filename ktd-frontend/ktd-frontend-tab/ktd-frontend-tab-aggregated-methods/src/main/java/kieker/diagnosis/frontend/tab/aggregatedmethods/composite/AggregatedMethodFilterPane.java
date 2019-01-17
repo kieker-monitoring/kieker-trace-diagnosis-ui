@@ -163,6 +163,7 @@ public final class AggregatedMethodFilterPane extends TitledPane implements Stri
 
 	private Node createSaveAsFavoriteLink( ) {
 		saveAsFavoriteLink = new Hyperlink( );
+		saveAsFavoriteLink.setId( "tabAggregatedMethodsFilteSaveAsFavorite" );
 		saveAsFavoriteLink.setText( RESOURCE_BUNDLE.getString( "saveAsFavorite" ) );
 
 		return saveAsFavoriteLink;
