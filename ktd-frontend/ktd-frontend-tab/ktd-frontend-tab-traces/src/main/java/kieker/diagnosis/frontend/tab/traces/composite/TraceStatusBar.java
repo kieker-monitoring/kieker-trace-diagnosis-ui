@@ -56,16 +56,6 @@ public final class TraceStatusBar extends HBox {
 	/**
 	 * Sets the value which is shown in the component.
 	 *
-	 * @param value
-	 *            The new value. Can also be {@code null}.
-	 */
-	public void setValue( final String value ) {
-		status.setText( value );
-	}
-
-	/**
-	 * Sets the value which is shown in the component.
-	 *
 	 * @param traces
 	 *            The new number of traces.
 	 * @param totalTraces
