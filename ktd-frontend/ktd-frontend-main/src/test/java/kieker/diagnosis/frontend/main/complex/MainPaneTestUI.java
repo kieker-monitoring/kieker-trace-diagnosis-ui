@@ -76,12 +76,6 @@ public final class MainPaneTestUI extends ApplicationTest {
 	}
 
 	@Test
-	public void testManualDialog( ) {
-		clickOn( "#menuHelp" ).clickOn( "#menuItemManual" );
-		clickOn( "#manualDialogOk" );
-	}
-
-	@Test
 	public void testMonitoringSettingsDialog( ) throws InterruptedException {
 		clickOn( "#menuFile" ).clickOn( "#menuItemMonitoringSettings" );
 
