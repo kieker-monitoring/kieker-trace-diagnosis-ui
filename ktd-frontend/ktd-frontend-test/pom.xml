@@ -15,12 +15,22 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.testfx</groupId>
-			<artifactId>testfx-core</artifactId>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
+			<classifier>win</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<classifier>linux</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.testfx</groupId>
+			<artifactId>testfx-core</artifactId>
 		</dependency>
 	</dependencies>
 

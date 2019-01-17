@@ -27,6 +27,16 @@
 			<artifactId>javafx-controls</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<classifier>win</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<classifier>linux</classifier>
+		</dependency>
+		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
 		</dependency>

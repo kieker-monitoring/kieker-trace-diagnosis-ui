@@ -47,7 +47,7 @@
 										<maxMemorySize>3G</maxMemorySize>
 										<extraArgument>--module-path</extraArgument>
 										<extraArgument>%BASEDIR%\modules</extraArgument>
-										<extraArgument>--add-modules=javafx.controls,javafx.fxml,javafx.web</extraArgument>
+										<extraArgument>--add-modules=javafx.controls</extraArgument>
 									</jvmSettings>
 								</program>
 								<program>
@@ -62,7 +62,7 @@
 										<maxMemorySize>3G</maxMemorySize>
 										<extraArgument>--module-path</extraArgument>
 										<extraArgument>$BASEDIR/modules</extraArgument>
-										<extraArgument>--add-modules=javafx.controls,javafx.fxml,javafx.web</extraArgument>
+										<extraArgument>--add-modules=javafx.controls</extraArgument>
 									</jvmSettings>
 								</program>
 							</programs>

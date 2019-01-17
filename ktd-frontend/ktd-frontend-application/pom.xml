@@ -20,13 +20,17 @@
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-graphics</artifactId>
-			<classifier>linux</classifier>
+			<artifactId>javafx-base</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-media</artifactId>
+			<artifactId>javafx-base</artifactId>
 			<classifier>win</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-base</artifactId>
+			<classifier>linux</classifier>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
