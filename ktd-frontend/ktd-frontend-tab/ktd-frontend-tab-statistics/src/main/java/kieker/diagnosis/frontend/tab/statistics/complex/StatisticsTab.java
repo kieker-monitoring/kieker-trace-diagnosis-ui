@@ -25,13 +25,13 @@ import javafx.scene.layout.VBox;
 import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.search.statistics.Statistics;
 import kieker.diagnosis.backend.search.statistics.StatisticsService;
+import kieker.diagnosis.frontend.tab.statistics.composite.StatisticsCPUUsageBar;
 import kieker.diagnosis.frontend.tab.statistics.composite.StatisticsMemoryUsageBar;
 import kieker.diagnosis.frontend.tab.statistics.composite.StatisticsPane;
 
 public final class StatisticsTab extends Tab {
 
 	private StatisticsPane statisticsPane;
-	private StatisticsMemoryUsageBar memoryUsageBar;
 
 	private Optional<Statistics> statisticsForRefresh;
 
@@ -45,6 +45,7 @@ public final class StatisticsTab extends Tab {
 		final VBox vbox = new VBox( );
 
 		vbox.getChildren( ).add( createStatisticsPane( ) );
+		vbox.getChildren( ).add( createCPUUsageBar( ) );
 		vbox.getChildren( ).add( createMemoryUsageBar( ) );
 
 		setContent( vbox );
@@ -58,10 +59,12 @@ public final class StatisticsTab extends Tab {
 		return statisticsPane;
 	}
 
-	private Node createMemoryUsageBar( ) {
-		memoryUsageBar = new StatisticsMemoryUsageBar( );
+	private Node createCPUUsageBar( ) {
+		return new StatisticsCPUUsageBar( );
+	}
 
-		return memoryUsageBar;
+	private Node createMemoryUsageBar( ) {
+		return new StatisticsMemoryUsageBar( );
 	}
 
 	private void initialize( ) {
