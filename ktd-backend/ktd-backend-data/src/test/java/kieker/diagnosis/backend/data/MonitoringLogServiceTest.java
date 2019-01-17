@@ -22,9 +22,11 @@ import static org.hamcrest.core.IsNull.nullValue;
 import static org.hamcrest.number.IsCloseTo.closeTo;
 import static org.hamcrest.number.OrderingComparison.greaterThan;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -452,6 +454,19 @@ public class MonitoringLogServiceTest {
 		assertThat( secondMethod.getTraceSize( ), is( 1 ) );
 
 		assertThat( ivService.getTraceRoots( ).get( 0 ), is( firstMethod ) );
+	}
+
+	@Test
+	public void testImportFromZipFile( ) throws Exception {
+		final URL logFileUrl = getClass( ).getResource( "/kieker-log-binary.zip" );
+		final File logFile = new File( logFileUrl.toURI( ) );
+
+		ivService.importMonitoringLog( logFile, ImportType.ZIP_FILE );
+
+		assertThat( ivService.getTraceRoots( ), hasSize( 2 ) );
+		assertThat( ivService.getAggreatedMethods( ), hasSize( 3 ) );
+		assertThat( ivService.getMethods( ), hasSize( 3 ) );
+		assertTrue( ivService.isDataAvailable( ) );
 	}
 
 	@SuppressWarnings ( "deprecation" )

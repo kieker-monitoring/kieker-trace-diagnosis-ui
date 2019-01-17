@@ -172,10 +172,6 @@ public class MonitoringLogService implements Service {
 		processDuration = duration;
 	}
 
-	public void setDataAvailable( final boolean dataAvailable ) {
-		this.dataAvailable = dataAvailable;
-	}
-
 	private void clear( ) {
 		dataAvailable = false;
 		traceRoots.clear( );
