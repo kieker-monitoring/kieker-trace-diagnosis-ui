@@ -16,6 +16,10 @@
 
 package kieker.diagnosis.frontend.application;
 
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
@@ -28,16 +32,27 @@ import javafx.stage.WindowEvent;
 
 public final class KiekerTraceDiagnosisTestUI extends ApplicationTest {
 
+	private CloseDialogPage closeDialogPage;
+
 	@Override
 	public void start( final Stage stage ) throws Exception {
 		final KiekerTraceDiagnosis kiekerTraceDiagnosis = new KiekerTraceDiagnosis( );
 		kiekerTraceDiagnosis.start( stage );
+
+		closeDialogPage = new CloseDialogPage( this );
 	}
 
 	@Test
 	public void closeApplication( ) {
+		assertThat( listWindows( ), hasSize( 1 ) );
+
 		closeCurrentWindowViaJavaFx( );
-		clickOn( "#mainCloseDialogYes" );
+		closeDialogPage.getCancel( ).click( );
+		assertThat( listWindows( ), hasSize( 1 ) );
+
+		closeCurrentWindowViaJavaFx( );
+		closeDialogPage.getYes( ).click( );
+		assertThat( listWindows( ), is( empty( ) ) );
 	}
 
 	private void closeCurrentWindowViaJavaFx( ) {

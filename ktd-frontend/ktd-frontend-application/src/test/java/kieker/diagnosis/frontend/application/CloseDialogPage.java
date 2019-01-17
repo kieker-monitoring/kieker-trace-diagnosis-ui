@@ -14,24 +14,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.frontend.test;
+package kieker.diagnosis.frontend.application;
 
 import org.testfx.api.FxRobot;
-import org.testfx.service.query.NodeQuery;
 
-public final class TextField {
+import kieker.diagnosis.frontend.test.Button;
+import lombok.Getter;
 
-	private final FxRobot fxRobot;
-	private final String locator;
+@Getter
+public final class CloseDialogPage {
 
-	public TextField( final FxRobot fxRobot, final String locator ) {
-		this.fxRobot = fxRobot;
-		this.locator = locator;
-	}
+	private final Button yes;
+	private final Button cancel;
 
-	public String getText( ) {
-		final NodeQuery query = fxRobot.lookup( locator );
-		return query.queryTextInputControl( ).getText( );
+	public CloseDialogPage( final FxRobot fxRobot ) {
+		yes = new Button( fxRobot, "#mainCloseDialogYes" );
+		cancel = new Button( fxRobot, "#mainCloseDialogCancel" );
 	}
 
 }

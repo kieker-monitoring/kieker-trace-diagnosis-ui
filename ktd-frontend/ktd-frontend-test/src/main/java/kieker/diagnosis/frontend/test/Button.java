@@ -19,19 +19,19 @@ package kieker.diagnosis.frontend.test;
 import org.testfx.api.FxRobot;
 import org.testfx.service.query.NodeQuery;
 
-public final class TextField {
+public final class Button {
 
 	private final FxRobot fxRobot;
 	private final String locator;
 
-	public TextField( final FxRobot fxRobot, final String locator ) {
+	public Button( final FxRobot fxRobot, final String locator ) {
 		this.fxRobot = fxRobot;
 		this.locator = locator;
 	}
 
-	public String getText( ) {
+	public void click( ) {
 		final NodeQuery query = fxRobot.lookup( locator );
-		return query.queryTextInputControl( ).getText( );
+		fxRobot.clickOn( query.queryButton( ) );
 	}
 
 }

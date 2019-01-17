@@ -244,6 +244,8 @@ public final class MainMenuBar extends MenuBar implements IconMixin {
 			final DialogPane dialogPane = alert.getDialogPane( );
 			final Node yesButton = dialogPane.lookupButton( ButtonType.YES );
 			yesButton.setId( "mainCloseDialogYes" );
+			final Node cancelButton = dialogPane.lookupButton( ButtonType.CANCEL );
+			cancelButton.setId( "mainCloseDialogCancel" );
 
 			// Add the logo
 			final String iconPath = RESOURCE_BUNDLE.getString( "iconReallyClose" );
