@@ -48,6 +48,8 @@
 										<extraArgument>--module-path</extraArgument>
 										<extraArgument>%BASEDIR%\modules</extraArgument>
 										<extraArgument>--add-modules=javafx.controls</extraArgument>
+										<extraArgument>--add-opens</extraArgument>
+										<extraArgument>java.base/java.lang=ALL-UNNAMED</extraArgument>
 									</jvmSettings>
 								</program>
 								<program>
@@ -63,6 +65,8 @@
 										<extraArgument>--module-path</extraArgument>
 										<extraArgument>$BASEDIR/modules</extraArgument>
 										<extraArgument>--add-modules=javafx.controls</extraArgument>
+										<extraArgument>--add-opens</extraArgument>
+										<extraArgument>java.base/java.lang=ALL-UNNAMED</extraArgument>
 									</jvmSettings>
 								</program>
 							</programs>
