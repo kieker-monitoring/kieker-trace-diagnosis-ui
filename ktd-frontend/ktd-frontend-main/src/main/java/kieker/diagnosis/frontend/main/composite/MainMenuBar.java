@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import javafx.application.HostServices;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -40,9 +41,9 @@ import kieker.diagnosis.backend.monitoring.MonitoringService;
 import kieker.diagnosis.backend.monitoring.Status;
 import kieker.diagnosis.backend.properties.DevelopmentModeProperty;
 import kieker.diagnosis.backend.properties.PropertiesService;
+import kieker.diagnosis.frontend.base.common.HostServicesHolder;
 import kieker.diagnosis.frontend.base.mixin.IconMixin;
 import kieker.diagnosis.frontend.dialog.about.AboutDialog;
-import kieker.diagnosis.frontend.dialog.manual.ManualDialog;
 import kieker.diagnosis.frontend.dialog.monitoring.MonitoringDialog;
 import kieker.diagnosis.frontend.main.properties.CloseWithoutPromptProperty;
 
@@ -212,8 +213,8 @@ public final class MainMenuBar extends MenuBar implements IconMixin {
 	}
 
 	private void performDocumentation( ) {
-		final ManualDialog manualDialog = new ManualDialog( );
-		manualDialog.showAndWait( );
+		final HostServices hostServices = HostServicesHolder.getHostServices( );
+		hostServices.showDocument( "https://github.com/kieker-monitoring/kieker-trace-diagnosis-ui/wiki" );
 	}
 
 	/**

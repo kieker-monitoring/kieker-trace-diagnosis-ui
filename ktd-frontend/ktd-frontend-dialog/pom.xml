@@ -16,7 +16,6 @@
 
 	<modules>
 		<module>ktd-frontend-dialog-about</module>
-		<module>ktd-frontend-dialog-manual</module>
 		<module>ktd-frontend-dialog-monitoring</module>
 		<module>ktd-frontend-dialog-settings</module>
 		<module>ktd-frontend-dialog-progress</module>
