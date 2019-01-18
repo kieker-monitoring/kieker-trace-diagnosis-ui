@@ -32,10 +32,8 @@ import com.google.inject.Injector;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TreeTableView;
 import javafx.stage.Stage;
 import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.backend.data.MethodCall;
@@ -52,6 +50,7 @@ import kieker.diagnosis.backend.settings.properties.ShowUnmonitoredTimeProperty;
 public final class TracesTabTestUI extends ApplicationTest {
 
 	private TracesTab tracesTab;
+	private TracesPage tracesPage;
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
@@ -71,6 +70,8 @@ public final class TracesTabTestUI extends ApplicationTest {
 		final Scene scene = new Scene( tabPane );
 		stage.setScene( scene );
 		stage.show( );
+
+		tracesPage = new TracesPage( this );
 	}
 
 	private List<MethodCall> createTraces( ) {
@@ -114,105 +115,102 @@ public final class TracesTabTestUI extends ApplicationTest {
 
 	@Test
 	public void testNormalSearch( ) {
-		final TreeTableView<?> tableView = lookup( "#tabTracesTreeTable" ).query( );
-		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 4 ) );
+		assertThat( tracesPage.getTable( ).countItems( ), is( 4 ) );
 
-		clickOn( "#tabTracesFilterHost" ).write( "host1" );
-		clickOn( "#tabTracesFilterClass" ).write( "class1" );
-		clickOn( "#tabTracesFilterMethod" ).write( "method1" );
-		clickOn( "#tabTracesSearch" );
-		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 2 ) );
+		tracesPage.getFilter( ).getHost( ).writeText( "host1" );
+		tracesPage.getFilter( ).getClazz( ).writeText( "class1" );
+		tracesPage.getFilter( ).getMethod( ).writeText( "method1" );
+		tracesPage.getFilter( ).getSearch( ).click( );
+		assertThat( tracesPage.getTable( ).countItems( ), is( 2 ) );
 
-		clickOn( "#tabTracesFilterTraceId" ).write( "1" );
-		clickOn( "#tabTracesSearch" );
-		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 1 ) );
+		tracesPage.getFilter( ).getTraceId( ).writeText( "1" );
+		tracesPage.getFilter( ).getSearch( ).click( );
+		assertThat( tracesPage.getTable( ).countItems( ), is( 1 ) );
 
-		clickOn( "#tabTracesFilterTraceId" ).eraseText( 1 );
-		clickOn( "#tabTracesFilterException" ).write( "exception" );
-		clickOn( "#tabTracesSearch" );
-		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 1 ) );
+		tracesPage.getFilter( ).getTraceId( ).clearText( );
+		tracesPage.getFilter( ).getException( ).writeText( "exception" );
+		tracesPage.getFilter( ).getSearch( ).click( );
+		assertThat( tracesPage.getTable( ).countItems( ), is( 1 ) );
 
-		clickOn( "#tabTracesFilterException" ).eraseText( 9 );
-		clickOn( "#tabTracesFilterSearchType" ).clickOn( "Nur fehlgeschlagene" );
-		clickOn( "#tabTracesSearch" );
-		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 1 ) );
+		tracesPage.getFilter( ).getException( ).clearText( );
+		tracesPage.getFilter( ).getSearchType( ).select( "Nur fehlgeschlagene" );
+		tracesPage.getFilter( ).getSearch( ).click( );
+		assertThat( tracesPage.getTable( ).countItems( ), is( 1 ) );
 
-		clickOn( "#tabTracesFilterHost" ).eraseText( 5 );
-		clickOn( "#tabTracesFilterSearchType" ).clickOn( "Nur erfolgreiche" );
-		clickOn( "#tabTracesSearch" );
-		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 2 ) );
+		tracesPage.getFilter( ).getHost( ).clearText( );
+		tracesPage.getFilter( ).getSearchType( ).select( "Nur erfolgreiche" );
+		tracesPage.getFilter( ).getSearch( ).click( );
+		assertThat( tracesPage.getTable( ).countItems( ), is( 2 ) );
 	}
 
 	@Test
 	public void testDetailPanel( ) {
-		clickOn( lookup( "#tabTracesTreeTable" ).lookup( ".tree-table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabTracesDetailHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
-		assertThat( lookup( "#tabTracesDetailException" ).queryTextInputControl( ).getText( ), is( "<Keine Daten verfügbar>" ) );
+		tracesPage.getTable( ).clickOnNthTableRow( 0 );
+		assertThat( tracesPage.getDetail( ).getHost( ).getText( ), is( "host1" ) );
+		assertThat( tracesPage.getDetail( ).getException( ).getText( ), is( "<Keine Daten verfügbar>" ) );
 
-		clickOn( lookup( "#tabTracesTreeTable" ).lookup( ".tree-table-row-cell" ).nth( 1 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabTracesDetailHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
-		assertThat( lookup( "#tabTracesDetailException" ).queryTextInputControl( ).getText( ), is( "exception" ) );
+		tracesPage.getTable( ).clickOnNthTableRow( 1 );
+		assertThat( tracesPage.getDetail( ).getHost( ).getText( ), is( "host1" ) );
+		assertThat( tracesPage.getDetail( ).getException( ).getText( ), is( "exception" ) );
 	}
 
 	@Test
 	public void testSearchWithRegularExpressions( ) {
-		final TreeTableView<?> tableView = lookup( "#tabTracesTreeTable" ).query( );
-		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 4 ) );
+		assertThat( tracesPage.getTable( ).countItems( ), is( 4 ) );
 
-		clickOn( "#tabTracesFilterUseRegExpr" );
+		tracesPage.getFilter( ).getUseRegularExpression( ).click( );
 
-		clickOn( "#tabTracesFilterHost" ).write( ".*1.*" );
-		clickOn( "#tabTracesFilterClass" ).write( "class1" );
-		clickOn( "#tabTracesFilterMethod" ).write( "m....d\\d" );
-		clickOn( "#tabTracesSearch" );
-		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 2 ) );
+		tracesPage.getFilter( ).getHost( ).writeText( ".*1.*" );
+		tracesPage.getFilter( ).getClazz( ).writeText( "class1" );
+		tracesPage.getFilter( ).getMethod( ).writeText( "m....d\\d" );
+		tracesPage.getFilter( ).getSearch( ).click( );
+		assertThat( tracesPage.getTable( ).countItems( ), is( 2 ) );
 
-		clickOn( "#tabTracesFilterException" ).write( "e.*" );
-		clickOn( "#tabTracesSearch" );
-		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 1 ) );
+		tracesPage.getFilter( ).getException( ).writeText( "e.*" );
+		tracesPage.getFilter( ).getSearch( ).click( );
+		assertThat( tracesPage.getTable( ).countItems( ), is( 1 ) );
 
-		clickOn( "#tabTracesFilterException" ).eraseText( 9 );
-		clickOn( "#tabTracesFilterSearchType" ).clickOn( "Nur fehlgeschlagene" );
-		clickOn( "#tabTracesSearch" );
-		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 1 ) );
+		tracesPage.getFilter( ).getException( ).clearText( );
+		tracesPage.getFilter( ).getSearchType( ).select( "Nur fehlgeschlagene" );
+		tracesPage.getFilter( ).getSearch( ).click( );
+		assertThat( tracesPage.getTable( ).countItems( ), is( 1 ) );
 	}
 
 	@Test
 	public void testSearchWithInvalidRegularExpressions( ) {
-		final TreeTableView<?> tableView = lookup( "#tabTracesTreeTable" ).query( );
-		assertThat( tableView.getRoot( ).getChildren( ).size( ), is( 4 ) );
+		assertThat( tracesPage.getTable( ).countItems( ), is( 4 ) );
 
-		clickOn( "#tabTracesFilterUseRegExpr" );
+		tracesPage.getFilter( ).getUseRegularExpression( ).click( );
 
-		clickOn( "#tabTracesFilterHost" ).write( "(" );
-		clickOn( "#tabTracesSearch" );
-		clickOn( ".dialog-pane .button" );
+		tracesPage.getFilter( ).getHost( ).writeText( "(" );
+		tracesPage.getFilter( ).getSearch( ).click( );
+		tracesPage.getDialog( ).getOk( ).click( );
 
-		clickOn( "#tabTracesFilterHost" ).eraseText( 1 );
-		clickOn( "#tabTracesFilterClass" ).write( "(" );
-		clickOn( "#tabTracesSearch" );
-		clickOn( ".dialog-pane .button" );
+		tracesPage.getFilter( ).getHost( ).clearText( );
+		tracesPage.getFilter( ).getClazz( ).writeText( "(" );
+		tracesPage.getFilter( ).getSearch( ).click( );
+		tracesPage.getDialog( ).getOk( ).click( );
 
-		clickOn( "#tabTracesFilterClass" ).eraseText( 1 );
-		clickOn( "#tabTracesFilterMethod" ).write( "(" );
-		clickOn( "#tabTracesSearch" );
-		clickOn( ".dialog-pane .button" );
+		tracesPage.getFilter( ).getClazz( ).clearText( );
+		tracesPage.getFilter( ).getMethod( ).writeText( "(" );
+		tracesPage.getFilter( ).getSearch( ).click( );
+		tracesPage.getDialog( ).getOk( ).click( );
 
-		clickOn( "#tabTracesFilterMethod" ).eraseText( 1 );
-		clickOn( "#tabTracesFilterException" ).write( "(" );
-		clickOn( "#tabTracesSearch" );
-		clickOn( ".dialog-pane .button" );
+		tracesPage.getFilter( ).getMethod( ).clearText( );
+		tracesPage.getFilter( ).getException( ).writeText( "(" );
+		tracesPage.getFilter( ).getSearch( ).click( );
+		tracesPage.getDialog( ).getOk( ).click( );
 	}
 
 	@Test
 	public void testExpandChildren( ) {
-		clickOn( lookup( "#tabTracesTreeTable" ).lookup( ".tree-table-row-cell" ).nth( 0 ).lookup( ".arrow" ).queryAs( Node.class ) );
+		tracesPage.getTable( ).expandNthRow( 0 );
 
-		clickOn( lookup( "#tabTracesTreeTable" ).lookup( ".tree-table-row-cell" ).nth( 1 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabTracesDetailHost" ).queryTextInputControl( ).getText( ), is( "-" ) );
+		tracesPage.getTable( ).clickOnNthTableRow( 1 );
+		assertThat( tracesPage.getDetail( ).getHost( ).getText( ), is( "-" ) );
 
-		clickOn( lookup( "#tabTracesTreeTable" ).lookup( ".tree-table-row-cell" ).nth( 2 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabTracesDetailHost" ).queryTextInputControl( ).getText( ), is( "host5" ) );
+		tracesPage.getTable( ).clickOnNthTableRow( 2 );
+		assertThat( tracesPage.getDetail( ).getHost( ).getText( ), is( "host5" ) );
 	}
 
 	@Test
@@ -221,14 +219,14 @@ public final class TracesTabTestUI extends ApplicationTest {
 		final Consumer<TracesFilter> action = filterHolder::setValue;
 		tracesTab.setOnSaveAsFavorite( action );
 
-		clickOn( "#tabTracesFilterHost" ).write( "host1" );
-		clickOn( "#tabTracesSaveAsFavorite" );
-		clickOn( "#tabTracesFilterHost" ).eraseText( 5 );
+		tracesPage.getFilter( ).getHost( ).writeText( "host1" );
+		tracesPage.getFilter( ).getSaveAsFavorite( ).click( );
+		tracesPage.getFilter( ).getHost( ).clearText( );
 
 		assertThat( filterHolder.getValue( ), is( notNullValue( ) ) );
 		interact( ( ) -> tracesTab.setFilterValue( filterHolder.getValue( ) ) );
 
-		assertThat( lookup( "#tabTracesFilterHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
+		assertThat( tracesPage.getFilter( ).getHost( ).getText( ), is( "host1" ) );
 	}
 
 }
