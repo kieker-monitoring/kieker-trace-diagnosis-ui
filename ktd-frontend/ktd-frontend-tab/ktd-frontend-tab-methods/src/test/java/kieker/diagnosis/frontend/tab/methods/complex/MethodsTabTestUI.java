@@ -38,10 +38,9 @@ import com.google.inject.Injector;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TableView;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.backend.data.MethodCall;
@@ -61,6 +60,7 @@ import kieker.diagnosis.backend.settings.properties.TimestampProperty;
 public final class MethodsTabTestUI extends ApplicationTest {
 
 	private MethodsTab methodsTab;
+	private MethodsPage methodsPage;
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
@@ -81,6 +81,8 @@ public final class MethodsTabTestUI extends ApplicationTest {
 		final Scene scene = new Scene( tabPane );
 		stage.setScene( scene );
 		stage.show( );
+
+		methodsPage = new MethodsPage( this );
 	}
 
 	private List<MethodCall> createMethodCalls( ) {
@@ -113,116 +115,113 @@ public final class MethodsTabTestUI extends ApplicationTest {
 
 	@Test
 	public void testNormalSearch( ) {
-		final TableView<Object> tableView = lookup( "#tabMethodsTable" ).queryTableView( );
-		assertThat( tableView.getItems( ).size( ), is( 4 ) );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 4 ) );
 
-		clickOn( "#tabMethodsFilterHost" ).write( "host1" );
-		clickOn( "#tabMethodsFilterClass" ).write( "class1" );
-		clickOn( "#tabMethodsFilterMethod" ).write( "method1" );
-		clickOn( "#tabMethodsSearch" );
-		assertThat( tableView.getItems( ).size( ), is( 2 ) );
+		methodsPage.getFilter( ).getHost( ).writeText( "host1" );
+		methodsPage.getFilter( ).getClazz( ).writeText( "class1" );
+		methodsPage.getFilter( ).getMethod( ).writeText( "method1" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 2 ) );
 
-		clickOn( "#tabMethodsFilterException" ).write( "exception" );
-		clickOn( "#tabMethodsSearch" );
-		assertThat( tableView.getItems( ).size( ), is( 1 ) );
+		methodsPage.getFilter( ).getException( ).writeText( "exception" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 1 ) );
 
-		clickOn( "#tabMethodsFilterException" ).eraseText( 9 );
-		clickOn( "#tabMethodsFilterSearchType" ).clickOn( "Nur fehlgeschlagene" );
-		clickOn( "#tabMethodsSearch" );
-		assertThat( tableView.getItems( ).size( ), is( 1 ) );
+		methodsPage.getFilter( ).getException( ).clearText( );
+		methodsPage.getFilter( ).getSearchType( ).select( "Nur fehlgeschlagene" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 1 ) );
 
-		clickOn( "#tabMethodsFilterHost" ).eraseText( 5 );
-		clickOn( "#tabMethodsFilterSearchType" ).clickOn( "Nur erfolgreiche " );
-		clickOn( "#tabMethodsSearch" );
-		assertThat( tableView.getItems( ).size( ), is( 2 ) );
+		methodsPage.getFilter( ).getHost( ).clearText( );
+		methodsPage.getFilter( ).getSearchType( ).select( "Nur erfolgreiche " );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 2 ) );
 	}
 
 	@Test
 	public void testDetailPanel( ) {
-		clickOn( lookup( "#tabMethodsTable" ).lookup( ".table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
+		methodsPage.getTable( ).clickOnNthTableRow( 0 );
 		assertThat( lookup( "#tabMethodsDetailHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
 		assertThat( lookup( "#tabMethodsDetailException" ).queryTextInputControl( ).getText( ), is( "<Keine Daten verfügbar>" ) );
 
-		clickOn( lookup( "#tabMethodsTable" ).lookup( ".table-row-cell" ).nth( 1 ).queryAs( Node.class ) );
+		methodsPage.getTable( ).clickOnNthTableRow( 1 );
 		assertThat( lookup( "#tabMethodsDetailHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
 		assertThat( lookup( "#tabMethodsDetailException" ).queryTextInputControl( ).getText( ), is( "exception" ) );
 	}
 
 	@Test
 	public void testSearchWithRegularExpressions( ) {
-		final TableView<Object> tableView = lookup( "#tabMethodsTable" ).queryTableView( );
-		assertThat( tableView.getItems( ).size( ), is( 4 ) );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 4 ) );
 
-		clickOn( "#tabMethodsFilterUseRegExpr" );
+		methodsPage.getFilter( ).getUseRegularExpression( ).click( );
 
-		clickOn( "#tabMethodsFilterHost" ).write( ".*1.*" );
-		clickOn( "#tabMethodsFilterClass" ).write( "class1" );
-		clickOn( "#tabMethodsFilterMethod" ).write( "m....d\\d" );
-		clickOn( "#tabMethodsSearch" );
-		assertThat( tableView.getItems( ).size( ), is( 2 ) );
+		methodsPage.getFilter( ).getHost( ).writeText( ".*1.*" );
+		methodsPage.getFilter( ).getClazz( ).writeText( "class1" );
+		methodsPage.getFilter( ).getMethod( ).writeText( "m....d\\d" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 2 ) );
 
-		clickOn( "#tabMethodsFilterException" ).write( "e.*" );
-		clickOn( "#tabMethodsSearch" );
-		assertThat( tableView.getItems( ).size( ), is( 1 ) );
+		methodsPage.getFilter( ).getException( ).writeText( "e.*" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 1 ) );
 
-		clickOn( "#tabMethodsFilterException" ).eraseText( 9 );
-		clickOn( "#tabMethodsFilterSearchType" ).clickOn( "Nur fehlgeschlagene" );
-		clickOn( "#tabMethodsSearch" );
-		assertThat( tableView.getItems( ).size( ), is( 1 ) );
+		methodsPage.getFilter( ).getException( ).clearText( );
+		methodsPage.getFilter( ).getSearchType( ).select( "Nur fehlgeschlagene" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 1 ) );
 	}
 
 	@Test
 	public void testSearchWithInvalidRegularExpressions( ) {
-		final TableView<Object> tableView = lookup( "#tabMethodsTable" ).queryTableView( );
-		assertThat( tableView.getItems( ).size( ), is( 4 ) );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 4 ) );
 
-		clickOn( "#tabMethodsFilterUseRegExpr" );
+		methodsPage.getFilter( ).getUseRegularExpression( ).click( );
 
-		clickOn( "#tabMethodsFilterHost" ).write( "(" );
-		clickOn( "#tabMethodsSearch" );
-		clickOn( ".dialog-pane .button" );
+		methodsPage.getFilter( ).getHost( ).writeText( "(" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		methodsPage.getDialog( ).getOk( ).click( );
 
-		clickOn( "#tabMethodsFilterHost" ).eraseText( 1 );
-		clickOn( "#tabMethodsFilterClass" ).write( "(" );
-		clickOn( "#tabMethodsSearch" );
-		clickOn( ".dialog-pane .button" );
+		methodsPage.getFilter( ).getHost( ).clearText( );
+		methodsPage.getFilter( ).getClazz( ).writeText( "(" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		methodsPage.getDialog( ).getOk( ).click( );
 
-		clickOn( "#tabMethodsFilterClass" ).eraseText( 1 );
-		clickOn( "#tabMethodsFilterMethod" ).write( "(" );
-		clickOn( "#tabMethodsSearch" );
-		clickOn( ".dialog-pane .button" );
+		methodsPage.getFilter( ).getClazz( ).clearText( );
+		methodsPage.getFilter( ).getMethod( ).writeText( "(" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		methodsPage.getDialog( ).getOk( ).click( );
 
-		clickOn( "#tabMethodsFilterMethod" ).eraseText( 1 );
-		clickOn( "#tabMethodsFilterException" ).write( "(" );
-		clickOn( "#tabMethodsSearch" );
-		clickOn( ".dialog-pane .button" );
+		methodsPage.getFilter( ).getMethod( ).clearText( );
+		methodsPage.getFilter( ).getException( ).writeText( "(" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		methodsPage.getDialog( ).getOk( ).click( );
 	}
 
 	@Test
 	public void testSorting( ) {
-		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 1 ).queryAs( Node.class ) );
-		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 1 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabMethodsTable" ).lookup( ".table-cell" ).nth( 0 ).queryLabeled( ).getText( ), is( "host3" ) );
+		methodsPage.getTable( ).clickOnNthHeader( 1 );
+		methodsPage.getTable( ).clickOnNthHeader( 1 );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 0 ), is( "host3" ) );
 
-		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 2 ).queryAs( Node.class ) );
-		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 2 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabMethodsTable" ).lookup( ".table-cell" ).nth( 1 ).queryLabeled( ).getText( ), is( "class3" ) );
+		methodsPage.getTable( ).clickOnNthHeader( 2 );
+		methodsPage.getTable( ).clickOnNthHeader( 2 );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 1 ), is( "class3" ) );
 
-		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 3 ).queryAs( Node.class ) );
-		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 3 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabMethodsTable" ).lookup( ".table-cell" ).nth( 2 ).queryLabeled( ).getText( ), is( "method3" ) );
+		methodsPage.getTable( ).clickOnNthHeader( 3 );
+		methodsPage.getTable( ).clickOnNthHeader( 3 );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 2 ), is( "method3" ) );
 
-		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 4 ).queryAs( Node.class ) );
-		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 4 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabMethodsTable" ).lookup( ".table-cell" ).nth( 3 ).queryLabeled( ).getText( ), is( "150" ) );
+		methodsPage.getTable( ).clickOnNthHeader( 4 );
+		methodsPage.getTable( ).clickOnNthHeader( 4 );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 3 ), is( "150" ) );
 
-		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 5 ).queryAs( Node.class ) );
-		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 5 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabMethodsTable" ).lookup( ".table-cell" ).nth( 4 ).queryLabeled( ).getText( ), is( "1000" ) );
+		methodsPage.getTable( ).clickOnNthHeader( 5 );
+		methodsPage.getTable( ).clickOnNthHeader( 5 );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 4 ), is( "1000" ) );
 
-		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 6 ).queryAs( Node.class ) );
-		clickOn( lookup( "#tabMethodsTable" ).lookup( ".column-header" ).nth( 6 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabMethodsTable" ).lookup( ".table-cell" ).nth( 5 ).queryLabeled( ).getText( ), is( "42" ) );
+		methodsPage.getTable( ).clickOnNthHeader( 6 );
+		methodsPage.getTable( ).clickOnNthHeader( 6 );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 5 ), is( "42" ) );
 	}
 
 	@Test
@@ -231,14 +230,14 @@ public final class MethodsTabTestUI extends ApplicationTest {
 		final Consumer<MethodsFilter> action = filterHolder::setValue;
 		methodsTab.setOnSaveAsFavorite( action );
 
-		clickOn( "#tabMethodsFilterHost" ).write( "host1" );
-		clickOn( "#tabMethodsFilteSaveAsFavorite" );
-		clickOn( "#tabMethodsFilterHost" ).eraseText( 5 );
+		methodsPage.getFilter( ).getHost( ).writeText( "host1" );
+		methodsPage.getFilter( ).getSaveAsFavorite( ).click( );
+		methodsPage.getFilter( ).getHost( ).clearText( );
 
 		assertThat( filterHolder.getValue( ), is( notNullValue( ) ) );
 		interact( ( ) -> methodsTab.setFilterValue( filterHolder.getValue( ) ) );
 
-		assertThat( lookup( "#tabMethodsFilterHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
+		assertThat( methodsPage.getFilter( ).getHost( ).getText( ), is( "host1" ) );
 	}
 
 	@Test
@@ -247,11 +246,11 @@ public final class MethodsTabTestUI extends ApplicationTest {
 		final Consumer<MethodCall> action = mock( Consumer.class );
 		methodsTab.setOnJumpToTrace( action );
 
-		clickOn( "#tabMethodsJumpToTrace" );
+		methodsPage.getDetail( ).getJumpToTrace( ).click( );
 		verify( action, never( ) ).accept( any( ) );
 
-		clickOn( lookup( "#tabMethodsTable" ).lookup( ".table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
-		clickOn( "#tabMethodsJumpToTrace" );
+		methodsPage.getTable( ).clickOnNthElementInFirstRow( 0 );
+		methodsPage.getDetail( ).getJumpToTrace( ).click( );
 		verify( action ).accept( any( ) );
 	}
 
@@ -261,13 +260,26 @@ public final class MethodsTabTestUI extends ApplicationTest {
 		final Consumer<CSVData> action = csvData -> dataHolder.setValue( csvData );
 		methodsTab.setOnExportToCSV( action );
 
-		clickOn( "#methodCallTabExportToCsv" );
+		methodsPage.getStatusBar( ).getExportToCsv( ).click( );
 
 		final CSVData csvData = dataHolder.getValue( );
 		assertThat( csvData, is( notNullValue( ) ) );
 		assertThat( csvData.getHeaders( ), hasSize( 6 ) );
 		assertThat( csvData.getRows( ), hasSize( 4 ) );
 		assertThat( csvData.getRows( ).get( 0 ), hasSize( 6 ) );
+	}
+
+	@Test
+	public void testDefaultButtonProperty( ) {
+		methodsPage.getFilter( ).getHost( ).writeText( "host1" );
+		methodsPage.getFilter( ).getMethod( ).writeText( "method1" );
+
+		push( KeyCode.ENTER );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 4 ) );
+
+		methodsTab.defaultButtonProperty( ).set( true );
+		push( KeyCode.ENTER );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 2 ) );
 	}
 
 }
