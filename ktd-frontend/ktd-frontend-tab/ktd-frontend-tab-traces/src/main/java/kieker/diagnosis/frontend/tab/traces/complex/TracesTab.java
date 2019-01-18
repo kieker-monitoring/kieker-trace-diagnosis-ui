@@ -22,6 +22,7 @@ import java.util.function.Consumer;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.Priority;
@@ -42,10 +43,10 @@ public final class TracesTab extends Tab {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( TracesTab.class.getName( ) );
 
-	private final TraceFilterPane filterPane = new TraceFilterPane( );
-	private final TracesTreeTableView treeTableView = new TracesTreeTableView( );
-	private final TraceDetailsPane detailsPane = new TraceDetailsPane( );
-	private final TraceStatusBar statusBar = new TraceStatusBar( );
+	private TraceFilterPane filterPane;
+	private TracesTreeTableView treeTableView;
+	private TraceDetailsPane detailsPane;
+	private TraceStatusBar statusBar;
 
 	private Consumer<TracesFilter> onSaveAsFavorite;
 	private List<MethodCall> traceRootsForRefresh;
@@ -58,35 +59,50 @@ public final class TracesTab extends Tab {
 	}
 
 	private void createControl( ) {
-		final VBox vbox = new VBox( );
-		setContent( vbox );
-
-		configureFilterPane( );
-		vbox.getChildren( ).add( filterPane );
-
-		configureTreeTableView( );
-		vbox.getChildren( ).add( treeTableView );
-
-		vbox.getChildren( ).add( detailsPane );
-
-		configureStatusBar( );
-		vbox.getChildren( ).add( statusBar );
+		setContent( createVBox( ) );
 	}
 
-	private void configureFilterPane( ) {
+	private VBox createVBox( ) {
+		final VBox vbox = new VBox( );
+
+		vbox.getChildren( ).add( createFilterPane( ) );
+		vbox.getChildren( ).add( createTreeTableView( ) );
+		vbox.getChildren( ).add( createDetailsPane( ) );
+		vbox.getChildren( ).add( createStatusBar( ) );
+
+		return vbox;
+	}
+
+	private Node createFilterPane( ) {
+		filterPane = new TraceFilterPane( );
+
 		filterPane.setOnSearch( e -> performSearch( ) );
 		filterPane.setOnSaveAsFavorite( e -> performSaveAsFavorite( ) );
+
+		return filterPane;
 	}
 
-	private void configureTreeTableView( ) {
+	private Node createTreeTableView( ) {
+		treeTableView = new TracesTreeTableView( );
+
 		treeTableView.setId( "tabTracesTreeTable" );
 		treeTableView.addSelectionChangeListener( ( aObservable, aOldValue, aNewValue ) -> detailsPane.setValue( aNewValue != null ? aNewValue.getValue( ) : null ) );
 
 		VBox.setVgrow( treeTableView, Priority.ALWAYS );
+
+		return treeTableView;
 	}
 
-	private void configureStatusBar( ) {
+	private Node createDetailsPane( ) {
+		detailsPane = new TraceDetailsPane( );
+		return detailsPane;
+	}
+
+	private Node createStatusBar( ) {
+		statusBar = new TraceStatusBar( );
 		VBox.setMargin( statusBar, new Insets( 5 ) );
+
+		return statusBar;
 	}
 
 	private void performInitialize( ) {
