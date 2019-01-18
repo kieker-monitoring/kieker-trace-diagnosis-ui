@@ -16,14 +16,12 @@
 
 package kieker.diagnosis.frontend.main.composite;
 
-import java.io.InputStream;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.application.HostServices;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
@@ -31,9 +29,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
-import javafx.stage.Stage;
 import javafx.stage.Window;
 import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.monitoring.MonitoringConfiguration;
@@ -44,6 +40,7 @@ import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.frontend.base.common.HostServicesHolder;
 import kieker.diagnosis.frontend.base.mixin.IconMixin;
 import kieker.diagnosis.frontend.dialog.about.AboutDialog;
+import kieker.diagnosis.frontend.dialog.alert.Alert;
 import kieker.diagnosis.frontend.dialog.monitoring.MonitoringDialog;
 import kieker.diagnosis.frontend.main.properties.CloseWithoutPromptProperty;
 
@@ -246,14 +243,6 @@ public final class MainMenuBar extends MenuBar implements IconMixin {
 			yesButton.setId( "mainCloseDialogYes" );
 			final Node cancelButton = dialogPane.lookupButton( ButtonType.CANCEL );
 			cancelButton.setId( "mainCloseDialogCancel" );
-
-			// Add the logo
-			final String iconPath = RESOURCE_BUNDLE.getString( "iconReallyClose" );
-			final InputStream iconStream = getClass( ).getClassLoader( ).getResourceAsStream( iconPath );
-			final Image icon = new Image( iconStream );
-			final Stage stage = (Stage) dialogPane.getScene( ).getWindow( );
-			stage.getIcons( ).add( icon );
-			dialogPane.getStylesheets( ).add( "/kieker/diagnosis/frontend/base/ui/Dialog.css" );
 
 			// If the user clicked ok, we close the window
 			final Optional<ButtonType> result = alert.showAndWait( );
