@@ -17,35 +17,19 @@
 package kieker.diagnosis.frontend.test;
 
 import org.testfx.api.FxRobot;
-import org.testfx.service.query.NodeQuery;
 
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-
-public final class TextField {
+public final class ComboBox {
 
 	private final FxRobot fxRobot;
 	private final String locator;
 
-	public TextField( final FxRobot fxRobot, final String locator ) {
+	public ComboBox( final FxRobot fxRobot, final String locator ) {
 		this.fxRobot = fxRobot;
 		this.locator = locator;
 	}
 
-	public String getText( ) {
-		final NodeQuery query = fxRobot.lookup( locator );
-		return query.queryTextInputControl( ).getText( );
-	}
-
-	public void writeText( final String text ) {
-		fxRobot.clickOn( locator ).write( text );
-	}
-
-	public void clearText( ) {
-		fxRobot.clickOn( locator );
-
-		fxRobot.push( new KeyCodeCombination( KeyCode.A, KeyCombination.CONTROL_DOWN ) ).type( KeyCode.BACK_SPACE );
+	public void select( final String text ) {
+		fxRobot.clickOn( locator ).clickOn( text );
 	}
 
 }

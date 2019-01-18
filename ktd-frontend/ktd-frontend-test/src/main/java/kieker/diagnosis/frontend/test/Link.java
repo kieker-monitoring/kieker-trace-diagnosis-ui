@@ -19,33 +19,21 @@ package kieker.diagnosis.frontend.test;
 import org.testfx.api.FxRobot;
 import org.testfx.service.query.NodeQuery;
 
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
+import javafx.scene.control.Hyperlink;
 
-public final class TextField {
+public final class Link {
 
 	private final FxRobot fxRobot;
 	private final String locator;
 
-	public TextField( final FxRobot fxRobot, final String locator ) {
+	public Link( final FxRobot fxRobot, final String locator ) {
 		this.fxRobot = fxRobot;
 		this.locator = locator;
 	}
 
-	public String getText( ) {
+	public void click( ) {
 		final NodeQuery query = fxRobot.lookup( locator );
-		return query.queryTextInputControl( ).getText( );
-	}
-
-	public void writeText( final String text ) {
-		fxRobot.clickOn( locator ).write( text );
-	}
-
-	public void clearText( ) {
-		fxRobot.clickOn( locator );
-
-		fxRobot.push( new KeyCodeCombination( KeyCode.A, KeyCombination.CONTROL_DOWN ) ).type( KeyCode.BACK_SPACE );
+		fxRobot.clickOn( query.queryAs( Hyperlink.class ) );
 	}
 
 }

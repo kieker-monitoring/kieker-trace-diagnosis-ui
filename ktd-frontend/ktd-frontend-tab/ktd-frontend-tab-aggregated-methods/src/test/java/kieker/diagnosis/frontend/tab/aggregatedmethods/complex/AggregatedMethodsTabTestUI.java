@@ -38,10 +38,9 @@ import com.google.inject.Injector;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TableView;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
@@ -59,6 +58,7 @@ import kieker.diagnosis.backend.settings.properties.TimeUnitProperty;
 public final class AggregatedMethodsTabTestUI extends ApplicationTest {
 
 	private AggregatedMethodsTab methodsTab;
+	private AggregatedMethodsPage methodsPage;
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
@@ -78,6 +78,8 @@ public final class AggregatedMethodsTabTestUI extends ApplicationTest {
 		final Scene scene = new Scene( tabPane );
 		stage.setScene( scene );
 		stage.show( );
+
+		methodsPage = new AggregatedMethodsPage( this );
 	}
 
 	private List<AggregatedMethodCall> createAggregatedMethodCalls( ) {
@@ -116,130 +118,126 @@ public final class AggregatedMethodsTabTestUI extends ApplicationTest {
 
 	@Test
 	public void testNormalSearch( ) {
-		final TableView<Object> tableView = lookup( "#tabAggregatedMethodsTable" ).queryTableView( );
-		assertThat( tableView.getItems( ).size( ), is( 4 ) );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 4 ) );
 
-		clickOn( "#tabAggregatedMethodsFilterHost" ).write( "host1" );
-		clickOn( "#tabAggregatedMethodsFilterClass" ).write( "class1" );
-		clickOn( "#tabAggregatedMethodsFilterMethod" ).write( "method1" );
-		clickOn( "#tabAggregatedMethodsSearch" );
-		assertThat( tableView.getItems( ).size( ), is( 2 ) );
+		methodsPage.getFilter( ).getHost( ).writeText( "host1" );
+		methodsPage.getFilter( ).getMethod( ).writeText( "method1" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 2 ) );
 
-		clickOn( "#tabAggregatedMethodsFilterException" ).write( "exception" );
-		clickOn( "#tabAggregatedMethodsSearch" );
-		assertThat( tableView.getItems( ).size( ), is( 1 ) );
+		methodsPage.getFilter( ).getException( ).writeText( "exception" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 1 ) );
 
-		clickOn( "#tabAggregatedMethodsFilterException" ).eraseText( 9 );
-		clickOn( "#tabAggregatedMethodsFilterSearchType" ).clickOn( "Nur fehlgeschlagene" );
-		clickOn( "#tabAggregatedMethodsSearch" );
-		assertThat( tableView.getItems( ).size( ), is( 1 ) );
+		methodsPage.getFilter( ).getException( ).clearText( );
+		methodsPage.getFilter( ).getSearchType( ).select( "Nur fehlgeschlagene" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 1 ) );
 
-		clickOn( "#tabAggregatedMethodsFilterHost" ).eraseText( 5 );
-		clickOn( "#tabAggregatedMethodsFilterSearchType" ).clickOn( "Nur erfolgreiche " );
-		clickOn( "#tabAggregatedMethodsSearch" );
-		assertThat( tableView.getItems( ).size( ), is( 2 ) );
+		methodsPage.getFilter( ).getHost( ).clearText( );
+		methodsPage.getFilter( ).getSearchType( ).select( "Nur erfolgreiche " );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 2 ) );
 	}
 
 	@Test
 	public void testDetailPanel( ) {
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabAggregatedMethodsDetailHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
-		assertThat( lookup( "#tabAggregatedMethodsDetailException" ).queryTextInputControl( ).getText( ), is( "<Keine Daten verfügbar>" ) );
+		methodsPage.getTable( ).clickOnNthTableRow( 0 );
+		assertThat( methodsPage.getDetail( ).getHost( ).getText( ), is( "host1" ) );
+		assertThat( methodsPage.getDetail( ).getException( ).getText( ), is( "<Keine Daten verfügbar>" ) );
 
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-row-cell" ).nth( 1 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabAggregatedMethodsDetailHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
-		assertThat( lookup( "#tabAggregatedMethodsDetailException" ).queryTextInputControl( ).getText( ), is( "exception" ) );
+		methodsPage.getTable( ).clickOnNthTableRow( 1 );
+		assertThat( methodsPage.getDetail( ).getHost( ).getText( ), is( "host1" ) );
+		assertThat( methodsPage.getDetail( ).getException( ).getText( ), is( "exception" ) );
 	}
 
 	@Test
 	public void testSearchWithRegularExpressions( ) {
-		final TableView<Object> tableView = lookup( "#tabAggregatedMethodsTable" ).queryTableView( );
-		assertThat( tableView.getItems( ).size( ), is( 4 ) );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 4 ) );
 
-		clickOn( "#tabAggregatedMethodsFilterUseRegExpr" );
+		methodsPage.getFilter( ).getUseRegularExpression( ).click( );
 
-		clickOn( "#tabAggregatedMethodsFilterHost" ).write( ".*1.*" );
-		clickOn( "#tabAggregatedMethodsFilterClass" ).write( "class1" );
-		clickOn( "#tabAggregatedMethodsFilterMethod" ).write( "m....d\\d" );
-		clickOn( "#tabAggregatedMethodsSearch" );
-		assertThat( tableView.getItems( ).size( ), is( 2 ) );
+		methodsPage.getFilter( ).getHost( ).writeText( ".*1.*" );
+		methodsPage.getFilter( ).getClazz( ).writeText( "class1" );
+		methodsPage.getFilter( ).getMethod( ).writeText( "m....d\\d" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 2 ) );
 
-		clickOn( "#tabAggregatedMethodsFilterException" ).write( "e.*" );
-		clickOn( "#tabAggregatedMethodsSearch" );
-		assertThat( tableView.getItems( ).size( ), is( 1 ) );
+		methodsPage.getFilter( ).getException( ).writeText( "e.*" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 1 ) );
 
-		clickOn( "#tabAggregatedMethodsFilterException" ).eraseText( 9 );
-		clickOn( "#tabAggregatedMethodsFilterSearchType" ).clickOn( "Nur fehlgeschlagene" );
-		clickOn( "#tabAggregatedMethodsSearch" );
-		assertThat( tableView.getItems( ).size( ), is( 1 ) );
+		methodsPage.getFilter( ).getException( ).clearText( );
+		methodsPage.getFilter( ).getSearchType( ).select( "Nur fehlgeschlagene" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 1 ) );
 	}
 
 	@Test
 	public void testSearchWithInvalidRegularExpressions( ) {
-		final TableView<Object> tableView = lookup( "#tabAggregatedMethodsTable" ).queryTableView( );
-		assertThat( tableView.getItems( ).size( ), is( 4 ) );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 4 ) );
 
-		clickOn( "#tabAggregatedMethodsFilterUseRegExpr" );
+		methodsPage.getFilter( ).getUseRegularExpression( ).click( );
 
-		clickOn( "#tabAggregatedMethodsFilterHost" ).write( "(" );
-		clickOn( "#tabAggregatedMethodsSearch" );
-		clickOn( ".dialog-pane .button" );
+		methodsPage.getFilter( ).getHost( ).writeText( "(" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		methodsPage.getDialog( ).getOk( ).click( );
 
-		clickOn( "#tabAggregatedMethodsFilterHost" ).eraseText( 1 );
-		clickOn( "#tabAggregatedMethodsFilterClass" ).write( "(" );
-		clickOn( "#tabAggregatedMethodsSearch" );
-		clickOn( ".dialog-pane .button" );
+		methodsPage.getFilter( ).getHost( ).clearText( );
+		methodsPage.getFilter( ).getClazz( ).writeText( "(" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		methodsPage.getDialog( ).getOk( ).click( );
 
-		clickOn( "#tabAggregatedMethodsFilterClass" ).eraseText( 1 );
-		clickOn( "#tabAggregatedMethodsFilterMethod" ).write( "(" );
-		clickOn( "#tabAggregatedMethodsSearch" );
-		clickOn( ".dialog-pane .button" );
+		methodsPage.getFilter( ).getClazz( ).clearText( );
+		methodsPage.getFilter( ).getMethod( ).writeText( "(" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		methodsPage.getDialog( ).getOk( ).click( );
 
-		clickOn( "#tabAggregatedMethodsFilterMethod" ).eraseText( 1 );
-		clickOn( "#tabAggregatedMethodsFilterException" ).write( "(" );
-		clickOn( "#tabAggregatedMethodsSearch" );
-		clickOn( ".dialog-pane .button" );
+		methodsPage.getFilter( ).getMethod( ).clearText( );
+		methodsPage.getFilter( ).getException( ).writeText( "(" );
+		methodsPage.getFilter( ).getSearch( ).click( );
+		methodsPage.getDialog( ).getOk( ).click( );
 	}
 
 	@Test
 	public void testSorting( ) {
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 1 ).queryAs( Node.class ) );
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 1 ).queryAs( Node.class ) );
+		methodsPage.getTable( ).clickOnNthHeader( 1 );
+		methodsPage.getTable( ).clickOnNthHeader( 1 );
 
-		assertThat( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-cell" ).nth( 0 ).queryLabeled( ).getText( ), is( "10" ) );
-		assertThat( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-cell" ).nth( 1 ).queryLabeled( ).getText( ), is( "host2" ) );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 0 ), is( "10" ) );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 1 ), is( "host2" ) );
 
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 2 ).queryAs( Node.class ) );
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 2 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-cell" ).nth( 1 ).queryLabeled( ).getText( ), is( "host3" ) );
+		methodsPage.getTable( ).clickOnNthHeader( 2 );
+		methodsPage.getTable( ).clickOnNthHeader( 2 );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 1 ), is( "host3" ) );
 
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 3 ).queryAs( Node.class ) );
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 3 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-cell" ).nth( 2 ).queryLabeled( ).getText( ), is( "class3" ) );
+		methodsPage.getTable( ).clickOnNthHeader( 3 );
+		methodsPage.getTable( ).clickOnNthHeader( 3 );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 2 ), is( "class3" ) );
 
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 4 ).queryAs( Node.class ) );
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 4 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-cell" ).nth( 3 ).queryLabeled( ).getText( ), is( "method3" ) );
+		methodsPage.getTable( ).clickOnNthHeader( 4 );
+		methodsPage.getTable( ).clickOnNthHeader( 4 );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 3 ), is( "method3" ) );
 
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 5 ).queryAs( Node.class ) );
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 5 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-cell" ).nth( 4 ).queryLabeled( ).getText( ), is( "10" ) );
+		methodsPage.getTable( ).clickOnNthHeader( 5 );
+		methodsPage.getTable( ).clickOnNthHeader( 5 );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 4 ), is( "10" ) );
 
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 6 ).queryAs( Node.class ) );
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 6 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-cell" ).nth( 5 ).queryLabeled( ).getText( ), is( "42" ) );
+		methodsPage.getTable( ).clickOnNthHeader( 6 );
+		methodsPage.getTable( ).clickOnNthHeader( 6 );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 5 ), is( "42" ) );
 
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 7 ).queryAs( Node.class ) );
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 7 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-cell" ).nth( 6 ).queryLabeled( ).getText( ), is( "50" ) );
+		methodsPage.getTable( ).clickOnNthHeader( 7 );
+		methodsPage.getTable( ).clickOnNthHeader( 7 );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 6 ), is( "50" ) );
 
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 8 ).queryAs( Node.class ) );
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 8 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-cell" ).nth( 7 ).queryLabeled( ).getText( ), is( "60" ) );
+		methodsPage.getTable( ).clickOnNthHeader( 8 );
+		methodsPage.getTable( ).clickOnNthHeader( 8 );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 7 ), is( "60" ) );
 
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 9 ).queryAs( Node.class ) );
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".column-header" ).nth( 9 ).queryAs( Node.class ) );
-		assertThat( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-cell" ).nth( 8 ).queryLabeled( ).getText( ), is( "500" ) );
+		methodsPage.getTable( ).clickOnNthHeader( 9 );
+		methodsPage.getTable( ).clickOnNthHeader( 9 );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 8 ), is( "500" ) );
 	}
 
 	@Test
@@ -248,14 +246,14 @@ public final class AggregatedMethodsTabTestUI extends ApplicationTest {
 		final Consumer<AggregatedMethodsFilter> action = filterHolder::setValue;
 		methodsTab.setOnSaveAsFavorite( action );
 
-		clickOn( "#tabAggregatedMethodsFilterHost" ).write( "host1" );
-		clickOn( "#tabAggregatedMethodsFilteSaveAsFavorite" );
-		clickOn( "#tabAggregatedMethodsFilterHost" ).eraseText( 5 );
+		methodsPage.getFilter( ).getHost( ).writeText( "host1" );
+		methodsPage.getFilter( ).getSaveAsFavorite( ).click( );
+		methodsPage.getFilter( ).getHost( ).clearText( );
 
 		assertThat( filterHolder.getValue( ), is( notNullValue( ) ) );
 		interact( ( ) -> methodsTab.setFilterValue( filterHolder.getValue( ) ) );
 
-		assertThat( lookup( "#tabAggregatedMethodsFilterHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
+		assertThat( methodsPage.getFilter( ).getHost( ).getText( ), is( "host1" ) );
 	}
 
 	@Test
@@ -264,11 +262,11 @@ public final class AggregatedMethodsTabTestUI extends ApplicationTest {
 		final Consumer<AggregatedMethodCall> action = mock( Consumer.class );
 		methodsTab.setOnJumpToMethods( action );
 
-		clickOn( "#tabAggregatedMethodsJumpToMethods" );
+		methodsPage.getDetail( ).getJumpToMethods( ).click( );
 		verify( action, never( ) ).accept( any( ) );
 
-		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
-		clickOn( "#tabAggregatedMethodsJumpToMethods" );
+		methodsPage.getTable( ).clickOnNthElementInFirstRow( 0 );
+		methodsPage.getDetail( ).getJumpToMethods( ).click( );
 		verify( action ).accept( any( ) );
 	}
 
@@ -278,13 +276,26 @@ public final class AggregatedMethodsTabTestUI extends ApplicationTest {
 		final Consumer<CSVData> action = csvData -> dataHolder.setValue( csvData );
 		methodsTab.setOnExportToCSV( action );
 
-		clickOn( "#aggregatedMethodCallTabExportToCsv" );
+		methodsPage.getStatusBar( ).getExportToCsv( ).click( );
 
 		final CSVData csvData = dataHolder.getValue( );
 		assertThat( csvData, is( notNullValue( ) ) );
 		assertThat( csvData.getHeaders( ), hasSize( 9 ) );
 		assertThat( csvData.getRows( ), hasSize( 4 ) );
 		assertThat( csvData.getRows( ).get( 0 ), hasSize( 9 ) );
+	}
+
+	@Test
+	public void testDefaultButtonProperty( ) {
+		methodsPage.getFilter( ).getHost( ).writeText( "host1" );
+		methodsPage.getFilter( ).getMethod( ).writeText( "method1" );
+
+		push( KeyCode.ENTER );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 4 ) );
+
+		methodsTab.defaultButtonProperty( ).set( true );
+		push( KeyCode.ENTER );
+		assertThat( methodsPage.getTable( ).countItems( ), is( 2 ) );
 	}
 
 }

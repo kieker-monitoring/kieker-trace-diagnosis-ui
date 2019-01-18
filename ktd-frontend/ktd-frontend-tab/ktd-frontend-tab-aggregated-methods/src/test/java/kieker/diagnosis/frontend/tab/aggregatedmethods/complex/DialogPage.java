@@ -14,38 +14,20 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.frontend.test;
+package kieker.diagnosis.frontend.tab.aggregatedmethods.complex;
 
 import org.testfx.api.FxRobot;
-import org.testfx.service.query.NodeQuery;
 
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
+import kieker.diagnosis.frontend.test.Button;
+import lombok.Getter;
 
-public final class TextField {
+@Getter
+public final class DialogPage {
 
-	private final FxRobot fxRobot;
-	private final String locator;
+	private final Button ok;
 
-	public TextField( final FxRobot fxRobot, final String locator ) {
-		this.fxRobot = fxRobot;
-		this.locator = locator;
-	}
-
-	public String getText( ) {
-		final NodeQuery query = fxRobot.lookup( locator );
-		return query.queryTextInputControl( ).getText( );
-	}
-
-	public void writeText( final String text ) {
-		fxRobot.clickOn( locator ).write( text );
-	}
-
-	public void clearText( ) {
-		fxRobot.clickOn( locator );
-
-		fxRobot.push( new KeyCodeCombination( KeyCode.A, KeyCombination.CONTROL_DOWN ) ).type( KeyCode.BACK_SPACE );
+	public DialogPage( final FxRobot fxRobot ) {
+		ok = new Button( fxRobot, ".dialog-pane .button" );
 	}
 
 }
