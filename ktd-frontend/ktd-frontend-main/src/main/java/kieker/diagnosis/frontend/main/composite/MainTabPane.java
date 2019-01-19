@@ -47,10 +47,10 @@ public final class MainTabPane extends TabPane implements StylesheetMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MainTabPane.class.getName( ) );
 
-	private final TracesTab tracesTab = new TracesTab( );
-	private final MethodsTab methodsTab = new MethodsTab( );
-	private final AggregatedMethodsTab aggregatedMethodsTab = new AggregatedMethodsTab( );
-	private final StatisticsTab statisticsTab = new StatisticsTab( );
+	private TracesTab tracesTab;
+	private MethodsTab methodsTab;
+	private AggregatedMethodsTab aggregatedMethodsTab;
+	private StatisticsTab statisticsTab;
 
 	public MainTabPane( ) {
 		createControl( );
@@ -60,20 +60,14 @@ public final class MainTabPane extends TabPane implements StylesheetMixin {
 		setTabClosingPolicy( TabClosingPolicy.UNAVAILABLE );
 		addDefaultStylesheet( );
 
-		configureTracesTab( );
-		getTabs( ).add( tracesTab );
-
-		configureMethodsTab( );
-		getTabs( ).add( methodsTab );
-
-		configureAggregatedMethodsTab( );
-		getTabs( ).add( aggregatedMethodsTab );
-
-		configureStatisticsTab( );
-		getTabs( ).add( statisticsTab );
+		getTabs( ).add( createTracesTab( ) );
+		getTabs( ).add( createMethodsTab( ) );
+		getTabs( ).add( createAggregatedMethodsTab( ) );
+		getTabs( ).add( createStatisticsTab( ) );
 	}
 
-	private void configureTracesTab( ) {
+	private Tab createTracesTab( ) {
+		tracesTab = new TracesTab( );
 		tracesTab.setId( "tabTraces" );
 		tracesTab.setText( RESOURCE_BUNDLE.getString( "traces" ) );
 
@@ -81,9 +75,13 @@ public final class MainTabPane extends TabPane implements StylesheetMixin {
 		// visible. Therefore we have to set the default
 		// button property only for the current tab.
 		tracesTab.defaultButtonProperty( ).bind( getSelectionModel( ).selectedItemProperty( ).isEqualTo( tracesTab ) );
+
+		return tracesTab;
 	}
 
-	private void configureMethodsTab( ) {
+	private Tab createMethodsTab( ) {
+		methodsTab = new MethodsTab( );
+
 		methodsTab.setId( "tabMethods" );
 		methodsTab.setText( RESOURCE_BUNDLE.getString( "methods" ) );
 		methodsTab.setOnJumpToTrace( this::performJumpToTrace );
@@ -93,9 +91,13 @@ public final class MainTabPane extends TabPane implements StylesheetMixin {
 		// visible. Therefore we have to set the default
 		// button property only for the current tab.
 		methodsTab.defaultButtonProperty( ).bind( getSelectionModel( ).selectedItemProperty( ).isEqualTo( methodsTab ) );
+
+		return methodsTab;
 	}
 
-	private void configureAggregatedMethodsTab( ) {
+	private Tab createAggregatedMethodsTab( ) {
+		aggregatedMethodsTab = new AggregatedMethodsTab( );
+
 		aggregatedMethodsTab.setId( "tabAggregatedMethods" );
 		aggregatedMethodsTab.setText( RESOURCE_BUNDLE.getString( "aggregatedMethods" ) );
 		aggregatedMethodsTab.setOnJumpToMethods( this::performJumpToMethods );
@@ -105,11 +107,17 @@ public final class MainTabPane extends TabPane implements StylesheetMixin {
 		// visible. Therefore we have to set the default
 		// button property only for the current tab.
 		aggregatedMethodsTab.defaultButtonProperty( ).bind( getSelectionModel( ).selectedItemProperty( ).isEqualTo( aggregatedMethodsTab ) );
+
+		return aggregatedMethodsTab;
 	}
 
-	private void configureStatisticsTab( ) {
+	private Tab createStatisticsTab( ) {
+		statisticsTab = new StatisticsTab( );
+
 		statisticsTab.setId( "tabStatistics" );
 		statisticsTab.setText( RESOURCE_BUNDLE.getString( "statistics" ) );
+
+		return statisticsTab;
 	}
 
 	public void prepareRefresh( ) {
