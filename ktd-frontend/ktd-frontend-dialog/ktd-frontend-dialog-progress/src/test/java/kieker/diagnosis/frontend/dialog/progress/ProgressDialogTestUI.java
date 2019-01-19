@@ -15,14 +15,17 @@
  ***************************************************************************/
 package kieker.diagnosis.frontend.dialog.progress;
 
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Labeled;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -32,22 +35,31 @@ import javafx.stage.Stage;
  */
 public final class ProgressDialogTestUI extends ApplicationTest {
 
+	private ProgressDialog progressDialog;
+
 	@Override
 	public void start( final Stage stage ) throws Exception {
-		final ProgressDialog progressDialog = new ProgressDialog( );
 
-		final Scene scene = new Scene( progressDialog );
+		final Scene scene = new Scene( new VBox( ) );
 		stage.setScene( scene );
 		stage.show( );
 
+		progressDialog = new ProgressDialog( );
 		progressDialog.setProgress( 50.0 );
 		progressDialog.setMessage( "test-message" );
+		progressDialog.show( );
 	}
 
 	@Test
-	public void testMonitoringDialog( ) {
+	public void testProgressDialog( ) {
+		assertThat( listWindows( ), hasSize( 2 ) );
+
 		final Labeled messageLabel = lookup( "#progressDialogMessage" ).queryLabeled( );
 		assertThat( messageLabel.getText( ), is( "test-message" ) );
+
+		WaitForAsyncUtils.asyncFx( ( ) -> progressDialog.closeDialog( ) );
+		WaitForAsyncUtils.waitForFxEvents( );
+		assertThat( listWindows( ), hasSize( 1 ) );
 	}
 
 }

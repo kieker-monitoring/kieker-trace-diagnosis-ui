@@ -16,51 +16,68 @@
 
 package kieker.diagnosis.frontend.dialog.progress;
 
-import java.io.InputStream;
 import java.util.ResourceBundle;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.stage.Window;
+import kieker.diagnosis.frontend.base.mixin.DialogMixin;
+import kieker.diagnosis.frontend.base.mixin.ImageMixin;
 
 /**
  * A progress dialog, which can be displayed during lengthy processes.
  *
  * @author Nils Christian Ehmke
  */
-public final class ProgressDialog extends VBox {
+public final class ProgressDialog extends Alert implements DialogMixin, ImageMixin {
 
-	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle( ProgressDialog.class.getCanonicalName( ) );
+	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( ProgressDialog.class.getName( ) );
 
 	private ProgressIndicator progressIndicator;
 	private Label label;
 
 	public ProgressDialog( ) {
+		super( AlertType.NONE );
+
 		createControl( );
 	}
 
 	private void createControl( ) {
-		setAlignment( Pos.CENTER );
-		setPadding( new Insets( 5 ) );
-		setSpacing( 10 );
+		addDefaultStylesheet( );
 
-		setPrefHeight( 100 );
-		setPrefWidth( 250 );
+		setTitle( RESOURCE_BUNDLE.getString( "title" ) );
+		getStage( ).getIcons( ).add( createIcon( ) );
+		getDialogPane( ).setContent( createVBox( ) );
+	}
 
-		getChildren( ).add( createProgressIndicator( ) );
-		getChildren( ).add( createLabel( ) );
+	private Image createIcon( ) {
+		return loadImage( "/kieker-logo.png" );
+	}
 
-		getStylesheets( ).add( "/kieker/diagnosis/frontend/base/ui/Dialog.css" );
+	private Node createVBox( ) {
+		final VBox vBox = new VBox( );
+
+		vBox.setAlignment( Pos.CENTER );
+		vBox.setPadding( new Insets( 5 ) );
+		vBox.setSpacing( 10 );
+
+		vBox.setPrefHeight( 100 );
+		vBox.setPrefWidth( 250 );
+
+		vBox.getChildren( ).add( createProgressIndicator( ) );
+		vBox.getChildren( ).add( createLabel( ) );
+
+		return vBox;
+	}
+
+	public void closeDialog( ) {
+		getStage( ).close( );
 	}
 
 	private Node createProgressIndicator( ) {
@@ -77,44 +94,9 @@ public final class ProgressDialog extends VBox {
 		return label;
 	}
 
-	public void open( final Window aParent ) {
-		// Create a scene if necessary
-		Scene scene = getScene( );
-		if ( scene == null ) {
-			scene = new Scene( this );
-		}
-
-		// Load the icon
-		final String iconPath = getLocalizedString( "icon" );
-		final InputStream iconStream = getClass( ).getClassLoader( ).getResourceAsStream( iconPath );
-		final Image icon = new Image( iconStream );
-
-		// Prepare and show the stage
-		final Stage stage = new Stage( );
-		stage.setResizable( false );
-		stage.initModality( Modality.WINDOW_MODAL );
-		stage.initStyle( StageStyle.DECORATED );
-		stage.initOwner( aParent );
-		stage.getIcons( ).add( icon );
-		stage.setTitle( getLocalizedString( "title" ) );
-		stage.setScene( scene );
-		stage.setOnCloseRequest( aEvent -> aEvent.consume( ) );
-
-		stage.showAndWait( );
-	}
-
-	private String getLocalizedString( final String aKey ) {
-		return ivResourceBundle.getString( aKey );
-	}
-
-	public void close( ) {
-		final Window window = getScene( ).getWindow( );
-		window.hide( );
-	}
-
 	public void setMessage( final String aMessage ) {
 		label.setText( aMessage );
-		layout( );
+		getDialogPane( ).layout( );
 	}
 
 	public void setProgress( final double aProgress ) {

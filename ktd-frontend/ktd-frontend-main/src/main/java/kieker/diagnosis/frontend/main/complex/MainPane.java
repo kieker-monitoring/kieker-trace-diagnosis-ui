@@ -225,6 +225,7 @@ public final class MainPane extends VBox implements StylesheetMixin {
 
 		private final File ivDirectoryOrFile;
 		private final ImportType ivType;
+		private ProgressDialog progressDialog;
 
 		ImportThread( final File aDirectoryOrFile, final ImportType aType ) {
 			ivDirectoryOrFile = aDirectoryOrFile;
@@ -234,12 +235,11 @@ public final class MainPane extends VBox implements StylesheetMixin {
 
 		@Override
 		public void run( ) {
-			// Show the progress dialog
-			final ProgressDialog importerDialogView = new ProgressDialog( );
 			Platform.runLater( ( ) -> {
-				importerDialogView.setMessage( RESOURCE_BUNDLE.getString( "processImport" ) );
-				importerDialogView.setProgress( -1.0 );
-				importerDialogView.open( getWindow( ) );
+				progressDialog = new ProgressDialog( );
+				progressDialog.setMessage( RESOURCE_BUNDLE.getString( "processImport" ) );
+				progressDialog.setProgress( -1.0 );
+				progressDialog.show( );
 			} );
 
 			try {
@@ -255,7 +255,7 @@ public final class MainPane extends VBox implements StylesheetMixin {
 
 				// Now refresh everything
 				Platform.runLater( ( ) -> {
-					importerDialogView.setMessage( RESOURCE_BUNDLE.getString( "processRefresh" ) );
+					progressDialog.setMessage( RESOURCE_BUNDLE.getString( "processRefresh" ) );
 				} );
 
 				mainTabPane.prepareRefresh( );
@@ -272,7 +272,7 @@ public final class MainPane extends VBox implements StylesheetMixin {
 				ExceptionUtil.handleException( ex, MainPane.class.getCanonicalName( ) );
 			} finally {
 				Platform.runLater( ( ) -> {
-					importerDialogView.close( );
+					progressDialog.closeDialog( );
 				} );
 			}
 		}
