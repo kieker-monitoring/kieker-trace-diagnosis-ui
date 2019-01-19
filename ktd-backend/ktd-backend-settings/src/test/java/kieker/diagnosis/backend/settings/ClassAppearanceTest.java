@@ -16,11 +16,9 @@
 
 package kieker.diagnosis.backend.settings;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test class for the {@link ClassAppearance}.
@@ -31,20 +29,20 @@ public final class ClassAppearanceTest {
 
 	@Test
 	public void testConvertWithNullValue( ) {
-		assertThat( ClassAppearance.SHORT.convert( null ), is( nullValue( ) ) );
-		assertThat( ClassAppearance.LONG.convert( null ), is( nullValue( ) ) );
+		assertThat( ClassAppearance.SHORT.convert( null ) ).isNull( );
+		assertThat( ClassAppearance.LONG.convert( null ) ).isNull( );
 	}
 
 	@Test
 	public void testConvertWithLongAppearance( ) {
-		assertThat( ClassAppearance.LONG.convert( "A.B.C" ), is( "A.B.C" ) );
-		assertThat( ClassAppearance.LONG.convert( "A" ), is( "A" ) );
+		assertThat( ClassAppearance.LONG.convert( "A.B.C" ) ).isEqualTo( "A.B.C" );
+		assertThat( ClassAppearance.LONG.convert( "A" ) ).isEqualTo( "A" );
 	}
 
 	@Test
 	public void testConvertWithShortAppearance( ) {
-		assertThat( ClassAppearance.SHORT.convert( "A.B.C" ), is( "C" ) );
-		assertThat( ClassAppearance.SHORT.convert( "A" ), is( "A" ) );
+		assertThat( ClassAppearance.SHORT.convert( "A.B.C" ) ).isEqualTo( "C" );
+		assertThat( ClassAppearance.SHORT.convert( "A" ) ).isEqualTo( "A" );
 	}
 
 }

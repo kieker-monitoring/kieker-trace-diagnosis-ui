@@ -16,7 +16,7 @@
 
 package kieker.diagnosis.frontend.dialog.alert;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -50,7 +50,7 @@ public final class AlertTestUI extends ApplicationTest {
 
 	@Test
 	public void testInfoDialog( ) {
-		assertThat( listWindows( ), hasSize( 2 ) );
+		assertThat( listWindows( ) ).hasSize( 2 );
 
 		final Text headerText = lookup( ".dialog-pane .text" ).queryText( );
 		assertThat( headerText.getText( ), is( "Warnung" ) );
@@ -59,7 +59,7 @@ public final class AlertTestUI extends ApplicationTest {
 		assertThat( content.getText( ), is( "Ungültige Dateneingabe." ) );
 
 		clickOn( "#infoDialogOk" );
-		assertThat( listWindows( ), hasSize( 1 ) );
+		assertThat( listWindows( ) ).hasSize( 1 );
 	}
 
 }

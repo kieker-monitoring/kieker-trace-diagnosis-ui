@@ -16,9 +16,7 @@
 
 package kieker.diagnosis.frontend.dialog.about;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.core.StringContains.containsString;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -47,16 +45,16 @@ public final class AboutDialogTestUI extends ApplicationTest {
 
 	@Test
 	public void testAboutDialog( ) {
-		assertThat( listWindows( ), hasSize( 2 ) );
+		assertThat( listWindows( ) ).hasSize( 2 );
 
 		final Labeled descriptionLabel = lookup( "#aboutDialogDescription" ).queryLabeled( );
 
-		assertThat( descriptionLabel.getText( ), containsString( "Kieker Trace Diagnosis - " ) );
-		assertThat( descriptionLabel.getText( ), containsString( "Copyright 2015-2019 Kieker Project (http://kieker-monitoring.net)" ) );
-		assertThat( descriptionLabel.getText( ), containsString( "Dieses Werkzeug ist unter der Apache License 2.0 lizenziert." ) );
+		assertThat( descriptionLabel.getText( ) ).contains( "Kieker Trace Diagnosis - " );
+		assertThat( descriptionLabel.getText( ) ).contains( "Copyright 2015-2019 Kieker Project (http://kieker-monitoring.net)" );
+		assertThat( descriptionLabel.getText( ) ).contains( "Dieses Werkzeug ist unter der Apache License 2.0 lizenziert." );
 
 		clickOn( "#aboutDialogOk" );
-		assertThat( listWindows( ), hasSize( 1 ) );
+		assertThat( listWindows( ) ).hasSize( 1 );
 	}
 
 }

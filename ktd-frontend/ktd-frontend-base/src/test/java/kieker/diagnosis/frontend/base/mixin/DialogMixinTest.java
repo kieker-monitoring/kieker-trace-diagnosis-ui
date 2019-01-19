@@ -16,9 +16,7 @@
 
 package kieker.diagnosis.frontend.base.mixin;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -53,7 +51,7 @@ public final class DialogMixinTest implements DialogMixin {
 		when( dialogPane.getScene( ) ).thenReturn( scene );
 		when( scene.getWindow( ) ).thenReturn( stage );
 
-		assertThat( getStage( ), is( stage ) );
+		assertThat( getStage( ) ).isEqualTo( stage );
 	}
 
 	@Test
@@ -63,7 +61,7 @@ public final class DialogMixinTest implements DialogMixin {
 
 		addDefaultStylesheet( );
 
-		assertThat( stylesheets, hasSize( 1 ) );
+		assertThat( stylesheets ).hasSize( 1 );
 		assertTrue( stylesheets.get( 0 ).contains( "DialogMixinTest.css" ) );
 	}
 

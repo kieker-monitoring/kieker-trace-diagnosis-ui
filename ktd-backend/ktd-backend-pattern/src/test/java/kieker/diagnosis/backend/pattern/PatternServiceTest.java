@@ -16,10 +16,9 @@
 
 package kieker.diagnosis.backend.pattern;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * This is a unit test for the {@link PatternService}.
@@ -32,29 +31,29 @@ public final class PatternServiceTest {
 
 	@Test
 	public void patternsShouldBeRecognizedAsValid( ) {
-		assertThat( patternService.isValidPattern( ".*" ), is( true ) );
-		assertThat( patternService.isValidPattern( "Test" ), is( true ) );
-		assertThat( patternService.isValidPattern( ".*Test.*" ), is( true ) );
-		assertThat( patternService.isValidPattern( "(\\d)" ), is( true ) );
-		assertThat( patternService.isValidPattern( "[.*]" ), is( true ) );
+		assertThat( patternService.isValidPattern( ".*" ) ).isTrue( );
+		assertThat( patternService.isValidPattern( "Test" ) ).isTrue( );
+		assertThat( patternService.isValidPattern( ".*Test.*" ) ).isTrue( );
+		assertThat( patternService.isValidPattern( "(\\d)" ) ).isTrue( );
+		assertThat( patternService.isValidPattern( "[.*]" ) ).isTrue( );
 	}
 
 	@Test
 	public void patternsShouldBeRecognizedAsInvalid( ) {
-		assertThat( patternService.isValidPattern( "(" ), is( false ) );
-		assertThat( patternService.isValidPattern( ")" ), is( false ) );
-		assertThat( patternService.isValidPattern( "*" ), is( false ) );
-		assertThat( patternService.isValidPattern( "[" ), is( false ) );
-		assertThat( patternService.isValidPattern( null ), is( false ) );
+		assertThat( patternService.isValidPattern( "(" ) ).isFalse( );
+		assertThat( patternService.isValidPattern( ")" ) ).isFalse( );
+		assertThat( patternService.isValidPattern( "*" ) ).isFalse( );
+		assertThat( patternService.isValidPattern( "[" ) ).isFalse( );
+		assertThat( patternService.isValidPattern( null ) ).isFalse( );
 	}
 
 	@Test
 	public void patternCompilationShouldWorkAsExpected( ) {
-		assertThat( patternService.compilePattern( ".*" ).matcher( "Test" ).matches( ), is( true ) );
-		assertThat( patternService.compilePattern( "Test" ).matcher( "Test" ).matches( ), is( true ) );
-		assertThat( patternService.compilePattern( ".*Test.*" ).matcher( "Test" ).matches( ), is( true ) );
-		assertThat( patternService.compilePattern( "(\\\\d)" ).matcher( "Test" ).matches( ), is( false ) );
-		assertThat( patternService.compilePattern( "\\d*" ).matcher( "123" ).matches( ), is( true ) );
+		assertThat( patternService.compilePattern( ".*" ).matcher( "Test" ).matches( ) ).isTrue( );
+		assertThat( patternService.compilePattern( "Test" ).matcher( "Test" ).matches( ) ).isTrue( );
+		assertThat( patternService.compilePattern( ".*Test.*" ).matcher( "Test" ).matches( ) ).isTrue( );
+		assertThat( patternService.compilePattern( "(\\\\d)" ).matcher( "Test" ).matches( ) ).isFalse( );
+		assertThat( patternService.compilePattern( "\\d*" ).matcher( "123" ).matches( ) ).isTrue( );
 	}
 
 }

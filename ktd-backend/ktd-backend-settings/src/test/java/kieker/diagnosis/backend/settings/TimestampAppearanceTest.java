@@ -16,10 +16,9 @@
 
 package kieker.diagnosis.backend.settings;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test class for the {@link TimestampAppearance}.
@@ -30,27 +29,27 @@ public final class TimestampAppearanceTest {
 
 	@Test
 	public void testConvertWithTimestampAppearance( ) {
-		assertThat( TimestampAppearance.TIMESTAMP.convert( 1418993603113L ), is( "1418993603113" ) );
+		assertThat( TimestampAppearance.TIMESTAMP.convert( 1418993603113L ) ).isEqualTo( "1418993603113" );
 	}
 
 	@Test
 	public void testConvertWithDateAppearance( ) {
-		assertThat( TimestampAppearance.DATE.convert( 1418993603113L ), is( "19.12.14" ) );
+		assertThat( TimestampAppearance.DATE.convert( 1418993603113L ) ).isEqualTo( "19.12.14" );
 	}
 
 	@Test
 	public void testConvertWithDateAndTimeAppearance( ) {
-		assertThat( TimestampAppearance.DATE_AND_TIME.convert( 1418993603113L ), is( "19.12.2014, 13:53:23" ) );
+		assertThat( TimestampAppearance.DATE_AND_TIME.convert( 1418993603113L ) ).isEqualTo( "19.12.2014, 13:53:23" );
 	}
 
 	@Test
 	public void testConvertWithLongTimeAppearance( ) {
-		assertThat( TimestampAppearance.LONG_TIME.convert( 1418993603113L ), is( "13:53:23 MEZ" ) );
+		assertThat( TimestampAppearance.LONG_TIME.convert( 1418993603113L ) ).isEqualTo( "13:53:23 MEZ" );
 	}
 
 	@Test
 	public void testConvertWithShortTimeAppearance( ) {
-		assertThat( TimestampAppearance.SHORT_TIME.convert( 1418993603113L ), is( "13:53" ) );
+		assertThat( TimestampAppearance.SHORT_TIME.convert( 1418993603113L ) ).isEqualTo( "13:53" );
 	}
 
 }

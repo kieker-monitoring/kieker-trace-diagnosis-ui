@@ -16,10 +16,7 @@
 
 package kieker.diagnosis.frontend.base.mixin;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.collection.IsEmptyCollection.empty;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -44,11 +41,11 @@ public final class StylesheetMixinTest implements StylesheetMixin {
 
 	@Test
 	public void testAddDefaultStylesheet( ) {
-		assertThat( stylesheets, is( empty( ) ) );
+		assertThat( stylesheets ).isEmpty( );
 
 		addDefaultStylesheet( );
 
-		assertThat( stylesheets, hasSize( 1 ) );
+		assertThat( stylesheets ).hasSize( 1 );
 		assertTrue( stylesheets.get( 0 ).contains( "StylesheetMixinTest.css" ) );
 	}
 

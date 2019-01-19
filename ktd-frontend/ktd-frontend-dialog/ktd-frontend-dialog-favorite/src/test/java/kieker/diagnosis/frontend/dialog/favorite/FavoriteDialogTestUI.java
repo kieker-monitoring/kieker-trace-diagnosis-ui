@@ -16,9 +16,7 @@
 
 package kieker.diagnosis.frontend.dialog.favorite;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -54,7 +52,7 @@ public final class FavoriteDialogTestUI extends ApplicationTest {
 		favoriteDialogPage.getTextField( ).writeText( "Favorit 1" );
 		favoriteDialogPage.getCancel( ).click( );
 
-		assertThat( favoriteDialog.getResult( ), is( nullValue( ) ) );
+		assertThat( favoriteDialog.getResult( ) ).isNull( );
 	}
 
 	@Test
@@ -62,7 +60,7 @@ public final class FavoriteDialogTestUI extends ApplicationTest {
 		favoriteDialogPage.getTextField( ).writeText( "Favorit 1" );
 		favoriteDialogPage.getOk( ).click( );
 
-		assertThat( favoriteDialog.getResult( ), is( "Favorit 1" ) );
+		assertThat( favoriteDialog.getResult( ) ).isEqualTo( "Favorit 1" );
 	}
 
 }

@@ -16,7 +16,7 @@
 
 package kieker.diagnosis.frontend.tab.aggregatedmethods.complex;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -280,9 +280,9 @@ public final class AggregatedMethodsTabTestUI extends ApplicationTest {
 
 		final CSVData csvData = dataHolder.getValue( );
 		assertThat( csvData, is( notNullValue( ) ) );
-		assertThat( csvData.getHeaders( ), hasSize( 9 ) );
-		assertThat( csvData.getRows( ), hasSize( 4 ) );
-		assertThat( csvData.getRows( ).get( 0 ), hasSize( 9 ) );
+		assertThat( csvData.getHeaders( ) ).hasSize( 9 );
+		assertThat( csvData.getRows( ) ).hasSize( 4 );
+		assertThat( csvData.getRows( ).get( 0 ) ).hasSize( 9 );
 	}
 
 	@Test

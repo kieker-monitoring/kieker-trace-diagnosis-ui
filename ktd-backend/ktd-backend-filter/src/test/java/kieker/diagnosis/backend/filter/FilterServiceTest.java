@@ -16,8 +16,7 @@
 
 package kieker.diagnosis.backend.filter;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -25,8 +24,9 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.function.Predicate;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -36,157 +36,173 @@ import com.google.inject.Injector;
  *
  * @author Nils Christian Ehmke
  */
+@DisplayName ( "Unit-Test for FilterService" )
 public final class FilterServiceTest {
 
 	private FilterService filterService;
 
-	@Before
+	@BeforeEach
 	public void setUp( ) {
 		final Injector injector = Guice.createInjector( );
 		filterService = injector.getInstance( FilterService.class );
 	}
 
 	@Test
+	@DisplayName ( "Test the creation of a long predicate" )
 	public void testCreateLongPredicate( ) {
 		final Predicate<Long> predicate = filterService.createLongPredicate( e -> e, 42L );
-		assertThat( predicate.test( 42L ), is( true ) );
-		assertThat( predicate.test( 15L ), is( false ) );
+		assertThat( predicate.test( 42L ) ).isTrue( );
+		assertThat( predicate.test( 15L ) ).isFalse( );
 	}
 
 	@Test
+	@DisplayName ( "Test the creation of a long predicate with null values" )
 	public void testCreateLongPredicateWithNull( ) {
 		final Predicate<Long> predicate = filterService.createLongPredicate( null, null );
-		assertThat( predicate.test( null ), is( true ) );
+		assertThat( predicate.test( null ) ).isTrue( );
 	}
 
 	@Test
+	@DisplayName ( "Test the creation of a string predicate" )
 	public void testCreateStringPredicate( ) {
 		final Predicate<String> predicate = filterService.createStringPredicate( e -> e, "A", false );
-		assertThat( predicate.test( "A" ), is( true ) );
-		assertThat( predicate.test( "a" ), is( true ) );
-		assertThat( predicate.test( "B" ), is( false ) );
-		assertThat( predicate.test( null ), is( false ) );
+		assertThat( predicate.test( "A" ) ).isTrue( );
+		assertThat( predicate.test( "a" ) ).isTrue( );
+		assertThat( predicate.test( "B" ) ).isFalse( );
+		assertThat( predicate.test( null ) ).isFalse( );
 	}
 
 	@Test
+	@DisplayName ( "Test the creation of a string predicate with regular expressions" )
 	public void testCreateStringPredicateWithRegExpr( ) {
 		final Predicate<String> predicate = filterService.createStringPredicate( e -> e, ".*A.*", true );
-		assertThat( predicate.test( "A" ), is( true ) );
-		assertThat( predicate.test( "BAB" ), is( true ) );
-		assertThat( predicate.test( "B" ), is( false ) );
-		assertThat( predicate.test( null ), is( false ) );
+		assertThat( predicate.test( "A" ) ).isTrue( );
+		assertThat( predicate.test( "BAB" ) ).isTrue( );
+		assertThat( predicate.test( "B" ) ).isFalse( );
+		assertThat( predicate.test( null ) ).isFalse( );
 	}
 
 	@Test
+	@DisplayName ( "Test the creation of a string predicate with null values" )
 	public void testCreateStringPredicateWithNull( ) {
 		final Predicate<String> predicate = filterService.createStringPredicate( null, null, false );
-		assertThat( predicate.test( null ), is( true ) );
+		assertThat( predicate.test( null ) ).isTrue( );
 	}
 
 	@Test
+	@DisplayName ( "Test the creation of a string predicate with regular expressions and null values" )
 	public void testCreateStringPredicateWithNullAndRegExpr( ) {
 		final Predicate<String> predicate = filterService.createStringPredicate( e -> e, ".*", true );
-		assertThat( predicate.test( null ), is( false ) );
+		assertThat( predicate.test( null ) ).isFalse( );
 	}
 
 	@Test
+	@DisplayName ( "Test the conjunction of predicates" )
 	public void testConjunct( ) {
 		final Predicate<Integer> predicateA = value -> value % 2 == 0;
 		final Predicate<Integer> predicateB = value -> value % 3 == 0;
 		final Predicate<Integer> conjunction = filterService.conjunct( Arrays.asList( predicateA, predicateB ) );
 
-		assertThat( conjunction.test( 12 ), is( true ) );
-		assertThat( conjunction.test( 30 ), is( true ) );
-		assertThat( conjunction.test( 9 ), is( false ) );
-		assertThat( conjunction.test( 4 ), is( false ) );
+		assertThat( conjunction.test( 12 ) ).isTrue( );
+		assertThat( conjunction.test( 30 ) ).isTrue( );
+		assertThat( conjunction.test( 9 ) ).isFalse( );
+		assertThat( conjunction.test( 4 ) ).isFalse( );
 	}
 
 	@Test
+	@DisplayName ( "Test the creation of an after-time predicate" )
 	public void testCreateAfterTimePredicate( ) {
 		final Predicate<Long> predicate = filterService.createAfterTimePredicate( e -> e, LocalDate.of( 2000, 05, 01 ), LocalTime.of( 15, 20 ) );
 
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 20 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 25 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2001, 05, 01, 10, 20 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 1999, 05, 01, 15, 20 ) ), is( false ) );
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 14, 20 ) ), is( false ) );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 20 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 25 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2001, 05, 01, 10, 20 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 1999, 05, 01, 15, 20 ) ) ).isFalse( );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 14, 20 ) ) ).isFalse( );
 	}
 
 	@Test
+	@DisplayName ( "Test the creation of an after-time predicate without date" )
 	public void testCreateAfterTimePredicateDateNull( ) {
 		final Predicate<Long> predicate = filterService.createAfterTimePredicate( e -> e, null, LocalTime.of( 15, 20 ) );
 
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 20 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 25 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2001, 05, 01, 10, 20 ) ), is( false ) );
-		assertThat( predicate.test( createTimestamp( 1999, 05, 01, 15, 20 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 14, 20 ) ), is( false ) );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 20 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 25 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2001, 05, 01, 10, 20 ) ) ).isFalse( );
+		assertThat( predicate.test( createTimestamp( 1999, 05, 01, 15, 20 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 14, 20 ) ) ).isFalse( );
 	}
 
 	@Test
+	@DisplayName ( "Test the creation of an after-time predicate without time" )
 	public void testCreateAfterTimePredicateTimeNull( ) {
 		final Predicate<Long> predicate = filterService.createAfterTimePredicate( e -> e, LocalDate.of( 2000, 05, 01 ), null );
 
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 20 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 25 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2001, 05, 01, 10, 20 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 1999, 05, 01, 15, 20 ) ), is( false ) );
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 14, 20 ) ), is( true ) );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 20 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 25 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2001, 05, 01, 10, 20 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 1999, 05, 01, 15, 20 ) ) ).isFalse( );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 14, 20 ) ) ).isTrue( );
 	}
 
 	@Test
+	@DisplayName ( "Test the creation of an after-time predicate without date and time" )
 	public void testCreateAfterTimePredicateDateAndTimeNull( ) {
 		final Predicate<Long> predicate = filterService.createAfterTimePredicate( e -> e, null, null );
 
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 20 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 25 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2001, 05, 01, 10, 20 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 1999, 05, 01, 15, 20 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 14, 20 ) ), is( true ) );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 20 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 25 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2001, 05, 01, 10, 20 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 1999, 05, 01, 15, 20 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 14, 20 ) ) ).isTrue( );
 	}
 
 	@Test
+	@DisplayName ( "Test the creation of a before-time predicate" )
 	public void testCreateBeforeTimePredicate( ) {
 		final Predicate<Long> predicate = filterService.createBeforeTimePredicate( e -> e, LocalDate.of( 2000, 05, 01 ), LocalTime.of( 15, 20 ) );
 
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 20 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 25 ) ), is( false ) );
-		assertThat( predicate.test( createTimestamp( 2001, 05, 01, 10, 20 ) ), is( false ) );
-		assertThat( predicate.test( createTimestamp( 1999, 05, 01, 15, 20 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 14, 20 ) ), is( true ) );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 20 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 25 ) ) ).isFalse( );
+		assertThat( predicate.test( createTimestamp( 2001, 05, 01, 10, 20 ) ) ).isFalse( );
+		assertThat( predicate.test( createTimestamp( 1999, 05, 01, 15, 20 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 14, 20 ) ) ).isTrue( );
 	}
 
 	@Test
+	@DisplayName ( "Test the creation of a before-time predicate without date" )
 	public void testCreateBeforeTimePredicateDateNull( ) {
 		final Predicate<Long> predicate = filterService.createBeforeTimePredicate( e -> e, null, LocalTime.of( 15, 20 ) );
 
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 20 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 25 ) ), is( false ) );
-		assertThat( predicate.test( createTimestamp( 2001, 05, 01, 10, 20 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 1999, 05, 01, 15, 20 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 14, 20 ) ), is( true ) );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 20 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 25 ) ) ).isFalse( );
+		assertThat( predicate.test( createTimestamp( 2001, 05, 01, 10, 20 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 1999, 05, 01, 15, 20 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 14, 20 ) ) ).isTrue( );
 	}
 
 	@Test
+	@DisplayName ( "Test the creation of a before-time predicate without time" )
 	public void testCreateBeforeTimePredicateTimeNull( ) {
 		final Predicate<Long> predicate = filterService.createBeforeTimePredicate( e -> e, LocalDate.of( 2000, 05, 01 ), null );
 
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 20 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 25 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2001, 05, 01, 10, 20 ) ), is( false ) );
-		assertThat( predicate.test( createTimestamp( 1999, 05, 01, 15, 20 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 14, 20 ) ), is( true ) );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 20 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 25 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2001, 05, 01, 10, 20 ) ) ).isFalse( );
+		assertThat( predicate.test( createTimestamp( 1999, 05, 01, 15, 20 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 14, 20 ) ) ).isTrue( );
 	}
 
 	@Test
+	@DisplayName ( "Test the creation of a before-time predicate without date and time" )
 	public void testCreateBeforeTimePredicateDateAndTimeNull( ) {
 		final Predicate<Long> predicate = filterService.createBeforeTimePredicate( e -> e, null, null );
 
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 20 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 25 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2001, 05, 01, 10, 20 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 1999, 05, 01, 15, 20 ) ), is( true ) );
-		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 14, 20 ) ), is( true ) );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 20 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 15, 25 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2001, 05, 01, 10, 20 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 1999, 05, 01, 15, 20 ) ) ).isTrue( );
+		assertThat( predicate.test( createTimestamp( 2000, 05, 01, 14, 20 ) ) ).isTrue( );
 	}
 
 	private long createTimestamp( final int aYear, final int aMonth, final int aDay, final int aHour, final int aMinute ) {

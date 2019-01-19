@@ -16,12 +16,10 @@
 
 package kieker.diagnosis.backend.properties;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -35,7 +33,7 @@ public final class PropertiesServiceTest {
 
 	private PropertiesService propertiesService;
 
-	@Before
+	@BeforeEach
 	public void setUp( ) {
 		final Injector injector = Guice.createInjector( );
 		propertiesService = injector.getInstance( PropertiesService.class );
@@ -43,23 +41,23 @@ public final class PropertiesServiceTest {
 
 	@Test
 	public void testLoadApplicationProperty( ) {
-		assertThat( propertiesService.loadApplicationProperty( SimpleBooleanApplicationProperty.class ), is( notNullValue( ) ) );
-		assertThat( propertiesService.loadApplicationProperty( SimpleEnumApplicationProperty.class ), is( notNullValue( ) ) );
-		assertThat( propertiesService.loadApplicationProperty( SimpleFloatApplicationProperty.class ), is( notNullValue( ) ) );
-		assertThat( propertiesService.loadApplicationProperty( SimpleIntegerApplicationProperty.class ), is( notNullValue( ) ) );
+		assertThat( propertiesService.loadApplicationProperty( SimpleBooleanApplicationProperty.class ) ).isNotNull( );
+		assertThat( propertiesService.loadApplicationProperty( SimpleEnumApplicationProperty.class ) ).isNotNull( );
+		assertThat( propertiesService.loadApplicationProperty( SimpleFloatApplicationProperty.class ) ).isNotNull( );
+		assertThat( propertiesService.loadApplicationProperty( SimpleIntegerApplicationProperty.class ) ).isNotNull( );
 	}
 
 	@Test
 	public void testSaveApplicationProperty( ) {
 		propertiesService.saveApplicationProperty( SimpleStringApplicationProperty.class, "42" );
-		assertThat( propertiesService.loadApplicationProperty( SimpleStringApplicationProperty.class ), is( "42" ) );
+		assertThat( propertiesService.loadApplicationProperty( SimpleStringApplicationProperty.class ) ).isEqualTo( "42" );
 	}
 
 	@Test
 	public void testLoadSystemProperty( ) {
 		System.setProperty( "SimpleBooleanSystemProperty", "true" );
-		assertThat( propertiesService.loadSystemProperty( SimpleBooleanSystemProperty.class ), is( Boolean.TRUE ) );
+		assertThat( propertiesService.loadSystemProperty( SimpleBooleanSystemProperty.class ) ).isEqualTo( Boolean.TRUE );
 
-		assertThat( propertiesService.loadSystemProperty( DevelopmentModeProperty.class ), is( Boolean.FALSE ) );
+		assertThat( propertiesService.loadSystemProperty( DevelopmentModeProperty.class ) ).isEqualTo( Boolean.FALSE );
 	}
 }

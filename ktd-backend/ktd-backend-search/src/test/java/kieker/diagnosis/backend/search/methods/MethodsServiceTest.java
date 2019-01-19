@@ -16,15 +16,14 @@
 
 package kieker.diagnosis.backend.search.methods;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Calendar;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -42,7 +41,7 @@ public class MethodsServiceTest {
 	private MethodsService methodsService;
 	private Repository repository;
 
-	@Before
+	@BeforeEach
 	public void setUp( ) {
 		final Injector injector = Guice.createInjector( );
 
@@ -58,21 +57,21 @@ public class MethodsServiceTest {
 		createMethodCall( "host1", "class1", "op3", "cause1" );
 		createMethodCall( "host1", "class1", "op3", "cause4" );
 
-		assertThat( methodsService.countMethods( ), is( 4 ) );
+		assertThat( methodsService.countMethods( ) ).isEqualTo( 4 );
 
 		// Now search with a filter
 		final MethodsFilter methodsFilter = new MethodsFilter( );
 		methodsFilter.setHost( "host1" );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 4 );
 
 		methodsFilter.setClazz( "class1" );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 3 );
 
 		methodsFilter.setMethod( "op3" );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 2 );
 
 		methodsFilter.setException( "cause4" );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 1 );
 	}
 
 	@Test
@@ -83,22 +82,22 @@ public class MethodsServiceTest {
 		createMethodCall( "host1", "class1", "op3", "cause1" );
 		createMethodCall( "host1", "class1", "op3", "cause4" );
 
-		assertThat( methodsService.countMethods( ), is( 4 ) );
+		assertThat( methodsService.countMethods( ) ).isEqualTo( 4 );
 
 		// Now search with a filter
 		final MethodsFilter methodsFilter = new MethodsFilter( );
 		methodsFilter.setUseRegExpr( true );
 		methodsFilter.setHost( ".*host1.*" );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 4 );
 
 		methodsFilter.setClazz( ".*class1.*" );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 3 );
 
 		methodsFilter.setMethod( ".*op3.*" );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 2 );
 
 		methodsFilter.setException( ".*cause4.*" );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 1 );
 	}
 
 	@Test
@@ -109,18 +108,18 @@ public class MethodsServiceTest {
 		createMethodCall( "host1", "class1", "op3", "cause1" );
 		createMethodCall( "host1", "class1", "op3", "cause4" );
 
-		assertThat( methodsService.countMethods( ), is( 4 ) );
+		assertThat( methodsService.countMethods( ) ).isEqualTo( 4 );
 
 		// Now search with a filter
 		final MethodsFilter methodsFilter = new MethodsFilter( );
 		methodsFilter.setSearchType( SearchType.ALL );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 4 );
 
 		methodsFilter.setSearchType( SearchType.ONLY_FAILED );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 3 );
 
 		methodsFilter.setSearchType( SearchType.ONLY_SUCCESSFUL );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 1 );
 	}
 
 	@Test
@@ -131,21 +130,21 @@ public class MethodsServiceTest {
 		createMethodCall( 2L );
 		createMethodCall( 3L );
 
-		assertThat( methodsService.countMethods( ), is( 4 ) );
+		assertThat( methodsService.countMethods( ) ).isEqualTo( 4 );
 
 		// Now search with a filter
 		final MethodsFilter methodsFilter = new MethodsFilter( );
 		methodsFilter.setTraceId( 1L );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 2 );
 
 		methodsFilter.setTraceId( 2L );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 1 );
 
 		methodsFilter.setTraceId( 3L );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 1 );
 
 		methodsFilter.setTraceId( 4L );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 0 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 0 );
 	}
 
 	@Test
@@ -156,53 +155,53 @@ public class MethodsServiceTest {
 		createMethodCall( 2015, 01, 04, 15, 25 );
 		createMethodCall( 2015, 01, 01, 15, 20 );
 
-		assertThat( methodsService.countMethods( ), is( 4 ) );
+		assertThat( methodsService.countMethods( ) ).isEqualTo( 4 );
 
 		// Now search with a filter
 		final MethodsFilter methodsFilter = new MethodsFilter( );
 		methodsFilter.setLowerDate( LocalDate.of( 2000, 05, 01 ) );
 		methodsFilter.setLowerTime( LocalTime.of( 15, 20 ) );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 4 );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2000, 05, 01 ) );
 		methodsFilter.setLowerTime( LocalTime.of( 14, 20 ) );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 4 );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2000, 05, 01 ) );
 		methodsFilter.setLowerTime( LocalTime.of( 16, 20 ) );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 3 );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2000, 05, 01 ) );
 		methodsFilter.setLowerTime( LocalTime.of( 15, 21 ) );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 3 );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2015, 01, 01 ) );
 		methodsFilter.setLowerTime( LocalTime.of( 15, 20 ) );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 2 );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2015, 01, 04 ) );
 		methodsFilter.setLowerTime( LocalTime.of( 15, 20 ) );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 1 );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2015, 01, 05 ) );
 		methodsFilter.setLowerTime( LocalTime.of( 10, 10 ) );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 0 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 0 );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2015, 01, 04 ) );
 		methodsFilter.setLowerTime( LocalTime.of( 15, 26 ) );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 0 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 0 );
 
 		methodsFilter.setLowerDate( null );
 		methodsFilter.setLowerTime( null );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 4 );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2015, 01, 01 ) );
 		methodsFilter.setLowerTime( null );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 2 );
 
 		methodsFilter.setLowerDate( null );
 		methodsFilter.setLowerTime( LocalTime.of( 15, 25 ) );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 1 );
 	}
 
 	@Test
@@ -213,57 +212,57 @@ public class MethodsServiceTest {
 		createMethodCall( 2015, 01, 04, 15, 25 );
 		createMethodCall( 2015, 01, 01, 15, 20 );
 
-		assertThat( methodsService.countMethods( ), is( 4 ) );
+		assertThat( methodsService.countMethods( ) ).isEqualTo( 4 );
 
 		// Now search with a filter
 		final MethodsFilter methodsFilter = new MethodsFilter( );
 		methodsFilter.setUpperDate( LocalDate.of( 2000, 05, 01 ) );
 		methodsFilter.setUpperTime( LocalTime.of( 15, 20 ) );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 1 );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2000, 05, 01 ) );
 		methodsFilter.setUpperTime( LocalTime.of( 14, 20 ) );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 0 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 0 );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2000, 05, 01 ) );
 		methodsFilter.setUpperTime( LocalTime.of( 16, 20 ) );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 1 );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2000, 05, 05 ) );
 		methodsFilter.setUpperTime( LocalTime.of( 15, 21 ) );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 2 );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2015, 01, 01 ) );
 		methodsFilter.setUpperTime( LocalTime.of( 15, 20 ) );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 3 );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2015, 01, 04 ) );
 		methodsFilter.setUpperTime( LocalTime.of( 15, 20 ) );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 3 );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2015, 01, 05 ) );
 		methodsFilter.setUpperTime( LocalTime.of( 10, 10 ) );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 4 );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2015, 01, 04 ) );
 		methodsFilter.setUpperTime( LocalTime.of( 15, 26 ) );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 4 );
 
 		methodsFilter.setUpperDate( null );
 		methodsFilter.setUpperTime( null );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 4 );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2015, 01, 01 ) );
 		methodsFilter.setUpperTime( null );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 3 );
 
 		methodsFilter.setUpperDate( null );
 		methodsFilter.setUpperTime( LocalTime.of( 15, 25 ) );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 4 );
 
 		methodsFilter.setUpperDate( null );
 		methodsFilter.setUpperTime( LocalTime.of( 15, 20 ) );
-		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 3 );
 	}
 
 	private void createMethodCall( final String aHost, final String aClazz, final String aMethod, final String aException ) {

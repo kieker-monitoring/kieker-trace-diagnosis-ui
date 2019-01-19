@@ -19,8 +19,8 @@ package kieker.diagnosis.backend.monitoring;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * This is a unit test for {@link MonitoringUtil}.
@@ -29,7 +29,7 @@ import org.junit.Test;
  */
 public final class MonitoringUtilTest {
 
-	@After
+	@AfterEach
 	public void after( ) {
 		MonitoringUtil.setMonitoringProbeFactory( new NoOpMonitoringProbeFactory( ) );
 	}

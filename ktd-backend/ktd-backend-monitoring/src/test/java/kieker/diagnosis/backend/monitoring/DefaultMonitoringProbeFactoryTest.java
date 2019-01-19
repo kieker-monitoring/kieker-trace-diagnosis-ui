@@ -16,11 +16,9 @@
 
 package kieker.diagnosis.backend.monitoring;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * This is a unit test for {@link DefaultMonitoringProbeFactory}.
@@ -32,7 +30,7 @@ public final class DefaultMonitoringProbeFactoryTest {
 	@Test
 	public void testCreateMonitoringProbe( ) {
 		final DefaultMonitoringProbeFactory probeFactory = new DefaultMonitoringProbeFactory( );
-		assertThat( probeFactory.createMonitoringProbe( String.class, "toString()" ), is( instanceOf( DefaultMonitoringProbe.class ) ) );
+		assertThat( probeFactory.createMonitoringProbe( String.class, "toString()" ) ).isInstanceOf( DefaultMonitoringProbe.class );
 	}
 
 }

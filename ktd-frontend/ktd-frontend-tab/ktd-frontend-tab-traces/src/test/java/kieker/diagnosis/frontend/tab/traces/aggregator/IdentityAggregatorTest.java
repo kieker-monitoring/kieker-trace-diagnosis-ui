@@ -16,10 +16,7 @@
 
 package kieker.diagnosis.frontend.tab.traces.aggregator;
 
-import static org.hamcrest.collection.IsEmptyCollection.empty;
-import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collections;
 
@@ -38,7 +35,7 @@ public final class IdentityAggregatorTest {
 	public void testAggregationOnEmptyList( ) {
 		final Aggregator aggregator = new IdentityAggregator( );
 
-		assertThat( aggregator.aggregate( Collections.emptyList( ) ), is( empty( ) ) );
+		assertThat( aggregator.aggregate( Collections.emptyList( ) ) ).isEmpty( );
 	}
 
 	@Test
@@ -46,7 +43,7 @@ public final class IdentityAggregatorTest {
 		final Aggregator aggregator = new IdentityAggregator( );
 
 		final MethodCall call = new MethodCall( );
-		assertThat( aggregator.aggregate( Collections.singletonList( call ) ), contains( call ) );
+		assertThat( aggregator.aggregate( Collections.singletonList( call ) ) ).contains( call );
 	}
 
 }

@@ -16,41 +16,41 @@
 
 package kieker.diagnosis.backend.data.reader;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import kieker.diagnosis.backend.data.exception.CorruptStreamException;
 import kieker.diagnosis.backend.data.exception.ImportFailedException;
 
 /**
- * Test class for the {@link AsciiFileReader}.
+ * Test class for the {@link BinaryReader}.
  *
  * @author Nils Christian Ehmke
  */
-public final class AsciiFileReaderTest {
+@DisplayName ( "Unit-Test for BinaryReader" )
+public final class BinaryReaderTest {
 
 	@Test
+	@DisplayName ( "Test with normal logs" )
 	public void testNormalLogs( ) throws URISyntaxException, IOException, CorruptStreamException, ImportFailedException {
 		final Repository repository = new Repository( );
 		final Reader reader = new Reader( );
 
-		final URL logDirectoryUrl = getClass( ).getResource( "/kieker-log-ascii" );
+		final URL logDirectoryUrl = getClass( ).getResource( "/kieker-log-binary" );
 		final File logDirectory = new File( logDirectoryUrl.toURI( ) );
 
 		reader.readRecursiveFromDirectory( logDirectory.toPath( ), repository );
 
-		assertThat( repository.getTraceRoots( ), hasSize( 3 ) );
-		assertThat( repository.getAggreatedMethods( ), hasSize( 4 ) );
-		assertThat( repository.getMethods( ), hasSize( 4 ) );
-		assertThat( repository.getIgnoredRecords( ), is( 1 ) );
+		assertThat( repository.getTraceRoots( ) ).hasSize( 2 );
+		assertThat( repository.getAggreatedMethods( ) ).hasSize( 3 );
+		assertThat( repository.getMethods( ) ).hasSize( 3 );
 	}
 
 }

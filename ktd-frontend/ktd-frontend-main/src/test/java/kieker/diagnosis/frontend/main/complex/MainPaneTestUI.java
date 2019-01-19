@@ -16,8 +16,7 @@
 
 package kieker.diagnosis.frontend.main.complex;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -80,14 +79,14 @@ public final class MainPaneTestUI extends ApplicationTest {
 		clickOn( "#menuFile" ).clickOn( "#menuItemMonitoringSettings" );
 
 		final Labeled statusLabelFst = lookup( "#monitoringDialogStatus" ).queryLabeled( );
-		assertThat( statusLabelFst.getText( ), is( "Kein Monitoring gestartet" ) );
+		assertThat( statusLabelFst.getText( ) ).isEqualTo( "Kein Monitoring gestartet" );
 
 		clickOn( "#monitoringDialogActive" );
 		clickOn( "#monitoringDialogOk" );
 
 		clickOn( "#menuFile" ).clickOn( "#menuItemMonitoringSettings" );
 		final Labeled statusLabelSnd = lookup( "#monitoringDialogStatus" ).queryLabeled( );
-		assertThat( statusLabelSnd.getText( ), is( "Monitoring läuft" ) );
+		assertThat( statusLabelSnd.getText( ) ).isEqualTo( "Monitoring läuft" );
 
 		clickOn( "#monitoringDialogActive" );
 		clickOn( "#monitoringDialogOk" );
@@ -118,7 +117,7 @@ public final class MainPaneTestUI extends ApplicationTest {
 		clickOn( "#tabTracesFilterHost" ).eraseText( 5 );
 
 		clickOn( "#menuFavorites" ).clickOn( "Favorite 1" );
-		assertThat( lookup( "#tabTracesFilterHost" ).queryTextInputControl( ).getText( ), is( "host1" ) );
+		assertThat( lookup( "#tabTracesFilterHost" ).queryTextInputControl( ).getText( ) ).isEqualTo( "host1" );
 	}
 
 	@Test
@@ -128,15 +127,15 @@ public final class MainPaneTestUI extends ApplicationTest {
 
 		clickOn( "#tabTraces" );
 		final TreeTableView<?> treeTableView = lookup( "#tabTracesTreeTable" ).query( );
-		assertThat( treeTableView.getRoot( ).getChildren( ).size( ), is( 2 ) );
+		assertThat( treeTableView.getRoot( ).getChildren( ) ).hasSize( 2 );
 
 		clickOn( "#tabMethods" );
 		final TableView<Object> methodsTableView = lookup( "#tabMethodsTable" ).queryTableView( );
-		assertThat( methodsTableView.getItems( ).size( ), is( 3 ) );
+		assertThat( methodsTableView.getItems( ) ).hasSize( 3 );
 
 		clickOn( "#tabAggregatedMethods" );
 		final TableView<Object> aggregatedMethodsTableView = lookup( "#tabAggregatedMethodsTable" ).queryTableView( );
-		assertThat( aggregatedMethodsTableView.getItems( ).size( ), is( 3 ) );
+		assertThat( aggregatedMethodsTableView.getItems( ) ).hasSize( 3 );
 	}
 
 	private void loadBinaryDataIntoTemporaryFolder( ) throws IOException {
@@ -165,7 +164,7 @@ public final class MainPaneTestUI extends ApplicationTest {
 		clickOn( "#tabAggregatedMethodsJumpToMethods" );
 
 		final TabPane tabPane = lookup( "#mainTabPane" ).queryAs( TabPane.class );
-		assertThat( tabPane.getSelectionModel( ).getSelectedItem( ).getText( ), is( "Methodenaufrufe" ) );
+		assertThat( tabPane.getSelectionModel( ).getSelectedItem( ).getText( ) ).isEqualTo( "Methodenaufrufe" );
 	}
 
 	@Test
@@ -178,7 +177,7 @@ public final class MainPaneTestUI extends ApplicationTest {
 		clickOn( "#tabMethodsJumpToTrace" );
 
 		final TabPane tabPane = lookup( "#mainTabPane" ).queryAs( TabPane.class );
-		assertThat( tabPane.getSelectionModel( ).getSelectedItem( ).getText( ), is( "Traces" ) );
+		assertThat( tabPane.getSelectionModel( ).getSelectedItem( ).getText( ) ).isEqualTo( "Traces" );
 	}
 
 }

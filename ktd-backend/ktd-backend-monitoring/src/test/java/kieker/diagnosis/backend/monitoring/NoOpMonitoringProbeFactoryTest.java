@@ -16,10 +16,9 @@
 
 package kieker.diagnosis.backend.monitoring;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * This is a unit test for {@link NoOpMonitoringProbeFactory}.
@@ -32,7 +31,7 @@ public final class NoOpMonitoringProbeFactoryTest {
 	public void factoryShouldReturnSameInstance( ) {
 		final NoOpMonitoringProbeFactory probeFactory = new NoOpMonitoringProbeFactory( );
 
-		assertThat( probeFactory.createMonitoringProbe( null, null ), is( probeFactory.createMonitoringProbe( null, null ) ) );
+		assertThat( probeFactory.createMonitoringProbe( null, null ) ).isEqualTo( probeFactory.createMonitoringProbe( null, null ) );
 	}
 
 	@Test

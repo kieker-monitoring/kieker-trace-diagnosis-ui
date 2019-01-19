@@ -16,8 +16,7 @@
 
 package kieker.diagnosis.frontend.tab.statistics.complex;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -65,9 +64,9 @@ public final class StatisticsTabTestUI extends ApplicationTest {
 	public void testWithoutData( ) {
 		loadData( createFirstStatistics( ) );
 
-		assertThat( statisticsPage.getProcessedBytes( ).getText( ), is( "<Keine Daten verfügbar> " ) );
-		assertThat( statisticsPage.getProcessDuration( ).getText( ), is( "<Keine Daten verfügbar> " ) );
-		assertThat( statisticsPage.getProcessSpeed( ).getText( ), is( "<Keine Daten verfügbar> " ) );
+		assertThat( statisticsPage.getProcessedBytes( ).getText( ) ).isEqualTo( "<Keine Daten verfügbar> " );
+		assertThat( statisticsPage.getProcessDuration( ).getText( ) ).isEqualTo( "<Keine Daten verfügbar> " );
+		assertThat( statisticsPage.getProcessSpeed( ).getText( ) ).isEqualTo( "<Keine Daten verfügbar> " );
 	}
 
 	private void loadData( final Optional<Statistics> statistics ) {
@@ -84,9 +83,9 @@ public final class StatisticsTabTestUI extends ApplicationTest {
 	public void testWithFirstUnits( ) {
 		loadData( createSecondStatistics( ) );
 
-		assertThat( statisticsPage.getProcessedBytes( ).getText( ), is( "250 [B]" ) );
-		assertThat( statisticsPage.getProcessDuration( ).getText( ), is( "10 [ms]" ) );
-		assertThat( statisticsPage.getProcessSpeed( ).getText( ), is( "1000 [B/s]" ) );
+		assertThat( statisticsPage.getProcessedBytes( ).getText( ) ).isEqualTo( "250 [B]" );
+		assertThat( statisticsPage.getProcessDuration( ).getText( ) ).isEqualTo( "10 [ms]" );
+		assertThat( statisticsPage.getProcessSpeed( ).getText( ) ).isEqualTo( "1000 [B/s]" );
 	}
 
 	private Optional<Statistics> createSecondStatistics( ) {
@@ -102,9 +101,9 @@ public final class StatisticsTabTestUI extends ApplicationTest {
 	public void testWithSecondsUnits( ) {
 		loadData( createThirdStatistics( ) );
 
-		assertThat( statisticsPage.getProcessedBytes( ).getText( ), is( "244 [KB]" ) );
-		assertThat( statisticsPage.getProcessDuration( ).getText( ), is( "10 [s]" ) );
-		assertThat( statisticsPage.getProcessSpeed( ).getText( ), is( "9 [KB/s]" ) );
+		assertThat( statisticsPage.getProcessedBytes( ).getText( ) ).isEqualTo( "244 [KB]" );
+		assertThat( statisticsPage.getProcessDuration( ).getText( ) ).isEqualTo( "10 [s]" );
+		assertThat( statisticsPage.getProcessSpeed( ).getText( ) ).isEqualTo( "9 [KB/s]" );
 	}
 
 	private Optional<Statistics> createThirdStatistics( ) {
@@ -120,9 +119,9 @@ public final class StatisticsTabTestUI extends ApplicationTest {
 	public void testWithThirdUnits( ) {
 		loadData( createFourthStatistics( ) );
 
-		assertThat( statisticsPage.getProcessedBytes( ).getText( ), is( "238 [MB]" ) );
-		assertThat( statisticsPage.getProcessDuration( ).getText( ), is( "10 [m]" ) );
-		assertThat( statisticsPage.getProcessSpeed( ).getText( ), is( "9 [MB/s]" ) );
+		assertThat( statisticsPage.getProcessedBytes( ).getText( ) ).isEqualTo( "238 [MB]" );
+		assertThat( statisticsPage.getProcessDuration( ).getText( ) ).isEqualTo( "10 [m]" );
+		assertThat( statisticsPage.getProcessSpeed( ).getText( ) ).isEqualTo( "9 [MB/s]" );
 	}
 
 	private Optional<Statistics> createFourthStatistics( ) {

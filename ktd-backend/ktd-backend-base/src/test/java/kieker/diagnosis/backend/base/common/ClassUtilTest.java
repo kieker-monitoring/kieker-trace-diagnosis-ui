@@ -16,16 +16,14 @@
 
 package kieker.diagnosis.backend.base.common;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -37,32 +35,32 @@ import com.google.inject.matcher.Matchers;
  *
  * @author Nils Christian Ehmke
  */
+@DisplayName ( "Unit-Test for ClassUtil" )
 public final class ClassUtilTest {
-
-	@Rule
-	public final ExpectedException expectedException = ExpectedException.none( );
 
 	private final Injector injector = Guice.createInjector( new Module( ) );
 
 	@Test
+	@DisplayName ( "Real name of proxy class should return correct name" )
 	public void realNameOfProxyClassShouldReturnCorrectName( ) {
 		final String realName = ClassUtil.getRealName( injector.getInstance( ProxiedClass.class ).getClass( ) );
-		assertThat( realName, is( equalTo( ProxiedClass.class.getName( ) ) ) );
+		assertThat( realName ).isEqualTo( ProxiedClass.class.getName( ) );
 	}
 
 	@Test
+	@DisplayName ( "Real name of non-proxy class should return correct name" )
 	public void realNameOfNonProxyClassShouldReturnCorrectName( ) {
 		final String realName = ClassUtil.getRealName( injector.getInstance( NonProxiedClass.class ).getClass( ) );
-		assertThat( realName, is( equalTo( NonProxiedClass.class.getName( ) ) ) );
+		assertThat( realName ).isEqualTo( NonProxiedClass.class.getName( ) );
 	}
 
 	@Test
+	@DisplayName ( "Instantiation should throw exception" )
 	public void instantiationShouldThrowException( ) throws ReflectiveOperationException {
 		final Constructor<ClassUtil> constructor = ClassUtil.class.getDeclaredConstructor( );
 		constructor.setAccessible( true );
 
-		expectedException.expectCause( instanceOf( AssertionError.class ) );
-		constructor.newInstance( );
+		assertThrows( InvocationTargetException.class, constructor::newInstance );
 	}
 
 }

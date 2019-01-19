@@ -16,9 +16,7 @@
 
 package kieker.diagnosis.frontend.tab.traces.aggregator;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.collection.IsEmptyCollection.empty;
-import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -42,7 +40,7 @@ public final class ThresholdAggregatorTest {
 	public void testAggregationOnEmptyList( ) {
 		final Aggregator aggregator = new ThresholdAggregator( 1 );
 
-		assertThat( aggregator.aggregate( Collections.emptyList( ) ), is( empty( ) ) );
+		assertThat( aggregator.aggregate( Collections.emptyList( ) ) ).isEmpty( );
 	}
 
 	@Test
@@ -50,7 +48,7 @@ public final class ThresholdAggregatorTest {
 		final Aggregator aggregator = new ThresholdAggregator( 1 );
 
 		final MethodCall call = new MethodCall( );
-		assertThat( aggregator.aggregate( Collections.singletonList( call ) ), contains( call ) );
+		assertThat( aggregator.aggregate( Collections.singletonList( call ) ) ).contains( call );
 	}
 
 	@Test
@@ -67,7 +65,7 @@ public final class ThresholdAggregatorTest {
 		call3.setPercent( 65.0f );
 
 		final List<MethodCall> aggregatedList = aggregator.aggregate( Arrays.asList( call1, call2, call3 ) );
-		assertThat( aggregatedList, hasSize( 2 ) );
+		assertThat( aggregatedList ).hasSize( 2 );
 		assertTrue( aggregatedList.contains( call3 ) );
 
 		final MethodCall aggregationMethodCall = aggregatedList.get( 1 );

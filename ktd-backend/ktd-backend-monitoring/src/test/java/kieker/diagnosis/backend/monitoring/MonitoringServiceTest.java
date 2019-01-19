@@ -16,14 +16,12 @@
 
 package kieker.diagnosis.backend.monitoring;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import kieker.monitoring.core.controller.IMonitoringController;
 
@@ -34,7 +32,7 @@ import kieker.monitoring.core.controller.IMonitoringController;
  */
 public final class MonitoringServiceTest {
 
-	@After
+	@AfterEach
 	public void after( ) {
 		MonitoringControllerHolder.setMonitoringController( null );
 		MonitoringControllerHolder.setCurrentConfiguration( null );
@@ -44,7 +42,7 @@ public final class MonitoringServiceTest {
 	public void testGetCurrentStatusNoMonitoring( ) {
 		final MonitoringService monitoringService = new MonitoringService( );
 
-		assertThat( monitoringService.getCurrentStatus( ), is( Status.NO_MONITORING ) );
+		assertThat( monitoringService.getCurrentStatus( ) ).isEqualTo( Status.NO_MONITORING );
 	}
 
 	@Test
@@ -55,7 +53,7 @@ public final class MonitoringServiceTest {
 		when( controller.isMonitoringTerminated( ) ).thenReturn( Boolean.FALSE );
 		MonitoringControllerHolder.setMonitoringController( controller );
 
-		assertThat( monitoringService.getCurrentStatus( ), is( Status.RUNNING ) );
+		assertThat( monitoringService.getCurrentStatus( ) ).isEqualTo( Status.RUNNING );
 	}
 
 	@Test
@@ -66,14 +64,14 @@ public final class MonitoringServiceTest {
 		when( controller.isMonitoringTerminated( ) ).thenReturn( Boolean.TRUE );
 		MonitoringControllerHolder.setMonitoringController( controller );
 
-		assertThat( monitoringService.getCurrentStatus( ), is( Status.TERMINATED ) );
+		assertThat( monitoringService.getCurrentStatus( ) ).isEqualTo( Status.TERMINATED );
 	}
 
 	@Test
 	public void testGetCurrentConfigurationNotSet( ) {
 		final MonitoringService monitoringService = new MonitoringService( );
 
-		assertThat( monitoringService.getCurrentConfiguration( ), is( notNullValue( ) ) );
+		assertThat( monitoringService.getCurrentConfiguration( ) ).isNotNull( );
 	}
 
 	@Test
@@ -83,7 +81,7 @@ public final class MonitoringServiceTest {
 		final MonitoringConfiguration configuration = new MonitoringConfiguration( );
 		MonitoringControllerHolder.setCurrentConfiguration( configuration );
 
-		assertThat( monitoringService.getCurrentConfiguration( ), is( configuration ) );
+		assertThat( monitoringService.getCurrentConfiguration( ) ).isEqualTo( configuration );
 	}
 
 	@Test
@@ -94,16 +92,16 @@ public final class MonitoringServiceTest {
 
 		configuration.setActive( true );
 		monitoringService.configureMonitoring( configuration );
-		assertThat( monitoringService.getCurrentStatus( ), is( Status.RUNNING ) );
+		assertThat( monitoringService.getCurrentStatus( ) ).isEqualTo( Status.RUNNING );
 
 		configuration.setTimer( Timer.MILLIS );
 		configuration.setWriter( Writer.ASCII_WRITER );
 		monitoringService.configureMonitoring( configuration );
-		assertThat( monitoringService.getCurrentStatus( ), is( Status.RUNNING ) );
+		assertThat( monitoringService.getCurrentStatus( ) ).isEqualTo( Status.RUNNING );
 
 		configuration.setActive( false );
 		monitoringService.configureMonitoring( configuration );
-		assertThat( monitoringService.getCurrentStatus( ), is( Status.NO_MONITORING ) );
+		assertThat( monitoringService.getCurrentStatus( ) ).isEqualTo( Status.NO_MONITORING );
 	}
 
 }

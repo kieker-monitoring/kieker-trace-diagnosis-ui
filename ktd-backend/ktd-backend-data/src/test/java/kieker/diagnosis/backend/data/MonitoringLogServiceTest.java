@@ -16,13 +16,8 @@
 
 package kieker.diagnosis.backend.data;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.hamcrest.number.IsCloseTo.closeTo;
-import static org.hamcrest.number.OrderingComparison.greaterThan;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,14 +25,17 @@ import java.net.URL;
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.rules.TemporaryFolder;
+import org.assertj.core.data.Offset;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.TempDirectory;
+import org.junitpioneer.jupiter.TempDirectory.TempDir;
 
 import com.carrotsearch.hppc.ByteArrayList;
 import com.google.common.io.Files;
@@ -64,20 +62,15 @@ import kieker.diagnosis.backend.data.reader.Repository;
  *
  * @author Nils Christian Ehmke
  */
+@DisplayName ( "Unit-Test for MonitoringLogService" )
 public class MonitoringLogServiceTest {
-
-	@Rule
-	public TemporaryFolder ivTemporaryFolder = new TemporaryFolder( );
-
-	@Rule
-	public ExpectedException ivExpectedException = ExpectedException.none( );
 
 	private ByteArrayList ivByteList;
 	private IRegistry<String> ivStringRegistry;
 	private MonitoringLogService ivService;
 	private Repository repository;
 
-	@Before
+	@BeforeEach
 	public void setUp( ) {
 		ivByteList = new ByteArrayList( );
 		ivStringRegistry = new Registry<>( );
@@ -88,39 +81,40 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	public void testEmptyDirectory( ) throws CorruptStreamException, ImportFailedException {
-		// Import the directory
-		final File directory = ivTemporaryFolder.getRoot( );
+	@ExtendWith ( TempDirectory.class )
+	@DisplayName ( "Test with an empty directory" )
+	public void testEmptyDirectory( @TempDir final Path tempDir ) throws CorruptStreamException, ImportFailedException {
+		assertThrows( ImportFailedException.class, ( ) -> ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY ) );
 
-		// Make sure that an exception occurs
-		ivExpectedException.expect( ImportFailedException.class );
-		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 	}
 
 	@Test
-	public void testSingleTrace( ) throws Exception {
+	@ExtendWith ( TempDirectory.class )
+	@DisplayName ( "Test with a single trace" )
+	public void testSingleTrace( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
 		writeRecord( new BeforeOperationEvent( System.currentTimeMillis( ), 1L, 0, "op1", "class1" ) );
 		writeRecord( new BeforeOperationEvent( System.currentTimeMillis( ), 1L, 0, "op2", "class1" ) );
 		writeRecord( new AfterOperationEvent( System.currentTimeMillis( ), 1L, 0, "op2", "class1" ) );
 		writeRecord( new AfterOperationEvent( System.currentTimeMillis( ), 1L, 0, "op1", "class1" ) );
-		writeMappingFile( );
-		finishWriting( );
+		writeMappingFile( tempDir );
+		finishWriting( tempDir );
 
 		// Import the directory
-		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
+		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		assertThat( repository.getMethods( ), hasSize( 2 ) );
-		assertThat( repository.getAggreatedMethods( ), hasSize( 2 ) );
-		assertThat( repository.getTraceRoots( ), hasSize( 1 ) );
-		assertThat( repository.getProcessedBytes( ), is( greaterThan( 0L ) ) );
+		assertThat( repository.getMethods( ) ).hasSize( 2 );
+		assertThat( repository.getAggreatedMethods( ) ).hasSize( 2 );
+		assertThat( repository.getTraceRoots( ) ).hasSize( 1 );
+		assertThat( repository.getProcessedBytes( ) ).isGreaterThan( 0L );
 	}
 
 	@Test
-	public void testTwoInterleavedTrace( ) throws Exception {
+	@ExtendWith ( TempDirectory.class )
+	@DisplayName ( "Test with two interleaves traces" )
+	public void testTwoInterleavedTrace( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
 		writeRecord( new BeforeOperationEvent( System.currentTimeMillis( ), 1L, 0, "op1", "class1" ) );
@@ -132,44 +126,46 @@ public class MonitoringLogServiceTest {
 		writeRecord( new AfterOperationEvent( System.currentTimeMillis( ), 2L, 0, "op2", "class2" ) );
 		writeRecord( new AfterOperationEvent( System.currentTimeMillis( ), 1L, 0, "op1", "class1" ) );
 		writeRecord( new AfterOperationEvent( System.currentTimeMillis( ), 2L, 0, "op1", "class2" ) );
-		writeMappingFile( );
-		finishWriting( );
+		writeMappingFile( tempDir );
+		finishWriting( tempDir );
 
 		// Import the directory
-		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
+		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		assertThat( repository.getMethods( ), hasSize( 4 ) );
-		assertThat( repository.getAggreatedMethods( ), hasSize( 4 ) );
-		assertThat( repository.getTraceRoots( ), hasSize( 2 ) );
-		assertThat( repository.getProcessedBytes( ), is( greaterThan( 0L ) ) );
+		assertThat( repository.getMethods( ) ).hasSize( 4 );
+		assertThat( repository.getAggreatedMethods( ) ).hasSize( 4 );
+		assertThat( repository.getTraceRoots( ) ).hasSize( 2 );
+		assertThat( repository.getProcessedBytes( ) ).isGreaterThan( 0L );
 	}
 
 	@Test
-	public void testFailedTrace( ) throws Exception {
+	@ExtendWith ( TempDirectory.class )
+	@DisplayName ( "Test with a failed trace" )
+	public void testFailedTrace( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
 		writeRecord( new BeforeOperationEvent( System.currentTimeMillis( ), 1L, 0, "op1", "class1" ) );
 		writeRecord( new BeforeOperationEvent( System.currentTimeMillis( ), 1L, 0, "op2", "class1" ) );
 		writeRecord( new AfterOperationFailedEvent( System.currentTimeMillis( ), 1L, 0, "op2", "class1", "cause" ) );
 		writeRecord( new AfterOperationFailedEvent( System.currentTimeMillis( ), 1L, 0, "op1", "class1", "cause" ) );
-		writeMappingFile( );
-		finishWriting( );
+		writeMappingFile( tempDir );
+		finishWriting( tempDir );
 
 		// Import the directory
-		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
+		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		assertThat( repository.getMethods( ), hasSize( 2 ) );
-		assertThat( repository.getAggreatedMethods( ), hasSize( 2 ) );
-		assertThat( repository.getTraceRoots( ), hasSize( 1 ) );
-		assertThat( repository.getProcessedBytes( ), is( greaterThan( 0L ) ) );
+		assertThat( repository.getMethods( ) ).hasSize( 2 );
+		assertThat( repository.getAggreatedMethods( ) ).hasSize( 2 );
+		assertThat( repository.getTraceRoots( ) ).hasSize( 1 );
+		assertThat( repository.getProcessedBytes( ) ).isGreaterThan( 0L );
 	}
 
 	@Test
-	public void testMethodAggregation( ) throws Exception {
+	@ExtendWith ( TempDirectory.class )
+	@DisplayName ( "Test the method aggregation" )
+	public void testMethodAggregation( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
 		writeRecord( new BeforeOperationEvent( System.currentTimeMillis( ), 1L, 0, "op1", "class1" ) );
@@ -180,22 +176,23 @@ public class MonitoringLogServiceTest {
 		writeRecord( new BeforeOperationEvent( System.currentTimeMillis( ), 1L, 0, "op1", "class2" ) );
 		writeRecord( new AfterOperationEvent( System.currentTimeMillis( ), 1L, 0, "op1", "class2" ) );
 		writeRecord( new AfterOperationEvent( System.currentTimeMillis( ), 1L, 0, "op1", "class1" ) );
-		writeMappingFile( );
-		finishWriting( );
+		writeMappingFile( tempDir );
+		finishWriting( tempDir );
 
 		// Import the directory
-		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
+		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		assertThat( repository.getMethods( ), hasSize( 4 ) );
-		assertThat( repository.getAggreatedMethods( ), hasSize( 3 ) );
-		assertThat( repository.getTraceRoots( ), hasSize( 1 ) );
-		assertThat( repository.getProcessedBytes( ), is( greaterThan( 0L ) ) );
+		assertThat( repository.getMethods( ) ).hasSize( 4 );
+		assertThat( repository.getAggreatedMethods( ) ).hasSize( 3 );
+		assertThat( repository.getTraceRoots( ) ).hasSize( 1 );
+		assertThat( repository.getProcessedBytes( ) ).isGreaterThan( 0L );
 	}
 
 	@Test
-	public void testMethodAggregationValues1( ) throws Exception {
+	@ExtendWith ( TempDirectory.class )
+	@DisplayName ( "Test the method aggregation in detail" )
+	public void testMethodAggregationValues1( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 3L, 0L, "0", "host", 0L, 0 ) );
 		writeRecord( new BeforeOperationEvent( 1, 3L, 0, "op1", "class1" ) );
@@ -209,31 +206,32 @@ public class MonitoringLogServiceTest {
 		writeRecord( new BeforeOperationEvent( 1, 2L, 0, "op1", "class1" ) );
 		writeRecord( new AfterOperationEvent( 3, 2L, 0, "op1", "class1" ) );
 
-		writeMappingFile( );
-		finishWriting( );
+		writeMappingFile( tempDir );
+		finishWriting( tempDir );
 
 		// Import the directory
-		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
+		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		final List<AggregatedMethodCall> aggreatedMethods = repository.getAggreatedMethods( );
-		assertThat( aggreatedMethods, hasSize( 1 ) );
+		assertThat( aggreatedMethods ).hasSize( 1 );
 
 		final AggregatedMethodCall aggregatedMethodCall = aggreatedMethods.get( 0 );
-		assertThat( aggregatedMethodCall.getCount( ), is( 3 ) );
-		assertThat( aggregatedMethodCall.getHost( ), is( "host" ) );
-		assertThat( aggregatedMethodCall.getClazz( ), is( "class1" ) );
-		assertThat( aggregatedMethodCall.getMethod( ), is( "op1" ) );
-		assertThat( aggregatedMethodCall.getMinDuration( ), is( 1L ) );
-		assertThat( aggregatedMethodCall.getMaxDuration( ), is( 9L ) );
-		assertThat( aggregatedMethodCall.getAvgDuration( ), is( 4L ) );
-		assertThat( aggregatedMethodCall.getMedianDuration( ), is( 2L ) );
-		assertThat( aggregatedMethodCall.getTotalDuration( ), is( 12L ) );
+		assertThat( aggregatedMethodCall.getCount( ) ).isEqualTo( 3 );
+		assertThat( aggregatedMethodCall.getHost( ) ).isEqualTo( "host" );
+		assertThat( aggregatedMethodCall.getClazz( ) ).isEqualTo( "class1" );
+		assertThat( aggregatedMethodCall.getMethod( ) ).isEqualTo( "op1" );
+		assertThat( aggregatedMethodCall.getMinDuration( ) ).isEqualTo( 1L );
+		assertThat( aggregatedMethodCall.getMaxDuration( ) ).isEqualTo( 9L );
+		assertThat( aggregatedMethodCall.getAvgDuration( ) ).isEqualTo( 4L );
+		assertThat( aggregatedMethodCall.getMedianDuration( ) ).isEqualTo( 2L );
+		assertThat( aggregatedMethodCall.getTotalDuration( ) ).isEqualTo( 12L );
 	}
 
 	@Test
-	public void testMethodAggregationValues2( ) throws Exception {
+	@ExtendWith ( TempDirectory.class )
+	@DisplayName ( "Test the method aggregation in detail" )
+	public void testMethodAggregationValues2( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 2L, 0L, "0", "host", 0L, 0 ) );
 		writeRecord( new BeforeOperationEvent( 1, 2L, 0, "op1", "class1" ) );
@@ -251,113 +249,118 @@ public class MonitoringLogServiceTest {
 		writeRecord( new BeforeOperationEvent( 5, 2L, 0, "op1", "class1" ) );
 		writeRecord( new AfterOperationEvent( 25, 2L, 0, "op1", "class1" ) );
 
-		writeMappingFile( );
-		finishWriting( );
+		writeMappingFile( tempDir );
+		finishWriting( tempDir );
 
 		// Import the directory
-		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
+		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		final List<AggregatedMethodCall> aggreatedMethods = repository.getAggreatedMethods( );
-		assertThat( aggreatedMethods, hasSize( 1 ) );
+		assertThat( aggreatedMethods ).hasSize( 1 );
 
 		final AggregatedMethodCall aggregatedMethodCall = aggreatedMethods.get( 0 );
-		assertThat( aggregatedMethodCall.getCount( ), is( 4 ) );
-		assertThat( aggregatedMethodCall.getHost( ), is( "host" ) );
-		assertThat( aggregatedMethodCall.getClazz( ), is( "class1" ) );
-		assertThat( aggregatedMethodCall.getMethod( ), is( "op1" ) );
-		assertThat( aggregatedMethodCall.getMinDuration( ), is( 1L ) );
-		assertThat( aggregatedMethodCall.getMaxDuration( ), is( 20L ) );
-		assertThat( aggregatedMethodCall.getAvgDuration( ), is( 8L ) );
-		assertThat( aggregatedMethodCall.getMedianDuration( ), is( 9L ) );
-		assertThat( aggregatedMethodCall.getTotalDuration( ), is( 32L ) );
+		assertThat( aggregatedMethodCall.getCount( ) ).isEqualTo( 4 );
+		assertThat( aggregatedMethodCall.getHost( ) ).isEqualTo( "host" );
+		assertThat( aggregatedMethodCall.getClazz( ) ).isEqualTo( "class1" );
+		assertThat( aggregatedMethodCall.getMethod( ) ).isEqualTo( "op1" );
+		assertThat( aggregatedMethodCall.getMinDuration( ) ).isEqualTo( 1L );
+		assertThat( aggregatedMethodCall.getMaxDuration( ) ).isEqualTo( 20L );
+		assertThat( aggregatedMethodCall.getAvgDuration( ) ).isEqualTo( 8L );
+		assertThat( aggregatedMethodCall.getMedianDuration( ) ).isEqualTo( 9L );
+		assertThat( aggregatedMethodCall.getTotalDuration( ) ).isEqualTo( 32L );
 	}
 
 	@Test
-	public void testIncompleteTrace( ) throws Exception {
+	@ExtendWith ( TempDirectory.class )
+	@DisplayName ( "Test with an incomplete trace" )
+	public void testIncompleteTrace( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
 		writeRecord( new BeforeOperationEvent( System.currentTimeMillis( ), 1L, 0, "op1", "class1" ) );
 		writeRecord( new BeforeOperationEvent( System.currentTimeMillis( ), 1L, 0, "op2", "class1" ) );
 		writeRecord( new AfterOperationEvent( System.currentTimeMillis( ), 1L, 0, "op2", "class1" ) );
-		writeMappingFile( );
-		finishWriting( );
+		writeMappingFile( tempDir );
+		finishWriting( tempDir );
 
 		// Import the directory
-		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
+		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		assertThat( repository.getMethods( ), hasSize( 0 ) );
-		assertThat( repository.getAggreatedMethods( ), hasSize( 0 ) );
-		assertThat( repository.getTraceRoots( ), hasSize( 0 ) );
-		assertThat( repository.getIncompleteTraces( ), is( 1 ) );
-		assertThat( repository.getProcessedBytes( ), is( greaterThan( 0L ) ) );
+		assertThat( repository.getMethods( ) ).isEmpty( );
+		assertThat( repository.getAggreatedMethods( ) ).isEmpty( );
+		assertThat( repository.getTraceRoots( ) ).isEmpty( );
+		assertThat( repository.getIncompleteTraces( ) ).isEqualTo( 1 );
+		assertThat( repository.getProcessedBytes( ) ).isGreaterThan( 0L );
 	}
 
 	@Test
-	public void testDanglingRecords( ) throws Exception {
+	@ExtendWith ( TempDirectory.class )
+	@DisplayName ( "Test with some dangling records" )
+	public void testDanglingRecords( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new BeforeOperationEvent( System.currentTimeMillis( ), 1L, 0, "op1", "class1" ) );
 		writeRecord( new BeforeOperationEvent( System.currentTimeMillis( ), 1L, 0, "op2", "class1" ) );
 		writeRecord( new AfterOperationEvent( System.currentTimeMillis( ), 1L, 0, "op2", "class1" ) );
 		writeRecord( new AfterOperationEvent( System.currentTimeMillis( ), 1L, 0, "op1", "class1" ) );
-		writeMappingFile( );
-		finishWriting( );
+		writeMappingFile( tempDir );
+		finishWriting( tempDir );
 
 		// Import the directory
-		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
+		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		assertThat( repository.getMethods( ), hasSize( 0 ) );
-		assertThat( repository.getAggreatedMethods( ), hasSize( 0 ) );
-		assertThat( repository.getTraceRoots( ), hasSize( 0 ) );
-		assertThat( repository.getDanglingRecords( ), is( 4 ) );
-		assertThat( repository.getProcessedBytes( ), is( greaterThan( 0L ) ) );
+		assertThat( repository.getMethods( ) ).isEmpty( );
+		assertThat( repository.getAggreatedMethods( ) ).isEmpty( );
+		assertThat( repository.getTraceRoots( ) ).isEmpty( );
+		assertThat( repository.getDanglingRecords( ) ).isEqualTo( 4 );
+		assertThat( repository.getProcessedBytes( ) ).isGreaterThan( 0L );
 	}
 
 	@Test
-	public void testDurationConversion( ) throws Exception {
+	@ExtendWith ( TempDirectory.class )
+	@DisplayName ( "Test the duration conversion" )
+	public void testDurationConversion( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
 		writeRecord( new KiekerMetadataRecord( "0", "0", "0", 0, false, 0L, TimeUnit.SECONDS.name( ), 0 ) );
 		writeRecord( new BeforeOperationEvent( 10, 1L, 0, "op1", "class1" ) );
 		writeRecord( new AfterOperationFailedEvent( 20, 1L, 0, "op1", "class1", "cause" ) );
-		writeMappingFile( );
-		finishWriting( );
+		writeMappingFile( tempDir );
+		finishWriting( tempDir );
 
 		// Import the directory
-		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
+		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		final MethodCall methodCall = repository.getMethods( ).get( 0 );
-		assertThat( methodCall.getDuration( ), is( 10000000000L ) );
+		assertThat( methodCall.getDuration( ) ).isEqualTo( 10000000000L );
 	}
 
 	@Test
-	public void testTimestampConversion( ) throws Exception {
+	@ExtendWith ( TempDirectory.class )
+	@DisplayName ( "Test the timestamp conversion" )
+	public void testTimestampConversion( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
 		writeRecord( new KiekerMetadataRecord( "0", "0", "0", 0, false, 0L, TimeUnit.SECONDS.name( ), 0 ) );
 		writeRecord( new BeforeOperationEvent( 10, 1L, 0, "op1", "class1" ) );
 		writeRecord( new AfterOperationFailedEvent( 20, 1L, 0, "op1", "class1", "cause" ) );
-		writeMappingFile( );
-		finishWriting( );
+		writeMappingFile( tempDir );
+		finishWriting( tempDir );
 
 		// Import the directory
-		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
+		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		final MethodCall methodCall = repository.getMethods( ).get( 0 );
-		assertThat( methodCall.getTimestamp( ), is( 10000L ) );
+		assertThat( methodCall.getTimestamp( ) ).isEqualTo( 10000L );
 	}
 
 	@Test
-	public void testIgnoreRecordWithOtherTraces( ) throws Exception {
+	@ExtendWith ( TempDirectory.class )
+	@DisplayName ( "Test record ignoring" )
+	public void testIgnoreRecordWithOtherTraces( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new CPUUtilizationRecord( 0L, "", "", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) );
 		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
@@ -366,110 +369,109 @@ public class MonitoringLogServiceTest {
 		writeRecord( new AfterOperationFailedEvent( 20, 1L, 0, "op1", "class1", "cause" ) );
 		writeRecord( new CPUUtilizationRecord( 1L, "", "", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) );
 
-		writeMappingFile( );
-		finishWriting( );
+		writeMappingFile( tempDir );
+		finishWriting( tempDir );
 
 		// Import the directory
-		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
+		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		assertThat( repository.getTraceRoots( ), hasSize( 1 ) );
-		assertThat( repository.getIgnoredRecords( ), is( 2 ) );
+		assertThat( repository.getTraceRoots( ) ).hasSize( 1 );
+		assertThat( repository.getIgnoredRecords( ) ).isEqualTo( 2 );
 	}
 
 	@Test
-	public void testIgnoreRecord( ) throws Exception {
+	@ExtendWith ( TempDirectory.class )
+	@DisplayName ( "Test record ignoring" )
+	public void testIgnoreRecord( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new CPUUtilizationRecord( 0L, "", "", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) );
 		writeRecord( new CPUUtilizationRecord( 1L, "", "", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) );
 
-		writeMappingFile( );
-		finishWriting( );
+		writeMappingFile( tempDir );
+		finishWriting( tempDir );
 
 		// Import the directory and make sure that a business exception occurs (because
 		// records where ignored, but no traces were reconstructed)
-		final File directory = ivTemporaryFolder.getRoot( );
-		ivExpectedException.expect( ImportFailedException.class );
-		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
+		assertThrows( ImportFailedException.class, ( ) -> ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY ) );
 	}
 
 	@Test
-	public void testUnknownRecord( ) throws Exception {
+	@ExtendWith ( TempDirectory.class )
+	@DisplayName ( "Test with an unknown record" )
+	public void testUnknownRecord( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new UnknownRecord( ) );
 
-		writeMappingFile( );
-		finishWriting( );
-
-		// The import should not work
-		ivExpectedException.expect( ImportFailedException.class );
+		writeMappingFile( tempDir );
+		finishWriting( tempDir );
 
 		// Import the directory
-		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
+		assertThrows( ImportFailedException.class, ( ) -> ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY ) );
 	}
 
 	@Test
-	public void testTraceInDetail( ) throws Exception {
+	@ExtendWith ( TempDirectory.class )
+	@DisplayName ( "Test a trace in detail" )
+	public void testTraceInDetail( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
 		writeRecord( new BeforeOperationEvent( 1000000L, 1L, 0, "op1", "class1" ) );
 		writeRecord( new BeforeOperationEvent( 2000000L, 1L, 0, "op2", "class2" ) );
 		writeRecord( new AfterOperationEvent( 2500000L, 1L, 0, "op2", "class2" ) );
 		writeRecord( new AfterOperationFailedEvent( 4000000L, 1L, 0, "op1", "class1", "cause" ) );
-		writeMappingFile( );
-		finishWriting( );
+		writeMappingFile( tempDir );
+		finishWriting( tempDir );
 
 		// Import the directory
-		final File directory = ivTemporaryFolder.getRoot( );
-		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
+		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		assertThat( repository.getMethods( ), hasSize( 2 ) );
-		assertThat( repository.getAggreatedMethods( ), hasSize( 2 ) );
-		assertThat( repository.getTraceRoots( ), hasSize( 1 ) );
-		assertThat( repository.getProcessedBytes( ), is( greaterThan( 0L ) ) );
+		assertThat( repository.getMethods( ) ).hasSize( 2 );
+		assertThat( repository.getAggreatedMethods( ) ).hasSize( 2 );
+		assertThat( repository.getTraceRoots( ) ).hasSize( 1 );
+		assertThat( repository.getProcessedBytes( ) ).isGreaterThan( 0L );
 
 		// Now some advanced checks
 		final MethodCall firstMethod = repository.getMethods( ).get( 0 );
-		assertThat( firstMethod.getHost( ), is( "host" ) );
-		assertThat( firstMethod.getClazz( ), is( "class1" ) );
-		assertThat( firstMethod.getMethod( ), is( "op1" ) );
-		assertThat( firstMethod.getException( ), is( "cause" ) );
-		assertThat( firstMethod.getTimestamp( ), is( 1L ) );
-		assertThat( firstMethod.getDuration( ), is( 3000000L ) );
-		assertThat( (double) firstMethod.getPercent( ), is( closeTo( 100.0, 0.01 ) ) );
-		assertThat( firstMethod.getTraceDepth( ), is( 2 ) );
-		assertThat( firstMethod.getTraceId( ), is( 1L ) );
-		assertThat( firstMethod.getTraceSize( ), is( 2 ) );
+		assertThat( firstMethod.getHost( ) ).isEqualTo( "host" );
+		assertThat( firstMethod.getClazz( ) ).isEqualTo( "class1" );
+		assertThat( firstMethod.getMethod( ) ).isEqualTo( "op1" );
+		assertThat( firstMethod.getException( ) ).isEqualTo( "cause" );
+		assertThat( firstMethod.getTimestamp( ) ).isEqualTo( 1L );
+		assertThat( firstMethod.getDuration( ) ).isEqualTo( 3000000L );
+		assertThat( (double) firstMethod.getPercent( ) ).isCloseTo( 100.0, Offset.offset( 0.01 ) );
+		assertThat( firstMethod.getTraceDepth( ) ).isEqualTo( 2 );
+		assertThat( firstMethod.getTraceId( ) ).isEqualTo( 1L );
+		assertThat( firstMethod.getTraceSize( ) ).isEqualTo( 2 );
 
 		final MethodCall secondMethod = repository.getMethods( ).get( 1 );
-		assertThat( secondMethod.getHost( ), is( "host" ) );
-		assertThat( secondMethod.getClazz( ), is( "class2" ) );
-		assertThat( secondMethod.getMethod( ), is( "op2" ) );
-		assertThat( secondMethod.getException( ), is( nullValue( ) ) );
-		assertThat( secondMethod.getTimestamp( ), is( 2L ) );
-		assertThat( secondMethod.getDuration( ), is( 500000L ) );
-		assertThat( (double) secondMethod.getPercent( ), is( closeTo( 16.66, 0.01 ) ) );
-		assertThat( secondMethod.getTraceDepth( ), is( 1 ) );
-		assertThat( secondMethod.getTraceId( ), is( 1L ) );
-		assertThat( secondMethod.getTraceSize( ), is( 1 ) );
+		assertThat( secondMethod.getHost( ) ).isEqualTo( "host" );
+		assertThat( secondMethod.getClazz( ) ).isEqualTo( "class2" );
+		assertThat( secondMethod.getMethod( ) ).isEqualTo( "op2" );
+		assertThat( secondMethod.getException( ) ).isNull( );
+		assertThat( secondMethod.getTimestamp( ) ).isEqualTo( 2L );
+		assertThat( secondMethod.getDuration( ) ).isEqualTo( 500000L );
+		assertThat( (double) secondMethod.getPercent( ) ).isCloseTo( 16.66, Offset.offset( 0.01 ) );
+		assertThat( secondMethod.getTraceDepth( ) ).isEqualTo( 1 );
+		assertThat( secondMethod.getTraceId( ) ).isEqualTo( 1L );
+		assertThat( secondMethod.getTraceSize( ) ).isEqualTo( 1 );
 
-		assertThat( repository.getTraceRoots( ).get( 0 ), is( firstMethod ) );
+		assertThat( repository.getTraceRoots( ).get( 0 ) ).isEqualTo( firstMethod );
 	}
 
 	@Test
+	@DisplayName ( "Test the import from a zip file" )
 	public void testImportFromZipFile( ) throws Exception {
 		final URL logFileUrl = getClass( ).getResource( "/kieker-log-binary.zip" );
 		final File logFile = new File( logFileUrl.toURI( ) );
 
 		ivService.importMonitoringLog( logFile, ImportType.ZIP_FILE );
 
-		assertThat( repository.getTraceRoots( ), hasSize( 2 ) );
-		assertThat( repository.getAggreatedMethods( ), hasSize( 3 ) );
-		assertThat( repository.getMethods( ), hasSize( 3 ) );
-		assertTrue( repository.isDataAvailable( ) );
+		assertThat( repository.getTraceRoots( ) ).hasSize( 2 );
+		assertThat( repository.getAggreatedMethods( ) ).hasSize( 3 );
+		assertThat( repository.getMethods( ) ).hasSize( 3 );
+		assertThat( repository.isDataAvailable( ) ).isTrue( );
 	}
 
 	@SuppressWarnings ( "deprecation" )
@@ -491,7 +493,7 @@ public class MonitoringLogServiceTest {
 		ivByteList.add( byteArray );
 	}
 
-	private void writeMappingFile( ) throws IOException {
+	private void writeMappingFile( final Path tempDir ) throws IOException {
 		// Collect the mappings
 		final StringBuilder stringBuilder = new StringBuilder( );
 
@@ -502,12 +504,12 @@ public class MonitoringLogServiceTest {
 		}
 
 		// Write the mapping file
-		final File mappingFile = new File( ivTemporaryFolder.getRoot( ), "kieker.map" );
+		final File mappingFile = new File( tempDir.toFile( ), "kieker.map" );
 		Files.asCharSink( mappingFile, Charset.forName( "UTF-8" ) ).write( stringBuilder );
 	}
 
-	private void finishWriting( ) throws IOException {
-		final File binaryFile = new File( ivTemporaryFolder.getRoot( ), "kieker.bin" );
+	private void finishWriting( final Path tempDir ) throws IOException {
+		final File binaryFile = new File( tempDir.toFile( ), "kieker.bin" );
 		ivByteList.trimToSize( );
 		Files.write( ivByteList.buffer, binaryFile );
 	}

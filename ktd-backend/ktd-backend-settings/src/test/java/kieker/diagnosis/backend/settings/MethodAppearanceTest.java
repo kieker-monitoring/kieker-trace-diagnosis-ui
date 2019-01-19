@@ -16,11 +16,9 @@
 
 package kieker.diagnosis.backend.settings;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test class for the {@link MethodAppearance}.
@@ -31,22 +29,22 @@ public final class MethodAppearanceTest {
 
 	@Test
 	public void testConvertWithNullValue( ) {
-		assertThat( MethodAppearance.SHORT.convert( null ), is( nullValue( ) ) );
-		assertThat( MethodAppearance.LONG.convert( null ), is( nullValue( ) ) );
+		assertThat( MethodAppearance.SHORT.convert( null ) ).isNull( );
+		assertThat( MethodAppearance.LONG.convert( null ) ).isNull( );
 	}
 
 	@Test
 	public void testConvertWithLongAppearance( ) {
-		assertThat( MethodAppearance.LONG.convert( "A.B.C.d()" ), is( "A.B.C.d()" ) );
-		assertThat( MethodAppearance.LONG.convert( "A.d()" ), is( "A.d()" ) );
+		assertThat( MethodAppearance.LONG.convert( "A.B.C.d()" ) ).isEqualTo( "A.B.C.d()" );
+		assertThat( MethodAppearance.LONG.convert( "A.d()" ) ).isEqualTo( "A.d()" );
 	}
 
 	@Test
 	public void testConvertWithShortAppearance( ) {
-		assertThat( MethodAppearance.SHORT.convert( "A.B.C.d()" ), is( "d(...)" ) );
-		assertThat( MethodAppearance.SHORT.convert( "d()" ), is( "d(...)" ) );
-		assertThat( MethodAppearance.SHORT.convert( "A.B.C.d(int, String)" ), is( "d(...)" ) );
-		assertThat( MethodAppearance.SHORT.convert( "e" ), is( "e" ) );
+		assertThat( MethodAppearance.SHORT.convert( "A.B.C.d()" ) ).isEqualTo( "d(...)" );
+		assertThat( MethodAppearance.SHORT.convert( "d()" ) ).isEqualTo( "d(...)" );
+		assertThat( MethodAppearance.SHORT.convert( "A.B.C.d(int, String)" ) ).isEqualTo( "d(...)" );
+		assertThat( MethodAppearance.SHORT.convert( "e" ) ).isEqualTo( "e" );
 	}
 
 }

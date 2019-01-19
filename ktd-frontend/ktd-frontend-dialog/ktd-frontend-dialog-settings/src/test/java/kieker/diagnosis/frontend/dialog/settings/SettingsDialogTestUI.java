@@ -16,8 +16,7 @@
 
 package kieker.diagnosis.frontend.dialog.settings;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.concurrent.TimeUnit;
 
@@ -67,13 +66,13 @@ public final class SettingsDialogTestUI extends ApplicationTest {
 
 	@Test
 	public void testSettingsDialog( ) {
-		assertThat( listWindows( ), hasSize( 2 ) );
+		assertThat( listWindows( ) ).hasSize( 2 );
 
 		enterNullValues( );
 		enterInvalidValues( );
 		enterValidValues( );
 
-		assertThat( listWindows( ), hasSize( 1 ) );
+		assertThat( listWindows( ) ).hasSize( 1 );
 	}
 
 	private void enterNullValues( ) {

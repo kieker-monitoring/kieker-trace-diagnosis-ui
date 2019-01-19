@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.diagnosis.frontend.dialog.progress;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -52,14 +52,14 @@ public final class ProgressDialogTestUI extends ApplicationTest {
 
 	@Test
 	public void testProgressDialog( ) {
-		assertThat( listWindows( ), hasSize( 2 ) );
+		assertThat( listWindows( ) ).hasSize( 2 );
 
 		final Labeled messageLabel = lookup( "#progressDialogMessage" ).queryLabeled( );
 		assertThat( messageLabel.getText( ), is( "test-message" ) );
 
 		WaitForAsyncUtils.asyncFx( ( ) -> progressDialog.closeDialog( ) );
 		WaitForAsyncUtils.waitForFxEvents( );
-		assertThat( listWindows( ), hasSize( 1 ) );
+		assertThat( listWindows( ) ).hasSize( 1 );
 	}
 
 }

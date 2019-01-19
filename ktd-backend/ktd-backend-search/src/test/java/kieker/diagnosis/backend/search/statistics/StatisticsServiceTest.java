@@ -16,8 +16,7 @@
 
 package kieker.diagnosis.backend.search.statistics;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -25,8 +24,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Optional;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -45,7 +44,7 @@ public final class StatisticsServiceTest {
 	private StatisticsService statisticsService;
 	private Repository repository;
 
-	@Before
+	@BeforeEach
 	public void setUp( ) {
 		repository = mock( Repository.class );
 		final Injector injector = Guice.createInjector( new ServiceMockModule<>( Repository.class, repository ) );
@@ -56,7 +55,7 @@ public final class StatisticsServiceTest {
 	@Test
 	public void testNoData( ) {
 		final Optional<Statistics> statistics = statisticsService.getStatistics( );
-		assertThat( statistics.isPresent( ), is( false ) );
+		assertThat( statistics.isPresent( ) ).isFalse( );
 	}
 
 	@Test
@@ -76,22 +75,22 @@ public final class StatisticsServiceTest {
 		when( repository.getTraceRoots( ) ).thenReturn( Arrays.asList( methodCallStart ) );
 
 		final Statistics statistics = statisticsService.getStatistics( ).get( );
-		assertThat( statistics.getDanglingRecords( ), is( 42 ) );
-		assertThat( statistics.getIgnoredRecords( ), is( 15 ) );
-		assertThat( statistics.getIncompleteTraces( ), is( 10 ) );
-		assertThat( statistics.getProcessedBytes( ), is( 50L ) );
-		assertThat( statistics.getIncompleteTraces( ), is( 10 ) );
-		assertThat( statistics.getProcessDuration( ), is( 25L ) );
-		assertThat( statistics.getProcessSpeed( ), is( 2L ) );
+		assertThat( statistics.getDanglingRecords( ) ).isEqualTo( 42 );
+		assertThat( statistics.getIgnoredRecords( ) ).isEqualTo( 15 );
+		assertThat( statistics.getIncompleteTraces( ) ).isEqualTo( 10 );
+		assertThat( statistics.getProcessedBytes( ) ).isEqualTo( 50L );
+		assertThat( statistics.getIncompleteTraces( ) ).isEqualTo( 10 );
+		assertThat( statistics.getProcessDuration( ) ).isEqualTo( 25L );
+		assertThat( statistics.getProcessSpeed( ) ).isEqualTo( 2L );
 
-		assertThat( statistics.getDirectory( ), is( "/tmp/" ) );
+		assertThat( statistics.getDirectory( ) ).isEqualTo( "/tmp/" );
 
-		assertThat( statistics.getAggregatedMethods( ), is( 0 ) );
-		assertThat( statistics.getMethods( ), is( 2 ) );
-		assertThat( statistics.getTraces( ), is( 1 ) );
+		assertThat( statistics.getAggregatedMethods( ) ).isEqualTo( 0 );
+		assertThat( statistics.getMethods( ) ).isEqualTo( 2 );
+		assertThat( statistics.getTraces( ) ).isEqualTo( 1 );
 
-		assertThat( statistics.getBeginnOfMonitoring( ), is( "01.12.2018, 20:00:00" ) );
-		assertThat( statistics.getEndOfMonitoring( ), is( "02.12.2018, 22:00:00" ) );
+		assertThat( statistics.getBeginnOfMonitoring( ) ).isEqualTo( "01.12.2018, 20:00:00" );
+		assertThat( statistics.getEndOfMonitoring( ) ).isEqualTo( "02.12.2018, 22:00:00" );
 	}
 
 	@Test
@@ -101,8 +100,8 @@ public final class StatisticsServiceTest {
 		when( repository.getProcessDuration( ) ).thenReturn( 0L );
 
 		final Statistics statistics = statisticsService.getStatistics( ).get( );
-		assertThat( statistics.getProcessDuration( ), is( 0L ) );
-		assertThat( statistics.getProcessSpeed( ), is( 0L ) );
+		assertThat( statistics.getProcessDuration( ) ).isEqualTo( 0L );
+		assertThat( statistics.getProcessSpeed( ) ).isEqualTo( 0L );
 	}
 
 	private MethodCall createMethodCall( final int aYear, final int aMonth, final int aDay, final int aHour, final int aMinute ) {

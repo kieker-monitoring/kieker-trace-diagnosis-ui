@@ -16,19 +16,19 @@
 
 package kieker.diagnosis.backend.export;
 
-import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.TempDirectory;
+import org.junitpioneer.jupiter.TempDirectory.TempDir;
 
 /**
  * This is a unit test for {@link ExportService}.
@@ -37,15 +37,10 @@ import org.junit.rules.TemporaryFolder;
  */
 public final class ExportServiceTest {
 
-	@Rule
-	public TemporaryFolder temporaryFolder = new TemporaryFolder( );
-
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none( );
-
 	@Test
-	public void testSimpleExport( ) throws IOException {
-		final File csvFile = temporaryFolder.newFile( );
+	@ExtendWith ( TempDirectory.class )
+	public void testSimpleExport( @TempDir final Path tempDir ) throws IOException {
+		final Path csvFile = tempDir.resolve( "output.csv" );
 		final CSVData csvData = new CSVData( );
 		csvData.addHeader( "Header 1" );
 		csvData.addHeader( "Header 2" );
@@ -53,32 +48,33 @@ public final class ExportServiceTest {
 		csvData.addRow( Arrays.asList( "A2", "B2" ) );
 
 		final ExportService exportService = new ExportService( );
-		exportService.exportToCSV( csvFile, csvData );
+		exportService.exportToCSV( csvFile.toFile( ), csvData );
 
-		final List<String> allLines = Files.readAllLines( csvFile.toPath( ) );
-		assertThat( allLines, contains( "Header 1;Header 2", "A1;B1", "A2;B2" ) );
+		final List<String> allLines = Files.readAllLines( csvFile );
+		assertThat( allLines ).containsExactly( "Header 1;Header 2", "A1;B1", "A2;B2" );
 	}
 
 	@Test
-	public void testExportWithoutData( ) throws IOException {
-		final File csvFile = temporaryFolder.newFile( );
+	@ExtendWith ( TempDirectory.class )
+	public void testExportWithoutData( @TempDir final Path tempDir ) throws IOException {
+		final Path csvFile = tempDir.resolve( "output.csv" );
 		final CSVData csvData = new CSVData( );
 		csvData.addHeader( "Header 1" );
 		csvData.addHeader( "Header 2" );
 
 		final ExportService exportService = new ExportService( );
-		exportService.exportToCSV( csvFile, csvData );
+		exportService.exportToCSV( csvFile.toFile( ), csvData );
 
-		final List<String> allLines = Files.readAllLines( csvFile.toPath( ) );
-		assertThat( allLines, contains( "Header 1;Header 2" ) );
+		final List<String> allLines = Files.readAllLines( csvFile );
+		assertThat( allLines ).containsExactly( "Header 1;Header 2" );
 	}
 
 	@Test
-	public void testExportOnDirectory( ) throws IOException {
+	@ExtendWith ( TempDirectory.class )
+	public void testExportOnDirectory( @TempDir final Path tempDir ) throws IOException {
 		final ExportService exportService = new ExportService( );
 
-		expectedException.expect( IOException.class );
-		exportService.exportToCSV( temporaryFolder.getRoot( ), new CSVData( ) );
+		assertThrows( IOException.class, ( ) -> exportService.exportToCSV( tempDir.toFile( ), new CSVData( ) ) );
 	}
 
 }

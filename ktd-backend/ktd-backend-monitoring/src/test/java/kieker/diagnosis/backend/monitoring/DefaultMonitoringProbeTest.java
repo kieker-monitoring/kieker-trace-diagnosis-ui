@@ -22,8 +22,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
@@ -39,7 +39,7 @@ import kieker.monitoring.timer.ITimeSource;
  */
 public final class DefaultMonitoringProbeTest {
 
-	@After
+	@AfterEach
 	public void after( ) {
 		MonitoringControllerHolder.setMonitoringController( null );
 	}

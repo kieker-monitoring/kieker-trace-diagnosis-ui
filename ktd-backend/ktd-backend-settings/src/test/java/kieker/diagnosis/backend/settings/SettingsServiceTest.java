@@ -16,15 +16,13 @@
 
 package kieker.diagnosis.backend.settings;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.concurrent.TimeUnit;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -45,7 +43,7 @@ public final class SettingsServiceTest {
 	private Settings currentSettings;
 	private TimeUnit currentTimeUnit;
 
-	@Before
+	@BeforeEach
 	public void setUp( ) {
 		final Injector injector = Guice.createInjector( );
 		settingsService = injector.getInstance( SettingsService.class );
@@ -54,7 +52,7 @@ public final class SettingsServiceTest {
 		currentTimeUnit = propertiesService.loadApplicationProperty( TimeUnitProperty.class );
 	}
 
-	@After
+	@AfterEach
 	public void tearDown( ) {
 		settingsService.saveSettings( currentSettings );
 		propertiesService.saveApplicationProperty( TimeUnitProperty.class, currentTimeUnit );
@@ -64,14 +62,14 @@ public final class SettingsServiceTest {
 	public void testLoadSettings( ) {
 		final Settings settings = settingsService.loadSettings( );
 
-		assertThat( settings, is( notNullValue( ) ) );
-		assertThat( settings.getClassAppearance( ), is( notNullValue( ) ) );
-		assertThat( settings.getMaxNumberOfMethodCalls( ), is( notNullValue( ) ) );
-		assertThat( settings.getMethodAppearance( ), is( notNullValue( ) ) );
-		assertThat( settings.getMethodCallAggregation( ), is( notNullValue( ) ) );
-		assertThat( settings.getMethodCallThreshold( ), is( notNullValue( ) ) );
-		assertThat( settings.getTimestampAppearance( ), is( notNullValue( ) ) );
-		assertThat( settings.getTimeUnit( ), is( notNullValue( ) ) );
+		assertThat( settings ).isNotNull( );
+		assertThat( settings.getClassAppearance( ) ).isNotNull( );
+		assertThat( settings.getMaxNumberOfMethodCalls( ) ).isNotNull( );
+		assertThat( settings.getMethodAppearance( ) ).isNotNull( );
+		assertThat( settings.getMethodCallAggregation( ) ).isNotNull( );
+		assertThat( settings.getMethodCallThreshold( ) ).isNotNull( );
+		assertThat( settings.getTimestampAppearance( ) ).isNotNull( );
+		assertThat( settings.getTimeUnit( ) ).isNotNull( );
 	}
 
 	@Test
@@ -89,39 +87,39 @@ public final class SettingsServiceTest {
 		settingsService.saveSettings( settings );
 
 		final Settings loadedSettings = settingsService.loadSettings( );
-		assertThat( loadedSettings, is( notNullValue( ) ) );
-		assertThat( loadedSettings.getClassAppearance( ), is( ClassAppearance.SHORT ) );
-		assertThat( loadedSettings.getMaxNumberOfMethodCalls( ), is( 42 ) );
-		assertThat( loadedSettings.getMethodAppearance( ), is( MethodAppearance.LONG ) );
-		assertThat( loadedSettings.getMethodCallAggregation( ), is( MethodCallAggregation.BY_TRACE_DEPTH ) );
-		assertThat( loadedSettings.isShowUnmonitoredTimeProperty( ), is( true ) );
-		assertThat( loadedSettings.getMethodCallThreshold( ), is( 42.5f ) );
-		assertThat( loadedSettings.getTimestampAppearance( ), is( TimestampAppearance.LONG_TIME ) );
-		assertThat( loadedSettings.getTimeUnit( ), is( TimeUnit.HOURS ) );
+		assertThat( loadedSettings ).isNotNull( );
+		assertThat( loadedSettings.getClassAppearance( ) ).isEqualTo( ClassAppearance.SHORT );
+		assertThat( loadedSettings.getMaxNumberOfMethodCalls( ) ).isEqualTo( 42 );
+		assertThat( loadedSettings.getMethodAppearance( ) ).isEqualTo( MethodAppearance.LONG );
+		assertThat( loadedSettings.getMethodCallAggregation( ) ).isEqualTo( MethodCallAggregation.BY_TRACE_DEPTH );
+		assertThat( loadedSettings.isShowUnmonitoredTimeProperty( ) ).isEqualTo( true );
+		assertThat( loadedSettings.getMethodCallThreshold( ) ).isEqualTo( 42.5f );
+		assertThat( loadedSettings.getTimestampAppearance( ) ).isEqualTo( TimestampAppearance.LONG_TIME );
+		assertThat( loadedSettings.getTimeUnit( ) ).isEqualTo( TimeUnit.HOURS );
 	}
 
 	@Test
 	public void testGetCurrentDurationSuffix( ) {
 		propertiesService.saveApplicationProperty( TimeUnitProperty.class, TimeUnit.DAYS );
-		assertThat( settingsService.getCurrentDurationSuffix( ), is( "[d]" ) );
+		assertThat( settingsService.getCurrentDurationSuffix( ) ).isEqualTo( "[d]" );
 
 		propertiesService.saveApplicationProperty( TimeUnitProperty.class, TimeUnit.HOURS );
-		assertThat( settingsService.getCurrentDurationSuffix( ), is( "[h]" ) );
+		assertThat( settingsService.getCurrentDurationSuffix( ) ).isEqualTo( "[h]" );
 
 		propertiesService.saveApplicationProperty( TimeUnitProperty.class, TimeUnit.MICROSECONDS );
-		assertThat( settingsService.getCurrentDurationSuffix( ), is( "[µs]" ) );
+		assertThat( settingsService.getCurrentDurationSuffix( ) ).isEqualTo( "[µs]" );
 
 		propertiesService.saveApplicationProperty( TimeUnitProperty.class, TimeUnit.MILLISECONDS );
-		assertThat( settingsService.getCurrentDurationSuffix( ), is( "[ms]" ) );
+		assertThat( settingsService.getCurrentDurationSuffix( ) ).isEqualTo( "[ms]" );
 
 		propertiesService.saveApplicationProperty( TimeUnitProperty.class, TimeUnit.MINUTES );
-		assertThat( settingsService.getCurrentDurationSuffix( ), is( "[m]" ) );
+		assertThat( settingsService.getCurrentDurationSuffix( ) ).isEqualTo( "[m]" );
 
 		propertiesService.saveApplicationProperty( TimeUnitProperty.class, TimeUnit.NANOSECONDS );
-		assertThat( settingsService.getCurrentDurationSuffix( ), is( "[ns]" ) );
+		assertThat( settingsService.getCurrentDurationSuffix( ) ).isEqualTo( "[ns]" );
 
 		propertiesService.saveApplicationProperty( TimeUnitProperty.class, TimeUnit.SECONDS );
-		assertThat( settingsService.getCurrentDurationSuffix( ), is( "[s]" ) );
+		assertThat( settingsService.getCurrentDurationSuffix( ) ).isEqualTo( "[s]" );
 	}
 
 }

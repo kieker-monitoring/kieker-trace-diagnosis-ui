@@ -16,10 +16,7 @@
 
 package kieker.diagnosis.frontend.application;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.collection.IsEmptyCollection.empty;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
@@ -44,15 +41,15 @@ public final class KiekerTraceDiagnosisTestUI extends ApplicationTest {
 
 	@Test
 	public void closeApplication( ) {
-		assertThat( listWindows( ), hasSize( 1 ) );
+		assertThat( listWindows( ) ).hasSize( 1 );
 
 		closeCurrentWindowViaJavaFx( );
 		closeDialogPage.getCancel( ).click( );
-		assertThat( listWindows( ), hasSize( 1 ) );
+		assertThat( listWindows( ) ).hasSize( 1 );
 
 		closeCurrentWindowViaJavaFx( );
 		closeDialogPage.getYes( ).click( );
-		assertThat( listWindows( ), is( empty( ) ) );
+		assertThat( listWindows( ) ).isEmpty( );
 	}
 
 	private void closeCurrentWindowViaJavaFx( ) {

@@ -16,8 +16,8 @@
 
 package kieker.diagnosis.backend.cache;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -26,10 +26,9 @@ import static org.mockito.Mockito.when;
 import java.lang.reflect.Method;
 
 import org.aopalliance.intercept.MethodInvocation;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -42,36 +41,37 @@ import kieker.diagnosis.backend.base.service.Service;
  *
  * @author Nils Christian Ehmke
  */
+@DisplayName ( "Unit-Test for CacheInterceptor" )
 public final class CacheInterceptorTest {
-
-	@Rule
-	public final ExpectedException expectedException = ExpectedException.none( );
 
 	private TestService testService;
 
-	@Before
+	@BeforeEach
 	public void setUp( ) {
 		final Injector injector = Guice.createInjector( new CacheModule( ) );
 		testService = injector.getInstance( TestService.class );
 	}
 
 	@Test
+	@DisplayName ( "Test without the use of the cache annotation" )
 	public void testWithoutUseCacheAnnotation( ) throws Throwable {
 		testService.methodA( "test-key" );
 		testService.methodA( "test-key" );
 
-		assertThat( testService.getCounter( ), is( 2 ) );
+		assertThat( testService.getCounter( ) ).isEqualTo( 2 );
 	}
 
 	@Test
+	@DisplayName ( "Test with the use of the cache annotation" )
 	public void testWithUseCacheAnnotation( ) throws Throwable {
 		testService.methodB( "test-key" );
 		testService.methodB( "test-key" );
 
-		assertThat( testService.getCounter( ), is( 1 ) );
+		assertThat( testService.getCounter( ) ).isEqualTo( 1 );
 	}
 
 	@Test
+	@DisplayName ( "Test with the use of the cache annotation and a null value" )
 	public void testWithUseCacheAnnotationWithNullValue( ) throws Throwable {
 		final UseCache useCache = mock( UseCache.class );
 		when( useCache.cacheName( ) ).thenReturn( "test-cache" );
@@ -91,6 +91,7 @@ public final class CacheInterceptorTest {
 	}
 
 	@Test
+	@DisplayName ( "Test without any annotation" )
 	public void testWithoutAnyAnnotation( ) throws Throwable {
 		final Method method = mock( Method.class );
 		final MethodInvocation methodInvocation = mock( MethodInvocation.class );
@@ -103,15 +104,17 @@ public final class CacheInterceptorTest {
 	}
 
 	@Test
+	@DisplayName ( "Test with the use of the invalidate cache annotation" )
 	public void testWithInvalidateCacheAnnotation( ) throws Throwable {
 		testService.methodB( "test-key" );
 		testService.methodC( "test-key" );
 		testService.methodB( "test-key" );
 
-		assertThat( testService.getCounter( ), is( 2 ) );
+		assertThat( testService.getCounter( ) ).isEqualTo( 2 );
 	}
 
 	@Test
+	@DisplayName ( "Test with the use of the invalidate cache annotation but without cache" )
 	public void testWithInvalidateCacheAnnotationWithoutCache( ) throws Throwable {
 		final InvalidateCache invalidateCache = mock( InvalidateCache.class );
 		when( invalidateCache.cacheName( ) ).thenReturn( "test-cache" );
@@ -131,9 +134,9 @@ public final class CacheInterceptorTest {
 	}
 
 	@Test
+	@DisplayName ( "Test with an occuring exception" )
 	public void testException( ) throws Throwable {
-		expectedException.expect( Exception.class );
-		testService.methodD( "test-key" );
+		assertThrows( Exception.class, ( ) -> testService.methodD( "test-key" ) );
 	}
 
 	@Singleton

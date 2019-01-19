@@ -23,9 +23,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -44,13 +44,13 @@ public final class MonitoringInterceptorTest {
 
 	private TestService testService;
 
-	@Before
+	@BeforeEach
 	public void setUp( ) {
 		final Injector injector = Guice.createInjector( new MonitoringModule( ) );
 		testService = injector.getInstance( TestService.class );
 	}
 
-	@After
+	@AfterEach
 	public void after( ) {
 		MonitoringUtil.setMonitoringProbeFactory( new NoOpMonitoringProbeFactory( ) );
 	}

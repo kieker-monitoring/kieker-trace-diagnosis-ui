@@ -16,6 +16,7 @@
 
 package kieker.diagnosis.frontend.tab.traces.complex;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -115,7 +116,7 @@ public final class TracesTabTestUI extends ApplicationTest {
 
 	@Test
 	public void testNormalSearch( ) {
-		assertThat( tracesPage.getTable( ).countItems( ), is( 4 ) );
+		assertThat( tracesPage.getTable( ).countItems( ) ).isEqualTo( 4 );
 
 		tracesPage.getFilter( ).getHost( ).writeText( "host1" );
 		tracesPage.getFilter( ).getClazz( ).writeText( "class1" );
@@ -125,38 +126,38 @@ public final class TracesTabTestUI extends ApplicationTest {
 
 		tracesPage.getFilter( ).getTraceId( ).writeText( "1" );
 		tracesPage.getFilter( ).getSearch( ).click( );
-		assertThat( tracesPage.getTable( ).countItems( ), is( 1 ) );
+		assertThat( tracesPage.getTable( ).countItems( ) ).isEqualTo( 1 );
 
 		tracesPage.getFilter( ).getTraceId( ).clearText( );
 		tracesPage.getFilter( ).getException( ).writeText( "exception" );
 		tracesPage.getFilter( ).getSearch( ).click( );
-		assertThat( tracesPage.getTable( ).countItems( ), is( 1 ) );
+		assertThat( tracesPage.getTable( ).countItems( ) ).isEqualTo( 1 );
 
 		tracesPage.getFilter( ).getException( ).clearText( );
 		tracesPage.getFilter( ).getSearchType( ).select( "Nur fehlgeschlagene" );
 		tracesPage.getFilter( ).getSearch( ).click( );
-		assertThat( tracesPage.getTable( ).countItems( ), is( 1 ) );
+		assertThat( tracesPage.getTable( ).countItems( ) ).isEqualTo( 1 );
 
 		tracesPage.getFilter( ).getHost( ).clearText( );
 		tracesPage.getFilter( ).getSearchType( ).select( "Nur erfolgreiche" );
 		tracesPage.getFilter( ).getSearch( ).click( );
-		assertThat( tracesPage.getTable( ).countItems( ), is( 2 ) );
+		assertThat( tracesPage.getTable( ).countItems( ) ).isEqualTo( 2 );
 	}
 
 	@Test
 	public void testDetailPanel( ) {
 		tracesPage.getTable( ).clickOnNthTableRow( 0 );
-		assertThat( tracesPage.getDetail( ).getHost( ).getText( ), is( "host1" ) );
-		assertThat( tracesPage.getDetail( ).getException( ).getText( ), is( "<Keine Daten verfügbar>" ) );
+		assertThat( tracesPage.getDetail( ).getHost( ).getText( ) ).isEqualTo( "host1" );
+		assertThat( tracesPage.getDetail( ).getException( ).getText( ) ).isEqualTo( "<Keine Daten verfügbar>" );
 
 		tracesPage.getTable( ).clickOnNthTableRow( 1 );
-		assertThat( tracesPage.getDetail( ).getHost( ).getText( ), is( "host1" ) );
-		assertThat( tracesPage.getDetail( ).getException( ).getText( ), is( "exception" ) );
+		assertThat( tracesPage.getDetail( ).getHost( ).getText( ) ).isEqualTo( "host1" );
+		assertThat( tracesPage.getDetail( ).getException( ).getText( ) ).isEqualTo( "exception" );
 	}
 
 	@Test
 	public void testSearchWithRegularExpressions( ) {
-		assertThat( tracesPage.getTable( ).countItems( ), is( 4 ) );
+		assertThat( tracesPage.getTable( ).countItems( ) ).isEqualTo( 4 );
 
 		tracesPage.getFilter( ).getUseRegularExpression( ).click( );
 
@@ -164,21 +165,21 @@ public final class TracesTabTestUI extends ApplicationTest {
 		tracesPage.getFilter( ).getClazz( ).writeText( "class1" );
 		tracesPage.getFilter( ).getMethod( ).writeText( "m....d\\d" );
 		tracesPage.getFilter( ).getSearch( ).click( );
-		assertThat( tracesPage.getTable( ).countItems( ), is( 2 ) );
+		assertThat( tracesPage.getTable( ).countItems( ) ).isEqualTo( 2 );
 
 		tracesPage.getFilter( ).getException( ).writeText( "e.*" );
 		tracesPage.getFilter( ).getSearch( ).click( );
-		assertThat( tracesPage.getTable( ).countItems( ), is( 1 ) );
+		assertThat( tracesPage.getTable( ).countItems( ) ).isEqualTo( 1 );
 
 		tracesPage.getFilter( ).getException( ).clearText( );
 		tracesPage.getFilter( ).getSearchType( ).select( "Nur fehlgeschlagene" );
 		tracesPage.getFilter( ).getSearch( ).click( );
-		assertThat( tracesPage.getTable( ).countItems( ), is( 1 ) );
+		assertThat( tracesPage.getTable( ).countItems( ) ).isEqualTo( 1 );
 	}
 
 	@Test
 	public void testSearchWithInvalidRegularExpressions( ) {
-		assertThat( tracesPage.getTable( ).countItems( ), is( 4 ) );
+		assertThat( tracesPage.getTable( ).countItems( ) ).isEqualTo( 4 );
 
 		tracesPage.getFilter( ).getUseRegularExpression( ).click( );
 
@@ -207,10 +208,10 @@ public final class TracesTabTestUI extends ApplicationTest {
 		tracesPage.getTable( ).expandNthRow( 0 );
 
 		tracesPage.getTable( ).clickOnNthTableRow( 1 );
-		assertThat( tracesPage.getDetail( ).getHost( ).getText( ), is( "-" ) );
+		assertThat( tracesPage.getDetail( ).getHost( ).getText( ) ).isEqualTo( "-" );
 
 		tracesPage.getTable( ).clickOnNthTableRow( 2 );
-		assertThat( tracesPage.getDetail( ).getHost( ).getText( ), is( "host5" ) );
+		assertThat( tracesPage.getDetail( ).getHost( ).getText( ) ).isEqualTo( "host5" );
 	}
 
 	@Test
@@ -223,10 +224,10 @@ public final class TracesTabTestUI extends ApplicationTest {
 		tracesPage.getFilter( ).getSaveAsFavorite( ).click( );
 		tracesPage.getFilter( ).getHost( ).clearText( );
 
-		assertThat( filterHolder.getValue( ), is( notNullValue( ) ) );
+		assertThat( filterHolder.getValue( ) ).isEqualTo( notNullValue( ) );
 		interact( ( ) -> tracesTab.setFilterValue( filterHolder.getValue( ) ) );
 
-		assertThat( tracesPage.getFilter( ).getHost( ).getText( ), is( "host1" ) );
+		assertThat( tracesPage.getFilter( ).getHost( ).getText( ) ).isEqualTo( "host1" );
 	}
 
 }
