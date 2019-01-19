@@ -91,7 +91,7 @@ public final class Reader {
 		boolean anyFilesProcessed = !mappingFileContainingDirectories.isEmpty( );
 		for ( final Path subDirectory : mappingFileContainingDirectories ) {
 			final boolean filesProcessed = readFromDirectory( subDirectory, repository );
-			anyFilesProcessed &= filesProcessed;
+			anyFilesProcessed |= filesProcessed;
 		}
 
 		if ( !anyFilesProcessed ) {
