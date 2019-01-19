@@ -29,7 +29,6 @@ import org.junit.Test;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.settings.properties.TimeUnitProperty;
 
@@ -48,7 +47,7 @@ public final class SettingsServiceTest {
 
 	@Before
 	public void setUp( ) {
-		final Injector injector = Guice.createInjector( new ServiceBaseModule( ) );
+		final Injector injector = Guice.createInjector( );
 		settingsService = injector.getInstance( SettingsService.class );
 		propertiesService = injector.getInstance( PropertiesService.class );
 		currentSettings = settingsService.loadSettings( );

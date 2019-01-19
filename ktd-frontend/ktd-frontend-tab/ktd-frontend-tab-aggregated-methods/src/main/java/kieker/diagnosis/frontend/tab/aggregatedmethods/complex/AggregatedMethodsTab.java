@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
+import com.google.inject.Inject;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -28,22 +30,31 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.export.CSVData;
 import kieker.diagnosis.backend.pattern.PatternService;
 import kieker.diagnosis.backend.search.aggregatedmethods.AggregatedMethodsFilter;
 import kieker.diagnosis.backend.search.aggregatedmethods.AggregatedMethodsService;
 import kieker.diagnosis.backend.settings.SettingsService;
+import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 import kieker.diagnosis.frontend.dialog.alert.Alert;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.composite.AggregatedMethodDetailsPane;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.composite.AggregatedMethodFilterPane;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.composite.AggregatedMethodStatusBar;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.composite.AggregatedMethodsTableView;
 
-public final class AggregatedMethodsTab extends Tab {
+public final class AggregatedMethodsTab extends Tab implements CdiMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( AggregatedMethodsTab.class.getName( ) );
+
+	@Inject
+	private AggregatedMethodsService methodsService;
+
+	@Inject
+	private SettingsService settingsService;
+
+	@Inject
+	private PatternService patternService;
 
 	private AggregatedMethodFilterPane filterPane;
 	private AggregatedMethodsTableView methodsTableView;
@@ -59,6 +70,7 @@ public final class AggregatedMethodsTab extends Tab {
 	private Consumer<CSVData> onExportToCSV;
 
 	public AggregatedMethodsTab( ) {
+		injectFields( );
 		createControl( );
 		performInitialize( );
 	}
@@ -123,12 +135,9 @@ public final class AggregatedMethodsTab extends Tab {
 	}
 
 	public void prepareRefresh( ) {
-		// Get the data
-		final AggregatedMethodsService methodsService = ServiceFactory.getService( AggregatedMethodsService.class );
 		methodsForRefresh = methodsService.searchMethods( new AggregatedMethodsFilter( ) );
 		totalMethodsForRefresh = methodsService.countMethods( );
 
-		final SettingsService settingsService = ServiceFactory.getService( SettingsService.class );
 		durationSuffixForRefresh = settingsService.getCurrentDurationSuffix( );
 	}
 
@@ -160,7 +169,6 @@ public final class AggregatedMethodsTab extends Tab {
 		if ( checkFilter( filter ) ) {
 
 			// Find the methods to display
-			final AggregatedMethodsService methodsService = ServiceFactory.getService( AggregatedMethodsService.class );
 			final List<AggregatedMethodCall> methods = methodsService.searchMethods( filter );
 			final int totalMethods = methodsService.countMethods( );
 
@@ -184,8 +192,6 @@ public final class AggregatedMethodsTab extends Tab {
 	private boolean checkFilter( final AggregatedMethodsFilter filter ) {
 		// If we are using regular expressions, we should check them
 		if ( filter.isUseRegExpr( ) ) {
-			final PatternService patternService = ServiceFactory.getService( PatternService.class );
-
 			final StringBuilder strBuilder = new StringBuilder( );
 
 			if ( !( patternService.isValidPattern( filter.getHost( ) ) || filter.getHost( ) == null ) ) {

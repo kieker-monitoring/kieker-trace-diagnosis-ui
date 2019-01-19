@@ -19,6 +19,8 @@ package kieker.diagnosis.frontend.main.composite;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import com.google.inject.Inject;
+
 import javafx.application.HostServices;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -31,22 +33,28 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Window;
-import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.monitoring.MonitoringConfiguration;
 import kieker.diagnosis.backend.monitoring.MonitoringService;
 import kieker.diagnosis.backend.monitoring.Status;
 import kieker.diagnosis.backend.properties.DevelopmentModeProperty;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.frontend.base.common.HostServicesHolder;
+import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 import kieker.diagnosis.frontend.base.mixin.IconMixin;
 import kieker.diagnosis.frontend.dialog.about.AboutDialog;
 import kieker.diagnosis.frontend.dialog.alert.Alert;
 import kieker.diagnosis.frontend.dialog.monitoring.MonitoringDialog;
 import kieker.diagnosis.frontend.main.properties.CloseWithoutPromptProperty;
 
-public final class MainMenuBar extends MenuBar implements IconMixin {
+public final class MainMenuBar extends MenuBar implements IconMixin, CdiMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MainMenuBar.class.getName( ) );
+
+	@Inject
+	private PropertiesService propertiesService;
+
+	@Inject
+	private MonitoringService monitoringService;
 
 	private Runnable onSettings;
 	private Runnable onImportLogFromZip;
@@ -56,6 +64,7 @@ public final class MainMenuBar extends MenuBar implements IconMixin {
 	private Menu favoritesMenu;
 
 	public MainMenuBar( ) {
+		injectFields( );
 		createControl( );
 	}
 
@@ -197,7 +206,6 @@ public final class MainMenuBar extends MenuBar implements IconMixin {
 	}
 
 	private void performMonitoring( ) {
-		final MonitoringService monitoringService = ServiceFactory.getService( MonitoringService.class );
 		final MonitoringConfiguration monitoringConfiguration = monitoringService.getCurrentConfiguration( );
 		final Status status = monitoringService.getCurrentStatus( );
 
@@ -218,7 +226,6 @@ public final class MainMenuBar extends MenuBar implements IconMixin {
 	 * This action is performed, when the user tries to close the application.
 	 */
 	public void performClose( ) {
-		final PropertiesService propertiesService = ServiceFactory.getService( PropertiesService.class );
 		final boolean developmentMode = propertiesService.loadSystemProperty( DevelopmentModeProperty.class );
 		final boolean closeWithoutPrompt = propertiesService.loadApplicationProperty( CloseWithoutPromptProperty.class );
 

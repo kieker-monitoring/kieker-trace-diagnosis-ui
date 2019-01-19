@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
+import com.google.inject.Inject;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -27,21 +29,30 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.pattern.PatternService;
 import kieker.diagnosis.backend.search.traces.TracesFilter;
 import kieker.diagnosis.backend.search.traces.TracesService;
 import kieker.diagnosis.backend.settings.SettingsService;
+import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 import kieker.diagnosis.frontend.dialog.alert.Alert;
 import kieker.diagnosis.frontend.tab.traces.composite.TraceDetailsPane;
 import kieker.diagnosis.frontend.tab.traces.composite.TraceFilterPane;
 import kieker.diagnosis.frontend.tab.traces.composite.TraceStatusBar;
 import kieker.diagnosis.frontend.tab.traces.composite.TracesTreeTableView;
 
-public final class TracesTab extends Tab {
+public final class TracesTab extends Tab implements CdiMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( TracesTab.class.getName( ) );
+
+	@Inject
+	private TracesService tracesService;
+
+	@Inject
+	private SettingsService settingsService;
+
+	@Inject
+	private PatternService patternService;
 
 	private TraceFilterPane filterPane;
 	private TracesTreeTableView treeTableView;
@@ -54,6 +65,7 @@ public final class TracesTab extends Tab {
 	private String durationSuffixForRefresh;
 
 	public TracesTab( ) {
+		injectFields( );
 		createControl( );
 		performInitialize( );
 	}
@@ -129,7 +141,6 @@ public final class TracesTab extends Tab {
 		if ( checkFilter( filter ) ) {
 
 			// Find the trace roots to display
-			final TracesService tracesService = ServiceFactory.getService( TracesService.class );
 			final List<MethodCall> traceRoots = tracesService.searchTraces( filter );
 			final int totalTraces = tracesService.countTraces( );
 
@@ -150,12 +161,10 @@ public final class TracesTab extends Tab {
 
 	public void prepareRefresh( ) {
 		// Find the trace roots to display
-		final TracesService tracesService = ServiceFactory.getService( TracesService.class );
 		traceRootsForRefresh = tracesService.searchTraces( new TracesFilter( ) );
 		totalTracesForRefresh = tracesService.countTraces( );
 
 		// Get the duration suffix
-		final SettingsService settingsService = ServiceFactory.getService( SettingsService.class );
 		durationSuffixForRefresh = settingsService.getCurrentDurationSuffix( );
 	}
 
@@ -175,7 +184,6 @@ public final class TracesTab extends Tab {
 	private boolean checkFilter( final TracesFilter filter ) {
 		// If we are using regular expressions, we should check them
 		if ( filter.isUseRegExpr( ) ) {
-			final PatternService patternService = ServiceFactory.getService( PatternService.class );
 
 			final StringBuilder strBuilder = new StringBuilder( );
 

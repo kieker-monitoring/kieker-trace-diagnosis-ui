@@ -16,15 +16,17 @@
 
 package kieker.diagnosis.frontend.tab.aggregatedmethods.atom;
 
+import com.google.inject.Inject;
+
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.util.Callback;
-import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.settings.MethodAppearance;
 import kieker.diagnosis.backend.settings.properties.MethodAppearanceProperty;
+import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 
 /**
  * This is a cell factory for a table which shows the method of an {@link AggregatedMethodCall} in the configured
@@ -32,9 +34,14 @@ import kieker.diagnosis.backend.settings.properties.MethodAppearanceProperty;
  *
  * @author Nils Christian Ehmke
  */
-public final class MethodCellValueFactory implements Callback<CellDataFeatures<AggregatedMethodCall, String>, ObservableValue<String>> {
+public final class MethodCellValueFactory implements Callback<CellDataFeatures<AggregatedMethodCall, String>, ObservableValue<String>>, CdiMixin {
 
-	private final PropertiesService propertiesService = ServiceFactory.getService( PropertiesService.class );
+	@Inject
+	private PropertiesService propertiesService;
+
+	public MethodCellValueFactory( ) {
+		injectFields( );
+	}
 
 	@Override
 	public ObservableValue<String> call( final CellDataFeatures<AggregatedMethodCall, String> cellDataFeatures ) {

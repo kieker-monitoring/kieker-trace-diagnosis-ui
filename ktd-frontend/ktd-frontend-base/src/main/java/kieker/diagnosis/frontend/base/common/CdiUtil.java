@@ -14,28 +14,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.backend.base.service;
+package kieker.diagnosis.frontend.base.common;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
-/**
- * This factory can be used to retrieve a service from the CDI context, even if the requesting class is not in the
- * context.
- *
- * @author Nils Christian Ehmke
- */
-public final class ServiceFactory {
+public final class CdiUtil {
 
 	@Inject
 	private static Injector injector;
-
-	private ServiceFactory( ) {
+ 
+	private CdiUtil( ) {
 		throw new AssertionError( "This class must not be instantiated." );
 	}
 
-	public static <S extends Service> S getService( final Class<S> serviceClass ) {
-		return injector.getInstance( serviceClass );
+	public static void injectFields( final Object instance ) {
+		injector.injectMembers( instance );
 	}
 
 }

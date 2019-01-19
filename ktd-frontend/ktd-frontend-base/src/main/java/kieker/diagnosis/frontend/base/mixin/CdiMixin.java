@@ -14,22 +14,14 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.backend.base;
+package kieker.diagnosis.frontend.base.mixin;
 
-import com.google.inject.AbstractModule;
+import kieker.diagnosis.frontend.base.common.CdiUtil;
 
-import kieker.diagnosis.backend.base.service.ServiceFactory;
+public interface CdiMixin {
 
-/**
- * This is the Guice module for the service base.
- *
- * @author Nils Christian Ehmke
- */
-public final class ServiceBaseModule extends AbstractModule {
-
-	@Override
-	protected void configure( ) {
-		requestStaticInjection( ServiceFactory.class );
+	default void injectFields( ) {
+		CdiUtil.injectFields( this );
 	}
 
 }

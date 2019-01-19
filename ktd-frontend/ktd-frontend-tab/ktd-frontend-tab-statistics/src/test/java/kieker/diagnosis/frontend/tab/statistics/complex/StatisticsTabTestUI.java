@@ -33,9 +33,9 @@ import com.google.inject.Injector;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
-import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.backend.search.statistics.Statistics;
 import kieker.diagnosis.backend.search.statistics.StatisticsService;
+import kieker.diagnosis.frontend.base.FrontendBaseModule;
 
 /**
  * This is a UI test which checks that the statistics tab is working as expected.
@@ -50,7 +50,7 @@ public final class StatisticsTabTestUI extends ApplicationTest {
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
-		final Injector injector = Guice.createInjector( new ServiceBaseModule( ), new Module( ) );
+		final Injector injector = Guice.createInjector( new FrontendBaseModule( ), new Module( ) );
 
 		statisticsService = injector.getInstance( StatisticsService.class );
 

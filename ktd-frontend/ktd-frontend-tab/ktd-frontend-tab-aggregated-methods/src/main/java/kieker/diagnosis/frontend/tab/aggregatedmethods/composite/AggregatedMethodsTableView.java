@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.google.inject.Inject;
+
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
@@ -30,7 +32,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.SortType;
 import javafx.scene.control.TableView;
 import javafx.util.Callback;
-import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.export.CSVData;
 import kieker.diagnosis.backend.properties.PropertiesService;
@@ -38,6 +39,7 @@ import kieker.diagnosis.backend.settings.ClassAppearance;
 import kieker.diagnosis.backend.settings.MethodAppearance;
 import kieker.diagnosis.backend.settings.properties.ClassAppearanceProperty;
 import kieker.diagnosis.backend.settings.properties.MethodAppearanceProperty;
+import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 import kieker.diagnosis.frontend.base.mixin.StylesheetMixin;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.atom.ClassCellValueFactory;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.atom.DurationCellValueFactory;
@@ -49,9 +51,12 @@ import kieker.diagnosis.frontend.tab.aggregatedmethods.atom.StyledRow;
  *
  * @author Nils Christian Ehmke
  */
-public final class AggregatedMethodsTableView extends TableView<AggregatedMethodCall> implements StylesheetMixin {
+public final class AggregatedMethodsTableView extends TableView<AggregatedMethodCall> implements StylesheetMixin, CdiMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( AggregatedMethodsTableView.class.getName( ) );
+
+	@Inject
+	private PropertiesService propertiesService;
 
 	private TableColumn<AggregatedMethodCall, String> count;
 	private TableColumn<AggregatedMethodCall, String> host;
@@ -64,6 +69,7 @@ public final class AggregatedMethodsTableView extends TableView<AggregatedMethod
 	private TableColumn<AggregatedMethodCall, String> totalDuration;
 
 	public AggregatedMethodsTableView( ) {
+		injectFields( );
 		createControl( );
 	}
 
@@ -192,8 +198,6 @@ public final class AggregatedMethodsTableView extends TableView<AggregatedMethod
 	}
 
 	private Callback<TableView<AggregatedMethodCall>, Boolean> createSortPolicy( ) {
-		final PropertiesService propertiesService = ServiceFactory.getService( PropertiesService.class );
-
 		return param -> {
 			final ObservableList<TableColumn<AggregatedMethodCall, ?>> sortOrder = param.getSortOrder( );
 

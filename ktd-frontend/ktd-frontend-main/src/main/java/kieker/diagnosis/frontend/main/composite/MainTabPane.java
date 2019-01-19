@@ -21,12 +21,13 @@ import java.io.IOException;
 import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
 
+import com.google.inject.Inject;
+
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
-import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.export.CSVData;
@@ -36,6 +37,7 @@ import kieker.diagnosis.backend.search.aggregatedmethods.AggregatedMethodsFilter
 import kieker.diagnosis.backend.search.methods.MethodsFilter;
 import kieker.diagnosis.backend.search.traces.TracesFilter;
 import kieker.diagnosis.frontend.base.common.DelegateException;
+import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 import kieker.diagnosis.frontend.base.mixin.StylesheetMixin;
 import kieker.diagnosis.frontend.main.properties.LastExportPathProperty;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.complex.AggregatedMethodsTab;
@@ -43,9 +45,15 @@ import kieker.diagnosis.frontend.tab.methods.complex.MethodsTab;
 import kieker.diagnosis.frontend.tab.statistics.complex.StatisticsTab;
 import kieker.diagnosis.frontend.tab.traces.complex.TracesTab;
 
-public final class MainTabPane extends TabPane implements StylesheetMixin {
+public final class MainTabPane extends TabPane implements StylesheetMixin, CdiMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MainTabPane.class.getName( ) );
+
+	@Inject
+	private PropertiesService propertiesService;
+
+	@Inject
+	private ExportService exportService;
 
 	private TracesTab tracesTab;
 	private MethodsTab methodsTab;
@@ -53,6 +61,7 @@ public final class MainTabPane extends TabPane implements StylesheetMixin {
 	private StatisticsTab statisticsTab;
 
 	public MainTabPane( ) {
+		injectFields( );
 		createControl( );
 	}
 
@@ -149,7 +158,6 @@ public final class MainTabPane extends TabPane implements StylesheetMixin {
 		fileChooser.setTitle( RESOURCE_BUNDLE.getString( "titleExportToCSV" ) );
 
 		// Set an initial directory if possible
-		final PropertiesService propertiesService = ServiceFactory.getService( PropertiesService.class );
 		final String lastExportPath = propertiesService.loadApplicationProperty( LastExportPathProperty.class );
 		final File lastExportDirectory = new File( lastExportPath );
 		if ( lastExportDirectory.isDirectory( ) ) {
@@ -164,7 +172,6 @@ public final class MainTabPane extends TabPane implements StylesheetMixin {
 				propertiesService.saveApplicationProperty( LastExportPathProperty.class, directory.getAbsolutePath( ) );
 			}
 
-			final ExportService exportService = ServiceFactory.getService( ExportService.class );
 			try {
 				exportService.exportToCSV( file, aCsvData );
 			} catch ( final IOException ex ) {

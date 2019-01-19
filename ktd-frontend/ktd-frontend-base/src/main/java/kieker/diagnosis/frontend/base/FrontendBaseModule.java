@@ -14,26 +14,16 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.diagnosis.frontend.application;
+package kieker.diagnosis.frontend.base;
 
 import com.google.inject.AbstractModule;
 
-import kieker.diagnosis.backend.cache.CacheModule;
-import kieker.diagnosis.backend.monitoring.MonitoringModule;
-import kieker.diagnosis.frontend.base.FrontendBaseModule;
+import kieker.diagnosis.frontend.base.common.CdiUtil;
 
-/**
- * This is the Guice module for the application.
- *
- * @author Nils Christian Ehmke
- */
-final class KiekerTraceDiagnosisModule extends AbstractModule {
+public class FrontendBaseModule extends AbstractModule {
 
 	@Override
 	protected void configure( ) {
-		install( new MonitoringModule( ) );
-		install( new CacheModule( ) );
-		install( new FrontendBaseModule( ) );
+		requestStaticInjection( CdiUtil.class );
 	}
-
 }

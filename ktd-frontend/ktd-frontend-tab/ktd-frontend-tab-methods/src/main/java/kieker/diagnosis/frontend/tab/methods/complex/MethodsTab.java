@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
+import com.google.inject.Inject;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -28,7 +30,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.export.CSVData;
@@ -36,15 +37,25 @@ import kieker.diagnosis.backend.pattern.PatternService;
 import kieker.diagnosis.backend.search.methods.MethodsFilter;
 import kieker.diagnosis.backend.search.methods.MethodsService;
 import kieker.diagnosis.backend.settings.SettingsService;
+import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 import kieker.diagnosis.frontend.dialog.alert.Alert;
 import kieker.diagnosis.frontend.tab.methods.composite.MethodDetailsPane;
 import kieker.diagnosis.frontend.tab.methods.composite.MethodFilterPane;
 import kieker.diagnosis.frontend.tab.methods.composite.MethodStatusBar;
 import kieker.diagnosis.frontend.tab.methods.composite.MethodsTableView;
 
-public final class MethodsTab extends Tab {
+public final class MethodsTab extends Tab implements CdiMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MethodsTab.class.getName( ) );
+
+	@Inject
+	private MethodsService methodsService;
+
+	@Inject
+	private SettingsService settingsService;
+
+	@Inject
+	private PatternService patternService;
 
 	private MethodFilterPane filterPane;
 	private MethodsTableView methodsTableView;
@@ -60,6 +71,7 @@ public final class MethodsTab extends Tab {
 	private String durationSuffixForRefresh;
 
 	public MethodsTab( ) {
+		injectFields( );
 		createControl( );
 		performInitialize( );
 	}
@@ -125,7 +137,6 @@ public final class MethodsTab extends Tab {
 	private void performSearch( ) {
 		final MethodsFilter filter = filterPane.getValue( );
 		if ( checkFilter( filter ) ) {
-			final MethodsService methodsService = ServiceFactory.getService( MethodsService.class );
 			final List<MethodCall> methods = methodsService.searchMethods( filter );
 			final int totalMethods = methodsService.countMethods( );
 
@@ -148,8 +159,6 @@ public final class MethodsTab extends Tab {
 	private boolean checkFilter( final MethodsFilter filter ) {
 		// If we are using regular expressions, we should check them
 		if ( filter.isUseRegExpr( ) ) {
-			final PatternService patternService = ServiceFactory.getService( PatternService.class );
-
 			final StringBuilder strBuilder = new StringBuilder( );
 
 			if ( !( patternService.isValidPattern( filter.getHost( ) ) || filter.getHost( ) == null ) ) {
@@ -224,11 +233,9 @@ public final class MethodsTab extends Tab {
 	}
 
 	public void prepareRefresh( ) {
-		final MethodsService methodsService = ServiceFactory.getService( MethodsService.class );
 		methodsForRefresh = methodsService.searchMethods( new MethodsFilter( ) );
 		totalMethodsForRefresh = methodsService.countMethods( );
 
-		final SettingsService settingsService = ServiceFactory.getService( SettingsService.class );
 		durationSuffixForRefresh = settingsService.getCurrentDurationSuffix( );
 	}
 

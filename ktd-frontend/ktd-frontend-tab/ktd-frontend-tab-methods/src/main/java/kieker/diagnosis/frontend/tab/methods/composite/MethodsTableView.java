@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.google.inject.Inject;
+
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
@@ -29,7 +31,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.SortType;
 import javafx.scene.control.TableView;
 import javafx.util.Callback;
-import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.export.CSVData;
 import kieker.diagnosis.backend.properties.PropertiesService;
@@ -37,6 +38,7 @@ import kieker.diagnosis.backend.settings.ClassAppearance;
 import kieker.diagnosis.backend.settings.MethodAppearance;
 import kieker.diagnosis.backend.settings.properties.ClassAppearanceProperty;
 import kieker.diagnosis.backend.settings.properties.MethodAppearanceProperty;
+import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 import kieker.diagnosis.frontend.base.mixin.StylesheetMixin;
 import kieker.diagnosis.frontend.tab.methods.atom.ClassCellValueFactory;
 import kieker.diagnosis.frontend.tab.methods.atom.DurationCellValueFactory;
@@ -49,9 +51,12 @@ import kieker.diagnosis.frontend.tab.methods.atom.TimestampCellValueFactory;
  *
  * @author Nils Christian Ehmke
  */
-public final class MethodsTableView extends TableView<MethodCall> implements StylesheetMixin {
+public final class MethodsTableView extends TableView<MethodCall> implements StylesheetMixin, CdiMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MethodsTableView.class.getName( ) );
+
+	@Inject
+	private PropertiesService propertiesService;
 
 	private TableColumn<MethodCall, String> host;
 	private TableColumn<MethodCall, String> clazz;
@@ -61,6 +66,7 @@ public final class MethodsTableView extends TableView<MethodCall> implements Sty
 	private TableColumn<MethodCall, String> traceId;
 
 	public MethodsTableView( ) {
+		injectFields( );
 		createControl( );
 	}
 
@@ -151,8 +157,6 @@ public final class MethodsTableView extends TableView<MethodCall> implements Sty
 	}
 
 	private Callback<TableView<MethodCall>, Boolean> createSortPolicy( ) {
-		final PropertiesService propertiesService = ServiceFactory.getService( PropertiesService.class );
-
 		return param -> {
 			final ObservableList<TableColumn<MethodCall, ?>> sortOrder = param.getSortOrder( );
 

@@ -20,13 +20,14 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Stack;
 
+import com.google.inject.Inject;
+
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
-import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.settings.MethodCallAggregation;
@@ -34,6 +35,7 @@ import kieker.diagnosis.backend.settings.properties.MaxNumberOfMethodCallsProper
 import kieker.diagnosis.backend.settings.properties.MethodCallAggregationProperty;
 import kieker.diagnosis.backend.settings.properties.MethodCallThresholdProperty;
 import kieker.diagnosis.backend.settings.properties.ShowUnmonitoredTimeProperty;
+import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 import kieker.diagnosis.frontend.base.mixin.StylesheetMixin;
 import kieker.diagnosis.frontend.tab.traces.aggregator.Aggregator;
 import kieker.diagnosis.frontend.tab.traces.aggregator.DurationAggregator;
@@ -48,13 +50,17 @@ import kieker.diagnosis.frontend.tab.traces.atom.MethodCellValueFactory;
 import kieker.diagnosis.frontend.tab.traces.atom.StyledRow;
 import kieker.diagnosis.frontend.tab.traces.atom.TimestampCellValueFactory;
 
-public final class TracesTreeTableView extends TreeTableView<MethodCall> implements StylesheetMixin {
+public final class TracesTreeTableView extends TreeTableView<MethodCall> implements StylesheetMixin, CdiMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( TracesTreeTableView.class.getName( ) );
+
+	@Inject
+	private PropertiesService propertiesService;
 
 	private TreeTableColumn<MethodCall, Long> durationColumn;
 
 	public TracesTreeTableView( ) {
+		injectFields( );
 		createControl( );
 	}
 
@@ -186,7 +192,6 @@ public final class TracesTreeTableView extends TreeTableView<MethodCall> impleme
 	}
 
 	public void setItems( final List<MethodCall> items ) {
-		final PropertiesService propertiesService = ServiceFactory.getService( PropertiesService.class );
 		final boolean showUnmonitoredTime = propertiesService.loadApplicationProperty( ShowUnmonitoredTimeProperty.class );
 
 		// Prepare the aggregator based on the properties

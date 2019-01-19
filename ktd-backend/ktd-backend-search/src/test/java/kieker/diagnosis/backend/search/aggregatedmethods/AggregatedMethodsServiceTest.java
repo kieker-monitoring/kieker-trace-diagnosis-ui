@@ -25,7 +25,6 @@ import org.junit.Test;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.data.MonitoringLogService;
 
@@ -41,7 +40,7 @@ public class AggregatedMethodsServiceTest {
 
 	@Before
 	public void setUp( ) {
-		final Injector injector = Guice.createInjector( new ServiceBaseModule( ) );
+		final Injector injector = Guice.createInjector( );
 		ivMethodsService = injector.getInstance( AggregatedMethodsService.class );
 		ivDataService = injector.getInstance( MonitoringLogService.class );
 	}

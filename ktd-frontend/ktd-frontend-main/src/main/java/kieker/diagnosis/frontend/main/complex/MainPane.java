@@ -21,6 +21,8 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import com.google.inject.Inject;
+
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -32,7 +34,6 @@ import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
-import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.ImportType;
 import kieker.diagnosis.backend.data.MonitoringLogService;
 import kieker.diagnosis.backend.data.exception.CorruptStreamException;
@@ -42,6 +43,7 @@ import kieker.diagnosis.backend.settings.Settings;
 import kieker.diagnosis.backend.settings.SettingsService;
 import kieker.diagnosis.frontend.base.common.DelegateException;
 import kieker.diagnosis.frontend.base.common.ExceptionUtil;
+import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 import kieker.diagnosis.frontend.base.mixin.StylesheetMixin;
 import kieker.diagnosis.frontend.dialog.alert.Alert;
 import kieker.diagnosis.frontend.dialog.favorite.FavoriteDialog;
@@ -51,14 +53,28 @@ import kieker.diagnosis.frontend.main.composite.MainMenuBar;
 import kieker.diagnosis.frontend.main.composite.MainTabPane;
 import kieker.diagnosis.frontend.main.properties.LastImportPathProperty;
 
-public final class MainPane extends VBox implements StylesheetMixin {
+public final class MainPane extends VBox implements StylesheetMixin, CdiMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MainPane.class.getName( ) );
+
+	@Inject
+	private SettingsService settingsService;
+
+	@Inject
+	private PropertiesService propertiesService;
+
+	@Inject
+	private MonitoringLogService monitoringLogService;
 
 	private MainMenuBar menuBar;
 	private MainTabPane mainTabPane;
 
 	public MainPane( ) {
+		injectFields( );
+		createControl( );
+	}
+
+	private void createControl( ) {
 		getChildren( ).add( createMenuBar( ) );
 		getChildren( ).add( createMainPane( ) );
 	}
@@ -107,7 +123,6 @@ public final class MainPane extends VBox implements StylesheetMixin {
 	 * This action is performed, when the user wants to configure the settings.
 	 */
 	private void performSettings( ) {
-		final SettingsService settingsService = ServiceFactory.getService( SettingsService.class );
 		final Settings settings = settingsService.loadSettings( );
 
 		final SettingsDialog settingsDialog = new SettingsDialog( );
@@ -178,13 +193,11 @@ public final class MainPane extends VBox implements StylesheetMixin {
 	}
 
 	private File getInitialDirectory( ) {
-		final PropertiesService propertiesService = ServiceFactory.getService( PropertiesService.class );
 		final String lastImportPath = propertiesService.loadApplicationProperty( LastImportPathProperty.class );
 		return new File( lastImportPath );
 	}
 
 	private void setNewInitialDirectory( final File lastImportDirectory, final File directory ) {
-		final PropertiesService propertiesService = ServiceFactory.getService( PropertiesService.class );
 		if ( !directory.equals( lastImportDirectory ) ) {
 			propertiesService.saveApplicationProperty( LastImportPathProperty.class, directory.getAbsolutePath( ) );
 		}
@@ -245,7 +258,6 @@ public final class MainPane extends VBox implements StylesheetMixin {
 			try {
 				// Load the monitoring log
 				Exception exception = null;
-				final MonitoringLogService monitoringLogService = ServiceFactory.getService( MonitoringLogService.class );
 				try {
 					monitoringLogService.importMonitoringLog( ivDirectoryOrFile, ivType );
 				} catch ( final CorruptStreamException | ImportFailedException ex ) {

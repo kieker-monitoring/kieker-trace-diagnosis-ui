@@ -38,7 +38,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeTableView;
 import javafx.stage.Stage;
-import kieker.diagnosis.backend.base.ServiceBaseModule;
+import kieker.diagnosis.frontend.base.FrontendBaseModule;
 
 /**
  * This is a UI test which checks that the main view is working as expected.
@@ -54,7 +54,7 @@ public final class MainPaneTestUI extends ApplicationTest {
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
-		Guice.createInjector( new ServiceBaseModule( ) );
+		Guice.createInjector( new FrontendBaseModule( ) );
 
 		mainPane = new MainPane( );
 

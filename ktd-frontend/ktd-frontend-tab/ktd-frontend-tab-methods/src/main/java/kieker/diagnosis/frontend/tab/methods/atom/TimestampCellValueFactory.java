@@ -16,19 +16,26 @@
 
 package kieker.diagnosis.frontend.tab.methods.atom;
 
+import com.google.inject.Inject;
+
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.util.Callback;
-import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.settings.TimestampAppearance;
 import kieker.diagnosis.backend.settings.properties.TimestampProperty;
+import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 
-public final class TimestampCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>> {
+public final class TimestampCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>>, CdiMixin {
 
-	private final PropertiesService ivPropertiesService = ServiceFactory.getService( PropertiesService.class );
+	@Inject
+	private PropertiesService ivPropertiesService;
+
+	public TimestampCellValueFactory( ) {
+		injectFields( );
+	}
 
 	@Override
 	public ObservableValue<String> call( final CellDataFeatures<MethodCall, String> aParam ) {

@@ -35,12 +35,12 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
-import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.data.MonitoringLogService;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.search.traces.TracesFilter;
 import kieker.diagnosis.backend.settings.properties.ShowUnmonitoredTimeProperty;
+import kieker.diagnosis.frontend.base.FrontendBaseModule;
 
 /**
  * This is a UI test which checks that the traces view is working as expected.
@@ -54,7 +54,7 @@ public final class TracesTabTestUI extends ApplicationTest {
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
-		final Injector injector = Guice.createInjector( new ServiceBaseModule( ) );
+		final Injector injector = Guice.createInjector( new FrontendBaseModule( ) );
 
 		final MonitoringLogService monitoringLogService = injector.getInstance( MonitoringLogService.class );
 		monitoringLogService.getRepository( ).getTraceRoots( ).addAll( createTraces( ) );

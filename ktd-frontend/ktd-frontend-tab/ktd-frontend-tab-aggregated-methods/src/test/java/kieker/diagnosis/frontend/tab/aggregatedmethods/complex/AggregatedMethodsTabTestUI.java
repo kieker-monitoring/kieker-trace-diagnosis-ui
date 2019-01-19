@@ -42,13 +42,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.data.MonitoringLogService;
 import kieker.diagnosis.backend.export.CSVData;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.search.aggregatedmethods.AggregatedMethodsFilter;
 import kieker.diagnosis.backend.settings.properties.TimeUnitProperty;
+import kieker.diagnosis.frontend.base.FrontendBaseModule;
 
 /**
  * This is a UI test which checks that the aggregated methods tab is working as expected.
@@ -62,7 +62,7 @@ public final class AggregatedMethodsTabTestUI extends ApplicationTest {
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
-		final Injector injector = Guice.createInjector( new ServiceBaseModule( ) );
+		final Injector injector = Guice.createInjector( new FrontendBaseModule( ) );
 
 		final MonitoringLogService monitoringLogService = injector.getInstance( MonitoringLogService.class );
 		monitoringLogService.getRepository( ).getAggreatedMethods( ).addAll( createAggregatedMethodCalls( ) );

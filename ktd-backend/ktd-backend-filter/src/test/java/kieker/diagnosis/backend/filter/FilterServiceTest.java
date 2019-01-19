@@ -31,8 +31,6 @@ import org.junit.Test;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import kieker.diagnosis.backend.base.ServiceBaseModule;
-
 /**
  * This is a unit test the {@link FilterService}.
  *
@@ -44,7 +42,7 @@ public final class FilterServiceTest {
 
 	@Before
 	public void setUp( ) {
-		final Injector injector = Guice.createInjector( new ServiceBaseModule( ) );
+		final Injector injector = Guice.createInjector( );
 		filterService = injector.getInstance( FilterService.class );
 	}
 
@@ -81,7 +79,7 @@ public final class FilterServiceTest {
 
 	@Test
 	public void testCreateStringPredicateWithNull( ) {
-		final Predicate<String> predicate = filterService.createStringPredicate(null, null, false );
+		final Predicate<String> predicate = filterService.createStringPredicate( null, null, false );
 		assertThat( predicate.test( null ), is( true ) );
 	}
 
