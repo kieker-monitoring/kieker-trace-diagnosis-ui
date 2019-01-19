@@ -19,7 +19,7 @@ package kieker.diagnosis.backend.base.common;
 import java.util.Objects;
 
 /**
- * This util class retrieves the real classes and class names from Guice's proxy classes.
+ * This util class retrieves the real class names from Guice's proxy classes.
  *
  * @author Nils Christian Ehmke
  */
@@ -27,28 +27,6 @@ public final class ClassUtil {
 
 	private ClassUtil( ) {
 		throw new AssertionError( "This class must not be instantiated." );
-	}
-
-	/**
-	 * Retrieves the real class of the given class. If the given class is a proxy class, the super class will be
-	 * returned. Otherwise the class itself will be returned.
-	 *
-	 * @param clazz
-	 *            The (potentially proxied) class. Must not be {@code null}.
-	 *
-	 * @return The real class.
-	 *
-	 * @throws NullPointerException
-	 *             If the given class is {@code null}.
-	 */
-	public static Class<?> getRealClass( final Class<?> clazz ) {
-		Objects.requireNonNull( clazz, "The class must not be null." );
-
-		if ( clazz.getName( ).contains( "$$EnhancerByGuice$$" ) ) {
-			return clazz.getSuperclass( );
-		} else {
-			return clazz;
-		}
 	}
 
 	/**
@@ -64,7 +42,16 @@ public final class ClassUtil {
 	 *             If the given class is {@code null}.
 	 */
 	public static String getRealName( final Class<?> clazz ) {
-		return getRealClass( clazz ).getName( );
+		Objects.requireNonNull( clazz, "The class must not be null." );
+
+		final Class<?> realClass;
+		if ( clazz.getName( ).contains( "$$EnhancerByGuice$$" ) ) {
+			realClass = clazz.getSuperclass( );
+		} else {
+			realClass = clazz;
+		}
+
+		return realClass.getName( );
 	}
 
 }

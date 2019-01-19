@@ -45,18 +45,6 @@ public final class ClassUtilTest {
 	private final Injector injector = Guice.createInjector( new Module( ) );
 
 	@Test
-	public void realClassOfProxyClassShouldReturnCorrectClass( ) {
-		final Class<?> realClass = ClassUtil.getRealClass( injector.getInstance( ProxiedClass.class ).getClass( ) );
-		assertThat( realClass, is( equalTo( ProxiedClass.class ) ) );
-	}
-
-	@Test
-	public void realClassOfNonProxyClassShouldReturnCorrectClass( ) {
-		final Class<?> realClass = ClassUtil.getRealClass( injector.getInstance( NonProxiedClass.class ).getClass( ) );
-		assertThat( realClass, is( equalTo( NonProxiedClass.class ) ) );
-	}
-
-	@Test
 	public void realNameOfProxyClassShouldReturnCorrectName( ) {
 		final String realName = ClassUtil.getRealName( injector.getInstance( ProxiedClass.class ).getClass( ) );
 		assertThat( realName, is( equalTo( ProxiedClass.class.getName( ) ) ) );
