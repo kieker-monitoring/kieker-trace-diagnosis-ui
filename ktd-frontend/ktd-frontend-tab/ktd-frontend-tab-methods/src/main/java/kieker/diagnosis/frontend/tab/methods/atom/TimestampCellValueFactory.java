@@ -31,7 +31,7 @@ import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 public final class TimestampCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>>, CdiMixin {
 
 	@Inject
-	private PropertiesService ivPropertiesService;
+	private PropertiesService propertiesService;
 
 	public TimestampCellValueFactory( ) {
 		injectFields( );
@@ -39,7 +39,7 @@ public final class TimestampCellValueFactory implements Callback<CellDataFeature
 
 	@Override
 	public ObservableValue<String> call( final CellDataFeatures<MethodCall, String> aParam ) {
-		final TimestampAppearance timestampAppearance = ivPropertiesService.loadApplicationProperty( TimestampProperty.class );
+		final TimestampAppearance timestampAppearance = propertiesService.loadApplicationProperty( TimestampProperty.class );
 		return new ReadOnlyObjectWrapper<>( timestampAppearance.convert( aParam.getValue( ).getTimestamp( ) ) );
 	}
 

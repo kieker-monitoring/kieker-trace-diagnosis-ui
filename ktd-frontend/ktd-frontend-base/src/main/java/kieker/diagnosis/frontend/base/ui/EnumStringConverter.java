@@ -32,12 +32,12 @@ import javafx.util.StringConverter;
  */
 public final class EnumStringConverter<E extends Enum<?>> extends StringConverter<E> {
 
-	private final ResourceBundle ivResourceBundle;
-	private final Class<E> ivEnumClass;
+	private final ResourceBundle resourceBundle;
+	private final Class<E> enumClass;
 
 	public EnumStringConverter( final Class<E> aEnumClass ) {
-		ivResourceBundle = ResourceBundle.getBundle( aEnumClass.getName( ) );
-		ivEnumClass = aEnumClass;
+		resourceBundle = ResourceBundle.getBundle( aEnumClass.getName( ) );
+		enumClass = aEnumClass;
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public final class EnumStringConverter<E extends Enum<?>> extends StringConverte
 			return "";
 		}
 
-		return ivResourceBundle.getString( aObject.name( ) );
+		return resourceBundle.getString( aObject.name( ) );
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public final class EnumStringConverter<E extends Enum<?>> extends StringConverte
 			return null;
 		}
 
-		final E[] enumConstants = ivEnumClass.getEnumConstants( );
+		final E[] enumConstants = enumClass.getEnumConstants( );
 
 		// Run through all values of the enum and check which one maps to the given string.
 		for ( final E enumConstant : enumConstants ) {

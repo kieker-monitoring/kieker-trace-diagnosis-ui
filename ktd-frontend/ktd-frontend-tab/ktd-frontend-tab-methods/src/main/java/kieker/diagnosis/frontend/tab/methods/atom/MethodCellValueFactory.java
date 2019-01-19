@@ -36,7 +36,7 @@ import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 public final class MethodCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>>, CdiMixin {
 
 	@Inject
-	private PropertiesService ivPropertiesService;
+	private PropertiesService propertiesService;
 
 	public MethodCellValueFactory( ) {
 		injectFields( );
@@ -44,7 +44,7 @@ public final class MethodCellValueFactory implements Callback<CellDataFeatures<M
 
 	@Override
 	public ObservableValue<String> call( final CellDataFeatures<MethodCall, String> aParam ) {
-		final MethodAppearance methodAppearance = ivPropertiesService.loadApplicationProperty( MethodAppearanceProperty.class );
+		final MethodAppearance methodAppearance = propertiesService.loadApplicationProperty( MethodAppearanceProperty.class );
 		return new ReadOnlyObjectWrapper<>( methodAppearance.convert( aParam.getValue( ).getMethod( ) ) );
 	}
 

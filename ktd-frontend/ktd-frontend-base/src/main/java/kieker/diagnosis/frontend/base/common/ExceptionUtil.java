@@ -41,7 +41,7 @@ import javafx.stage.Stage;
  */
 public final class ExceptionUtil {
 
-	private static final ResourceBundle cvResourceBundle = ResourceBundle.getBundle( ExceptionUtil.class.getName( ) );
+	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( ExceptionUtil.class.getName( ) );
 
 	private ExceptionUtil( ) {
 		// Avoid instantiation
@@ -72,8 +72,8 @@ public final class ExceptionUtil {
 		final Runnable runnable = ( ) -> {
 			// Prepare the dialog
 			final Alert alert = new Alert( AlertType.ERROR );
-			alert.setTitle( cvResourceBundle.getString( "errorTitle" ) );
-			alert.setHeaderText( cvResourceBundle.getString( "errorMessage" ) );
+			alert.setTitle( RESOURCE_BUNDLE.getString( "errorTitle" ) );
+			alert.setHeaderText( RESOURCE_BUNDLE.getString( "errorMessage" ) );
 			alert.setContentText( exception.getMessage( ) );
 
 			// Make sure that the alert dialog resizes to the required height (usually just necessary for Linux systems)
@@ -86,7 +86,7 @@ public final class ExceptionUtil {
 			final String exceptionText = sw.toString( );
 
 			// Prepare the remaining components
-			final Label label = new Label( cvResourceBundle.getString( "errorDescription" ) );
+			final Label label = new Label( RESOURCE_BUNDLE.getString( "errorDescription" ) );
 
 			final TextArea textArea = new TextArea( exceptionText );
 			textArea.setEditable( false );
@@ -105,7 +105,7 @@ public final class ExceptionUtil {
 			alert.getDialogPane( ).setExpandableContent( expContent );
 
 			// Add the logo
-			final String iconPath = cvResourceBundle.getString( "errorIcon" );
+			final String iconPath = RESOURCE_BUNDLE.getString( "errorIcon" );
 			final InputStream iconStream = ExceptionUtil.class.getClassLoader( ).getResourceAsStream( iconPath );
 			final Image icon = new Image( iconStream );
 			final Stage stage = (Stage) alert.getDialogPane( ).getScene( ).getWindow( );
@@ -126,7 +126,7 @@ public final class ExceptionUtil {
 		final boolean isDelegateException = throwable instanceof DelegateException;
 		final Throwable exception = isDelegateException ? throwable.getCause( ) : throwable;
 
-		LogManager.getLogger( loggerName ).error( cvResourceBundle.getString( "errorMessage" ), exception );
+		LogManager.getLogger( loggerName ).error( RESOURCE_BUNDLE.getString( "errorMessage" ), exception );
 	}
 
 }

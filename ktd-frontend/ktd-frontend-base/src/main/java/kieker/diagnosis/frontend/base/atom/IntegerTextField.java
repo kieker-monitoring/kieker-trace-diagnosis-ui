@@ -29,7 +29,7 @@ import javafx.util.converter.IntegerStringConverter;
  */
 public final class IntegerTextField extends TextField {
 
-	private final ObjectProperty<Integer> ivValueProperty = new SimpleObjectProperty<>( );
+	private final ObjectProperty<Integer> valueProperty = new SimpleObjectProperty<>( );
 
 	public IntegerTextField( ) {
 		// We combine a converter with a filter. The converter will make sure that only valid numbers are in the field once it looses focus. The filter will
@@ -37,7 +37,7 @@ public final class IntegerTextField extends TextField {
 		// everything just with the filter.
 		setTextFormatter( new TextFormatter<>( new IntegerStringConverter( ), null, new NumericIntegerFilter( ) ) );
 
-		textProperty( ).bindBidirectional( ivValueProperty, new IntegerStringConverter( ) );
+		textProperty( ).bindBidirectional( valueProperty, new IntegerStringConverter( ) );
 	}
 
 	/**
@@ -46,7 +46,7 @@ public final class IntegerTextField extends TextField {
 	 * @param aValue The new value.
 	 */
 	public void setValue( final Integer aValue ) {
-		ivValueProperty.set( aValue );
+		valueProperty.set( aValue );
 	}
 
 	/**
@@ -55,11 +55,11 @@ public final class IntegerTextField extends TextField {
 	 * @return The current value.
 	 */
 	public Integer getValue( ) {
-		return ivValueProperty.get( );
+		return valueProperty.get( );
 	}
 
 	public ObjectProperty<Integer> valueProperty( ) {
-		return ivValueProperty;
+		return valueProperty;
 	}
 
 }

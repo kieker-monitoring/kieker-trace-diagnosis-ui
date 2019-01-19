@@ -348,7 +348,7 @@ public class Repository {
 		private final String method;
 		private final String exception;
 		private final MethodCall methodCall;
-		private int ivHash;
+		private final int hash;
 
 		AggregationKey( final String host, final String clazz, final String method, final String exception, final MethodCall methodCall ) {
 			this.host = host;
@@ -357,10 +357,10 @@ public class Repository {
 			this.exception = exception;
 			this.methodCall = methodCall;
 
-			calculateHash( );
+			hash = calculateHash( );
 		}
 
-		private void calculateHash( ) {
+		private int calculateHash( ) {
 			final int prime = 31;
 
 			int result = 1;
@@ -369,13 +369,12 @@ public class Repository {
 			result = prime * result + ( host == null ? 0 : host.hashCode( ) );
 			result = prime * result + ( method == null ? 0 : method.hashCode( ) );
 
-			// We calculate the hash eagerly and only once.
-			ivHash = result;
+			return result;
 		}
 
 		@Override
 		public int hashCode( ) {
-			return ivHash;
+			return hash;
 		}
 
 		@Override

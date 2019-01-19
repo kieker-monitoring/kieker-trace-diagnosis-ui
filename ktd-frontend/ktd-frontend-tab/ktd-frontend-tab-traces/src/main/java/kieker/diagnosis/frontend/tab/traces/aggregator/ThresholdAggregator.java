@@ -29,10 +29,10 @@ import kieker.diagnosis.backend.data.MethodCall;
  */
 public final class ThresholdAggregator extends Aggregator {
 
-	private final float ivThreshold;
+	private final float threshold;
 
 	public ThresholdAggregator( final float aThreshold ) {
-		ivThreshold = aThreshold;
+		threshold = aThreshold;
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public final class ThresholdAggregator extends Aggregator {
 
 		// Separate the method calls with the threshold.
 		for ( final MethodCall call : calls ) {
-			if ( call.getPercent( ) < ivThreshold ) {
+			if ( call.getPercent( ) < threshold ) {
 				underThreshold.add( call );
 			} else {
 				overThreshold.add( call );

@@ -28,7 +28,7 @@ import javafx.scene.control.TextFormatter.Change;
  */
 final class NumericIntegerFilter implements UnaryOperator<Change> {
 
-	private static final Pattern cvNumericPattern = Pattern.compile( "(-)?\\d*" );
+	private static final Pattern NUMMERIC_PATTERN = Pattern.compile( "(-)?\\d*" );
 
 	@Override
 	public Change apply( final Change aChange ) {
@@ -40,7 +40,7 @@ final class NumericIntegerFilter implements UnaryOperator<Change> {
 	}
 
 	private boolean onlyNumeric( final String aText ) {
-		return cvNumericPattern.matcher( aText ).matches( );
+		return NUMMERIC_PATTERN.matcher( aText ).matches( );
 	}
 
 }

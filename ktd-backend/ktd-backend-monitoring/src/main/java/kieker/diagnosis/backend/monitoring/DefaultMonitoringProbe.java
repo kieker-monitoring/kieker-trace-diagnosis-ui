@@ -33,24 +33,24 @@ import kieker.monitoring.core.registry.TraceRegistry;
  */
 public final class DefaultMonitoringProbe implements MonitoringProbe {
 
-	private final IMonitoringController ivMonitoringController;
+	private final IMonitoringController monitoringController;
 
-	private final Class<?> ivClass;
-	private final String ivMethod;
-	private Throwable ivThrowable;
-	private boolean ivNewTrace;
+	private final Class<?> clazz;
+	private final String method;
+	private Throwable throwable;
+	private boolean newTrace;
 
-	public DefaultMonitoringProbe( final Class<?> aClass, final String aMethod ) {
-		ivClass = aClass;
-		ivMethod = aMethod;
+	public DefaultMonitoringProbe( final Class<?> clazz, final String method ) {
+		this.clazz = clazz;
+		this.method = method;
 
-		ivMonitoringController = MonitoringControllerHolder.getMonitoringController( );
+		monitoringController = MonitoringControllerHolder.getMonitoringController( );
 		fireBeforeEvent( );
 	}
 
 	@Override
-	public void fail( final Throwable aThrowable ) {
-		ivThrowable = aThrowable;
+	public void fail( final Throwable throwable ) {
+		this.throwable = throwable;
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public final class DefaultMonitoringProbe implements MonitoringProbe {
 	}
 
 	private void fireBeforeEvent( ) {
-		if ( ivMonitoringController == null ) {
+		if ( monitoringController == null ) {
 			return;
 		}
 
@@ -67,49 +67,50 @@ public final class DefaultMonitoringProbe implements MonitoringProbe {
 		TraceMetadata trace = TraceRegistry.INSTANCE.getTrace( );
 		if ( trace == null ) {
 			// We have to remember that this is the start of a trace, as the trace has to be deregistered at the end.
-			ivNewTrace = true;
+			newTrace = true;
 			trace = TraceRegistry.INSTANCE.registerTrace( );
 
 			// Write a record for the new trace
-			ivMonitoringController.newMonitoringRecord( trace );
+			monitoringController.newMonitoringRecord( trace );
 		} else {
-			ivNewTrace = false;
+			newTrace = false;
 		}
 
-		final String className = ClassUtil.getRealName( ivClass );
+		final String className = ClassUtil.getRealName( clazz );
 
 		// Write a record for the start of the method
-		final IMonitoringRecord event = new BeforeOperationEvent( getCurrentTime( ), trace.getTraceId( ), trace.getNextOrderId( ), ivMethod, className );
-		ivMonitoringController.newMonitoringRecord( event );
+		final IMonitoringRecord event = new BeforeOperationEvent( getCurrentTime( ), trace.getTraceId( ), trace.getNextOrderId( ), method, className );
+		monitoringController.newMonitoringRecord( event );
 	}
 
 	private void fireAfterEvent( ) {
-		if ( ivMonitoringController == null ) {
+		if ( monitoringController == null ) {
 			return;
 		}
 
 		final TraceMetadata trace = TraceRegistry.INSTANCE.getTrace( );
-		final String className = ClassUtil.getRealName( ivClass );
+		final String className = ClassUtil.getRealName( clazz );
 
 		// Create the correct event depending on whether this method call failed or not
 		final IMonitoringRecord event;
-		if ( ivThrowable == null ) {
-			event = new AfterOperationEvent( getCurrentTime( ), trace.getTraceId( ), trace.getNextOrderId( ), ivMethod, className );
+		if ( throwable == null ) {
+			event = new AfterOperationEvent( getCurrentTime( ), trace.getTraceId( ), trace.getNextOrderId( ), method, className );
 		} else {
-			event = new AfterOperationFailedEvent( getCurrentTime( ), trace.getTraceId( ), trace.getNextOrderId( ), ivMethod, className, ivThrowable.toString( ) );
+			event = new AfterOperationFailedEvent( getCurrentTime( ), trace.getTraceId( ), trace.getNextOrderId( ), method, className, throwable.toString( ) );
 		}
 
-		ivMonitoringController.newMonitoringRecord( event );
+		monitoringController.newMonitoringRecord( event );
 
-		// If this probe started the trace, it has to close it. Otherwise we could create a memory leak (and faulty monitoring
+		// If this probe started the trace, it has to close it. Otherwise we could create a memory leak (and faulty
+		// monitoring
 		// behaviour).
-		if ( ivNewTrace ) {
+		if ( newTrace ) {
 			TraceRegistry.INSTANCE.unregisterTrace( );
 		}
 	}
 
 	private long getCurrentTime( ) {
-		return ivMonitoringController.getTimeSource( ).getTime( );
+		return monitoringController.getTimeSource( ).getTime( );
 	}
 
 }

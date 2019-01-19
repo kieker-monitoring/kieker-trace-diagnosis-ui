@@ -28,7 +28,7 @@ public enum MethodAppearance {
 
 	SHORT, LONG;
 
-	private static final Pattern cvMethodPattern = Pattern.compile( "(.*)\\(.*\\)" );
+	private static final Pattern methodPattern = Pattern.compile( "(.*)\\(.*\\)" );
 
 	public String convert( final String aMethod ) {
 		String method = aMethod;
@@ -39,7 +39,7 @@ public enum MethodAppearance {
 		}
 
 		if ( this == SHORT ) {
-			final Matcher matcher = cvMethodPattern.matcher( method );
+			final Matcher matcher = methodPattern.matcher( method );
 			if ( matcher.find( ) ) {
 				// Replace the parenthesis
 				method = matcher.group( 1 );

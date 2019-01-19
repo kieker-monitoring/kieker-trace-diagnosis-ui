@@ -33,11 +33,11 @@ import kieker.diagnosis.frontend.tab.traces.aggregator.Aggregator;
  */
 public final class MethodCallTreeItem extends TreeItem<MethodCall> {
 
-	private static final ResourceBundle cvResourceBundle = ResourceBundle.getBundle( MethodCallTreeItem.class.getName( ) );
+	private static final ResourceBundle RESORCE_BUNDLE = ResourceBundle.getBundle( MethodCallTreeItem.class.getName( ) );
 
-	private boolean ivChildrenInitialized = false;
-	private final boolean ivShowUnmonitoredTime;
-	private final Aggregator ivAggregator;
+	private boolean childrenInitialized = false;
+	private final boolean showUnmonitoredTime;
+	private final Aggregator aggregator;
 
 	/**
 	 * Creates a new tree item.
@@ -52,15 +52,15 @@ public final class MethodCallTreeItem extends TreeItem<MethodCall> {
 	public MethodCallTreeItem( final MethodCall aMethodCall, final boolean aShowUnmonitoredTime, final Aggregator aAggregator ) {
 		super( aMethodCall );
 
-		ivShowUnmonitoredTime = aShowUnmonitoredTime;
-		ivAggregator = aAggregator;
+		showUnmonitoredTime = aShowUnmonitoredTime;
+		aggregator = aAggregator;
 	}
 
 	@Override
 	public ObservableList<TreeItem<MethodCall>> getChildren( ) {
 		// Initialize the children in a lazy way.
-		if ( !ivChildrenInitialized ) {
-			ivChildrenInitialized = true;
+		if ( !childrenInitialized ) {
+			childrenInitialized = true;
 			initializeChildren( );
 		}
 
@@ -76,10 +76,10 @@ public final class MethodCallTreeItem extends TreeItem<MethodCall> {
 		final List<TreeItem<MethodCall>> result = new ArrayList<>( );
 
 		// Aggregate the method calls if necessary
-		final List<MethodCall> children = ivAggregator.aggregate( getValue( ).getChildren( ) );
+		final List<MethodCall> children = aggregator.aggregate( getValue( ).getChildren( ) );
 
 		// Show the unmonitored time if necessary
-		if ( ivShowUnmonitoredTime ) {
+		if ( showUnmonitoredTime ) {
 			// Calculate the unmonitored time
 			float percent = 0.0f;
 			long duration = 0;
@@ -92,7 +92,7 @@ public final class MethodCallTreeItem extends TreeItem<MethodCall> {
 			final MethodCall methodCall = new MethodCall( );
 			methodCall.setHost( "-" );
 			methodCall.setClazz( "-" );
-			methodCall.setMethod( cvResourceBundle.getString( "unmonitoredTime" ) );
+			methodCall.setMethod( RESORCE_BUNDLE.getString( "unmonitoredTime" ) );
 			methodCall.setTraceId( getValue( ).getTraceId( ) );
 			methodCall.setTimestamp( getValue( ).getTimestamp( ) );
 
@@ -100,12 +100,12 @@ public final class MethodCallTreeItem extends TreeItem<MethodCall> {
 			methodCall.setDuration( getValue( ).getDuration( ) - duration );
 
 			// Make sure that the new node does not try to create further nodes
-			result.add( new MethodCallTreeItem( methodCall, false, ivAggregator ) );
+			result.add( new MethodCallTreeItem( methodCall, false, aggregator ) );
 		}
 
 		// Now convert the children into items
 		for ( final MethodCall child : children ) {
-			result.add( new MethodCallTreeItem( child, ivShowUnmonitoredTime, ivAggregator ) );
+			result.add( new MethodCallTreeItem( child, showUnmonitoredTime, aggregator ) );
 		}
 
 		super.getChildren( ).setAll( result );

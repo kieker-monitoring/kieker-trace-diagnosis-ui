@@ -26,15 +26,15 @@ package kieker.diagnosis.backend.properties;
  */
 public abstract class EnumApplicationProperty<T extends Enum<T>> implements ApplicationProperty<T> {
 
-	private final Class<T> ivEnumClass;
+	private final Class<T> enumClass;
 
-	public EnumApplicationProperty( final Class<T> aEnumClass ) {
-		ivEnumClass = aEnumClass;
+	public EnumApplicationProperty( final Class<T> enumClass ) {
+		this.enumClass = enumClass;
 	}
 
 	@Override
 	public final T deserialize( final String aString ) {
-		return Enum.valueOf( ivEnumClass, aString );
+		return Enum.valueOf( enumClass, aString );
 	}
 
 	@Override

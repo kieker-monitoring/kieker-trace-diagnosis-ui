@@ -29,26 +29,26 @@ import org.junit.Test;
  */
 public class EnumStringConverterTest {
 
-	private final EnumStringConverter<TestEnum> ivConverter = new EnumStringConverter<>( TestEnum.class );
+	private final EnumStringConverter<TestEnum> converter = new EnumStringConverter<>( TestEnum.class );
 
 	@Test
 	public void toStringShouldWork( ) {
-		assertThat( ivConverter.toString( TestEnum.ENUM_VALUE_1 ), is( "Value 1" ) );
+		assertThat( converter.toString( TestEnum.ENUM_VALUE_1 ), is( "Value 1" ) );
 	}
 
 	@Test
 	public void toStringForNullValueShouldWork( ) {
-		assertThat( ivConverter.toString( null ), is( "" ) );
+		assertThat( converter.toString( null ), is( "" ) );
 	}
 
 	@Test
 	public void fromStringShouldWork( ) {
-		assertThat( ivConverter.fromString( "Value 2" ), is( TestEnum.ENUM_VALUE_2 ) );
+		assertThat( converter.fromString( "Value 2" ), is( TestEnum.ENUM_VALUE_2 ) );
 	}
 
 	@Test
 	public void fromStringForEmptyStringShouldWork( ) {
-		assertThat( ivConverter.fromString( "" ), is( nullValue( ) ) );
+		assertThat( converter.fromString( "" ), is( nullValue( ) ) );
 	}
 
 }

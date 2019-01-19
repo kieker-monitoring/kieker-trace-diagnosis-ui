@@ -30,7 +30,7 @@ import kieker.diagnosis.backend.data.MethodCall;
  */
 public abstract class Aggregator {
 
-	private final ResourceBundle ivResourceBundle = ResourceBundle.getBundle( Aggregator.class.getName( ) );
+	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( Aggregator.class.getName( ) );
 
 	/**
 	 * Aggregates the given list of method calls. This means that the resulting list should contain real method calls
@@ -62,7 +62,7 @@ public abstract class Aggregator {
 
 		methodCall.setHost( "-" );
 		methodCall.setClazz( "-" );
-		methodCall.setMethod( String.format( ivResourceBundle.getString( "methodCallsAggregated" ), aList.size( ) ) );
+		methodCall.setMethod( String.format( RESOURCE_BUNDLE.getString( "methodCallsAggregated" ), aList.size( ) ) );
 		methodCall.setTraceId( aList.get( 0 ).getTraceId( ) );
 		methodCall.setPercent( (float) percent );
 		methodCall.setDuration( duration );

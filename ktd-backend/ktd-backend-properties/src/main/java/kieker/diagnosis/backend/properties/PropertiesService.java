@@ -43,7 +43,7 @@ public class PropertiesService implements Service {
 	private static final Logger LOGGER = LogManager.getLogger( PropertiesService.class );
 
 	@Inject
-	private Injector ivInjector;
+	private Injector injector;
 
 	/**
 	 * Delivers the value of the given application property or its default value, if the property has not been set yet.
@@ -97,7 +97,7 @@ public class PropertiesService implements Service {
 	}
 
 	private <T> T getProperty( final Class<? extends T> aPropertyClass ) {
-		return ivInjector.getInstance( aPropertyClass );
+		return injector.getInstance( aPropertyClass );
 	}
 
 	/**

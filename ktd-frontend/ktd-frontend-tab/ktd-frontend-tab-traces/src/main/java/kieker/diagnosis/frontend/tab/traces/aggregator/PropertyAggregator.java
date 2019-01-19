@@ -24,16 +24,17 @@ import java.util.List;
 import kieker.diagnosis.backend.data.MethodCall;
 
 /**
- * An abstract base class for aggregators which aggregate method calls within a trace by a specific property of the method call.
+ * An abstract base class for aggregators which aggregate method calls within a trace by a specific property of the
+ * method call.
  *
  * @author Nils Christian Ehmke
  */
 public abstract class PropertyAggregator extends Aggregator {
 
-	private final int ivMaxCalls;
+	private final int maxCalls;
 
 	public PropertyAggregator( final int aMaxCalls ) {
-		ivMaxCalls = aMaxCalls;
+		maxCalls = aMaxCalls;
 	}
 
 	@Override
@@ -44,7 +45,7 @@ public abstract class PropertyAggregator extends Aggregator {
 		final Iterator<MethodCall> iterator = aCalls.stream( ).sorted( getComparator( ) ).iterator( );
 
 		// Get the first n method calls (where n is the maximal numbers of allowed method calls)
-		int maxCalls = ivMaxCalls;
+		int maxCalls = this.maxCalls;
 		while ( maxCalls > 0 && iterator.hasNext( ) ) {
 			accepted.add( iterator.next( ) );
 			maxCalls--;

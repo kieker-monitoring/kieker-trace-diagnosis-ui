@@ -26,32 +26,32 @@ import kieker.monitoring.core.controller.IMonitoringController;
  */
 public final class MonitoringControllerHolder {
 
-	private static volatile IMonitoringController cvMonitoringController;
-	private static volatile MonitoringConfiguration cvMonitoringConfiguration;
+	private static volatile IMonitoringController monitoringController;
+	private static volatile MonitoringConfiguration monitoringConfiguration;
 
 	private MonitoringControllerHolder( ) {
 		// Avoid instantiation
 	}
 
 	public static IMonitoringController getMonitoringController( ) {
-		return cvMonitoringController;
+		return monitoringController;
 	}
 
 	public static void setMonitoringController( final IMonitoringController aMonitoringController ) {
-		cvMonitoringController = aMonitoringController;
+		monitoringController = aMonitoringController;
 	}
 
 	public static MonitoringConfiguration getCurrentConfiguration( ) {
-		return cvMonitoringConfiguration;
+		return monitoringConfiguration;
 	}
 
 	public static void setCurrentConfiguration( final MonitoringConfiguration aMonitoringConfiguration ) {
-		cvMonitoringConfiguration = aMonitoringConfiguration;
+		monitoringConfiguration = aMonitoringConfiguration;
 	}
 
 	public static IMonitoringController clearMonitoringController( ) {
-		final IMonitoringController controller = cvMonitoringController;
-		cvMonitoringController = null;
+		final IMonitoringController controller = monitoringController;
+		monitoringController = null;
 		return controller;
 	}
 

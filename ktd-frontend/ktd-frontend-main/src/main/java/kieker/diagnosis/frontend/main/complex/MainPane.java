@@ -236,13 +236,13 @@ public final class MainPane extends VBox implements StylesheetMixin, CdiMixin {
 
 	private class ImportThread extends Thread {
 
-		private final File ivDirectoryOrFile;
-		private final ImportType ivType;
+		private final File directoryOrFile;
+		private final ImportType tye;
 		private ProgressDialog progressDialog;
 
 		ImportThread( final File aDirectoryOrFile, final ImportType aType ) {
-			ivDirectoryOrFile = aDirectoryOrFile;
-			ivType = aType;
+			directoryOrFile = aDirectoryOrFile;
+			tye = aType;
 			setName( "Monitoring Import Thread" );
 		}
 
@@ -259,7 +259,7 @@ public final class MainPane extends VBox implements StylesheetMixin, CdiMixin {
 				// Load the monitoring log
 				Exception exception = null;
 				try {
-					monitoringLogService.importMonitoringLog( ivDirectoryOrFile, ivType );
+					monitoringLogService.importMonitoringLog( directoryOrFile, tye );
 				} catch ( final CorruptStreamException | ImportFailedException ex ) {
 					// We still want to refresh, but we also want to display the exception.
 					exception = new DelegateException( ex );

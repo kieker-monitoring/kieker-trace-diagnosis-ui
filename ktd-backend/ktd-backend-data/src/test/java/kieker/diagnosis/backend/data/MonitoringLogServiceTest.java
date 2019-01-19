@@ -65,18 +65,18 @@ import kieker.diagnosis.backend.data.reader.Repository;
 @DisplayName ( "Unit-Test for MonitoringLogService" )
 public class MonitoringLogServiceTest {
 
-	private ByteArrayList ivByteList;
-	private IRegistry<String> ivStringRegistry;
-	private MonitoringLogService ivService;
+	private ByteArrayList byteList;
+	private IRegistry<String> stringRegistry;
+	private MonitoringLogService service;
 	private Repository repository;
 
 	@BeforeEach
 	public void setUp( ) {
-		ivByteList = new ByteArrayList( );
-		ivStringRegistry = new Registry<>( );
+		byteList = new ByteArrayList( );
+		stringRegistry = new Registry<>( );
 
 		final Injector injector = Guice.createInjector( );
-		ivService = injector.getInstance( MonitoringLogService.class );
+		service = injector.getInstance( MonitoringLogService.class );
 		repository = injector.getInstance( Repository.class );
 	}
 
@@ -84,7 +84,7 @@ public class MonitoringLogServiceTest {
 	@ExtendWith ( TempDirectory.class )
 	@DisplayName ( "Test with an empty directory" )
 	public void testEmptyDirectory( @TempDir final Path tempDir ) throws CorruptStreamException, ImportFailedException {
-		assertThrows( ImportFailedException.class, ( ) -> ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY ) );
+		assertThrows( ImportFailedException.class, ( ) -> service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY ) );
 
 	}
 
@@ -102,7 +102,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( repository.getMethods( ) ).hasSize( 2 );
@@ -130,7 +130,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( repository.getMethods( ) ).hasSize( 4 );
@@ -153,7 +153,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( repository.getMethods( ) ).hasSize( 2 );
@@ -180,7 +180,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( repository.getMethods( ) ).hasSize( 4 );
@@ -210,7 +210,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		final List<AggregatedMethodCall> aggreatedMethods = repository.getAggreatedMethods( );
@@ -253,7 +253,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		final List<AggregatedMethodCall> aggreatedMethods = repository.getAggreatedMethods( );
@@ -284,7 +284,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( repository.getMethods( ) ).isEmpty( );
@@ -307,7 +307,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( repository.getMethods( ) ).isEmpty( );
@@ -330,7 +330,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		final MethodCall methodCall = repository.getMethods( ).get( 0 );
@@ -350,7 +350,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		final MethodCall methodCall = repository.getMethods( ).get( 0 );
@@ -373,7 +373,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( repository.getTraceRoots( ) ).hasSize( 1 );
@@ -393,7 +393,7 @@ public class MonitoringLogServiceTest {
 
 		// Import the directory and make sure that a business exception occurs (because
 		// records where ignored, but no traces were reconstructed)
-		assertThrows( ImportFailedException.class, ( ) -> ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY ) );
+		assertThrows( ImportFailedException.class, ( ) -> service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY ) );
 	}
 
 	@Test
@@ -407,7 +407,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		assertThrows( ImportFailedException.class, ( ) -> ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY ) );
+		assertThrows( ImportFailedException.class, ( ) -> service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY ) );
 	}
 
 	@Test
@@ -424,7 +424,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		ivService.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( repository.getMethods( ) ).hasSize( 2 );
@@ -466,7 +466,7 @@ public class MonitoringLogServiceTest {
 		final URL logFileUrl = getClass( ).getResource( "/kieker-log-binary.zip" );
 		final File logFile = new File( logFileUrl.toURI( ) );
 
-		ivService.importMonitoringLog( logFile, ImportType.ZIP_FILE );
+		service.importMonitoringLog( logFile, ImportType.ZIP_FILE );
 
 		assertThat( repository.getTraceRoots( ) ).hasSize( 2 );
 		assertThat( repository.getAggreatedMethods( ) ).hasSize( 3 );
@@ -477,29 +477,29 @@ public class MonitoringLogServiceTest {
 	@SuppressWarnings ( "deprecation" )
 	private void writeRecord( final AbstractMonitoringRecord aRecord ) {
 		// Register the record name
-		final int recordKey = ivStringRegistry.get( aRecord.getClass( ).getName( ) );
+		final int recordKey = stringRegistry.get( aRecord.getClass( ).getName( ) );
 
 		// Register the record's strings
-		aRecord.registerStrings( ivStringRegistry );
+		aRecord.registerStrings( stringRegistry );
 
 		// Now write the record into our buffer
 		final byte[] byteArray = new byte[aRecord.getSize( ) + 4 + 8];
 		final ByteBuffer byteBuffer = ByteBuffer.wrap( byteArray );
 		byteBuffer.putInt( recordKey );
 		byteBuffer.putLong( System.currentTimeMillis( ) );
-		aRecord.serialize( DefaultValueSerializer.create( byteBuffer, ivStringRegistry ) );
+		aRecord.serialize( DefaultValueSerializer.create( byteBuffer, stringRegistry ) );
 		byteBuffer.flip( );
 
-		ivByteList.add( byteArray );
+		byteList.add( byteArray );
 	}
 
 	private void writeMappingFile( final Path tempDir ) throws IOException {
 		// Collect the mappings
 		final StringBuilder stringBuilder = new StringBuilder( );
 
-		final Object[] allStrings = ivStringRegistry.getAll( );
+		final Object[] allStrings = stringRegistry.getAll( );
 		for ( final Object string : allStrings ) {
-			final int id = ivStringRegistry.get( (String) string );
+			final int id = stringRegistry.get( (String) string );
 			stringBuilder.append( "$" ).append( id ).append( "=" ).append( string ).append( "\n" );
 		}
 
@@ -510,8 +510,8 @@ public class MonitoringLogServiceTest {
 
 	private void finishWriting( final Path tempDir ) throws IOException {
 		final File binaryFile = new File( tempDir.toFile( ), "kieker.bin" );
-		ivByteList.trimToSize( );
-		Files.write( ivByteList.buffer, binaryFile );
+		byteList.trimToSize( );
+		Files.write( byteList.buffer, binaryFile );
 	}
 
 	private static class UnknownRecord extends AbstractMonitoringRecord {

@@ -37,7 +37,7 @@ import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 public final class DurationCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>>, CdiMixin {
 
 	@Inject
-	private PropertiesService ivPropertiesService;
+	private PropertiesService propertiesService;
 
 	public DurationCellValueFactory( ) {
 		injectFields( );
@@ -45,7 +45,7 @@ public final class DurationCellValueFactory implements Callback<CellDataFeatures
 
 	@Override
 	public ObservableValue<String> call( final CellDataFeatures<MethodCall, String> aParam ) {
-		final TimeUnit timeUnit = ivPropertiesService.loadApplicationProperty( TimeUnitProperty.class );
+		final TimeUnit timeUnit = propertiesService.loadApplicationProperty( TimeUnitProperty.class );
 		return new ReadOnlyStringWrapper( Long.toString( timeUnit.convert( aParam.getValue( ).getDuration( ), TimeUnit.NANOSECONDS ) ).intern( ) );
 	}
 

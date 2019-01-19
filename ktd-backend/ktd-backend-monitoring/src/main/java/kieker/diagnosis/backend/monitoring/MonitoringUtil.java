@@ -18,18 +18,18 @@ package kieker.diagnosis.backend.monitoring;
 
 public final class MonitoringUtil {
 
-	private static volatile MonitoringProbeFactory cvMonitoringProbeFactory = new NoOpMonitoringProbeFactory( );
+	private static volatile MonitoringProbeFactory monitoringProbeFactory = new NoOpMonitoringProbeFactory( );
 
 	private MonitoringUtil( ) {
 		// Avoid instantiation
 	}
 
 	public static MonitoringProbe createMonitoringProbe( final Class<?> aClass, final String aMethod ) {
-		return cvMonitoringProbeFactory.createMonitoringProbe( aClass, aMethod );
+		return monitoringProbeFactory.createMonitoringProbe( aClass, aMethod );
 	}
 
 	public static void setMonitoringProbeFactory( final MonitoringProbeFactory aMonitoringProbeFactory ) {
-		cvMonitoringProbeFactory = aMonitoringProbeFactory;
+		monitoringProbeFactory = aMonitoringProbeFactory;
 	}
 
 }
