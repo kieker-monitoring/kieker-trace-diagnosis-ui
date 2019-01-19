@@ -17,7 +17,6 @@
 package kieker.diagnosis.frontend.main.complex;
 
 import java.io.File;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -26,17 +25,12 @@ import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.stage.Window;
 import kieker.diagnosis.backend.base.service.ServiceFactory;
 import kieker.diagnosis.backend.data.ImportType;
@@ -50,6 +44,7 @@ import kieker.diagnosis.frontend.base.common.DelegateException;
 import kieker.diagnosis.frontend.base.common.ExceptionUtil;
 import kieker.diagnosis.frontend.base.mixin.StylesheetMixin;
 import kieker.diagnosis.frontend.dialog.alert.Alert;
+import kieker.diagnosis.frontend.dialog.favorite.FavoriteDialog;
 import kieker.diagnosis.frontend.dialog.progress.ProgressDialog;
 import kieker.diagnosis.frontend.dialog.settings.SettingsDialog;
 import kieker.diagnosis.frontend.main.composite.MainMenuBar;
@@ -201,20 +196,9 @@ public final class MainPane extends VBox implements StylesheetMixin {
 	}
 
 	public void performSaveAsFavorite( final Tab tab, final Object filter ) {
-		final TextInputDialog textInputDialog = new TextInputDialog( );
-		textInputDialog.setTitle( RESOURCE_BUNDLE.getString( "newFilterFavorite" ) );
-		textInputDialog.setHeaderText( RESOURCE_BUNDLE.getString( "newFilterFavoriteName" ) );
+		final FavoriteDialog favoriteDialog = new FavoriteDialog( );
 
-		final String iconPath = RESOURCE_BUNDLE.getString( "iconNewFavorite" );
-		final InputStream iconStream = getClass( ).getClassLoader( ).getResourceAsStream( iconPath );
-		final Image icon = new Image( iconStream );
-		final DialogPane dialogPane = textInputDialog.getDialogPane( );
-		final Stage stage = (Stage) dialogPane.getScene( ).getWindow( );
-		stage.getIcons( ).add( icon );
-		dialogPane.getStylesheets( ).add( "/kieker/diagnosis/frontend/base/ui/Dialog.css" );
-		dialogPane.lookupButton( ButtonType.OK ).setId( "favoriteFilterDialogOk" );
-		dialogPane.lookupButton( ButtonType.CANCEL ).setId( "favoriteFilterDialogCancel" );
-		final Optional<String> result = textInputDialog.showAndWait( );
+		final Optional<String> result = favoriteDialog.showAndWait( );
 
 		if ( result.isPresent( ) ) {
 			final String text = result.get( );

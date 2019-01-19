@@ -26,13 +26,17 @@
 			<groupId>net.kieker-monitoring</groupId>
 			<artifactId>ktd-frontend-dialog-about</artifactId>
 		</dependency>
-			<dependency>
+		<dependency>
 			<groupId>net.kieker-monitoring</groupId>
 			<artifactId>ktd-frontend-dialog-alert</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>net.kieker-monitoring</groupId>
 			<artifactId>ktd-frontend-dialog-monitoring</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.kieker-monitoring</groupId>
+			<artifactId>ktd-frontend-dialog-favorite</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>net.kieker-monitoring</groupId>
