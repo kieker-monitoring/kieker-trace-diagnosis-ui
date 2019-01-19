@@ -26,7 +26,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
-import kieker.diagnosis.backend.data.MonitoringLogService;
+import kieker.diagnosis.backend.data.reader.Repository;
 
 /**
  * Test class for the {@link AggregatedMethodsService}.
@@ -35,14 +35,14 @@ import kieker.diagnosis.backend.data.MonitoringLogService;
  */
 public class AggregatedMethodsServiceTest {
 
-	private AggregatedMethodsService ivMethodsService;
-	private MonitoringLogService ivDataService;
+	private AggregatedMethodsService methodsService;
+	private Repository repository;
 
 	@Before
 	public void setUp( ) {
 		final Injector injector = Guice.createInjector( );
-		ivMethodsService = injector.getInstance( AggregatedMethodsService.class );
-		ivDataService = injector.getInstance( MonitoringLogService.class );
+		methodsService = injector.getInstance( AggregatedMethodsService.class );
+		repository = injector.getInstance( Repository.class );
 	}
 
 	@Test
@@ -53,21 +53,21 @@ public class AggregatedMethodsServiceTest {
 		createMethodCall( "host1", "class1", "op3", "cause1" );
 		createMethodCall( "host1", "class1", "op3", "cause4" );
 
-		assertThat( ivMethodsService.countMethods( ), is( 4 ) );
+		assertThat( methodsService.countMethods( ), is( 4 ) );
 
 		// Now search with a filter
 		final AggregatedMethodsFilter methodsFilter = new AggregatedMethodsFilter( );
 		methodsFilter.setHost( "host1" );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
 		methodsFilter.setClazz( "class1" );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
 
 		methodsFilter.setMethod( "op3" );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
 
 		methodsFilter.setException( "cause4" );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
 	}
 
 	@Test
@@ -78,22 +78,22 @@ public class AggregatedMethodsServiceTest {
 		createMethodCall( "host1", "class1", "op3", "cause1" );
 		createMethodCall( "host1", "class1", "op3", "cause4" );
 
-		assertThat( ivMethodsService.countMethods( ), is( 4 ) );
+		assertThat( methodsService.countMethods( ), is( 4 ) );
 
 		// Now search with a filter
 		final AggregatedMethodsFilter methodsFilter = new AggregatedMethodsFilter( );
 		methodsFilter.setUseRegExpr( true );
 		methodsFilter.setHost( ".*host1.*" );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
 		methodsFilter.setClazz( ".*class1.*" );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
 
 		methodsFilter.setMethod( ".*op3.*" );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
 
 		methodsFilter.setException( ".*cause4.*" );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
 	}
 
 	@Test
@@ -104,18 +104,18 @@ public class AggregatedMethodsServiceTest {
 		createMethodCall( "host1", "class1", "op3", "cause1" );
 		createMethodCall( "host1", "class1", "op3", "cause4" );
 
-		assertThat( ivMethodsService.countMethods( ), is( 4 ) );
+		assertThat( methodsService.countMethods( ), is( 4 ) );
 
 		// Now search with a filter
 		final AggregatedMethodsFilter methodsFilter = new AggregatedMethodsFilter( );
 		methodsFilter.setSearchType( SearchType.ALL );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
 		methodsFilter.setSearchType( SearchType.ONLY_FAILED );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
 
 		methodsFilter.setSearchType( SearchType.ONLY_SUCCESSFUL );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
 	}
 
 	private void createMethodCall( final String aHost, final String aClazz, final String aMethod, final String aException ) {
@@ -125,7 +125,7 @@ public class AggregatedMethodsServiceTest {
 		methodCall.setMethod( aMethod );
 		methodCall.setException( aException );
 
-		ivDataService.getRepository( ).getAggreatedMethods( ).add( methodCall );
+		repository.getAggreatedMethods( ).add( methodCall );
 	}
 
 }

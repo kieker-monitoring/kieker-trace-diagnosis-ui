@@ -57,6 +57,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 import kieker.diagnosis.backend.data.exception.CorruptStreamException;
 import kieker.diagnosis.backend.data.exception.ImportFailedException;
+import kieker.diagnosis.backend.data.reader.Repository;
 
 /**
  * Test class for the {@link MonitoringLogService}.
@@ -74,6 +75,7 @@ public class MonitoringLogServiceTest {
 	private ByteArrayList ivByteList;
 	private IRegistry<String> ivStringRegistry;
 	private MonitoringLogService ivService;
+	private Repository repository;
 
 	@Before
 	public void setUp( ) {
@@ -82,6 +84,7 @@ public class MonitoringLogServiceTest {
 
 		final Injector injector = Guice.createInjector( );
 		ivService = injector.getInstance( MonitoringLogService.class );
+		repository = injector.getInstance( Repository.class );
 	}
 
 	@Test
@@ -110,10 +113,10 @@ public class MonitoringLogServiceTest {
 		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		assertThat( ivService.getRepository( ).getMethods( ), hasSize( 2 ) );
-		assertThat( ivService.getRepository( ).getAggreatedMethods( ), hasSize( 2 ) );
-		assertThat( ivService.getRepository( ).getTraceRoots( ), hasSize( 1 ) );
-		assertThat( ivService.getRepository( ).getProcessedBytes( ), is( greaterThan( 0L ) ) );
+		assertThat( repository.getMethods( ), hasSize( 2 ) );
+		assertThat( repository.getAggreatedMethods( ), hasSize( 2 ) );
+		assertThat( repository.getTraceRoots( ), hasSize( 1 ) );
+		assertThat( repository.getProcessedBytes( ), is( greaterThan( 0L ) ) );
 	}
 
 	@Test
@@ -137,10 +140,10 @@ public class MonitoringLogServiceTest {
 		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		assertThat( ivService.getRepository( ).getMethods( ), hasSize( 4 ) );
-		assertThat( ivService.getRepository( ).getAggreatedMethods( ), hasSize( 4 ) );
-		assertThat( ivService.getRepository( ).getTraceRoots( ), hasSize( 2 ) );
-		assertThat( ivService.getRepository( ).getProcessedBytes( ), is( greaterThan( 0L ) ) );
+		assertThat( repository.getMethods( ), hasSize( 4 ) );
+		assertThat( repository.getAggreatedMethods( ), hasSize( 4 ) );
+		assertThat( repository.getTraceRoots( ), hasSize( 2 ) );
+		assertThat( repository.getProcessedBytes( ), is( greaterThan( 0L ) ) );
 	}
 
 	@Test
@@ -159,10 +162,10 @@ public class MonitoringLogServiceTest {
 		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		assertThat( ivService.getRepository( ).getMethods( ), hasSize( 2 ) );
-		assertThat( ivService.getRepository( ).getAggreatedMethods( ), hasSize( 2 ) );
-		assertThat( ivService.getRepository( ).getTraceRoots( ), hasSize( 1 ) );
-		assertThat( ivService.getRepository( ).getProcessedBytes( ), is( greaterThan( 0L ) ) );
+		assertThat( repository.getMethods( ), hasSize( 2 ) );
+		assertThat( repository.getAggreatedMethods( ), hasSize( 2 ) );
+		assertThat( repository.getTraceRoots( ), hasSize( 1 ) );
+		assertThat( repository.getProcessedBytes( ), is( greaterThan( 0L ) ) );
 	}
 
 	@Test
@@ -185,10 +188,10 @@ public class MonitoringLogServiceTest {
 		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		assertThat( ivService.getRepository( ).getMethods( ), hasSize( 4 ) );
-		assertThat( ivService.getRepository( ).getAggreatedMethods( ), hasSize( 3 ) );
-		assertThat( ivService.getRepository( ).getTraceRoots( ), hasSize( 1 ) );
-		assertThat( ivService.getRepository( ).getProcessedBytes( ), is( greaterThan( 0L ) ) );
+		assertThat( repository.getMethods( ), hasSize( 4 ) );
+		assertThat( repository.getAggreatedMethods( ), hasSize( 3 ) );
+		assertThat( repository.getTraceRoots( ), hasSize( 1 ) );
+		assertThat( repository.getProcessedBytes( ), is( greaterThan( 0L ) ) );
 	}
 
 	@Test
@@ -214,7 +217,7 @@ public class MonitoringLogServiceTest {
 		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		final List<AggregatedMethodCall> aggreatedMethods = ivService.getRepository( ).getAggreatedMethods( );
+		final List<AggregatedMethodCall> aggreatedMethods = repository.getAggreatedMethods( );
 		assertThat( aggreatedMethods, hasSize( 1 ) );
 
 		final AggregatedMethodCall aggregatedMethodCall = aggreatedMethods.get( 0 );
@@ -256,7 +259,7 @@ public class MonitoringLogServiceTest {
 		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		final List<AggregatedMethodCall> aggreatedMethods = ivService.getRepository( ).getAggreatedMethods( );
+		final List<AggregatedMethodCall> aggreatedMethods = repository.getAggreatedMethods( );
 		assertThat( aggreatedMethods, hasSize( 1 ) );
 
 		final AggregatedMethodCall aggregatedMethodCall = aggreatedMethods.get( 0 );
@@ -286,11 +289,11 @@ public class MonitoringLogServiceTest {
 		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		assertThat( ivService.getRepository( ).getMethods( ), hasSize( 0 ) );
-		assertThat( ivService.getRepository( ).getAggreatedMethods( ), hasSize( 0 ) );
-		assertThat( ivService.getRepository( ).getTraceRoots( ), hasSize( 0 ) );
-		assertThat( ivService.getRepository( ).getIncompleteTraces( ), is( 1 ) );
-		assertThat( ivService.getRepository( ).getProcessedBytes( ), is( greaterThan( 0L ) ) );
+		assertThat( repository.getMethods( ), hasSize( 0 ) );
+		assertThat( repository.getAggreatedMethods( ), hasSize( 0 ) );
+		assertThat( repository.getTraceRoots( ), hasSize( 0 ) );
+		assertThat( repository.getIncompleteTraces( ), is( 1 ) );
+		assertThat( repository.getProcessedBytes( ), is( greaterThan( 0L ) ) );
 	}
 
 	@Test
@@ -308,11 +311,11 @@ public class MonitoringLogServiceTest {
 		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		assertThat( ivService.getRepository( ).getMethods( ), hasSize( 0 ) );
-		assertThat( ivService.getRepository( ).getAggreatedMethods( ), hasSize( 0 ) );
-		assertThat( ivService.getRepository( ).getTraceRoots( ), hasSize( 0 ) );
-		assertThat( ivService.getRepository( ).getDanglingRecords( ), is( 4 ) );
-		assertThat( ivService.getRepository( ).getProcessedBytes( ), is( greaterThan( 0L ) ) );
+		assertThat( repository.getMethods( ), hasSize( 0 ) );
+		assertThat( repository.getAggreatedMethods( ), hasSize( 0 ) );
+		assertThat( repository.getTraceRoots( ), hasSize( 0 ) );
+		assertThat( repository.getDanglingRecords( ), is( 4 ) );
+		assertThat( repository.getProcessedBytes( ), is( greaterThan( 0L ) ) );
 	}
 
 	@Test
@@ -330,7 +333,7 @@ public class MonitoringLogServiceTest {
 		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		final MethodCall methodCall = ivService.getRepository( ).getMethods( ).get( 0 );
+		final MethodCall methodCall = repository.getMethods( ).get( 0 );
 		assertThat( methodCall.getDuration( ), is( 10000000000L ) );
 	}
 
@@ -349,7 +352,7 @@ public class MonitoringLogServiceTest {
 		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		final MethodCall methodCall = ivService.getRepository( ).getMethods( ).get( 0 );
+		final MethodCall methodCall = repository.getMethods( ).get( 0 );
 		assertThat( methodCall.getTimestamp( ), is( 10000L ) );
 	}
 
@@ -371,8 +374,8 @@ public class MonitoringLogServiceTest {
 		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		assertThat( ivService.getRepository( ).getTraceRoots( ), hasSize( 1 ) );
-		assertThat( ivService.getRepository( ).getIgnoredRecords( ), is( 2 ) );
+		assertThat( repository.getTraceRoots( ), hasSize( 1 ) );
+		assertThat( repository.getIgnoredRecords( ), is( 2 ) );
 	}
 
 	@Test
@@ -423,13 +426,13 @@ public class MonitoringLogServiceTest {
 		ivService.importMonitoringLog( directory, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
-		assertThat( ivService.getRepository( ).getMethods( ), hasSize( 2 ) );
-		assertThat( ivService.getRepository( ).getAggreatedMethods( ), hasSize( 2 ) );
-		assertThat( ivService.getRepository( ).getTraceRoots( ), hasSize( 1 ) );
-		assertThat( ivService.getRepository( ).getProcessedBytes( ), is( greaterThan( 0L ) ) );
+		assertThat( repository.getMethods( ), hasSize( 2 ) );
+		assertThat( repository.getAggreatedMethods( ), hasSize( 2 ) );
+		assertThat( repository.getTraceRoots( ), hasSize( 1 ) );
+		assertThat( repository.getProcessedBytes( ), is( greaterThan( 0L ) ) );
 
 		// Now some advanced checks
-		final MethodCall firstMethod = ivService.getRepository( ).getMethods( ).get( 0 );
+		final MethodCall firstMethod = repository.getMethods( ).get( 0 );
 		assertThat( firstMethod.getHost( ), is( "host" ) );
 		assertThat( firstMethod.getClazz( ), is( "class1" ) );
 		assertThat( firstMethod.getMethod( ), is( "op1" ) );
@@ -441,7 +444,7 @@ public class MonitoringLogServiceTest {
 		assertThat( firstMethod.getTraceId( ), is( 1L ) );
 		assertThat( firstMethod.getTraceSize( ), is( 2 ) );
 
-		final MethodCall secondMethod = ivService.getRepository( ).getMethods( ).get( 1 );
+		final MethodCall secondMethod = repository.getMethods( ).get( 1 );
 		assertThat( secondMethod.getHost( ), is( "host" ) );
 		assertThat( secondMethod.getClazz( ), is( "class2" ) );
 		assertThat( secondMethod.getMethod( ), is( "op2" ) );
@@ -453,7 +456,7 @@ public class MonitoringLogServiceTest {
 		assertThat( secondMethod.getTraceId( ), is( 1L ) );
 		assertThat( secondMethod.getTraceSize( ), is( 1 ) );
 
-		assertThat( ivService.getRepository( ).getTraceRoots( ).get( 0 ), is( firstMethod ) );
+		assertThat( repository.getTraceRoots( ).get( 0 ), is( firstMethod ) );
 	}
 
 	@Test
@@ -463,10 +466,10 @@ public class MonitoringLogServiceTest {
 
 		ivService.importMonitoringLog( logFile, ImportType.ZIP_FILE );
 
-		assertThat( ivService.getRepository( ).getTraceRoots( ), hasSize( 2 ) );
-		assertThat( ivService.getRepository( ).getAggreatedMethods( ), hasSize( 3 ) );
-		assertThat( ivService.getRepository( ).getMethods( ), hasSize( 3 ) );
-		assertTrue( ivService.getRepository( ).isDataAvailable( ) );
+		assertThat( repository.getTraceRoots( ), hasSize( 2 ) );
+		assertThat( repository.getAggreatedMethods( ), hasSize( 3 ) );
+		assertThat( repository.getMethods( ), hasSize( 3 ) );
+		assertTrue( repository.isDataAvailable( ) );
 	}
 
 	@SuppressWarnings ( "deprecation" )

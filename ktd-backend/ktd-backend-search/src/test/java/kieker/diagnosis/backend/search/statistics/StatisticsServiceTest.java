@@ -31,10 +31,9 @@ import org.junit.Test;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
+import kieker.diagnosis.backend.base.service.ServiceMockModule;
 import kieker.diagnosis.backend.data.MethodCall;
-import kieker.diagnosis.backend.data.MonitoringLogService;
 import kieker.diagnosis.backend.data.reader.Repository;
-import kieker.diagnosis.backend.search.ServiceMockModule;
 
 /**
  * Test class for the {@link StatisticsService}.
@@ -49,11 +48,8 @@ public final class StatisticsServiceTest {
 	@Before
 	public void setUp( ) {
 		repository = mock( Repository.class );
+		final Injector injector = Guice.createInjector( new ServiceMockModule<>( Repository.class, repository ) );
 
-		final MonitoringLogService monitoringLogService = mock( MonitoringLogService.class );
-		when( monitoringLogService.getRepository( ) ).thenReturn( repository );
-
-		final Injector injector = Guice.createInjector( new ServiceMockModule( MonitoringLogService.class, monitoringLogService ) );
 		statisticsService = injector.getInstance( StatisticsService.class );
 	}
 

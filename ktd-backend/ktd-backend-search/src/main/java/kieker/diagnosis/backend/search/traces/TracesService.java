@@ -27,7 +27,7 @@ import com.google.inject.Singleton;
 
 import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.data.MethodCall;
-import kieker.diagnosis.backend.data.MonitoringLogService;
+import kieker.diagnosis.backend.data.reader.Repository;
 import kieker.diagnosis.backend.filter.FilterService;
 
 /**
@@ -39,7 +39,7 @@ import kieker.diagnosis.backend.filter.FilterService;
 public class TracesService implements Service {
 
 	@Inject
-	private MonitoringLogService monitoringLogService;
+	private Repository repository;
 
 	@Inject
 	private FilterService filterService;
@@ -73,7 +73,7 @@ public class TracesService implements Service {
 		}
 
 		// Get all trace roots...
-		final List<MethodCall> traceRoots = monitoringLogService.getRepository( ).getTraceRoots( );
+		final List<MethodCall> traceRoots = repository.getTraceRoots( );
 
 		// ...and apply the filter to each of the traces
 		return traceRoots
@@ -117,7 +117,7 @@ public class TracesService implements Service {
 	 * @return The number of all traces.
 	 */
 	public int countTraces( ) {
-		return monitoringLogService.getRepository( ).getTraceRoots( ).size( );
+		return repository.getTraceRoots( ).size( );
 	}
 
 }

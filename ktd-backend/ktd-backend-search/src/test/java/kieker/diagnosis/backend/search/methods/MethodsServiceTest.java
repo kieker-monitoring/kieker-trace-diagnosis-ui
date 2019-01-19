@@ -30,7 +30,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import kieker.diagnosis.backend.data.MethodCall;
-import kieker.diagnosis.backend.data.MonitoringLogService;
+import kieker.diagnosis.backend.data.reader.Repository;
 
 /**
  * Test class for the {@link MethodsService}.
@@ -39,14 +39,15 @@ import kieker.diagnosis.backend.data.MonitoringLogService;
  */
 public class MethodsServiceTest {
 
-	private MethodsService ivMethodsService;
-	private MonitoringLogService ivDataService;
+	private MethodsService methodsService;
+	private Repository repository;
 
 	@Before
 	public void setUp( ) {
 		final Injector injector = Guice.createInjector( );
-		ivMethodsService = injector.getInstance( MethodsService.class );
-		ivDataService = injector.getInstance( MonitoringLogService.class );
+
+		methodsService = injector.getInstance( MethodsService.class );
+		repository = injector.getInstance( Repository.class );
 	}
 
 	@Test
@@ -57,21 +58,21 @@ public class MethodsServiceTest {
 		createMethodCall( "host1", "class1", "op3", "cause1" );
 		createMethodCall( "host1", "class1", "op3", "cause4" );
 
-		assertThat( ivMethodsService.countMethods( ), is( 4 ) );
+		assertThat( methodsService.countMethods( ), is( 4 ) );
 
 		// Now search with a filter
 		final MethodsFilter methodsFilter = new MethodsFilter( );
 		methodsFilter.setHost( "host1" );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
 		methodsFilter.setClazz( "class1" );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
 
 		methodsFilter.setMethod( "op3" );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
 
 		methodsFilter.setException( "cause4" );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
 	}
 
 	@Test
@@ -82,22 +83,22 @@ public class MethodsServiceTest {
 		createMethodCall( "host1", "class1", "op3", "cause1" );
 		createMethodCall( "host1", "class1", "op3", "cause4" );
 
-		assertThat( ivMethodsService.countMethods( ), is( 4 ) );
+		assertThat( methodsService.countMethods( ), is( 4 ) );
 
 		// Now search with a filter
 		final MethodsFilter methodsFilter = new MethodsFilter( );
 		methodsFilter.setUseRegExpr( true );
 		methodsFilter.setHost( ".*host1.*" );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
 		methodsFilter.setClazz( ".*class1.*" );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
 
 		methodsFilter.setMethod( ".*op3.*" );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
 
 		methodsFilter.setException( ".*cause4.*" );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
 	}
 
 	@Test
@@ -108,18 +109,18 @@ public class MethodsServiceTest {
 		createMethodCall( "host1", "class1", "op3", "cause1" );
 		createMethodCall( "host1", "class1", "op3", "cause4" );
 
-		assertThat( ivMethodsService.countMethods( ), is( 4 ) );
+		assertThat( methodsService.countMethods( ), is( 4 ) );
 
 		// Now search with a filter
 		final MethodsFilter methodsFilter = new MethodsFilter( );
 		methodsFilter.setSearchType( SearchType.ALL );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
 		methodsFilter.setSearchType( SearchType.ONLY_FAILED );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
 
 		methodsFilter.setSearchType( SearchType.ONLY_SUCCESSFUL );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
 	}
 
 	@Test
@@ -130,21 +131,21 @@ public class MethodsServiceTest {
 		createMethodCall( 2L );
 		createMethodCall( 3L );
 
-		assertThat( ivMethodsService.countMethods( ), is( 4 ) );
+		assertThat( methodsService.countMethods( ), is( 4 ) );
 
 		// Now search with a filter
 		final MethodsFilter methodsFilter = new MethodsFilter( );
 		methodsFilter.setTraceId( 1L );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
 
 		methodsFilter.setTraceId( 2L );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
 
 		methodsFilter.setTraceId( 3L );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
 
 		methodsFilter.setTraceId( 4L );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 0 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 0 ) );
 	}
 
 	@Test
@@ -155,53 +156,53 @@ public class MethodsServiceTest {
 		createMethodCall( 2015, 01, 04, 15, 25 );
 		createMethodCall( 2015, 01, 01, 15, 20 );
 
-		assertThat( ivMethodsService.countMethods( ), is( 4 ) );
+		assertThat( methodsService.countMethods( ), is( 4 ) );
 
 		// Now search with a filter
 		final MethodsFilter methodsFilter = new MethodsFilter( );
 		methodsFilter.setLowerDate( LocalDate.of( 2000, 05, 01 ) );
 		methodsFilter.setLowerTime( LocalTime.of( 15, 20 ) );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2000, 05, 01 ) );
 		methodsFilter.setLowerTime( LocalTime.of( 14, 20 ) );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2000, 05, 01 ) );
 		methodsFilter.setLowerTime( LocalTime.of( 16, 20 ) );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2000, 05, 01 ) );
 		methodsFilter.setLowerTime( LocalTime.of( 15, 21 ) );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2015, 01, 01 ) );
 		methodsFilter.setLowerTime( LocalTime.of( 15, 20 ) );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2015, 01, 04 ) );
 		methodsFilter.setLowerTime( LocalTime.of( 15, 20 ) );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2015, 01, 05 ) );
 		methodsFilter.setLowerTime( LocalTime.of( 10, 10 ) );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 0 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 0 ) );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2015, 01, 04 ) );
 		methodsFilter.setLowerTime( LocalTime.of( 15, 26 ) );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 0 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 0 ) );
 
 		methodsFilter.setLowerDate( null );
 		methodsFilter.setLowerTime( null );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
 		methodsFilter.setLowerDate( LocalDate.of( 2015, 01, 01 ) );
 		methodsFilter.setLowerTime( null );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
 
 		methodsFilter.setLowerDate( null );
 		methodsFilter.setLowerTime( LocalTime.of( 15, 25 ) );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
 	}
 
 	@Test
@@ -212,57 +213,57 @@ public class MethodsServiceTest {
 		createMethodCall( 2015, 01, 04, 15, 25 );
 		createMethodCall( 2015, 01, 01, 15, 20 );
 
-		assertThat( ivMethodsService.countMethods( ), is( 4 ) );
+		assertThat( methodsService.countMethods( ), is( 4 ) );
 
 		// Now search with a filter
 		final MethodsFilter methodsFilter = new MethodsFilter( );
 		methodsFilter.setUpperDate( LocalDate.of( 2000, 05, 01 ) );
 		methodsFilter.setUpperTime( LocalTime.of( 15, 20 ) );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2000, 05, 01 ) );
 		methodsFilter.setUpperTime( LocalTime.of( 14, 20 ) );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 0 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 0 ) );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2000, 05, 01 ) );
 		methodsFilter.setUpperTime( LocalTime.of( 16, 20 ) );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 1 ) );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2000, 05, 05 ) );
 		methodsFilter.setUpperTime( LocalTime.of( 15, 21 ) );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 2 ) );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2015, 01, 01 ) );
 		methodsFilter.setUpperTime( LocalTime.of( 15, 20 ) );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2015, 01, 04 ) );
 		methodsFilter.setUpperTime( LocalTime.of( 15, 20 ) );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2015, 01, 05 ) );
 		methodsFilter.setUpperTime( LocalTime.of( 10, 10 ) );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2015, 01, 04 ) );
 		methodsFilter.setUpperTime( LocalTime.of( 15, 26 ) );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
 		methodsFilter.setUpperDate( null );
 		methodsFilter.setUpperTime( null );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
 		methodsFilter.setUpperDate( LocalDate.of( 2015, 01, 01 ) );
 		methodsFilter.setUpperTime( null );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
 
 		methodsFilter.setUpperDate( null );
 		methodsFilter.setUpperTime( LocalTime.of( 15, 25 ) );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 4 ) );
 
 		methodsFilter.setUpperDate( null );
 		methodsFilter.setUpperTime( LocalTime.of( 15, 20 ) );
-		assertThat( ivMethodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
+		assertThat( methodsService.searchMethods( methodsFilter ).size( ), is( 3 ) );
 	}
 
 	private void createMethodCall( final String aHost, final String aClazz, final String aMethod, final String aException ) {
@@ -272,14 +273,14 @@ public class MethodsServiceTest {
 		methodCall.setMethod( aMethod );
 		methodCall.setException( aException );
 
-		ivDataService.getRepository( ).getMethods( ).add( methodCall );
+		repository.getMethods( ).add( methodCall );
 	}
 
 	private void createMethodCall( final long aTraceId ) {
 		final MethodCall methodCall = new MethodCall( );
 		methodCall.setTraceId( aTraceId );
 
-		ivDataService.getRepository( ).getMethods( ).add( methodCall );
+		repository.getMethods( ).add( methodCall );
 	}
 
 	private void createMethodCall( final int aYear, final int aMonth, final int aDay, final int aHour, final int aMinute ) {
@@ -289,7 +290,7 @@ public class MethodsServiceTest {
 		final MethodCall methodCall = new MethodCall( );
 		methodCall.setTimestamp( calendar.getTimeInMillis( ) );
 
-		ivDataService.getRepository( ).getMethods( ).add( methodCall );
+		repository.getMethods( ).add( methodCall );
 	}
 
 }

@@ -26,13 +26,12 @@ import java.util.Optional;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
-import com.google.inject.Injector;
 
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
+import kieker.diagnosis.backend.base.service.ServiceMockModule;
 import kieker.diagnosis.backend.search.statistics.Statistics;
 import kieker.diagnosis.backend.search.statistics.StatisticsService;
 import kieker.diagnosis.frontend.base.FrontendBaseModule;
@@ -50,9 +49,8 @@ public final class StatisticsTabTestUI extends ApplicationTest {
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
-		final Injector injector = Guice.createInjector( new FrontendBaseModule( ), new Module( ) );
-
-		statisticsService = injector.getInstance( StatisticsService.class );
+		statisticsService = mock( StatisticsService.class );
+		Guice.createInjector( new FrontendBaseModule( ), new ServiceMockModule<>( StatisticsService.class, statisticsService ) );
 
 		statisticsTab = new StatisticsTab( );
 		final TabPane tabPane = new TabPane( statisticsTab );
@@ -134,15 +132,6 @@ public final class StatisticsTabTestUI extends ApplicationTest {
 				.processDuration( 600000L )
 				.processSpeed( 9999L )
 				.build( ) );
-	}
-
-	private static final class Module extends AbstractModule {
-
-		@Override
-		protected void configure( ) {
-			bind( StatisticsService.class ).toInstance( mock( StatisticsService.class ) );
-		}
-
 	}
 
 }

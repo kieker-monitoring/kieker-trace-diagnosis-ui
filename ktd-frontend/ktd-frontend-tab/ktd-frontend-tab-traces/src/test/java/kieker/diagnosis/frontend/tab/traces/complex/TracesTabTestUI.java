@@ -36,7 +36,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import kieker.diagnosis.backend.data.MethodCall;
-import kieker.diagnosis.backend.data.MonitoringLogService;
+import kieker.diagnosis.backend.data.reader.Repository;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.search.traces.TracesFilter;
 import kieker.diagnosis.backend.settings.properties.ShowUnmonitoredTimeProperty;
@@ -56,8 +56,8 @@ public final class TracesTabTestUI extends ApplicationTest {
 	public void start( final Stage stage ) throws Exception {
 		final Injector injector = Guice.createInjector( new FrontendBaseModule( ) );
 
-		final MonitoringLogService monitoringLogService = injector.getInstance( MonitoringLogService.class );
-		monitoringLogService.getRepository( ).getTraceRoots( ).addAll( createTraces( ) );
+		final Repository repository = injector.getInstance( Repository.class );
+		repository.getTraceRoots( ).addAll( createTraces( ) );
 
 		final PropertiesService propertiesService = injector.getInstance( PropertiesService.class );
 		propertiesService.saveApplicationProperty( ShowUnmonitoredTimeProperty.class, Boolean.TRUE );

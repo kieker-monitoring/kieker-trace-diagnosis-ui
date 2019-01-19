@@ -23,7 +23,7 @@ import com.google.inject.Singleton;
 
 import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.data.MethodCall;
-import kieker.diagnosis.backend.data.MonitoringLogService;
+import kieker.diagnosis.backend.data.reader.Repository;
 import kieker.diagnosis.backend.search.statistics.Statistics.StatisticsBuilder;
 import kieker.diagnosis.backend.settings.TimestampAppearance;
 
@@ -36,37 +36,37 @@ import kieker.diagnosis.backend.settings.TimestampAppearance;
 public class StatisticsService implements Service {
 
 	@Inject
-	private MonitoringLogService monitoringLogService;
+	private Repository repository;
 
 	public Optional<Statistics> getStatistics( ) {
 		// We create the DTO only, if we have any data available
-		if ( monitoringLogService.getRepository( ).isDataAvailable( ) ) {
+		if ( repository.isDataAvailable( ) ) {
 			final StatisticsBuilder statisticsBuilder = Statistics.builder( );
 
 			// TRACEUI-10 [Occasional division by zero]
-			final long processDuration = monitoringLogService.getRepository( ).getProcessDuration( );
+			final long processDuration = repository.getProcessDuration( );
 			statisticsBuilder.processDuration( processDuration );
-			final long processedBytes = monitoringLogService.getRepository( ).getProcessedBytes( );
+			final long processedBytes = repository.getProcessedBytes( );
 			statisticsBuilder.processedBytes( processedBytes );
 
 			if ( processDuration != 0L ) {
 				statisticsBuilder.processSpeed( processedBytes / processDuration );
 			}
 
-			statisticsBuilder.ignoredRecords( monitoringLogService.getRepository( ).getIgnoredRecords( ) );
-			statisticsBuilder.danglingRecords( monitoringLogService.getRepository( ).getDanglingRecords( ) );
-			statisticsBuilder.incompleteTraces( monitoringLogService.getRepository( ).getIncompleteTraces( ) );
-			statisticsBuilder.methods( monitoringLogService.getRepository( ).getMethods( ).size( ) );
-			statisticsBuilder.aggregatedMethods( monitoringLogService.getRepository( ).getAggreatedMethods( ).size( ) );
-			statisticsBuilder.traces( monitoringLogService.getRepository( ).getTraceRoots( ).size( ) );
-			statisticsBuilder.directory( monitoringLogService.getRepository( ).getDirectory( ) );
+			statisticsBuilder.ignoredRecords( repository.getIgnoredRecords( ) );
+			statisticsBuilder.danglingRecords( repository.getDanglingRecords( ) );
+			statisticsBuilder.incompleteTraces( repository.getIncompleteTraces( ) );
+			statisticsBuilder.methods( repository.getMethods( ).size( ) );
+			statisticsBuilder.aggregatedMethods( repository.getAggreatedMethods( ).size( ) );
+			statisticsBuilder.traces( repository.getTraceRoots( ).size( ) );
+			statisticsBuilder.directory( repository.getDirectory( ) );
 
-			final long minTimestamp = monitoringLogService.getRepository( ).getMethods( )
+			final long minTimestamp = repository.getMethods( )
 					.parallelStream( )
 					.map( MethodCall::getTimestamp )
 					.min( Long::compareTo )
 					.orElse( 0L );
-			final long maxTimestamp = monitoringLogService.getRepository( ).getMethods( )
+			final long maxTimestamp = repository.getMethods( )
 					.parallelStream( )
 					.map( MethodCall::getTimestamp )
 					.max( Long::compareTo )

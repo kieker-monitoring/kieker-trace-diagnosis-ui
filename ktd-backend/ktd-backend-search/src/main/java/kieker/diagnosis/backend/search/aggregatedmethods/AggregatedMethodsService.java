@@ -25,7 +25,7 @@ import com.google.inject.Singleton;
 
 import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
-import kieker.diagnosis.backend.data.MonitoringLogService;
+import kieker.diagnosis.backend.data.reader.Repository;
 import kieker.diagnosis.backend.filter.FilterService;
 
 /**
@@ -37,10 +37,10 @@ import kieker.diagnosis.backend.filter.FilterService;
 public class AggregatedMethodsService implements Service {
 
 	@Inject
-	private MonitoringLogService monitoringLogService;
+	private FilterService filterService;
 
 	@Inject
-	private FilterService filterService;
+	private Repository repository;
 
 	/**
 	 * This method searches, based on the given filter, for aggregated method calls within the imported monitoring log.
@@ -52,7 +52,7 @@ public class AggregatedMethodsService implements Service {
 	 */
 	public List<AggregatedMethodCall> searchMethods( final AggregatedMethodsFilter aFilter ) {
 		// Get the methods
-		final List<AggregatedMethodCall> methods = monitoringLogService.getRepository( ).getAggreatedMethods( );
+		final List<AggregatedMethodCall> methods = repository.getAggreatedMethods( );
 
 		// Filter the methods
 		return methods
@@ -78,7 +78,7 @@ public class AggregatedMethodsService implements Service {
 	 * @return The number of all aggregated method calls.
 	 */
 	public int countMethods( ) {
-		final List<AggregatedMethodCall> methods = monitoringLogService.getRepository( ).getAggreatedMethods( );
+		final List<AggregatedMethodCall> methods = repository.getAggreatedMethods( );
 		return methods.size( );
 	}
 

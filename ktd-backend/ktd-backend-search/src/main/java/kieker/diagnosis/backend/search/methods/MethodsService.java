@@ -25,7 +25,7 @@ import com.google.inject.Singleton;
 
 import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.data.MethodCall;
-import kieker.diagnosis.backend.data.MonitoringLogService;
+import kieker.diagnosis.backend.data.reader.Repository;
 import kieker.diagnosis.backend.filter.FilterService;
 
 /**
@@ -37,7 +37,7 @@ import kieker.diagnosis.backend.filter.FilterService;
 public class MethodsService implements Service {
 
 	@Inject
-	private MonitoringLogService monitoringLogService;
+	private Repository repository;
 
 	@Inject
 	private FilterService filterService;
@@ -52,7 +52,7 @@ public class MethodsService implements Service {
 	 */
 	public List<MethodCall> searchMethods( final MethodsFilter aFilter ) {
 		// Get the methods
-		final List<MethodCall> methods = monitoringLogService.getRepository( ).getMethods( );
+		final List<MethodCall> methods = repository.getMethods( );
 
 		// Filter the methods
 		return methods
@@ -81,7 +81,7 @@ public class MethodsService implements Service {
 	 * @return The number of all method calls.
 	 */
 	public int countMethods( ) {
-		final List<MethodCall> methods = monitoringLogService.getRepository( ).getMethods( );
+		final List<MethodCall> methods = repository.getMethods( );
 		return methods.size( );
 	}
 

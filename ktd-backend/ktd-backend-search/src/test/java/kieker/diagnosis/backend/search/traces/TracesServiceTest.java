@@ -30,7 +30,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import kieker.diagnosis.backend.data.MethodCall;
-import kieker.diagnosis.backend.data.MonitoringLogService;
+import kieker.diagnosis.backend.data.reader.Repository;
 
 /**
  * Test class for the {@link TracesService}.
@@ -40,13 +40,13 @@ import kieker.diagnosis.backend.data.MonitoringLogService;
 public final class TracesServiceTest {
 
 	private TracesService tracesService;
-	private MonitoringLogService dataService;
+	private Repository repository;
 
 	@Before
 	public void setUp( ) {
 		final Injector injector = Guice.createInjector( );
 		tracesService = injector.getInstance( TracesService.class );
-		dataService = injector.getInstance( MonitoringLogService.class );
+		repository = injector.getInstance( Repository.class );
 	}
 
 	@Test
@@ -288,7 +288,7 @@ public final class TracesServiceTest {
 		methodCall.setMethod( aMethod );
 		methodCall.setException( aException );
 
-		dataService.getRepository( ).getTraceRoots( ).add( methodCall );
+		repository.getTraceRoots( ).add( methodCall );
 	}
 
 	private void createMethodCall( final int aYear, final int aMonth, final int aDay, final int aHour, final int aMinute ) {
@@ -298,14 +298,14 @@ public final class TracesServiceTest {
 		final MethodCall methodCall = new MethodCall( );
 		methodCall.setTimestamp( calendar.getTimeInMillis( ) );
 
-		dataService.getRepository( ).getTraceRoots( ).add( methodCall );
+		repository.getTraceRoots( ).add( methodCall );
 	}
 
 	private void createMethodCall( final long aTraceId ) {
 		final MethodCall methodCall = new MethodCall( );
 		methodCall.setTraceId( aTraceId );
 
-		dataService.getRepository( ).getTraceRoots( ).add( methodCall );
+		repository.getTraceRoots( ).add( methodCall );
 	}
 
 	private void createMethodCallWithChild( final String aHost1, final String aHost2 ) {
@@ -316,7 +316,7 @@ public final class TracesServiceTest {
 		child.setHost( aHost2 );
 		methodCall.addChild( child );
 
-		dataService.getRepository( ).getTraceRoots( ).add( methodCall );
+		repository.getTraceRoots( ).add( methodCall );
 	}
 
 }

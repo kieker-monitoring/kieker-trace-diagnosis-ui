@@ -19,6 +19,7 @@ package kieker.diagnosis.backend.data;
 import java.io.File;
 import java.util.ResourceBundle;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import kieker.diagnosis.backend.base.service.Service;
@@ -37,7 +38,8 @@ public class MonitoringLogService implements Service {
 
 	private static final ResourceBundle RESOURCES = ResourceBundle.getBundle( MonitoringLogService.class.getName( ) );
 
-	private final Repository repository = new Repository( );
+	@Inject
+	private Repository repository;
 
 	public void importMonitoringLog( final File directoryOrFile, final ImportType type ) throws CorruptStreamException, ImportFailedException {
 		final long tin = System.currentTimeMillis( );
@@ -65,10 +67,6 @@ public class MonitoringLogService implements Service {
 		} catch ( final Exception ex ) {
 			throw new ImportFailedException( RESOURCES.getString( "errorMessageImportFailed" ), ex );
 		}
-	}
-
-	public Repository getRepository( ) {
-		return repository;
 	}
 
 }

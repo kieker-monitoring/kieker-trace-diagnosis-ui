@@ -31,11 +31,13 @@ import java.util.concurrent.TimeUnit;
 import com.carrotsearch.hppc.LongArrayList;
 import com.carrotsearch.hppc.LongObjectHashMap;
 import com.carrotsearch.hppc.LongObjectMap;
+import com.google.inject.Singleton;
 
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.data.exception.CorruptStreamException;
 
+@Singleton
 public class Repository {
 
 	private static final TimeUnit DESTINATION_TIMESTAMP_TIME_UNIT = TimeUnit.MILLISECONDS;

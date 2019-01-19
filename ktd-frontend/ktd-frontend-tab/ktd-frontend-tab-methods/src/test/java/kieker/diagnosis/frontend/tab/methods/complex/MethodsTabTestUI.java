@@ -43,7 +43,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import kieker.diagnosis.backend.data.MethodCall;
-import kieker.diagnosis.backend.data.MonitoringLogService;
+import kieker.diagnosis.backend.data.reader.Repository;
 import kieker.diagnosis.backend.export.CSVData;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.search.methods.MethodsFilter;
@@ -66,8 +66,8 @@ public final class MethodsTabTestUI extends ApplicationTest {
 	public void start( final Stage stage ) throws Exception {
 		final Injector injector = Guice.createInjector( new FrontendBaseModule( ) );
 
-		final MonitoringLogService monitoringLogService = injector.getInstance( MonitoringLogService.class );
-		monitoringLogService.getRepository( ).getMethods( ).addAll( createMethodCalls( ) );
+		final Repository repository = injector.getInstance( Repository.class );
+		repository.getMethods( ).addAll( createMethodCalls( ) );
 
 		final PropertiesService propertiesService = injector.getInstance( PropertiesService.class );
 		propertiesService.saveApplicationProperty( TimeUnitProperty.class, TimeUnit.NANOSECONDS );
