@@ -34,6 +34,7 @@ import com.google.inject.Injector;
 import kieker.diagnosis.backend.base.ServiceBaseModule;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.data.MonitoringLogService;
+import kieker.diagnosis.backend.data.reader.Repository;
 import kieker.diagnosis.backend.search.ServiceMockModule;
 
 /**
@@ -44,13 +45,16 @@ import kieker.diagnosis.backend.search.ServiceMockModule;
 public final class StatisticsServiceTest {
 
 	private StatisticsService statisticsService;
-	private MonitoringLogService dataService;
+	private Repository repository;
 
 	@Before
 	public void setUp( ) {
-		dataService = mock( MonitoringLogService.class );
+		repository = mock( Repository.class );
 
-		final Injector injector = Guice.createInjector( new ServiceBaseModule( ), new ServiceMockModule( MonitoringLogService.class, dataService ) );
+		final MonitoringLogService monitoringLogService = mock( MonitoringLogService.class );
+		when( monitoringLogService.getRepository( ) ).thenReturn( repository );
+
+		final Injector injector = Guice.createInjector( new ServiceBaseModule( ), new ServiceMockModule( MonitoringLogService.class, monitoringLogService ) );
 		statisticsService = injector.getInstance( StatisticsService.class );
 	}
 
@@ -62,19 +66,19 @@ public final class StatisticsServiceTest {
 
 	@Test
 	public void testExistingData( ) {
-		when( dataService.getRepository( ).isDataAvailable( ) ).thenReturn( true );
-		when( dataService.getRepository( ).getDanglingRecords( ) ).thenReturn( 42 );
-		when( dataService.getRepository( ).getIgnoredRecords( ) ).thenReturn( 15 );
-		when( dataService.getRepository( ).getIncompleteTraces( ) ).thenReturn( 10 );
-		when( dataService.getRepository( ).getProcessedBytes( ) ).thenReturn( 50L );
-		when( dataService.getRepository( ).getProcessDuration( ) ).thenReturn( 25L );
-		when( dataService.getRepository( ).getDirectory( ) ).thenReturn( "/tmp/" );
+		when( repository.isDataAvailable( ) ).thenReturn( true );
+		when( repository.getDanglingRecords( ) ).thenReturn( 42 );
+		when( repository.getIgnoredRecords( ) ).thenReturn( 15 );
+		when( repository.getIncompleteTraces( ) ).thenReturn( 10 );
+		when( repository.getProcessedBytes( ) ).thenReturn( 50L );
+		when( repository.getProcessDuration( ) ).thenReturn( 25L );
+		when( repository.getDirectory( ) ).thenReturn( "/tmp/" );
 
 		final MethodCall methodCallStart = createMethodCall( 2018, 12, 1, 20, 00 );
 		final MethodCall methodCallEnd = createMethodCall( 2018, 12, 2, 22, 00 );
 
-		when( dataService.getRepository( ).getMethods( ) ).thenReturn( Arrays.asList( methodCallStart, methodCallEnd ) );
-		when( dataService.getRepository( ).getTraceRoots( ) ).thenReturn( Arrays.asList( methodCallStart ) );
+		when( repository.getMethods( ) ).thenReturn( Arrays.asList( methodCallStart, methodCallEnd ) );
+		when( repository.getTraceRoots( ) ).thenReturn( Arrays.asList( methodCallStart ) );
 
 		final Statistics statistics = statisticsService.getStatistics( ).get( );
 		assertThat( statistics.getDanglingRecords( ), is( 42 ) );
@@ -97,9 +101,9 @@ public final class StatisticsServiceTest {
 
 	@Test
 	public void testProcessDurationIsZero( ) {
-		when( dataService.getRepository( ).isDataAvailable( ) ).thenReturn( true );
-		when( dataService.getRepository( ).getProcessedBytes( ) ).thenReturn( 50L );
-		when( dataService.getRepository( ).getProcessDuration( ) ).thenReturn( 0L );
+		when( repository.isDataAvailable( ) ).thenReturn( true );
+		when( repository.getProcessedBytes( ) ).thenReturn( 50L );
+		when( repository.getProcessDuration( ) ).thenReturn( 0L );
 
 		final Statistics statistics = statisticsService.getStatistics( ).get( );
 		assertThat( statistics.getProcessDuration( ), is( 0L ) );
