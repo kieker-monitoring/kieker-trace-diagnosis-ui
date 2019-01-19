@@ -289,7 +289,7 @@ public final class TracesServiceTest {
 		methodCall.setMethod( aMethod );
 		methodCall.setException( aException );
 
-		dataService.getTraceRoots( ).add( methodCall );
+		dataService.getRepository( ).getTraceRoots( ).add( methodCall );
 	}
 
 	private void createMethodCall( final int aYear, final int aMonth, final int aDay, final int aHour, final int aMinute ) {
@@ -299,14 +299,14 @@ public final class TracesServiceTest {
 		final MethodCall methodCall = new MethodCall( );
 		methodCall.setTimestamp( calendar.getTimeInMillis( ) );
 
-		dataService.getTraceRoots( ).add( methodCall );
+		dataService.getRepository( ).getTraceRoots( ).add( methodCall );
 	}
 
 	private void createMethodCall( final long aTraceId ) {
 		final MethodCall methodCall = new MethodCall( );
 		methodCall.setTraceId( aTraceId );
 
-		dataService.getTraceRoots( ).add( methodCall );
+		dataService.getRepository( ).getTraceRoots( ).add( methodCall );
 	}
 
 	private void createMethodCallWithChild( final String aHost1, final String aHost2 ) {
@@ -317,7 +317,7 @@ public final class TracesServiceTest {
 		child.setHost( aHost2 );
 		methodCall.addChild( child );
 
-		dataService.getTraceRoots( ).add( methodCall );
+		dataService.getRepository( ).getTraceRoots( ).add( methodCall );
 	}
 
 }

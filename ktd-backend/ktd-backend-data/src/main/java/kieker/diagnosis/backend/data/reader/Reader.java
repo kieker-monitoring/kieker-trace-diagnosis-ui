@@ -17,163 +17,180 @@
 package kieker.diagnosis.backend.data.reader;
 
 import java.io.File;
-import java.io.FilenameFilter;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.FileVisitOption;
+import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import com.carrotsearch.hppc.IntObjectHashMap;
 import com.carrotsearch.hppc.IntObjectMap;
+import com.google.common.io.ByteStreams;
 
-import kieker.diagnosis.backend.monitoring.MonitoringProbe;
-import kieker.diagnosis.backend.monitoring.MonitoringUtil;
+import kieker.diagnosis.backend.data.exception.CorruptStreamException;
+import kieker.diagnosis.backend.data.exception.ImportFailedException;
 
-/**
- * This is an abstract base for readers, which import monitoring logs. It provides some convenient helper methods.
- *
- * @author Nils Christian Ehmke
- */
-public abstract class Reader {
+public final class Reader {
 
+	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( Reader.class.getName( ) );
 	private static final Pattern MAPPING_FILE_PATTERN = Pattern.compile( "\\$(\\d*)=(.*)" );
 
-	private final TemporaryRepository temporaryRepository;
-
-	public Reader( final TemporaryRepository temporaryRepository ) {
-		this.temporaryRepository = temporaryRepository;
+	public void readRecursiveFromZipFile( final Path zipFile, final Repository repository ) throws IOException, CorruptStreamException, ImportFailedException {
+		final Path directory = extractZipFileToTemporaryDirectory( zipFile );
+		try {
+			readRecursiveFromDirectory( directory, repository );
+		} finally {
+			deleteTemporaryDirectory( directory );
+		}
 	}
 
-	public abstract void readFromDirectory( File directory ) throws IOException;
+	private Path extractZipFileToTemporaryDirectory( final Path zipFilePath ) throws IOException {
+		final Path temporaryDirectory = Files.createTempDirectory( "ktd" );
 
-	public abstract boolean shouldBeExecuted( File directory ) throws IOException;
-
-	/**
-	 * Reads the Kieker mapping file from the given directory. If the directory contains no such mapping file, an empty
-	 * map is returned.
-	 *
-	 * @param directory
-	 *            The directory from which the mapping file should be read.
-	 *
-	 * @return The mapping between the keys and the Strings.
-	 *
-	 * @throws IOException
-	 *             If the mapping file exists but could not be read.
-	 */
-	protected final IntObjectMap<String> readMappingFile( final File directory ) throws IOException {
-		final MonitoringProbe probe = MonitoringUtil.createMonitoringProbe( getClass( ), "readMappingFile(java.io.File)" );
-
-		try {
-			final IntObjectMap<String> stringMapping = new IntObjectHashMap<>( );
-
-			// Check if the file exists
-			final File mappingFile = new File( directory, "kieker.map" );
-			if ( mappingFile.exists( ) ) {
-				final List<String> lines = Files.readAllLines( mappingFile.toPath( ) );
-
-				for ( final String line : lines ) {
-					final Matcher matcher = MAPPING_FILE_PATTERN.matcher( line );
-
-					if ( matcher.find( ) ) {
-						// Split the line into key and value
-						final String key = matcher.group( 1 );
-						final String value = matcher.group( 2 ).intern( );
-
-						// Store the entry in our map
-						final int intKey = Integer.parseInt( key );
-						stringMapping.put( intKey, value );
+		try ( ZipFile zipFile = new ZipFile( zipFilePath.toFile( ) ) ) {
+			final Enumeration<? extends ZipEntry> zipEntries = zipFile.entries( );
+			while ( zipEntries.hasMoreElements( ) ) {
+				final ZipEntry zipEntry = zipEntries.nextElement( );
+				try ( InputStream inputStream = zipFile.getInputStream( zipEntry ) ) {
+					try ( FileOutputStream outputStream = new FileOutputStream( new File( temporaryDirectory.toFile( ), zipEntry.getName( ) ) ) ) {
+						ByteStreams.copy( inputStream, outputStream );
 					}
 				}
 			}
-
-			return stringMapping;
-		} catch ( final Throwable t ) {
-			probe.fail( t );
-			throw t;
-		} finally {
-			probe.stop( );
 		}
+
+		return temporaryDirectory;
 	}
 
-	/**
-	 * Delivers a list of all directories, which contain at least one file for each of the given extensions. The search
-	 * is performed recursive.
-	 *
-	 * @param directory
-	 *            The root directory.
-	 * @param extensions
-	 *            The extensions to search for.
-	 *
-	 * @return The resulting list of directories.
-	 *
-	 * @throws IOException
-	 *             If the list of directories could not be determined.
-	 */
-	protected List<File> findDirectoriesContainingFilesWithExtensions( final File directory, final String... extensions ) throws IOException {
-		final MonitoringProbe probe = MonitoringUtil.createMonitoringProbe( getClass( ), "findDirectoriesContainingFilesWithExtensions(java.io.File, java.lang.String[])" );
-
-		try {
-			return Files.walk( directory.toPath( ), Integer.MAX_VALUE, new FileVisitOption[0] ) // Visit all files in
-																								// infinite depth...
-					.map( path -> path.toFile( ) ).filter( file -> file.isDirectory( ) ) // ...which are directories...
-					.filter( dir -> containsFilesWithAllExtensions( dir, extensions ) ) // ...and contain at least one
-																						// file for each extension.
-					.collect( Collectors.toList( ) );
-		} catch ( final Throwable t ) {
-			probe.fail( t );
-			throw t;
-		} finally {
-			probe.stop( );
-		}
-	}
-
-	private boolean containsFilesWithAllExtensions( final File directory, final String[] extensions ) {
-		for ( final String extension : extensions ) {
-			final String lowerExtension = extension.toLowerCase( );
-			final File[] filesWithExtension = directory.listFiles( (FilenameFilter) ( aDir, aName ) -> aName.toLowerCase( ).endsWith( lowerExtension ) );
-
-			// Did we find a file with the extension?
-			if ( filesWithExtension.length == 0 ) {
-				return false;
+	private void deleteTemporaryDirectory( final Path path ) throws IOException {
+		if ( Files.isDirectory( path ) ) {
+			final List<Path> children = Files.list( path ).collect( Collectors.toList( ) );
+			if ( !children.isEmpty( ) ) {
+				for ( final Path child : children ) {
+					deleteTemporaryDirectory( child );
+				}
 			}
 		}
 
-		// It seems that we found a file for each extension.
-		return true;
+		Files.delete( path );
 	}
 
-	/**
-	 * Delivers a list of all files with the given extension. The search is performed non-recursive.
-	 *
-	 * @param directory
-	 *            The root directory.
-	 * @param extension
-	 *            The extension to search for.
-	 *
-	 * @return The resulting list of files.
-	 *
-	 * @throws IOException
-	 *             If the list of files could not be determined.
-	 */
-	protected File[] findFilesWithExtension( final File directory, final String extension ) throws IOException {
-		final MonitoringProbe probe = MonitoringUtil.createMonitoringProbe( getClass( ), "findFilesWithExtension(java.io.File, java.lang.String)" );
+	public void readRecursiveFromDirectory( final Path directory, final Repository repository ) throws IOException, CorruptStreamException, ImportFailedException {
+		repository.clear( );
 
-		try {
-			final String lowerExtension = extension.toLowerCase( );
-			return directory.listFiles( (FilenameFilter) ( aDir, aName ) -> aName.toLowerCase( ).endsWith( lowerExtension ) );
-		} catch ( final Throwable t ) {
-			probe.fail( t );
-			throw t;
-		} finally {
-			probe.stop( );
+		final List<Path> mappingFileContainingDirectories = getAllMappingFileContainingDirectories( directory );
+		boolean anyFilesProcessed = !mappingFileContainingDirectories.isEmpty( );
+		for ( final Path subDirectory : mappingFileContainingDirectories ) {
+			final boolean filesProcessed = readFromDirectory( subDirectory, repository );
+			anyFilesProcessed &= filesProcessed;
+		}
+
+		if ( !anyFilesProcessed ) {
+			// No reader felt responsible for the import directory. We inform the user.
+			throw new ImportFailedException( RESOURCE_BUNDLE.getString( "errorMessageUnknownMonitoringLog" ) );
+		}
+
+		repository.finish( );
+
+		if ( repository.getIgnoredRecords( ) > 0 && repository.getTraceRoots( ).size( ) == 0 ) {
+			// No traces have been reconstructed and records have been ignored. We inform the user.
+			final String msg = String.format( RESOURCE_BUNDLE.getString( "errorMessageNoTraceAndRecordsIgnored" ), repository.getIgnoredRecords( ) );
+			throw new ImportFailedException( msg );
 		}
 	}
 
-	protected TemporaryRepository getTemporaryRepository( ) {
-		return temporaryRepository;
+	private List<Path> getAllMappingFileContainingDirectories( final Path directory ) throws IOException {
+		try ( Stream<Path> stream = Files.walk( directory ) ) {
+			return stream
+					.filter( Files::isDirectory )
+					.filter( this::containsMappingFile )
+					.collect( Collectors.toList( ) );
+		}
+	}
+
+	private boolean containsMappingFile( final Path directory ) {
+		final Path mappingFilePath = getMappingFilePath( directory );
+		return Files.isRegularFile( mappingFilePath );
+	}
+
+	private Path getMappingFilePath( final Path directory ) {
+		return directory.resolve( "kieker.map" );
+	}
+
+	private boolean readFromDirectory( final Path directory, final Repository repository ) throws IOException, ImportFailedException {
+		final IntObjectMap<String> mapping = readMappingFile( directory );
+		repository.clearBeforeNextDirectory( );
+
+		final List<Path> asciiFiles = getAllAsciiFilesFromDirectory( directory );
+		final List<Path> binaryFiles = getAllBinaryFilesFromDirectory( directory );
+
+		if ( !asciiFiles.isEmpty( ) ) {
+			final AsciiReader asciiReader = new AsciiReader( mapping, repository );
+			for ( final Path asciiFile : asciiFiles ) {
+				asciiReader.readFromFile( asciiFile );
+			}
+		}
+
+		if ( !binaryFiles.isEmpty( ) ) {
+			final BinaryReader binaryReader = new BinaryReader( mapping, repository );
+			for ( final Path binaryFile : binaryFiles ) {
+				binaryReader.readFromFile( binaryFile, mapping );
+			}
+		}
+
+		return !( asciiFiles.isEmpty( ) && binaryFiles.isEmpty( ) );
+	}
+
+	private List<Path> getAllAsciiFilesFromDirectory( final Path directory ) throws IOException {
+		return Files.list( directory )
+				.filter( Files::isRegularFile )
+				.filter( this::isAsciiFile )
+				.collect( Collectors.toList( ) );
+	}
+
+	private boolean isAsciiFile( final Path file ) {
+		return file.toString( ).endsWith( ".dat" );
+	}
+
+	private List<Path> getAllBinaryFilesFromDirectory( final Path directory ) throws IOException {
+		return Files.list( directory )
+				.filter( Files::isRegularFile )
+				.filter( this::isBinaryFile )
+				.collect( Collectors.toList( ) );
+	}
+
+	private boolean isBinaryFile( final Path file ) {
+		return file.toString( ).endsWith( ".bin" );
+	}
+
+	private IntObjectMap<String> readMappingFile( final Path directory ) throws IOException {
+		final Path mappingFilePath = getMappingFilePath( directory );
+		final List<String> lines = Files.readAllLines( mappingFilePath );
+
+		final IntObjectMap<String> mapping = new IntObjectHashMap<>( lines.size( ) );
+		lines.stream( )
+				.parallel( )
+				.map( MAPPING_FILE_PATTERN::matcher )
+				.filter( Matcher::find )
+				.sequential( )
+				.forEach( matcher -> {
+					final String key = matcher.group( 1 );
+					final String value = matcher.group( 2 ).intern( );
+
+					final int intKey = Integer.parseInt( key );
+					mapping.put( intKey, value );
+				} );
+
+		return mapping;
 	}
 
 }

@@ -16,6 +16,7 @@
 
 package kieker.diagnosis.backend.data.reader;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -33,38 +34,32 @@ import com.carrotsearch.hppc.LongObjectMap;
 
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.data.MethodCall;
-import kieker.diagnosis.backend.data.MonitoringLogService;
 import kieker.diagnosis.backend.data.exception.CorruptStreamException;
-import kieker.diagnosis.backend.monitoring.MonitoringProbe;
-import kieker.diagnosis.backend.monitoring.MonitoringUtil;
 
-/**
- * This is a temporary storage used during an import of monitoring logs. Readers can use it to store the read data.
- *
- * @author Nils Christian Ehmke
- */
-public final class TemporaryRepository {
+public final class Repository {
 
 	private static final TimeUnit DESTINATION_TIMESTAMP_TIME_UNIT = TimeUnit.MILLISECONDS;
 	private static final TimeUnit DESTINATION_DURATION_TIME_UNIT = TimeUnit.NANOSECONDS;
 
-	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( TemporaryRepository.class.getName( ) );
+	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( Repository.class.getName( ) );
 
 	private final LongObjectMap<String> hostMap = new LongObjectHashMap<>( );
 	private final LongObjectMap<List<MethodCall>> reconstructionMap = new LongObjectHashMap<>( );
 	private boolean streamCorrupt = false;
 	private Exception exception = null;
-	private final MonitoringLogService monitoringLogService;
+
+	private final List<MethodCall> traceRoots = new ArrayList<>( );
+	private final List<AggregatedMethodCall> aggreatedMethods = new ArrayList<>( );
+	private final List<MethodCall> methods = new ArrayList<>( );
 
 	private int ignoredRecords;
 	private int danglingRecords;
-
 	private TimeUnit sourceTimeUnit;
 	private long processedBytes;
-
-	public TemporaryRepository( final MonitoringLogService monitoringLogService ) {
-		this.monitoringLogService = monitoringLogService;
-	}
+	private long processDuration;
+	private boolean dataAvailable = false;
+	private int incompleteTraces;
+	private String directory;
 
 	void processBeforeOperationEvent( final long timestamp, final long traceId ) {
 		final List<MethodCall> methodList = reconstructionMap.get( traceId );
@@ -132,7 +127,7 @@ public final class TemporaryRepository {
 			reconstructionMap.remove( traceId );
 
 			// Add the trace to the container
-			monitoringLogService.addTraceRoot( lastMethodCall );
+			traceRoots.add( lastMethodCall );
 		} else {
 			final MethodCall previousMethodCall = methodList.get( methodList.size( ) - 1 );
 			// We can calculate the trace size and the trace depth on-the-fly
@@ -185,10 +180,11 @@ public final class TemporaryRepository {
 		calculatePercentAndCollectMethods( );
 		aggregateMethods( );
 
-		monitoringLogService.setProcessedBytes( processedBytes );
-		monitoringLogService.setIgnoredRecords( ignoredRecords );
-		monitoringLogService.setDanglingRecords( danglingRecords );
-		monitoringLogService.setIncompleteTraces( reconstructionMap.size( ) );
+		incompleteTraces = reconstructionMap.size( );
+
+		// We don't need the temporary data anymore
+		hostMap.clear( );
+		reconstructionMap.clear( );
 
 		if ( streamCorrupt ) {
 			throw new CorruptStreamException( RESOURCE_BUNDLE.getString( "errorMessageStreamCorrupt" ), exception );
@@ -196,117 +192,151 @@ public final class TemporaryRepository {
 	}
 
 	private void calculatePercentAndCollectMethods( ) {
-		final MonitoringProbe probe = MonitoringUtil.createMonitoringProbe( getClass( ), "calculatePercentAndCollectMethods()" );
+		final Stack<MethodCall> stack = new Stack<>( );
+		stack.addAll( traceRoots );
 
-		try {
-
-			final List<MethodCall> traceRoots = monitoringLogService.getTraceRoots( );
-
-			final Stack<MethodCall> stack = new Stack<>( );
-			stack.addAll( traceRoots );
-
-			// The trace roots have always 100% of the time
-			for ( final MethodCall traceRoot : traceRoots ) {
-				traceRoot.setPercent( 100.0f );
-			}
-
-			final List<MethodCall> methods = new ArrayList<>( );
-
-			while ( !stack.isEmpty( ) ) {
-				// Get the next method call
-				final MethodCall methodCall = stack.pop( );
-				final long duration = methodCall.getDuration( );
-
-				// Calculate the percent of each child
-				final List<MethodCall> children = methodCall.getChildren( );
-				for ( final MethodCall child : children ) {
-					child.setPercent( child.getDuration( ) * 100.0f / duration );
-
-					// Add the child to the stack
-					stack.push( child );
-				}
-
-				methodCall.trimToSize( );
-				methods.add( methodCall );
-			}
-
-			monitoringLogService.addMethods( methods );
-		} catch ( final Throwable t ) {
-			probe.fail( t );
-			throw t;
-		} finally {
-			probe.stop( );
+		// The trace roots have always 100% of the time
+		for ( final MethodCall traceRoot : traceRoots ) {
+			traceRoot.setPercent( 100.0f );
 		}
+
+		final List<MethodCall> methods = new ArrayList<>( );
+
+		while ( !stack.isEmpty( ) ) {
+			// Get the next method call
+			final MethodCall methodCall = stack.pop( );
+			final long duration = methodCall.getDuration( );
+
+			// Calculate the percent of each child
+			final List<MethodCall> children = methodCall.getChildren( );
+			for ( final MethodCall child : children ) {
+				child.setPercent( child.getDuration( ) * 100.0f / duration );
+
+				// Add the child to the stack
+				stack.push( child );
+			}
+
+			methodCall.trimToSize( );
+			methods.add( methodCall );
+		}
+
+		this.methods.addAll( methods );
 	}
 
 	private void aggregateMethods( ) {
-		final MonitoringProbe probe = MonitoringUtil.createMonitoringProbe( getClass( ), "aggregateMethods()" );
+		final Map<AggregationKey, MethodCall> aggregationMapWithExemplaricMethodCall = new HashMap<>( );
+		final Map<AggregationKey, LongArrayList> aggregationMapWithDuration = new HashMap<>( );
 
-		try {
-			final Map<AggregationKey, MethodCall> aggregationMapWithExemplaricMethodCall = new HashMap<>( );
-			final Map<AggregationKey, LongArrayList> aggregationMapWithDuration = new HashMap<>( );
+		// Aggregate the methods. We perform only the key calculation in parallel, as the put into the aggregation
+		// maps would be
+		// slower due to synchronization.
+		methods.parallelStream( ).map( method -> new AggregationKey( method.getHost( ), method.getClazz( ), method.getMethod( ), method.getException( ), method ) )
+				.sequential( ).forEach( key -> {
+					LongArrayList durationlist = aggregationMapWithDuration.get( key );
 
-			// Aggregate the methods. We perform only the key calculation in parallel, as the put into the aggregation
-			// maps would be
-			// slower due to synchronization.
-			final List<MethodCall> methodCalls = monitoringLogService.getMethods( );
-			methodCalls.parallelStream( ).map( method -> new AggregationKey( method.getHost( ), method.getClazz( ), method.getMethod( ), method.getException( ), method ) )
-					.sequential( ).forEach( key -> {
-						LongArrayList durationlist = aggregationMapWithDuration.get( key );
+					if ( durationlist == null ) {
+						durationlist = new LongArrayList( );
 
-						if ( durationlist == null ) {
-							durationlist = new LongArrayList( );
+						aggregationMapWithDuration.put( key, durationlist );
+						aggregationMapWithExemplaricMethodCall.put( key, key.getMethodCall( ) );
+					}
 
-							aggregationMapWithDuration.put( key, durationlist );
-							aggregationMapWithExemplaricMethodCall.put( key, key.getMethodCall( ) );
-						}
+					durationlist.add( key.getMethodCall( ).getDuration( ) );
+				} );
 
-						durationlist.add( key.getMethodCall( ).getDuration( ) );
-					} );
+		// As we need the median, we have to have sorted lists. The sorting can be performed in parallel.
+		aggregationMapWithDuration.values( ).parallelStream( ).forEach( list -> Arrays.sort( list.buffer, 0, list.size( ) ) );
 
-			// As we need the median, we have to have sorted lists. The sorting can be performed in parallel.
-			aggregationMapWithDuration.values( ).parallelStream( ).forEach( list -> Arrays.sort( list.buffer, 0, list.size( ) ) );
+		// Now we can calculate the aggregated methods based on the aggregation maps. As we have no "complex"
+		// put-if-absent-part
+		// here (as above), we do this in parallel.
+		final Queue<AggregatedMethodCall> aggregatedMethodCalls = new ConcurrentLinkedQueue<>( );
+		aggregationMapWithExemplaricMethodCall.keySet( ).parallelStream( ).forEach( key -> {
+			final MethodCall exemplaricMethodCall = aggregationMapWithExemplaricMethodCall.get( key );
+			final LongArrayList durationList = aggregationMapWithDuration.get( key );
 
-			// Now we can calculate the aggregated methods based on the aggregation maps. As we have no "complex"
-			// put-if-absent-part
-			// here (as above), we do this in parallel.
-			final Queue<AggregatedMethodCall> aggregatedMethodCalls = new ConcurrentLinkedQueue<>( );
-			aggregationMapWithExemplaricMethodCall.keySet( ).parallelStream( ).forEach( key -> {
-				final MethodCall exemplaricMethodCall = aggregationMapWithExemplaricMethodCall.get( key );
-				final LongArrayList durationList = aggregationMapWithDuration.get( key );
+			// We need the sum of the durations
+			long durationSum = 0;
+			final int size = durationList.size( );
+			final long[] array = durationList.buffer;
+			for ( int index = 0; index < size; index++ ) {
+				durationSum += array[index];
+			}
 
-				// We need the sum of the durations
-				long durationSum = 0;
-				final int size = durationList.size( );
-				final long[] array = durationList.buffer;
-				for ( int index = 0; index < size; index++ ) {
-					durationSum += array[index];
-				}
+			// Now assemble the aggregated method call
+			final AggregatedMethodCall aggregatedMethodCall = new AggregatedMethodCall( );
+			aggregatedMethodCall.setAvgDuration( durationSum / size );
+			aggregatedMethodCall.setTotalDuration( durationSum );
+			aggregatedMethodCall.setHost( exemplaricMethodCall.getHost( ) );
+			aggregatedMethodCall.setClazz( exemplaricMethodCall.getClazz( ) );
+			aggregatedMethodCall.setMethod( exemplaricMethodCall.getMethod( ) );
+			aggregatedMethodCall.setException( exemplaricMethodCall.getException( ) );
+			aggregatedMethodCall.setCount( size );
+			aggregatedMethodCall.setMedianDuration( array[size / 2] );
+			aggregatedMethodCall.setMinDuration( array[0] );
+			aggregatedMethodCall.setMaxDuration( array[size - 1] );
 
-				// Now assemble the aggregated method call
-				final AggregatedMethodCall aggregatedMethodCall = new AggregatedMethodCall( );
-				aggregatedMethodCall.setAvgDuration( durationSum / size );
-				aggregatedMethodCall.setTotalDuration( durationSum );
-				aggregatedMethodCall.setHost( exemplaricMethodCall.getHost( ) );
-				aggregatedMethodCall.setClazz( exemplaricMethodCall.getClazz( ) );
-				aggregatedMethodCall.setMethod( exemplaricMethodCall.getMethod( ) );
-				aggregatedMethodCall.setException( exemplaricMethodCall.getException( ) );
-				aggregatedMethodCall.setCount( size );
-				aggregatedMethodCall.setMedianDuration( array[size / 2] );
-				aggregatedMethodCall.setMinDuration( array[0] );
-				aggregatedMethodCall.setMaxDuration( array[size - 1] );
+			aggregatedMethodCalls.add( aggregatedMethodCall );
+		} );
 
-				aggregatedMethodCalls.add( aggregatedMethodCall );
-			} );
+		// Add them now to the service, as we are out of the parallel stream
+		aggreatedMethods.addAll( aggregatedMethodCalls );
+	}
 
-			// Add them now to the service, as we are out of the parallel stream
-			monitoringLogService.addAggregatedMethods( aggregatedMethodCalls );
-		} catch ( final Throwable t ) {
-			probe.fail( t );
-			throw t;
-		} finally {
-			probe.stop( );
-		}
+	public void clear( ) {
+		dataAvailable = false;
+		traceRoots.clear( );
+		aggreatedMethods.clear( );
+		methods.clear( );
+	}
+
+	public int getIgnoredRecords( ) {
+		return ignoredRecords;
+	}
+
+	public List<MethodCall> getTraceRoots( ) {
+		return traceRoots;
+	}
+
+	public void setDataAvailable( final File inputDirectory, final long tin ) {
+		directory = inputDirectory.getAbsolutePath( );
+		dataAvailable = true;
+
+		final long tout = System.currentTimeMillis( );
+		final long duration = tout - tin;
+		processDuration = duration;
+	}
+
+	public List<AggregatedMethodCall> getAggreatedMethods( ) {
+		return aggreatedMethods;
+	}
+
+	public List<MethodCall> getMethods( ) {
+		return methods;
+	}
+
+	public long getProcessDuration( ) {
+		return processDuration;
+	}
+
+	public long getProcessedBytes( ) {
+		return processedBytes;
+	}
+
+	public int getDanglingRecords( ) {
+		return danglingRecords;
+	}
+
+	public boolean isDataAvailable( ) {
+		return dataAvailable;
+	}
+
+	public String getDirectory( ) {
+		return directory;
+	}
+
+	public int getIncompleteTraces( ) {
+		return incompleteTraces;
 	}
 
 	private static class AggregationKey {

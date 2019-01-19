@@ -26,8 +26,8 @@ import java.net.URL;
 
 import org.junit.Test;
 
-import kieker.diagnosis.backend.data.MonitoringLogService;
 import kieker.diagnosis.backend.data.exception.CorruptStreamException;
+import kieker.diagnosis.backend.data.exception.ImportFailedException;
 
 /**
  * Test class for the {@link BinaryFileReader}.
@@ -37,20 +37,18 @@ import kieker.diagnosis.backend.data.exception.CorruptStreamException;
 public final class BinaryFileReaderTest {
 
 	@Test
-	public void testNormalLogs( ) throws URISyntaxException, IOException, CorruptStreamException {
-		final MonitoringLogService monitoringLogService = new MonitoringLogService( );
-		final TemporaryRepository temporaryRepository = new TemporaryRepository( monitoringLogService );
-		final BinaryFileReader binaryFileReader = new BinaryFileReader( temporaryRepository );
+	public void testNormalLogs( ) throws URISyntaxException, IOException, CorruptStreamException, ImportFailedException {
+		final Repository repository = new Repository( );
+		final Reader reader = new Reader( );
 
 		final URL logDirectoryUrl = getClass( ).getResource( "/kieker-log-binary" );
 		final File logDirectory = new File( logDirectoryUrl.toURI( ) );
 
-		binaryFileReader.readFromDirectory( logDirectory );
-		temporaryRepository.finish( );
+		reader.readRecursiveFromDirectory( logDirectory.toPath( ), repository );
 
-		assertThat( monitoringLogService.getTraceRoots( ), hasSize( 2 ) );
-		assertThat( monitoringLogService.getAggreatedMethods( ), hasSize( 3 ) );
-		assertThat( monitoringLogService.getMethods( ), hasSize( 3 ) );
+		assertThat( repository.getTraceRoots( ), hasSize( 2 ) );
+		assertThat( repository.getAggreatedMethods( ), hasSize( 3 ) );
+		assertThat( repository.getMethods( ), hasSize( 3 ) );
 	}
 
 }

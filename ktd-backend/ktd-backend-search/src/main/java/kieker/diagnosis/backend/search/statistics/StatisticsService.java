@@ -40,33 +40,33 @@ public class StatisticsService implements Service {
 
 	public Optional<Statistics> getStatistics( ) {
 		// We create the DTO only, if we have any data available
-		if ( monitoringLogService.isDataAvailable( ) ) {
+		if ( monitoringLogService.getRepository( ).isDataAvailable( ) ) {
 			final StatisticsBuilder statisticsBuilder = Statistics.builder( );
 
 			// TRACEUI-10 [Occasional division by zero]
-			final long processDuration = monitoringLogService.getProcessDuration( );
+			final long processDuration = monitoringLogService.getRepository( ).getProcessDuration( );
 			statisticsBuilder.processDuration( processDuration );
-			final long processedBytes = monitoringLogService.getProcessedBytes( );
+			final long processedBytes = monitoringLogService.getRepository( ).getProcessedBytes( );
 			statisticsBuilder.processedBytes( processedBytes );
 
 			if ( processDuration != 0L ) {
 				statisticsBuilder.processSpeed( processedBytes / processDuration );
 			}
 
-			statisticsBuilder.ignoredRecords( monitoringLogService.getIgnoredRecords( ) );
-			statisticsBuilder.danglingRecords( monitoringLogService.getDanglingRecords( ) );
-			statisticsBuilder.incompleteTraces( monitoringLogService.getIncompleteTraces( ) );
-			statisticsBuilder.methods( monitoringLogService.getMethods( ).size( ) );
-			statisticsBuilder.aggregatedMethods( monitoringLogService.getAggreatedMethods( ).size( ) );
-			statisticsBuilder.traces( monitoringLogService.getTraceRoots( ).size( ) );
-			statisticsBuilder.directory( monitoringLogService.getDirectory( ) );
+			statisticsBuilder.ignoredRecords( monitoringLogService.getRepository( ).getIgnoredRecords( ) );
+			statisticsBuilder.danglingRecords( monitoringLogService.getRepository( ).getDanglingRecords( ) );
+			statisticsBuilder.incompleteTraces( monitoringLogService.getRepository( ).getIncompleteTraces( ) );
+			statisticsBuilder.methods( monitoringLogService.getRepository( ).getMethods( ).size( ) );
+			statisticsBuilder.aggregatedMethods( monitoringLogService.getRepository( ).getAggreatedMethods( ).size( ) );
+			statisticsBuilder.traces( monitoringLogService.getRepository( ).getTraceRoots( ).size( ) );
+			statisticsBuilder.directory( monitoringLogService.getRepository( ).getDirectory( ) );
 
-			final long minTimestamp = monitoringLogService.getMethods( )
+			final long minTimestamp = monitoringLogService.getRepository( ).getMethods( )
 					.parallelStream( )
 					.map( MethodCall::getTimestamp )
 					.min( Long::compareTo )
 					.orElse( 0L );
-			final long maxTimestamp = monitoringLogService.getMethods( )
+			final long maxTimestamp = monitoringLogService.getRepository( ).getMethods( )
 					.parallelStream( )
 					.map( MethodCall::getTimestamp )
 					.max( Long::compareTo )

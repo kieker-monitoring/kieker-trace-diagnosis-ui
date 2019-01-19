@@ -273,14 +273,14 @@ public class MethodsServiceTest {
 		methodCall.setMethod( aMethod );
 		methodCall.setException( aException );
 
-		ivDataService.getMethods( ).add( methodCall );
+		ivDataService.getRepository( ).getMethods( ).add( methodCall );
 	}
 
 	private void createMethodCall( final long aTraceId ) {
 		final MethodCall methodCall = new MethodCall( );
 		methodCall.setTraceId( aTraceId );
 
-		ivDataService.getMethods( ).add( methodCall );
+		ivDataService.getRepository( ).getMethods( ).add( methodCall );
 	}
 
 	private void createMethodCall( final int aYear, final int aMonth, final int aDay, final int aHour, final int aMinute ) {
@@ -290,7 +290,7 @@ public class MethodsServiceTest {
 		final MethodCall methodCall = new MethodCall( );
 		methodCall.setTimestamp( calendar.getTimeInMillis( ) );
 
-		ivDataService.getMethods( ).add( methodCall );
+		ivDataService.getRepository( ).getMethods( ).add( methodCall );
 	}
 
 }

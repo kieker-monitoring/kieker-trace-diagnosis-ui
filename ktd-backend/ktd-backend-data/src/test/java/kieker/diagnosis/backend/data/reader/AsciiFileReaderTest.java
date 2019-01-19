@@ -27,8 +27,8 @@ import java.net.URL;
 
 import org.junit.Test;
 
-import kieker.diagnosis.backend.data.MonitoringLogService;
 import kieker.diagnosis.backend.data.exception.CorruptStreamException;
+import kieker.diagnosis.backend.data.exception.ImportFailedException;
 
 /**
  * Test class for the {@link AsciiFileReader}.
@@ -38,21 +38,19 @@ import kieker.diagnosis.backend.data.exception.CorruptStreamException;
 public final class AsciiFileReaderTest {
 
 	@Test
-	public void testNormalLogs( ) throws URISyntaxException, IOException, CorruptStreamException {
-		final MonitoringLogService monitoringLogService = new MonitoringLogService( );
-		final TemporaryRepository temporaryRepository = new TemporaryRepository( monitoringLogService );
-		final AsciiFileReader asciiFileReader = new AsciiFileReader( temporaryRepository );
+	public void testNormalLogs( ) throws URISyntaxException, IOException, CorruptStreamException, ImportFailedException {
+		final Repository repository = new Repository( );
+		final Reader reader = new Reader( );
 
 		final URL logDirectoryUrl = getClass( ).getResource( "/kieker-log-ascii" );
 		final File logDirectory = new File( logDirectoryUrl.toURI( ) );
 
-		asciiFileReader.readFromDirectory( logDirectory );
-		temporaryRepository.finish( );
+		reader.readRecursiveFromDirectory( logDirectory.toPath( ), repository );
 
-		assertThat( monitoringLogService.getTraceRoots( ), hasSize( 3 ) );
-		assertThat( monitoringLogService.getAggreatedMethods( ), hasSize( 4 ) );
-		assertThat( monitoringLogService.getMethods( ), hasSize( 4 ) );
-		assertThat( monitoringLogService.getIgnoredRecords( ), is( 1 ) );
+		assertThat( repository.getTraceRoots( ), hasSize( 3 ) );
+		assertThat( repository.getAggreatedMethods( ), hasSize( 4 ) );
+		assertThat( repository.getMethods( ), hasSize( 4 ) );
+		assertThat( repository.getIgnoredRecords( ), is( 1 ) );
 	}
 
 }

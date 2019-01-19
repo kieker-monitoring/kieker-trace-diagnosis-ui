@@ -45,13 +45,14 @@ public class MethodsService implements Service {
 	/**
 	 * This method searches, based on the given filter, for method calls within the imported monitoring log.
 	 *
-	 * @param aFilter The filter to apply to the method calls.
+	 * @param aFilter
+	 *            The filter to apply to the method calls.
 	 *
 	 * @return A new list containing all available method calls matching the filter.
 	 */
 	public List<MethodCall> searchMethods( final MethodsFilter aFilter ) {
 		// Get the methods
-		final List<MethodCall> methods = monitoringLogService.getMethods( );
+		final List<MethodCall> methods = monitoringLogService.getRepository( ).getMethods( );
 
 		// Filter the methods
 		return methods
@@ -80,7 +81,7 @@ public class MethodsService implements Service {
 	 * @return The number of all method calls.
 	 */
 	public int countMethods( ) {
-		final List<MethodCall> methods = monitoringLogService.getMethods( );
+		final List<MethodCall> methods = monitoringLogService.getRepository( ).getMethods( );
 		return methods.size( );
 	}
 

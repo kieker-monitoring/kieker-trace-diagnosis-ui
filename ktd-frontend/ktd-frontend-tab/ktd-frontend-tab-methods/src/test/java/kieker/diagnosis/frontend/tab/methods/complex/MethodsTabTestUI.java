@@ -67,7 +67,7 @@ public final class MethodsTabTestUI extends ApplicationTest {
 		final Injector injector = Guice.createInjector( new ServiceBaseModule( ) );
 
 		final MonitoringLogService monitoringLogService = injector.getInstance( MonitoringLogService.class );
-		monitoringLogService.addMethods( createMethodCalls( ) );
+		monitoringLogService.getRepository( ).getMethods( ).addAll( createMethodCalls( ) );
 
 		final PropertiesService propertiesService = injector.getInstance( PropertiesService.class );
 		propertiesService.saveApplicationProperty( TimeUnitProperty.class, TimeUnit.NANOSECONDS );

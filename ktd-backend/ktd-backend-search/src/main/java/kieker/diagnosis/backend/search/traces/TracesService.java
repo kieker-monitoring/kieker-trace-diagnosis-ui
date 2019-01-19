@@ -47,9 +47,11 @@ public class TracesService implements Service {
 	/**
 	 * This method searches, based on the given filter, for traces within the imported monitoring log.
 	 *
-	 * @param aFilter The filter to apply to the traces.
+	 * @param aFilter
+	 *            The filter to apply to the traces.
 	 *
-	 * @return A new list containing all available traces matching the filter. Only the root method calls of the traces are returned.
+	 * @return A new list containing all available traces matching the filter. Only the root method calls of the traces
+	 *         are returned.
 	 */
 	public List<MethodCall> searchTraces( final TracesFilter aFilter ) {
 		// Prepare the predicates
@@ -71,7 +73,7 @@ public class TracesService implements Service {
 		}
 
 		// Get all trace roots...
-		final List<MethodCall> traceRoots = monitoringLogService.getTraceRoots( );
+		final List<MethodCall> traceRoots = monitoringLogService.getRepository( ).getTraceRoots( );
 
 		// ...and apply the filter to each of the traces
 		return traceRoots
@@ -115,7 +117,7 @@ public class TracesService implements Service {
 	 * @return The number of all traces.
 	 */
 	public int countTraces( ) {
-		return monitoringLogService.getTraceRoots( ).size( );
+		return monitoringLogService.getRepository( ).getTraceRoots( ).size( );
 	}
 
 }

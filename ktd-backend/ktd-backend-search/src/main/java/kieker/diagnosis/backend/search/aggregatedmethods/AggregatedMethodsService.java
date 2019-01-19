@@ -45,13 +45,14 @@ public class AggregatedMethodsService implements Service {
 	/**
 	 * This method searches, based on the given filter, for aggregated method calls within the imported monitoring log.
 	 *
-	 * @param aFilter The filter to apply to the method calls.
+	 * @param aFilter
+	 *            The filter to apply to the method calls.
 	 *
 	 * @return A new list containing all available aggregated method calls matching the filter.
 	 */
 	public List<AggregatedMethodCall> searchMethods( final AggregatedMethodsFilter aFilter ) {
 		// Get the methods
-		final List<AggregatedMethodCall> methods = monitoringLogService.getAggreatedMethods( );
+		final List<AggregatedMethodCall> methods = monitoringLogService.getRepository( ).getAggreatedMethods( );
 
 		// Filter the methods
 		return methods
@@ -77,7 +78,7 @@ public class AggregatedMethodsService implements Service {
 	 * @return The number of all aggregated method calls.
 	 */
 	public int countMethods( ) {
-		final List<AggregatedMethodCall> methods = monitoringLogService.getAggreatedMethods( );
+		final List<AggregatedMethodCall> methods = monitoringLogService.getRepository( ).getAggreatedMethods( );
 		return methods.size( );
 	}
 

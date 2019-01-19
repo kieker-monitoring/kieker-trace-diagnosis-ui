@@ -126,7 +126,7 @@ public class AggregatedMethodsServiceTest {
 		methodCall.setMethod( aMethod );
 		methodCall.setException( aException );
 
-		ivDataService.getAggreatedMethods( ).add( methodCall );
+		ivDataService.getRepository( ).getAggreatedMethods( ).add( methodCall );
 	}
 
 }

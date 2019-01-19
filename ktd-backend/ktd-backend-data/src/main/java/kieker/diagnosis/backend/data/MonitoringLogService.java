@@ -17,29 +17,15 @@
 package kieker.diagnosis.backend.data;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipFile;
 
-import com.google.common.io.ByteStreams;
-import com.google.common.io.Files;
 import com.google.inject.Singleton;
 
 import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.data.exception.CorruptStreamException;
 import kieker.diagnosis.backend.data.exception.ImportFailedException;
-import kieker.diagnosis.backend.data.reader.AsciiFileReader;
-import kieker.diagnosis.backend.data.reader.BinaryFileReader;
 import kieker.diagnosis.backend.data.reader.Reader;
-import kieker.diagnosis.backend.data.reader.TemporaryRepository;
+import kieker.diagnosis.backend.data.reader.Repository;
 
 /**
  * This is the service responsible for importing monitoring logs and holding the necessary data from the import.
@@ -51,200 +37,38 @@ public class MonitoringLogService implements Service {
 
 	private static final ResourceBundle RESOURCES = ResourceBundle.getBundle( MonitoringLogService.class.getName( ) );
 
-	private final List<MethodCall> traceRoots = new ArrayList<>( );
-	private final List<AggregatedMethodCall> aggreatedMethods = new ArrayList<>( );
-	private final List<MethodCall> methods = new ArrayList<>( );
-	private long processDuration;
-	private long processedBytes;
-	private boolean dataAvailable = false;
-	private int ignoredRecords;
-	private int danglingRecords;
-	private int incompleteTraces;
-	private String directory;
+	private final Repository repository = new Repository( );
 
 	public void importMonitoringLog( final File directoryOrFile, final ImportType type ) throws CorruptStreamException, ImportFailedException {
 		final long tin = System.currentTimeMillis( );
 
-		File directory = null;
 		try {
-			clear( );
+			final Reader reader = new Reader( );
 
-			directory = extractIfNecessary( directoryOrFile, type );
-
-			// We use some helper classes to avoid having temporary fields in the service
-			final TemporaryRepository temporaryRepository = new TemporaryRepository( this );
-
-			final List<Reader> readerList = new ArrayList<>( );
-			readerList.add( new BinaryFileReader( temporaryRepository ) );
-			readerList.add( new AsciiFileReader( temporaryRepository ) );
-
-			boolean directoryImported = false;
-
-			for ( final Reader reader : readerList ) {
-				if ( reader.shouldBeExecuted( directory ) ) {
-					reader.readFromDirectory( directory );
-					directoryImported = true;
-				}
+			switch ( type ) {
+				case DIRECTORY:
+					reader.readRecursiveFromDirectory( directoryOrFile.toPath( ), repository );
+				break;
+				case ZIP_FILE:
+					reader.readRecursiveFromZipFile( directoryOrFile.toPath( ), repository );
+				break;
+				default:
+				break;
 			}
 
-			temporaryRepository.finish( );
-
-			if ( !directoryImported ) {
-				// No reader felt responsible for the import directory. We inform the user.
-				throw new ImportFailedException( RESOURCES.getString( "errorMessageUnknownMonitoringLog" ) );
-			}
-
-			if ( ignoredRecords > 0 && traceRoots.size( ) == 0 ) {
-				// No traces have been reconstructed and records have been ignored. We inform the user.
-				final String msg = String.format( RESOURCES.getString( "errorMessageNoTraceAndRecordsIgnored" ), ignoredRecords );
-				throw new ImportFailedException( msg );
-			}
-
-			setDataAvailable( directoryOrFile, tin );
+			repository.setDataAvailable( directoryOrFile, tin );
 		} catch ( final CorruptStreamException ex ) {
 			// This means, that something went wrong, but that the data is partially available
-			setDataAvailable( directoryOrFile, tin );
+			repository.setDataAvailable( directoryOrFile, tin );
 
 			throw ex;
 		} catch ( final Exception ex ) {
 			throw new ImportFailedException( RESOURCES.getString( "errorMessageImportFailed" ), ex );
-		} finally {
-			// If necessary delete the temporary directory
-			if ( type == ImportType.ZIP_FILE && directory != null ) {
-				deleteDirectory( directory );
-			}
 		}
 	}
 
-	private File extractIfNecessary( final File directoryOrFile, final ImportType type ) throws ZipException, IOException {
-		final File directory;
-		switch ( type ) {
-			case DIRECTORY:
-				directory = directoryOrFile;
-			break;
-			case ZIP_FILE:
-				directory = extractZIPFile( directoryOrFile );
-			break;
-			default:
-				// Should not happen
-				directory = null;
-			break;
-
-		}
-		return directory;
-	}
-
-	private File extractZIPFile( final File file ) throws ZipException, IOException {
-		final File tempDirectory = Files.createTempDir( );
-
-		try ( ZipFile zipFile = new ZipFile( file ) ) {
-			final Enumeration<? extends ZipEntry> zipEntries = zipFile.entries( );
-			while ( zipEntries.hasMoreElements( ) ) {
-				final ZipEntry zipEntry = zipEntries.nextElement( );
-				try ( InputStream inputStream = zipFile.getInputStream( zipEntry ) ) {
-					try ( FileOutputStream outputStream = new FileOutputStream( new File( tempDirectory, zipEntry.getName( ) ) ) ) {
-						ByteStreams.copy( inputStream, outputStream );
-					}
-				}
-			}
-		}
-
-		return tempDirectory;
-	}
-
-	private void deleteDirectory( final File directory ) {
-		final File[] children = directory.listFiles( );
-		if ( children != null ) {
-			for ( final File child : children ) {
-				deleteDirectory( child );
-			}
-		}
-
-		directory.delete( );
-	}
-
-	private void setDataAvailable( final File inputDirectory, final long tin ) {
-		directory = inputDirectory.getAbsolutePath( );
-		dataAvailable = true;
-
-		final long tout = System.currentTimeMillis( );
-		final long duration = tout - tin;
-		processDuration = duration;
-	}
-
-	private void clear( ) {
-		dataAvailable = false;
-		traceRoots.clear( );
-		aggreatedMethods.clear( );
-		methods.clear( );
-	}
-
-	public void addTraceRoot( final MethodCall traceRoot ) {
-		traceRoots.add( traceRoot );
-	}
-
-	public void addAggregatedMethods( final Collection<AggregatedMethodCall> aggregatedMethodCalls ) {
-		aggreatedMethods.addAll( aggregatedMethodCalls );
-	}
-
-	public void addMethods( final Collection<MethodCall> methodCalls ) {
-		methods.addAll( methodCalls );
-	}
-
-	public void setProcessedBytes( final long processedBytes ) {
-		this.processedBytes = processedBytes;
-	}
-
-	public List<MethodCall> getTraceRoots( ) {
-		return traceRoots;
-	}
-
-	public List<AggregatedMethodCall> getAggreatedMethods( ) {
-		return aggreatedMethods;
-	}
-
-	public List<MethodCall> getMethods( ) {
-		return methods;
-	}
-
-	public long getProcessDuration( ) {
-		return processDuration;
-	}
-
-	public long getProcessedBytes( ) {
-		return processedBytes;
-	}
-
-	public boolean isDataAvailable( ) {
-		return dataAvailable;
-	}
-
-	public int getIgnoredRecords( ) {
-		return ignoredRecords;
-	}
-
-	public void setIgnoredRecords( final int ignoredRecords ) {
-		this.ignoredRecords = ignoredRecords;
-	}
-
-	public int getDanglingRecords( ) {
-		return danglingRecords;
-	}
-
-	public void setDanglingRecords( final int danglingRecords ) {
-		this.danglingRecords = danglingRecords;
-	}
-
-	public int getIncompleteTraces( ) {
-		return incompleteTraces;
-	}
-
-	public void setIncompleteTraces( final int incompleteTraces ) {
-		this.incompleteTraces = incompleteTraces;
-	}
-
-	public String getDirectory( ) {
-		return directory;
+	public Repository getRepository( ) {
+		return repository;
 	}
 
 }

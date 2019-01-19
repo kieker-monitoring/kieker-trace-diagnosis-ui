@@ -57,7 +57,7 @@ public final class TracesTabTestUI extends ApplicationTest {
 		final Injector injector = Guice.createInjector( new ServiceBaseModule( ) );
 
 		final MonitoringLogService monitoringLogService = injector.getInstance( MonitoringLogService.class );
-		createTraces( ).forEach( monitoringLogService::addTraceRoot );
+		monitoringLogService.getRepository( ).getTraceRoots( ).addAll( createTraces( ) );
 
 		final PropertiesService propertiesService = injector.getInstance( PropertiesService.class );
 		propertiesService.saveApplicationProperty( ShowUnmonitoredTimeProperty.class, Boolean.TRUE );

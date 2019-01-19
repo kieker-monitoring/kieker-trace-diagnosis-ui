@@ -65,7 +65,7 @@ public final class AggregatedMethodsTabTestUI extends ApplicationTest {
 		final Injector injector = Guice.createInjector( new ServiceBaseModule( ) );
 
 		final MonitoringLogService monitoringLogService = injector.getInstance( MonitoringLogService.class );
-		monitoringLogService.addAggregatedMethods( createAggregatedMethodCalls( ) );
+		monitoringLogService.getRepository( ).getAggreatedMethods( ).addAll( createAggregatedMethodCalls( ) );
 
 		final PropertiesService propertiesService = injector.getInstance( PropertiesService.class );
 		propertiesService.saveApplicationProperty( TimeUnitProperty.class, TimeUnit.NANOSECONDS );

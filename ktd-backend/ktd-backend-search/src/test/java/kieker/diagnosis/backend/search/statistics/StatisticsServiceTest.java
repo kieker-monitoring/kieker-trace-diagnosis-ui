@@ -62,19 +62,19 @@ public final class StatisticsServiceTest {
 
 	@Test
 	public void testExistingData( ) {
-		when( dataService.isDataAvailable( ) ).thenReturn( true );
-		when( dataService.getDanglingRecords( ) ).thenReturn( 42 );
-		when( dataService.getIgnoredRecords( ) ).thenReturn( 15 );
-		when( dataService.getIncompleteTraces( ) ).thenReturn( 10 );
-		when( dataService.getProcessedBytes( ) ).thenReturn( 50L );
-		when( dataService.getProcessDuration( ) ).thenReturn( 25L );
-		when( dataService.getDirectory( ) ).thenReturn( "/tmp/" );
+		when( dataService.getRepository( ).isDataAvailable( ) ).thenReturn( true );
+		when( dataService.getRepository( ).getDanglingRecords( ) ).thenReturn( 42 );
+		when( dataService.getRepository( ).getIgnoredRecords( ) ).thenReturn( 15 );
+		when( dataService.getRepository( ).getIncompleteTraces( ) ).thenReturn( 10 );
+		when( dataService.getRepository( ).getProcessedBytes( ) ).thenReturn( 50L );
+		when( dataService.getRepository( ).getProcessDuration( ) ).thenReturn( 25L );
+		when( dataService.getRepository( ).getDirectory( ) ).thenReturn( "/tmp/" );
 
 		final MethodCall methodCallStart = createMethodCall( 2018, 12, 1, 20, 00 );
 		final MethodCall methodCallEnd = createMethodCall( 2018, 12, 2, 22, 00 );
 
-		when( dataService.getMethods( ) ).thenReturn( Arrays.asList( methodCallStart, methodCallEnd ) );
-		when( dataService.getTraceRoots( ) ).thenReturn( Arrays.asList( methodCallStart ) );
+		when( dataService.getRepository( ).getMethods( ) ).thenReturn( Arrays.asList( methodCallStart, methodCallEnd ) );
+		when( dataService.getRepository( ).getTraceRoots( ) ).thenReturn( Arrays.asList( methodCallStart ) );
 
 		final Statistics statistics = statisticsService.getStatistics( ).get( );
 		assertThat( statistics.getDanglingRecords( ), is( 42 ) );
@@ -97,9 +97,9 @@ public final class StatisticsServiceTest {
 
 	@Test
 	public void testProcessDurationIsZero( ) {
-		when( dataService.isDataAvailable( ) ).thenReturn( true );
-		when( dataService.getProcessedBytes( ) ).thenReturn( 50L );
-		when( dataService.getProcessDuration( ) ).thenReturn( 0L );
+		when( dataService.getRepository( ).isDataAvailable( ) ).thenReturn( true );
+		when( dataService.getRepository( ).getProcessedBytes( ) ).thenReturn( 50L );
+		when( dataService.getRepository( ).getProcessDuration( ) ).thenReturn( 0L );
 
 		final Statistics statistics = statisticsService.getStatistics( ).get( );
 		assertThat( statistics.getProcessDuration( ), is( 0L ) );
