@@ -286,10 +286,21 @@ public class Repository {
 	}
 
 	public void clear( ) {
+		exception = null;
+		streamCorrupt = false;
 		dataAvailable = false;
 		traceRoots.clear( );
 		aggreatedMethods.clear( );
 		methods.clear( );
+		hostMap.clear( );
+		reconstructionMap.clear( );
+		ignoredRecords = 0;
+		danglingRecords = 0;
+		sourceTimeUnit = null;
+		processedBytes = 0;
+		processDuration = 0;
+		incompleteTraces = 0;
+		directory = null;
 	}
 
 	public int getIgnoredRecords( ) {
