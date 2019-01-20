@@ -16,10 +16,9 @@
 
 package kieker.diagnosis.backend.data.reader;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Enumeration;
@@ -61,7 +60,7 @@ public final class Reader {
 			while ( zipEntries.hasMoreElements( ) ) {
 				final ZipEntry zipEntry = zipEntries.nextElement( );
 				try ( InputStream inputStream = zipFile.getInputStream( zipEntry ) ) {
-					try ( FileOutputStream outputStream = new FileOutputStream( new File( temporaryDirectory.toFile( ), zipEntry.getName( ) ) ) ) {
+					try ( OutputStream outputStream = Files.newOutputStream( temporaryDirectory.resolve( zipEntry.getName( ) ) ) ) {
 						ByteStreams.copy( inputStream, outputStream );
 					}
 				}

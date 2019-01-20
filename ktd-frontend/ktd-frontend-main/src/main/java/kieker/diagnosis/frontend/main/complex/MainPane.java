@@ -18,6 +18,7 @@ package kieker.diagnosis.frontend.main.complex;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -153,7 +154,7 @@ public final class MainPane extends VBox implements StylesheetMixin, CdiMixin {
 			// Remember the directory as initial directory for the next time
 			setNewInitialDirectory( lastImportDirectory, directory );
 
-			final ImportThread importThread = new ImportThread( directory, ImportType.DIRECTORY );
+			final ImportThread importThread = new ImportThread( directory.toPath( ), ImportType.DIRECTORY );
 			importThread.start( );
 		}
 	}
@@ -164,7 +165,7 @@ public final class MainPane extends VBox implements StylesheetMixin, CdiMixin {
 	 * @param directory
 	 *            The import directory.
 	 */
-	public void performImportLog( final File directory ) {
+	public void performImportLog( final Path directory ) {
 		final ImportThread importThread = new ImportThread( directory, ImportType.DIRECTORY );
 		importThread.start( );
 	}
@@ -187,7 +188,7 @@ public final class MainPane extends VBox implements StylesheetMixin, CdiMixin {
 			final File directory = file.getParentFile( );
 			setNewInitialDirectory( lastImportDirectory, directory );
 
-			final ImportThread importThread = new ImportThread( file, ImportType.ZIP_FILE );
+			final ImportThread importThread = new ImportThread( file.toPath( ), ImportType.ZIP_FILE );
 			importThread.start( );
 		}
 	}
@@ -236,11 +237,11 @@ public final class MainPane extends VBox implements StylesheetMixin, CdiMixin {
 
 	private class ImportThread extends Thread {
 
-		private final File directoryOrFile;
+		private final Path directoryOrFile;
 		private final ImportType tye;
 		private ProgressDialog progressDialog;
 
-		ImportThread( final File aDirectoryOrFile, final ImportType aType ) {
+		ImportThread( final Path aDirectoryOrFile, final ImportType aType ) {
 			directoryOrFile = aDirectoryOrFile;
 			tye = aType;
 			setName( "Monitoring Import Thread" );

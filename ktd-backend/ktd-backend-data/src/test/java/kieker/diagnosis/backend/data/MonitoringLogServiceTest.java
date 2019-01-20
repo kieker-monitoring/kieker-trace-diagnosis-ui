@@ -84,7 +84,7 @@ public class MonitoringLogServiceTest {
 	@ExtendWith ( TempDirectory.class )
 	@DisplayName ( "Test with an empty directory" )
 	public void testEmptyDirectory( @TempDir final Path tempDir ) throws CorruptStreamException, ImportFailedException {
-		assertThrows( ImportFailedException.class, ( ) -> service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY ) );
+		assertThrows( ImportFailedException.class, ( ) -> service.importMonitoringLog( tempDir, ImportType.DIRECTORY ) );
 
 	}
 
@@ -102,7 +102,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( repository.getMethods( ) ).hasSize( 2 );
@@ -130,7 +130,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( repository.getMethods( ) ).hasSize( 4 );
@@ -153,7 +153,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( repository.getMethods( ) ).hasSize( 2 );
@@ -180,7 +180,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( repository.getMethods( ) ).hasSize( 4 );
@@ -210,7 +210,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		final List<AggregatedMethodCall> aggreatedMethods = repository.getAggreatedMethods( );
@@ -253,7 +253,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		final List<AggregatedMethodCall> aggreatedMethods = repository.getAggreatedMethods( );
@@ -284,7 +284,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( repository.getMethods( ) ).isEmpty( );
@@ -307,7 +307,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( repository.getMethods( ) ).isEmpty( );
@@ -330,7 +330,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		final MethodCall methodCall = repository.getMethods( ).get( 0 );
@@ -350,7 +350,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		final MethodCall methodCall = repository.getMethods( ).get( 0 );
@@ -373,7 +373,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( repository.getTraceRoots( ) ).hasSize( 1 );
@@ -393,7 +393,7 @@ public class MonitoringLogServiceTest {
 
 		// Import the directory and make sure that a business exception occurs (because
 		// records where ignored, but no traces were reconstructed)
-		assertThrows( ImportFailedException.class, ( ) -> service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY ) );
+		assertThrows( ImportFailedException.class, ( ) -> service.importMonitoringLog( tempDir, ImportType.DIRECTORY ) );
 	}
 
 	@Test
@@ -407,7 +407,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		assertThrows( ImportFailedException.class, ( ) -> service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY ) );
+		assertThrows( ImportFailedException.class, ( ) -> service.importMonitoringLog( tempDir, ImportType.DIRECTORY ) );
 	}
 
 	@Test
@@ -424,7 +424,7 @@ public class MonitoringLogServiceTest {
 		finishWriting( tempDir );
 
 		// Import the directory
-		service.importMonitoringLog( tempDir.toFile( ), ImportType.DIRECTORY );
+		service.importMonitoringLog( tempDir, ImportType.DIRECTORY );
 
 		// Make sure that the import worked as intended
 		assertThat( repository.getMethods( ) ).hasSize( 2 );
@@ -466,7 +466,7 @@ public class MonitoringLogServiceTest {
 		final URL logFileUrl = getClass( ).getResource( "/kieker-log-binary.zip" );
 		final File logFile = new File( logFileUrl.toURI( ) );
 
-		service.importMonitoringLog( logFile, ImportType.ZIP_FILE );
+		service.importMonitoringLog( logFile.toPath( ), ImportType.ZIP_FILE );
 
 		assertThat( repository.getTraceRoots( ) ).hasSize( 2 );
 		assertThat( repository.getAggreatedMethods( ) ).hasSize( 3 );

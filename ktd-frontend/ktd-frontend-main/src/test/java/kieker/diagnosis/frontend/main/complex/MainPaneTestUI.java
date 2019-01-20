@@ -149,7 +149,7 @@ public final class MainPaneTestUI extends ApplicationTest {
 		// We cannot use the GUI at this point. TestFX cannot handle native dialogs and
 		// neither can the headless test environment.
 		// In this case we have to import the logs via code.
-		mainPane.performImportLog( tempDir.toFile( ) );
+		mainPane.performImportLog( tempDir );
 	}
 
 	@Test

@@ -16,7 +16,7 @@
 
 package kieker.diagnosis.backend.data.reader;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -300,8 +300,8 @@ public class Repository {
 		return traceRoots;
 	}
 
-	public void setDataAvailable( final File inputDirectory, final long tin ) {
-		directory = inputDirectory.getAbsolutePath( );
+	public void setDataAvailable( final Path inputDirectory, final long tin ) {
+		directory = inputDirectory.toAbsolutePath( ).toString( );
 		dataAvailable = true;
 
 		final long tout = System.currentTimeMillis( );

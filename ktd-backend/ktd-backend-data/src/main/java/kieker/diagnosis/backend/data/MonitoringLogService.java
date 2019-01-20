@@ -16,7 +16,7 @@
 
 package kieker.diagnosis.backend.data;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.ResourceBundle;
 
 import com.google.inject.Inject;
@@ -41,7 +41,7 @@ public class MonitoringLogService implements Service {
 	@Inject
 	private Repository repository;
 
-	public void importMonitoringLog( final File directoryOrFile, final ImportType type ) throws CorruptStreamException, ImportFailedException {
+	public void importMonitoringLog( final Path directoryOrFile, final ImportType type ) throws CorruptStreamException, ImportFailedException {
 		final long tin = System.currentTimeMillis( );
 
 		try {
@@ -49,10 +49,10 @@ public class MonitoringLogService implements Service {
 
 			switch ( type ) {
 				case DIRECTORY:
-					reader.readRecursiveFromDirectory( directoryOrFile.toPath( ), repository );
+					reader.readRecursiveFromDirectory( directoryOrFile, repository );
 				break;
 				case ZIP_FILE:
-					reader.readRecursiveFromZipFile( directoryOrFile.toPath( ), repository );
+					reader.readRecursiveFromZipFile( directoryOrFile, repository );
 				break;
 				default:
 				break;
