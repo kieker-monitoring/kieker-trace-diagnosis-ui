@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
@@ -473,6 +474,20 @@ public class MonitoringLogServiceTest {
 		assertThat( repository.getAggreatedMethods( ) ).hasSize( 3 );
 		assertThat( repository.getMethods( ) ).hasSize( 3 );
 		assertThat( repository.isDataAvailable( ) ).isTrue( );
+	}
+
+	@Test
+	@DisplayName ( "Test with corrupt logs" )
+	public void testCorruptLogs( ) throws URISyntaxException, IOException, CorruptStreamException, ImportFailedException {
+		final URL logDirectoryUrl = getClass( ).getResource( "/kieker-log-binary-corrupt" );
+		final Path logDirectory = Paths.get( logDirectoryUrl.toURI( ) );
+
+		assertThrows( CorruptStreamException.class, ( ) -> service.importMonitoringLog( logDirectory, ImportType.DIRECTORY ) );
+
+		assertThat( repository.isDataAvailable( ) ).isTrue( );
+		assertThat( repository.getTraceRoots( ) ).hasSize( 1 );
+		assertThat( repository.getAggreatedMethods( ) ).hasSize( 2 );
+		assertThat( repository.getMethods( ) ).hasSize( 2 );
 	}
 
 	@SuppressWarnings ( "deprecation" )
