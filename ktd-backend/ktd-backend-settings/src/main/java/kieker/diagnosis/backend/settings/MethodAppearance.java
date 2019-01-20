@@ -30,8 +30,8 @@ public enum MethodAppearance {
 
 	private static final Pattern methodPattern = Pattern.compile( "(.*)\\(.*\\)" );
 
-	public String convert( final String aMethod ) {
-		String method = aMethod;
+	public String convert( final String methodName ) {
+		String method = methodName;
 
 		// This can only happen when the records contains null values. Ugly but possible.
 		if ( method == null ) {

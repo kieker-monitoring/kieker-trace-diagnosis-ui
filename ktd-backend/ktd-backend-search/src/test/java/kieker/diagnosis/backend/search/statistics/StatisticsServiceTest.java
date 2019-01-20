@@ -104,9 +104,9 @@ public final class StatisticsServiceTest {
 		assertThat( statistics.getProcessSpeed( ) ).isEqualTo( 0L );
 	}
 
-	private MethodCall createMethodCall( final int aYear, final int aMonth, final int aDay, final int aHour, final int aMinute ) {
+	private MethodCall createMethodCall( final int year, final int month, final int day, final int hour, final int minute ) {
 		final Calendar calendar = Calendar.getInstance( );
-		calendar.set( aYear, aMonth - 1, aDay, aHour, aMinute, 0 );
+		calendar.set( year, month - 1, day, hour, minute, 0 );
 
 		final MethodCall methodCall = new MethodCall( );
 		methodCall.setTimestamp( calendar.getTimeInMillis( ) );

@@ -32,8 +32,10 @@ public final class FloatTextField extends TextField {
 	private final ObjectProperty<Float> valueProperty = new SimpleObjectProperty<>( );
 
 	public FloatTextField( ) {
-		// We combine a converter with a filter. The converter will make sure that only valid numbers are in the field once it looses focus. The filter will
-		// make sure that only numbers can be entered in the first place. As the pattern requires us also to add a minus sign though, we cannot control
+		// We combine a converter with a filter. The converter will make sure that only valid numbers are in the field
+		// once it looses focus. The filter will
+		// make sure that only numbers can be entered in the first place. As the pattern requires us also to add a minus
+		// sign though, we cannot control
 		// everything just with the filter.
 		setTextFormatter( new TextFormatter<>( new FloatStringConverter( ), null, new NumericFloatingPointFilter( ) ) );
 		textProperty( ).bindBidirectional( valueProperty, new FloatStringConverter( ) );
@@ -42,10 +44,11 @@ public final class FloatTextField extends TextField {
 	/**
 	 * Sets the value of the text field.
 	 *
-	 * @param aValue The new value.
+	 * @param value
+	 *            The new value.
 	 */
-	public void setValue( final Float aValue ) {
-		valueProperty.set( aValue );
+	public void setValue( final Float value ) {
+		valueProperty.set( value );
 	}
 
 	/**

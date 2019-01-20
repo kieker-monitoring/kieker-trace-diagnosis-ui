@@ -31,16 +31,16 @@ final class NumericIntegerFilter implements UnaryOperator<Change> {
 	private static final Pattern NUMMERIC_PATTERN = Pattern.compile( "(-)?\\d*" );
 
 	@Override
-	public Change apply( final Change aChange ) {
-		if ( onlyNumeric( aChange.getControlNewText( ) ) ) {
-			return aChange;
+	public Change apply( final Change change ) {
+		if ( onlyNumeric( change.getControlNewText( ) ) ) {
+			return change;
 		} else {
 			return null;
 		}
 	}
 
-	private boolean onlyNumeric( final String aText ) {
-		return NUMMERIC_PATTERN.matcher( aText ).matches( );
+	private boolean onlyNumeric( final String text ) {
+		return NUMMERIC_PATTERN.matcher( text ).matches( );
 	}
 
 }

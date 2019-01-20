@@ -52,19 +52,19 @@ public final class ExceptionUtil {
 	 * {@link BusinessRuntimeException}, the error is not logged and the error dialog indicates that the error is a
 	 * business error.
 	 *
-	 * @param aThrowable
+	 * @param throwable
 	 *            The exception to handle.
-	 * @param aLoggerName
+	 * @param loggerName
 	 *            The name of the logger, the exception will be logged in.
 	 */
-	public static void handleException( final Throwable aThrowable, final String aLoggerName ) {
-		showExceptionDialog( aThrowable );
-		logException( aThrowable, aLoggerName );
+	public static void handleException( final Throwable throwable, final String loggerName ) {
+		showExceptionDialog( throwable );
+		logException( throwable, loggerName );
 	}
 
-	private static void showExceptionDialog( final Throwable aThrowable ) {
-		final boolean isDelegateException = aThrowable instanceof DelegateException;
-		final Throwable exception = isDelegateException ? aThrowable.getCause( ) : aThrowable;
+	private static void showExceptionDialog( final Throwable throwable ) {
+		final boolean isDelegateException = throwable instanceof DelegateException;
+		final Throwable exception = isDelegateException ? throwable.getCause( ) : throwable;
 
 		// Keep in mind that some controllers start a new thread. As this might also lead to exceptions, the whole
 		// dialog showing has to be performed in the

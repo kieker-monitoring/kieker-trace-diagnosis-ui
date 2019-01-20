@@ -45,33 +45,33 @@ public class MethodsService implements Service {
 	/**
 	 * This method searches, based on the given filter, for method calls within the imported monitoring log.
 	 *
-	 * @param aFilter
+	 * @param filter
 	 *            The filter to apply to the method calls.
 	 *
 	 * @return A new list containing all available method calls matching the filter.
 	 */
-	public List<MethodCall> searchMethods( final MethodsFilter aFilter ) {
+	public List<MethodCall> searchMethods( final MethodsFilter filter ) {
 		// Get the methods
 		final List<MethodCall> methods = repository.getMethods( );
 
 		// Filter the methods
 		return methods
 				.parallelStream( )
-				.filter( filterService.createStringPredicate( MethodCall::getHost, aFilter.getHost( ), aFilter.isUseRegExpr( ) ) )
-				.filter( filterService.createStringPredicate( MethodCall::getClazz, aFilter.getClazz( ), aFilter.isUseRegExpr( ) ) )
-				.filter( filterService.createStringPredicate( MethodCall::getMethod, aFilter.getMethod( ), aFilter.isUseRegExpr( ) ) )
-				.filter( filterService.createStringPredicate( MethodCall::getException, aFilter.getException( ), aFilter.isUseRegExpr( ) ) )
-				.filter( filterService.createLongPredicate( MethodCall::getTraceId, aFilter.getTraceId( ) ) )
-				.filter( getSearchTypePredicate( aFilter.getSearchType( ) ) )
-				.filter( filterService.createAfterTimePredicate( MethodCall::getTimestamp, aFilter.getLowerDate( ), aFilter.getLowerTime( ) ) )
-				.filter( filterService.createBeforeTimePredicate( MethodCall::getTimestamp, aFilter.getUpperDate( ), aFilter.getUpperTime( ) ) )
+				.filter( filterService.createStringPredicate( MethodCall::getHost, filter.getHost( ), filter.isUseRegExpr( ) ) )
+				.filter( filterService.createStringPredicate( MethodCall::getClazz, filter.getClazz( ), filter.isUseRegExpr( ) ) )
+				.filter( filterService.createStringPredicate( MethodCall::getMethod, filter.getMethod( ), filter.isUseRegExpr( ) ) )
+				.filter( filterService.createStringPredicate( MethodCall::getException, filter.getException( ), filter.isUseRegExpr( ) ) )
+				.filter( filterService.createLongPredicate( MethodCall::getTraceId, filter.getTraceId( ) ) )
+				.filter( getSearchTypePredicate( filter.getSearchType( ) ) )
+				.filter( filterService.createAfterTimePredicate( MethodCall::getTimestamp, filter.getLowerDate( ), filter.getLowerTime( ) ) )
+				.filter( filterService.createBeforeTimePredicate( MethodCall::getTimestamp, filter.getUpperDate( ), filter.getUpperTime( ) ) )
 				.collect( Collectors.toList( ) );
 	}
 
-	private Predicate<MethodCall> getSearchTypePredicate( final SearchType aSearchType ) {
+	private Predicate<MethodCall> getSearchTypePredicate( final SearchType searchType ) {
 		return method -> {
 			final boolean failedCall = method.getException( ) != null;
-			return aSearchType == SearchType.ALL || aSearchType == SearchType.ONLY_FAILED && failedCall || aSearchType == SearchType.ONLY_SUCCESSFUL && !failedCall;
+			return searchType == SearchType.ALL || searchType == SearchType.ONLY_FAILED && failedCall || searchType == SearchType.ONLY_SUCCESSFUL && !failedCall;
 		};
 	}
 

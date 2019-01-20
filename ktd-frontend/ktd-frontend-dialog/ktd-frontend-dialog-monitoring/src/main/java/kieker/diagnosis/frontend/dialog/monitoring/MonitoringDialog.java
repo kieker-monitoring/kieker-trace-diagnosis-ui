@@ -257,10 +257,10 @@ public final class MonitoringDialog extends Dialog<MonitoringConfiguration> impl
 		return inputValid;
 	}
 
-	private List<String> getStatusStyle( final Status aStatus ) {
+	private List<String> getStatusStyle( final Status status ) {
 		final String style;
 
-		switch ( aStatus ) {
+		switch ( status ) {
 			case RUNNING:
 				style = "monitoringRunning";
 			break;

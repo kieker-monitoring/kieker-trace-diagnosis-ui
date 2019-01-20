@@ -117,12 +117,12 @@ public class AggregatedMethodsServiceTest {
 		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 1 );
 	}
 
-	private void createMethodCall( final String aHost, final String aClazz, final String aMethod, final String aException ) {
+	private void createMethodCall( final String host, final String clazz, final String method, final String exception ) {
 		final AggregatedMethodCall methodCall = new AggregatedMethodCall( );
-		methodCall.setHost( aHost );
-		methodCall.setClazz( aClazz );
-		methodCall.setMethod( aMethod );
-		methodCall.setException( aException );
+		methodCall.setHost( host );
+		methodCall.setClazz( clazz );
+		methodCall.setMethod( method );
+		methodCall.setException( exception );
 
 		repository.getAggreatedMethods( ).add( methodCall );
 	}

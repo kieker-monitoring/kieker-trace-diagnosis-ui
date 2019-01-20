@@ -32,8 +32,10 @@ public final class IntegerTextField extends TextField {
 	private final ObjectProperty<Integer> valueProperty = new SimpleObjectProperty<>( );
 
 	public IntegerTextField( ) {
-		// We combine a converter with a filter. The converter will make sure that only valid numbers are in the field once it looses focus. The filter will
-		// make sure that only numbers can be entered in the first place. As the pattern requires us also to add a minus sign though, we cannot control
+		// We combine a converter with a filter. The converter will make sure that only valid numbers are in the field
+		// once it looses focus. The filter will
+		// make sure that only numbers can be entered in the first place. As the pattern requires us also to add a minus
+		// sign though, we cannot control
 		// everything just with the filter.
 		setTextFormatter( new TextFormatter<>( new IntegerStringConverter( ), null, new NumericIntegerFilter( ) ) );
 
@@ -43,10 +45,11 @@ public final class IntegerTextField extends TextField {
 	/**
 	 * Sets the value of the text field.
 	 *
-	 * @param aValue The new value.
+	 * @param value
+	 *            The new value.
 	 */
-	public void setValue( final Integer aValue ) {
-		valueProperty.set( aValue );
+	public void setValue( final Integer value ) {
+		valueProperty.set( value );
 	}
 
 	/**

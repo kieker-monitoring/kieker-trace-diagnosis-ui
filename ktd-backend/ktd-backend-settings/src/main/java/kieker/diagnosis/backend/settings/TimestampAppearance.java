@@ -31,11 +31,11 @@ public enum TimestampAppearance {
 
 	TIMESTAMP, DATE, SHORT_TIME, LONG_TIME, DATE_AND_TIME;
 
-	public String convert( final long aTimestamp ) {
+	public String convert( final long originalTimestamp ) {
 		final String timestamp;
 
 		if ( this == TIMESTAMP ) {
-			timestamp = Long.toString( aTimestamp );
+			timestamp = Long.toString( originalTimestamp );
 		} else {
 			final DateTimeFormatter formatter;
 
@@ -58,7 +58,7 @@ public enum TimestampAppearance {
 
 			}
 
-			final Instant instant = Instant.ofEpochMilli( aTimestamp );
+			final Instant instant = Instant.ofEpochMilli( originalTimestamp );
 			final ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant( instant, ZoneId.systemDefault( ) );
 			timestamp = formatter.format( zonedDateTime );
 		}

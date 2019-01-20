@@ -45,30 +45,30 @@ public class AggregatedMethodsService implements Service {
 	/**
 	 * This method searches, based on the given filter, for aggregated method calls within the imported monitoring log.
 	 *
-	 * @param aFilter
+	 * @param filter
 	 *            The filter to apply to the method calls.
 	 *
 	 * @return A new list containing all available aggregated method calls matching the filter.
 	 */
-	public List<AggregatedMethodCall> searchMethods( final AggregatedMethodsFilter aFilter ) {
+	public List<AggregatedMethodCall> searchMethods( final AggregatedMethodsFilter filter ) {
 		// Get the methods
 		final List<AggregatedMethodCall> methods = repository.getAggreatedMethods( );
 
 		// Filter the methods
 		return methods
 				.parallelStream( )
-				.filter( filterService.createStringPredicate( AggregatedMethodCall::getHost, aFilter.getHost( ), aFilter.isUseRegExpr( ) ) )
-				.filter( filterService.createStringPredicate( AggregatedMethodCall::getClazz, aFilter.getClazz( ), aFilter.isUseRegExpr( ) ) )
-				.filter( filterService.createStringPredicate( AggregatedMethodCall::getMethod, aFilter.getMethod( ), aFilter.isUseRegExpr( ) ) )
-				.filter( filterService.createStringPredicate( AggregatedMethodCall::getException, aFilter.getException( ), aFilter.isUseRegExpr( ) ) )
-				.filter( getSearchTypePredicate( aFilter.getSearchType( ) ) )
+				.filter( filterService.createStringPredicate( AggregatedMethodCall::getHost, filter.getHost( ), filter.isUseRegExpr( ) ) )
+				.filter( filterService.createStringPredicate( AggregatedMethodCall::getClazz, filter.getClazz( ), filter.isUseRegExpr( ) ) )
+				.filter( filterService.createStringPredicate( AggregatedMethodCall::getMethod, filter.getMethod( ), filter.isUseRegExpr( ) ) )
+				.filter( filterService.createStringPredicate( AggregatedMethodCall::getException, filter.getException( ), filter.isUseRegExpr( ) ) )
+				.filter( getSearchTypePredicate( filter.getSearchType( ) ) )
 				.collect( Collectors.toList( ) );
 	}
 
-	private Predicate<AggregatedMethodCall> getSearchTypePredicate( final SearchType aSearchType ) {
+	private Predicate<AggregatedMethodCall> getSearchTypePredicate( final SearchType searchType ) {
 		return method -> {
 			final boolean failedCall = method.getException( ) != null;
-			return aSearchType == SearchType.ALL || aSearchType == SearchType.ONLY_FAILED && failedCall || aSearchType == SearchType.ONLY_SUCCESSFUL && !failedCall;
+			return searchType == SearchType.ALL || searchType == SearchType.ONLY_FAILED && failedCall || searchType == SearchType.ONLY_SUCCESSFUL && !failedCall;
 		};
 	}
 

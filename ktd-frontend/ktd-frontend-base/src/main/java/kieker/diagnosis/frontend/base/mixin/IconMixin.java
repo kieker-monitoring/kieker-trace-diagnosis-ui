@@ -24,15 +24,15 @@ public interface IconMixin {
 	/**
 	 * This method creates an icon which can for instance be used as a graphic for a node.
 	 *
-	 * @param aIcon
+	 * @param icon
 	 *            The type of the icon.
 	 *
 	 * @return A new icon.
 	 */
-	default Node createIcon( final Icon aIcon ) {
+	default Node createIcon( final Icon icon ) {
 		final Label label = new Label( );
 
-		label.setText( aIcon.getUnicode( ) );
+		label.setText( icon.getUnicode( ) );
 		label.getStyleClass( ).add( "font-awesome-icon" );
 
 		return label;
@@ -42,7 +42,7 @@ public interface IconMixin {
 
 		SEARCH( "\uf002" ), FOLDER_OPEN( "\uf07c" ), ZIP_ARCHIVE( "\uf1c6" ), TIMES( "\uf00d" ), COGS( "\uf085" ), QUESTION_CIRCLE( "\uf059" ), INFO_CIRCLE( "\uf05a" ), CHART( "\uf080" );
 
-		private String unicode;
+		private final String unicode;
 
 		Icon( final String unicode ) {
 			this.unicode = unicode;

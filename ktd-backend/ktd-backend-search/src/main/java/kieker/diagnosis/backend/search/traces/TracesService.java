@@ -47,28 +47,28 @@ public class TracesService implements Service {
 	/**
 	 * This method searches, based on the given filter, for traces within the imported monitoring log.
 	 *
-	 * @param aFilter
+	 * @param filter
 	 *            The filter to apply to the traces.
 	 *
 	 * @return A new list containing all available traces matching the filter. Only the root method calls of the traces
 	 *         are returned.
 	 */
-	public List<MethodCall> searchTraces( final TracesFilter aFilter ) {
+	public List<MethodCall> searchTraces( final TracesFilter filter ) {
 		// Prepare the predicates
 		final List<Predicate<MethodCall>> predicates = new ArrayList<>( );
-		predicates.add( filterService.createStringPredicate( MethodCall::getHost, aFilter.getHost( ), aFilter.isUseRegExpr( ) ) );
-		predicates.add( filterService.createStringPredicate( MethodCall::getClazz, aFilter.getClazz( ), aFilter.isUseRegExpr( ) ) );
-		predicates.add( filterService.createStringPredicate( MethodCall::getMethod, aFilter.getMethod( ), aFilter.isUseRegExpr( ) ) );
-		predicates.add( filterService.createStringPredicate( MethodCall::getException, aFilter.getException( ), aFilter.isUseRegExpr( ) ) );
-		predicates.add( filterService.createLongPredicate( MethodCall::getTraceId, aFilter.getTraceId( ) ) );
-		predicates.add( getSearchTypePredicate( aFilter.getSearchType( ) ) );
-		predicates.add( filterService.createAfterTimePredicate( MethodCall::getTimestamp, aFilter.getLowerDate( ), aFilter.getLowerTime( ) ) );
-		predicates.add( filterService.createBeforeTimePredicate( MethodCall::getTimestamp, aFilter.getUpperDate( ), aFilter.getUpperTime( ) ) );
+		predicates.add( filterService.createStringPredicate( MethodCall::getHost, filter.getHost( ), filter.isUseRegExpr( ) ) );
+		predicates.add( filterService.createStringPredicate( MethodCall::getClazz, filter.getClazz( ), filter.isUseRegExpr( ) ) );
+		predicates.add( filterService.createStringPredicate( MethodCall::getMethod, filter.getMethod( ), filter.isUseRegExpr( ) ) );
+		predicates.add( filterService.createStringPredicate( MethodCall::getException, filter.getException( ), filter.isUseRegExpr( ) ) );
+		predicates.add( filterService.createLongPredicate( MethodCall::getTraceId, filter.getTraceId( ) ) );
+		predicates.add( getSearchTypePredicate( filter.getSearchType( ) ) );
+		predicates.add( filterService.createAfterTimePredicate( MethodCall::getTimestamp, filter.getLowerDate( ), filter.getLowerTime( ) ) );
+		predicates.add( filterService.createBeforeTimePredicate( MethodCall::getTimestamp, filter.getUpperDate( ), filter.getUpperTime( ) ) );
 
 		Predicate<MethodCall> predicate = filterService.conjunct( predicates );
 
 		// If we should search the whole trace, we have to apply the predicate recursive
-		if ( aFilter.isSearchWholeTrace( ) ) {
+		if ( filter.isSearchWholeTrace( ) ) {
 			predicate = recursive( predicate );
 		}
 
@@ -82,14 +82,14 @@ public class TracesService implements Service {
 				.collect( Collectors.toList( ) );
 	}
 
-	private Predicate<MethodCall> getSearchTypePredicate( final SearchType aSearchType ) {
+	private Predicate<MethodCall> getSearchTypePredicate( final SearchType searchType ) {
 		return method -> {
 			final boolean failedCall = method.getException( ) != null;
-			return aSearchType == SearchType.ALL || aSearchType == SearchType.ONLY_FAILED && failedCall || aSearchType == SearchType.ONLY_SUCCESSFUL && !failedCall;
+			return searchType == SearchType.ALL || searchType == SearchType.ONLY_FAILED && failedCall || searchType == SearchType.ONLY_SUCCESSFUL && !failedCall;
 		};
 	}
 
-	private Predicate<MethodCall> recursive( final Predicate<MethodCall> aPredicate ) {
+	private Predicate<MethodCall> recursive( final Predicate<MethodCall> predicate ) {
 		return t -> {
 			// We start with the trace root
 			final Stack<MethodCall> methods = new Stack<>( );
@@ -99,7 +99,7 @@ public class TracesService implements Service {
 				final MethodCall methodCall = methods.pop( );
 
 				// If the current method matches, we are finished. Otherwise we search in the children.
-				if ( aPredicate.test( methodCall ) ) {
+				if ( predicate.test( methodCall ) ) {
 					return true;
 				} else {
 					methods.addAll( methodCall.getChildren( ) );

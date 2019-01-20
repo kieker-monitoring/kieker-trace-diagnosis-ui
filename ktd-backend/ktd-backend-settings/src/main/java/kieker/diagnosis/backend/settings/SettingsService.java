@@ -64,18 +64,18 @@ public class SettingsService implements Service {
 	/**
 	 * This method saves the given application settings.
 	 *
-	 * @param aSettings
+	 * @param settings
 	 *            The new settings.
 	 */
-	public void saveSettings( final Settings aSettings ) {
-		propertiesService.saveApplicationProperty( TimestampProperty.class, aSettings.getTimestampAppearance( ) );
-		propertiesService.saveApplicationProperty( TimeUnitProperty.class, aSettings.getTimeUnit( ) );
-		propertiesService.saveApplicationProperty( ClassAppearanceProperty.class, aSettings.getClassAppearance( ) );
-		propertiesService.saveApplicationProperty( MethodAppearanceProperty.class, aSettings.getMethodAppearance( ) );
-		propertiesService.saveApplicationProperty( ShowUnmonitoredTimeProperty.class, aSettings.isShowUnmonitoredTimeProperty( ) );
-		propertiesService.saveApplicationProperty( MethodCallAggregationProperty.class, aSettings.getMethodCallAggregation( ) );
-		propertiesService.saveApplicationProperty( MethodCallThresholdProperty.class, aSettings.getMethodCallThreshold( ) );
-		propertiesService.saveApplicationProperty( MaxNumberOfMethodCallsProperty.class, aSettings.getMaxNumberOfMethodCalls( ) );
+	public void saveSettings( final Settings settings ) {
+		propertiesService.saveApplicationProperty( TimestampProperty.class, settings.getTimestampAppearance( ) );
+		propertiesService.saveApplicationProperty( TimeUnitProperty.class, settings.getTimeUnit( ) );
+		propertiesService.saveApplicationProperty( ClassAppearanceProperty.class, settings.getClassAppearance( ) );
+		propertiesService.saveApplicationProperty( MethodAppearanceProperty.class, settings.getMethodAppearance( ) );
+		propertiesService.saveApplicationProperty( ShowUnmonitoredTimeProperty.class, settings.isShowUnmonitoredTimeProperty( ) );
+		propertiesService.saveApplicationProperty( MethodCallAggregationProperty.class, settings.getMethodCallAggregation( ) );
+		propertiesService.saveApplicationProperty( MethodCallThresholdProperty.class, settings.getMethodCallThreshold( ) );
+		propertiesService.saveApplicationProperty( MaxNumberOfMethodCallsProperty.class, settings.getMaxNumberOfMethodCalls( ) );
 	}
 
 	/**

@@ -265,26 +265,26 @@ public class MethodsServiceTest {
 		assertThat( methodsService.searchMethods( methodsFilter ) ).hasSize( 3 );
 	}
 
-	private void createMethodCall( final String aHost, final String aClazz, final String aMethod, final String aException ) {
+	private void createMethodCall( final String host, final String clazz, final String method, final String exception ) {
 		final MethodCall methodCall = new MethodCall( );
-		methodCall.setHost( aHost );
-		methodCall.setClazz( aClazz );
-		methodCall.setMethod( aMethod );
-		methodCall.setException( aException );
+		methodCall.setHost( host );
+		methodCall.setClazz( clazz );
+		methodCall.setMethod( method );
+		methodCall.setException( exception );
 
 		repository.getMethods( ).add( methodCall );
 	}
 
-	private void createMethodCall( final long aTraceId ) {
+	private void createMethodCall( final long traceId ) {
 		final MethodCall methodCall = new MethodCall( );
-		methodCall.setTraceId( aTraceId );
+		methodCall.setTraceId( traceId );
 
 		repository.getMethods( ).add( methodCall );
 	}
 
-	private void createMethodCall( final int aYear, final int aMonth, final int aDay, final int aHour, final int aMinute ) {
+	private void createMethodCall( final int year, final int month, final int day, final int hour, final int minute ) {
 		final Calendar calendar = Calendar.getInstance( );
-		calendar.set( aYear, aMonth - 1, aDay, aHour, aMinute, 0 );
+		calendar.set( year, month - 1, day, hour, minute, 0 );
 
 		final MethodCall methodCall = new MethodCall( );
 		methodCall.setTimestamp( calendar.getTimeInMillis( ) );

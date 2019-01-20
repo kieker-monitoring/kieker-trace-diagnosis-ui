@@ -33,8 +33,8 @@ public enum ClassAppearance {
 	 */
 	LONG;
 
-	public String convert( final String aClass ) {
-		String clazz = aClass;
+	public String convert( final String clazzName ) {
+		String clazz = clazzName;
 
 		// This can only happen when the records contains null values. Ugly but possible.
 		if ( clazz == null ) {

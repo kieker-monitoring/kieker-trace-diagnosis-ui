@@ -280,19 +280,19 @@ public final class TracesServiceTest {
 		assertThat( tracesService.searchTraces( tracesFilter ) ).hasSize( 3 );
 	}
 
-	private void createMethodCall( final String aHost, final String aClazz, final String aMethod, final String aException ) {
+	private void createMethodCall( final String host, final String clazz, final String method, final String exception ) {
 		final MethodCall methodCall = new MethodCall( );
-		methodCall.setHost( aHost );
-		methodCall.setClazz( aClazz );
-		methodCall.setMethod( aMethod );
-		methodCall.setException( aException );
+		methodCall.setHost( host );
+		methodCall.setClazz( clazz );
+		methodCall.setMethod( method );
+		methodCall.setException( exception );
 
 		repository.getTraceRoots( ).add( methodCall );
 	}
 
-	private void createMethodCall( final int aYear, final int aMonth, final int aDay, final int aHour, final int aMinute ) {
+	private void createMethodCall( final int year, final int month, final int day, final int hour, final int minute ) {
 		final Calendar calendar = Calendar.getInstance( );
-		calendar.set( aYear, aMonth - 1, aDay, aHour, aMinute, 0 );
+		calendar.set( year, month - 1, day, hour, minute, 0 );
 
 		final MethodCall methodCall = new MethodCall( );
 		methodCall.setTimestamp( calendar.getTimeInMillis( ) );
@@ -300,19 +300,19 @@ public final class TracesServiceTest {
 		repository.getTraceRoots( ).add( methodCall );
 	}
 
-	private void createMethodCall( final long aTraceId ) {
+	private void createMethodCall( final long traceId ) {
 		final MethodCall methodCall = new MethodCall( );
-		methodCall.setTraceId( aTraceId );
+		methodCall.setTraceId( traceId );
 
 		repository.getTraceRoots( ).add( methodCall );
 	}
 
-	private void createMethodCallWithChild( final String aHost1, final String aHost2 ) {
+	private void createMethodCallWithChild( final String host1, final String host2 ) {
 		final MethodCall methodCall = new MethodCall( );
-		methodCall.setHost( aHost1 );
+		methodCall.setHost( host1 );
 
 		final MethodCall child = new MethodCall( );
-		child.setHost( aHost2 );
+		child.setHost( host2 );
 		methodCall.addChild( child );
 
 		repository.getTraceRoots( ).add( methodCall );

@@ -35,9 +35,9 @@ public final class EnumStringConverter<E extends Enum<?>> extends StringConverte
 	private final ResourceBundle resourceBundle;
 	private final Class<E> enumClass;
 
-	public EnumStringConverter( final Class<E> aEnumClass ) {
-		resourceBundle = ResourceBundle.getBundle( aEnumClass.getName( ) );
-		enumClass = aEnumClass;
+	public EnumStringConverter( final Class<E> enumClass ) {
+		resourceBundle = ResourceBundle.getBundle( enumClass.getName( ) );
+		this.enumClass = enumClass;
 	}
 
 	@Override

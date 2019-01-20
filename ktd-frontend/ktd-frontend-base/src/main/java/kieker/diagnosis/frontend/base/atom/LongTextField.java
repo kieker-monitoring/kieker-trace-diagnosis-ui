@@ -39,11 +39,11 @@ public final class LongTextField extends TextField {
 	/**
 	 * Sets the value of the text field.
 	 *
-	 * @param aLong
+	 * @param value
 	 *            The new value.
 	 */
-	public void setValue( final Long aLong ) {
-		setText( Long.toString( aLong ) );
+	public void setValue( final Long value ) {
+		setText( Long.toString( value ) );
 	}
 
 	/**

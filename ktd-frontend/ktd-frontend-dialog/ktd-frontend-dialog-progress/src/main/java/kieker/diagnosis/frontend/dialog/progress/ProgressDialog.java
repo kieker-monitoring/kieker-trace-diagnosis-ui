@@ -94,13 +94,13 @@ public final class ProgressDialog extends Alert implements DialogMixin, ImageMix
 		return label;
 	}
 
-	public void setMessage( final String aMessage ) {
-		label.setText( aMessage );
+	public void setMessage( final String message ) {
+		label.setText( message );
 		getDialogPane( ).layout( );
 	}
 
-	public void setProgress( final double aProgress ) {
-		progressIndicator.setProgress( aProgress );
+	public void setProgress( final double progress ) {
+		progressIndicator.setProgress( progress );
 	}
 
 }
