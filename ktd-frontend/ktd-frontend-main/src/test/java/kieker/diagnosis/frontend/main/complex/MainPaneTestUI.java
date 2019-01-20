@@ -24,7 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.rules.TemporaryFolder;
 import org.testfx.framework.junit.ApplicationTest;
 

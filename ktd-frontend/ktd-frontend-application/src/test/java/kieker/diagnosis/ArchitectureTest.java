@@ -20,7 +20,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

@@ -18,7 +18,7 @@ package kieker.diagnosis.frontend.dialog.favorite;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
 import javafx.scene.Scene;

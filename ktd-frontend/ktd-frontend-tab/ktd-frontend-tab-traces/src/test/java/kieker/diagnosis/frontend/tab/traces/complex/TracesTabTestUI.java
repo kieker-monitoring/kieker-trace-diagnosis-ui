@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
 import com.google.inject.Guice;
