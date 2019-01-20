@@ -35,7 +35,7 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.diagnosis.backend.data.MethodCall;
 
-public final class AsciiReader {
+final class AsciiReader {
 
 	private static final Pattern ASCII_FILE_ENTRY_PATTERN = Pattern.compile( "\\$(\\d*);\\d*;(.*)" );
 	private static final Pattern ASCII_FILE_BEFORE_OPERATION_EVENT_PATTERN = Pattern.compile( "(\\d*);(-?\\d*).*" );
@@ -53,7 +53,7 @@ public final class AsciiReader {
 	private final IntObjectMap<String> mapping;
 	private final Repository repository;
 
-	public AsciiReader( final IntObjectMap<String> mapping, final Repository repository ) {
+	AsciiReader( final IntObjectMap<String> mapping, final Repository repository ) {
 		this.mapping = mapping;
 		this.repository = repository;
 		findImportantKeysInMapping( );

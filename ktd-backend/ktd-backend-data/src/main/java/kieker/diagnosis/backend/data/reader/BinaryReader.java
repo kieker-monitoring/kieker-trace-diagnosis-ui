@@ -37,7 +37,7 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.diagnosis.backend.data.MethodCall;
 
-public final class BinaryReader {
+final class BinaryReader {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( BinaryReader.class.getName( ) );
 
@@ -52,7 +52,7 @@ public final class BinaryReader {
 	private final IntObjectMap<String> mapping;
 	private final Repository repository;
 
-	public BinaryReader( final IntObjectMap<String> mapping, final Repository repository ) {
+	BinaryReader( final IntObjectMap<String> mapping, final Repository repository ) {
 		this.mapping = mapping;
 		this.repository = repository;
 		findImportantKeysInMapping( );
