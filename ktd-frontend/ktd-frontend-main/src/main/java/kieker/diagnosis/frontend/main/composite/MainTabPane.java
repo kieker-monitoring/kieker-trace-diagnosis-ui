@@ -173,7 +173,7 @@ public final class MainTabPane extends TabPane implements StylesheetMixin, CdiMi
 			}
 
 			try {
-				exportService.exportToCSV( file, aCsvData );
+				exportService.exportToCSV( file.toPath( ), aCsvData );
 			} catch ( final IOException ex ) {
 				throw new DelegateException( ex );
 			}

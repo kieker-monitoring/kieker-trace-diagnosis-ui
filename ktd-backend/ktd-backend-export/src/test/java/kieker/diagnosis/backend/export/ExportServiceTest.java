@@ -48,7 +48,7 @@ public final class ExportServiceTest {
 		csvData.addRow( Arrays.asList( "A2", "B2" ) );
 
 		final ExportService exportService = new ExportService( );
-		exportService.exportToCSV( csvFile.toFile( ), csvData );
+		exportService.exportToCSV( csvFile, csvData );
 
 		final List<String> allLines = Files.readAllLines( csvFile );
 		assertThat( allLines ).containsExactly( "Header 1;Header 2", "A1;B1", "A2;B2" );
@@ -63,7 +63,7 @@ public final class ExportServiceTest {
 		csvData.addHeader( "Header 2" );
 
 		final ExportService exportService = new ExportService( );
-		exportService.exportToCSV( csvFile.toFile( ), csvData );
+		exportService.exportToCSV( csvFile, csvData );
 
 		final List<String> allLines = Files.readAllLines( csvFile );
 		assertThat( allLines ).containsExactly( "Header 1;Header 2" );
@@ -74,7 +74,7 @@ public final class ExportServiceTest {
 	public void testExportOnDirectory( @TempDir final Path tempDir ) throws IOException {
 		final ExportService exportService = new ExportService( );
 
-		assertThrows( IOException.class, ( ) -> exportService.exportToCSV( tempDir.toFile( ), new CSVData( ) ) );
+		assertThrows( IOException.class, ( ) -> exportService.exportToCSV( tempDir, new CSVData( ) ) );
 	}
 
 }

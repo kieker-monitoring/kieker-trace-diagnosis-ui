@@ -16,9 +16,10 @@
 
 package kieker.diagnosis.backend.export;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,33 +38,33 @@ public class ExportService implements Service {
 	/**
 	 * Exports the given data into the given file as CSV data. The columns are separated with a semicolon.
 	 *
-	 * @param file
-	 *            The file in which the data should be written.
+	 * @param path
+	 *            The path in which the data should be written.
 	 * @param csvData
 	 *            The CSV data to be written.
 	 *
 	 * @throws IOException
 	 *             If something went wrong while writing the data.
 	 */
-	public void exportToCSV( final File file, final CSVData csvData ) throws IOException {
-		try ( FileWriter fileWriter = new FileWriter( file ) ) {
-			writeHeader( fileWriter, csvData.getHeaders( ) );
-			writeValues( fileWriter, csvData.getRows( ) );
+	public void exportToCSV( final Path path, final CSVData csvData ) throws IOException {
+		try ( Writer writer = Files.newBufferedWriter( path ) ) {
+			writeHeader( writer, csvData.getHeaders( ) );
+			writeValues( writer, csvData.getRows( ) );
 		}
 	}
 
-	private void writeHeader( final FileWriter fileWriter, final List<String> headers ) throws IOException {
+	private void writeHeader( final Writer writer, final List<String> headers ) throws IOException {
 		final String headerLine = String.join( ";", headers );
-		fileWriter.append( headerLine ).append( "\n" );
+		writer.append( headerLine ).append( "\n" );
 	}
 
-	private void writeValues( final FileWriter fileWriter, final List<List<String>> rows ) throws IOException {
+	private void writeValues( final Writer writer, final List<List<String>> rows ) throws IOException {
 		final List<String> rowLines = rows
 				.stream( )
 				.map( row -> String.join( ";", row ) )
 				.collect( Collectors.toList( ) );
 		final String csvString = String.join( "\n", rowLines );
-		fileWriter.append( csvString );
+		writer.append( csvString );
 	}
 
 }
