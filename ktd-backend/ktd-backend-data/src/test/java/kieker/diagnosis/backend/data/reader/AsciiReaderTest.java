@@ -18,10 +18,11 @@ package kieker.diagnosis.backend.data.reader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,9 +45,9 @@ public final class AsciiReaderTest {
 		final Reader reader = new Reader( );
 
 		final URL logDirectoryUrl = getClass( ).getResource( "/kieker-log-ascii" );
-		final File logDirectory = new File( logDirectoryUrl.toURI( ) );
+		final Path logDirectory = Paths.get( logDirectoryUrl.toURI( ) );
 
-		reader.readRecursiveFromDirectory( logDirectory.toPath( ), repository );
+		reader.readRecursiveFromDirectory( logDirectory, repository );
 
 		assertThat( repository.getTraceRoots( ) ).hasSize( 3 );
 		assertThat( repository.getAggreatedMethods( ) ).hasSize( 4 );

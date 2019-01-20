@@ -19,13 +19,15 @@ package kieker.diagnosis.backend.data;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -38,7 +40,6 @@ import org.junitpioneer.jupiter.TempDirectory;
 import org.junitpioneer.jupiter.TempDirectory.TempDir;
 
 import com.carrotsearch.hppc.ByteArrayList;
-import com.google.common.io.Files;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -464,9 +465,9 @@ public class MonitoringLogServiceTest {
 	@DisplayName ( "Test the import from a zip file" )
 	public void testImportFromZipFile( ) throws Exception {
 		final URL logFileUrl = getClass( ).getResource( "/kieker-log-binary.zip" );
-		final File logFile = new File( logFileUrl.toURI( ) );
+		final Path logFile = Paths.get( logFileUrl.toURI( ) );
 
-		service.importMonitoringLog( logFile.toPath( ), ImportType.ZIP_FILE );
+		service.importMonitoringLog( logFile, ImportType.ZIP_FILE );
 
 		assertThat( repository.getTraceRoots( ) ).hasSize( 2 );
 		assertThat( repository.getAggreatedMethods( ) ).hasSize( 3 );
@@ -504,14 +505,14 @@ public class MonitoringLogServiceTest {
 		}
 
 		// Write the mapping file
-		final File mappingFile = new File( tempDir.toFile( ), "kieker.map" );
-		Files.asCharSink( mappingFile, Charset.forName( "UTF-8" ) ).write( stringBuilder );
+		final Path mappingFile = tempDir.resolve( "kieker.map" );
+		Files.write( mappingFile, Collections.singletonList( stringBuilder.toString( ) ), StandardCharsets.UTF_8 );
 	}
 
 	private void finishWriting( final Path tempDir ) throws IOException {
-		final File binaryFile = new File( tempDir.toFile( ), "kieker.bin" );
+		final Path binaryFile = tempDir.resolve( "kieker.bin" );
 		byteList.trimToSize( );
-		Files.write( byteList.buffer, binaryFile );
+		Files.write( binaryFile, byteList.buffer );
 	}
 
 	private static class UnknownRecord extends AbstractMonitoringRecord {
