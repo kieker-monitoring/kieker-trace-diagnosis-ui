@@ -16,9 +16,7 @@
 
 package kieker.diagnosis.frontend.base.atom;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -40,19 +38,19 @@ public final class NumericFloatingPointFilterTest {
 		final Change change = mock( Change.class );
 
 		when( change.getControlNewText( ) ).thenReturn( "" );
-		assertThat( filter.apply( change ), is( change ) );
+		assertThat( filter.apply( change ) ).isEqualTo( change );
 
 		when( change.getControlNewText( ) ).thenReturn( "42" );
-		assertThat( filter.apply( change ), is( change ) );
+		assertThat( filter.apply( change ) ).isEqualTo( change );
 
 		when( change.getControlNewText( ) ).thenReturn( "42.5" );
-		assertThat( filter.apply( change ), is( change ) );
+		assertThat( filter.apply( change ) ).isEqualTo( change );
 
 		when( change.getControlNewText( ) ).thenReturn( "-42" );
-		assertThat( filter.apply( change ), is( change ) );
+		assertThat( filter.apply( change ) ).isEqualTo( change );
 
 		when( change.getControlNewText( ) ).thenReturn( "-42.5" );
-		assertThat( filter.apply( change ), is( change ) );
+		assertThat( filter.apply( change ) ).isEqualTo( change );
 	}
 
 	@Test
@@ -62,13 +60,13 @@ public final class NumericFloatingPointFilterTest {
 		final Change change = mock( Change.class );
 
 		when( change.getControlNewText( ) ).thenReturn( "--42.5" );
-		assertThat( filter.apply( change ), is( nullValue( ) ) );
+		assertThat( filter.apply( change ) ).isNull( );
 
 		when( change.getControlNewText( ) ).thenReturn( "abc" );
-		assertThat( filter.apply( change ), is( nullValue( ) ) );
+		assertThat( filter.apply( change ) ).isNull( );
 
 		when( change.getControlNewText( ) ).thenReturn( "42.a5" );
-		assertThat( filter.apply( change ), is( nullValue( ) ) );
+		assertThat( filter.apply( change ) ).isNull( );
 	}
 
 }

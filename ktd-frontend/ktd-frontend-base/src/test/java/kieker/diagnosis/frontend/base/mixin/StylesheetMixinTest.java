@@ -17,7 +17,6 @@
 package kieker.diagnosis.frontend.base.mixin;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,7 +45,7 @@ public final class StylesheetMixinTest implements StylesheetMixin {
 		addDefaultStylesheet( );
 
 		assertThat( stylesheets ).hasSize( 1 );
-		assertTrue( stylesheets.get( 0 ).contains( "StylesheetMixinTest.css" ) );
+		assertThat( stylesheets.get( 0 ) ).contains( "StylesheetMixinTest.css" );
 	}
 
 	@Override

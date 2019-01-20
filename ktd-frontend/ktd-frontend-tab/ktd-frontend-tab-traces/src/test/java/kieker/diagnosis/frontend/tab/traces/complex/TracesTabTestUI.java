@@ -17,16 +17,14 @@
 package kieker.diagnosis.frontend.tab.traces.complex;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
 import org.junit.jupiter.api.Test;
-import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.framework.junit5.ApplicationTest;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -122,7 +120,7 @@ public final class TracesTabTestUI extends ApplicationTest {
 		tracesPage.getFilter( ).getClazz( ).writeText( "class1" );
 		tracesPage.getFilter( ).getMethod( ).writeText( "method1" );
 		tracesPage.getFilter( ).getSearch( ).click( );
-		assertThat( tracesPage.getTable( ).countItems( ), is( 2 ) );
+		assertThat( tracesPage.getTable( ).countItems( ) ).isEqualTo( 2 );
 
 		tracesPage.getFilter( ).getTraceId( ).writeText( "1" );
 		tracesPage.getFilter( ).getSearch( ).click( );

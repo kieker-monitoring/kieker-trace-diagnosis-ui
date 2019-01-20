@@ -17,9 +17,6 @@
 package kieker.diagnosis.frontend.tab.aggregatedmethods.complex;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -31,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import org.junit.jupiter.api.Test;
-import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.framework.junit5.ApplicationTest;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -118,42 +115,42 @@ public final class AggregatedMethodsTabTestUI extends ApplicationTest {
 
 	@Test
 	public void testNormalSearch( ) {
-		assertThat( methodsPage.getTable( ).countItems( ), is( 4 ) );
+		assertThat( methodsPage.getTable( ).countItems( ) ).isEqualTo( 4 );
 
 		methodsPage.getFilter( ).getHost( ).writeText( "host1" );
 		methodsPage.getFilter( ).getMethod( ).writeText( "method1" );
 		methodsPage.getFilter( ).getSearch( ).click( );
-		assertThat( methodsPage.getTable( ).countItems( ), is( 2 ) );
+		assertThat( methodsPage.getTable( ).countItems( ) ).isEqualTo( 2 );
 
 		methodsPage.getFilter( ).getException( ).writeText( "exception" );
 		methodsPage.getFilter( ).getSearch( ).click( );
-		assertThat( methodsPage.getTable( ).countItems( ), is( 1 ) );
+		assertThat( methodsPage.getTable( ).countItems( ) ).isEqualTo( 1 );
 
 		methodsPage.getFilter( ).getException( ).clearText( );
 		methodsPage.getFilter( ).getSearchType( ).select( "Nur fehlgeschlagene" );
 		methodsPage.getFilter( ).getSearch( ).click( );
-		assertThat( methodsPage.getTable( ).countItems( ), is( 1 ) );
+		assertThat( methodsPage.getTable( ).countItems( ) ).isEqualTo( 1 );
 
 		methodsPage.getFilter( ).getHost( ).clearText( );
 		methodsPage.getFilter( ).getSearchType( ).select( "Nur erfolgreiche " );
 		methodsPage.getFilter( ).getSearch( ).click( );
-		assertThat( methodsPage.getTable( ).countItems( ), is( 2 ) );
+		assertThat( methodsPage.getTable( ).countItems( ) ).isEqualTo( 2 );
 	}
 
 	@Test
 	public void testDetailPanel( ) {
 		methodsPage.getTable( ).clickOnNthTableRow( 0 );
-		assertThat( methodsPage.getDetail( ).getHost( ).getText( ), is( "host1" ) );
-		assertThat( methodsPage.getDetail( ).getException( ).getText( ), is( "<Keine Daten verfügbar>" ) );
+		assertThat( methodsPage.getDetail( ).getHost( ).getText( ) ).isEqualTo( "host1" );
+		assertThat( methodsPage.getDetail( ).getException( ).getText( ) ).isEqualTo( "<Keine Daten verfügbar>" );
 
 		methodsPage.getTable( ).clickOnNthTableRow( 1 );
-		assertThat( methodsPage.getDetail( ).getHost( ).getText( ), is( "host1" ) );
-		assertThat( methodsPage.getDetail( ).getException( ).getText( ), is( "exception" ) );
+		assertThat( methodsPage.getDetail( ).getHost( ).getText( ) ).isEqualTo( "host1" );
+		assertThat( methodsPage.getDetail( ).getException( ).getText( ) ).isEqualTo( "exception" );
 	}
 
 	@Test
 	public void testSearchWithRegularExpressions( ) {
-		assertThat( methodsPage.getTable( ).countItems( ), is( 4 ) );
+		assertThat( methodsPage.getTable( ).countItems( ) ).isEqualTo( 4 );
 
 		methodsPage.getFilter( ).getUseRegularExpression( ).click( );
 
@@ -161,21 +158,21 @@ public final class AggregatedMethodsTabTestUI extends ApplicationTest {
 		methodsPage.getFilter( ).getClazz( ).writeText( "class1" );
 		methodsPage.getFilter( ).getMethod( ).writeText( "m....d\\d" );
 		methodsPage.getFilter( ).getSearch( ).click( );
-		assertThat( methodsPage.getTable( ).countItems( ), is( 2 ) );
+		assertThat( methodsPage.getTable( ).countItems( ) ).isEqualTo( 2 );
 
 		methodsPage.getFilter( ).getException( ).writeText( "e.*" );
 		methodsPage.getFilter( ).getSearch( ).click( );
-		assertThat( methodsPage.getTable( ).countItems( ), is( 1 ) );
+		assertThat( methodsPage.getTable( ).countItems( ) ).isEqualTo( 1 );
 
 		methodsPage.getFilter( ).getException( ).clearText( );
 		methodsPage.getFilter( ).getSearchType( ).select( "Nur fehlgeschlagene" );
 		methodsPage.getFilter( ).getSearch( ).click( );
-		assertThat( methodsPage.getTable( ).countItems( ), is( 1 ) );
+		assertThat( methodsPage.getTable( ).countItems( ) ).isEqualTo( 1 );
 	}
 
 	@Test
 	public void testSearchWithInvalidRegularExpressions( ) {
-		assertThat( methodsPage.getTable( ).countItems( ), is( 4 ) );
+		assertThat( methodsPage.getTable( ).countItems( ) ).isEqualTo( 4 );
 
 		methodsPage.getFilter( ).getUseRegularExpression( ).click( );
 
@@ -204,40 +201,40 @@ public final class AggregatedMethodsTabTestUI extends ApplicationTest {
 		methodsPage.getTable( ).clickOnNthHeader( 1 );
 		methodsPage.getTable( ).clickOnNthHeader( 1 );
 
-		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 0 ), is( "10" ) );
-		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 1 ), is( "host2" ) );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 0 ) ).isEqualTo( "10" );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 1 ) ).isEqualTo( "host2" );
 
 		methodsPage.getTable( ).clickOnNthHeader( 2 );
 		methodsPage.getTable( ).clickOnNthHeader( 2 );
-		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 1 ), is( "host3" ) );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 1 ) ).isEqualTo( "host3" );
 
 		methodsPage.getTable( ).clickOnNthHeader( 3 );
 		methodsPage.getTable( ).clickOnNthHeader( 3 );
-		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 2 ), is( "class3" ) );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 2 ) ).isEqualTo( "class3" );
 
 		methodsPage.getTable( ).clickOnNthHeader( 4 );
 		methodsPage.getTable( ).clickOnNthHeader( 4 );
-		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 3 ), is( "method3" ) );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 3 ) ).isEqualTo( "method3" );
 
 		methodsPage.getTable( ).clickOnNthHeader( 5 );
 		methodsPage.getTable( ).clickOnNthHeader( 5 );
-		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 4 ), is( "10" ) );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 4 ) ).isEqualTo( "10" );
 
 		methodsPage.getTable( ).clickOnNthHeader( 6 );
 		methodsPage.getTable( ).clickOnNthHeader( 6 );
-		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 5 ), is( "42" ) );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 5 ) ).isEqualTo( "42" );
 
 		methodsPage.getTable( ).clickOnNthHeader( 7 );
 		methodsPage.getTable( ).clickOnNthHeader( 7 );
-		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 6 ), is( "50" ) );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 6 ) ).isEqualTo( "50" );
 
 		methodsPage.getTable( ).clickOnNthHeader( 8 );
 		methodsPage.getTable( ).clickOnNthHeader( 8 );
-		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 7 ), is( "60" ) );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 7 ) ).isEqualTo( "60" );
 
 		methodsPage.getTable( ).clickOnNthHeader( 9 );
 		methodsPage.getTable( ).clickOnNthHeader( 9 );
-		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 8 ), is( "500" ) );
+		assertThat( methodsPage.getTable( ).getNthTextInFirstRow( 8 ) ).isEqualTo( "500" );
 	}
 
 	@Test
@@ -250,10 +247,10 @@ public final class AggregatedMethodsTabTestUI extends ApplicationTest {
 		methodsPage.getFilter( ).getSaveAsFavorite( ).click( );
 		methodsPage.getFilter( ).getHost( ).clearText( );
 
-		assertThat( filterHolder.getValue( ), is( notNullValue( ) ) );
+		assertThat( filterHolder.getValue( ) ).isNotNull( );
 		interact( ( ) -> methodsTab.setFilterValue( filterHolder.getValue( ) ) );
 
-		assertThat( methodsPage.getFilter( ).getHost( ).getText( ), is( "host1" ) );
+		assertThat( methodsPage.getFilter( ).getHost( ).getText( ) ).isEqualTo( "host1" );
 	}
 
 	@Test
@@ -279,7 +276,7 @@ public final class AggregatedMethodsTabTestUI extends ApplicationTest {
 		methodsPage.getStatusBar( ).getExportToCsv( ).click( );
 
 		final CSVData csvData = dataHolder.getValue( );
-		assertThat( csvData, is( notNullValue( ) ) );
+		assertThat( csvData ).isNotNull( );
 		assertThat( csvData.getHeaders( ) ).hasSize( 9 );
 		assertThat( csvData.getRows( ) ).hasSize( 4 );
 		assertThat( csvData.getRows( ).get( 0 ) ).hasSize( 9 );
@@ -291,11 +288,11 @@ public final class AggregatedMethodsTabTestUI extends ApplicationTest {
 		methodsPage.getFilter( ).getMethod( ).writeText( "method1" );
 
 		push( KeyCode.ENTER );
-		assertThat( methodsPage.getTable( ).countItems( ), is( 4 ) );
+		assertThat( methodsPage.getTable( ).countItems( ) ).isEqualTo( 4 );
 
 		methodsTab.defaultButtonProperty( ).set( true );
 		push( KeyCode.ENTER );
-		assertThat( methodsPage.getTable( ).countItems( ), is( 2 ) );
+		assertThat( methodsPage.getTable( ).countItems( ) ).isEqualTo( 2 );
 	}
 
 }

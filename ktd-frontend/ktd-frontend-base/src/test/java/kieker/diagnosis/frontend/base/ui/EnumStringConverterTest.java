@@ -16,9 +16,8 @@
 
 package kieker.diagnosis.frontend.base.ui;
 
-import static org.hamcrest.core.Is.is;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertThat;
 
 import org.junit.jupiter.api.Test;
 
@@ -33,22 +32,22 @@ public class EnumStringConverterTest {
 
 	@Test
 	public void toStringShouldWork( ) {
-		assertThat( converter.toString( TestEnum.ENUM_VALUE_1 ), is( "Value 1" ) );
+		assertThat( converter.toString( TestEnum.ENUM_VALUE_1 ) ).isEqualTo( "Value 1" );
 	}
 
 	@Test
 	public void toStringForNullValueShouldWork( ) {
-		assertThat( converter.toString( null ), is( "" ) );
+		assertThat( converter.toString( null ) ).isEqualTo( "" );
 	}
 
 	@Test
 	public void fromStringShouldWork( ) {
-		assertThat( converter.fromString( "Value 2" ), is( TestEnum.ENUM_VALUE_2 ) );
+		assertThat( converter.fromString( "Value 2" ) ).isEqualTo( TestEnum.ENUM_VALUE_2 );
 	}
 
 	@Test
 	public void fromStringForEmptyStringShouldWork( ) {
-		assertThat( converter.fromString( "" ), is( nullValue( ) ) );
+		assertThat( converter.fromString( "" ) ).isEqualTo( nullValue( ) );
 	}
 
 }

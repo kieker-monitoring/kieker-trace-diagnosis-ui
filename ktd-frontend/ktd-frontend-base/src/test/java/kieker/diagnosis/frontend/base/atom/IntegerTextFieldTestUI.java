@@ -16,12 +16,10 @@
 
 package kieker.diagnosis.frontend.base.atom;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
-import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.framework.junit5.ApplicationTest;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -48,8 +46,8 @@ public final class IntegerTextFieldTestUI extends ApplicationTest {
 		textField.setValue( 42 );
 
 		textField.setText( "50" );
-		assertThat( textField.getValue( ), is( 50 ) );
-		assertThat( textField.valueProperty( ).get( ), is( 50 ) );
+		assertThat( textField.getValue( ) ).isEqualTo( 50 );
+		assertThat( textField.valueProperty( ).get( ) ).isEqualTo( 50 );
 	}
 
 	@Test
@@ -57,25 +55,25 @@ public final class IntegerTextFieldTestUI extends ApplicationTest {
 		textField.setValue( 42 );
 
 		textField.setText( "abc" );
-		assertThat( textField.getValue( ), is( 42 ) );
+		assertThat( textField.getValue( ) ).isEqualTo( 42 );
 
 		textField.setText( "--1" );
-		assertThat( textField.getValue( ), is( 42 ) );
+		assertThat( textField.getValue( ) ).isEqualTo( 42 );
 
 		textField.setText( "++1" );
-		assertThat( textField.getValue( ), is( 42 ) );
+		assertThat( textField.getValue( ) ).isEqualTo( 42 );
 
 		textField.setText( "." );
-		assertThat( textField.getValue( ), is( 42 ) );
+		assertThat( textField.getValue( ) ).isEqualTo( 42 );
 
 		textField.setText( "0.5" );
-		assertThat( textField.getValue( ), is( 42 ) );
+		assertThat( textField.getValue( ) ).isEqualTo( 42 );
 	}
 
 	@Test
 	public void testEmptyValue( ) {
 		textField.setText( "" );
-		assertThat( textField.getValue( ), is( nullValue( ) ) );
+		assertThat( textField.getValue( ) ).isNull( );
 	}
 
 }

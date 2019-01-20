@@ -16,11 +16,9 @@
 package kieker.diagnosis.frontend.dialog.progress;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 
 import org.junit.jupiter.api.Test;
-import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.scene.Scene;
@@ -55,7 +53,7 @@ public final class ProgressDialogTestUI extends ApplicationTest {
 		assertThat( listWindows( ) ).hasSize( 2 );
 
 		final Labeled messageLabel = lookup( "#progressDialogMessage" ).queryLabeled( );
-		assertThat( messageLabel.getText( ), is( "test-message" ) );
+		assertThat( messageLabel.getText( ) ).isEqualTo( "test-message" );
 
 		WaitForAsyncUtils.asyncFx( ( ) -> progressDialog.closeDialog( ) );
 		WaitForAsyncUtils.waitForFxEvents( );

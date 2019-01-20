@@ -16,11 +16,10 @@
 
 package kieker.diagnosis.frontend.base.common;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
-import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.scene.Scene;
@@ -46,8 +45,8 @@ public final class ExceptionUtilTestUI extends ApplicationTest {
 		ExceptionUtil.handleException( new DelegateException( new IllegalArgumentException( "Test Exception" ) ), "test" );
 		WaitForAsyncUtils.waitForFxEvents( );
 
-		assertThat( lookup( ".dialog-pane .label" ).queryLabeled( ).getText( ), is( "Ein Fehler ist aufgetreten." ) );
-		assertThat( lookup( ".dialog-pane .content.label" ).queryLabeled( ).getText( ), is( "Test Exception" ) );
+		assertThat( lookup( ".dialog-pane .label" ).queryLabeled( ).getText( ) ).isEqualTo( "Ein Fehler ist aufgetreten." );
+		assertThat( lookup( ".dialog-pane .content.label" ).queryLabeled( ).getText( ) ).isEqualTo( "Test Exception" );
 		clickOn( ".dialog-pane .button" );
 	}
 
@@ -56,8 +55,8 @@ public final class ExceptionUtilTestUI extends ApplicationTest {
 		ExceptionUtil.handleException( new IllegalArgumentException( "Test Exception" ), "test" );
 		WaitForAsyncUtils.waitForFxEvents( );
 
-		assertThat( lookup( ".dialog-pane .label" ).queryLabeled( ).getText( ), is( "Ein Fehler ist aufgetreten." ) );
-		assertThat( lookup( ".dialog-pane .content.label" ).queryLabeled( ).getText( ), is( "Test Exception" ) );
+		assertThat( lookup( ".dialog-pane .label" ).queryLabeled( ).getText( ) ).isEqualTo( "Ein Fehler ist aufgetreten." );
+		assertThat( lookup( ".dialog-pane .content.label" ).queryLabeled( ).getText( ) ).isEqualTo( "Test Exception" );
 		clickOn( ".dialog-pane .button" );
 	}
 

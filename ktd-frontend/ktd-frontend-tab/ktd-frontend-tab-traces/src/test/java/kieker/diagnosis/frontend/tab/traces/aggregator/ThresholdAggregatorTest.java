@@ -17,9 +17,6 @@
 package kieker.diagnosis.frontend.tab.traces.aggregator;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -66,11 +63,11 @@ public final class ThresholdAggregatorTest {
 
 		final List<MethodCall> aggregatedList = aggregator.aggregate( Arrays.asList( call1, call2, call3 ) );
 		assertThat( aggregatedList ).hasSize( 2 );
-		assertTrue( aggregatedList.contains( call3 ) );
+		assertThat( aggregatedList ).contains( call3 );
 
 		final MethodCall aggregationMethodCall = aggregatedList.get( 1 );
-		assertThat( aggregationMethodCall.getMethod( ), is( "2 Methodenaufrufe zusammengefasst " ) );
-		assertThat( aggregationMethodCall.getPercent( ), is( 35.0f ) );
+		assertThat( aggregationMethodCall.getMethod( ) ).isEqualTo( "2 Methodenaufrufe zusammengefasst " );
+		assertThat( aggregationMethodCall.getPercent( ) ).isEqualTo( 35.0f );
 	}
 
 }

@@ -16,9 +16,7 @@
 
 package kieker.diagnosis.frontend.base.mixin;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
@@ -31,27 +29,27 @@ public final class StringMixinTest implements StringMixin {
 
 	@Test
 	public void testTrimToNullWithNullString( ) {
-		assertThat( trimToNull( null ), is( nullValue( ) ) );
+		assertThat( trimToNull( null ) ).isNull( );
 	}
 
 	@Test
 	public void testTrimToNullWithEmptyString( ) {
-		assertThat( trimToNull( "" ), is( nullValue( ) ) );
+		assertThat( trimToNull( "" ) ).isNull( );
 	}
 
 	@Test
 	public void testTrimToNullWithBlankString( ) {
-		assertThat( trimToNull( "    " ), is( nullValue( ) ) );
+		assertThat( trimToNull( "    " ) ).isNull( );
 	}
 
 	@Test
 	public void testTrimToNullWithWhitespaceString( ) {
-		assertThat( trimToNull( "  A bc " ), is( "A bc" ) );
+		assertThat( trimToNull( "  A bc " ) ).isEqualTo( "A bc" );
 	}
 
 	@Test
 	public void testTrimToNullWithNormalString( ) {
-		assertThat( trimToNull( "Abc" ), is( "Abc" ) );
+		assertThat( trimToNull( "Abc" ) ).isEqualTo( "Abc" );
 	}
 
 }

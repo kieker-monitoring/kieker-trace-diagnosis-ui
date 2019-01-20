@@ -17,11 +17,9 @@
 package kieker.diagnosis.frontend.dialog.alert;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 
 import org.junit.jupiter.api.Test;
-import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.framework.junit5.ApplicationTest;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
@@ -53,10 +51,10 @@ public final class AlertTestUI extends ApplicationTest {
 		assertThat( listWindows( ) ).hasSize( 2 );
 
 		final Text headerText = lookup( ".dialog-pane .text" ).queryText( );
-		assertThat( headerText.getText( ), is( "Warnung" ) );
+		assertThat( headerText.getText( ) ).isEqualTo( "Warnung" );
 
 		final Labeled content = lookup( ".dialog-pane .content" ).queryLabeled( );
-		assertThat( content.getText( ), is( "Ungültige Dateneingabe." ) );
+		assertThat( content.getText( ) ).isEqualTo( "Ungültige Dateneingabe." );
 
 		clickOn( "#infoDialogOk" );
 		assertThat( listWindows( ) ).hasSize( 1 );

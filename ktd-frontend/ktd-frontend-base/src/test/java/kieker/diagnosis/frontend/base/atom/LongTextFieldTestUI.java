@@ -16,12 +16,10 @@
 
 package kieker.diagnosis.frontend.base.atom;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
-import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.framework.junit5.ApplicationTest;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -48,7 +46,7 @@ public final class LongTextFieldTestUI extends ApplicationTest {
 		textField.setValue( 42L );
 
 		textField.setText( "50" );
-		assertThat( textField.getValue( ), is( 50L ) );
+		assertThat( textField.getValue( ) ).isEqualTo( 50L );
 	}
 
 	@Test
@@ -56,25 +54,25 @@ public final class LongTextFieldTestUI extends ApplicationTest {
 		textField.setValue( 42L );
 
 		textField.setText( "abc" );
-		assertThat( textField.getValue( ), is( 42L ) );
+		assertThat( textField.getValue( ) ).isEqualTo( 42L );
 
 		textField.setText( "--1" );
-		assertThat( textField.getValue( ), is( 42L ) );
+		assertThat( textField.getValue( ) ).isEqualTo( 42L );
 
 		textField.setText( "++1" );
-		assertThat( textField.getValue( ), is( 42L ) );
+		assertThat( textField.getValue( ) ).isEqualTo( 42L );
 
 		textField.setText( "." );
-		assertThat( textField.getValue( ), is( 42L ) );
+		assertThat( textField.getValue( ) ).isEqualTo( 42L );
 
 		textField.setText( "0.5" );
-		assertThat( textField.getValue( ), is( 42L ) );
+		assertThat( textField.getValue( ) ).isEqualTo( 42L );
 	}
 
 	@Test
 	public void testEmptyValue( ) {
 		textField.setText( "" );
-		assertThat( textField.getValue( ), is( nullValue( ) ) );
+		assertThat( textField.getValue( ) ).isNull( );
 	}
 
 }

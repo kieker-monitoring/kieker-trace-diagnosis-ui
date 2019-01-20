@@ -17,7 +17,6 @@
 package kieker.diagnosis.frontend.base.mixin;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -62,7 +61,7 @@ public final class DialogMixinTest implements DialogMixin {
 		addDefaultStylesheet( );
 
 		assertThat( stylesheets ).hasSize( 1 );
-		assertTrue( stylesheets.get( 0 ).contains( "DialogMixinTest.css" ) );
+		assertThat( stylesheets.get( 0 ).contains( "DialogMixinTest.css" ) ).isTrue( );
 	}
 
 	@Override

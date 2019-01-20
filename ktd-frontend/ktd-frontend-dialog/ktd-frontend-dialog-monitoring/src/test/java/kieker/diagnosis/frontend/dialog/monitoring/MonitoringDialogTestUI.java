@@ -17,11 +17,9 @@
 package kieker.diagnosis.frontend.dialog.monitoring;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 
 import org.junit.jupiter.api.Test;
-import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.framework.junit5.ApplicationTest;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Labeled;
@@ -69,13 +67,13 @@ public final class MonitoringDialogTestUI extends ApplicationTest {
 	private void changeMonitoringState( ) {
 		interact( ( ) -> monitoringDialog.setStatus( Status.NO_MONITORING ) );
 		final Labeled statusLabel = lookup( "#monitoringDialogStatus" ).queryLabeled( );
-		assertThat( statusLabel.getText( ), is( "Kein Monitoring gestartet" ) );
+		assertThat( statusLabel.getText( ) ).isEqualTo( "Kein Monitoring gestartet" );
 
 		interact( ( ) -> monitoringDialog.setStatus( Status.RUNNING ) );
-		assertThat( statusLabel.getText( ), is( "Monitoring läuft" ) );
+		assertThat( statusLabel.getText( ) ).isEqualTo( "Monitoring läuft" );
 
 		interact( ( ) -> monitoringDialog.setStatus( Status.TERMINATED ) );
-		assertThat( statusLabel.getText( ), is( "Monitoring terminiert" ) );
+		assertThat( statusLabel.getText( ) ).isEqualTo( "Monitoring terminiert" );
 	}
 
 	private void enterInvalidValues( ) {
