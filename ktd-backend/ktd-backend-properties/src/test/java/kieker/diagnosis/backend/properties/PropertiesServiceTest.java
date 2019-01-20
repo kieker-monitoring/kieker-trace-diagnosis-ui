@@ -18,29 +18,24 @@ package kieker.diagnosis.backend.properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.google.inject.Guice;
-import com.google.inject.Injector;
 
 /**
  * Test class for {@link PropertiesService}.
  *
  * @author Nils Christian Ehmke
  */
+@DisplayName ( "Unit-Test for PropertiesService" )
 public final class PropertiesServiceTest {
 
-	private PropertiesService propertiesService;
-
-	@BeforeEach
-	public void setUp( ) {
-		final Injector injector = Guice.createInjector( );
-		propertiesService = injector.getInstance( PropertiesService.class );
-	}
+	private final PropertiesService propertiesService = Guice.createInjector( ).getInstance( PropertiesService.class );
 
 	@Test
-	public void testLoadApplicationProperty( ) {
+	@DisplayName ( "Application properties should initially not be null" )
+	public void applicationPropertiesShouldInitiallyNotBeNull( ) {
 		assertThat( propertiesService.loadApplicationProperty( SimpleBooleanApplicationProperty.class ) ).isNotNull( );
 		assertThat( propertiesService.loadApplicationProperty( SimpleEnumApplicationProperty.class ) ).isNotNull( );
 		assertThat( propertiesService.loadApplicationProperty( SimpleFloatApplicationProperty.class ) ).isNotNull( );
@@ -48,13 +43,15 @@ public final class PropertiesServiceTest {
 	}
 
 	@Test
-	public void testSaveApplicationProperty( ) {
+	@DisplayName ( "Application properties should be saveable and loadable" )
+	public void applicationPropertiesShouldBeSaveableAndLoadable( ) {
 		propertiesService.saveApplicationProperty( SimpleStringApplicationProperty.class, "42" );
 		assertThat( propertiesService.loadApplicationProperty( SimpleStringApplicationProperty.class ) ).isEqualTo( "42" );
 	}
 
 	@Test
-	public void testLoadSystemProperty( ) {
+	@DisplayName ( "System properties should be loadable" )
+	public void systemPropertiesShouldBeLoadable( ) {
 		System.setProperty( "SimpleBooleanSystemProperty", "true" );
 		assertThat( propertiesService.loadSystemProperty( SimpleBooleanSystemProperty.class ) ).isEqualTo( Boolean.TRUE );
 

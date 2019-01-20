@@ -18,6 +18,7 @@ package kieker.diagnosis.backend.pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -25,11 +26,13 @@ import org.junit.jupiter.api.Test;
  *
  * @author Nils Christian Ehmke
  */
+@DisplayName ( "Unit-Test for PatternService" )
 public final class PatternServiceTest {
 
 	private final PatternService patternService = new PatternService( );
 
 	@Test
+	@DisplayName ( "Patterns should be rcognized as valid" )
 	public void patternsShouldBeRecognizedAsValid( ) {
 		assertThat( patternService.isValidPattern( ".*" ) ).isTrue( );
 		assertThat( patternService.isValidPattern( "Test" ) ).isTrue( );
@@ -39,6 +42,7 @@ public final class PatternServiceTest {
 	}
 
 	@Test
+	@DisplayName ( "Patterns should be rcognized as invalid" )
 	public void patternsShouldBeRecognizedAsInvalid( ) {
 		assertThat( patternService.isValidPattern( "(" ) ).isFalse( );
 		assertThat( patternService.isValidPattern( ")" ) ).isFalse( );
@@ -48,6 +52,7 @@ public final class PatternServiceTest {
 	}
 
 	@Test
+	@DisplayName ( "Pattern compilation should work as expected" )
 	public void patternCompilationShouldWorkAsExpected( ) {
 		assertThat( patternService.compilePattern( ".*" ).matcher( "Test" ).matches( ) ).isTrue( );
 		assertThat( patternService.compilePattern( "Test" ).matcher( "Test" ).matches( ) ).isTrue( );
