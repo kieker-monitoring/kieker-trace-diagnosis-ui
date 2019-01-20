@@ -17,8 +17,6 @@
 package kieker.diagnosis.frontend.base.common;
 
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ResourceBundle;
 
 import org.apache.logging.log4j.LogManager;
@@ -26,11 +24,7 @@ import org.apache.logging.log4j.LogManager;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
@@ -67,8 +61,7 @@ public final class ExceptionUtil {
 		final Throwable exception = isDelegateException ? throwable.getCause( ) : throwable;
 
 		// Keep in mind that some controllers start a new thread. As this might also lead to exceptions, the whole
-		// dialog showing has to be performed in the
-		// JavaFX application thread.
+		// dialog showing has to be performed in the JavaFX application thread.
 		final Runnable runnable = ( ) -> {
 			// Prepare the dialog
 			final Alert alert = new Alert( AlertType.ERROR );
@@ -78,31 +71,6 @@ public final class ExceptionUtil {
 
 			// Make sure that the alert dialog resizes to the required height (usually just necessary for Linux systems)
 			alert.getDialogPane( ).setMinHeight( Region.USE_PREF_SIZE );
-
-			// Convert the throwable into a string
-			final StringWriter sw = new StringWriter( );
-			final PrintWriter pw = new PrintWriter( sw );
-			exception.printStackTrace( pw );
-			final String exceptionText = sw.toString( );
-
-			// Prepare the remaining components
-			final Label label = new Label( RESOURCE_BUNDLE.getString( "errorDescription" ) );
-
-			final TextArea textArea = new TextArea( exceptionText );
-			textArea.setEditable( false );
-			textArea.setWrapText( true );
-
-			textArea.setMaxWidth( Double.MAX_VALUE );
-			textArea.setMaxHeight( Double.MAX_VALUE );
-			GridPane.setVgrow( textArea, Priority.ALWAYS );
-			GridPane.setHgrow( textArea, Priority.ALWAYS );
-
-			final GridPane expContent = new GridPane( );
-			expContent.setMaxWidth( Double.MAX_VALUE );
-			expContent.add( label, 0, 0 );
-			expContent.add( textArea, 0, 1 );
-
-			alert.getDialogPane( ).setExpandableContent( expContent );
 
 			// Add the logo
 			final String iconPath = RESOURCE_BUNDLE.getString( "errorIcon" );

@@ -64,6 +64,8 @@ public class MonitoringLogService implements Service {
 			repository.setDataAvailable( directoryOrFile, tin );
 
 			throw ex;
+		} catch ( final ImportFailedException ex ) {
+			throw ex;
 		} catch ( final Exception ex ) {
 			throw new ImportFailedException( RESOURCES.getString( "errorMessageImportFailed" ), ex );
 		}
