@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javafx.collections.FXCollections;
@@ -39,7 +39,7 @@ public final class DialogMixinTest implements DialogMixin {
 
 	private DialogPane dialogPane;
 
-	@Before
+	@BeforeEach
 	public void before( ) {
 		dialogPane = mock( DialogPane.class );
 	}

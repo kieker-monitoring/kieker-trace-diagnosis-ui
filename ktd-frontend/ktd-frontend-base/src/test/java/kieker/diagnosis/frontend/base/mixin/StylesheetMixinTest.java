@@ -19,7 +19,7 @@ package kieker.diagnosis.frontend.base.mixin;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javafx.collections.FXCollections;
@@ -34,7 +34,7 @@ public final class StylesheetMixinTest implements StylesheetMixin {
 
 	private final ObservableList<String> stylesheets = FXCollections.observableArrayList( );
 
-	@Before
+	@BeforeEach
 	public void before( ) {
 		stylesheets.clear( );
 	}

@@ -23,9 +23,10 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.TempDirectory;
+import org.junitpioneer.jupiter.TempDirectory.TempDir;
 import org.testfx.framework.junit.ApplicationTest;
 
 import com.google.inject.Guice;
@@ -45,9 +46,6 @@ import kieker.diagnosis.frontend.base.FrontendBaseModule;
  * @author Nils Christian Ehmke
  */
 public final class MainPaneTestUI extends ApplicationTest {
-
-	@Rule
-	public TemporaryFolder temporaryFolder = new TemporaryFolder( );
 
 	private MainPane mainPane;
 
@@ -121,9 +119,10 @@ public final class MainPaneTestUI extends ApplicationTest {
 	}
 
 	@Test
-	public void testImportLog( ) throws IOException {
-		loadBinaryDataIntoTemporaryFolder( );
-		importTemporaryFolder( );
+	@ExtendWith ( TempDirectory.class )
+	public void testImportLog( @TempDir final Path tempDir ) throws IOException {
+		loadBinaryDataIntoTemporaryFolder( tempDir );
+		importTemporaryFolder( tempDir );
 
 		clickOn( "#tabTraces" );
 		final TreeTableView<?> treeTableView = lookup( "#tabTracesTreeTable" ).query( );
@@ -138,26 +137,26 @@ public final class MainPaneTestUI extends ApplicationTest {
 		assertThat( aggregatedMethodsTableView.getItems( ) ).hasSize( 3 );
 	}
 
-	private void loadBinaryDataIntoTemporaryFolder( ) throws IOException {
+	private void loadBinaryDataIntoTemporaryFolder( final Path tempDir ) throws IOException {
 		final InputStream binaryDataStream = getClass( ).getResourceAsStream( "/kieker-log-binary/kieker.bin" );
 		final InputStream mappingFileStream = getClass( ).getResourceAsStream( "/kieker-log-binary/kieker.map" );
 
-		final Path temporaryPath = temporaryFolder.getRoot( ).toPath( );
-		Files.copy( binaryDataStream, temporaryPath.resolve( "kieker.bin" ) );
-		Files.copy( mappingFileStream, temporaryPath.resolve( "kieker.map" ) );
+		Files.copy( binaryDataStream, tempDir.resolve( "kieker.bin" ) );
+		Files.copy( mappingFileStream, tempDir.resolve( "kieker.map" ) );
 	}
 
-	private void importTemporaryFolder( ) {
+	private void importTemporaryFolder( final Path tempDir ) {
 		// We cannot use the GUI at this point. TestFX cannot handle native dialogs and
 		// neither can the headless test environment.
 		// In this case we have to import the logs via code.
-		mainPane.performImportLog( temporaryFolder.getRoot( ) );
+		mainPane.performImportLog( tempDir.toFile( ) );
 	}
 
 	@Test
-	public void testJumpToMethods( ) throws IOException {
-		loadBinaryDataIntoTemporaryFolder( );
-		importTemporaryFolder( );
+	@ExtendWith ( TempDirectory.class )
+	public void testJumpToMethods( @TempDir final Path tempDir ) throws IOException {
+		loadBinaryDataIntoTemporaryFolder( tempDir );
+		importTemporaryFolder( tempDir );
 
 		clickOn( "#tabAggregatedMethods" );
 		clickOn( lookup( "#tabAggregatedMethodsTable" ).lookup( ".table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
@@ -168,9 +167,10 @@ public final class MainPaneTestUI extends ApplicationTest {
 	}
 
 	@Test
-	public void testJumpToTrace( ) throws IOException {
-		loadBinaryDataIntoTemporaryFolder( );
-		importTemporaryFolder( );
+	@ExtendWith ( TempDirectory.class )
+	public void testJumpToTrace( @TempDir final Path tempDir ) throws IOException {
+		loadBinaryDataIntoTemporaryFolder( tempDir );
+		importTemporaryFolder( tempDir );
 
 		clickOn( "#tabMethods" );
 		clickOn( lookup( "#tabMethodsTable" ).lookup( ".table-row-cell" ).nth( 0 ).queryAs( Node.class ) );
