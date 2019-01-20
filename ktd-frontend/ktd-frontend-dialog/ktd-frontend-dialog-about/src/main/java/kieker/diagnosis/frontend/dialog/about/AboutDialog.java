@@ -49,8 +49,7 @@ public final class AboutDialog extends Alert implements DialogMixin, ImageMixin 
 	}
 
 	private Image createIcon( ) {
-		final String iconPath = RESOURCE_BUNDLE.getString( "icon" );
-		return loadImage( iconPath );
+		return loadImage( "/kieker-logo.png" );
 	}
 
 	private void addComponents( ) {
