@@ -17,7 +17,6 @@
 package kieker.diagnosis.frontend.base.ui;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.core.IsNull.nullValue;
 
 import org.junit.jupiter.api.Test;
 
@@ -47,7 +46,7 @@ public class EnumStringConverterTest {
 
 	@Test
 	public void fromStringForEmptyStringShouldWork( ) {
-		assertThat( converter.fromString( "" ) ).isEqualTo( nullValue( ) );
+		assertThat( converter.fromString( "" ) ).isNull( );
 	}
 
 }

@@ -17,7 +17,6 @@
 package kieker.diagnosis.frontend.tab.traces.complex;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.core.IsNull.notNullValue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -222,7 +221,7 @@ public final class TracesTabTestUI extends ApplicationTest {
 		tracesPage.getFilter( ).getSaveAsFavorite( ).click( );
 		tracesPage.getFilter( ).getHost( ).clearText( );
 
-		assertThat( filterHolder.getValue( ) ).isEqualTo( notNullValue( ) );
+		assertThat( filterHolder.getValue( ) ).isNotNull( );
 		interact( ( ) -> tracesTab.setFilterValue( filterHolder.getValue( ) ) );
 
 		assertThat( tracesPage.getFilter( ).getHost( ).getText( ) ).isEqualTo( "host1" );
