@@ -21,18 +21,23 @@ import java.lang.management.MemoryMXBean;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableDoubleValue;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.util.Pair;
 
 public final class StatisticsMemoryUsageBar extends TitledPane {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( StatisticsMemoryUsageBar.class.getName( ) );
 
-	private ProgressBar progressBar;
-	private Text progressText;
+	private final ObjectProperty<Pair<Long, Long>> memoryUsage = new SimpleObjectProperty<>( new Pair<>( 0L, 0L ) );
 
 	public StatisticsMemoryUsageBar( ) {
 		createControl( );
@@ -56,16 +61,22 @@ public final class StatisticsMemoryUsageBar extends TitledPane {
 	}
 
 	private Node createProgressBar( ) {
-		progressBar = new ProgressBar( );
+		final ProgressBar progressBar = new ProgressBar( );
 
 		progressBar.setMaxWidth( Double.POSITIVE_INFINITY );
 		progressBar.setPrefHeight( 30 );
+
+		final ObservableDoubleValue observable = Bindings.createDoubleBinding( ( ) -> 1.0 * memoryUsage.get( ).getKey( ) / memoryUsage.get( ).getValue( ), memoryUsage );
+		progressBar.progressProperty( ).bind( observable );
 
 		return progressBar;
 	}
 
 	private Node createProgressText( ) {
-		progressText = new Text( );
+		final Text progressText = new Text( );
+
+		final ObservableValue<String> observable = Bindings.createStringBinding( ( ) -> String.format( "%d / %d [MB]", memoryUsage.get( ).getKey( ), memoryUsage.get( ).getValue( ) ), memoryUsage );
+		progressText.textProperty( ).bind( observable );
 
 		return progressText;
 	}
@@ -77,9 +88,7 @@ public final class StatisticsMemoryUsageBar extends TitledPane {
 				final long usedHeap = memoryMXBean.getHeapMemoryUsage( ).getUsed( ) / 1024 / 1024;
 				final long committedHeap = memoryMXBean.getHeapMemoryUsage( ).getCommitted( ) / 1024 / 1024;
 
-				Platform.runLater( ( ) -> {
-					setValue( usedHeap, committedHeap );
-				} );
+				Platform.runLater( ( ) -> memoryUsage.set( new Pair<>( usedHeap, committedHeap ) ) );
 
 				try {
 					Thread.sleep( 2500 );
@@ -91,11 +100,6 @@ public final class StatisticsMemoryUsageBar extends TitledPane {
 		thread.setDaemon( true );
 		thread.setName( "Statistics Memory Refresh Thread" );
 		thread.start( );
-	}
-
-	private void setValue( final long aCurrentMegaByte, final long aTotalMegaByte ) {
-		progressBar.setProgress( 1.0 * aCurrentMegaByte / aTotalMegaByte );
-		progressText.setText( String.format( "%d / %d [MB]", aCurrentMegaByte, aTotalMegaByte ) );
 	}
 
 }

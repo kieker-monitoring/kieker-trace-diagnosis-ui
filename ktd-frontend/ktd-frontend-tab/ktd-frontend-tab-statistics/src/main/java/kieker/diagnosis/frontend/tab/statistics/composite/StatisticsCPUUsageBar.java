@@ -22,6 +22,9 @@ import java.util.ResourceBundle;
 import com.sun.management.OperatingSystemMXBean;
 
 import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TitledPane;
@@ -32,8 +35,7 @@ public final class StatisticsCPUUsageBar extends TitledPane {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( StatisticsCPUUsageBar.class.getName( ) );
 
-	private ProgressBar progressBar;
-	private Text progressText;
+	private final DoubleProperty cpuLoad = new SimpleDoubleProperty( );
 
 	public StatisticsCPUUsageBar( ) {
 		createControl( );
@@ -57,16 +59,20 @@ public final class StatisticsCPUUsageBar extends TitledPane {
 	}
 
 	private Node createProgressBar( ) {
-		progressBar = new ProgressBar( );
+		final ProgressBar progressBar = new ProgressBar( );
 
 		progressBar.setMaxWidth( Double.POSITIVE_INFINITY );
 		progressBar.setPrefHeight( 30 );
+		progressBar.progressProperty( ).bind( cpuLoad );
 
 		return progressBar;
 	}
 
 	private Node createProgressText( ) {
-		progressText = new Text( );
+		final Text progressText = new Text( );
+
+		final ObservableValue<String> observable = cpuLoad.multiply( 100.0 ).asString( "%.0f %%" );
+		progressText.textProperty( ).bind( observable );
 
 		return progressText;
 	}
@@ -75,11 +81,9 @@ public final class StatisticsCPUUsageBar extends TitledPane {
 		final Thread thread = new Thread( ( ) -> {
 			while ( !Thread.interrupted( ) ) {
 				final OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getPlatformMXBean( OperatingSystemMXBean.class );
-				final double cpuLoad = operatingSystemMXBean.getProcessCpuLoad( );
+				final double newCpuLoad = operatingSystemMXBean.getProcessCpuLoad( );
 
-				Platform.runLater( ( ) -> {
-					setValue( cpuLoad );
-				} );
+				Platform.runLater( ( ) -> cpuLoad.set( newCpuLoad ) );
 
 				try {
 					Thread.sleep( 2500 );
@@ -91,11 +95,6 @@ public final class StatisticsCPUUsageBar extends TitledPane {
 		thread.setDaemon( true );
 		thread.setName( "Statistics CPU Refresh Thread" );
 		thread.start( );
-	}
-
-	private void setValue( final double cpuLoad ) {
-		progressBar.setProgress( cpuLoad );
-		progressText.setText( String.format( "%d %%", (int) ( cpuLoad * 100 ) ) );
 	}
 
 }

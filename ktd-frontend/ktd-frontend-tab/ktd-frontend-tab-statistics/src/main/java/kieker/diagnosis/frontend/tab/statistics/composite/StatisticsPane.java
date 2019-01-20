@@ -19,7 +19,12 @@ package kieker.diagnosis.frontend.tab.statistics.composite;
 import java.text.NumberFormat;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Function;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableStringValue;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -34,18 +39,7 @@ public final class StatisticsPane extends GridPane implements StylesheetMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( StatisticsPane.class.getName( ) );
 
-	private TextField processedBytes;
-	private TextField processDuration;
-	private TextField processSpeed;
-	private TextField ignoredRecords;
-	private TextField danglingRecords;
-	private TextField incompleteTraces;
-	private TextField methods;
-	private TextField aggregatedMethods;
-	private TextField traces;
-	private TextField beginOfMonitoring;
-	private TextField endOfMonitoring;
-	private TextField directory;
+	private final ObjectProperty<Statistics> statistics = new SimpleObjectProperty<>( );
 
 	public StatisticsPane( ) {
 		createControl( );
@@ -110,13 +104,30 @@ public final class StatisticsPane extends GridPane implements StylesheetMixin {
 	}
 
 	private Node createDirectoryField( ) {
-		directory = new TextField( );
+		final TextField directory = new TextField( );
 
+		final ObservableStringValue observable = selectString( statistics, Statistics::getDirectory, RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+		directory.textProperty( ).bind( observable );
 		directory.setEditable( false );
 
 		GridPane.setHgrow( directory, Priority.ALWAYS );
 
 		return directory;
+	}
+
+	private <T> ObservableStringValue selectString( final ObjectProperty<T> observable, final Function<T, String> getter, final String alternative ) {
+		return Bindings.createStringBinding( ( ) -> {
+			final T value = observable.get( );
+			return value != null ? getter.apply( value ) : alternative;
+		}, observable );
+	}
+
+	private <T> ObservableStringValue selectIntegerAsString( final ObjectProperty<T> observable, final Function<T, Integer> getter, final String alternative ) {
+		final NumberFormat decimalFormat = NumberFormat.getInstance( );
+		return Bindings.createStringBinding( ( ) -> {
+			final T value = observable.get( );
+			return value != null ? decimalFormat.format( getter.apply( value ) ) : alternative;
+		}, observable );
 	}
 
 	private Node createProcessedBytesLabel( ) {
@@ -128,8 +139,10 @@ public final class StatisticsPane extends GridPane implements StylesheetMixin {
 	}
 
 	private Node createProcessedBytesField( ) {
-		processedBytes = new TextField( );
+		final TextField processedBytes = new TextField( );
 
+		final ObservableStringValue observable = selectString( statistics, statistics -> convertToByteString( statistics.getProcessedBytes( ) ), RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+		processedBytes.textProperty( ).bind( observable );
 		processedBytes.setId( "statisticsProcessedBytes" );
 		processedBytes.setEditable( false );
 
@@ -147,8 +160,10 @@ public final class StatisticsPane extends GridPane implements StylesheetMixin {
 	}
 
 	private Node createProcessDurationField( ) {
-		processDuration = new TextField( );
+		final TextField processDuration = new TextField( );
 
+		final ObservableStringValue observable = selectString( statistics, statistics -> convertToDurationString( statistics.getProcessDuration( ) ), RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+		processDuration.textProperty( ).bind( observable );
 		processDuration.setId( "statisticsProcessDuration" );
 		processDuration.setEditable( false );
 
@@ -166,8 +181,10 @@ public final class StatisticsPane extends GridPane implements StylesheetMixin {
 	}
 
 	private Node createProcessSpeedField( ) {
-		processSpeed = new TextField( );
+		final TextField processSpeed = new TextField( );
 
+		final ObservableStringValue observable = selectString( statistics, statistics -> convertToSpeedString( statistics.getProcessSpeed( ) ), RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+		processSpeed.textProperty( ).bind( observable );
 		processSpeed.setId( "statisticsProcessSpeed" );
 		processSpeed.setEditable( false );
 
@@ -185,8 +202,10 @@ public final class StatisticsPane extends GridPane implements StylesheetMixin {
 	}
 
 	private Node createBeginOfMonitoringField( ) {
-		beginOfMonitoring = new TextField( );
+		final TextField beginOfMonitoring = new TextField( );
 
+		final ObservableStringValue observable = selectString( statistics, Statistics::getBeginnOfMonitoring, RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+		beginOfMonitoring.textProperty( ).bind( observable );
 		beginOfMonitoring.setEditable( false );
 
 		GridPane.setHgrow( beginOfMonitoring, Priority.ALWAYS );
@@ -203,8 +222,10 @@ public final class StatisticsPane extends GridPane implements StylesheetMixin {
 	}
 
 	private Node createEndOfMonitoringField( ) {
-		endOfMonitoring = new TextField( );
+		final TextField endOfMonitoring = new TextField( );
 
+		final ObservableStringValue observable = selectString( statistics, Statistics::getEndOfMonitoring, RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+		endOfMonitoring.textProperty( ).bind( observable );
 		endOfMonitoring.setEditable( false );
 
 		GridPane.setHgrow( endOfMonitoring, Priority.ALWAYS );
@@ -221,8 +242,10 @@ public final class StatisticsPane extends GridPane implements StylesheetMixin {
 	}
 
 	private Node createTracesField( ) {
-		traces = new TextField( );
+		final TextField traces = new TextField( );
 
+		final ObservableStringValue observable = selectIntegerAsString( statistics, Statistics::getTraces, RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+		traces.textProperty( ).bind( observable );
 		traces.setEditable( false );
 
 		GridPane.setHgrow( traces, Priority.ALWAYS );
@@ -239,8 +262,10 @@ public final class StatisticsPane extends GridPane implements StylesheetMixin {
 	}
 
 	private Node createMethodsField( ) {
-		methods = new TextField( );
+		final TextField methods = new TextField( );
 
+		final ObservableStringValue observable = selectIntegerAsString( statistics, Statistics::getMethods, RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+		methods.textProperty( ).bind( observable );
 		methods.setEditable( false );
 
 		GridPane.setHgrow( methods, Priority.ALWAYS );
@@ -257,8 +282,10 @@ public final class StatisticsPane extends GridPane implements StylesheetMixin {
 	}
 
 	private Node createAggregatedMethodsField( ) {
-		aggregatedMethods = new TextField( );
+		final TextField aggregatedMethods = new TextField( );
 
+		final ObservableStringValue observable = selectIntegerAsString( statistics, Statistics::getAggregatedMethods, RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+		aggregatedMethods.textProperty( ).bind( observable );
 		aggregatedMethods.setEditable( false );
 
 		GridPane.setHgrow( aggregatedMethods, Priority.ALWAYS );
@@ -275,8 +302,10 @@ public final class StatisticsPane extends GridPane implements StylesheetMixin {
 	}
 
 	private Node createIgnoredRecordsField( ) {
-		ignoredRecords = new TextField( );
+		final TextField ignoredRecords = new TextField( );
 
+		final ObservableStringValue observable = selectIntegerAsString( statistics, Statistics::getIgnoredRecords, RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+		ignoredRecords.textProperty( ).bind( observable );
 		ignoredRecords.setEditable( false );
 
 		GridPane.setHgrow( ignoredRecords, Priority.ALWAYS );
@@ -293,8 +322,10 @@ public final class StatisticsPane extends GridPane implements StylesheetMixin {
 	}
 
 	private Node createDanglingRecordsField( ) {
-		danglingRecords = new TextField( );
+		final TextField danglingRecords = new TextField( );
 
+		final ObservableStringValue observable = selectIntegerAsString( statistics, Statistics::getDanglingRecords, RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+		danglingRecords.textProperty( ).bind( observable );
 		danglingRecords.setEditable( false );
 
 		GridPane.setHgrow( danglingRecords, Priority.ALWAYS );
@@ -311,8 +342,10 @@ public final class StatisticsPane extends GridPane implements StylesheetMixin {
 	}
 
 	private Node createIncompleteTracesField( ) {
-		incompleteTraces = new TextField( );
+		final TextField incompleteTraces = new TextField( );
 
+		final ObservableStringValue observable = selectIntegerAsString( statistics, Statistics::getIncompleteTraces, RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
+		incompleteTraces.textProperty( ).bind( observable );
 		incompleteTraces.setEditable( false );
 
 		GridPane.setHgrow( incompleteTraces, Priority.ALWAYS );
@@ -321,35 +354,7 @@ public final class StatisticsPane extends GridPane implements StylesheetMixin {
 	}
 
 	public void setValue( final Optional<Statistics> aStatistics ) {
-		aStatistics.ifPresentOrElse( statistics -> {
-			final NumberFormat decimalFormat = NumberFormat.getInstance( );
-
-			processedBytes.setText( convertToByteString( statistics.getProcessedBytes( ) ) );
-			processDuration.setText( convertToDurationString( statistics.getProcessDuration( ) ) );
-			processSpeed.setText( convertToSpeedString( statistics.getProcessSpeed( ) ) );
-			methods.setText( decimalFormat.format( statistics.getMethods( ) ) );
-			aggregatedMethods.setText( decimalFormat.format( statistics.getAggregatedMethods( ) ) );
-			traces.setText( decimalFormat.format( statistics.getTraces( ) ) );
-			ignoredRecords.setText( decimalFormat.format( statistics.getIgnoredRecords( ) ) );
-			danglingRecords.setText( decimalFormat.format( statistics.getDanglingRecords( ) ) );
-			incompleteTraces.setText( decimalFormat.format( statistics.getIncompleteTraces( ) ) );
-			beginOfMonitoring.setText( statistics.getBeginnOfMonitoring( ) );
-			endOfMonitoring.setText( statistics.getEndOfMonitoring( ) );
-			directory.setText( statistics.getDirectory( ) );
-		}, ( ) -> {
-			processedBytes.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			processDuration.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			processSpeed.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			methods.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			aggregatedMethods.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			traces.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			ignoredRecords.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			danglingRecords.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			incompleteTraces.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			beginOfMonitoring.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			endOfMonitoring.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-			directory.setText( RESOURCE_BUNDLE.getString( "noDataAvailable" ) );
-		} );
+		statistics.setValue( aStatistics.orElse( null ) );
 	}
 
 	private String convertToByteString( final long aBytes ) {
