@@ -27,10 +27,6 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-
-import kieker.diagnosis.backend.base.service.ServiceMockModule;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.data.reader.Repository;
 
@@ -47,9 +43,7 @@ public final class StatisticsServiceTest {
 	@BeforeEach
 	public void setUp( ) {
 		repository = mock( Repository.class );
-		final Injector injector = Guice.createInjector( new ServiceMockModule<>( Repository.class, repository ) );
-
-		statisticsService = injector.getInstance( StatisticsService.class );
+		statisticsService = new StatisticsService( repository );
 	}
 
 	@Test

@@ -41,8 +41,6 @@ import org.junitpioneer.jupiter.TempDirectory;
 import org.junitpioneer.jupiter.TempDirectory.TempDir;
 
 import com.carrotsearch.hppc.ByteArrayList;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
@@ -77,9 +75,8 @@ public class MonitoringLogServiceTest {
 		byteList = new ByteArrayList( );
 		stringRegistry = new Registry<>( );
 
-		final Injector injector = Guice.createInjector( );
-		service = injector.getInstance( MonitoringLogService.class );
-		repository = injector.getInstance( Repository.class );
+		repository = new Repository( );
+		service = new MonitoringLogService( repository );
 	}
 
 	@Test

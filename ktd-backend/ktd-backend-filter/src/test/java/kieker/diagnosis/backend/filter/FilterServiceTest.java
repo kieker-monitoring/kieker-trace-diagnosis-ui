@@ -24,12 +24,10 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.function.Predicate;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import kieker.diagnosis.backend.pattern.PatternService;
 
 /**
  * This is a unit test the {@link FilterService}.
@@ -39,13 +37,7 @@ import com.google.inject.Injector;
 @DisplayName ( "Unit-Test for FilterService" )
 public final class FilterServiceTest {
 
-	private FilterService filterService;
-
-	@BeforeEach
-	public void setUp( ) {
-		final Injector injector = Guice.createInjector( );
-		filterService = injector.getInstance( FilterService.class );
-	}
+	private final FilterService filterService = new FilterService( new PatternService( ) );
 
 	@Test
 	@DisplayName ( "Test the creation of a long predicate" )

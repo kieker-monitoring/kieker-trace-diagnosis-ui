@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Field;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,6 @@ import com.google.inject.Guice;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
-import kieker.diagnosis.backend.base.service.ServiceMockModule;
 import kieker.diagnosis.backend.search.statistics.Statistics;
 import kieker.diagnosis.backend.search.statistics.StatisticsService;
 import kieker.diagnosis.frontend.base.FrontendBaseModule;
@@ -49,13 +49,18 @@ public final class StatisticsTabTestUI extends ApplicationTest {
 	@Override
 	public void start( final Stage stage ) throws Exception {
 		statisticsService = mock( StatisticsService.class );
-		Guice.createInjector( new FrontendBaseModule( ), new ServiceMockModule<>( StatisticsService.class, statisticsService ) );
+		Guice.createInjector( new FrontendBaseModule( ) );
 
 		statisticsTab = new StatisticsTab( );
 		final TabPane tabPane = new TabPane( statisticsTab );
 		final Scene scene = new Scene( tabPane );
 		stage.setScene( scene );
 		stage.show( );
+
+		// Workaround until we can inject the dependencies in a better way
+		final Field statisticsServiceField = StatisticsTab.class.getDeclaredField( "statisticsService" );
+		statisticsServiceField.setAccessible( true );
+		statisticsServiceField.set( statisticsTab, statisticsService );
 
 		statisticsPage = new StatisticsPage( this );
 	}

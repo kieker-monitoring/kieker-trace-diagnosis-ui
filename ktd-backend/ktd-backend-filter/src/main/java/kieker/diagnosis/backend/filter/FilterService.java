@@ -32,6 +32,7 @@ import com.google.inject.Singleton;
 
 import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.pattern.PatternService;
+import lombok.RequiredArgsConstructor;
 
 /**
  * This is the service responsible for handling various filters and predicates. It helps to assemble predicates in a
@@ -40,10 +41,10 @@ import kieker.diagnosis.backend.pattern.PatternService;
  * @author Nils Christian Ehmke
  */
 @Singleton
+@RequiredArgsConstructor ( onConstructor = @__ ( @Inject ) )
 public class FilterService implements Service {
 
-	@Inject
-	private PatternService patternService;
+	private final PatternService patternService;
 
 	/**
 	 * Creates a predicate which applies the given function and checks whether the result is equal to the given long. If
@@ -111,10 +112,10 @@ public class FilterService implements Service {
 	 *
 	 * @param predicates
 	 *            The (possible empty) list of predicates.
-	 * 
+	 *
 	 * @param <T>
 	 *            The original type.
-	 * 
+	 *
 	 * @return The conjuncted predicates.
 	 */
 	public <T> Predicate<T> conjunct( final List<Predicate<T>> predicates ) {

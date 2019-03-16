@@ -27,6 +27,7 @@ import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.data.reader.Repository;
 import kieker.diagnosis.backend.filter.FilterService;
+import lombok.RequiredArgsConstructor;
 
 /**
  * This is the service responsible for searching aggregated method calls within the imported monitoring log.
@@ -34,13 +35,11 @@ import kieker.diagnosis.backend.filter.FilterService;
  * @author Nils Christian Ehmke
  */
 @Singleton
+@RequiredArgsConstructor ( onConstructor = @__ ( @Inject ) )
 public class AggregatedMethodsService implements Service {
 
-	@Inject
-	private FilterService filterService;
-
-	@Inject
-	private Repository repository;
+	private final FilterService filterService;
+	private final Repository repository;
 
 	/**
 	 * This method searches, based on the given filter, for aggregated method calls within the imported monitoring log.

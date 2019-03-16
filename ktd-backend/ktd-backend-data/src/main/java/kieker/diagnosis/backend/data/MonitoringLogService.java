@@ -27,6 +27,7 @@ import kieker.diagnosis.backend.data.exception.CorruptStreamException;
 import kieker.diagnosis.backend.data.exception.ImportFailedException;
 import kieker.diagnosis.backend.data.reader.Reader;
 import kieker.diagnosis.backend.data.reader.Repository;
+import lombok.RequiredArgsConstructor;
 
 /**
  * This is the service responsible for importing monitoring logs and holding the necessary data from the import.
@@ -34,12 +35,12 @@ import kieker.diagnosis.backend.data.reader.Repository;
  * @author Nils Christian Ehmke
  */
 @Singleton
+@RequiredArgsConstructor ( onConstructor = @__ ( @Inject ) )
 public class MonitoringLogService implements Service {
 
 	private static final ResourceBundle RESOURCES = ResourceBundle.getBundle( MonitoringLogService.class.getName( ) );
 
-	@Inject
-	private Repository repository;
+	private final Repository repository;
 
 	public void importMonitoringLog( final Path directoryOrFile, final ImportType type ) throws CorruptStreamException, ImportFailedException {
 		final long tin = System.currentTimeMillis( );

@@ -31,6 +31,7 @@ import kieker.diagnosis.backend.settings.properties.MethodCallThresholdProperty;
 import kieker.diagnosis.backend.settings.properties.ShowUnmonitoredTimeProperty;
 import kieker.diagnosis.backend.settings.properties.TimeUnitProperty;
 import kieker.diagnosis.backend.settings.properties.TimestampProperty;
+import lombok.RequiredArgsConstructor;
 
 /**
  * This service is responsible for handling the application settings.
@@ -38,10 +39,10 @@ import kieker.diagnosis.backend.settings.properties.TimestampProperty;
  * @author Nils Christian Ehmke
  */
 @Singleton
+@RequiredArgsConstructor ( onConstructor = @__ ( @Inject ) )
 public class SettingsService implements Service {
 
-	@Inject
-	private PropertiesService propertiesService;
+	private final PropertiesService propertiesService;
 
 	/**
 	 * This method loads the current settings of the application.

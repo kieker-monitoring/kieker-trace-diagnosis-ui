@@ -30,6 +30,7 @@ import com.google.inject.Singleton;
 import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.cache.InvalidateCache;
 import kieker.diagnosis.backend.cache.UseCache;
+import lombok.RequiredArgsConstructor;
 
 /**
  * This service is responsible for loading and saving properties within the application.
@@ -37,13 +38,13 @@ import kieker.diagnosis.backend.cache.UseCache;
  * @author Nils Christian Ehmke
  */
 @Singleton
+@RequiredArgsConstructor ( onConstructor = @__ ( @Inject ) )
 public class PropertiesService implements Service {
 
 	private static final ResourceBundle RESOURCES = ResourceBundle.getBundle( PropertiesService.class.getName( ) );
 	private static final Logger LOGGER = LogManager.getLogger( PropertiesService.class );
 
-	@Inject
-	private Injector injector;
+	private final Injector injector;
 
 	/**
 	 * Delivers the value of the given application property or its default value, if the property has not been set yet.

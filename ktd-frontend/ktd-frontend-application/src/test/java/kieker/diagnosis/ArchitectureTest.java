@@ -64,8 +64,9 @@ public final class ArchitectureTest {
 				item.getFields( )
 						.stream( )
 						.filter( javaField -> !javaField.getModifiers( ).contains( JavaModifier.STATIC ) )
+						.filter( javaField -> !javaField.getModifiers( ).contains( JavaModifier.FINAL ) )
 						.filter( javaField -> !javaField.isAnnotatedWith( Inject.class ) )
-						.map( javaField -> String.format( "Field %s is neither static nor injected", javaField.getFullName( ) ) )
+						.map( javaField -> String.format( "Field %s is neither static, final, nor injected", javaField.getFullName( ) ) )
 						.map( message -> SimpleConditionEvent.violated( item, message ) )
 						.forEach( events::add );
 			}

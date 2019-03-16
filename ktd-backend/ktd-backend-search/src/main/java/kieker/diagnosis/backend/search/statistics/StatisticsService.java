@@ -26,6 +26,7 @@ import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.data.reader.Repository;
 import kieker.diagnosis.backend.search.statistics.Statistics.StatisticsBuilder;
 import kieker.diagnosis.backend.settings.TimestampAppearance;
+import lombok.RequiredArgsConstructor;
 
 /**
  * This service is responsible for loading statistics for the imported log.
@@ -33,10 +34,10 @@ import kieker.diagnosis.backend.settings.TimestampAppearance;
  * @author Nils Christian Ehmke
  */
 @Singleton
+@RequiredArgsConstructor ( onConstructor = @__ ( @Inject ) )
 public class StatisticsService implements Service {
 
-	@Inject
-	private Repository repository;
+	private final Repository repository;
 
 	public Optional<Statistics> getStatistics( ) {
 		// We create the DTO only, if we have any data available

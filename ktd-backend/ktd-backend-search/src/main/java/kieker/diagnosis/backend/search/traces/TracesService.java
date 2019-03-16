@@ -29,6 +29,7 @@ import kieker.diagnosis.backend.base.service.Service;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.data.reader.Repository;
 import kieker.diagnosis.backend.filter.FilterService;
+import lombok.RequiredArgsConstructor;
 
 /**
  * This is the service responsible for searching traces (or root method calls) within the imported monitoring log.
@@ -36,13 +37,11 @@ import kieker.diagnosis.backend.filter.FilterService;
  * @author Nils Christian Ehmke
  */
 @Singleton
+@RequiredArgsConstructor ( onConstructor = @__ ( @Inject ) )
 public class TracesService implements Service {
 
-	@Inject
-	private Repository repository;
-
-	@Inject
-	private FilterService filterService;
+	private final Repository repository;
+	private final FilterService filterService;
 
 	/**
 	 * This method searches, based on the given filter, for traces within the imported monitoring log.
