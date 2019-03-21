@@ -18,8 +18,6 @@ package kieker.diagnosis.frontend.tab.traces.atom;
 
 import java.util.concurrent.TimeUnit;
 
-import com.google.inject.Inject;
-
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
@@ -27,21 +25,17 @@ import javafx.util.Callback;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.settings.properties.TimeUnitProperty;
-import kieker.diagnosis.frontend.base.mixin.CdiMixin;
+import lombok.RequiredArgsConstructor;
 
 /**
  * This is a cell factory for a tree table which shows the duration of a method call in the configured manner.
  *
  * @author Nils Christian Ehmke
  */
-public final class DurationCellValueFactory implements Callback<CellDataFeatures<MethodCall, Long>, ObservableValue<Long>>, CdiMixin {
+@RequiredArgsConstructor
+public final class DurationCellValueFactory implements Callback<CellDataFeatures<MethodCall, Long>, ObservableValue<Long>> {
 
-	@Inject
-	private PropertiesService propertiesService;
-
-	public DurationCellValueFactory( ) {
-		injectFields( );
-	}
+	private final PropertiesService propertiesService;
 
 	@Override
 	public ObservableValue<Long> call( final CellDataFeatures<MethodCall, Long> aParam ) {

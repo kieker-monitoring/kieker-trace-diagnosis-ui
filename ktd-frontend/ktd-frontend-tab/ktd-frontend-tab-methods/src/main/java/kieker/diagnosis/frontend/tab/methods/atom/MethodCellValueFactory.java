@@ -16,8 +16,6 @@
 
 package kieker.diagnosis.frontend.tab.methods.atom;
 
-import com.google.inject.Inject;
-
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -26,21 +24,17 @@ import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.settings.MethodAppearance;
 import kieker.diagnosis.backend.settings.properties.MethodAppearanceProperty;
-import kieker.diagnosis.frontend.base.mixin.CdiMixin;
+import lombok.RequiredArgsConstructor;
 
 /**
  * This is a cell factory for a table which shows the method of a method call in the configured manner.
  *
  * @author Nils Christian Ehmke
  */
-public final class MethodCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>>, CdiMixin {
+@RequiredArgsConstructor
+public final class MethodCellValueFactory implements Callback<CellDataFeatures<MethodCall, String>, ObservableValue<String>> {
 
-	@Inject
-	private PropertiesService propertiesService;
-
-	public MethodCellValueFactory( ) {
-		injectFields( );
-	}
+	private final PropertiesService propertiesService;
 
 	@Override
 	public ObservableValue<String> call( final CellDataFeatures<MethodCall, String> aParam ) {

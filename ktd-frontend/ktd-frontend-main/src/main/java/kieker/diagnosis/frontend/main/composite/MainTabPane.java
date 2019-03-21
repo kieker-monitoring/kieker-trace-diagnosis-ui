@@ -37,7 +37,6 @@ import kieker.diagnosis.backend.search.aggregatedmethods.AggregatedMethodsFilter
 import kieker.diagnosis.backend.search.methods.MethodsFilter;
 import kieker.diagnosis.backend.search.traces.TracesFilter;
 import kieker.diagnosis.frontend.base.common.DelegateException;
-import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 import kieker.diagnosis.frontend.base.mixin.StylesheetMixin;
 import kieker.diagnosis.frontend.main.properties.LastExportPathProperty;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.complex.AggregatedMethodsTab;
@@ -45,23 +44,27 @@ import kieker.diagnosis.frontend.tab.methods.complex.MethodsTab;
 import kieker.diagnosis.frontend.tab.statistics.complex.StatisticsTab;
 import kieker.diagnosis.frontend.tab.traces.complex.TracesTab;
 
-public final class MainTabPane extends TabPane implements StylesheetMixin, CdiMixin {
+public final class MainTabPane extends TabPane implements StylesheetMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MainTabPane.class.getName( ) );
 
-	@Inject
-	private PropertiesService propertiesService;
+	private final PropertiesService propertiesService;
+	private final ExportService exportService;
+
+	private final TracesTab tracesTab;
+	private final MethodsTab methodsTab;
+	private final AggregatedMethodsTab aggregatedMethodsTab;
+	private final StatisticsTab statisticsTab;
 
 	@Inject
-	private ExportService exportService;
+	public MainTabPane( final PropertiesService propertiesService, final ExportService exportService, final TracesTab tracesTab, final MethodsTab methodsTab, final AggregatedMethodsTab aggregatedMethodsTab, final StatisticsTab statisticsTab ) {
+		this.propertiesService = propertiesService;
+		this.exportService = exportService;
+		this.tracesTab = tracesTab;
+		this.methodsTab = methodsTab;
+		this.aggregatedMethodsTab = aggregatedMethodsTab;
+		this.statisticsTab = statisticsTab;
 
-	private TracesTab tracesTab;
-	private MethodsTab methodsTab;
-	private AggregatedMethodsTab aggregatedMethodsTab;
-	private StatisticsTab statisticsTab;
-
-	public MainTabPane( ) {
-		injectFields( );
 		createControl( );
 	}
 
@@ -69,14 +72,13 @@ public final class MainTabPane extends TabPane implements StylesheetMixin, CdiMi
 		setTabClosingPolicy( TabClosingPolicy.UNAVAILABLE );
 		addDefaultStylesheet( );
 
-		getTabs( ).add( createTracesTab( ) );
-		getTabs( ).add( createMethodsTab( ) );
-		getTabs( ).add( createAggregatedMethodsTab( ) );
-		getTabs( ).add( createStatisticsTab( ) );
+		getTabs( ).add( configureTracesTab( ) );
+		getTabs( ).add( configureMethodsTab( ) );
+		getTabs( ).add( configureAggregatedMethodsTab( ) );
+		getTabs( ).add( configureStatisticsTab( ) );
 	}
 
-	private Tab createTracesTab( ) {
-		tracesTab = new TracesTab( );
+	private Tab configureTracesTab( ) {
 		tracesTab.setId( "tabTraces" );
 		tracesTab.setText( RESOURCE_BUNDLE.getString( "traces" ) );
 
@@ -88,9 +90,7 @@ public final class MainTabPane extends TabPane implements StylesheetMixin, CdiMi
 		return tracesTab;
 	}
 
-	private Tab createMethodsTab( ) {
-		methodsTab = new MethodsTab( );
-
+	private Tab configureMethodsTab( ) {
 		methodsTab.setId( "tabMethods" );
 		methodsTab.setText( RESOURCE_BUNDLE.getString( "methods" ) );
 		methodsTab.setOnJumpToTrace( this::performJumpToTrace );
@@ -104,9 +104,7 @@ public final class MainTabPane extends TabPane implements StylesheetMixin, CdiMi
 		return methodsTab;
 	}
 
-	private Tab createAggregatedMethodsTab( ) {
-		aggregatedMethodsTab = new AggregatedMethodsTab( );
-
+	private Tab configureAggregatedMethodsTab( ) {
 		aggregatedMethodsTab.setId( "tabAggregatedMethods" );
 		aggregatedMethodsTab.setText( RESOURCE_BUNDLE.getString( "aggregatedMethods" ) );
 		aggregatedMethodsTab.setOnJumpToMethods( this::performJumpToMethods );
@@ -120,9 +118,7 @@ public final class MainTabPane extends TabPane implements StylesheetMixin, CdiMi
 		return aggregatedMethodsTab;
 	}
 
-	private Tab createStatisticsTab( ) {
-		statisticsTab = new StatisticsTab( );
-
+	private Tab configureStatisticsTab( ) {
 		statisticsTab.setId( "tabStatistics" );
 		statisticsTab.setText( RESOURCE_BUNDLE.getString( "statistics" ) );
 

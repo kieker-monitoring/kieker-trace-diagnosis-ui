@@ -44,7 +44,6 @@ import kieker.diagnosis.backend.settings.Settings;
 import kieker.diagnosis.backend.settings.SettingsService;
 import kieker.diagnosis.frontend.base.common.DelegateException;
 import kieker.diagnosis.frontend.base.common.ExceptionUtil;
-import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 import kieker.diagnosis.frontend.base.mixin.StylesheetMixin;
 import kieker.diagnosis.frontend.dialog.alert.Alert;
 import kieker.diagnosis.frontend.dialog.favorite.FavoriteDialog;
@@ -54,35 +53,34 @@ import kieker.diagnosis.frontend.main.composite.MainMenuBar;
 import kieker.diagnosis.frontend.main.composite.MainTabPane;
 import kieker.diagnosis.frontend.main.properties.LastImportPathProperty;
 
-public final class MainPane extends VBox implements StylesheetMixin, CdiMixin {
+public final class MainPane extends VBox implements StylesheetMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MainPane.class.getName( ) );
 
-	@Inject
-	private SettingsService settingsService;
+	private final SettingsService settingsService;
+	private final PropertiesService propertiesService;
+	private final MonitoringLogService monitoringLogService;
+
+	private final MainMenuBar menuBar;
+	private final MainTabPane mainTabPane;
 
 	@Inject
-	private PropertiesService propertiesService;
+	public MainPane( final SettingsService settingsService, final PropertiesService propertiesService, final MonitoringLogService monitoringLogService, final MainTabPane mainTabPane, final MainMenuBar menuBar ) {
+		this.settingsService = settingsService;
+		this.propertiesService = propertiesService;
+		this.monitoringLogService = monitoringLogService;
+		this.mainTabPane = mainTabPane;
+		this.menuBar = menuBar;
 
-	@Inject
-	private MonitoringLogService monitoringLogService;
-
-	private MainMenuBar menuBar;
-	private MainTabPane mainTabPane;
-
-	public MainPane( ) {
-		injectFields( );
 		createControl( );
 	}
 
 	private void createControl( ) {
-		getChildren( ).add( createMenuBar( ) );
-		getChildren( ).add( createMainPane( ) );
+		getChildren( ).add( configureMenuBar( ) );
+		getChildren( ).add( configureMainPane( ) );
 	}
 
-	private Node createMenuBar( ) {
-		menuBar = new MainMenuBar( );
-
+	private Node configureMenuBar( ) {
 		menuBar.setOnSettings( ( ) -> performSettings( ) );
 		menuBar.setOnImportLog( ( ) -> performImportLog( ) );
 		menuBar.setOnImportLogFromZip( ( ) -> performImportLogFromZip( ) );
@@ -90,9 +88,7 @@ public final class MainPane extends VBox implements StylesheetMixin, CdiMixin {
 		return menuBar;
 	}
 
-	private Node createMainPane( ) {
-		mainTabPane = new MainTabPane( );
-
+	private Node configureMainPane( ) {
 		loadFonts( );
 		addDefaultStylesheet( );
 		mainTabPane.setId( "mainTabPane" );

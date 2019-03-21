@@ -30,6 +30,7 @@ import org.junitpioneer.jupiter.TempDirectory.TempDir;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -38,7 +39,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeTableView;
 import javafx.stage.Stage;
-import kieker.diagnosis.frontend.base.FrontendBaseModule;
 
 /**
  * This is a UI test which checks that the main view is working as expected.
@@ -51,9 +51,9 @@ public final class MainPaneTestUI extends ApplicationTest {
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
-		Guice.createInjector( new FrontendBaseModule( ) );
+		final Injector injector = Guice.createInjector( );
 
-		mainPane = new MainPane( );
+		mainPane = injector.getInstance( MainPane.class );
 
 		final Scene scene = new Scene( mainPane );
 		stage.setScene( scene );

@@ -39,22 +39,18 @@ import kieker.diagnosis.backend.monitoring.Status;
 import kieker.diagnosis.backend.properties.DevelopmentModeProperty;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.frontend.base.common.HostServicesHolder;
-import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 import kieker.diagnosis.frontend.base.mixin.IconMixin;
 import kieker.diagnosis.frontend.dialog.about.AboutDialog;
 import kieker.diagnosis.frontend.dialog.alert.Alert;
 import kieker.diagnosis.frontend.dialog.monitoring.MonitoringDialog;
 import kieker.diagnosis.frontend.main.properties.CloseWithoutPromptProperty;
 
-public final class MainMenuBar extends MenuBar implements IconMixin, CdiMixin {
+public final class MainMenuBar extends MenuBar implements IconMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MainMenuBar.class.getName( ) );
 
-	@Inject
-	private PropertiesService propertiesService;
-
-	@Inject
-	private MonitoringService monitoringService;
+	private final PropertiesService propertiesService;
+	private final MonitoringService monitoringService;
 
 	private Runnable onSettings;
 	private Runnable onImportLogFromZip;
@@ -63,8 +59,10 @@ public final class MainMenuBar extends MenuBar implements IconMixin, CdiMixin {
 	private int favorites;
 	private Menu favoritesMenu;
 
-	public MainMenuBar( ) {
-		injectFields( );
+	@Inject
+	public MainMenuBar( final PropertiesService propertiesService, final MonitoringService monitoringService ) {
+		this.propertiesService = propertiesService;
+		this.monitoringService = monitoringService;
 		createControl( );
 	}
 

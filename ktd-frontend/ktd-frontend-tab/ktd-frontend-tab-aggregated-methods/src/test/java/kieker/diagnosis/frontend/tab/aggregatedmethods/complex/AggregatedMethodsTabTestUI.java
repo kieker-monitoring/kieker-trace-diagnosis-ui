@@ -45,7 +45,6 @@ import kieker.diagnosis.backend.export.CSVData;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.search.aggregatedmethods.AggregatedMethodsFilter;
 import kieker.diagnosis.backend.settings.properties.TimeUnitProperty;
-import kieker.diagnosis.frontend.base.FrontendBaseModule;
 
 /**
  * This is a UI test which checks that the aggregated methods tab is working as expected.
@@ -59,7 +58,7 @@ public final class AggregatedMethodsTabTestUI extends ApplicationTest {
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
-		final Injector injector = Guice.createInjector( new FrontendBaseModule( ) );
+		final Injector injector = Guice.createInjector( );
 
 		final Repository repository = injector.getInstance( Repository.class );
 		repository.getAggreatedMethods( ).addAll( createAggregatedMethodCalls( ) );
@@ -67,7 +66,7 @@ public final class AggregatedMethodsTabTestUI extends ApplicationTest {
 		final PropertiesService propertiesService = injector.getInstance( PropertiesService.class );
 		propertiesService.saveApplicationProperty( TimeUnitProperty.class, TimeUnit.NANOSECONDS );
 
-		methodsTab = new AggregatedMethodsTab( );
+		methodsTab = injector.getInstance( AggregatedMethodsTab.class );
 		methodsTab.prepareRefresh( );
 		methodsTab.performRefresh( );
 

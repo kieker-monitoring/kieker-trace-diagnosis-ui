@@ -33,28 +33,24 @@ import javafx.scene.layout.VBox;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.export.CSVData;
 import kieker.diagnosis.backend.pattern.PatternService;
+import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.search.aggregatedmethods.AggregatedMethodsFilter;
 import kieker.diagnosis.backend.search.aggregatedmethods.AggregatedMethodsService;
 import kieker.diagnosis.backend.settings.SettingsService;
-import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 import kieker.diagnosis.frontend.dialog.alert.Alert;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.composite.AggregatedMethodDetailsPane;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.composite.AggregatedMethodFilterPane;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.composite.AggregatedMethodStatusBar;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.composite.AggregatedMethodsTableView;
 
-public final class AggregatedMethodsTab extends Tab implements CdiMixin {
+public final class AggregatedMethodsTab extends Tab {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( AggregatedMethodsTab.class.getName( ) );
 
-	@Inject
-	private AggregatedMethodsService methodsService;
-
-	@Inject
-	private SettingsService settingsService;
-
-	@Inject
-	private PatternService patternService;
+	private final AggregatedMethodsService methodsService;
+	private final SettingsService settingsService;
+	private final PatternService patternService;
+	private final PropertiesService propertiesService;
 
 	private AggregatedMethodFilterPane filterPane;
 	private AggregatedMethodsTableView methodsTableView;
@@ -69,8 +65,13 @@ public final class AggregatedMethodsTab extends Tab implements CdiMixin {
 	private Consumer<AggregatedMethodCall> onJumpToMethods;
 	private Consumer<CSVData> onExportToCSV;
 
-	public AggregatedMethodsTab( ) {
-		injectFields( );
+	@Inject
+	public AggregatedMethodsTab( final AggregatedMethodsService methodsService, final SettingsService settingsService, final PatternService patternService, final PropertiesService propertiesService ) {
+		this.methodsService = methodsService;
+		this.settingsService = settingsService;
+		this.patternService = patternService;
+		this.propertiesService = propertiesService;
+
 		createControl( );
 		performInitialize( );
 	}
@@ -100,7 +101,7 @@ public final class AggregatedMethodsTab extends Tab implements CdiMixin {
 	}
 
 	private Node createMethodsTableView( ) {
-		methodsTableView = new AggregatedMethodsTableView( );
+		methodsTableView = new AggregatedMethodsTableView( propertiesService );
 
 		methodsTableView.setId( "tabAggregatedMethodsTable" );
 		methodsTableView.addSelectionChangeListener( ( aObservable, aOldValue, aNewValue ) -> detailsPane.setValue( aNewValue ) );

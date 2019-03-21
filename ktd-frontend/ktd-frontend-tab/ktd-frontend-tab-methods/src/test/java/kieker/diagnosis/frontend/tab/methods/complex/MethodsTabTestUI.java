@@ -47,7 +47,6 @@ import kieker.diagnosis.backend.search.methods.MethodsFilter;
 import kieker.diagnosis.backend.settings.TimestampAppearance;
 import kieker.diagnosis.backend.settings.properties.TimeUnitProperty;
 import kieker.diagnosis.backend.settings.properties.TimestampProperty;
-import kieker.diagnosis.frontend.base.FrontendBaseModule;
 
 /**
  * This is a UI test which checks that the methods tab is working as expected.
@@ -61,7 +60,7 @@ public final class MethodsTabTestUI extends ApplicationTest {
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
-		final Injector injector = Guice.createInjector( new FrontendBaseModule( ) );
+		final Injector injector = Guice.createInjector( );
 
 		final Repository repository = injector.getInstance( Repository.class );
 		repository.getMethods( ).addAll( createMethodCalls( ) );
@@ -70,7 +69,7 @@ public final class MethodsTabTestUI extends ApplicationTest {
 		propertiesService.saveApplicationProperty( TimeUnitProperty.class, TimeUnit.NANOSECONDS );
 		propertiesService.saveApplicationProperty( TimestampProperty.class, TimestampAppearance.TIMESTAMP );
 
-		methodsTab = new MethodsTab( );
+		methodsTab = injector.getInstance( MethodsTab.class );
 		methodsTab.prepareRefresh( );
 		methodsTab.performRefresh( );
 

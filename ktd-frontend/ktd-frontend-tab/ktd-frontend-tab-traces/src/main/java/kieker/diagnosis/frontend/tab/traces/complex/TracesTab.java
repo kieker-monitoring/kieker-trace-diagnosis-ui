@@ -31,28 +31,24 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.pattern.PatternService;
+import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.search.traces.TracesFilter;
 import kieker.diagnosis.backend.search.traces.TracesService;
 import kieker.diagnosis.backend.settings.SettingsService;
-import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 import kieker.diagnosis.frontend.dialog.alert.Alert;
 import kieker.diagnosis.frontend.tab.traces.composite.TraceDetailsPane;
 import kieker.diagnosis.frontend.tab.traces.composite.TraceFilterPane;
 import kieker.diagnosis.frontend.tab.traces.composite.TraceStatusBar;
 import kieker.diagnosis.frontend.tab.traces.composite.TracesTreeTableView;
 
-public final class TracesTab extends Tab implements CdiMixin {
+public final class TracesTab extends Tab {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( TracesTab.class.getName( ) );
 
-	@Inject
-	private TracesService tracesService;
-
-	@Inject
-	private SettingsService settingsService;
-
-	@Inject
-	private PatternService patternService;
+	private final TracesService tracesService;
+	private final SettingsService settingsService;
+	private final PatternService patternService;
+	private final PropertiesService propertiesService;
 
 	private TraceFilterPane filterPane;
 	private TracesTreeTableView treeTableView;
@@ -64,8 +60,12 @@ public final class TracesTab extends Tab implements CdiMixin {
 	private int totalTracesForRefresh;
 	private String durationSuffixForRefresh;
 
-	public TracesTab( ) {
-		injectFields( );
+	@Inject
+	public TracesTab( final TracesService tracesService, final SettingsService settingsService, final PatternService patternService, final PropertiesService propertiesService ) {
+		this.tracesService = tracesService;
+		this.settingsService = settingsService;
+		this.patternService = patternService;
+		this.propertiesService = propertiesService;
 		createControl( );
 		performInitialize( );
 	}
@@ -95,7 +95,7 @@ public final class TracesTab extends Tab implements CdiMixin {
 	}
 
 	private Node createTreeTableView( ) {
-		treeTableView = new TracesTreeTableView( );
+		treeTableView = new TracesTreeTableView( propertiesService );
 
 		treeTableView.setId( "tabTracesTreeTable" );
 		treeTableView.addSelectionChangeListener( ( aObservable, aOldValue, aNewValue ) -> detailsPane.setValue( aNewValue != null ? aNewValue.getValue( ) : null ) );

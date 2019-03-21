@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import com.google.inject.Inject;
-
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
@@ -39,7 +37,6 @@ import kieker.diagnosis.backend.settings.ClassAppearance;
 import kieker.diagnosis.backend.settings.MethodAppearance;
 import kieker.diagnosis.backend.settings.properties.ClassAppearanceProperty;
 import kieker.diagnosis.backend.settings.properties.MethodAppearanceProperty;
-import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 import kieker.diagnosis.frontend.base.mixin.StylesheetMixin;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.atom.ClassCellValueFactory;
 import kieker.diagnosis.frontend.tab.aggregatedmethods.atom.DurationCellValueFactory;
@@ -51,12 +48,11 @@ import kieker.diagnosis.frontend.tab.aggregatedmethods.atom.StyledRow;
  *
  * @author Nils Christian Ehmke
  */
-public final class AggregatedMethodsTableView extends TableView<AggregatedMethodCall> implements StylesheetMixin, CdiMixin {
+public final class AggregatedMethodsTableView extends TableView<AggregatedMethodCall> implements StylesheetMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( AggregatedMethodsTableView.class.getName( ) );
 
-	@Inject
-	private PropertiesService propertiesService;
+	private final PropertiesService propertiesService;
 
 	private TableColumn<AggregatedMethodCall, String> count;
 	private TableColumn<AggregatedMethodCall, String> host;
@@ -68,8 +64,8 @@ public final class AggregatedMethodsTableView extends TableView<AggregatedMethod
 	private TableColumn<AggregatedMethodCall, String> maxDuration;
 	private TableColumn<AggregatedMethodCall, String> totalDuration;
 
-	public AggregatedMethodsTableView( ) {
-		injectFields( );
+	public AggregatedMethodsTableView( final PropertiesService propertiesService ) {
+		this.propertiesService = propertiesService;
 		createControl( );
 	}
 
@@ -125,7 +121,7 @@ public final class AggregatedMethodsTableView extends TableView<AggregatedMethod
 	private TableColumn<AggregatedMethodCall, ?> createClassTableColumn( ) {
 		clazz = new TableColumn<>( );
 
-		clazz.setCellValueFactory( new ClassCellValueFactory( ) );
+		clazz.setCellValueFactory( new ClassCellValueFactory( propertiesService ) );
 		clazz.setText( RESOURCE_BUNDLE.getString( "columnClass" ) );
 		clazz.setPrefWidth( 200 );
 
@@ -135,7 +131,7 @@ public final class AggregatedMethodsTableView extends TableView<AggregatedMethod
 	private TableColumn<AggregatedMethodCall, ?> createMethodTableColumn( ) {
 		method = new TableColumn<>( );
 
-		method.setCellValueFactory( new MethodCellValueFactory( ) );
+		method.setCellValueFactory( new MethodCellValueFactory( propertiesService ) );
 		method.setText( RESOURCE_BUNDLE.getString( "columnMethod" ) );
 		method.setPrefWidth( 400 );
 
@@ -143,7 +139,7 @@ public final class AggregatedMethodsTableView extends TableView<AggregatedMethod
 	}
 
 	private TableColumn<AggregatedMethodCall, ?> createMinDurationTableColumn( ) {
-		final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getMinDuration );
+		final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( propertiesService, AggregatedMethodCall::getMinDuration );
 
 		minDuration = new TableColumn<>( );
 		minDuration.setCellValueFactory( cellValueFactory );
@@ -154,7 +150,7 @@ public final class AggregatedMethodsTableView extends TableView<AggregatedMethod
 	}
 
 	private TableColumn<AggregatedMethodCall, ?> createAvgDurationTableColumn( ) {
-		final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getAvgDuration );
+		final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( propertiesService, AggregatedMethodCall::getAvgDuration );
 
 		avgDuration = new TableColumn<>( );
 		avgDuration.setCellValueFactory( cellValueFactory );
@@ -165,7 +161,7 @@ public final class AggregatedMethodsTableView extends TableView<AggregatedMethod
 	}
 
 	private TableColumn<AggregatedMethodCall, ?> createMedianDurationTableColumn( ) {
-		final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getMedianDuration );
+		final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( propertiesService, AggregatedMethodCall::getMedianDuration );
 
 		medianDuration = new TableColumn<>( );
 		medianDuration.setCellValueFactory( cellValueFactory );
@@ -176,7 +172,7 @@ public final class AggregatedMethodsTableView extends TableView<AggregatedMethod
 	}
 
 	private TableColumn<AggregatedMethodCall, ?> createMaxDurationTableColumn( ) {
-		final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getMaxDuration );
+		final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( propertiesService, AggregatedMethodCall::getMaxDuration );
 
 		maxDuration = new TableColumn<>( );
 		maxDuration.setCellValueFactory( cellValueFactory );
@@ -187,7 +183,7 @@ public final class AggregatedMethodsTableView extends TableView<AggregatedMethod
 	}
 
 	private TableColumn<AggregatedMethodCall, ?> createTotalDurationTableColumn( ) {
-		final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( AggregatedMethodCall::getTotalDuration );
+		final DurationCellValueFactory cellValueFactory = new DurationCellValueFactory( propertiesService, AggregatedMethodCall::getTotalDuration );
 
 		totalDuration = new TableColumn<>( );
 		totalDuration.setCellValueFactory( cellValueFactory );

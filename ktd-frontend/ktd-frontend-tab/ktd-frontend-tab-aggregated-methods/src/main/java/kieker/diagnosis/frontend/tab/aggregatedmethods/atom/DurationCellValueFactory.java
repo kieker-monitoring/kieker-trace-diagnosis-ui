@@ -19,8 +19,6 @@ package kieker.diagnosis.frontend.tab.aggregatedmethods.atom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-import com.google.inject.Inject;
-
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -28,7 +26,7 @@ import javafx.util.Callback;
 import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.settings.properties.TimeUnitProperty;
-import kieker.diagnosis.frontend.base.mixin.CdiMixin;
+import lombok.RequiredArgsConstructor;
 
 /**
  * This is a cell factory for a table which shows the duration of an {@link AggregatedMethodCall} in the configured
@@ -36,24 +34,11 @@ import kieker.diagnosis.frontend.base.mixin.CdiMixin;
  *
  * @author Nils Christian Ehmke
  */
-public final class DurationCellValueFactory implements Callback<CellDataFeatures<AggregatedMethodCall, String>, ObservableValue<String>>, CdiMixin {
+@RequiredArgsConstructor
+public final class DurationCellValueFactory implements Callback<CellDataFeatures<AggregatedMethodCall, String>, ObservableValue<String>> {
 
-	@Inject
-	private PropertiesService propertiesService;
-
+	private final PropertiesService propertiesService;
 	private final Function<AggregatedMethodCall, Long> getter;
-
-	/**
-	 * Creates a new instance of this class.
-	 *
-	 * @param getter
-	 *            The getter which is used to retrieve the corresponding duration value from the
-	 *            {@link AggregatedMethodCall}.
-	 */
-	public DurationCellValueFactory( final Function<AggregatedMethodCall, Long> getter ) {
-		this.getter = getter;
-		injectFields( );
-	}
 
 	@Override
 	public ObservableValue<String> call( final CellDataFeatures<AggregatedMethodCall, String> cellDataFeatures ) {

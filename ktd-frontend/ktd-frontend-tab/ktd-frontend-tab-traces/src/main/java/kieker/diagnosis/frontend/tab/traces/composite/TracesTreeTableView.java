@@ -20,8 +20,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Stack;
 
-import com.google.inject.Inject;
-
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.Label;
@@ -35,7 +33,6 @@ import kieker.diagnosis.backend.settings.properties.MaxNumberOfMethodCallsProper
 import kieker.diagnosis.backend.settings.properties.MethodCallAggregationProperty;
 import kieker.diagnosis.backend.settings.properties.MethodCallThresholdProperty;
 import kieker.diagnosis.backend.settings.properties.ShowUnmonitoredTimeProperty;
-import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 import kieker.diagnosis.frontend.base.mixin.StylesheetMixin;
 import kieker.diagnosis.frontend.tab.traces.aggregator.Aggregator;
 import kieker.diagnosis.frontend.tab.traces.aggregator.DurationAggregator;
@@ -50,17 +47,16 @@ import kieker.diagnosis.frontend.tab.traces.atom.MethodCellValueFactory;
 import kieker.diagnosis.frontend.tab.traces.atom.StyledRow;
 import kieker.diagnosis.frontend.tab.traces.atom.TimestampCellValueFactory;
 
-public final class TracesTreeTableView extends TreeTableView<MethodCall> implements StylesheetMixin, CdiMixin {
+public final class TracesTreeTableView extends TreeTableView<MethodCall> implements StylesheetMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( TracesTreeTableView.class.getName( ) );
 
-	@Inject
-	private PropertiesService propertiesService;
+	private final PropertiesService propertiesService;
 
 	private TreeTableColumn<MethodCall, Long> durationColumn;
 
-	public TracesTreeTableView( ) {
-		injectFields( );
+	public TracesTreeTableView( final PropertiesService propertiesService ) {
+		this.propertiesService = propertiesService;
 		createControl( );
 	}
 
@@ -96,7 +92,7 @@ public final class TracesTreeTableView extends TreeTableView<MethodCall> impleme
 	private TreeTableColumn<MethodCall, String> createClassTreeTableColumn( ) {
 		final TreeTableColumn<MethodCall, String> column = new TreeTableColumn<>( );
 
-		column.setCellValueFactory( new ClassCellValueFactory( ) );
+		column.setCellValueFactory( new ClassCellValueFactory( propertiesService ) );
 		column.setText( RESOURCE_BUNDLE.getString( "columnClass" ) );
 		column.setPrefWidth( 200 );
 
@@ -106,7 +102,7 @@ public final class TracesTreeTableView extends TreeTableView<MethodCall> impleme
 	private TreeTableColumn<MethodCall, String> createMethodTreeTableColumn( ) {
 		final TreeTableColumn<MethodCall, String> column = new TreeTableColumn<>( );
 
-		column.setCellValueFactory( new MethodCellValueFactory( ) );
+		column.setCellValueFactory( new MethodCellValueFactory( propertiesService ) );
 		column.setText( RESOURCE_BUNDLE.getString( "columnMethod" ) );
 		column.setPrefWidth( 400 );
 
@@ -146,7 +142,7 @@ public final class TracesTreeTableView extends TreeTableView<MethodCall> impleme
 	private TreeTableColumn<MethodCall, Long> createDurationTreeTableColumn( ) {
 		durationColumn = new TreeTableColumn<>( );
 
-		durationColumn.setCellValueFactory( new DurationCellValueFactory( ) );
+		durationColumn.setCellValueFactory( new DurationCellValueFactory( propertiesService ) );
 		durationColumn.setText( RESOURCE_BUNDLE.getString( "columnDuration" ) );
 		durationColumn.setPrefWidth( 150 );
 
@@ -156,7 +152,7 @@ public final class TracesTreeTableView extends TreeTableView<MethodCall> impleme
 	private TreeTableColumn<MethodCall, String> createTimestampTreeTableColumn( ) {
 		final TreeTableColumn<MethodCall, String> column = new TreeTableColumn<>( );
 
-		column.setCellValueFactory( new TimestampCellValueFactory( ) );
+		column.setCellValueFactory( new TimestampCellValueFactory( propertiesService ) );
 		column.setText( RESOURCE_BUNDLE.getString( "columnTimestamp" ) );
 		column.setPrefWidth( 150 );
 

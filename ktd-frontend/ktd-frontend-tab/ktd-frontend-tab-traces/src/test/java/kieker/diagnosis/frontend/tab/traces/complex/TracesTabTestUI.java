@@ -38,7 +38,6 @@ import kieker.diagnosis.backend.data.reader.Repository;
 import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.search.traces.TracesFilter;
 import kieker.diagnosis.backend.settings.properties.ShowUnmonitoredTimeProperty;
-import kieker.diagnosis.frontend.base.FrontendBaseModule;
 
 /**
  * This is a UI test which checks that the traces view is working as expected.
@@ -52,7 +51,7 @@ public final class TracesTabTestUI extends ApplicationTest {
 
 	@Override
 	public void start( final Stage stage ) throws Exception {
-		final Injector injector = Guice.createInjector( new FrontendBaseModule( ) );
+		final Injector injector = Guice.createInjector( );
 
 		final Repository repository = injector.getInstance( Repository.class );
 		repository.getTraceRoots( ).addAll( createTraces( ) );
@@ -60,7 +59,7 @@ public final class TracesTabTestUI extends ApplicationTest {
 		final PropertiesService propertiesService = injector.getInstance( PropertiesService.class );
 		propertiesService.saveApplicationProperty( ShowUnmonitoredTimeProperty.class, Boolean.TRUE );
 
-		tracesTab = new TracesTab( );
+		tracesTab = injector.getInstance( TracesTab.class );
 		tracesTab.prepareRefresh( );
 		tracesTab.performRefresh( );
 

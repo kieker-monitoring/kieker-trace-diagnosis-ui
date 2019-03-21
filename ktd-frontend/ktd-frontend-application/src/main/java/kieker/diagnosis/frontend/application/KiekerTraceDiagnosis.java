@@ -19,6 +19,7 @@ package kieker.diagnosis.frontend.application;
 import java.util.ResourceBundle;
 
 import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -44,26 +45,26 @@ public final class KiekerTraceDiagnosis extends Application implements ImageMixi
 	@Override
 	public void start( final Stage primaryStage ) throws Exception {
 		initializeExceptionHandling( );
-		startCdiContainer( );
+		final Injector injector = startCdiContainer( );
 		initializeHostServicesHolder( );
-		prepareAndShowStage( primaryStage );
+		prepareAndShowStage( primaryStage, injector );
 	}
 
 	private void initializeExceptionHandling( ) {
 		Thread.setDefaultUncaughtExceptionHandler( ( thread, throwable ) -> ExceptionUtil.handleException( throwable, KiekerTraceDiagnosis.class.getCanonicalName( ) ) );
 	}
 
-	private void startCdiContainer( ) {
+	private Injector startCdiContainer( ) {
 		final KiekerTraceDiagnosisModule module = new KiekerTraceDiagnosisModule( );
-		Guice.createInjector( com.google.inject.Stage.PRODUCTION, module );
+		return Guice.createInjector( com.google.inject.Stage.PRODUCTION, module );
 	}
 
 	private void initializeHostServicesHolder( ) {
 		HostServicesHolder.setHostServices( getHostServices( ) );
 	}
 
-	private void prepareAndShowStage( final Stage primaryStage ) {
-		final MainPane mainPane = new MainPane( );
+	private void prepareAndShowStage( final Stage primaryStage, final Injector injector ) {
+		final MainPane mainPane = injector.getInstance( MainPane.class );
 		catchDefaultCloseEventWithMainPane( primaryStage, mainPane );
 
 		primaryStage.setTitle( RESOURCE_BUNDLE.getString( "title" ) );

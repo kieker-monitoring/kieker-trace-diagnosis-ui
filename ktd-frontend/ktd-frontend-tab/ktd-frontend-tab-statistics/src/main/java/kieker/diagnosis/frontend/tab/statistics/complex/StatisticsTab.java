@@ -26,21 +26,20 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import kieker.diagnosis.backend.search.statistics.Statistics;
 import kieker.diagnosis.backend.search.statistics.StatisticsService;
-import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 import kieker.diagnosis.frontend.tab.statistics.composite.StatisticsCPUUsageBar;
 import kieker.diagnosis.frontend.tab.statistics.composite.StatisticsMemoryUsageBar;
 import kieker.diagnosis.frontend.tab.statistics.composite.StatisticsPane;
 
-public final class StatisticsTab extends Tab implements CdiMixin {
+public final class StatisticsTab extends Tab {
 
-	@Inject
-	private StatisticsService statisticsService;
+	private final StatisticsService statisticsService;
 
 	private StatisticsPane statisticsPane;
 	private Optional<Statistics> statisticsForRefresh;
 
-	public StatisticsTab( ) {
-		injectFields( );
+	@Inject
+	public StatisticsTab( final StatisticsService statisticsService ) {
+		this.statisticsService = statisticsService;
 		createControl( );
 		initialize( );
 	}

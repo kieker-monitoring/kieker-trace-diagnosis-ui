@@ -17,12 +17,15 @@
 package kieker.diagnosis;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noFields;
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
 
+import javax.inject.Inject;
+
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
@@ -42,6 +45,19 @@ import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.frontend.base.common.DelegateException;
 
 public final class ArchitectureTest {
+
+	@Test
+	@DisplayName ( "Avoid Field Injection" )
+	void avoidFieldInjection( ) {
+		final ArchRule rule = noFields( )
+				.should( )
+				.beAnnotatedWith( Inject.class )
+				.orShould( )
+				.beAnnotatedWith( com.google.inject.Inject.class );
+
+		final JavaClasses importedClasses = new ClassFileImporter( ).importPackages( "kieker.diagnosis" );
+		rule.check( importedClasses );
+	}
 
 	@Test
 	public void servicesShouldHaveNoState( ) {
@@ -78,7 +94,7 @@ public final class ArchitectureTest {
 		final JavaClasses importedClasses = new ClassFileImporter( ).importPackages( "kieker.diagnosis" );
 
 		final ArchRule rule = classes( ).that( )
-				.implement( Service.class ).and( ).dontHaveModifier( JavaModifier.ABSTRACT )
+				.implement( Service.class ).and( ).doNotHaveModifier( JavaModifier.ABSTRACT )
 				.should( ).beAnnotatedWith( Singleton.class );
 
 		rule.check( importedClasses );
@@ -102,7 +118,7 @@ public final class ArchitectureTest {
 		final JavaClasses importedClasses = new ClassFileImporter( ).importPackages( "kieker.diagnosis" );
 
 		final ArchRule rule = classes( ).that( )
-				.areAssignableTo( ApplicationProperty.class ).and( ).dontHaveModifier( JavaModifier.ABSTRACT )
+				.areAssignableTo( ApplicationProperty.class ).and( ).doNotHaveModifier( JavaModifier.ABSTRACT )
 				.should( ).beAnnotatedWith( Singleton.class );
 
 		rule.check( importedClasses );

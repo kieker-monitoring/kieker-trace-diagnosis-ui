@@ -34,28 +34,24 @@ import kieker.diagnosis.backend.data.AggregatedMethodCall;
 import kieker.diagnosis.backend.data.MethodCall;
 import kieker.diagnosis.backend.export.CSVData;
 import kieker.diagnosis.backend.pattern.PatternService;
+import kieker.diagnosis.backend.properties.PropertiesService;
 import kieker.diagnosis.backend.search.methods.MethodsFilter;
 import kieker.diagnosis.backend.search.methods.MethodsService;
 import kieker.diagnosis.backend.settings.SettingsService;
-import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 import kieker.diagnosis.frontend.dialog.alert.Alert;
 import kieker.diagnosis.frontend.tab.methods.composite.MethodDetailsPane;
 import kieker.diagnosis.frontend.tab.methods.composite.MethodFilterPane;
 import kieker.diagnosis.frontend.tab.methods.composite.MethodStatusBar;
 import kieker.diagnosis.frontend.tab.methods.composite.MethodsTableView;
 
-public final class MethodsTab extends Tab implements CdiMixin {
+public final class MethodsTab extends Tab {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MethodsTab.class.getName( ) );
 
-	@Inject
-	private MethodsService methodsService;
-
-	@Inject
-	private SettingsService settingsService;
-
-	@Inject
-	private PatternService patternService;
+	private final MethodsService methodsService;
+	private final SettingsService settingsService;
+	private final PatternService patternService;
+	private final PropertiesService propertiesService;
 
 	private MethodFilterPane filterPane;
 	private MethodsTableView methodsTableView;
@@ -70,8 +66,13 @@ public final class MethodsTab extends Tab implements CdiMixin {
 	private int totalMethodsForRefresh;
 	private String durationSuffixForRefresh;
 
-	public MethodsTab( ) {
-		injectFields( );
+	@Inject
+	public MethodsTab( final MethodsService methodsService, final SettingsService settingsService, final PatternService patternService, final PropertiesService propertiesService ) {
+		this.methodsService = methodsService;
+		this.settingsService = settingsService;
+		this.patternService = patternService;
+		this.propertiesService = propertiesService;
+
 		createControl( );
 		performInitialize( );
 	}
@@ -101,7 +102,7 @@ public final class MethodsTab extends Tab implements CdiMixin {
 	}
 
 	private Node createMethodsTableView( ) {
-		methodsTableView = new MethodsTableView( );
+		methodsTableView = new MethodsTableView( propertiesService );
 
 		methodsTableView.setId( "tabMethodsTable" );
 		methodsTableView.addSelectionChangeListener( ( observable, oldValue, newValue ) -> detailsPane.setValue( newValue ) );

@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import com.google.inject.Inject;
-
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
@@ -38,7 +36,6 @@ import kieker.diagnosis.backend.settings.ClassAppearance;
 import kieker.diagnosis.backend.settings.MethodAppearance;
 import kieker.diagnosis.backend.settings.properties.ClassAppearanceProperty;
 import kieker.diagnosis.backend.settings.properties.MethodAppearanceProperty;
-import kieker.diagnosis.frontend.base.mixin.CdiMixin;
 import kieker.diagnosis.frontend.base.mixin.StylesheetMixin;
 import kieker.diagnosis.frontend.tab.methods.atom.ClassCellValueFactory;
 import kieker.diagnosis.frontend.tab.methods.atom.DurationCellValueFactory;
@@ -51,12 +48,11 @@ import kieker.diagnosis.frontend.tab.methods.atom.TimestampCellValueFactory;
  *
  * @author Nils Christian Ehmke
  */
-public final class MethodsTableView extends TableView<MethodCall> implements StylesheetMixin, CdiMixin {
+public final class MethodsTableView extends TableView<MethodCall> implements StylesheetMixin {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( MethodsTableView.class.getName( ) );
 
-	@Inject
-	private PropertiesService propertiesService;
+	private final PropertiesService propertiesService;
 
 	private TableColumn<MethodCall, String> host;
 	private TableColumn<MethodCall, String> clazz;
@@ -65,8 +61,8 @@ public final class MethodsTableView extends TableView<MethodCall> implements Sty
 	private TableColumn<MethodCall, String> timestamp;
 	private TableColumn<MethodCall, String> traceId;
 
-	public MethodsTableView( ) {
-		injectFields( );
+	public MethodsTableView( final PropertiesService propertiesService ) {
+		this.propertiesService = propertiesService;
 		createControl( );
 	}
 
@@ -101,7 +97,7 @@ public final class MethodsTableView extends TableView<MethodCall> implements Sty
 	private TableColumn<MethodCall, ?> createClassTableColumn( ) {
 		clazz = new TableColumn<>( );
 
-		clazz.setCellValueFactory( new ClassCellValueFactory( ) );
+		clazz.setCellValueFactory( new ClassCellValueFactory( propertiesService ) );
 		clazz.setText( RESOURCE_BUNDLE.getString( "columnClass" ) );
 		clazz.setPrefWidth( 200 );
 
@@ -111,7 +107,7 @@ public final class MethodsTableView extends TableView<MethodCall> implements Sty
 	private TableColumn<MethodCall, ?> createMethodTableColumn( ) {
 		method = new TableColumn<>( );
 
-		method.setCellValueFactory( new MethodCellValueFactory( ) );
+		method.setCellValueFactory( new MethodCellValueFactory( propertiesService ) );
 		method.setText( RESOURCE_BUNDLE.getString( "columnMethod" ) );
 		method.setPrefWidth( 400 );
 
@@ -121,7 +117,7 @@ public final class MethodsTableView extends TableView<MethodCall> implements Sty
 	private TableColumn<MethodCall, ?> createDurationTableColumn( ) {
 		duration = new TableColumn<>( );
 
-		duration.setCellValueFactory( new DurationCellValueFactory( ) );
+		duration.setCellValueFactory( new DurationCellValueFactory( propertiesService ) );
 		duration.setText( RESOURCE_BUNDLE.getString( "columnDuration" ) );
 		duration.setPrefWidth( 150 );
 
@@ -131,7 +127,7 @@ public final class MethodsTableView extends TableView<MethodCall> implements Sty
 	private TableColumn<MethodCall, ?> createTimestampTableColumn( ) {
 		timestamp = new TableColumn<>( );
 
-		timestamp.setCellValueFactory( new TimestampCellValueFactory( ) );
+		timestamp.setCellValueFactory( new TimestampCellValueFactory( propertiesService ) );
 		timestamp.setText( RESOURCE_BUNDLE.getString( "columnTimestamp" ) );
 		timestamp.setPrefWidth( 150 );
 

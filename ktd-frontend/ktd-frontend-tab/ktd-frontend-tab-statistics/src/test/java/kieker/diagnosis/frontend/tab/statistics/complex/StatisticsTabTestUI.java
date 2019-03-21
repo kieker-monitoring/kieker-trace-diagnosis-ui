@@ -27,13 +27,13 @@ import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import kieker.diagnosis.backend.search.statistics.Statistics;
 import kieker.diagnosis.backend.search.statistics.StatisticsService;
-import kieker.diagnosis.frontend.base.FrontendBaseModule;
 
 /**
  * This is a UI test which checks that the statistics tab is working as expected.
@@ -49,9 +49,9 @@ public final class StatisticsTabTestUI extends ApplicationTest {
 	@Override
 	public void start( final Stage stage ) throws Exception {
 		statisticsService = mock( StatisticsService.class );
-		Guice.createInjector( new FrontendBaseModule( ) );
+		final Injector injector = Guice.createInjector( );
 
-		statisticsTab = new StatisticsTab( );
+		statisticsTab = injector.getInstance( StatisticsTab.class );
 		final TabPane tabPane = new TabPane( statisticsTab );
 		final Scene scene = new Scene( tabPane );
 		stage.setScene( scene );
