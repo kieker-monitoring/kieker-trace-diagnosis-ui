@@ -4,3 +4,5 @@ target
 .classpath
 logs
 /.checkstyle
+.factorypath
+.idea
