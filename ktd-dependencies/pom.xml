@@ -14,7 +14,7 @@
 		<kieker.version>1.13</kieker.version>
 		<guice.version>4.2.0</guice.version>
 		<hppc.version>0.7.3</hppc.version>
-		<log4j.version>2.11.0</log4j.version>
+		<log4j.version>2.13.2</log4j.version>
 		<jfxtras.version>9.0-r1</jfxtras.version>
 		<lombok.version>1.18.4</lombok.version>
 		<junit.version>5.3.2</junit.version>
@@ -22,7 +22,7 @@
 		<junitpioneer.version>0.3.0</junitpioneer.version>
 		<dependency.plugin.version>3.1.1</dependency.plugin.version>
 		<aopalliance.version>1.0</aopalliance.version>
-		<guava.version>23.0</guava.version>
+		<guava.version>24.1.1-jre</guava.version>
 		<javafx.version>11</javafx.version>
 		<testfx.version>4.0.15-alpha</testfx.version>
 		<mockito.version>2.23.4</mockito.version>
