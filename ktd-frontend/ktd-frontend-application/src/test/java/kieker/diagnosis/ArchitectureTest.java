@@ -47,7 +47,7 @@ import kieker.diagnosis.frontend.base.common.DelegateException;
 public final class ArchitectureTest {
 
 	@Test
-	@DisplayName ( "Avoid Field Injection" )
+	@DisplayName( "Avoid Field Injection" )
 	void avoidFieldInjection( ) {
 		final ArchRule rule = noFields( )
 				.should( )

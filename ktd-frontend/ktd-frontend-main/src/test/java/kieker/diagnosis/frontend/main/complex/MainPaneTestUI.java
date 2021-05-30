@@ -24,9 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junitpioneer.jupiter.TempDirectory;
-import org.junitpioneer.jupiter.TempDirectory.TempDir;
+import org.junit.jupiter.api.io.TempDir;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import com.google.inject.Guice;
@@ -119,7 +117,6 @@ public final class MainPaneTestUI extends ApplicationTest {
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
 	public void testImportLog( @TempDir final Path tempDir ) throws IOException {
 		loadBinaryDataIntoTemporaryFolder( tempDir );
 		importTemporaryFolder( tempDir );
@@ -153,7 +150,6 @@ public final class MainPaneTestUI extends ApplicationTest {
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
 	public void testJumpToMethods( @TempDir final Path tempDir ) throws IOException {
 		loadBinaryDataIntoTemporaryFolder( tempDir );
 		importTemporaryFolder( tempDir );
@@ -167,7 +163,6 @@ public final class MainPaneTestUI extends ApplicationTest {
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
 	public void testJumpToTrace( @TempDir final Path tempDir ) throws IOException {
 		loadBinaryDataIntoTemporaryFolder( tempDir );
 		importTemporaryFolder( tempDir );

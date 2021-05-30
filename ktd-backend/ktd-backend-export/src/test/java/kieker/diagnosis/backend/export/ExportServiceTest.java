@@ -26,9 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junitpioneer.jupiter.TempDirectory;
-import org.junitpioneer.jupiter.TempDirectory.TempDir;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * This is a unit test for {@link ExportService}.
@@ -38,7 +36,6 @@ import org.junitpioneer.jupiter.TempDirectory.TempDir;
 public final class ExportServiceTest {
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
 	public void testSimpleExport( @TempDir final Path tempDir ) throws IOException {
 		final Path csvFile = tempDir.resolve( "output.csv" );
 		final CSVData csvData = new CSVData( );
@@ -55,7 +52,6 @@ public final class ExportServiceTest {
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
 	public void testExportWithoutData( @TempDir final Path tempDir ) throws IOException {
 		final Path csvFile = tempDir.resolve( "output.csv" );
 		final CSVData csvData = new CSVData( );
@@ -70,7 +66,6 @@ public final class ExportServiceTest {
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
 	public void testExportOnDirectory( @TempDir final Path tempDir ) throws IOException {
 		final ExportService exportService = new ExportService( );
 

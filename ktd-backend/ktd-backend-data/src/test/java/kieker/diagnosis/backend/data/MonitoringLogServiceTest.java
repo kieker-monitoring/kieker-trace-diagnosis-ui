@@ -36,9 +36,7 @@ import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junitpioneer.jupiter.TempDirectory;
-import org.junitpioneer.jupiter.TempDirectory.TempDir;
+import org.junit.jupiter.api.io.TempDir;
 
 import com.carrotsearch.hppc.ByteArrayList;
 
@@ -62,7 +60,7 @@ import kieker.diagnosis.backend.data.reader.Repository;
  *
  * @author Nils Christian Ehmke
  */
-@DisplayName ( "Unit-Test for MonitoringLogService" )
+@DisplayName( "Unit-Test for MonitoringLogService" )
 public class MonitoringLogServiceTest {
 
 	private ByteArrayList byteList;
@@ -80,16 +78,14 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
-	@DisplayName ( "Test with an empty directory" )
+	@DisplayName( "Test with an empty directory" )
 	public void testEmptyDirectory( @TempDir final Path tempDir ) throws CorruptStreamException, ImportFailedException {
 		assertThrows( ImportFailedException.class, ( ) -> service.importMonitoringLog( tempDir, ImportType.DIRECTORY ) );
 
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
-	@DisplayName ( "Test with a single trace" )
+	@DisplayName( "Test with a single trace" )
 	public void testSingleTrace( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
@@ -111,8 +107,7 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
-	@DisplayName ( "Test with two interleaves traces" )
+	@DisplayName( "Test with two interleaves traces" )
 	public void testTwoInterleavedTrace( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
@@ -139,8 +134,7 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
-	@DisplayName ( "Test with a failed trace" )
+	@DisplayName( "Test with a failed trace" )
 	public void testFailedTrace( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
@@ -162,8 +156,7 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
-	@DisplayName ( "Test the method aggregation" )
+	@DisplayName( "Test the method aggregation" )
 	public void testMethodAggregation( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
@@ -189,8 +182,7 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
-	@DisplayName ( "Test the method aggregation in detail" )
+	@DisplayName( "Test the method aggregation in detail" )
 	public void testMethodAggregationValues1( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 3L, 0L, "0", "host", 0L, 0 ) );
@@ -228,8 +220,7 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
-	@DisplayName ( "Test the method aggregation in detail" )
+	@DisplayName( "Test the method aggregation in detail" )
 	public void testMethodAggregationValues2( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 2L, 0L, "0", "host", 0L, 0 ) );
@@ -271,8 +262,7 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
-	@DisplayName ( "Test with an incomplete trace" )
+	@DisplayName( "Test with an incomplete trace" )
 	public void testIncompleteTrace( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
@@ -294,8 +284,7 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
-	@DisplayName ( "Test with some dangling records" )
+	@DisplayName( "Test with some dangling records" )
 	public void testDanglingRecords( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new BeforeOperationEvent( System.currentTimeMillis( ), 1L, 0, "op1", "class1" ) );
@@ -317,8 +306,7 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
-	@DisplayName ( "Test the duration conversion" )
+	@DisplayName( "Test the duration conversion" )
 	public void testDurationConversion( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
@@ -337,8 +325,7 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
-	@DisplayName ( "Test the timestamp conversion" )
+	@DisplayName( "Test the timestamp conversion" )
 	public void testTimestampConversion( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
@@ -357,8 +344,7 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
-	@DisplayName ( "Test record ignoring" )
+	@DisplayName( "Test record ignoring" )
 	public void testIgnoreRecordWithOtherTraces( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new CPUUtilizationRecord( 0L, "", "", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) );
@@ -380,8 +366,7 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
-	@DisplayName ( "Test record ignoring" )
+	@DisplayName( "Test record ignoring" )
 	public void testIgnoreRecord( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new CPUUtilizationRecord( 0L, "", "", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) );
@@ -396,8 +381,7 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
-	@DisplayName ( "Test with an unknown record" )
+	@DisplayName( "Test with an unknown record" )
 	public void testUnknownRecord( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new UnknownRecord( ) );
@@ -410,8 +394,7 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	@ExtendWith ( TempDirectory.class )
-	@DisplayName ( "Test a trace in detail" )
+	@DisplayName( "Test a trace in detail" )
 	public void testTraceInDetail( @TempDir final Path tempDir ) throws Exception {
 		// Prepare the data
 		writeRecord( new TraceMetadata( 1L, 0L, "0", "host", 0L, 0 ) );
@@ -439,7 +422,7 @@ public class MonitoringLogServiceTest {
 		assertThat( firstMethod.getException( ) ).isEqualTo( "cause" );
 		assertThat( firstMethod.getTimestamp( ) ).isEqualTo( 1L );
 		assertThat( firstMethod.getDuration( ) ).isEqualTo( 3000000L );
-		assertThat( (double) firstMethod.getPercent( ) ).isCloseTo( 100.0, Offset.offset( 0.01 ) );
+		assertThat( ( double ) firstMethod.getPercent( ) ).isCloseTo( 100.0, Offset.offset( 0.01 ) );
 		assertThat( firstMethod.getTraceDepth( ) ).isEqualTo( 2 );
 		assertThat( firstMethod.getTraceId( ) ).isEqualTo( 1L );
 		assertThat( firstMethod.getTraceSize( ) ).isEqualTo( 2 );
@@ -451,7 +434,7 @@ public class MonitoringLogServiceTest {
 		assertThat( secondMethod.getException( ) ).isNull( );
 		assertThat( secondMethod.getTimestamp( ) ).isEqualTo( 2L );
 		assertThat( secondMethod.getDuration( ) ).isEqualTo( 500000L );
-		assertThat( (double) secondMethod.getPercent( ) ).isCloseTo( 16.66, Offset.offset( 0.01 ) );
+		assertThat( ( double ) secondMethod.getPercent( ) ).isCloseTo( 16.66, Offset.offset( 0.01 ) );
 		assertThat( secondMethod.getTraceDepth( ) ).isEqualTo( 1 );
 		assertThat( secondMethod.getTraceId( ) ).isEqualTo( 1L );
 		assertThat( secondMethod.getTraceSize( ) ).isEqualTo( 1 );
@@ -460,7 +443,7 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	@DisplayName ( "Test the import from a zip file" )
+	@DisplayName( "Test the import from a zip file" )
 	public void testImportFromZipFile( ) throws Exception {
 		final URL logFileUrl = getClass( ).getResource( "/kieker-log-binary.zip" );
 		final Path logFile = Paths.get( logFileUrl.toURI( ) );
@@ -474,7 +457,7 @@ public class MonitoringLogServiceTest {
 	}
 
 	@Test
-	@DisplayName ( "Test with corrupt logs" )
+	@DisplayName( "Test with corrupt logs" )
 	public void testCorruptLogs( ) throws URISyntaxException, IOException, CorruptStreamException, ImportFailedException {
 		final URL logDirectoryUrl = getClass( ).getResource( "/kieker-log-binary-corrupt" );
 		final Path logDirectory = Paths.get( logDirectoryUrl.toURI( ) );
@@ -487,7 +470,7 @@ public class MonitoringLogServiceTest {
 		assertThat( repository.getMethods( ) ).hasSize( 2 );
 	}
 
-	@SuppressWarnings ( "deprecation" )
+	@SuppressWarnings( "deprecation" )
 	private void writeRecord( final AbstractMonitoringRecord aRecord ) {
 		// Register the record name
 		final int recordKey = stringRegistry.get( aRecord.getClass( ).getName( ) );
@@ -512,7 +495,7 @@ public class MonitoringLogServiceTest {
 
 		final Object[] allStrings = stringRegistry.getAll( );
 		for ( final Object string : allStrings ) {
-			final int id = stringRegistry.get( (String) string );
+			final int id = stringRegistry.get( ( String ) string );
 			stringBuilder.append( "$" ).append( id ).append( "=" ).append( string ).append( "\n" );
 		}
 
