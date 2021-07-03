@@ -11,7 +11,7 @@
 
 	<properties>
 		<appassembler.plugin.version>2.1.0</appassembler.plugin.version>
-		<kieker.version>1.13</kieker.version>
+		<kieker.version>1.14</kieker.version>
 		<guice.version>5.0.1</guice.version>
 		<hppc.version>0.8.2</hppc.version>
 		<log4j.version>2.14.1</log4j.version>

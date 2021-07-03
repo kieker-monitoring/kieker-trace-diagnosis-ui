@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 import com.carrotsearch.hppc.IntObjectMap;
 import com.carrotsearch.hppc.cursors.IntObjectCursor;
 
+import kieker.common.record.flow.trace.ApplicationTraceMetadata;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
@@ -76,7 +77,7 @@ final class AsciiReader {
 				afterOperationEventKey = key;
 			} else if ( afterOperationFailedEventKey == -1 && AfterOperationFailedEvent.class.getName( ).equals( value ) ) {
 				afterOperationFailedEventKey = key;
-			} else if ( traceMetadataKey == -1 && TraceMetadata.class.getName( ).equals( value ) ) {
+			} else if ( traceMetadataKey == -1 && ( TraceMetadata.class.getName( ).equals( value ) ||  ApplicationTraceMetadata.class.getName( ).equals( value ) ) ) {
 				traceMetadataKey = key;
 			} else if ( kiekerMetadataRecordKey == -1 && KiekerMetadataRecord.class.getName( ).equals( value ) ) {
 				kiekerMetadataRecordKey = key;

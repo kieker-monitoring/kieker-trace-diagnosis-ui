@@ -39,12 +39,12 @@ import kieker.diagnosis.backend.data.exception.ImportFailedException;
 public final class AsciiReaderTest {
 
 	@Test
-	@DisplayName ( "Test with normal logs" )
-	public void testNormalLogs( ) throws URISyntaxException, IOException, CorruptStreamException, ImportFailedException {
+	@DisplayName ( "Test with normal logs (1.13)" )
+	public void testNormalLogs113( ) throws URISyntaxException, IOException, CorruptStreamException, ImportFailedException {
 		final Repository repository = new Repository( );
 		final Reader reader = new Reader( );
 
-		final URL logDirectoryUrl = getClass( ).getResource( "/kieker-log-ascii" );
+		final URL logDirectoryUrl = getClass( ).getResource( "/kieker-log-ascii-1.13" );
 		final Path logDirectory = Paths.get( logDirectoryUrl.toURI( ) );
 
 		reader.readRecursiveFromDirectory( logDirectory, repository );
@@ -54,5 +54,22 @@ public final class AsciiReaderTest {
 		assertThat( repository.getMethods( ) ).hasSize( 4 );
 		assertThat( repository.getIgnoredRecords( ) ).isEqualTo( 1 );
 	}
+	
+	@Test
+	@DisplayName ( "Test with normal logs (1.14)" )
+	public void testNormalLogs114( ) throws URISyntaxException, IOException, CorruptStreamException, ImportFailedException {
+		final Repository repository = new Repository( );
+		final Reader reader = new Reader( );
 
+		final URL logDirectoryUrl = getClass( ).getResource( "/kieker-log-ascii-1.14" );
+		final Path logDirectory = Paths.get( logDirectoryUrl.toURI( ) );
+
+		reader.readRecursiveFromDirectory( logDirectory, repository );
+
+		assertThat( repository.getTraceRoots( ) ).hasSize( 3 );
+		assertThat( repository.getAggreatedMethods( ) ).hasSize( 4 );
+		assertThat( repository.getMethods( ) ).hasSize( 4 );
+		assertThat( repository.getIgnoredRecords( ) ).isEqualTo( 1 );
+	}
+	
 }

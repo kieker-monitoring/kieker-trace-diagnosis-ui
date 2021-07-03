@@ -22,14 +22,15 @@ import com.google.inject.Singleton;
 
 import kieker.common.configuration.Configuration;
 import kieker.diagnosis.backend.base.service.Service;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.timer.SystemMilliTimer;
 import kieker.monitoring.timer.SystemNanoTimer;
-import kieker.monitoring.writer.filesystem.AsciiFileWriter;
-import kieker.monitoring.writer.filesystem.BinaryFileWriter;
+import kieker.monitoring.writer.filesystem.BinaryLogStreamHandler;
+import kieker.monitoring.writer.filesystem.FileWriter;
+import kieker.monitoring.writer.filesystem.TextLogStreamHandler;
 
 /**
  * This service can be used to control the monitoring within the application (and from within the application).
@@ -107,11 +108,11 @@ public class MonitoringService implements Service {
 
 			// Timer
 			if ( aConfiguration.getTimer( ) == Timer.MILLIS ) {
-				configuration.setProperty( ConfigurationFactory.TIMER_CLASSNAME, SystemMilliTimer.class.getName( ) );
+				configuration.setProperty( ConfigurationKeys.TIMER_CLASSNAME, SystemMilliTimer.class.getName( ) );
 				configuration.setProperty( SystemMilliTimer.CONFIG_OFFSET, "0" );
 				configuration.setProperty( SystemMilliTimer.CONFIG_UNIT, "0" );
 			} else {
-				configuration.setProperty( ConfigurationFactory.TIMER_CLASSNAME, SystemNanoTimer.class.getName( ) );
+				configuration.setProperty( ConfigurationKeys.TIMER_CLASSNAME, SystemNanoTimer.class.getName( ) );
 				configuration.setProperty( SystemNanoTimer.CONFIG_OFFSET, "0" );
 				configuration.setProperty( SystemNanoTimer.CONFIG_UNIT, "0" );
 			}
@@ -122,35 +123,34 @@ public class MonitoringService implements Service {
 			final String bufferSize = Integer.toString( aConfiguration.getBuffer( ) );
 			configuration.setProperty( WriterController.PREFIX + WriterController.RECORD_QUEUE_SIZE, queueSize );
 			configuration.setProperty( WriterController.PREFIX + WriterController.RECORD_QUEUE_FQN, LinkedBlockingQueue.class.getName( ) );
-
+			configuration.setProperty( ConfigurationKeys.WRITER_CLASSNAME, FileWriter.class.getName( ) );
+			
 			switch ( aConfiguration.getWriter( ) ) {
 				case ASCII_WRITER:
-					configuration.setProperty( ConfigurationFactory.WRITER_CLASSNAME, AsciiFileWriter.class.getName( ) );
-					configuration.setProperty( AsciiFileWriter.CONFIG_PATH, aConfiguration.getOutputDirectory( ) );
-					configuration.setProperty( AsciiFileWriter.CONFIG_MAXENTRIESINFILE, maxEntriesPerFile );
-					configuration.setProperty( AsciiFileWriter.CONFIG_CHARSET_NAME, "UTF-8" );
-					configuration.setProperty( AsciiFileWriter.CONFIG_FLUSH_MAPFILE, "true" );
+					configuration.setProperty( FileWriter.CONFIG_LOG_STREAM_HANDLER, BinaryLogStreamHandler.class.getName( ) );
+					configuration.setProperty( FileWriter.CONFIG_PATH, aConfiguration.getOutputDirectory( ) );
+					configuration.setProperty( FileWriter.CONFIG_MAXENTRIESINFILE, maxEntriesPerFile );
+					configuration.setProperty( FileWriter.CONFIG_CHARSET_NAME, "UTF-8" );
 					break;
 				case BINARY_WRITER:
-					configuration.setProperty( ConfigurationFactory.WRITER_CLASSNAME, BinaryFileWriter.class.getName( ) );
-					configuration.setProperty( BinaryFileWriter.CONFIG_PATH, aConfiguration.getOutputDirectory( ) );
-					configuration.setProperty( BinaryFileWriter.CONFIG_MAXENTRIESINFILE, maxEntriesPerFile );
-					configuration.setProperty( BinaryFileWriter.CONFIG_BUFFERSIZE, bufferSize );
-					configuration.setProperty( BinaryFileWriter.CONFIG_FLUSH_MAPFILE, "true" );
+					configuration.setProperty( FileWriter.CONFIG_LOG_STREAM_HANDLER, TextLogStreamHandler.class.getName( ) );
+					configuration.setProperty( FileWriter.CONFIG_PATH, aConfiguration.getOutputDirectory( ) );
+					configuration.setProperty( FileWriter.CONFIG_MAXENTRIESINFILE, maxEntriesPerFile );
+					configuration.setProperty( FileWriter.CONFIG_BUFFERSIZE, bufferSize );
 					break;
 				default:
 					break;
-
-			}
+ 
+			} 
 
 			// Controller
-			configuration.setProperty( ConfigurationFactory.CONTROLLER_NAME, "Kieker-Trace-Diagnosis" );
-			configuration.setProperty( ConfigurationFactory.EXPERIMENT_ID, "0" );
-			configuration.setProperty( ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE, "0" );
+			configuration.setProperty( ConfigurationKeys.CONTROLLER_NAME, "Kieker-Trace-Diagnosis" );
+			configuration.setProperty( ConfigurationKeys.EXPERIMENT_ID, "0" );
+			configuration.setProperty( ConfigurationKeys.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE, "0" );
 			// Never use a shutdown hook here. This will lead to a memory leak.
-			configuration.setProperty( ConfigurationFactory.USE_SHUTDOWN_HOOK, "false" );
-			configuration.setProperty( ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP, "true" );
-			configuration.setProperty( ConfigurationFactory.MONITORING_ENABLED, "true" );
+			configuration.setProperty( ConfigurationKeys.USE_SHUTDOWN_HOOK, "false" );
+			configuration.setProperty( ConfigurationKeys.AUTO_SET_LOGGINGTSTAMP, "true" );
+			configuration.setProperty( ConfigurationKeys.MONITORING_ENABLED, "true" );
 
 			// Create the new monitoring controller
 			monitoringController = MonitoringController.createInstance( configuration );

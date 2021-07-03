@@ -29,7 +29,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import org.assertj.core.data.Offset;
@@ -45,12 +48,12 @@ import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
-import kieker.common.record.io.DefaultValueSerializer;
+import kieker.common.record.io.BinaryValueSerializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.common.record.system.CPUUtilizationRecord;
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.Registry;
+import kieker.common.registry.writer.IWriterRegistry;
+import kieker.common.registry.writer.WriterRegistry;
 import kieker.diagnosis.backend.data.exception.CorruptStreamException;
 import kieker.diagnosis.backend.data.exception.ImportFailedException;
 import kieker.diagnosis.backend.data.reader.Repository;
@@ -64,14 +67,16 @@ import kieker.diagnosis.backend.data.reader.Repository;
 public class MonitoringLogServiceTest {
 
 	private ByteArrayList byteList;
-	private IRegistry<String> stringRegistry;
+	private IWriterRegistry<String> stringRegistry;
+	private Map<Integer, String> stringRegistryContent;
 	private MonitoringLogService service;
 	private Repository repository;
 
 	@BeforeEach
 	public void setUp( ) {
 		byteList = new ByteArrayList( );
-		stringRegistry = new Registry<>( );
+		stringRegistryContent = new HashMap<>( );
+		stringRegistry = new WriterRegistry( ( str, id ) -> stringRegistryContent.put( id, str ) );
 
 		repository = new Repository( );
 		service = new MonitoringLogService( repository );
@@ -470,20 +475,16 @@ public class MonitoringLogServiceTest {
 		assertThat( repository.getMethods( ) ).hasSize( 2 );
 	}
 
-	@SuppressWarnings( "deprecation" )
 	private void writeRecord( final AbstractMonitoringRecord aRecord ) {
 		// Register the record name
-		final int recordKey = stringRegistry.get( aRecord.getClass( ).getName( ) );
-
-		// Register the record's strings
-		aRecord.registerStrings( stringRegistry );
+		final int recordKey = stringRegistry.getId( aRecord.getClass( ).getName( ) );
 
 		// Now write the record into our buffer
 		final byte[] byteArray = new byte[aRecord.getSize( ) + 4 + 8];
 		final ByteBuffer byteBuffer = ByteBuffer.wrap( byteArray );
 		byteBuffer.putInt( recordKey );
 		byteBuffer.putLong( System.currentTimeMillis( ) );
-		aRecord.serialize( DefaultValueSerializer.create( byteBuffer, stringRegistry ) );
+		aRecord.serialize( BinaryValueSerializer.create( byteBuffer, stringRegistry ) );
 		byteBuffer.flip( );
 
 		byteList.add( byteArray );
@@ -493,10 +494,8 @@ public class MonitoringLogServiceTest {
 		// Collect the mappings
 		final StringBuilder stringBuilder = new StringBuilder( );
 
-		final Object[] allStrings = stringRegistry.getAll( );
-		for ( final Object string : allStrings ) {
-			final int id = stringRegistry.get( ( String ) string );
-			stringBuilder.append( "$" ).append( id ).append( "=" ).append( string ).append( "\n" );
+		for ( final Entry<Integer, String> entry : stringRegistryContent.entrySet( ) ) {
+			stringBuilder.append( "$" ).append( entry.getKey( ) ).append( "=" ).append( entry.getValue( ) ).append( "\n" );
 		}
 
 		// Write the mapping file
@@ -515,29 +514,16 @@ public class MonitoringLogServiceTest {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public Object[] toArray( ) {
-			return null;
-		}
-
-		@Override
-		public void registerStrings( final IRegistry<String> aStringRegistry ) {
-		}
-
-		@Override
-		public void serialize( final IValueSerializer aSerializer ) throws BufferOverflowException {
-		}
-
-		@Override
-		public String[] getValueNames( ) {
-			return null;
-		}
-
-		@Override
-		public void initFromArray( final Object[] aValues ) {
+		public void serialize( final IValueSerializer serializer ) throws BufferOverflowException {
 		}
 
 		@Override
 		public Class<?>[] getValueTypes( ) {
+			return null;
+		}
+
+		@Override
+		public String[] getValueNames( ) {
 			return null;
 		}
 
