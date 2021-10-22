@@ -124,24 +124,22 @@ public class MonitoringService implements Service {
 			configuration.setProperty( WriterController.PREFIX + WriterController.RECORD_QUEUE_SIZE, queueSize );
 			configuration.setProperty( WriterController.PREFIX + WriterController.RECORD_QUEUE_FQN, LinkedBlockingQueue.class.getName( ) );
 			configuration.setProperty( ConfigurationKeys.WRITER_CLASSNAME, FileWriter.class.getName( ) );
-			
+			configuration.setProperty( FileWriter.CONFIG_PATH, aConfiguration.getOutputDirectory( ) );
+			configuration.setProperty( FileWriter.CONFIG_MAXENTRIESINFILE, maxEntriesPerFile );
+
 			switch ( aConfiguration.getWriter( ) ) {
 				case ASCII_WRITER:
-					configuration.setProperty( FileWriter.CONFIG_LOG_STREAM_HANDLER, BinaryLogStreamHandler.class.getName( ) );
-					configuration.setProperty( FileWriter.CONFIG_PATH, aConfiguration.getOutputDirectory( ) );
-					configuration.setProperty( FileWriter.CONFIG_MAXENTRIESINFILE, maxEntriesPerFile );
+					configuration.setProperty( FileWriter.CONFIG_LOG_STREAM_HANDLER, TextLogStreamHandler.class.getName( ) );
 					configuration.setProperty( FileWriter.CONFIG_CHARSET_NAME, "UTF-8" );
 					break;
 				case BINARY_WRITER:
-					configuration.setProperty( FileWriter.CONFIG_LOG_STREAM_HANDLER, TextLogStreamHandler.class.getName( ) );
-					configuration.setProperty( FileWriter.CONFIG_PATH, aConfiguration.getOutputDirectory( ) );
-					configuration.setProperty( FileWriter.CONFIG_MAXENTRIESINFILE, maxEntriesPerFile );
+					configuration.setProperty( FileWriter.CONFIG_LOG_STREAM_HANDLER, BinaryLogStreamHandler.class.getName( ) );
 					configuration.setProperty( FileWriter.CONFIG_BUFFERSIZE, bufferSize );
 					break;
 				default:
 					break;
- 
-			} 
+
+			}
 
 			// Controller
 			configuration.setProperty( ConfigurationKeys.CONTROLLER_NAME, "Kieker-Trace-Diagnosis" );
