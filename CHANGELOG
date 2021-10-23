@@ -1,4 +1,8 @@
 5.2.0
+	23 Oct 2021
+	Bug (TRACEUI-39)
+	Files written with Kieker 1.14 can still not be processed.
+	
 	22 Oct 2021
 	Bug (TRACEUI-37)
 	Configuration for ascii and binary writer during monitoring is mixed-up.

@@ -48,6 +48,7 @@ final class BinaryReader {
 	private int afterOperationEventKey;
 	private int afterOperationFailedEventKey;
 	private int traceMetadataKey;
+	private int applicationTraceMetadataKey;
 	private int kiekerMetadataRecordKey;
 
 	private final IntObjectMap<String> mapping;
@@ -64,9 +65,10 @@ final class BinaryReader {
 		afterOperationEventKey = -1;
 		afterOperationFailedEventKey = -1;
 		traceMetadataKey = -1;
+		applicationTraceMetadataKey = -1;
 		kiekerMetadataRecordKey = -1;
 
-		mapping.forEach( (Consumer<IntObjectCursor<String>>) aCursor -> {
+		mapping.forEach( ( Consumer<IntObjectCursor<String>> ) aCursor -> {
 			final int key = aCursor.key;
 			final String value = aCursor.value;
 
@@ -76,8 +78,10 @@ final class BinaryReader {
 				afterOperationEventKey = key;
 			} else if ( afterOperationFailedEventKey == -1 && AfterOperationFailedEvent.class.getName( ).equals( value ) ) {
 				afterOperationFailedEventKey = key;
-			} else if ( traceMetadataKey == -1 && ( TraceMetadata.class.getName( ).equals( value ) ||  ApplicationTraceMetadata.class.getName( ).equals( value ) ) ) {
+			} else if ( traceMetadataKey == -1 && TraceMetadata.class.getName( ).equals( value ) ) {
 				traceMetadataKey = key;
+			} else if ( applicationTraceMetadataKey == -1 && ApplicationTraceMetadata.class.getName( ).equals( value ) ) {
+				applicationTraceMetadataKey = key;
 			} else if ( kiekerMetadataRecordKey == -1 && KiekerMetadataRecord.class.getName( ).equals( value ) ) {
 				kiekerMetadataRecordKey = key;
 			}
@@ -91,7 +95,7 @@ final class BinaryReader {
 		try {
 			while ( byteBuffer.hasRemaining( ) ) {
 				final int recordKey = byteBuffer.getInt( );
-				skipBytes( (byte) 8, byteBuffer ); // Ignore the logging timestamp
+				skipBytes( ( byte ) 8, byteBuffer ); // Ignore the logging timestamp
 
 				if ( recordKey == beforeOperationEventKey ) {
 					readBeforeOperationEvent( byteBuffer );
@@ -101,6 +105,8 @@ final class BinaryReader {
 					readAfterOperationFailedEvent( byteBuffer );
 				} else if ( recordKey == traceMetadataKey ) {
 					readTraceMetadata( byteBuffer );
+				} else if ( recordKey == applicationTraceMetadataKey ) {
+					readApplicationTraceMetadata( byteBuffer );
 				} else if ( recordKey == kiekerMetadataRecordKey ) {
 					readKiekerMetadataRecord( byteBuffer );
 				} else {
@@ -123,7 +129,7 @@ final class BinaryReader {
 	private void readBeforeOperationEvent( final ByteBuffer aByteBuffer ) {
 		final long timestamp = aByteBuffer.getLong( ); // Timestamp
 		final long traceId = aByteBuffer.getLong( ); // Trace Id
-		skipBytes( (byte) ( 3 * 4 ), aByteBuffer ); // Ignore order index, method name and class name
+		skipBytes( ( byte ) ( 3 * 4 ), aByteBuffer ); // Ignore order index, method name and class name
 
 		repository.processBeforeOperationEvent( timestamp, traceId );
 	}
@@ -131,7 +137,7 @@ final class BinaryReader {
 	private MethodCall readAfterOperationEvent( final ByteBuffer aByteBuffer ) {
 		final long timestamp = aByteBuffer.getLong( ); // Timestamp
 		final long traceId = aByteBuffer.getLong( ); // Trace Id
-		skipBytes( (byte) 4, aByteBuffer ); // Ignore order index
+		skipBytes( ( byte ) 4, aByteBuffer ); // Ignore order index
 		final String methodName = mapping.get( aByteBuffer.getInt( ) ); // Method name
 		final String clazz = mapping.get( aByteBuffer.getInt( ) ); // Class name
 
@@ -152,18 +158,30 @@ final class BinaryReader {
 
 	private void readTraceMetadata( final ByteBuffer aByteBuffer ) {
 		final long traceId = aByteBuffer.getLong( );
-		skipBytes( (byte) ( 8 + 4 ), aByteBuffer ); // Ignore thread id and session id
+		skipBytes( ( byte ) ( 8 + 4 ), aByteBuffer ); // Ignore thread id and session id
 
 		final String host = mapping.get( aByteBuffer.getInt( ) ); // Hostname
-		skipBytes( (byte) ( 8 + 4 ), aByteBuffer ); // Ignore parent trace Id and parent order Id
+		skipBytes( ( byte ) ( 8 + 4 ), aByteBuffer ); // Ignore parent trace Id and parent order Id
+
+		repository.processTraceMetadata( traceId, host );
+	}
+
+	private void readApplicationTraceMetadata( final ByteBuffer aByteBuffer ) {
+		final long traceId = aByteBuffer.getLong( );
+		skipBytes( ( byte ) ( 8 + 4 ), aByteBuffer ); // Ignore thread id and session id
+
+		final String host = mapping.get( aByteBuffer.getInt( ) ); // Hostname
+		skipBytes( ( byte ) ( 8 + 4 ), aByteBuffer ); // Ignore parent trace Id , parent order Id, and application name
+
+		System.out.println( mapping.get( aByteBuffer.getInt( ) ) );
 
 		repository.processTraceMetadata( traceId, host );
 	}
 
 	private void readKiekerMetadataRecord( final ByteBuffer aByteBuffer ) {
-		skipBytes( (byte) ( 4 * 4 + 1 + 8 ), aByteBuffer ); // Ignore a lot of fields...
+		skipBytes( ( byte ) ( 4 * 4 + 1 + 8 ), aByteBuffer ); // Ignore a lot of fields...
 		final String timeUnitName = mapping.get( aByteBuffer.getInt( ) ); // Time unit
-		skipBytes( (byte) 8, aByteBuffer ); // Ignore the number of records
+		skipBytes( ( byte ) 8, aByteBuffer ); // Ignore the number of records
 
 		repository.processSourceTimeUnit( timeUnitName );
 	}
@@ -176,7 +194,7 @@ final class BinaryReader {
 			try {
 				final Class<?> recordClass = Class.forName( recordName );
 				final Field sizeField = recordClass.getDeclaredField( "SIZE" );
-				size = (byte) (int) sizeField.get( null );
+				size = ( byte ) ( int ) sizeField.get( null );
 
 				ignoredRecordsSizeMap.put( aRecordKey, size );
 			} catch ( final Exception ex ) {
