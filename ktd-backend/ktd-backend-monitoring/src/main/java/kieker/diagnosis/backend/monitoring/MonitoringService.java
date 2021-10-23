@@ -22,7 +22,7 @@ import com.google.inject.Singleton;
 
 import kieker.common.configuration.Configuration;
 import kieker.diagnosis.backend.base.service.Service;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
@@ -108,11 +108,11 @@ public class MonitoringService implements Service {
 
 			// Timer
 			if ( aConfiguration.getTimer( ) == Timer.MILLIS ) {
-				configuration.setProperty( ConfigurationKeys.TIMER_CLASSNAME, SystemMilliTimer.class.getName( ) );
+				configuration.setProperty( ConfigurationConstants.TIMER_CLASSNAME, SystemMilliTimer.class.getName( ) );
 				configuration.setProperty( SystemMilliTimer.CONFIG_OFFSET, "0" );
 				configuration.setProperty( SystemMilliTimer.CONFIG_UNIT, "0" );
 			} else {
-				configuration.setProperty( ConfigurationKeys.TIMER_CLASSNAME, SystemNanoTimer.class.getName( ) );
+				configuration.setProperty( ConfigurationConstants.TIMER_CLASSNAME, SystemNanoTimer.class.getName( ) );
 				configuration.setProperty( SystemNanoTimer.CONFIG_OFFSET, "0" );
 				configuration.setProperty( SystemNanoTimer.CONFIG_UNIT, "0" );
 			}
@@ -123,7 +123,7 @@ public class MonitoringService implements Service {
 			final String bufferSize = Integer.toString( aConfiguration.getBuffer( ) );
 			configuration.setProperty( WriterController.PREFIX + WriterController.RECORD_QUEUE_SIZE, queueSize );
 			configuration.setProperty( WriterController.PREFIX + WriterController.RECORD_QUEUE_FQN, LinkedBlockingQueue.class.getName( ) );
-			configuration.setProperty( ConfigurationKeys.WRITER_CLASSNAME, FileWriter.class.getName( ) );
+			configuration.setProperty( ConfigurationConstants.WRITER_CLASSNAME, FileWriter.class.getName( ) );
 			configuration.setProperty( FileWriter.CONFIG_PATH, aConfiguration.getOutputDirectory( ) );
 			configuration.setProperty( FileWriter.CONFIG_MAXENTRIESINFILE, maxEntriesPerFile );
 
@@ -142,13 +142,13 @@ public class MonitoringService implements Service {
 			}
 
 			// Controller
-			configuration.setProperty( ConfigurationKeys.CONTROLLER_NAME, "Kieker-Trace-Diagnosis" );
-			configuration.setProperty( ConfigurationKeys.EXPERIMENT_ID, "0" );
-			configuration.setProperty( ConfigurationKeys.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE, "0" );
+			configuration.setProperty( ConfigurationConstants.CONTROLLER_NAME, "Kieker-Trace-Diagnosis" );
+			configuration.setProperty( ConfigurationConstants.EXPERIMENT_ID, "0" );
+			configuration.setProperty( ConfigurationConstants.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE, "0" );
 			// Never use a shutdown hook here. This will lead to a memory leak.
-			configuration.setProperty( ConfigurationKeys.USE_SHUTDOWN_HOOK, "false" );
-			configuration.setProperty( ConfigurationKeys.AUTO_SET_LOGGINGTSTAMP, "true" );
-			configuration.setProperty( ConfigurationKeys.MONITORING_ENABLED, "true" );
+			configuration.setProperty( ConfigurationConstants.USE_SHUTDOWN_HOOK, "false" );
+			configuration.setProperty( ConfigurationConstants.AUTO_SET_LOGGINGTSTAMP, "true" );
+			configuration.setProperty( ConfigurationConstants.MONITORING_ENABLED, "true" );
 
 			// Create the new monitoring controller
 			monitoringController = MonitoringController.createInstance( configuration );

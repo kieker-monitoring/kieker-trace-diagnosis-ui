@@ -1,5 +1,9 @@
 5.2.0
 	23 Oct 2021
+	Feature (TRACEUI-40)
+	Trace Diagnosis Tool should use Kieker 1.15
+
+	23 Oct 2021
 	Bug (TRACEUI-39)
 	Files written with Kieker 1.14 can still not be processed.
 	
