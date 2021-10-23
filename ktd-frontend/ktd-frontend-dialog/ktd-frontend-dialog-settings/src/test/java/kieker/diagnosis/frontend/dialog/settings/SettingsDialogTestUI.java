@@ -47,7 +47,7 @@ public final class SettingsDialogTestUI extends ApplicationTest {
 		stage.setScene( scene );
 		stage.show( );
 
-		settingsDialog = new SettingsDialog( );
+		settingsDialog = new SettingsDialog( stage );
 		settingsDialog.show( );
 
 		final Settings settings = Settings

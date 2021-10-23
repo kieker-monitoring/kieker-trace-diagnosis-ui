@@ -24,9 +24,9 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Window;
 import kieker.diagnosis.frontend.base.mixin.DialogMixin;
 import kieker.diagnosis.frontend.base.mixin.ImageMixin;
 
@@ -42,22 +42,18 @@ public final class ProgressDialog extends Alert implements DialogMixin, ImageMix
 	private ProgressIndicator progressIndicator;
 	private Label label;
 
-	public ProgressDialog( ) {
+	public ProgressDialog( final Window owner ) {
 		super( AlertType.NONE );
 
-		createControl( );
+		createControl( owner );
 	}
 
-	private void createControl( ) {
+	private void createControl( final Window owner ) {
 		addDefaultStylesheet( );
 
 		setTitle( RESOURCE_BUNDLE.getString( "title" ) );
-		getStage( ).getIcons( ).add( createIcon( ) );
+		initOwner( owner );
 		getDialogPane( ).setContent( createVBox( ) );
-	}
-
-	private Image createIcon( ) {
-		return loadImage( "/kieker-logo.png" );
 	}
 
 	private Node createVBox( ) {

@@ -39,7 +39,7 @@ public final class AboutDialogTestUI extends ApplicationTest {
 		stage.setScene( scene );
 		stage.show( );
 
-		final AboutDialog aboutDialog = new AboutDialog( );
+		final AboutDialog aboutDialog = new AboutDialog( stage );
 		aboutDialog.show( );
 	}
 

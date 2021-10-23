@@ -17,7 +17,7 @@
 package kieker.diagnosis.frontend.dialog.alert;
 
 import javafx.scene.control.ButtonType;
-import javafx.scene.image.Image;
+import javafx.stage.Window;
 import kieker.diagnosis.frontend.base.mixin.DialogMixin;
 import kieker.diagnosis.frontend.base.mixin.ImageMixin;
 
@@ -28,20 +28,16 @@ import kieker.diagnosis.frontend.base.mixin.ImageMixin;
  */
 public final class Alert extends javafx.scene.control.Alert implements DialogMixin, ImageMixin {
 
-	public Alert( final AlertType alertType ) {
+	public Alert( final AlertType alertType, final Window owner ) {
 		super( alertType );
 
-		configureDialog( );
+		configureDialog( owner );
 		configureButtons( );
 	}
 
-	private void configureDialog( ) {
-		getStage( ).getIcons( ).add( createIcon( ) );
+	private void configureDialog( final Window owner ) {
+		initOwner( owner );
 		addDefaultStylesheet( );
-	}
-
-	private Image createIcon( ) {
-		return loadImage( "/kieker-logo.png" );
 	}
 
 	private void configureButtons( ) {

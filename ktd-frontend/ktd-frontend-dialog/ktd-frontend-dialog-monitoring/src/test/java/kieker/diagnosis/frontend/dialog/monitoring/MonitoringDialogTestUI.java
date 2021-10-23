@@ -44,7 +44,7 @@ public final class MonitoringDialogTestUI extends ApplicationTest {
 		stage.setScene( scene );
 		stage.show( );
 
-		monitoringDialog = new MonitoringDialog( );
+		monitoringDialog = new MonitoringDialog( stage );
 		monitoringDialog.show( );
 
 		final MonitoringService monitoringService = new MonitoringService( );

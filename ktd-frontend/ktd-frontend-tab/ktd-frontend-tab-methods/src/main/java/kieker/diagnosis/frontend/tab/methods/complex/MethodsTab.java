@@ -179,7 +179,7 @@ public final class MethodsTab extends Tab {
 			}
 
 			if ( strBuilder.length( ) > 0 ) {
-				final Alert alert = new Alert( AlertType.WARNING );
+				final Alert alert = new Alert( AlertType.WARNING, getTabPane( ).getScene( ).getWindow( ) );
 				final String msg = RESOURCE_BUNDLE.getString( "errorMessageInvalidInput" ) + strBuilder.toString( );
 				alert.setContentText( msg );
 				alert.showAndWait( );

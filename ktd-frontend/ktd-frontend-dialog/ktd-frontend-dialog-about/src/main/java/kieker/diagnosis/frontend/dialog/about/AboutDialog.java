@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
+import javafx.stage.Window;
 import kieker.diagnosis.frontend.base.mixin.DialogMixin;
 import kieker.diagnosis.frontend.base.mixin.ImageMixin;
 
@@ -34,22 +34,18 @@ public final class AboutDialog extends Alert implements DialogMixin, ImageMixin 
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( AboutDialog.class.getCanonicalName( ) );
 
-	public AboutDialog( ) {
+	public AboutDialog( final Window owner ) {
 		super( AlertType.NONE );
 
-		configureDialog( );
+		configureDialog( owner );
 		addComponents( );
 		addButtons( );
 	}
 
-	private void configureDialog( ) {
+	private void configureDialog( final Window owner ) {
 		setTitle( RESOURCE_BUNDLE.getString( "title" ) );
-		getStage( ).getIcons( ).add( createIcon( ) );
+		initOwner( owner );
 		addDefaultStylesheet( );
-	}
-
-	private Image createIcon( ) {
-		return loadImage( "/kieker-logo.png" );
 	}
 
 	private void addComponents( ) {

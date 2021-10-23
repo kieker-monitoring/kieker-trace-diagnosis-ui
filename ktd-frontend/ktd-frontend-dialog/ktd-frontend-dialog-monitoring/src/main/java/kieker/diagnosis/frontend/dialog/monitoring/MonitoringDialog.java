@@ -36,10 +36,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Window;
 import kieker.diagnosis.backend.monitoring.MonitoringConfiguration;
 import kieker.diagnosis.backend.monitoring.Status;
 import kieker.diagnosis.backend.monitoring.Timer;
@@ -81,22 +81,17 @@ public final class MonitoringDialog extends Dialog<MonitoringConfiguration> impl
 	private final Label bufferLabel = new Label( );
 	private final IntegerTextField bufferField = new IntegerTextField( );
 
-	public MonitoringDialog( ) {
-		configureDialog( );
+	public MonitoringDialog( final Window owner ) {
+		configureDialog( owner );
 		addComponents( );
 		configureResultConverter( );
 		addButtons( );
 	}
 
-	private void configureDialog( ) {
+	private void configureDialog( final Window owner ) {
 		setTitle( RESOURCE_BUNDLE.getString( "title" ) );
-		getStage( ).getIcons( ).add( createIcon( ) );
+		initOwner( owner );
 		addDefaultStylesheet( );
-	}
-
-	private Image createIcon( ) {
-		final String iconPath = RESOURCE_BUNDLE.getString( "icon" );
-		return loadImage( iconPath );
 	}
 
 	private void addComponents( ) {
@@ -248,7 +243,7 @@ public final class MonitoringDialog extends Dialog<MonitoringConfiguration> impl
 		}
 
 		if ( !inputValid ) {
-			final Alert alert = new Alert( AlertType.WARNING );
+			final Alert alert = new Alert( AlertType.WARNING, getOwner( ) );
 			alert.getDialogPane( ).lookupButton( ButtonType.OK ).setId( "monitoringDialogValidationOk" );
 			alert.setContentText( RESOURCE_BUNDLE.getString( "errorRange" ) );
 			alert.show( );
@@ -263,14 +258,14 @@ public final class MonitoringDialog extends Dialog<MonitoringConfiguration> impl
 		switch ( status ) {
 			case RUNNING:
 				style = "monitoringRunning";
-			break;
+				break;
 			case TERMINATED:
 				style = "monitoringTerminated";
-			break;
+				break;
 			case NO_MONITORING:
 			default:
 				style = "noMonitoringStarted";
-			break;
+				break;
 
 		}
 

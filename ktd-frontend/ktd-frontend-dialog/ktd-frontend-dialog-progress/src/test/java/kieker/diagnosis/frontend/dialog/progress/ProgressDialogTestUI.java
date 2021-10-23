@@ -42,7 +42,7 @@ public final class ProgressDialogTestUI extends ApplicationTest {
 		stage.setScene( scene );
 		stage.show( );
 
-		progressDialog = new ProgressDialog( );
+		progressDialog = new ProgressDialog( stage );
 		progressDialog.setProgress( 50.0 );
 		progressDialog.setMessage( "test-message" );
 		progressDialog.show( );

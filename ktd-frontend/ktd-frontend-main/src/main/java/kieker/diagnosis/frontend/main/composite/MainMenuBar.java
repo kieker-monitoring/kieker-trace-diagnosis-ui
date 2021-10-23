@@ -199,7 +199,7 @@ public final class MainMenuBar extends MenuBar implements IconMixin {
 	}
 
 	private void performAbout( ) {
-		final AboutDialog aboutDialog = new AboutDialog( );
+		final AboutDialog aboutDialog = new AboutDialog( getScene( ).getWindow( ) );
 		aboutDialog.showAndWait( );
 	}
 
@@ -207,7 +207,7 @@ public final class MainMenuBar extends MenuBar implements IconMixin {
 		final MonitoringConfiguration monitoringConfiguration = monitoringService.getCurrentConfiguration( );
 		final Status status = monitoringService.getCurrentStatus( );
 
-		final MonitoringDialog monitoringDialog = new MonitoringDialog( );
+		final MonitoringDialog monitoringDialog = new MonitoringDialog( getScene( ).getWindow( ) );
 		monitoringDialog.setValue( monitoringConfiguration );
 		monitoringDialog.setStatus( status );
 
@@ -232,7 +232,7 @@ public final class MainMenuBar extends MenuBar implements IconMixin {
 			close( );
 		} else {
 			// We should ask the user beforehand
-			final Alert alert = new Alert( AlertType.CONFIRMATION );
+			final Alert alert = new Alert( AlertType.CONFIRMATION, getScene( ).getWindow( ) );
 			alert.setTitle( RESOURCE_BUNDLE.getString( "titleReallyClose" ) );
 			alert.setHeaderText( RESOURCE_BUNDLE.getString( "headerReallyClose" ) );
 

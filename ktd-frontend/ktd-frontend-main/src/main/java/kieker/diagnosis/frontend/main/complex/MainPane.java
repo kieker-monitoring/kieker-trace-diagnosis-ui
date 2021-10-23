@@ -122,7 +122,7 @@ public final class MainPane extends VBox implements StylesheetMixin {
 	private void performSettings( ) {
 		final Settings settings = settingsService.loadSettings( );
 
-		final SettingsDialog settingsDialog = new SettingsDialog( );
+		final SettingsDialog settingsDialog = new SettingsDialog( getScene( ).getWindow( ) );
 		settingsDialog.setValue( settings );
 		final Optional<Settings> result = settingsDialog.showAndWait( );
 
@@ -206,7 +206,7 @@ public final class MainPane extends VBox implements StylesheetMixin {
 	}
 
 	public void performSaveAsFavorite( final Tab tab, final Object filter ) {
-		final FavoriteDialog favoriteDialog = new FavoriteDialog( );
+		final FavoriteDialog favoriteDialog = new FavoriteDialog( getScene( ).getWindow( ) );
 
 		final Optional<String> result = favoriteDialog.showAndWait( );
 
@@ -215,7 +215,7 @@ public final class MainPane extends VBox implements StylesheetMixin {
 
 			// Check whether the text is valid
 			if ( text == null || text.trim( ).isEmpty( ) ) {
-				final Alert alert = new Alert( AlertType.WARNING );
+				final Alert alert = new Alert( AlertType.WARNING, getScene( ).getWindow( ) );
 				alert.setContentText( RESOURCE_BUNDLE.getString( "errorEmptyFilterName" ) );
 				alert.showAndWait( );
 
@@ -246,7 +246,7 @@ public final class MainPane extends VBox implements StylesheetMixin {
 		@Override
 		public void run( ) {
 			Platform.runLater( ( ) -> {
-				progressDialog = new ProgressDialog( );
+				progressDialog = new ProgressDialog( getScene( ).getWindow( ) );
 				progressDialog.setMessage( RESOURCE_BUNDLE.getString( "processImport" ) );
 				progressDialog.setProgress( -1.0 );
 				progressDialog.show( );

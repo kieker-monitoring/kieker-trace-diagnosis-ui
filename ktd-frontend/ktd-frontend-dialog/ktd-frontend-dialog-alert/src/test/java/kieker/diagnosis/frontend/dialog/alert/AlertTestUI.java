@@ -41,7 +41,7 @@ public final class AlertTestUI extends ApplicationTest {
 		stage.setScene( scene );
 		stage.show( );
 
-		final Alert alert = new Alert( AlertType.WARNING );
+		final Alert alert = new Alert( AlertType.WARNING, stage );
 		alert.setContentText( "Ungültige Dateneingabe." );
 		alert.show( );
 	}

@@ -1,4 +1,8 @@
 5.2.0
+	23 Oct 2021 
+	Internal Improvement (TRACEUI-41)
+	Dialogs should initialize their owners
+	
 	23 Oct 2021
 	Feature (TRACEUI-40)
 	Trace Diagnosis Tool should use Kieker 1.15

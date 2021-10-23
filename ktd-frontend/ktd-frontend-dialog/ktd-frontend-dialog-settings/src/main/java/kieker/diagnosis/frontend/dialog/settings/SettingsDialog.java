@@ -33,10 +33,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
-import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Window;
 import kieker.diagnosis.backend.settings.ClassAppearance;
 import kieker.diagnosis.backend.settings.MethodAppearance;
 import kieker.diagnosis.backend.settings.MethodCallAggregation;
@@ -79,22 +79,17 @@ public final class SettingsDialog extends Dialog<Settings> implements DialogMixi
 	private final Label methodCallThresholdLabel = new Label( );
 	private final FloatTextField methodCallThresholdField = new FloatTextField( );
 
-	public SettingsDialog( ) {
-		configureDialog( );
+	public SettingsDialog( final Window owner ) {
+		configureDialog( owner );
 		addComponents( );
 		configureResultConverter( );
 		addButtons( );
 	}
 
-	private void configureDialog( ) {
+	private void configureDialog( final Window owner ) {
 		setTitle( RESOURCE_BUNDLE.getString( "title" ) );
-		getStage( ).getIcons( ).add( createIcon( ) );
+		initOwner( owner );
 		addDefaultStylesheet( );
-	}
-
-	private Image createIcon( ) {
-		final String iconPath = RESOURCE_BUNDLE.getString( "icon" );
-		return loadImage( iconPath );
 	}
 
 	private void addComponents( ) {
@@ -300,7 +295,7 @@ public final class SettingsDialog extends Dialog<Settings> implements DialogMixi
 		}
 
 		if ( !inputValid ) {
-			final Alert alert = new Alert( AlertType.WARNING );
+			final Alert alert = new Alert( AlertType.WARNING, getOwner( ) );
 			alert.getDialogPane( ).lookupButton( ButtonType.OK ).setId( "settingsDialogValidationOk" );
 			alert.setContentText( errorMessage );
 			alert.show( );

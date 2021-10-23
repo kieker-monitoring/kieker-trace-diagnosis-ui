@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.image.Image;
+import javafx.stage.Window;
 import kieker.diagnosis.frontend.base.mixin.DialogMixin;
 import kieker.diagnosis.frontend.base.mixin.ImageMixin;
 
@@ -28,21 +28,17 @@ public final class FavoriteDialog extends TextInputDialog implements DialogMixin
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( FavoriteDialog.class.getName( ) );
 
-	public FavoriteDialog( ) {
-		configureDialog( );
+	public FavoriteDialog( final Window owner ) {
+		configureDialog( owner );
 		configureButtons( );
 	}
 
-	private void configureDialog( ) {
+	private void configureDialog( final Window owner ) {
 		setTitle( RESOURCE_BUNDLE.getString( "newFilterFavorite" ) );
 		setHeaderText( RESOURCE_BUNDLE.getString( "newFilterFavoriteName" ) );
 
-		getStage( ).getIcons( ).add( createIcon( ) );
+		initOwner( owner );
 		addDefaultStylesheet( );
-	}
-
-	private Image createIcon( ) {
-		return loadImage( "/kieker-logo.png" );
 	}
 
 	private void configureButtons( ) {

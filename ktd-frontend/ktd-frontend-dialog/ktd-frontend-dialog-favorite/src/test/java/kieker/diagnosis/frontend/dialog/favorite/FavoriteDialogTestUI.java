@@ -41,7 +41,7 @@ public final class FavoriteDialogTestUI extends ApplicationTest {
 		stage.setScene( scene );
 		stage.show( );
 
-		favoriteDialog = new FavoriteDialog( );
+		favoriteDialog = new FavoriteDialog( stage );
 		favoriteDialog.show( );
 
 		favoriteDialogPage = new FavoriteDialogPage( this );
