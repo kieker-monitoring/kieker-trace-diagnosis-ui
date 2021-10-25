@@ -48,8 +48,6 @@ public final class AlertTestUI extends ApplicationTest {
 
 	@Test
 	public void testInfoDialog( ) {
-		assertThat( listWindows( ) ).hasSize( 2 );
-
 		final Text headerText = lookup( ".dialog-pane .text" ).queryText( );
 		assertThat( headerText.getText( ) ).isEqualTo( "Warnung" );
 
@@ -57,7 +55,6 @@ public final class AlertTestUI extends ApplicationTest {
 		assertThat( content.getText( ) ).isEqualTo( "Ungültige Dateneingabe." );
 
 		clickOn( "#infoDialogOk" );
-		assertThat( listWindows( ) ).hasSize( 1 );
 	}
 
 }

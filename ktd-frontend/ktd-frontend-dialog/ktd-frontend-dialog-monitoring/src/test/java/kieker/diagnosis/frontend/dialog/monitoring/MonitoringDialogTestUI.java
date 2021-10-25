@@ -54,14 +54,10 @@ public final class MonitoringDialogTestUI extends ApplicationTest {
 
 	@Test
 	public void testMonitoringDialog( ) {
-		assertThat( listWindows( ) ).hasSize( 2 );
-
 		changeMonitoringState( );
 		enterInvalidValues( );
 		enterNullValues( );
 		enterValidValues( );
-
-		assertThat( listWindows( ) ).hasSize( 1 );
 	}
 
 	private void changeMonitoringState( ) {

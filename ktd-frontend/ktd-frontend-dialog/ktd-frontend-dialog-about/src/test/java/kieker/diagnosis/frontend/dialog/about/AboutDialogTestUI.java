@@ -45,8 +45,6 @@ public final class AboutDialogTestUI extends ApplicationTest {
 
 	@Test
 	public void testAboutDialog( ) {
-		assertThat( listWindows( ) ).hasSize( 2 );
-
 		final Labeled descriptionLabel = lookup( "#aboutDialogDescription" ).queryLabeled( );
 
 		assertThat( descriptionLabel.getText( ) ).contains( "Kieker Trace Diagnosis - " );
@@ -54,7 +52,6 @@ public final class AboutDialogTestUI extends ApplicationTest {
 		assertThat( descriptionLabel.getText( ) ).contains( "Dieses Werkzeug ist unter der Apache License 2.0 lizenziert." );
 
 		clickOn( "#aboutDialogOk" );
-		assertThat( listWindows( ) ).hasSize( 1 );
 	}
 
 }

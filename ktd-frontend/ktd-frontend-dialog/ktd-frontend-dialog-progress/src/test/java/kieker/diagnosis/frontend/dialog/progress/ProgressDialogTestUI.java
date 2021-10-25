@@ -50,14 +50,11 @@ public final class ProgressDialogTestUI extends ApplicationTest {
 
 	@Test
 	public void testProgressDialog( ) {
-		assertThat( listWindows( ) ).hasSize( 2 );
-
 		final Labeled messageLabel = lookup( "#progressDialogMessage" ).queryLabeled( );
 		assertThat( messageLabel.getText( ) ).isEqualTo( "test-message" );
 
 		WaitForAsyncUtils.asyncFx( ( ) -> progressDialog.closeDialog( ) );
 		WaitForAsyncUtils.waitForFxEvents( );
-		assertThat( listWindows( ) ).hasSize( 1 );
 	}
 
 }

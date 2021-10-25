@@ -66,13 +66,9 @@ public final class SettingsDialogTestUI extends ApplicationTest {
 
 	@Test
 	public void testSettingsDialog( ) {
-		assertThat( listWindows( ) ).hasSize( 2 );
-
 		enterNullValues( );
 		enterInvalidValues( );
 		enterValidValues( );
-
-		assertThat( listWindows( ) ).hasSize( 1 );
 	}
 
 	private void enterNullValues( ) {
