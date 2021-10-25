@@ -181,21 +181,25 @@ public final class TracesTabTestUI extends ApplicationTest {
 
 		tracesPage.getFilter( ).getHost( ).writeText( "(" );
 		tracesPage.getFilter( ).getSearch( ).click( );
+		targetWindow(1);
 		tracesPage.getDialog( ).getOk( ).click( );
 
 		tracesPage.getFilter( ).getHost( ).clearText( );
 		tracesPage.getFilter( ).getClazz( ).writeText( "(" );
 		tracesPage.getFilter( ).getSearch( ).click( );
+		targetWindow(1);
 		tracesPage.getDialog( ).getOk( ).click( );
 
 		tracesPage.getFilter( ).getClazz( ).clearText( );
 		tracesPage.getFilter( ).getMethod( ).writeText( "(" );
 		tracesPage.getFilter( ).getSearch( ).click( );
+		targetWindow(1);
 		tracesPage.getDialog( ).getOk( ).click( );
 
 		tracesPage.getFilter( ).getMethod( ).clearText( );
 		tracesPage.getFilter( ).getException( ).writeText( "(" );
 		tracesPage.getFilter( ).getSearch( ).click( );
+		targetWindow(1);
 		tracesPage.getDialog( ).getOk( ).click( );
 	}
 
