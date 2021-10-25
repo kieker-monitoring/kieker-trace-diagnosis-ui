@@ -14,7 +14,4 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: Prepare xvfb and build with Maven
-        run: |
-          Xvfb :99 &>/dev/null &
-          export DISPLAY=:99.0
-          mvn -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Denable.ui.tests=true -Dheadless.geometry=1920x1080-32 --batch-mode --update-snapshots package
+        run: Xvfb :99 &>/dev/null & export DISPLAY=:99.0 & mvn -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Denable.ui.tests=true -Dheadless.geometry=1920x1080-32 --batch-mode --update-snapshots package
