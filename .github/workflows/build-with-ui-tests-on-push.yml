@@ -14,6 +14,6 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: Build with Maven
-        run: mvn -D"enable.ui.tests"=true --batch-mode --update-snapshots package
+        run: mvn -D"enable.ui.tests"=true -D"testfx.robot"=glass -D"testfx.headless"=true --batch-mode --update-snapshots package
       - uses: codecov/codecov-action@v2
       
