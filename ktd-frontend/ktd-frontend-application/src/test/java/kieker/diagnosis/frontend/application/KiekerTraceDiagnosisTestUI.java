@@ -41,11 +41,15 @@ public final class KiekerTraceDiagnosisTestUI extends ApplicationTest {
 
 	@Test
 	public void closeApplication( ) {
+		assertThat( listWindows( ) ).hasSize( 1 );
+
 		closeCurrentWindowViaJavaFx( );
 		closeDialogPage.getCancel( ).click( );
+		assertThat( listWindows( ) ).hasSize( 1 );
 
 		closeCurrentWindowViaJavaFx( );
 		closeDialogPage.getYes( ).click( );
+		assertThat( listWindows( ) ).isEmpty( );
 	}
 
 	private void closeCurrentWindowViaJavaFx( ) {
