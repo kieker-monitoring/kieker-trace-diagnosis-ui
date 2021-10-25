@@ -27,7 +27,7 @@ public final class DialogPage {
 	private final Button ok;
 
 	public DialogPage( final FxRobot fxRobot ) {
-		ok = new Button( fxRobot, ".dialog-pane .button" );
+		ok = new Button( fxRobot, "#infoDialogOk" );
 	}
 
 }
