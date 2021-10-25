@@ -1,4 +1,4 @@
-name: maven build on push
+name: build with UI tests
 
 on: [push]
 
@@ -14,5 +14,4 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots package
-  
+        run: mvn -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Denable.ui.tests=true -Dheadless.geometry=1920x1080-32 --batch-mode --update-snapshots package
