@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/kieker-monitoring/kieker-trace-diagnosis-ui.svg?branch=refactoring)](https://travis-ci.org/kieker-monitoring/kieker-trace-diagnosis-ui)
-[![Coverage](https://codecov.io/gh/kieker-monitoring/kieker-trace-diagnosis-ui/branch/refactoring/graphs/badge.svg?branch=refactoring)](https://codecov.io/gh/kieker-monitoring/kieker-trace-diagnosis-ui/branch/refactoring)
+[![Build](https://github.com/kieker-monitoring/kieker-trace-diagnosis-ui/actions/workflows/build-on-push.yml/badge.svg)](https://github.com/kieker-monitoring/kieker-trace-diagnosis-ui/actions/workflows/build-on-push.yml)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 # Description
