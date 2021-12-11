@@ -14,7 +14,7 @@
 		<kieker.version>1.15</kieker.version>
 		<guice.version>5.0.1</guice.version>
 		<hppc.version>0.8.2</hppc.version>
-		<log4j.version>2.14.1</log4j.version>
+		<log4j.version>2.15.0</log4j.version>
 		<jfxtras.version>9.0-r1</jfxtras.version>
 		<lombok.version>1.18.20</lombok.version>
 		<junit.version>5.7.2</junit.version>
