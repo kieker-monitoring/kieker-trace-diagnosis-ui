@@ -1,3 +1,8 @@
+5.2.1
+	11 Dec 2021 
+	Bug (TRACEUI-42)
+	Update of Log4j2 to close CVE-2021-44228.
+
 5.2.0
 	23 Oct 2021 
 	Internal Improvement (TRACEUI-41)
