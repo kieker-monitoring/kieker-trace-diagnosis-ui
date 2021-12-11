@@ -6,7 +6,7 @@
 
 	<groupId>net.kieker-monitoring</groupId>
 	<artifactId>ktd-dependencies</artifactId>
-	<version>5.2.1</version>
+	<version>5.2.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -38,122 +38,122 @@
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-application</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-main</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-dialog-about</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-dialog-monitoring</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-dialog-settings</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-dialog-progress</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-dialog-alert</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-dialog-favorite</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-base</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-test</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-tab-traces</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-tab-statistics</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-tab-methods</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-tab-aggregated-methods</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-base</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-export</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-data</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-pattern</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-filter</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-search</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-settings</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-properties</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-monitoring</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-cache</artifactId>
-				<version>5.2.1</version>
+				<version>5.2.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
