@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015-2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015-2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -129,6 +129,7 @@ public final class ArchitectureTest {
 		final JavaClasses importedClasses = new ClassFileImporter( ).importPackages( "kieker.diagnosis" );
 
 		final LayeredArchitecture rule = layeredArchitecture( )
+				.consideringOnlyDependenciesInLayers( )
 				.layer( "Backend" ).definedBy( "kieker.diagnosis.backend.." )
 				.layer( "Frontend" ).definedBy( "kieker.diagnosis.frontend.." )
 				.whereLayer( "Frontend" ).mayNotBeAccessedByAnyLayer( )
@@ -163,7 +164,7 @@ public final class ArchitectureTest {
 
 			@Override
 			public void check( final JavaClass item, final ConditionEvents events ) {
-				item.getCallsFromSelf( )
+				item.getMethodCallsFromSelf( )
 						.stream( )
 						.filter( access -> access.getTargetOwner( ).isAssignableTo( DelegateException.class ) )
 						.map( access -> String.format( "Class %s uses a DelegateException", access.getOriginOwner( ).getName( ) ) )
