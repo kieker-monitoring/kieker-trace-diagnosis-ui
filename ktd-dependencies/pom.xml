@@ -16,7 +16,7 @@
 		<hppc.version>0.9.1</hppc.version>
 		<log4j.version>2.20.0</log4j.version>
 		<jfxtras.version>11-r2</jfxtras.version>
-		<lombok.version>1.18.26</lombok.version>
+		<lombok.version>1.18.44</lombok.version>
 		<junit.version>5.9.3</junit.version>
 		<assertj.version>3.24.2</assertj.version>
 		<dependency.plugin.version>3.5.0</dependency.plugin.version>
@@ -24,12 +24,12 @@
 		<guava.version>31.1-jre</guava.version>
 		<javafx.version>11.0.2</javafx.version>
 		<testfx.version>4.0.16-alpha</testfx.version>
-		<mockito.version>5.3.1</mockito.version>
+		<mockito.version>5.19.0</mockito.version>
 		<archunit.version>1.0.1</archunit.version>
 		<monocle.version>jdk-11+26</monocle.version>
 		<maven.compiler.version>3.11.0</maven.compiler.version>
 		<resources.plugin.version>3.3.1</resources.plugin.version>
-		<jacoco.plugin.version>0.8.10</jacoco.plugin.version>
+		<jacoco.plugin.version>0.8.14</jacoco.plugin.version>
 		<surefire.plugin.version>3.0.0</surefire.plugin.version>
 	</properties>
 
