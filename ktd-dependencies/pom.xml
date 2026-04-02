@@ -18,7 +18,7 @@
 		<jfxtras.version>11-r2</jfxtras.version>
 		<lombok.version>1.18.44</lombok.version>
 		<junit.version>5.9.3</junit.version>
-		<assertj.version>3.24.2</assertj.version>
+		<assertj.version>3.27.7</assertj.version>
 		<dependency.plugin.version>3.5.0</dependency.plugin.version>
 		<aopalliance.version>1.0</aopalliance.version>
 		<guava.version>32.0.0-jre</guava.version>
