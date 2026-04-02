@@ -31,6 +31,7 @@
 		<resources.plugin.version>3.3.1</resources.plugin.version>
 		<jacoco.plugin.version>0.8.14</jacoco.plugin.version>
 		<surefire.plugin.version>3.0.0</surefire.plugin.version>
+        <assembly.plugin.version>3.6.0</assembly.plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -332,6 +333,11 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>${surefire.plugin.version}</version>
 				</plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>${assembly.plugin.version}}</version>
+                </plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
