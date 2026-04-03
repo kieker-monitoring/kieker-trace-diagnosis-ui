@@ -5,7 +5,7 @@ pipeline {
 	}
   
 	environment {
-		DOCKER_CONTAINER = 'openjdk:11-jdk-slim'
+		DOCKER_CONTAINER = 'openjdk:21-jdk-slim'
 	}
 
   options {

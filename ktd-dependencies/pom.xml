@@ -6,7 +6,7 @@
 
 	<groupId>net.kieker-monitoring</groupId>
 	<artifactId>ktd-dependencies</artifactId>
-	<version>5.2.4-SNAPSHOT</version>
+	<version>6.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -22,11 +22,10 @@
 		<dependency.plugin.version>3.10.0</dependency.plugin.version>
 		<aopalliance.version>1.0</aopalliance.version>
 		<guava.version>33.5.0-jre</guava.version>
-		<javafx.version>11.0.2</javafx.version>
+		<javafx.version>21</javafx.version>
 		<testfx.version>4.0.16-alpha</testfx.version>
 		<mockito.version>5.23.0</mockito.version>
 		<archunit.version>1.4.1</archunit.version>
-		<monocle.version>jdk-11+26</monocle.version>
 		<maven.compiler.version>3.15.0</maven.compiler.version>
 		<resources.plugin.version>3.5.0</resources.plugin.version>
 		<jacoco.plugin.version>0.8.14</jacoco.plugin.version>
@@ -39,122 +38,122 @@
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-application</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-main</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-dialog-about</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-dialog-monitoring</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-dialog-settings</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-dialog-progress</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-dialog-alert</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-dialog-favorite</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-base</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-test</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-tab-traces</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-tab-statistics</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-tab-methods</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-frontend-tab-aggregated-methods</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-base</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-export</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-data</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-pattern</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-filter</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-search</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-settings</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-properties</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-monitoring</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
 				<artifactId>ktd-backend-cache</artifactId>
-				<version>5.2.4-SNAPSHOT</version>
+				<version>6.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>net.kieker-monitoring</groupId>
@@ -235,11 +234,6 @@
 				<groupId>org.testfx</groupId>
 				<artifactId>testfx-junit5</artifactId>
 				<version>${testfx.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.testfx</groupId>
-				<artifactId>openjfx-monocle</artifactId>
-				<version>${monocle.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>aopalliance</groupId>
