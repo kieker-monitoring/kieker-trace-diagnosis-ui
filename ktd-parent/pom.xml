@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>net.kieker-monitoring</groupId>
 		<artifactId>ktd-dependencies</artifactId>
-		<version>5.2.4-SNAPSHOT</version>
+		<version>6.0.0-SNAPSHOT</version>
 		<relativePath>../ktd-dependencies</relativePath>
 	</parent>
 
@@ -15,7 +15,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>21</java.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -41,7 +41,7 @@
 				<artifactId>maven-dependency-plugin</artifactId>
 
 				<configuration>
-					<skip>true</skip> <!-- Can currently not be used with Java 11 -->
+					<skip>true</skip>
 					<failOnWarning>true</failOnWarning>
 					<ignoreNonCompile>true</ignoreNonCompile>
 				</configuration>
