@@ -12,7 +12,7 @@ Currently the tool supports monitoring logs written by Kieker's binary and ascii
 Releases of Kieker Trace Diagnosis can be downloaded via
 https://github.com/kieker-monitoring/kieker-trace-diagnosis-ui/releases
 
-The latest version is 5.2.0 and requires Java 21. 
+The latest version is 5.2.0 and requires Java 11.  From version 6.0.0 on the application requires Java 21.
 
 # Issues
 
