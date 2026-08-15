@@ -15,8 +15,12 @@
 			<directory>${project.build.directory}/appassembler/lib</directory>
 			<outputDirectory>modules</outputDirectory>
 			<includes>
-				<include>javafx-*21.jar</include>
+				<include>javafx-*.jar</include>
 			</includes>
+			<excludes>
+				<exclude>javafx-*-linux.jar</exclude>
+				<exclude>javafx-*-win.jar</exclude>
+			</excludes>
 		</fileSet>
 
 		<fileSet>
