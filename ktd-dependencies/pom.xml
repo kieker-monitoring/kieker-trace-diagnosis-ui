@@ -21,7 +21,7 @@
 		<assertj.version>3.27.7</assertj.version>
 		<dependency.plugin.version>3.11.0</dependency.plugin.version>
 		<aopalliance.version>1.0</aopalliance.version>
-		<guava.version>33.6.0-jre</guava.version>
+		<guava.version>33.7.1-jre</guava.version>
 		<javafx.version>21.0.12</javafx.version>
 		<testfx.version>4.0.18</testfx.version>
 		<mockito.version>5.23.0</mockito.version>
